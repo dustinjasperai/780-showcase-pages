@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Practice Operator's Playbook · Solutions Maven Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#181B22; --panel:#20242E; --rule:#2B303C;
+    --clay:#D08356; --sage:#9AA3B5; --chalk:#F2EFE8; --grey:#C9CDD8; --dim:#7A8194;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Figtree',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--clay);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--chalk);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4.6vw}
+  .t-normal h1{font-size:3.3vw;max-width:84%}
+  .t-normal .body{font-size:1.46vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Figtree',sans-serif;font-size:1.4vw;font-weight:600;color:var(--sage);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--clay),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#262B37 0%,#0C0E13 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:86%;font-style:italic;color:#F0EDE4}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#262B37 0%,#0C0E13 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--clay);color:#EFC9AE;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .seq-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-seq{right:6.5%;bottom:9%;width:22vw}
+  .corner-seq{right:6%;bottom:7.5%;width:10vw;opacity:.4}
+  .brandline{font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--clay);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--clay);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Solutions Maven Consulting</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- operator's-sequence motif: six nodes on a rising step path, first three solid, last three outline -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="seq" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round">
+    <polyline points="20,128 60,108 100,88 140,68 180,48 220,28" stroke="#D08356" stroke-width="2.5" opacity="0.55"/>
+  </g>
+  <circle cx="20" cy="128" r="8" fill="#D08356"/>
+  <circle cx="60" cy="108" r="8" fill="#D08356"/>
+  <circle cx="100" cy="88" r="8" fill="#D08356"/>
+  <circle cx="140" cy="68" r="8" fill="none" stroke="#9AA3B5" stroke-width="2.5"/>
+  <circle cx="180" cy="48" r="8" fill="none" stroke="#9AA3B5" stroke-width="2.5"/>
+  <circle cx="220" cy="28" r="8" fill="none" stroke="#9AA3B5" stroke-width="2.5"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Practice Operator’s Playbook',sub:'What a dermatology practice actually needs when the owner can’t run everything, in one hour.',brand:true,climb:'title'},
+ {t:'normal',k:'Who this is for',title:'You run the clinical side. The operations side runs you.',body:'You are a strong clinician and a capable owner. The catch is billing, staffing, credentialing, and daily management still land on your desk, on top of a full patient schedule.'},
+ {t:'normal',k:'The trap',title:'Working more hours will not fix a missing operator.',body:'Every practice eventually hits the same wall: there is no one running the business side full time, so the owner does it in the gaps. Longer hours do not close that gap. A real operator does.'},
+ {t:'dark',title:'You do not have a marketing problem. You have a practice with no one running the machine.'},
+
+ {t:'section',idx:'Part One',title:'The Practice With No Operator'},
+ {t:'normal',k:'The real cost',title:'Billing backlogs and credentialing delays are operations problems, not clinical ones.',body:'When collections lag, a payor enrollment stalls, or a new hire has no real onboarding, it is rarely a clinical failure. It is the absence of someone whose full-time job is running the operation.'},
+ {t:'normal',k:'The shift',title:'Stop absorbing the operator role by accident. Install one on purpose.',body:'The owners who break through do not try to become better administrators on top of being clinicians. They bring in someone who has actually run practice operations before, on a fractional basis, and let that person run it.'},
+ {t:'dark',title:'An operator is not a title. It is a sequence of things done in order.'},
+
+ {t:'section',idx:'Part Two',title:'The Operator’s Playbook'},
+ {t:'normal',k:'Move one',title:'Practice Analysis.',body:'A full operational and financial assessment of the practice before anything changes, so the plan is built on what is actually happening, not a guess.'},
+ {t:'normal',k:'Move two',title:'Fractional EOS Integrator.',body:'A part-time embedded Integrator running the Entrepreneurial Operating System inside the practice: a clear vision the team can execute, the right people in the right seats, and issues solved for good instead of managed forever.'},
+ {t:'normal',k:'Move three',title:'Billing Support.',body:'Stabilizing the revenue cycle and collections function so the money coming in actually matches the work being done.'},
+ {t:'normal',k:'Move four',title:'Interim Practice Management.',body:'Full operational leadership during a transition or a management gap, so the practice does not stall while a permanent hire is found.'},
+ {t:'normal',k:'Move five',title:'Practice Start-Ups.',body:'Standing up the operational infrastructure, staffing, and workflow a brand-new practice needs before it can see its first patient.'},
+ {t:'normal',k:'Move six',title:'Credentialing.',body:'Handling payor enrollment so providers can actually bill for the work they are already doing.'},
+ {t:'dark',title:'Six moves, run in sequence, are what let a practice operate instead of react.'},
+
+ {t:'section',idx:'Part Three',title:'What This Looks Like'},
+ {t:'normal',k:'The result',title:'The same practice you built, minus the daily scramble.',body:'You keep the clinical vision and the standards you set. What changes is the operational machinery underneath it: billing that runs, credentialing that clears, and a team that knows the plan.'},
+ {t:'normal',k:'Why me',title:'Nearly 20 years inside healthcare operations.',body:'I am Toni Sikkema, MHA, founder of Solutions Maven Consulting and a Certified EOS Integrator. Before I consulted on dermatology practices, I was the Director of Operations inside one. I have run this from the inside, not just advised on it from the outside.'},
+
+ {t:'section',idx:'Your next step',title:'A Conversation About Your Practice'},
+ {t:'normal',k:'How we begin',title:'A conversation about where the operations gap actually is.',body:'We look at what is landing on your desk that should not be, and map which of the six moves your practice needs first, whether that is a full analysis, an embedded Integrator, or help clearing a credentialing backlog.'},
+ {t:'cta',title:'Reach out by phone or email.',chips:['Call 941.315.1099','Email toni@thesolutionsmaven.com'],disc:'Educational content for dermatology practice owners only. No income, revenue, or business result is guaranteed. Results vary by owner, practice, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function seq(kind){return `<svg class="seq-motif ${kind==='title'?'title-seq':'corner-seq'}"><use href="#seq"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Solutions Maven Consulting &middot; <b>Toni Sikkema</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.climb) h+=seq(s.climb);
+  else if(s.t==='title') h+=seq('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
