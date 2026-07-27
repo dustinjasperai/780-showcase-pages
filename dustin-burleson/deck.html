@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Practice Systems Masterclass · Dr. Dustin Burleson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#12161D; --panel:#1A212B; --rule:#2A3341;
+    --gold:#6E8FB8; --wine:#C9A8A0; --chalk:#F2EFE6; --grey:#C7CEDA; --dim:#6B7686;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Sora',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--chalk);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:5vw}
+  .t-normal h1{font-size:3.4vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.85vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Sora',sans-serif;font-size:1.4vw;font-weight:600;color:var(--wine);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#232D3D 0%,#0A0D12 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:86%;font-style:italic;color:#F1EFE9}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#232D3D 0%,#0A0D12 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--gold);color:#DCE6F0;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .rise-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-rise{right:7.5%;bottom:8%;width:22vw}
+  .corner-rise{right:6%;bottom:7.5%;width:10vw;opacity:.4}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--gold);font-weight:600}
+  .pillars{display:flex;gap:2.2vw;margin-top:3.6vh;flex-wrap:wrap}
+  .pillar{border:1px solid var(--rule);border-radius:10px;padding:2.4vh 1.8vw;max-width:22vw;background:rgba(255,255,255,.02)}
+  .pillar .n{font-family:'Sora',sans-serif;font-size:1.1vw;font-weight:700;color:var(--gold);letter-spacing:.12em;margin-bottom:1vh}
+  .pillar .t{font-family:'Cormorant Garamond',serif;font-size:1.7vw;color:var(--chalk);margin-bottom:1vh}
+  .pillar .d{font-size:1.05vw;color:var(--grey);line-height:1.5;font-weight:300}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.pillar{max-width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Practice Systems</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- rising step line lifting to a small closed ring / systems-compounding motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="rise" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="136" x2="246" y2="136" stroke="#6E8FB8" opacity="0.35"/>
+    <path d="M30 130 H86 V102 H142 V72 H198 V40" stroke="#6E8FB8" opacity="0.9"/>
+    <path d="M40 130 H90 V108 H146 V82 H200 V54" stroke="#F2EFE6" opacity="0.14"/>
+    <circle cx="198" cy="40" r="5" fill="none" stroke="#6E8FB8" stroke-width="2.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Practice Systems Masterclass',sub:'Marketing, treatment-coordinator conversion, and team training, run as one machine, in one hour.',brand:true,rise:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the system.',body:'The marketing calendar lives in your head. You personally coach every case presentation. You train every new hire yourself, from scratch, again. Growth just means doing all three, more often, alone.'},
+ {t:'dark',title:'You do not have a growth problem. You have a systems problem.'},
+
+ {t:'section',idx:'Part One',title:'The Practice Running on Memory'},
+ {t:'normal',k:'Why growth stalls',title:'More new patients without systems just adds chaos.',body:'Every marketing push you personally drive, every consult you personally close, every hire you personally train, caps the practice at exactly what you can carry. Volume does not fix that. It multiplies it.'},
+ {t:'normal',k:'The real cost',title:'A practice that depends on your memory cannot scale or sell.',body:'If the marketing calendar, the case-acceptance script, and the training plan all live in your head, none of it survives a slow week, a vacation, or a new location. You own a demanding job, not a system.'},
+ {t:'dark',title:'If it only runs when you personally run it, it is not a system yet.'},
+
+ {t:'section',idx:'Part Two',title:'The Systems Trio'},
+ {t:'normal',k:'System one, attract',title:'Marketing Automation Systems.',body:'A documented, repeatable process for filling the schedule, built once and run on process instead of ad hoc effort. The marketing calendar stops depending on whether you had time to think about it this month.'},
+ {t:'normal',k:'System two, convert',title:'The Treatment Coordinator Boot Camp.',body:'The exact case-presentation sequence a trained treatment coordinator runs, consult to started case, without you in the room. New-patient conversion stops depending on whether you personally closed the exam.'},
+ {t:'normal',k:'System three, retain and scale',title:'Employee Training Automation Systems.',body:'A documented onboarding and training framework so a new hire performs to standard on a schedule, not on however much of your personal time you can spare. The team stops depending on you training every person by hand.'},
+ {t:'dark',title:'Attract, convert, retain. Three systems, one practice engine.'},
+
+ {t:'section',idx:'Part Three',title:'What It Looks Like Running'},
+ {t:'normal',k:'The compounding effect',title:'Each system makes the other two easier.',body:'Automated marketing fills the calendar predictably. A trained treatment coordinator converts a steady share of it without your time. A trained team keeps quality consistent as volume grows. None of the three works alone; together they compound.'},
+
+ {t:'section',idx:'Why this works',title:'Tested in Practice, Not Sold as Theory'},
+ {t:'normal',k:'The credibility difference',title:'Built and run inside real orthodontic practices first.',body:'These are not slides written to sell a seminar. They are the systems used to run actual practices, refined against real patients, real teams, and real numbers before ever being taught to another owner.'},
+ {t:'dark',title:'A system that has only ever been marketed has never been tested. This one has.'},
+
+ {t:'section',idx:'Your next step',title:'Build It With the Platinum Mastermind'},
+ {t:'normal',k:'How I can help',title:'Systems taught inside the Platinum Mastermind.',body:'The Platinum Mastermind runs three mastermind meetings a year, monthly coaching calls, on-site trainings, leadership development, and office visit days, built around the same systems trio: marketing, conversion, and team, run as one machine, drawn from coaching over 3,000 orthodontists across 32 countries.'},
+ {t:'cta',title:'Ready to run your practice on systems instead of memory?',chips:['Learn about the Platinum Mastermind','Apply for a seat'],disc:'Educational content for orthodontic practice owners. No income, revenue, or business result is guaranteed. Results vary by owner, practice, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function rise(kind){return `<svg class="rise-motif ${kind==='title'?'title-rise':'corner-rise'}"><use href="#rise"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Burleson <b>Seminars</b> · Platinum Mastermind</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.rise) h+=rise(s.rise);
+  else if(s.t==='title') h+=rise('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
