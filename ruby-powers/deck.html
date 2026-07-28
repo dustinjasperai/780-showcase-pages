@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Power Up Your Practice Masterclass · Ruby Powers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FBF6EC; --panel:#F1E8D2; --rule:#DCCFAE;
+    --gold:#B8862E; --teal:#1F4B49; --ink:#232019; --grey:#5B5344; --dim:#8C8368;
+  }
+  html,body{height:100%}
+  body{background:#12100C;font-family:'Public Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#12100C}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.6vw}
+  .t-normal h1{font-size:3.1vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Public Sans',sans-serif;font-size:1.4vw;font-weight:600;color:var(--teal);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#274C49 0%,#12201F 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.2vw;max-width:82%;font-style:italic;color:#F4EFE2;font-weight:400}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:2.8vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1.1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.7vw;padding:2.4vh 1.3vw;width:13vw;min-height:15vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Public Sans',sans-serif;font-size:2vw;font-weight:700;color:var(--gold);line-height:1}
+  .flowcard .l{font-size:1.16vw;font-weight:600;color:var(--ink);line-height:1.25}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#2B2418 0%,#12100C 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:82%;color:#F7F1E3}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--gold);color:#EAD9AE;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#9C9484}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .book-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-book{right:7.5%;bottom:8%;width:20vw}
+  .corner-book{right:6%;bottom:7.5%;width:9vw;opacity:.4}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--gold);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#B8AF9A;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#B8AF9A;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#B8AF9A;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.4vw}.t-flow h1{font-size:4.8vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Power Up Your Practice</div>
+<div class="hint" id="hint">→ click or arrow keys</div>
+
+<!-- open book / compass motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="book" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.2" stroke-linecap="round">
+    <path d="M20 40 Q70 24 128 40 V120 Q70 104 20 120 Z" stroke="#B8862E" opacity="0.85"/>
+    <path d="M236 40 Q186 24 128 40 V120 Q186 104 236 120 Z" stroke="#B8862E" opacity="0.85"/>
+    <line x1="128" y1="40" x2="128" y2="120" stroke="#DCCFAE" opacity="0.6"/>
+    <circle cx="128" cy="60" r="5.5" stroke="#1F4B49" opacity="0.8"/>
+    <line x1="128" y1="65.5" x2="128" y2="78" stroke="#1F4B49" opacity="0.8"/>
+    <line x1="118" y1="72" x2="138" y2="72" stroke="#1F4B49" opacity="0.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Power Up Your Practice Masterclass',sub:'What immigration firm owners actually need to grow: intake that holds up under volume, marketing that respects the client and the bar, and a practice that reaches its goals without consuming the person who built it.',brand:true,book:'title'},
+ {t:'normal',k:'Who this is for',title:'Immigration firm owners growing case volume faster than their systems.',body:'Solo and small-firm attorneys handling filings, deadlines, and a client population that needs more hand-holding than most areas of law, with less time than ever to give it.'},
+ {t:'normal',k:'What you’ll walk away with',title:'A clear, honest read on where immigration-firm growth actually breaks.',body:'The same three areas covered in Power Up Your Practice, narrowed to the immigration-specific version of each: intake, marketing, and the practice that does not run you into the ground.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a guarantee.',body:'Every practice, caseload, and market is different. What matters is the version of this that fits yours.',disc:'Educational content. Nothing here is a promise of income, hours, or business results. Results vary and no outcome is guaranteed.'},
+ {t:'normal',k:'Who’s teaching this',title:'Ruby Powers. Board Certified in Immigration and Nationality Law.',body:'Founder of Powers Law Group, a full-service immigration firm in Houston. Committee chair at AILA. Author of two books on immigration practice management, and a national media source cited by the Washington Post, the New York Times, and CNN.'},
+
+ {t:'section',idx:'Part One',title:'Intake as Infrastructure'},
+ {t:'normal',k:'Where it actually breaks',title:'Immigration filings multiply faster than most firms’ intake can absorb.',body:'Case types, deadlines, and document chains stack differently than in general civil practice. A firm that grows filings without growing intake starts missing the details that matter most.'},
+ {t:'normal',k:'What most firms try first',title:'More hours, not better structure.',body:'The instinct is to work later. The actual fix is a repeatable intake system built for immigration case types specifically, not a general practice-management template.'},
+ {t:'dark',title:'A firm that scales its filings without scaling its intake is scaling its risk.'},
+ {t:'normal',k:'The real cost',title:'A missed detail in immigration law is rarely a small one.',body:'Deadlines and document requirements in immigration cases carry consequences that a general-practice intake process was never built to catch.'},
+
+ {t:'section',idx:'Part Two',title:'Marketing Without Crossing a Line'},
+ {t:'normal',k:'The tension',title:'Immigration attorneys serve a uniquely vulnerable client base.',body:'Bar rules on attorney solicitation exist in every practice area, but they carry more weight here, where clients are often navigating a system they do not fully understand, under real time pressure.'},
+ {t:'normal',k:'The real skill',title:'Marketing that informs before it sells.',body:'The version of ethical marketing this book teaches is not caution for its own sake. It is building trust with a client who needs to trust someone, and doing it in a way the bar has no reason to question.'},
+ {t:'dark',title:'The firms that grow fastest in this niche are the ones clients trust before they ever call.'},
+
+ {t:'section',idx:'Part Three',title:'A Practice That Doesn’t Consume You'},
+ {t:'normal',k:'The shift',title:'Growth and burnout are not the same line on the same graph.',body:'A practice built only to file more cases eventually runs its owner into the ground. The third part of the book is about building the firm and the life, not one at the expense of the other.'},
+ {t:'normal',k:'What that looks like',title:'A firm that reaches its goals on a schedule its owner can actually keep.',body:'Not a smaller caseload out of necessity. A structured one, so the practice serves the life it was supposed to fund.'},
+ {t:'dark',title:'The goal was never just more filings. It was a practice worth having built.'},
+
+ {t:'section',idx:'Where to go next',title:'Keep Powering Up'},
+ {t:'normal',k:'Free, then deeper',title:'Start with the masterclass. Go deeper with the books and the podcast.',body:'Then, for firm owners who want it directly: 1-on-1 strategic consulting, workshops, or a seat at the next Powers Strategy Group retreat, through the contact page or the newsletter you already run.'},
+ {t:'cta',title:'Build the firm. Build the life.',chips:['Read Power Up Your Practice','Get in touch'],disc:'Educational content only. No income, hours, or business result is guaranteed. Results vary by attorney and market.'},
+];
+
+const deck=document.getElementById('deck');
+function bookMotif(kind){return `<svg class="book-motif ${kind==='title'?'title-book':'corner-book'}"><use href="#book"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Power Up Your <b>Practice</b> · Ruby Powers</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.book) h+=bookMotif(s.book);
+  else if(s.t==='title') h+=bookMotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
