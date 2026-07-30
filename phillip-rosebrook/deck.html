@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Achieving Max Value &middot; Phillip Rosebrook, Business Mentors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f1f0ed; --panel:#e2e0da; --rule:#cbc8c0;
+    --ink:#232323; --accent:#1374a1; --slate:#3a3a3a;
+    --soft:#4c4c4c; --dim:#8a8781;
+  }
+  html,body{height:100%}
+  body{background:#d9d7d0;font-family:'Raleway',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#d9d7d0}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.6% 9.2%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Raleway',sans-serif;font-size:.98vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:0}
+  .t-title h1{font-size:5vw;max-width:86%}
+  .t-normal h1{font-size:3.4vw;max-width:84%}
+  .t-normal .body{font-family:'Raleway',sans-serif;font-size:1.4vw;color:var(--soft);margin-top:2.6vh;max-width:73%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Raleway',sans-serif;font-size:1.62vw;color:var(--soft);margin-top:3.2vh;max-width:76%;line-height:1.55;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Raleway',sans-serif;font-size:1.1vw;font-weight:700;color:var(--accent);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:22vw;height:2px;background:var(--slate);opacity:.45;margin-top:3.8vh}
+  .t-quiet{background:var(--slate);align-items:center;text-align:center}
+  .t-quiet h1{font-size:3.5vw;max-width:86%;color:#f1f0ed;font-weight:500;font-style:italic}
+  .t-quiet .body{color:#c3c0b9;text-align:center;max-width:70%;margin-left:auto;margin-right:auto}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:2.9vw;text-align:center;margin-bottom:4.4vh}
+  .flowrow{display:flex;gap:1.3vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--bg);border-top:2px solid var(--accent);padding:2.6vh 1.4vw;width:20vw;min-height:15vh;display:flex;flex-direction:column;gap:1.1vh}
+  .flowcard .n{font-family:'Raleway',sans-serif;font-size:.94vw;font-weight:700;color:var(--dim);letter-spacing:.22em;text-transform:uppercase}
+  .flowcard .l{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.72vw;font-weight:600;color:var(--ink);line-height:1.2}
+  .flowcard .d{font-family:'Raleway',sans-serif;font-size:.92vw;font-weight:400;color:var(--soft);line-height:1.5}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border-bottom:2px solid var(--accent);color:var(--accent);padding:.9vh 1.2vw;font-family:'Raleway',sans-serif;font-size:1.16vw;font-weight:600;letter-spacing:.06em}
+  .disc{position:absolute;left:9.2%;right:9.2%;bottom:4.4vh;font-family:'Raleway',sans-serif;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.5}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-quiet .disc{color:#a5a29a}
+  .bench{position:absolute;pointer-events:none}
+  .title-bench{right:8%;bottom:11%;width:21vw}
+  .corner-bench{right:6.6%;bottom:8.2%;width:10vw;opacity:.5}
+  .brandline{font-family:'Raleway',sans-serif;font-size:1.18vw;color:var(--soft);margin-top:3.8vh;font-weight:400;letter-spacing:.04em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(35,35,35,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:#7d7a74;z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#7d7a74;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#7d7a74;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-quiet h1{font-size:5.6vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:38vw}.flowcard .n{font-size:2vw}.flowcard .l{font-size:3.4vw}.flowcard .d{font-size:1.9vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 23</div>
+<div class="brand-foot">Business Mentors</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bench" viewBox="0 0 300 110">
+  <g fill="none" stroke="#1374a1" stroke-width="2">
+    <line x1="8" y1="88" x2="292" y2="88" opacity="0.55"/>
+    <line x1="150" y1="88" x2="150" y2="34"/>
+    <path d="M132 46 L150 24 L168 46 Z" fill="#1374a1" stroke="none"/>
+    <line x1="60" y1="82" x2="60" y2="94" opacity="0.4"/>
+    <line x1="105" y1="82" x2="105" y2="94" opacity="0.4"/>
+    <line x1="195" y1="82" x2="195" y2="94" opacity="0.4"/>
+    <line x1="240" y1="82" x2="240" y2="94" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Achieving Max Value',sub:'What a restoration company is actually worth, why revenue is the weakest signal of it, and the three steps from an honest diagnosis to a measured result.',brand:true,motif:'title'},
+
+ {t:'normal',k:'Who this is for',title:'Owners who have already built the company and now want it to be worth something.',body:'You have trucks, crews, carrier relationships and a name in your market. You also have a company that would struggle for a while if you stopped answering the phone. This class is for the owner who is past proving it can work and is now asking what it is worth.'},
+ {t:'normal',k:'What you will walk away with',title:'A way to look at your own company that has nothing to do with last month.',body:'What a buyer, a bank and a good general manager all look at, in what order, and the three-step path from finding out where you actually are to holding a measured improvement.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a valuation.',body:'Every company, market and set of books is different. Nothing here values your business or promises any outcome. Take the framework and run it against your own numbers and your own team.',disc:'Educational content. Nothing here is a guarantee of income, revenue, valuation, or any business result. Results vary.'},
+ {t:'normal',k:'Who is teaching this',title:'Phillip Rosebrook. Business Mentors.',body:'Thirty years in restoration that started as a technician, twenty of them consulting, and more than a hundred restoration companies advised. RIA Certified Restorer number 179. The whole practice runs on one line: know where you are going.'},
+
+ {t:'section',idx:'Part One',title:'Revenue Is The Weakest Thing You Can Show Anyone'},
+ {t:'normal',k:'The version you live',title:'A record year and no more confidence than the year before it.',body:'Restoration revenue arrives in storms, surges and program assignments. A big year proves the market was generous. It does not prove the company can repeat it, survive the owner taking a month off, or be handed to anyone.'},
+ {t:'normal',k:'What most owners measure',title:'The top line, the truck count, and how busy everyone looks.',body:'All three are activity. None of them tells you whether the company has the structure to hold what it has already won, which is the actual question underneath everything else.'},
+ {t:'quiet',title:'A company that depends on the owner is a job with employees attached to it.'},
+ {t:'normal',k:'What value actually rests on',title:'Structure, measurement, and whether the right people are in the right seats.',body:'Position level financial benchmarks. Departmental measurements. An organisational structure built for the phase the company is entering rather than the one it left. Partners who agree in writing on who does what. Those are the load-bearing walls.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Steps'},
+ {t:'flow',k:'The path this class teaches',title:'Discovery. Implementation. Results.',items:[
+   {n:'Step one',l:'Discovery and Recognition',d:'Find out what is actually true about the company before deciding anything.'},
+   {n:'Step two',l:'Strategic Implementation',d:'Turn the findings into a written plan with owners, dates and measures.'},
+   {n:'Step three',l:'Maximize Results',d:'Hold the plan long enough for the numbers to move, then benchmark again.'}]},
+ {t:'normal',k:'Step one',title:'Diagnose before you prescribe.',body:'Leadership strengths, weaknesses and goals. Market position. Face to face conversations with the core leadership. A complete financial statement and metrics review. Most owners have never had all four of these on the same table at the same time.'},
+ {t:'normal',k:'The part most owners skip',title:'Ask the staff, confidentially, and read what comes back.',body:'A confidential questionnaire to the team gives you the half of the picture the owner cannot see from the owner chair. Put it beside the financials and the real constraint usually names itself in an afternoon.'},
+ {t:'normal',k:'Step two',title:'A plan is only a plan when it says who, by when, and how it is measured.',body:'Right people in the right positions. Performance measurements and departmental benchmarks. An internal systems evaluation. A marketing action plan tied to actual revenue targets. A scalable infrastructure that grows with the company instead of being rebuilt every two years.'},
+ {t:'normal',k:'Step three',title:'The gap between planning and execution is where most plans die.',body:'Nothing in a strategic plan improves because it was written well. It improves because someone is in the room every month asking what moved, what did not, and why. That accountability is the difference between a binder and a result.'},
+ {t:'quiet',title:'Know where you are going. Then measure whether you are getting there.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When The Company Is Measured'},
+ {t:'normal',k:'For the leadership team',title:'Arguments turn into numbers.',body:'When every department has a benchmark and every position has a financial expectation, the monthly meeting stops being about opinions. That is worth more to morale than almost anything an owner can say.'},
+ {t:'normal',k:'For the clients',title:'Value shows up in retention long before it shows up in a sale.',body:'The most profitable restoration work comes from relationships that repeat: the agents, the property managers, the carriers, the homeowners who call you again. Keeping clients for life is a structural outcome, not a marketing campaign.'},
+ {t:'normal',k:'For the owner',title:'Optionality. The point of a valuable company is that you get to choose.',body:'Sell it, hand it to a general manager, hand it to family, or keep running it because you want to rather than because it cannot run without you. All four of those are the same piece of work.'},
+ {t:'quiet',title:'You are not building a bigger company. You are building one that could survive you.'},
+
+ {t:'normal',k:'Your next step',title:'Run the health check on your own company this month.',body:'Score the company honestly across the areas in step one, and let the lowest score choose your next project. Most owners already suspect what it will be, and are relieved when the exercise agrees with them.'},
+ {t:'cta',title:'Find out where your company actually stands.',chips:['Start with the Business Health Checklist'],disc:'Educational content only. No income, revenue, valuation, or business result is guaranteed. Results vary by company, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="bench ${kind==='title'?'title-bench':'corner-bench'}" viewBox="0 0 300 110"><use href="#bench"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div><div class="d">${it.d}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Phillip Rosebrook &middot; <b>Business Mentors</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
