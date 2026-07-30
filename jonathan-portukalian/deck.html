@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Proven Modular System · Jonathan Portukalian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0A1220; --panel:#101F38; --rule:#1B3358;
+    --blue:#0f52ff; --sky:#5B8BFF; --chalk:#F2F5FA; --grey:#a0a0a0; --dim:#6B7A90;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--sky);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:600;color:var(--chalk);line-height:1.12;letter-spacing:-.012em}
+  .t-title h1{font-size:4.7vw}
+  .t-normal h1{font-size:3.2vw;max-width:86%}
+  .t-normal .body{font-size:1.48vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:300}
+  .sub{font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start;background:linear-gradient(115deg,var(--panel) 0%,var(--bg) 62%)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.3vw;font-weight:700;color:var(--blue);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:18vw;height:3px;background:linear-gradient(90deg,var(--blue),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#132A55 0%,#050A14 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#FFFFFF;font-weight:500}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#132A55 0%,#050A14 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--blue);color:#CBD9FF;border-radius:4px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .shell{position:absolute;pointer-events:none;opacity:.92}
+  .title-shell{right:6.5%;bottom:8%;width:26vw}
+  .corner-shell{right:5.5%;bottom:7%;width:11vw;opacity:.32}
+  .brandline{font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--sky);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--blue);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Pool Mentor Program</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- pool shell section profile: the drawing that exists before the dig -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="shell" viewBox="0 0 280 150">
+  <g fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="10" y1="34" x2="270" y2="34" stroke="#a0a0a0" opacity="0.35"/>
+    <path d="M28 34 L28 66 C28 92 44 108 74 110 L196 110 C226 108 244 92 244 62 L244 34" stroke="#0f52ff" opacity="0.95"/>
+    <path d="M36 34 L36 64 C36 86 50 100 76 102 L194 102 C220 100 236 86 236 60 L236 34" stroke="#5B8BFF" opacity="0.28"/>
+    <line x1="28" y1="44" x2="244" y2="44" stroke="#F2F5FA" opacity="0.16"/>
+    <circle cx="244" cy="34" r="4" fill="none" stroke="#0f52ff" stroke-width="2.4"/>
+    <circle cx="28" cy="34" r="4" fill="none" stroke="#0f52ff" stroke-width="2.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Proven Modular System',sub:'How to run pool builds that finish on schedule and actually make money.',brand:true,shell:'title'},
+ {t:'normal',k:'Who this is for',title:'You can build a pool. That was never the problem.',body:'You know the dig, the plumbing, the set, the deck. You have crews who show up. And still, some months the money is there and some months it is gone, and you cannot say exactly which build did that to you.'},
+ {t:'dark',title:'Most builders do not lose money in the ground. They lose it in the quote.'},
+
+ {t:'section',idx:'Part One',title:'Where The Money Leaks'},
+ {t:'normal',k:'Leak one',title:'The estimate written from memory.',body:'You have priced enough pools to do it in your head, so you do. Then the excavation hits rock, the client moves the equipment pad, and there is nothing in writing that says who pays. You eat it, because arguing costs more than the change.'},
+ {t:'normal',k:'Leak two',title:'The schedule that only exists in your truck.',body:'Nobody else knows what happens Tuesday. Subs call you to find out. Every delay routes through one phone, and that phone belongs to the person who is supposed to be selling the next pool.'},
+ {t:'normal',k:'Leak three',title:'A client who is guessing.',body:'A homeowner who does not know what week they are in will call you every day of it. That is not a difficult client. That is a missing system, and it costs you hours you never invoice.'},
+ {t:'dark',title:'A build you cannot repeat is not a business. It is a favour you did once.'},
+
+ {t:'section',idx:'Part Two',title:'The Proven Modular System'},
+ {t:'normal',k:'Module one, Design before dirt',title:'Draw the pool in 3D, then build the drawing.',body:'The 3D model is not a picture for the client. It is the build document. It sells the job, it carries the permit, it prices the scope, and it settles the argument before there is one, because everything the client asked for is visible in it.'},
+ {t:'normal',k:'Module two, Price the build, not the pool',title:'You are not selling a pool. You are selling a scope.',body:'Every line, every allowance, every exclusion, priced from a model instead of a memory. The estimate framework and the contract are one document doing one job: making sure the pool you priced is the pool you build.'},
+ {t:'normal',k:'Module three, One workflow, every project',title:'The same twelve steps, in the same order, every time.',body:'Project management and CRM are not software you buy. They are a sequence you commit to, so build number eleven starts exactly where build number ten ended and nothing lives only in your head.'},
+ {t:'normal',k:'Module four, The crew runs the sequence',title:'Your team should know Tuesday without asking you.',body:'When the sequence is written down, a crew lead can run the day and a sub can be held to a date. That is the difference between a company and a very busy person with a truck.'},
+ {t:'normal',k:'Module five, Delivery is a system too',title:'Tell them what week they are in, every week.',body:'A short, predictable update turns an anxious homeowner into a referral. Five to six week builds and a 4.9 star average are not charm. They are the result of a client experience that was designed on purpose.'},
+ {t:'dark',title:'Modular means the next build starts where the last one ended.'},
+
+ {t:'section',idx:'Part Three',title:'The Build That Repeats'},
+ {t:'normal',k:'What changes first',title:'The quote stops being a guess.',body:'Priced from a model, with a scope the client already saw, margin stops being whatever is left over at the end. You find out on paper whether the job is worth taking, before the excavator is booked.'},
+ {t:'normal',k:'What changes next',title:'The company survives your day off.',body:'When the sequence lives outside your phone, you can be at a sales appointment while a build runs correctly without you. That is when volume stops costing you your evenings.'},
+ {t:'normal',k:'Why listen to me',title:'I am still building pools.',body:'Wetscapes Fiberglass Pools: 100 plus custom pools, over $10 million in completed projects, a 4.9 star rating across 64 plus clients, five to six week build windows, and a partnership with Z Pool Forms. I film the builds and put them on YouTube because the work should be checkable.'},
+ {t:'dark',title:'The system is worth more than the crew, the truck, or the lead.'},
+
+ {t:'section',idx:'Your next step',title:'Build It With Me'},
+ {t:'normal',k:'How the mentorship works',title:'Two calls a month, my systems, and my phone number.',body:'The Pool Mentor Program is private mentorship for serious builders: two 1-on-1 strategy calls every month, direct access to me, my pricing, contracts, estimates, project management and team systems, my supplier and builder network, and a walkthrough of your first build with the whole thing in place.'},
+ {t:'cta',title:'Ready to build it the same way twice?',chips:['Watch a real build','Apply for mentorship','Book a 15 minute call'],disc:'Educational content for pool builders and contractors. No income, revenue, margin, or business result is guaranteed. Results vary by builder, crew, market, and season.'},
+];
+
+const deck=document.getElementById('deck');
+function shell(kind){return `<svg class="shell ${kind==='title'?'title-shell':'corner-shell'}"><use href="#shell"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Pool Mentor Program &middot; <b>Jonathan Portukalian</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.shell) h+=shell(s.shell);
+  else if(s.t==='title') h+=shell('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
