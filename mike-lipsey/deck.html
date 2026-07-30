@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Consultative Brokerage &middot; The Lipsey Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbfbfa; --panel:#eceeee; --rule:#d5dada;
+    --teal:#338384; --gold:#deae43; --chalk:#1d2424; --grey:#525656; --dim:#8c9292;
+  }
+  html,body{height:100%}
+  body{background:#dfe2e2;font-family:'Montserrat',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dfe2e2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9% 9.5%}
+  .slide.active{opacity:1;visibility:visible}
+  .slide::after{content:'';position:absolute;left:0;top:0;width:100%;height:.85vh;background:var(--teal)}
+  .t-quote::after{background:var(--gold)}
+  .kicker{display:inline-block;font-family:'Montserrat',sans-serif;font-size:.94vw;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);border-bottom:.32vh solid var(--gold);padding-bottom:.9vh;margin-bottom:2.6vh;align-self:flex-start}
+  h1{font-family:'Zilla Slab',Georgia,serif;font-weight:700;color:var(--chalk);line-height:1.12;letter-spacing:-.012em}
+  .t-title h1{font-size:4.7vw;max-width:86%}
+  .t-normal h1{font-size:3vw;max-width:82%;font-weight:500}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:70%;line-height:1.65;font-weight:300}
+  .sub{font-family:'Montserrat',sans-serif;font-size:1.62vw;color:var(--grey);margin-top:3vh;max-width:72%;line-height:1.55;font-weight:300}
+  .t-section{background:var(--panel);align-items:flex-start;justify-content:flex-end;padding-bottom:12%}
+  .t-section .idx{font-family:'Zilla Slab',serif;font-size:6.4vw;font-weight:700;color:var(--gold);line-height:.9;margin-bottom:1.6vh}
+  .t-section h1{font-size:4vw;max-width:80%}
+  .t-quote{background:var(--teal);align-items:flex-start;justify-content:center}
+  .t-quote h1{font-size:3.4vw;max-width:80%;color:#fbfbfa;font-weight:500;line-height:1.2}
+  .t-quote .tick{width:5.5vw;height:.5vh;background:var(--gold);margin-bottom:3vh}
+  .t-cta{background:var(--panel);align-items:flex-start}
+  .t-cta h1{font-size:3.6vw;max-width:78%}
+  .chips{display:flex;gap:.9vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{background:var(--teal);color:#fbfbfa;border-radius:2px;padding:1.2vh 1.5vw;font-size:1.14vw;font-weight:600;font-family:'Montserrat',sans-serif}
+  .disc{position:absolute;left:9.5%;right:9.5%;bottom:4.4vh;font-size:.84vw;color:var(--dim);text-align:left;line-height:1.45;font-weight:300}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.18vw;color:var(--grey);margin-top:3.6vh;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--teal);font-weight:700}
+  .steps{position:absolute;pointer-events:none}
+  .s-title{right:7%;bottom:12%;width:16vw;opacity:.9}
+  .s-corner{right:6.5%;bottom:9%;width:8.5vw;opacity:.4}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.09);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#6f7676;z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6f7676;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#6f7676;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.4vw}.t-title h1{font-size:7.8vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.6vw}.t-section .idx{font-size:11vw}.t-quote h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.5vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Lipsey Company</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- numbered step rule: the grammar of a 10 step method -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="steps" viewBox="0 0 240 140">
+  <g fill="none" stroke-width="3.2" stroke-linecap="square">
+    <line x1="16" y1="20" x2="224" y2="20" stroke="#338384" opacity="0.85"/>
+    <line x1="16" y1="70" x2="176" y2="70" stroke="#338384" opacity="0.5"/>
+    <line x1="16" y1="120" x2="128" y2="120" stroke="#deae43"/>
+    <rect x="8" y="12" width="16" height="16" fill="#deae43" stroke="none"/>
+    <rect x="8" y="62" width="16" height="16" fill="#338384" stroke="none" opacity="0.7"/>
+    <rect x="8" y="112" width="16" height="16" fill="#338384" stroke="none" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Consultative Brokerage',sub:'How to get paid for your advice, not only for the closing. Drawn from Systems for Success and forty years of training the commercial real estate industry.',brand:true},
+
+ {t:'normal',k:'Who this is for',title:'You are good at this and it still feels fragile.',body:'You know your submarket, you can run a tour, you can hold a negotiation together. And your income still depends entirely on whether a deal you do not control decides to close. That is not a skill problem. It is a structure problem, and structure can be changed.'},
+
+ {t:'quote',title:'Nothing you know is free. It only looks free because of how you agreed to be paid.'},
+
+ {t:'section',idx:'01',title:'Paid Only At The End'},
+
+ {t:'normal',k:'The contingency',title:'Months of work, one conditional payday.',body:'A commercial assignment can take a year. You underwrite, you tour, you advise, you negotiate. Then a lender, a partner or a board changes its mind and every hour you spent is worth nothing. You carried all of the risk and none of the pricing power.'},
+
+ {t:'normal',k:'Free advice',title:'You give away the most valuable thing you own.',body:'The market study, the read on the submarket, the honest answer about whether to hold or sell. Owners collect all of it before they decide, and because it costs them nothing they weigh it as if it is worth nothing. What is unpriced is unvalued.'},
+
+ {t:'normal',k:'The fee conversation',title:'When you sell the same service, you compete on price.',body:'Three brokers pitch the same listing with the same market knowledge and the same responsiveness. There is only one variable left, so the owner negotiates the fee. That conversation is not caused by a weak close. It is caused by an undifferentiated offer.'},
+
+ {t:'normal',k:'The unsystematised hour',title:'The tour is the most repeated hour of your week and the least designed.',body:'Most brokers run a tour by instinct: unlock, walk, answer questions, drive to the next one. It is the single moment where a client forms an opinion of your judgment, and it is almost never built to a plan. The same is true of discovery, of the presentation, and of the close.'},
+
+ {t:'quote',title:'A broker with talent has good years. A broker with systems has a business.'},
+
+ {t:'section',idx:'02',title:'Services For A Fee'},
+
+ {t:'normal',k:'Module one, discovery',title:'Client discovery and needs analysis comes first, always.',body:'Before a price, before a strategy, before a tour. A thorough needs analysis is what separates an advisor from a vendor, and it is where rapport is actually built. Most brokers skip it because the client seems to already know what they want. They rarely do.'},
+
+ {t:'normal',k:'Module two, consultative brokerage',title:'Price the advice. Then the transaction is upside, not survival.',body:'A portfolio review, a market strategy, a lease audit, a disposition plan. These are engagements with a scope and a fee, delivered before anyone commits to a transaction. The client gets a better decision, and you get paid for the expertise you were already giving away.'},
+
+ {t:'normal',k:'Module three, presentations that win',title:'Win rate is a design problem, not a confidence problem.',body:'A presentation that wins is industry specific and built to answer the questions the owner has not asked yet. Same room, same competitors, different construction. Brokers who treat the presentation as a designed piece of work win more of them, consistently.'},
+
+ {t:'normal',k:'Module four, the perfect tour',title:'Ten steps, so the tour proves your judgment instead of testing it.',body:'The tour has a sequence: what happens before, the order of the stops, what gets said at each one, what the client leaves holding, and what happens in the twenty four hours after. Run to a plan it becomes the strongest evidence you offer. Run on instinct it becomes a drive.'},
+
+ {t:'normal',k:'Module five, negotiating to win',title:'Negotiation is psychology before it is arithmetic.',body:'The number moves last. What moves first is what each side believes about their alternatives, their timeline, and the cost of no agreement. Brokers trained on the psychology hold more of the fee and lose fewer deals in the final week.'},
+
+ {t:'normal',k:'Module six, financial literacy',title:'Use the financial analysis to win the deal, not just to file it.',body:'The broker who can sit with an owner and walk their numbers, honestly, is the broker who gets asked for advice next time. Financial literacy is not back office work. It is the credential that makes a paid advisory engagement possible in the first place.'},
+
+ {t:'quote',title:'Change what you are paid for, and every other problem in the business gets smaller.'},
+
+ {t:'section',idx:'03',title:'Where This Comes From'},
+
+ {t:'normal',k:'The curriculum',title:'Forty years, 191 courses, one industry.',body:'The Lipsey Company has trained the commercial real estate industry for over forty years, delivering more than two hundred programs a year. The course library behind this runs to 191 titles, and the same hands wrote BOMA’s Boot Camp for property and asset managers and IFMA’s FM 101, 201 and 301 series. Systems for Success is where it all lives.'},
+
+ {t:'cta',title:'Want to build this into your practice?',chips:['Talk to Mike','See the training menu','Systems for Success'],disc:'Educational content for commercial real estate brokers, teams and brokerage owners. No income, commission, fee, or business result is guaranteed. Results vary by broker, firm, market and asset class.'},
+];
+
+const deck=document.getElementById('deck');
+function steps(kind){return `<svg class="steps ${kind==='title'?'s-title':'s-corner'}"><use href="#steps"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`; }
+  else if(s.t==='quote'){ h=`<div class="tick"></div><h1>${s.title}</h1>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Systems for <b>Success</b> &middot; The Lipsey Company</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=steps('title');
+  else if(s.t==='cta') h+=steps('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
