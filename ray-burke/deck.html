@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Damage-Free Soft Wash &middot; Spray Wash Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1b1b1b; --panel:#161616; --rule:#2f2f2f;
+    --accent:#3b9ad5; --deep:#2a7db0; --steel:#2477ab;
+    --chalk:#f7f7f7; --grey:#9aa6ad; --dim:#6d7a82;
+  }
+  html,body{height:100%}
+  body{background:#0d0d0d;font-family:'Lato',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d0d0d}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Lusitana',Georgia,serif;font-weight:400;color:var(--chalk);line-height:1.18;letter-spacing:0}
+  .t-title h1{font-size:4.2vw;font-weight:700}
+  .t-normal h1{font-size:2.9vw;max-width:87%}
+  .t-normal .body{font-size:1.45vw;color:var(--grey);margin-top:2.8vh;max-width:78%;line-height:1.58;font-weight:300}
+  .sub{font-size:1.62vw;color:var(--grey);margin-top:3.4vh;max-width:80%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.25vw;font-weight:700;color:var(--accent);margin-bottom:2.2vh;letter-spacing:.18em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%;font-weight:700}
+  .t-section .rule{width:18vw;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#12303f 0%,#101010 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.95vw;max-width:82%;color:var(--chalk);font-weight:400}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#12303f 0%,#101010 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.4vw;max-width:84%;font-weight:700}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:1.3vh 1.7vw;font-size:1.15vw;font-weight:700;font-family:'Lato',sans-serif;letter-spacing:.04em}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.88vw;color:var(--dim);text-align:center;line-height:1.45;font-weight:300}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .spray{position:absolute;pointer-events:none}
+  .title-spray{right:7%;bottom:8.5%;width:17vw;opacity:.95}
+  .corner-spray{right:6%;bottom:7%;width:7.4vw;opacity:.42}
+  .brandline{font-family:'Lato',sans-serif;font-size:1.22vw;color:var(--grey);margin-top:3.6vh;font-weight:300;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.07);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.3vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}.t-cta h1{font-size:6vw}.chip{font-size:2.5vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Spray Wash Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- spray arc over a leaf, one stroke -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="spray" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round">
+    <path d="M18 30 C70 30 120 62 150 104" stroke="#3b9ad5" stroke-width="2.6" opacity="0.9"/>
+    <path d="M18 44 C66 46 110 74 136 110" stroke="#2a7db0" stroke-width="2.2" opacity="0.65"/>
+    <path d="M18 58 C62 62 100 86 122 116" stroke="#2477ab" stroke-width="1.8" opacity="0.45"/>
+    <path d="M186 128 C186 96 210 74 240 70 C240 102 218 126 186 128 Z" stroke="#f7f7f7" stroke-width="2.2" opacity="0.8"/>
+    <path d="M238 72 L192 124" stroke="#f7f7f7" stroke-width="1.4" opacity="0.55"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Damage-Free Soft Wash',sub:'How a crew cleans a roof and a house without killing a single plant, why most damage happens long before the chemical touches the surface, and how protecting the property becomes something the customer will happily pay extra for.',brand:true,spray:'title'},
+ {t:'normal',k:'Who this is for',title:'Owners and crew leads who already run soft wash and roof cleaning jobs.',body:'You have the equipment, you have customers, and the work mostly goes fine. Then one Saturday a hedge browns out three days after a roof job and you are writing a check instead of an invoice.'},
+ {t:'normal',k:'What you will walk away with',title:'A clear picture of what actually causes plant and property damage on a wash job, and the routine that prevents it.',body:'The chemistry behind the damage, the pre-wash walk, the coverings and rinse discipline that work, and how to charge for the protection instead of eating the cost of it.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every property, plant, roof and climate is different. What matters is the version of this routine that fits the work you actually do.',disc:'Educational content. Nothing here is a promise of income, hours, or business results. No outcome is guaranteed and results vary by company and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Ray Burke. Owner of Spray Wash Exterior Cleaning and founder of Spray Wash Academy.',body:'He and Tonya started Spray Wash Exterior Cleaning in Tallahassee in 2009 and still run trucks today. He holds a teaching degree and has been instructing for over twenty years, in this trade and others. The Plant and Property Protection certification was written with Doug Gore of Cajun Softwash, who also still runs a multiple truck company. Everything in this class is what those two companies do on real jobs.'},
+
+ {t:'section',idx:'Part One',title:'What Actually Burns the Landscaping'},
+ {t:'normal',k:'Where it breaks',title:'Most damage is not caused by the chemical. It is caused by what the crew did not do first.',body:'The mix was fine. The plants died anyway, because nothing was wet before the wash started, nothing was covered, and nothing was rinsed until the truck was already packing up.'},
+ {t:'normal',k:'The chemistry, plainly',title:'Bleach is only half the story. Salt is the other half.',body:'Sodium hydroxide and sodium hypochlorite leave salt behind as they break down. Salt in the root zone is what quietly kills a plant a week after everyone agreed the job looked great.'},
+ {t:'dark',title:'A plant almost never dies during the wash. It dies four days later, when nobody is there to see it.'},
+ {t:'normal',k:'Runoff is a map',title:'Water goes where the property tells it to go.',body:'Roof pitch, gutter drops, grading, mulch beds and driveway slope decide where your solution ends up. A crew that reads that before mixing anything already avoided most of the risk.'},
+ {t:'normal',k:'What most crews try first',title:'Turning the mix down and hoping.',body:'A weak mix does not clean, so the crew goes over it three times and puts more total product on the property than a correct mix would have. The fix was never the ratio on its own.'},
+
+ {t:'section',idx:'Part Two',title:'The Protection Routine'},
+ {t:'normal',k:'Before anything is mixed',title:'The pre-wash walk is the whole job in five minutes.',body:'Walk the property with the customer. Name the plants that are at risk, the beds that sit downhill, the irrigation heads, the exposed AC unit, the furniture. Say out loud what you are going to do about each one.'},
+ {t:'normal',k:'Wet, cover, rinse',title:'Saturate first, cover what stays, rinse before it dries.',body:'A plant that is already full of clean water cannot take on much of anything else. Coverings such as Tyvek and plant sheeting hold the line on what you cannot pre-wet. Dwell time is a decision, not an accident, and the rinse happens while the surface is still wet.'},
+ {t:'normal',k:'Ratios and dwell',title:'The right mix for the surface, held for the right time.',body:'Roof, siding, painted wood and concrete are four different problems. Once mix and dwell are chosen deliberately, one pass does the work, and one pass is what keeps product off the landscaping.'},
+ {t:'dark',title:'Protection is not being careful. It is a sequence, and a sequence can be taught to a nineteen year old on their second week.'},
+ {t:'normal',k:'When it goes wrong anyway',title:'Have the recovery ready before you need it.',body:'Flushing the root zone, documenting with photos from the pre-wash walk, and calling the customer before they call you. The companies that keep their reputation are the ones that handled it in the first twenty four hours.'},
+
+ {t:'section',idx:'Part Three',title:'Getting Paid for the Protection'},
+ {t:'normal',k:'The reframe',title:'Property protection is not overhead. It is the part of the job the customer actually cares about.',body:'Nobody hires you because they love clean shingles. They hire you because the house is their biggest asset and they want it handled by someone who will not wreck it.'},
+ {t:'normal',k:'How it sells',title:'Say what you protect, in writing, before you quote a number.',body:'The pre-wash walk turns into the estimate. The customer sees the beds, the plants and the furniture named on the page, and the low bidder who never mentioned any of it suddenly looks like the risk they are.'},
+ {t:'dark',title:'The cheapest wash on the street is the one with no plan for the landscaping. Make that the comparison.'},
+ {t:'normal',k:'What changes',title:'Fewer callbacks, fewer replacement checks, and a crew that can be sent out unsupervised.',body:'Damage claims stop being a cost of doing business. Technicians stop guessing. And a routine that is written down is a routine you can hand to the next hire instead of teaching it again from scratch.'},
+
+ {t:'section',idx:'The Path From Here',title:'Get Certified On It'},
+ {t:'normal',k:'Where to take it next',title:'The certification covers the full routine, tested, with your hands on real surfaces.',body:'Plant and Property Protection is the certification built specifically around everything above. The three day Softwashing and Roof Cleaning certification at the Tallahassee classrooms covers the craft it sits inside: chemistry, roof work, house washing and safe application on a real wash pad.'},
+ {t:'cta',title:'Clean the property. Protect the property. Charge for both.',chips:['Plant and Property Protection','Softwashing and Roof Cleaning Certification'],disc:'Educational content only. No income, hours, or business result is guaranteed. Results vary by company, property and market.'},
+];
+
+const deck=document.getElementById('deck');
+function sprayMotif(kind){return `<svg class="spray ${kind==='title'?'title-spray':'corner-spray'}"><use href="#spray"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Spray Wash <b>Academy</b> &middot; Ray Burke</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.spray) h+=sprayMotif(s.spray);
+  else if(s.t==='title') h+=sprayMotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
