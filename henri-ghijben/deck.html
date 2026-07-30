@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Numbers That Keep a Tree Business Alive &middot; Tree Surgeons Business Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#12190f; --panel:#0c1712; --rule:#1f2c1c;
+    --accent:#86c23f; --chalk:#f5f7f2; --grey:#9aae95; --dim:#69795f;
+  }
+  html,body{height:100%}
+  body{background:#080d07;font-family:'Plus Jakarta Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#080d07}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:8.2% 9.4% 8.2% 11.2%}
+  .slide.active{opacity:1;visibility:visible}
+  /* the left spine: a hairline with an accent segment, on every content slide */
+  .slide::before{content:'';position:absolute;left:5.6%;top:14%;bottom:14%;width:1px;background:var(--rule)}
+  .slide::after{content:'';position:absolute;left:5.6%;top:14%;width:3px;height:9%;background:var(--accent);transform:translateX(-1px)}
+  .t-section::before,.t-section::after,.t-title::before,.t-title::after,.t-cta::before,.t-cta::after{display:none}
+  .kicker{font-size:.95vw;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:3vh}
+  h1{font-weight:800;color:var(--chalk);line-height:1.14;letter-spacing:-.015em}
+  .t-title{padding-left:9.4%}
+  .t-title h1{font-size:4.4vw;max-width:82%}
+  .t-title .sub{font-size:1.5vw;color:var(--grey);margin-top:3.6vh;max-width:70%;line-height:1.55;font-weight:400}
+  .t-normal h1{font-size:2.75vw;max-width:84%}
+  .t-normal .body{font-size:1.4vw;color:var(--grey);margin-top:3vh;max-width:74%;line-height:1.6;font-weight:400}
+  .t-section{background:var(--panel);align-items:flex-start;justify-content:center;padding-left:9.4%}
+  .t-section .idx{font-size:7.4vw;font-weight:800;color:var(--accent);line-height:.9;opacity:.9}
+  .t-section h1{font-size:3.5vw;max-width:70%;margin-top:2.4vh}
+  .t-quote{background:var(--panel);align-items:center;text-align:center;padding-left:9.4%}
+  .t-quote h1{font-size:2.85vw;max-width:80%;font-weight:600;line-height:1.34}
+  .t-quote .body{font-size:1.3vw;color:var(--grey);margin-top:3vh;max-width:62%;font-weight:400}
+  .t-cta{background:linear-gradient(180deg,var(--panel) 0%,#0a130d 100%);align-items:center;text-align:center;padding-left:9.4%}
+  .t-cta h1{font-size:3.3vw;max-width:80%}
+  .figs{display:flex;gap:3.4vw;margin-top:4.4vh}
+  .fig{border-left:2px solid var(--accent);padding-left:1.1vw}
+  .fig b{display:block;font-size:2.1vw;font-weight:800;color:var(--chalk);line-height:1.1}
+  .fig span{display:block;font-size:.92vw;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-top:.9vh}
+  .chips{display:flex;gap:1vw;margin-top:4.4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.8vw;font-size:1.1vw;font-weight:800;letter-spacing:.03em}
+  .brandline{font-size:1.05vw;color:var(--grey);margin-top:4vh;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:800}
+  .disc{position:absolute;left:11.2%;right:9.4%;bottom:4.2vh;font-size:.84vw;color:var(--dim);line-height:1.45;font-weight:400}
+  .t-quote .disc,.t-cta .disc{left:9.4%;text-align:center}
+  .rings{position:absolute;pointer-events:none;opacity:.5}
+  .rings.big{right:5.4%;bottom:7%;width:20vw}
+  .rings.mark{right:6.4%;top:9%;width:8vw;opacity:.34}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(245,247,242,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:11px;letter-spacing:.18em;color:var(--dim);z-index:20;font-weight:800}
+  .brand-foot{position:fixed;bottom:13px;left:18px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:800}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--dim);z-index:20;letter-spacing:.12em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.5vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:4.9vw}.t-normal .body{font-size:2.9vw}
+    .t-title .sub{font-size:3.1vw}.t-section h1{font-size:5.8vw}.t-section .idx{font-size:13vw}
+    .t-quote h1{font-size:5vw}.t-cta h1{font-size:5.8vw}.chip{font-size:2.4vw}.fig b{font-size:4.4vw}.fig span{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Tree Surgeons Business Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- growth rings of a cut stem: three concentric arcs, off-centre like a real trunk -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="rings" viewBox="0 0 240 240">
+  <g fill="none" stroke="#86c23f" stroke-linecap="round">
+    <circle cx="120" cy="120" r="108" stroke-width="2.2" opacity="0.95"/>
+    <circle cx="126" cy="116" r="80" stroke-width="1.8" opacity="0.72"/>
+    <circle cx="131" cy="112" r="53" stroke-width="1.6" opacity="0.54"/>
+    <circle cx="135" cy="109" r="27" stroke-width="1.4" opacity="0.4"/>
+    <circle cx="137" cy="107" r="7" stroke-width="2" opacity="0.9"/>
+    <path d="M120 12 C104 70 100 150 112 228" stroke-width="1.2" opacity="0.28"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Numbers That Keep a Tree Business Alive',sub:'Four figures every arb owner should be able to say out loud without opening a laptop, why a company can look busy and profitable right up to the week it folds, and what to do about it before the bad month arrives.',brand:true,rings:'big'},
+
+ {t:'normal',k:'Who this is for',title:'Owners running crews who are busy, booked, and quietly unsure where the profit went.',body:'The diary is full. The vans are out. Turnover looks respectable when you say it in the pub. And yet the bank balance never quite reflects the effort, and you could not tell a stranger what last Tuesday actually earned you.'},
+ {t:'normal',k:'What you will walk away with',title:'Four numbers, where each one comes from, and what each one changes on Monday morning.',body:'Margin per job. Cost per man day. What a client is worth over time. And the cash you need sat in the bank to survive a month that goes wrong. No spreadsheets to buy, no software to install.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every company, market and cost base is different. What matters is the version of these figures that fits the work you actually do.',disc:'Educational content. Nothing here is a promise of income, profit, or business results. No outcome is guaranteed and results vary by company and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Henri Ghijben. 22 years in tree surgery, 18 of them running HRG Tree Surgeons.',body:'In 2019 he had built the company to 47 staff. He lost a major contract, the business went under, and he had to lay off all 47 people. He rebuilt it, slower and properly, and runs it at seven figures with six crews today. He founded the Tree Surgeons Business Academy so other owners would not learn this the way he did.'},
+
+ {t:'section',idx:'01',title:'Why a Busy Company Can Still Fall Over'},
+ {t:'normal',k:'The honest post mortem',title:'The company did not fail because the work dried up. It failed because nobody was measuring it.',body:'Henri\'s own account of 2019: no margin per job, no cost per man day, no idea what any client was really worth, no view of what needed to be in the bank to absorb a bad month. Brilliant with a chainsaw. Winging everything else.'},
+ {t:'quote',title:'Turnover is what you tell people. Margin is what you keep. They are not related as closely as anyone hopes.',rings:'mark'},
+ {t:'normal',k:'The Operator Trap',title:'Booked solid, revenue decent, profit poor, and every decision routed through you.',body:'Time off feels impossible because the company stops when you do. Quoting gets faster and looser because there are eleven other things waiting. The busier it gets, the less anyone knows whether it is working.'},
+ {t:'normal',k:'Why price cutting hides it',title:'A job priced £200 light does not feel like anything on the day.',body:'It feels like winning the work. Repeat it two hundred times a year and it is the difference between a company that can hire and a company that cannot replace a chipper. Nobody notices, because nobody is measuring the job, only the invoice.'},
+
+ {t:'section',idx:'02',title:'The Four Numbers'},
+ {t:'normal',k:'Number one',title:'Margin per job, not turnover per job.',body:'What the job earned after the crew, the fuel, the tip fees, the kit and the hours in the office quoting it. Work it out on ten recent jobs and the pattern arrives fast. Most owners find one whole category of work they have been doing at a loss for years.'},
+ {t:'normal',k:'Number two',title:'Cost per man day.',body:'What one person on one crew for one day actually costs you, with wages, employer costs, vehicle, kit, insurance and the share of the overhead they carry. Once you know it, every quote becomes arithmetic instead of instinct, and so does every hire.'},
+ {t:'normal',k:'Number three',title:'What a client is actually worth.',body:'A one off removal and an estate you survey every year are not the same customer, even when the first invoice is bigger. Knowing the difference changes who you chase, who you keep, and how much effort a relationship deserves.'},
+ {t:'normal',k:'Number four',title:'The cash you need to survive a bad month.',body:'A frozen January. A gearbox. A client who pays at ninety days instead of thirty. The number is not a feeling, it is a calculation, and having it written down is what turns a bad month into an inconvenience rather than an ending.'},
+ {t:'quote',title:'You cannot price with confidence until you know what the day costs. Everything else in the business is downstream of that one figure.',rings:'mark'},
+ {t:'normal',k:'Where they come from',title:'Everything you need is already in your accounts and your job sheets.',body:'Not a new system. Last year\'s numbers, ten recent jobs, and an afternoon. The work is in deciding to look, and in being willing to see what the first honest hour tells you.'},
+
+ {t:'section',idx:'03',title:'What Changes Once You Know Them'},
+ {t:'normal',k:'Quoting',title:'You stop competing on price because you can finally see what price means.',body:'When the day has a cost, a cheap quote stops looking like a win and starts looking like what it is. Owners who know their figures walk away from work more often and earn more doing it.'},
+ {t:'normal',k:'Hiring and structure',title:'A team you can afford, in roles you can defend.',body:'Cost per man day tells you whether the next climber pays for himself and at what utilisation. That is the difference between growing and simply getting bigger, which are not the same thing and only one of them is survivable.'},
+ {t:'normal',k:'Your own week',title:'The bottleneck loosens because decisions stop needing you.',body:'A crew lead with a costed rate card can quote small works. An office with a reserve figure can chase debt on a rule instead of a mood. The company keeps moving on the days you are not in it.'},
+ {t:'quote',title:'A business that knows its numbers does not need the owner in every conversation. That is what taking a holiday actually costs.',rings:'mark'},
+
+ {t:'normal',k:'Where to take it next',title:'The Six Pillars: Performance, Sales, Marketing, Operations, Structure and Finances.',body:'The figures above sit inside Finances. The 3-Day Transformation in Southampton works through all six and you leave with a written plan for your own company. The TSM Mastermind is the twelve month version for owners who already have a team and want the accountability that comes with it.'},
+ {t:'cta',title:'Know your numbers. Then grow the profit.',chips:['3-Day Transformation','TSM Mastermind','The Tree Surgeons Podcast'],brand:true,disc:'Educational content only. No income, profit, or business result is guaranteed. Results vary by company, market and cost base.',rings:'big'},
+];
+
+const deck=document.getElementById('deck');
+function ringMark(kind){return `<svg class="rings ${kind==='big'?'big':'mark'}" viewBox="0 0 240 240"><use href="#rings"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.figs) h+=`<div class="figs">`+s.figs.map(f=>`<div class="fig"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('')+`</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Tree Surgeons <b>Business Academy</b> &middot; Henri Ghijben</div>`;
+  }
+  if(s.rings) h+=ringMark(s.rings);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
