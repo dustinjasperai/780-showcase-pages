@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Assignment Ledger &middot; Keith Lewis, The Restoration Entrepreneur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#eef2f8; --panel:#dde5f1; --rule:#c2cee2;
+    --ink:#16233c; --accent:#35558c; --brass:#c99c4d;
+    --soft:#47566f; --dim:#8592a8;
+  }
+  html,body{height:100%}
+  body{background:#cdd8e8;font-family:'Mulish',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#cdd8e8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.8%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Mulish',sans-serif;font-size:1vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Roboto Slab',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.006em}
+  .t-title h1{font-size:4.2vw;max-width:88%}
+  .t-normal h1{font-size:2.92vw;max-width:84%}
+  .t-normal .body{font-size:1.44vw;color:var(--soft);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.7vw;color:var(--soft);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Mulish',sans-serif;font-size:1.2vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:20vw;height:4px;background:linear-gradient(90deg,var(--brass),rgba(201,156,77,0));margin-top:3.6vh}
+  .t-quiet{background:var(--ink);align-items:center;text-align:center}
+  .t-quiet h1{font-size:3.2vw;max-width:88%;color:#eef2f8;font-weight:500}
+  .t-quiet .body{color:#a9b6cc;text-align:center;max-width:70%;margin-left:auto;margin-right:auto}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:2.5vw;text-align:center;margin-bottom:4.2vh}
+  .flowrow{display:flex;gap:1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:.2vw;padding:2.3vh 1.2vw;width:17.6vw;min-height:15vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Roboto Slab',Georgia,serif;font-size:1.9vw;font-weight:700;color:var(--brass);line-height:1}
+  .flowcard .l{font-size:1.02vw;font-weight:700;color:var(--ink);line-height:1.3}
+  .flowcard .d{font-size:.92vw;font-weight:400;color:var(--soft);line-height:1.45}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:2px solid var(--accent);color:var(--accent);border-radius:.2vw;padding:1.3vh 1.7vw;font-size:1.14vw;font-weight:700;letter-spacing:.03em}
+  .disc{position:absolute;left:8.8%;right:8.8%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-quiet .disc{color:#7f8ca3}
+  .tally{position:absolute;pointer-events:none}
+  .title-tally{right:7.2%;bottom:10.5%;width:20vw}
+  .corner-tally{right:6.2%;bottom:8%;width:9.5vw;opacity:.6}
+  .brandline{font-size:1.22vw;color:var(--soft);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(22,35,60,.09);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--brass);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#6b7a93;z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6b7a93;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#6b7a93;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:4.9vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-quiet h1{font-size:5.2vw}.t-flow h1{font-size:4.4vw}
+    .flowcard{width:38vw}.flowcard .n{font-size:3.8vw}.flowcard .l{font-size:2.2vw}.flowcard .d{font-size:1.9vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 23</div>
+<div class="brand-foot">The Restoration Entrepreneur</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="tally" viewBox="0 0 320 90">
+  <g>
+    <line x1="10" y1="20" x2="310" y2="20" stroke="#35558c" stroke-width="2" opacity="0.28"/>
+    <line x1="10" y1="44" x2="310" y2="44" stroke="#35558c" stroke-width="2" opacity="0.28"/>
+    <line x1="10" y1="68" x2="310" y2="68" stroke="#35558c" stroke-width="2" opacity="0.28"/>
+    <rect x="10" y="14" width="96" height="12" fill="#35558c" opacity="0.55"/>
+    <rect x="10" y="38" width="168" height="12" fill="#35558c" opacity="0.55"/>
+    <rect x="10" y="62" width="240" height="12" fill="#c99c4d"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Assignment Ledger',sub:'How restoration work is actually allocated in this country, the four channels an independent owner can be allocated from, and the one score that decides how much arrives next month.',brand:true,motif:'title'},
+
+ {t:'normal',k:'Who this is for',title:'Owners of independent restoration companies who are tired of buying leads.',body:'You do water, fire and mold work. You are good at it. Your phone still depends on whoever called you last, and every slow month feels like a marketing failure. This class is for the owner who suspects the problem is not marketing at all.'},
+ {t:'normal',k:'What you will walk away with',title:'A map of where claim work is allocated, and where you are not on it.',body:'The four channels that hand out restoration assignments, what each one actually requires from you, and the order to open them in. One sitting, no slides about branding.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every market, carrier and company is different. Nothing here is a guarantee that any particular program will accept you or send you work. Take the map and test it against your own market.',disc:'Educational content. Nothing here is a guarantee of income, revenue, assignments, or any business result. Results vary.'},
+ {t:'normal',k:'Who is teaching this',title:'Keith Lewis. The Restoration Entrepreneur.',body:'I coach restoration and construction owners through startup, growth, acquisition and exit, from West Palm Beach. My work is built around the channel most owners in this trade never open properly.'},
+
+ {t:'section',idx:'Part One',title:'Most Restoration Work Is Not Won. It Is Allocated.'},
+ {t:'normal',k:'The version you live',title:'You are not short of marketing. You are short of allocation.',body:'A homeowner with three feet of water does not shop. They call whoever the insurer, the adjuster, the plumber or the fire captain put in front of them. By the time a lead reaches an advertisement, somebody else has usually already been assigned.'},
+ {t:'normal',k:'What most owners try first',title:'A bigger marketing budget, another van, one more salesperson.',body:'All three add cost to a company whose volume is set somewhere else. None of them changes who is standing at the front of the line when the next claim is handed out.'},
+ {t:'quiet',title:'The bulk of insurance property claim volume moves through programs. If you are not on one, you are working the leftovers.'},
+ {t:'normal',k:'The real constraint',title:'Your volume ceiling is an access problem, not an effort problem.',body:'Third Party Administrators, or TPAs, manage claim volume on behalf of carriers and route it to contractors on their approved panels. Access to those panels is an application and a standard, not a bidding war. Most independent owners have simply never applied.'},
+
+ {t:'section',idx:'Part Two',title:'The Four Channels That Allocate Work'},
+ {t:'flow',k:'Open them in this order',title:'Programs. Grants. First responders. Trades.',items:[
+   {n:'01',l:'TPA programs',d:'Carrier claim volume routed to approved contractors on a panel.'},
+   {n:'02',l:'Community grant agencies',d:'Agencies that fund homeowner repairs directly, outside the claim.'},
+   {n:'03',l:'Fire service and first responders',d:'The people standing at the loss before any adjuster arrives.'},
+   {n:'04',l:'Trade referral partners',d:'Insurance agents, plumbers and HVAC contractors who find the loss first.'}]},
+ {t:'normal',k:'Channel one',title:'Get activated on the national programs.',body:'There are a small number of national TPAs and the application is a real process: licensing, insurance, capacity, coverage area, response commitments and documentation standards. In my coaching work contractors typically activate on five or six programs inside the first 120 days, and many begin receiving assignments within about 45 days.',disc:'That pattern describes contractors I have coached. It is not a guarantee of acceptance, timing, or volume for any company.'},
+ {t:'normal',k:'Channel two',title:'Community grant agencies pay for work the claim never covers.',body:'Most markets have agencies funding homeowner repairs directly, in bands that run from a few thousand dollars up to substantial full-scope amounts. This is real work, funded, in your own service area, and almost nobody in restoration is registered for it.'},
+ {t:'normal',k:'Channel three',title:'The fire service sees the loss before anyone else does.',body:'First responders are at the property while it is still smoking. They are asked what to do next, every single time. Being the answer to that question is a relationship you build once and keep, not a campaign you buy.'},
+ {t:'normal',k:'Channel four',title:'The plumber, the agent and the HVAC contractor find the water first.',body:'They are already inside the house at the moment of the loss. A referral program aimed at those three trades and at insurance agents puts you in the conversation before the homeowner has even opened a search engine.'},
+ {t:'quiet',title:'Four channels. None of them is an advertisement. All of them are access.'},
+
+ {t:'section',idx:'Part Three',title:'The Score That Decides Next Month'},
+ {t:'normal',k:'POMS',title:'Getting on the panel is the easy half. Staying fed is the score.',body:'Performance Operations Management System is how I teach owners to run to the measure. Programs grade the contractors on their panel, and the grade governs how many assignments arrive next. Cycle time, documentation, compliance and customer scores are the currency.'},
+ {t:'normal',k:'What that changes',title:'Run the company to the scorecard instead of to your instincts.',body:'When the measure is explicit, the operating decisions stop being arguments. Who touches the file, how fast the moisture logs go in, when the estimate is uploaded, what the homeowner is told on day one. All of it is now scored, which means all of it is now fixable.'},
+ {t:'normal',k:'And the margin side',title:'One point of margin is worth more than one more van.',body:'A single point of improvement on your profit margin multiplies the cash the company actually keeps. The levers are material cost, subcontractor terms, workflow and estimating accuracy, and every one of them is inside your own four walls.'},
+ {t:'normal',k:'Why I teach it this way',title:'Because the same map works at every stage of the company.',body:'Startups use it to get fed in year one. Established owners use it to stop the revenue swinging. Owners heading for a sale use it because a company fed by programs and scored on performance is worth more than one fed by whoever called last.'},
+ {t:'quiet',title:'A company that is allocated work is a different asset than a company that is chasing it.'},
+
+ {t:'normal',k:'Your next step',title:'Pick the channel you have never once applied to.',body:'For most owners that is channel one, and it is the one with a written standard you can meet this quarter. Open it, then work the score. The other three get easier once your file quality is already program grade.'},
+ {t:'cta',title:'Find out which programs your company already qualifies for.',chips:['Book a consultation with Keith'],disc:'Educational content only. No income, revenue, assignment volume, or program acceptance is guaranteed. Results vary by market, company, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="tally ${kind==='title'?'title-tally':'corner-tally'}" viewBox="0 0 320 90"><use href="#tally"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div><div class="d">${it.d}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Keith Lewis &middot; <b>The Restoration Entrepreneur</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
