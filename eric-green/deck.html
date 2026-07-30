@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Adding IRS Representation to Your Practice &middot; Eric Green</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F7F8FA; --panel:#EDF1F8; --rule:#D3DCEA;
+    --gold:#F7C908; --navy:#010366; --ink:#0B1440; --grey:#55607A; --dim:#8B93A8;
+  }
+  html,body{height:100%}
+  body{background:#08101F;font-family:'Lato',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#08101F}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh;background:var(--ink);display:inline-block;padding:.5vh 1vw;border-radius:2px}
+  h1{font-family:'Noto Sans',Arial,sans-serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.3vw}
+  .t-normal h1{font-size:3vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Noto Sans',sans-serif;font-size:1.35vw;font-weight:700;color:var(--navy);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.1vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#132456 0%,#08101F 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3vw;max-width:80%;font-style:italic;color:#F4F6FB;font-weight:400}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#0F1E47 0%,#08101F 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:82%;color:#F7F8FA}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--gold);color:#F9E28A;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#9AA3BE}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .ledger-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-ledger{right:7.5%;bottom:9%;width:16vw}
+  .corner-ledger{right:6%;bottom:7.5%;width:7vw;opacity:.5}
+  .brandline{font-size:1.28vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--navy);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#AEB6CC;z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#AEB6CC;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#AEB6CC;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.2vw}.t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Tax Rep Network</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ledger / case-file tab motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ledger" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.2" stroke-linecap="round">
+    <rect x="30" y="24" width="170" height="102" rx="6" stroke="#F7C908" opacity="0.85"/>
+    <line x1="30" y1="54" x2="200" y2="54" stroke="#D3DCEA" opacity="0.7"/>
+    <line x1="52" y1="76" x2="150" y2="76" stroke="#010366" opacity="0.6"/>
+    <line x1="52" y1="94" x2="178" y2="94" stroke="#010366" opacity="0.6"/>
+    <rect x="180" y="10" width="40" height="24" rx="3" stroke="#F7C908" opacity="0.85"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Adding IRS Representation to Your Practice',sub:'What it actually takes for a CPA or EA firm to add IRS resolution work as a real revenue line: the credential that backs it, the pricing that protects it, and the growth layer once the case work is solid.',brand:true,ledger:'title'},
+ {t:'normal',k:'Who this is for',title:'CPAs, EAs, and attorneys who already run an independent tax practice.',body:'Firms that already prepare returns and get IRS notices forwarded to them by clients, but turn the resolution work away, refer it out, or price it by guessing.'},
+ {t:'normal',k:'What you will walk away with',title:'A clear, honest look at what separates a firm that adds resolution work from one that just talks about it.',body:'The credential that makes the work defensible, the pricing discipline that makes it profitable, and what changes once both are in place.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a guarantee.',body:'Every practice, caseload, and market is different. What matters is the version of this that fits yours.',disc:'Educational content. Nothing here is a promise of income, hours, or business results. Results vary and no outcome is guaranteed.'},
+ {t:'normal',k:'Who is teaching this',title:'Eric Green. Practicing tax attorney, founder of Tax Rep Network.',body:'Founding partner of Green and Sklarz LLC, representing taxpayers before the IRS, the DOJ Tax Division, and state revenue departments. Before law, a senior tax consultant at KPMG and Deloitte and Touche. Built a national reputation negotiating settlements in thousands of civil tax controversy cases. Host of the Tax Rep Network podcast, 180 plus episodes.'},
+
+ {t:'section',idx:'Part One',title:'The Credential'},
+ {t:'normal',k:'Where it actually breaks',title:'Most firms treat resolution work as a favor, not a service.',body:'A client gets an IRS notice, the firm handles it informally with no forms discipline and no procedure, and either underprices the work or quietly avoids it altogether.'},
+ {t:'normal',k:'What most firms try first',title:'Winging it on the forms and hoping the agent is reasonable.',body:'The instinct is to treat each notice as a one-off. The actual fix is a credential built around the real procedure: the forms, the strategy, the negotiation sequence that resolution work runs on.'},
+ {t:'dark',title:'A firm that handles IRS cases without a credential behind it is negotiating blind.'},
+ {t:'normal',k:'What CTRC actually is',title:'A Certified Tax Representation Consultant credential built from real cases.',body:'Each module is four hours of practical video instruction on the strategies, procedures, and forms used to actually resolve a case, with recertification every three years. It is what turns handling a notice into a service a firm can price and stand behind.'},
+
+ {t:'section',idx:'Part Two',title:'Pricing the Case, Not Guessing'},
+ {t:'normal',k:'The tension',title:'Resolution cases get underpriced because the value is genuinely hard to see up front.',body:'A return has a clear scope. An IRS collections or offer-in-compromise case does not, until someone has actually worked one and knows what the file requires.'},
+ {t:'normal',k:'The real skill',title:'Pricing built on tools, not instinct.',body:'The offer-in-compromise analyzer, a dedicated case-pricing tool, and a searchable IRS rules and regulations database replace the guesswork with a process a firm can repeat on every case.'},
+ {t:'dark',title:'The firms that keep this work are the ones who stopped pricing it by feel.'},
+
+ {t:'section',idx:'Part Three',title:'The Growth Layer'},
+ {t:'normal',k:'The shift',title:'Once the case work is solid, the constraint moves to growth.',body:'A firm that can competently and profitably work a resolution case still needs a steady flow of the right clients asking for it, not just referrals that show up at random.'},
+ {t:'normal',k:'What that looks like',title:'Monthly strategy, direct access, and a plan built for your firm specifically.',body:'A live monthly roundtable, direct access to Eric through a private calendar link, an annual in-person retreat, and a business action plan built with the team, not a generic template.'},
+ {t:'dark',title:'The goal was never just working more cases. It was building the practice around them on purpose.'},
+
+ {t:'section',idx:'The Path From Here',title:'Start with the Credential'},
+ {t:'normal',k:'Free, then deeper',title:'Start with this masterclass. Go deeper with CTRC and the membership ladder.',body:'From there, for firm owners ready to grow the resolution side specifically: the TRN Gold toolkit, CTRC Live certification, and the Platinum Marketing Mastermind, through Tax Rep Network.'},
+ {t:'cta',title:'Add the credential. Price it right. Grow it on purpose.',chips:['Explore Tax Rep Network','Join CTRC Live'],disc:'Educational content only. No income, hours, or business result is guaranteed. Results vary by firm and market.'},
+];
+
+const deck=document.getElementById('deck');
+function ledgerMotif(kind){return `<svg class="ledger-motif ${kind==='title'?'title-ledger':'corner-ledger'}"><use href="#ledger"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Tax Rep <b>Network</b> &middot; Eric Green</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ledger) h+=ledgerMotif(s.ledger);
+  else if(s.t==='title') h+=ledgerMotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
