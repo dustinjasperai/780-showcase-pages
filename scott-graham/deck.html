@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The OMS Practice Systems Masterclass · Scott Graham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F2F6F5; --panel:#E1E9E7; --rule:#C9D6D3;
+    --ink:#17262A; --ink-soft:#3D4E51; --ink-dim:#6E7F81; --accent:#0F6E5C;
+  }
+  html,body{height:100%}
+  body{background:#0C1211;font-family:'Archivo',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0C1211}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Frank Ruhl Libre',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.6vw}
+  .t-normal h1{font-size:3.1vw;max-width:86%}
+  .t-normal .body{font-size:1.42vw;color:var(--ink-soft);margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.7vw;color:var(--ink-soft);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Archivo',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(160deg,#DCE8E5 0%,var(--panel) 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:linear-gradient(160deg,#DCE8E5 0%,var(--panel) 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--ink-dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .check-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-check{right:7.5%;bottom:9%;width:16vw}
+  .corner-check{right:6%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-size:1.25vw;color:var(--ink-soft);margin-top:3.4vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(23,38,42,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#AEC4C0;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#AEC4C0;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#AEC4C0;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">OMS Systems</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- checklist rise motif: three ticked lines rising into a small node -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="check" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="34" x2="150" y2="34" stroke="#17262A" opacity="0.16"/>
+    <path d="M18 30 l8 8 l16 -16" stroke="#0F6E5C" opacity="0.9"/>
+    <line x1="18" y1="74" x2="170" y2="74" stroke="#17262A" opacity="0.16"/>
+    <path d="M18 70 l8 8 l16 -16" stroke="#0F6E5C" opacity="0.9"/>
+    <line x1="18" y1="114" x2="130" y2="114" stroke="#17262A" opacity="0.16"/>
+    <path d="M18 110 l8 8 l16 -16" stroke="#0F6E5C" opacity="0.9"/>
+    <circle cx="230" cy="74" r="6" fill="none" stroke="#0F6E5C" stroke-width="2.6"/>
+    <line x1="196" y1="74" x2="222" y2="74" stroke="#0F6E5C" opacity="0.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The OMS Practice Systems Masterclass',sub:'How independent oral and maxillofacial surgery practices build the checklists, policies, and revenue-cycle systems that let growth happen without the owner covering every detail.',brand:true,rise:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the whole operation.',body:'You are in the operating room, then you are approving payroll, then you are the one who remembers why a claim got denied last March. Every new patient adds a little more that only you can carry.'},
+ {t:'dark',title:'Your practice does not have a caseload problem. It has a systems problem.'},
+
+ {t:'section',idx:'Part One',title:'The OMS Owner Trap'},
+ {t:'normal',k:'Why growth gets harder, not easier',title:'More volume without systems just adds risk.',body:'Add a new associate, a new location, or a busier schedule to a practice that runs on the owner\'s memory, and every one of those additions multiplies the decisions, the exceptions, and the hours only you can cover.'},
+ {t:'normal',k:'The real cost',title:'A practice that lives in your head cannot be handed off, protected, or valued.',body:'If billing, HR, and compliance only work because you personally check them, the practice is not an asset yet. It is a very demanding job with your name on the door.'},
+ {t:'dark',title:'If it only runs because you are watching everything, you do not have a system. You have a habit.'},
+
+ {t:'section',idx:'Part Two',title:'Where a Systemized OMS Practice Starts'},
+ {t:'normal',k:'Practice analysis',title:'You cannot fix what you have not measured.',body:'Before anything else, look at how the practice actually runs today: production, collections, staffing ratios, and where time and revenue quietly leak. Most owners are guessing at their own numbers.'},
+ {t:'normal',k:'Revenue cycle, coding, and compliance',title:'The money you are already owed is the fastest fix.',body:'Reimbursement enhancement, clean coding and billing, and a compliance program that actually gets followed close the gap between what the practice should collect and what it does.'},
+ {t:'normal',k:'People',title:'Recruiting and onboarding that do not depend on you.',body:'A documented process for hiring, physician onboarding, and HR management means the next hire strengthens the practice instead of adding another thing only you can manage.'},
+ {t:'dark',title:'Practice analysis, revenue cycle, people. Three places the system either holds or breaks.'},
+
+ {t:'section',idx:'Part Three',title:'Where the Real Leverage Hides'},
+ {t:'normal',k:'Checklists and policies, not tribal knowledge',title:'Write it down once, and it stops living in your head.',body:'A checklist for a new-patient workup, a written policy for how a billing exception gets handled, a process for onboarding a new associate: none of this is exciting, and all of it is what makes the practice run the same way whether you are in the building or not.'},
+
+ {t:'section',idx:'Part Four',title:'Built for the Transition, Not Just the Day-to-Day'},
+ {t:'normal',k:'Buy-ins, exit strategies, and valuation',title:'A systemized practice is also a sale-ready practice.',body:'Governance documentation, clean financial modeling, and a track record of following your own policies are exactly what a buy-in partner, a lender, or a buyer\'s diligence team wants to see. The same systems that make daily life easier are what make a transition possible on your terms, whenever you decide to have that conversation.'},
+ {t:'dark',title:'A practice you could step back from, bring a partner into, or sell. Because it runs on systems, not on you.'},
+
+ {t:'section',idx:'Your next step',title:'Built by the Founder of SOMSA'},
+ {t:'normal',k:'Why this approach',title:'18-20 years inside OMS practices, not general dental.',body:'Scott Graham started and managed a large OMS practice with a nationally recognized fellowship program in St. Louis, then took that experience into full-time consulting exclusively for oral and maxillofacial surgery practices. He founded SOMSA (originally the JAWS Society) in 2004, starting with 12 people in a room in San Francisco, because the field did not yet have its own association for practice administrators. He co-authored the practice-management chapter in Fonseca\'s Oral and Maxillofacial Surgery, the field\'s own textbook.'},
+ {t:'cta',title:'Ready to see where your practice stands?',chips:['Start with a practice analysis','Talk through your transition timeline'],disc:'Educational content for OMS practice owners. No income, revenue, or business result is guaranteed. Results vary by practice, market, and how the systems are implemented.'},
+];
+
+const deck=document.getElementById('deck');
+function rise(kind){return `<svg class="check-motif ${kind==='title'?'title-check':'corner-check'}"><use href="#check"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">OMS <b>Consulting Firm</b> &middot; Scott Graham</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.rise) h+=rise(s.rise);
+  else if(s.t==='title') h+=rise('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
