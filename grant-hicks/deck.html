@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Ideal Capacity Masterclass · Grant Hicks · Advisor Practice Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700;800&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#07222E; --panel:#0D3140; --rule:#1E4756;
+    --orange:#68CCD1; --blue:#9CD65E; --chalk:#F2F0E9; --grey:#9BB4BC; --dim:#5E7B85;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Nunito Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .disp{font-family:'Bitter',Arial,sans-serif}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:2.4vh}
+  h1{font-family:'Bitter',Arial,sans-serif;font-weight:700;color:var(--chalk);line-height:1.1;letter-spacing:-.015em}
+  .t-title h1{font-size:5.2vw}
+  .t-normal h1{font-size:3.4vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.5;font-weight:300}
+  .sub{font-size:1.85vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.44;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Bitter',sans-serif;font-size:1.4vw;font-weight:600;color:var(--blue);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--orange),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#0C3543 0%,#051C24 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:86%;font-weight:500;color:#E4E9F2}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:3vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1.1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.7vw;padding:2.4vh 1.3vw;width:13vw;min-height:15vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Bitter',sans-serif;font-size:2vw;font-weight:800;color:var(--orange);line-height:1}
+  .flowcard .l{font-size:1.16vw;font-weight:600;color:var(--chalk);line-height:1.25}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#0E3B4A 0%,#06202A 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--orange);color:#CDEDEF;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frames{position:absolute;pointer-events:none;opacity:.9}
+  .title-frames{right:7.5%;bottom:8%;width:24vw}
+  .corner-frames{right:6%;bottom:7.5%;width:11vw;opacity:.45}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--orange);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--orange);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Advisor Practice Management</div>
+<div class="hint" id="hint">→ click or arrow keys</div>
+
+<!-- capacity-gauge motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frames" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round">
+    <path d="M40 128 A 90 90 0 0 1 220 128" stroke="#68CCD1" opacity="0.45"/>
+    <path d="M58 128 A 72 72 0 0 1 202 128" stroke="#68CCD1" opacity="0.75"/>
+    <path d="M40 128 A 90 90 0 0 1 148 42" stroke="#9CD65E" opacity="0.9"/>
+    <line x1="130" y1="128" x2="185" y2="62" stroke="#F2F0E9" opacity="0.85" stroke-width="3"/>
+    <circle cx="130" cy="128" r="5" fill="#9CD65E" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Ideal Capacity Masterclass',sub:'How Canadian financial advisors increase capacity and increase revenue, and take more time off while doing it.',brand:true,frames:'title'},
+ {t:'normal',k:'Who this is for',title:'Canadian advisors and teams with full calendars, and growth that stalled anyway.'},
+ {t:'dark',title:'Busy practices don’t plateau from lack of effort. They plateau from lack of room.'},
+
+ {t:'section',idx:'Part One',title:'The Capacity Trap'},
+ {t:'normal',k:'The trap',title:'The number one challenge for advisors isn’t leads. It’s the capacity to serve ideal clients.',body:'Look at next week’s calendar. How many hours belong to the clients who actually build your practice?'},
+
+ {t:'section',idx:'Part Two',title:'The Equation'},
+ {t:'normal',k:'The equation',title:'Increase your capacity and you increase your revenue.',body:'Ideal clients don’t need more of your hours. They need more of your value. The practice grows when the calendar is owned by the right relationships.'},
+
+ {t:'section',idx:'Part Three',title:'The Ideal-Client Reframe'},
+ {t:'normal',k:'The reframe',title:'Define ideal first. Everything else follows.',body:'Profile, fees, service model, marketing plan: all downstream of one honest definition. Advisors who segment their book earn more from it, because value flows to the clients who value it.'},
+ {t:'dark',title:'Most practices don’t have a marketing problem. They have a definition problem.'},
+ {t:'normal',k:'Who’s teaching this',title:'Grant Hicks, CIM, Advisor Practice Management.',body:'Over 35 years in financial services, 20 as an advisor. Built and sold an investment dealer and a $120-million practice. Former National Director of Practice Management at Manulife. Co-author of Guerrilla Marketing for Financial Advisors with Jay Conrad Levinson. Works with 40-plus elite Canadian teams.'},
+
+ {t:'section',idx:'Part Four',title:'The Ideal Capacity Path'},
+ {t:'flow',k:'The path',title:'Three processes, six moves',items:[
+   {n:'01',l:'Define the Ideal Client'},{n:'02',l:'Build the Acquire Process'},{n:'03',l:'Deepen the Value'},
+   {n:'04',l:'Segment the Book'},{n:'05',l:'Systemize the Practice'},{n:'06',l:'Take the Time Back'}]},
+ {t:'normal',k:'Acquire',title:'Define the ideal client, then build the process that brings them in.',body:'One profile, honestly drawn, decides everything downstream. A proven, repeatable path from stranger to ideal client, not one-off referral luck.'},
+ {t:'normal',k:'Service',title:'Deepen the value, then segment the book around it.',body:'More value to ideal clients, delivered on purpose, not on demand. Service models matched to relationships, so capacity goes where it counts.'},
+ {t:'normal',k:'Manage',title:'Systemize the practice, then take the time back.',body:'Processes the team runs without you in the middle of every one. Capacity is the point: more room for ideal clients, and for your life.'},
+ {t:'dark',title:'Elite teams don’t find capacity. They build it, on purpose.',disc:'Educational content, not a guarantee of results. Outcomes vary by practice.'},
+
+ {t:'section',idx:'Part Five',title:'The Canadian Advantage'},
+ {t:'normal',k:'Your ground',title:'Every coaching voice in your feed is American. This framework was built with Canadian teams.',body:'Banks, credit unions, independent brokerages, portfolio managers, family offices.'},
+
+ {t:'section',idx:'Part Six',title:'Your Next Move'},
+ {t:'normal',k:'Homework',title:'Take the Practice Excellence Assessment, then talk it through.',body:'A quick, honest read on where your practice is leaking time and consistency. Then a Practice Clarity Conversation: thirty minutes on your practice, your book, your capacity. No template.'},
+ {t:'cta',title:'Increase your capacity, on purpose.',chips:['Take the assessment','Book a clarity conversation'],disc:'Coaching is educational and is not a guarantee of revenue or results. Results vary.'},
+];
+
+const deck=document.getElementById('deck');
+function frames(kind){return `<svg class="frames ${kind==='title'?'title-frames':'corner-frames'}"><use href="#frames"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx disp">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Advisor <b>Practice Management</b> · Grant Hicks, CIM</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frames) h+=frames(s.frames);
+  else if(s.t==='title') h+=frames('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
