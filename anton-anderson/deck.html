@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Art of Collaboration: Anton Anderson · Elite Resource Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#16171D; --panel:#20222B; --rule:#33353F;
+    --orange:#FF7A42; --blue:#5E92E0; --chalk:#F5F3EF; --grey:#A6A8B2; --dim:#63656F;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Figtree',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .disp{font-family:'Newsreader',Georgia,serif}
+  .kicker{font-family:'Figtree',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.1;letter-spacing:-.01em}
+  .t-title h1{font-size:5.1vw}
+  .t-normal h1{font-size:3.4vw;max-width:86%}
+  .t-normal .body{font-family:'Figtree',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.5;font-weight:300}
+  .sub{font-family:'Figtree',sans-serif;font-size:1.82vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.44;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Newsreader',serif;font-size:1.5vw;font-weight:600;color:var(--blue);margin-bottom:2vh;letter-spacing:.12em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:90%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--orange),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#20222B 0%,#0E0F13 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;font-weight:500;color:#F1EEE8;font-style:italic}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:2.9vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.7vw;padding:2.4vh 1.1vw;width:12vw;min-height:14vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Newsreader',serif;font-size:1.9vw;font-weight:700;color:var(--orange);line-height:1}
+  .flowcard .l{font-family:'Figtree',sans-serif;font-size:1.08vw;font-weight:600;color:var(--chalk);line-height:1.25}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#22242D 0%,#0E0F13 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:86%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--orange);color:#FFD3BC;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Figtree',sans-serif;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Figtree',sans-serif;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frames{position:absolute;pointer-events:none;opacity:.9}
+  .title-frames{right:7%;bottom:8%;width:25vw}
+  .corner-frames{right:5.5%;bottom:7%;width:12vw;opacity:.5}
+  .brandline{font-family:'Figtree',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--orange);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--orange);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:5.6vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 23</div>
+<div class="brand-foot">Elite Resource Team</div>
+<div class="hint" id="hint">→ click or arrow keys</div>
+
+<!-- two-interlocking-rings motif: Advisor + CPA → shared client / VFO -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frames" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.2">
+    <circle cx="104" cy="75" r="46" stroke="#FF7A42" opacity="0.9"/>
+    <circle cx="156" cy="75" r="46" stroke="#5E92E0" opacity="0.85"/>
+    <circle cx="130" cy="75" r="6" fill="#F5F3EF" stroke="none" opacity="0.92"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Art of Collaboration',sub:'How advisors win high-net-worth clients by partnering with CPAs, live. The Team Based Model, without paying for leads, dinner seminars, or waiting on referrals.',brand:true,frames:'title'},
+ {t:'normal',k:'Who this is for',title:'Advisors who want high-net-worth clients and are tired of buying them one lead at a time.',body:'You’ll walk away with the CPA Team Based Model and the Virtual Family Office: the whole system, in plain terms.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a guarantee.',body:'The results and averages shared here are Elite Resource Team’s own. Yours will be your own; what matters is the model that produces them.',disc:'Educational content only. Figures cited are Elite Resource Team’s own reported averages, not a guarantee of results. Outcomes vary by practice.'},
+ {t:'normal',k:'Who’s teaching this',title:'Anton Anderson, founder of Elite Resource Team and author of The Art of Collaboration.',body:'A #1-bestselling framework for advisors and accountants, taught to practices across North America.'},
+
+ {t:'section',idx:'Part One',title:'Two Tribes at War'},
+ {t:'normal',k:'The old story',title:'Advisors and CPAs have competed for the same client for years.',body:'Leads, dinner seminars, waiting on referrals: the commoditization treadmill most advisors never step off.'},
+ {t:'dark',title:'Your prospect already trusts their accountant more than they trust you. That isn’t an insult, it’s the opening.'},
+ {t:'normal',k:'The shift',title:'Stop competing with the CPA. Start collaborating with them.'},
+
+ {t:'section',idx:'Part Two',title:'The CPA Team Based Model'},
+ {t:'flow',k:'The model',title:'Five steps from stranger to partner',items:[
+   {n:'01',l:'Identify'},{n:'02',l:'Contact'},{n:'03',l:'Engage'},
+   {n:'04',l:'Monetize'},{n:'05',l:'Maintain'}]},
+ {t:'normal',k:'01-02 · Identify & Contact',title:'Find the right CPA partners, then turn a cold accountant into a conversation.',body:'A repeatable, patent-pending process, not a networking-event lottery.'},
+ {t:'normal',k:'03-04 · Engage & Monetize',title:'Become the advisor the CPA wants to refer to, then build a win-win that compounds.',body:'Trust is earned in how you show up for their client; the structure keeps both sides winning as it grows.'},
+ {t:'normal',k:'05 · Maintain',title:'Partnerships that keep producing.',body:'A handful of real relationships beats leads you have to refill every month.'},
+ {t:'dark',title:'One good CPA relationship can outproduce a year of dinner seminars.'},
+
+ {t:'section',idx:'Part Three',title:'The Virtual Family Office'},
+ {t:'flow',k:'Five pillars',title:'One team behind every client',items:[
+   {n:'·',l:'Wealth Management'},{n:'·',l:'Tax Planning'},{n:'·',l:'Legal Services'},
+   {n:'·',l:'Business Advisory'},{n:'·',l:'Risk Mitigation'}]},
+ {t:'normal',k:'The idea',title:'What the ultra-wealthy have, and why your clients want it too.',body:'Billionaire-level service to every client, without building your own staff.'},
+ {t:'normal',k:'The bench',title:'A specialist team you orchestrate, not payroll you carry.',body:'You stay the quarterback; the expertise sits behind you.'},
+ {t:'dark',title:'You don’t need to hire the family office. You need to orchestrate it.'},
+
+ {t:'section',idx:'Part Four',title:'Making It Real'},
+ {t:'normal',k:'This month',title:'Your first real CPA conversation, on purpose.',body:'Not “let’s grab coffee sometime.” A specific, structured opening, backed by the proof a skeptical accountant needs to decide you’re worth referring to.'},
+
+ {t:'section',idx:'Part Five',title:'Where to Start'},
+ {t:'normal',k:'Homework',title:'Grab the free Art of Collaboration bundle.',body:'The book, the client-service-levels template, the example ADV: yours to keep.'},
+ {t:'cta',title:'Stop competing for the client. Start collaborating for them.',chips:['Get the free bundle','Schedule a call'],disc:'Educational content, not a guarantee of results. Figures are Elite Resource Team’s own averages. Outcomes vary by practice.'},
+];
+
+const deck=document.getElementById('deck');
+function frames(kind){return `<svg class="frames ${kind==='title'?'title-frames':'corner-frames'}"><use href="#frames"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx disp">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Elite Resource <b>Team</b> · Anton Anderson</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frames) h+=frames(s.frames);
+  else if(s.t==='title') h+=frames('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
