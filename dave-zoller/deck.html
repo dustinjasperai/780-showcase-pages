@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Document, Don't Create · Dave Zoller · Streamline My Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#141C28; --panel:#1E2A3A; --rule:#33404F;
+    --orange:#F2811D; --blue:#2E91FC; --chalk:#F7F5F1; --grey:#9FB0C0; --dim:#5E6E7E;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .disp{font-family:'Space Grotesk',Arial,sans-serif}
+  .kicker{font-family:'Space Grotesk',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:2.4vh}
+  h1{font-family:'Space Grotesk',Arial,sans-serif;font-weight:700;color:var(--chalk);line-height:1.1;letter-spacing:-.015em}
+  .t-title h1{font-size:5.2vw}
+  .t-normal h1{font-size:3.4vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.5;font-weight:300}
+  .sub{font-size:1.85vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.44;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Space Grotesk',sans-serif;font-size:1.4vw;font-weight:600;color:var(--blue);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--orange),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#1E2A3A 0%,#0C1420 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:86%;font-weight:500;color:#EAF1F8}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:3vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1.1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.7vw;padding:2.4vh 1.3vw;width:13vw;min-height:15vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Space Grotesk',sans-serif;font-size:2vw;font-weight:700;color:var(--orange);line-height:1}
+  .flowcard .l{font-size:1.16vw;font-weight:500;color:var(--chalk);line-height:1.25}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#20303F 0%,#0C1420 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--orange);color:#FAD9B8;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frames{position:absolute;pointer-events:none;opacity:.9}
+  .title-frames{right:7%;bottom:8%;width:25vw}
+  .corner-frames{right:6%;bottom:7.5%;width:11vw;opacity:.5}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--orange);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--orange);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 24</div>
+<div class="brand-foot">Streamline My Practice</div>
+<div class="hint" id="hint">→ click or arrow keys</div>
+
+<!-- play-button-into-funnel motif: organic video → predictable pipeline -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frames" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round">
+    <!-- funnel walls -->
+    <line x1="40" y1="26" x2="118" y2="128" stroke="#9FB0C0" stroke-width="1.8" opacity="0.45"/>
+    <line x1="220" y1="26" x2="142" y2="128" stroke="#9FB0C0" stroke-width="1.8" opacity="0.45"/>
+    <!-- views entering wide top -->
+    <circle cx="66" cy="24" r="3.6" fill="#F7F5F1" opacity="0.5"/>
+    <circle cx="104" cy="20" r="3" fill="#F7F5F1" opacity="0.4"/>
+    <circle cx="150" cy="22" r="3.4" fill="#2E91FC" opacity="0.7"/>
+    <circle cx="192" cy="24" r="3" fill="#F7F5F1" opacity="0.45"/>
+    <!-- play glyph at the throat -->
+    <path d="M118 58 L118 96 L152 77 Z" fill="#F2811D" stroke="none"/>
+    <!-- qualified node dropping out the bottom -->
+    <circle cx="130" cy="134" r="6.4" fill="#F2811D" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Document, Don’t Create',sub:'The content system behind a $450M advisory practice, live. How advisors turn one helpful video a week into the clients they actually want.',brand:true,frames:'title'},
+ {t:'normal',k:'What you’ll walk away with',title:'The three-part video system and the one filter that decides what’s worth publishing.',body:'Packaging, the opening hook, and “did I help someone today?” make up the whole engine, in plain terms.'},
+ {t:'normal',k:'Who’s teaching this',title:'Dave Zoller, CFP®, a practicing advisor, not a guru.',body:'Founder of a Warrenville, IL firm managing about $450M for roughly 250 households, grown on the exact organic system taught here since 2016. These are the numbers from my own practice, offered as education, not a guarantee; yours will be your own.',disc:'Educational content only. The results described are the presenter’s own and are not a guarantee of business results. Outcomes vary by practice.'},
+
+ {t:'section',idx:'Part One',title:'Why Content Wins'},
+ {t:'flow',k:'The five ways advisors grow',title:'There are only five, and four of them cap out',items:[
+   {n:'01',l:'Cold outreach'},{n:'02',l:'Referral relationships'},{n:'03',l:'Client referrals'},
+   {n:'04',l:'Paid marketing'},{n:'05',l:'Free content'}]},
+ {t:'dark',title:'You can only serve so many clients well. Content is how one advisor helps far more.'},
+
+ {t:'section',idx:'Part Two',title:'Document, Don’t Create'},
+ {t:'normal',k:'The mindset',title:'Don’t invent content. Document what you already say every day.',body:'The best material is the answer you just gave a client, recorded once, seen by thousands.'},
+ {t:'normal',k:'The filter',title:'“Did I help someone today?”',body:'One question decides whether a piece is worth publishing. If yes, it’s worthy. If no, skip it.'},
+ {t:'dark',title:'All work works. The advisors who show up weekly are the ones who win.'},
+
+ {t:'section',idx:'Part Three',title:'Packaging'},
+ {t:'normal',k:'Packaging',title:'The most critical step, and the one advisors skip.',body:'The title and thumbnail decide whether anyone ever reaches the value inside. Package for the question your ideal client is already typing, in their words.'},
+ {t:'dark',title:'You are not competing on advice. You’re competing on whether they press play.'},
+
+ {t:'section',idx:'Part Four',title:'The Opening Hook'},
+ {t:'normal',k:'The hook',title:'Answer the viewer’s question in the first 45 seconds.',body:'No long intro, no credentials reel. Target one person and one core problem: when you speak to everyone, no one hears themselves. The right-fit prospect leans in; that’s the filter working.'},
+
+ {t:'section',idx:'Part Five',title:'From Views to Conversations'},
+ {t:'flow',k:'The path',title:'How a view becomes a client, on purpose',items:[
+   {n:'01',l:'Package the video'},{n:'02',l:'Hook in 45s'},{n:'03',l:'Deliver the value'},
+   {n:'04',l:'Micro-commitment'},{n:'05',l:'The quiz funnel'},{n:'06',l:'The conversation'}]},
+ {t:'normal',k:'Micro-commitments',title:'Replace “book a call” with a small first ask.',body:'A quiz, a checklist, a short answer: small steps convert far better than a big one. The quiz funnel does the qualifying, a few questions, then a personalized next step that turns a passive watcher into a real conversation.'},
+
+ {t:'section',idx:'Part Six',title:'The Missing Dial'},
+ {t:'normal',k:'The lever',title:'The one lever most advisors under-use: paid marketing.',body:'Not a replacement for the content you already publish. It’s a volume dial on a message you’ve already proven works.'},
+ {t:'dark',title:'You proved this converts organically. Paid marketing decides how many people hear it.',disc:'Educational framing only. Results depend on offer, creative, and market; no specific outcome is promised.'},
+
+ {t:'section',idx:'Part Seven',title:'Your Next Step'},
+ {t:'normal',k:'Homework',title:'Grab the $700 Million Sales Playbook.',body:'The scripts behind the first-call conversations, yours to keep after the session.'},
+ {t:'cta',title:'Document, don’t create, starting this week.',chips:['Grab the Sales Playbook','Join the Academy waitlist'],disc:'Educational content, not a guarantee of results. The presenter’s figures are his own. Outcomes vary by practice.'},
+];
+
+const deck=document.getElementById('deck');
+function frames(kind){return `<svg class="frames ${kind==='title'?'title-frames':'corner-frames'}"><use href="#frames"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx disp">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Streamline <b>My Practice</b> · Dave Zoller, CFP®</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frames) h+=frames(s.frames);
+  else if(s.t==='title') h+=frames('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
