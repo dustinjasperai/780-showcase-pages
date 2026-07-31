@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Financial Clarity for Architecture Practice Owners &middot; Ray Brown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#000321; --panel:#0B1140; --rule:#1C2560;
+    --gold:#FFE35A; --ink:#F5F3E8; --grey:#9AA3B8; --dim:#6C7594;
+  }
+  html,body{height:100%}
+  body{background:#000000;font-family:'Montserrat',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#08101F;margin-bottom:2.4vh;background:var(--gold);display:inline-block;padding:.5vh 1vw;border-radius:2px}
+  h1{font-family:'Inter',Arial,sans-serif;font-weight:700;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.1vw}
+  .t-normal h1{font-size:2.9vw;max-width:86%}
+  .t-normal .body{font-size:1.45vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.6vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start;border-left:4px solid var(--gold);padding-left:6.4%}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.3vw;font-weight:600;color:var(--gold);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#0B1140 0%,#000000 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.9vw;max-width:78%;font-style:italic;color:#F5F3E8;font-weight:400}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#0B1140 0%,#000000 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:80%;color:#F5F3E8}
+  .steps{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .step{border:1px solid var(--gold);color:#FFF0B0;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#71789A}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .bar-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-bars{right:8%;bottom:11%;width:13vw}
+  .corner-bars{right:6%;bottom:8%;width:6vw;opacity:.55}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--gold);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#6C7594;z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6C7594;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#6C7594;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.3vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}.t-cta h1{font-size:6vw}.step{font-size:2.5vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">ArchiBiz</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ascending-bars motif: reading the numbers that matter -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bars" viewBox="0 0 220 140">
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <line x1="14" y1="126" x2="206" y2="126" stroke="#FFE35A" opacity="0.55"/>
+    <rect x="30" y="92" width="20" height="34" fill="#FFE35A" opacity="0.85"/>
+    <rect x="66" y="70" width="20" height="56" fill="#FFE35A" opacity="0.65"/>
+    <rect x="102" y="46" width="20" height="80" fill="#FFE35A" opacity="0.85"/>
+    <rect x="138" y="60" width="20" height="66" fill="#FFE35A" opacity="0.45"/>
+    <rect x="174" y="24" width="20" height="102" fill="#FFE35A" opacity="0.85"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Financial Clarity for Architecture Practice Owners',sub:'How to read what your firm’s numbers actually mean, tell profit from cashflow before the bank account tells you, and know which KPIs matter for a project-based practice.',brand:true,bars:'title'},
+ {t:'normal',k:'Who this is for',title:'Architecture firm owners who were trained to design, not to read a P&L.',body:'Solo and small-firm principals who do genuinely good work, win real projects, and still can’t answer a simple question with confidence: was that last project actually profitable.'},
+ {t:'normal',k:'What you will walk away with',title:'A plain-language read on the three things that actually matter.',body:'What your financial metrics are really telling you, the difference between profit and cashflow, and the handful of KPIs worth tracking in a practice built around one-off projects instead of repeat inventory.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a guarantee.',body:'Every practice, project mix, and market is different. What matters is applying this to your own numbers, not someone else’s.',disc:'Educational content. Nothing here is a promise of income, hours, or business results. Results vary and no outcome is guaranteed.'},
+ {t:'normal',k:'Who is teaching this',title:'Ray Brown. 25+ years at CEO level before he ever consulted to an architecture firm.',body:'Ray built his career running organizations across the UK, South Africa, and the US, including work with banks, startups, and senior executives. In 2015, consulting to architectural practices, he saw the same gap over and over: brilliant design, no business foundation underneath it. He founded ArchiBiz to close that gap directly, and has since worked with firms in 150-plus countries.'},
+
+ {t:'section',idx:'Part One',title:'The Trap'},
+ {t:'normal',k:'Where it actually breaks',title:'A great year on paper can still be a cash-poor year in the bank.',body:'Invoices go out, projects finish, the firm looks busy and successful from the outside, and the owner still can’t explain why there is never quite enough cash sitting in the account.'},
+ {t:'normal',k:'What most firms try first',title:'Working harder, taking on more projects, hoping volume fixes it.',body:'More revenue without understanding the difference between revenue, profit, and cash rarely fixes the problem. It usually just makes the same mistake bigger.'},
+ {t:'dark',title:'A firm that cannot tell profit from cashflow is flying with no instruments, no matter how good the design work is.'},
+
+ {t:'section',idx:'Part Two',title:'Financial Clarity'},
+ {t:'normal',k:'The first piece',title:'Understanding what your financial metrics actually mean.',body:'Not a bookkeeping class. A plain read on what the numbers your accountant already sends you are actually telling you about the health of the practice.'},
+ {t:'normal',k:'The second piece',title:'Profit and cashflow are not the same question.',body:'Profit is what the project made on paper. Cashflow is whether the money is actually in the account when payroll is due. Firms that only track one of the two get blindsided by the other.'},
+ {t:'normal',k:'The third piece',title:'The KPIs that matter for a project-based practice.',body:'Not generic small-business metrics. The specific handful worth tracking when your inventory is billable hours and projects, not products on a shelf.'},
+ {t:'dark',title:'The firms that stop guessing are the ones who finally read their own numbers.'},
+
+ {t:'section',idx:'Part Three',title:'The Capstone'},
+ {t:'normal',k:'Where this sits',title:'Financial Clarity is the sixth pillar, not the first.',body:'It follows Positioning, Marketing and Sales, Vision and Leadership, and Operations and Management inside the Fast Track MBA. Everything else you build in the practice shows up, for better or worse, in these numbers.'},
+ {t:'normal',k:'Why an outsider’s read helps',title:'A career spent reading P&Ls before architecture ever entered the picture.',body:'Twenty-five years at CEO level across banks, startups, and executive teams is a different vantage point than learning finance for the first time inside your own firm. That distance is what makes the numbers legible.'},
+ {t:'dark',title:'The goal was never just working more projects. It was finally being able to see, in numbers, whether the work is working.'},
+
+ {t:'section',idx:'The Path From Here',title:'Start With the Numbers'},
+ {t:'normal',k:'Free, then deeper',title:'Start with this masterclass. Go deeper inside the Fast Track MBA.',body:'From there, for firm owners ready to work through all six pillars: the 6-week Fast Track MBA program, the Business School for Architects community and monthly Q&A, or monthly 1-on-1 coaching with Ray directly.'},
+ {t:'cta',title:'Read the numbers. Tell profit from cashflow. Plan with certainty.',steps:['Explore Fast Track MBA','Join a live workshop'],disc:'Educational content only. No income, hours, or business result is guaranteed. Results vary by firm and market.'},
+];
+
+const deck=document.getElementById('deck');
+function barsMotif(kind){return `<svg class="bar-motif ${kind==='title'?'title-bars':'corner-bars'}"><use href="#bars"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Archi<b>Biz</b> &middot; Ray Brown</div>`;
+    if(s.steps) h+=`<div class="steps">`+s.steps.map(c=>`<div class="step">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.bars) h+=barsMotif(s.bars);
+  else if(s.t==='title') h+=barsMotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
