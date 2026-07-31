@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Iconic Firm Masterclass · Mark R. LePage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ek+Mukta:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAFCFC; --panel:#E6F5F6; --rule:#CBE7E9;
+    --acc:#02A3AB; --acc2:#0073B7; --ink:#10141A; --grey:#57636B; --dim:#93A3A8;
+  }
+  html,body{height:100%}
+  body{background:#DDEDEE;font-family:'Montserrat',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#DDEDEE}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:2.4vh}
+  h1{font-family:'Ek Mukta',Georgia,sans-serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.008em}
+  .t-title h1{font-size:4.1vw;max-width:88%}
+  .t-normal h1{font-size:3.1vw;max-width:86%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.58;font-weight:300}
+  .sub{font-size:1.7vw;color:var(--grey);margin-top:3vh;max-width:80%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.3vw;font-weight:600;color:var(--acc2);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:14vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.2vh}
+  .t-dark{background:linear-gradient(160deg,var(--panel) 0%,#F4FAFB 70%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.35vw;max-width:78%;color:#063C40}
+  .t-cta{background:linear-gradient(160deg,var(--panel) 0%,#F4FAFB 70%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:#04525A;border-radius:100px;padding:1.2vh 1.6vw;font-size:1.18vw;font-weight:500;background:rgba(255,255,255,.6)}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-size:1.28vw;color:var(--grey);margin-top:3.2vh;font-weight:400;letter-spacing:.01em}
+  .brandline b{color:var(--acc2);font-weight:600}
+  .scoreboard{position:absolute;pointer-events:none;opacity:.9}
+  .sb-title{right:7.5%;bottom:9%;width:16vw}
+  .sb-corner{right:6%;bottom:7%;width:8vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(2,54,58,.08);z-index:20}
+  .hud>i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#5B6E72;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5B6E72;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#5B6E72;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.3vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">EntreArchitect</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- scoreboard motif: five ascending ticks, tallest lit, echoing the Owner's Scoreboard -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="sb" viewBox="0 0 220 110">
+  <g stroke-linecap="round">
+    <line x1="10" y1="102" x2="210" y2="102" stroke="#9FC9CC" stroke-width="2" opacity="0.5"/>
+    <rect x="24" y="78" width="16" height="24" rx="2" fill="#9FC9CC" opacity="0.6"/>
+    <rect x="66" y="62" width="16" height="40" rx="2" fill="#63B8BD" opacity="0.75"/>
+    <rect x="108" y="46" width="16" height="56" rx="2" fill="#2FA0A6" opacity="0.85"/>
+    <rect x="150" y="30" width="16" height="72" rx="2" fill="#02A3AB"/>
+    <rect x="192" y="18" width="16" height="84" rx="2" fill="#0073B7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Iconic Firm Masterclass',sub:'A working session for small firm architects on why firms plateau near the first million, and the clarity that gets a firm past it.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You built real technical skill. The firm still plateaus.',body:'You can run a project end to end. You can solve problems a client cannot even name. But somewhere near the first million in revenue, growth stalls, and it is rarely because the work got worse.'},
+ {t:'dark',title:'Your firm does not have a talent problem. It has a clarity problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Firms Stay Stuck at $1M'},
+ {t:'normal',k:'The agreement trap',title:'Everyone on the team agrees on the story. That is not proof.',body:'Most firms believe they are different from the next one on the shortlist. But belief inside the office is not the same as proof in the market. If a stranger cannot tell your firm apart from three others, the story only exists in your head.'},
+ {t:'normal',k:'What proof actually looks like',title:'Real positioning shows up as shorter sales cycles, premium fees, and repeat clients.',body:'Not a mission statement on the wall. A firm that has actually operationalized its story wins faster, charges more, and gets asked back, because the client experienced the difference instead of reading about it.'},
+ {t:'dark',title:'Clarity is the first step toward building a firm that stands out.'},
+
+ {t:'section',idx:'Part Two',title:'The Iconic Firm Framework'},
+ {t:'normal',k:'Pillar One',title:'Impact Vision Story',body:'A narrative that unites the team internally and justifies a premium fee externally. Not a tagline. The story that makes a client understand why this firm, not the next name on the list.'},
+ {t:'normal',k:'Pillar Two',title:'Premium Positioning',body:'A defined niche and a fee strategy built around it. A firm that tries to be right for everyone ends up competing on price with everyone. A narrow, well-stated niche is what lets a firm charge like a specialist.'},
+ {t:'normal',k:'Pillar Three',title:'The Owner’s Scoreboard',body:'Five numbers, tracked every month: revenue per FTE, utilization, average fee, pipeline velocity, and cash buffer. Architecture-specific measures of whether the firm is getting healthier, not just busier.'},
+ {t:'normal',k:'Pillar Four',title:'Scalable Systems',body:'Repeatable operations and marketing workflows that do not depend on the owner personally remembering every step. The firm’s growth stops being capped by the owner’s calendar.'},
+ {t:'normal',k:'Pillar Five',title:'The 90-Day Action Map',body:'A quarterly plan built with an accountability partner. Not a five-year vision that never gets opened again. A near-term map the firm actually works from, one quarter at a time.'},
+ {t:'dark',title:'The Iconic Three: fewer assets, actually used, beats a binder of plans no one opens.'},
+
+ {t:'section',idx:'Part Three',title:'The Firm This Builds'},
+ {t:'normal',k:'The firm this builds',title:'A firm that wins on more than being the low bid.',body:'Clients arrive already knowing why this firm fits. Fees hold at the premium end of the range. The Owner’s Scoreboard shows the numbers moving, not just the workload.'},
+ {t:'normal',k:'Why Mark LePage',title:'An architect who runs a firm, not just a coach who talks about one.',body:'Mark R. LePage is President of Fivecat Studio Architecture and founder of EntreArchitect, home to a weekly podcast now past 670 episodes and a community of small firm architects built over more than a decade.'},
+ {t:'dark',title:'A firm that measures clarity gets to choose its growth. A firm that does not, waits for it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Take the Framework Further'},
+ {t:'normal',k:'The Iconic Firm Accelerator',title:'A one-day workshop, then a 30-day accelerator.',body:'Twelve seats. A working session on the Impact Vision Story, Premium Positioning, and the Owner’s Scoreboard, followed by 30 days of weekly cohort calls and a personally reviewed 90-Day Action Map.'},
+ {t:'normal',k:'Launch Coaching',title:'Six months, one-on-one and inside a small cohort.',body:'For firms launching or relaunching a venture, division, or service line. Business, financial, branding, marketing, sales, and launch strategy, worked through weekly with a cohort of ten.'},
+ {t:'cta',title:'Ready to see where your firm’s clarity actually stands?',chips:['Apply for the Iconic Firm Accelerator','Join EntreArchitect Network'],disc:'Educational content for architecture firm owners. No income or revenue result is guaranteed. Results vary by firm, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="scoreboard ${kind==='title'?'sb-title':'sb-corner'}"><use href="#sb"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">EntreArchitect &middot; <b>Mark R. LePage, AIA</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
