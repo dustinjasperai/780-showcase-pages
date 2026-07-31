@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Cultivate Relationships That Lead to Work · Jean Leathers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAFAF8; --panel:#EFEDE6; --rule:#D8D3C7;
+    --ink:#23281F; --accent:#1F4E5F; --accent2:#8A6D3B; --chalk:#23281F; --grey:#5C5A52; --dim:#8A8674;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Source Serif 4',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.18;letter-spacing:-.005em}
+  .t-title h1{font-size:4vw;max-width:88%}
+  .t-normal h1{font-size:3vw;max-width:84%}
+  .t-normal .body{font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent2);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.2vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.4vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.6vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .scale-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-scale{right:7%;bottom:9%;width:20vw}
+  .corner-scale{right:6%;bottom:7%;width:9vw;opacity:.5}
+  .brandline{font-size:1.25vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Practice Clarity</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- drafting-scale motif: a ruled measuring scale with tick marks, echoing a drafting scale -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="scale" viewBox="0 0 260 60">
+  <g fill="none" stroke-width="2.2" stroke-linecap="round">
+    <line x1="10" y1="30" x2="250" y2="30" stroke="#8A6D3B" opacity="0.5"/>
+    <line x1="10" y1="20" x2="10" y2="40" stroke="#1F4E5F" opacity="0.85"/>
+    <line x1="55" y1="24" x2="55" y2="36" stroke="#1F4E5F" opacity="0.6"/>
+    <line x1="100" y1="20" x2="100" y2="40" stroke="#1F4E5F" opacity="0.85"/>
+    <line x1="145" y1="24" x2="145" y2="36" stroke="#1F4E5F" opacity="0.6"/>
+    <line x1="190" y1="20" x2="190" y2="40" stroke="#1F4E5F" opacity="0.85"/>
+    <line x1="250" y1="20" x2="250" y2="40" stroke="#1F4E5F" opacity="0.85"/>
+    <circle cx="190" cy="30" r="4" fill="#8A6D3B" stroke="none" opacity="0.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Cultivate Relationships That Lead to Work',sub:'A masterclass for architecture firm owners on running a deliberately built practice, not a hopeful one.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You designed the firm. Who is designing the relationships that bring it work?',body:'You spent years building technical mastery. Nobody taught you how to build the client relationships, positioning, and communication that keep the phone ringing between projects.'},
+ {t:'dark',title:'Most firms do not lose work to a worse design. They lose it to a competitor somebody actually remembered.'},
+
+ {t:'section',idx:'Part One',title:'The Firm-Centric Trap'},
+ {t:'normal',k:'Talking about yourself',title:'Marketing built around what you designed is marketing nobody remembers.',body:'A capability statement about your firm reads the same as every other firm\'s capability statement. Prospects nod politely and hire whoever made them feel understood instead.'},
+ {t:'normal',k:'Business development in bursts',title:'Growth that only happens when a principal has spare time is not a system.',body:'Client development gets squeezed between deadlines instead of run on purpose, so the pipeline runs hot then cold and growth depends on timing, not design.'},
+ {t:'dark',title:'A deliberately run firm is not luckier than the others. It is clearer about what it wants.'},
+
+ {t:'section',idx:'Part Two',title:'The Four-Part Method'},
+ {t:'normal',k:'Envision',title:'Define the practice you actually want before choosing a single tactic.',body:'Name the ideal firm on purpose: the project types, the size, the clients worth attracting. Every strategy after this point is built to serve that picture, not guessed at.'},
+ {t:'normal',k:'Clarify',title:'Say plainly what makes this firm different.',body:'Positioning is not a slogan. It is a clear, specific claim about what this firm does that another firm down the street does not, stated so it can anchor every proposal and conversation.'},
+ {t:'normal',k:'Communicate',title:'Pivot from firm-centric to client-centric, and claim the expertise out loud.',body:'Swap "here is what we have designed" for "here is what you are trying to solve." Stop hedging the expertise this firm has actually earned.'},
+ {t:'normal',k:'Cultivate',title:'Nurture trust across a named continuum, not a scattered follow-up habit.',body:'The Client Relationship Continuum maps three deliberate stages: pre-engagement, engagement, and post-engagement, each with its own understanding of buyer psychology and its own next step.'},
+ {t:'dark',title:'Cultivate is not a follow-up email. It is a relationship, mapped on purpose, stage by stage.'},
+
+ {t:'section',idx:'Part Three',title:'What a Deliberately Run Firm Looks Like'},
+ {t:'normal',k:'The outcomes',title:'Clearer positioning, warmer introductions, steadier work.',body:'Firms that Envision, Clarify, Communicate, and Cultivate spend less energy chasing and more energy choosing, because the relationships that lead to work were built on purpose long before the RFP arrived.'},
+ {t:'normal',k:'Why Jean Leathers',title:'Thirty-five years, one audience, no exceptions.',body:'Jean Leathers has advised architecture firm owners exclusively since 1991. She started her career at URS, now AECOM, before moving into practice consulting, holds a Master\'s in Positive Organizational Development and Change from Case Western Reserve University, and has given well over 100 presentations to architects on this method.'},
+
+ {t:'section',idx:'Your Next Step',title:'Learn the Whole Method'},
+ {t:'normal',k:'The book',title:'Cultivate Relationships That Lead to Work: For Architects and Designers.',body:'Jean\'s book walks through Envision, Clarify, Communicate, and Cultivate in full, carried by the AIA\'s own Design Shop alongside her regular speaking engagements for architecture chapters and conferences.'},
+ {t:'normal',k:'Working with Jean',title:'Strategic planning, business development coaching, and marketing ideation, built around your firm.',body:'Practice Clarity advises firm leadership directly: clarifying position, building a marketplace strategy, and cultivating the relationships that turn into work, implemented by your own team with Jean\'s guidance.'},
+ {t:'cta',title:'Ready to run your firm on purpose?',chips:['Read the book','Talk with Jean about your firm'],disc:'Educational content for architecture firm owners. No revenue, client, or growth result is guaranteed. Results vary by firm, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function scaleSvg(kind){return `<svg class="scale-motif ${kind==='title'?'title-scale':'corner-scale'}"><use href="#scale"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Practice <b>Clarity</b> &middot; Jean Leathers</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=scaleSvg(s.arc);
+  else if(s.t==='title') h+=scaleSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
