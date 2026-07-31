@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>High Yield Velocity · Matt Krause</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0b10; --panel:#21242c; --rule:#191c24;
+    --signal:#2160c4; --steel:#9ba2b0; --chalk:#fafafa; --dim:#6b7280;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s linear;
+    display:grid;grid-template-columns:13% 1fr;align-items:stretch}
+  .slide.active{opacity:1;visibility:visible}
+  .rail{border-right:1px solid var(--rule);display:flex;flex-direction:column;justify-content:space-between;padding:5.4% 0 5.4% 3.4%}
+  .rail .no{font-family:'Inter Tight',sans-serif;font-size:1.1vw;font-weight:600;letter-spacing:.2em;color:var(--dim)}
+  .rail .tag{font-family:'Inter Tight',sans-serif;font-size:.86vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--signal);writing-mode:vertical-rl;transform:rotate(180deg);align-self:flex-start}
+  .pane{display:flex;flex-direction:column;justify-content:center;padding:6.2% 7.4% 6.2% 4.6%;position:relative}
+  .kicker{font-family:'Inter Tight',sans-serif;font-size:.98vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);margin-bottom:2.2vh}
+  h1{font-family:'Inter Tight',sans-serif;font-weight:600;color:var(--chalk);line-height:1.1;letter-spacing:-.018em}
+  .t-title h1{font-size:5.1vw;max-width:94%}
+  .t-normal h1{font-size:3.1vw;max-width:88%}
+  .t-normal .body{font-size:1.42vw;color:var(--steel);margin-top:2.6vh;max-width:82%;line-height:1.6;font-weight:300}
+  .sub{font-size:1.72vw;color:var(--steel);margin-top:3vh;max-width:80%;line-height:1.5;font-weight:300}
+  .t-section .pane{justify-content:flex-end;padding-bottom:11%}
+  .t-section h1{font-size:4.4vw;max-width:92%}
+  .t-section .idx{font-family:'Inter Tight',sans-serif;font-size:1.1vw;font-weight:600;color:var(--signal);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.6vh}
+  .t-dark .pane{background:var(--panel);justify-content:center}
+  .t-dark h1{font-size:3.5vw;max-width:88%;font-weight:500;color:var(--chalk)}
+  .t-cta .pane{background:var(--panel)}
+  .t-cta h1{font-size:3.9vw;max-width:88%}
+  .chips{display:flex;gap:.9vw;margin-top:3.6vh;flex-wrap:wrap}
+  .chip{border:1px solid var(--signal);color:#a7c3ee;padding:1.1vh 1.4vw;font-size:1.1vw;font-weight:500;font-family:'Inter Tight',sans-serif;letter-spacing:.02em}
+  .disc{position:absolute;left:4.6%;right:7.4%;bottom:3.6vh;font-size:.84vw;color:var(--dim);line-height:1.45;max-width:74%}
+  .brandline{font-family:'Inter Tight',sans-serif;font-size:1.16vw;color:var(--steel);margin-top:3.4vh;font-weight:500;letter-spacing:.03em}
+  .brandline b{color:var(--signal);font-weight:600}
+  .lanes{position:absolute;right:0;pointer-events:none}
+  .lanes-title{bottom:9%;width:34vw;opacity:.95}
+  .lanes-corner{bottom:6%;width:15vw;opacity:.34}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.07);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--signal);width:0;transition:width .3s linear}
+  .count{position:fixed;bottom:13px;right:18px;font-family:'Inter Tight',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Inter Tight',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .slide{grid-template-columns:9% 1fr}
+    .kicker{font-size:2.4vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.3vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.5vw}.rail .no{font-size:2.2vw}.rail .tag{font-size:1.9vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Freight Broker Frameworks</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- freight lanes: parallel runs, one lit, the rest quiet -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="lanes" viewBox="0 0 340 150">
+  <g stroke-width="2.2" stroke-linecap="round" fill="none">
+    <line x1="10" y1="26" x2="330" y2="26" stroke="#9ba2b0" opacity="0.16"/>
+    <line x1="10" y1="56" x2="330" y2="56" stroke="#9ba2b0" opacity="0.16"/>
+    <line x1="10" y1="86" x2="255" y2="86" stroke="#2160c4" opacity="0.95"/>
+    <circle cx="266" cy="86" r="6" fill="none" stroke="#2160c4" stroke-width="2.6"/>
+    <line x1="10" y1="116" x2="330" y2="116" stroke="#9ba2b0" opacity="0.16"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',tag:'Masterclass',title:'High Yield Velocity',sub:'How to pick the lanes nobody is fighting over, and turn one shipper into freight that repeats every week.',brand:true,lanes:'title'},
+ {t:'normal',tag:'Start here',k:'Who this is for',title:'You want a freight business, not a freight job.',body:'You have your authority, or you are about to. You can quote a load. What you do not have yet is a set of customers who send you freight without being chased for it. That is the whole gap, and it is a lane problem before it is a selling problem.'},
+ {t:'dark',tag:'Reframe',title:'You are not bad at sales. You are quoting the wrong freight.'},
+
+ {t:'section',tag:'Part one',idx:'Part one',title:'The Crowded Lane'},
+ {t:'normal',tag:'Part one',k:'Where new brokers go',title:'Everyone starts in the freight everyone else is already quoting.',body:'Dry van, big lanes, big shippers, published rates. It is the easiest freight to find, which is exactly why the margin is gone before you pick up the phone. You are the ninth call that shipper took today and the only thing left to compete on is price.'},
+ {t:'normal',tag:'Part one',k:'The grind that follows',title:'So the advice becomes: call more people.',body:'More dials, more hours, more rejection. It can work, and it burns most people out before it does. Volume is what you reach for when nothing about your offer is different. It treats a positioning problem as an effort problem.'},
+ {t:'normal',tag:'Part one',k:'The real cost',title:'A load is not a customer.',body:'One covered load feels like progress. It is not a business. A business is a shipper who has freight next week, and the week after, and who calls you first because you handle something specific better than the person who called them ninth.'},
+ {t:'dark',tag:'Reframe',title:'Margin is chosen upstream. You choose it when you choose the lane.'},
+
+ {t:'section',tag:'Part two',idx:'Part two',title:'High Yield Velocity'},
+ {t:'normal',tag:'Part two',k:'One, the underserved lane',title:'Go where the freight is awkward and the callers are few.',body:'High Yield Velocity means niching into lanes that are underserved: the commodity, the equipment, the region, or the service window that most brokers skip because it takes a little more thought. Fewer competitors, better margin, and a shipper who remembers you.'},
+ {t:'normal',tag:'Part two',k:'Two, the market update',title:'Stop cold pitching. Start being useful in public.',body:'The Market Update Strategy is a simple, repeated market read sent to the people who move that freight. It generates inbound interest, because a shipper who learns something from you has a reason to reply. You stop being an interruption and start being a source.'},
+ {t:'normal',tag:'Part two',k:'Three, the outreach system',title:'Know exactly who you are contacting and what happens next.',body:'The Shipper Outreach System is target identification plus a written follow up sequence. Who qualifies as your shipper, how you reach them, what the second and fifth touch say. The scripts, the shipper emails, the rate confirmations and carrier packets are already built so you are executing, not drafting.'},
+ {t:'normal',tag:'Part two',k:'Four, the daily plan',title:'Build it before 8am and after 5pm if that is what you have.',body:'The Side Hustle Daily Plan puts the prospecting into fixed blocks around a job. Most people do not fail for lack of ambition. They fail because the work never got a time slot. Give it one and the sequence runs whether you feel like it or not.'},
+ {t:'normal',tag:'Part two',k:'Five, the order',title:'Run the framework in sequence. Do not shop around it.',body:'Authority set up first. Then the first shipper. Then a repeatable customer base. The order is enforced for a reason: every step you skip you pay for twice later. Learn the business, copy the framework exactly, and spend your hours only on the actions that make money.'},
+ {t:'dark',tag:'Reframe',title:'Pick the lane. Be useful in it. Follow up on a schedule. Repeat.'},
+
+ {t:'section',tag:'Part three',idx:'Part three',title:'What a Book of Business Looks Like'},
+ {t:'normal',tag:'Part three',k:'The turn',title:'The week your freight starts showing up on its own.',body:'A repeatable customer base is a small number of shippers in a lane you understand, who send you the same freight on a rhythm. The phone still rings, but you are no longer starting from zero every Monday. That is the difference between a hustle and a brokerage.'},
+ {t:'normal',tag:'Part three',k:'Why listen to me',title:'I still move freight every day.',body:'I ran supply chain at Amazon and C.H. Robinson and managed tens of millions in logistics spend. Then I built my own brokerage from scratch with almost no overhead, and I still operate it. I hold active broker authority personally. More than 500 members now run these frameworks. I teach what I did this week, not what worked a decade ago.'},
+ {t:'dark',tag:'Reframe',title:'The lane you choose today decides what your margin looks like all year.'},
+
+ {t:'section',tag:'Next',idx:'Your next step',title:'Run the Frameworks'},
+ {t:'cta',tag:'Next',title:'Ready to pick your lane?',chips:['Watch the free training','Join Accelerator','Apply for Premium'],disc:'Educational content for people building a freight brokerage or agency. Nothing here is a guarantee of income, revenue, or business results. Results vary by person, lane, market, and effort. Freight Broker Frameworks is an educational program and is not itself a licensed freight broker.'},
+];
+
+const deck=document.getElementById('deck');
+function lanes(kind){return `<svg class="lanes ${kind==='title'?'lanes-title':'lanes-corner'}" viewBox="0 0 340 150"><use href="#lanes"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let pane='';
+  if(s.t==='section'){ pane=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`; }
+  else {
+    if(s.k) pane+=`<div class="kicker">${s.k}</div>`;
+    pane+=`<h1>${s.title}</h1>`;
+    if(s.sub) pane+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) pane+=`<div class="body">${s.body}</div>`;
+    if(s.brand) pane+=`<div class="brandline">Freight Broker <b>Frameworks</b> · Matt Krause</div>`;
+    if(s.chips) pane+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.lanes) pane+=lanes(s.lanes);
+  else if(s.t==='section'||s.t==='cta') pane+=lanes('corner');
+  if(s.disc) pane+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=`<div class="rail"><div class="no">${String(i+1).padStart(2,'0')}</div><div class="tag">${s.tag||''}</div></div><div class="pane">${pane}</div>`;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
