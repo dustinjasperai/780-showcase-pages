@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Reversing Burnout · Pete Atherton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FFFFFF; --panel:#101636; --rule:#D7D7D7;
+    --ink:#14171C; --accent:#EFC01E; --grey:#656C7B; --dim:#9AA0AC;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Karla',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#B08A00;margin-bottom:2.4vh}
+  h1{font-family:'Schibsted Grotesk',-apple-system,sans-serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.01em}
+  .t-title h1{font-size:4.1vw;max-width:88%}
+  .t-normal h1{font-size:3vw;max-width:84%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Karla',sans-serif;font-size:1.68vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.3vw;font-weight:700;color:#B08A00;margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.3vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.2vw;max-width:82%;font-style:normal;color:#FFFFFF}
+  .t-dark .kicker{color:var(--accent)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:80%;color:#FFFFFF}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#FFFFFF;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-dark .disc,.t-cta .disc{color:rgba(255,255,255,.55)}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .tick-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-tick{right:7%;bottom:10%;width:16vw}
+  .corner-tick{right:6%;bottom:7%;width:7vw;opacity:.6}
+  .brandline{font-family:'Karla',sans-serif;font-size:1.25vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:#B08A00;font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Karla',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Karla',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Karla',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">ActionsProve</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- tick motif: a single rising step-line, echoing "next-level" forward progression -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="tick" viewBox="0 0 260 60">
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <line x1="10" y1="48" x2="250" y2="48" stroke="#D7D7D7" opacity="0.7"/>
+    <polyline points="10,48 70,40 130,30 190,16 250,8" stroke="#EFC01E" opacity="0.95"/>
+    <circle cx="250" cy="8" r="5" fill="#EFC01E" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Reversing Burnout',sub:'A live masterclass for AEC firm leaders on why your best engineers walk out the door, and the named blueprint for keeping them.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You run a firm full of good engineers. One of your best just quietly stopped caring.',body:'It rarely shows up as a resignation letter first. It shows up as a missed deadline from someone who never used to miss one, or a principal who has not taken a real vacation in three years. Most AEC firm leaders do not see it until the exit interview.'},
+ {t:'dark',title:'A busy firm and a burning-out firm look identical from the outside. They do not look identical from the inside.'},
+
+ {t:'section',idx:'Part One',title:'Why Burnout Hides Inside a Healthy P&L'},
+ {t:'normal',k:'The billable-hour trap',title:'Utilization looks great right up until your best people are gone.',body:'A firm can hit every utilization target on the dashboard while the people generating those hours are running on empty. Revenue and billable hours measure output. Neither one measures whether the humans producing it are still engaged.'},
+ {t:'normal',k:'The next-fire cycle',title:'Every project deadline, every client call, every technical review still runs through the same few people.',body:'In a project-based AEC firm, the fire never actually goes out, it just moves to the next deadline. Leadership spends its time putting out fires instead of building the systems that would prevent the next one.'},
+ {t:'dark',title:'You cannot fix a retention problem with a bigger bonus. Bonuses do not fix exhaustion.'},
+
+ {t:'section',idx:'Part Two',title:'Pete Atherton’s Named Frameworks'},
+ {t:'normal',k:'The Reversing Burnout blueprint',title:'The named methodology for immediately re-engaging your top talent.',body:'Pete’s first book lays out a blueprint built specifically for AEC firms: how professional burnout and disengagement actually take hold in engineering organizations, and the concrete moves a firm’s leadership makes to reverse it before a top performer walks.'},
+ {t:'normal',k:'The I.M.P.A.C.T. process',title:'A named strategic-planning and leadership process built for AEC firm leaders.',body:'Pete built the I.M.P.A.C.T. process from his own 24 years as a practicing engineer, project manager, principal, and board member. It is the framework he uses to help firm leadership move from reactive firefighting to deliberate strategic planning.'},
+ {t:'normal',k:'The Next-Level Leadership Assessment',title:'A diagnostic that shows a firm exactly where its leadership gaps live.',body:'The subject of Pete’s second book, this assessment and the Team Success Ecosystem behind it help a firm’s leadership see, concretely, where the team dynamics that keep top talent engaged are strong, and where they are quietly failing.'},
+ {t:'dark',title:'You do not reverse burnout with a pep talk. You reverse it by changing what leadership actually does, on purpose.'},
+
+ {t:'section',idx:'Part Three',title:'What Reversing It Looks Like'},
+ {t:'normal',k:'A firm that keeps its best people',title:'The same technical talent that was one resignation letter away, still on the team a year later.',body:'The work is not glamorous. It is naming the I.M.P.A.C.T. process’s priorities out loud, running the Next-Level Leadership Assessment honestly, and following the Reversing Burnout blueprint even when the firm is busy. Results vary by firm, market, and effort.'},
+ {t:'normal',k:'Why Pete Atherton',title:'24 years as a practicing engineer and firm principal, before he ever coached anyone.',body:'Peter C. Atherton, P.E. spent 24 years as a civil engineer, project manager, principal, practice group leader, major firm owner, and board member at high-achieving AEC firms. He now hosts the AEC Leadership Today podcast and speaks at ACEC’s national and state conferences.'},
+
+ {t:'section',idx:'Your Next Step',title:'Apply to the AEC Leadership Mastermind'},
+ {t:'normal',k:'How the mastermind works',title:'Application-based group coaching, plus 1:1 executive sessions.',body:'The AEC Leadership Mastermind is an application-gated program pairing group coaching with 1:1 executive sessions for AEC firm leaders. For firms further along, ActionsProve also offers Executive and Outside-Board Advisory work directly with firm leadership.'},
+ {t:'cta',title:'Ready to reverse the burnout?',chips:['Apply to the AEC Leadership Mastermind','Listen to AEC Leadership Today'],disc:'Educational content for AEC firm leaders. No retention, revenue, or growth result is guaranteed. Results vary by firm, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function tickSvg(kind){return `<svg class="tick-motif ${kind==='title'?'title-tick':'corner-tick'}"><use href="#tick"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Actions<b>Prove</b> &middot; Pete Atherton</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=tickSvg(s.arc);
+  else if(s.t==='title') h+=tickSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
