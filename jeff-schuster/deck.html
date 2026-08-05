@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Master the Mechanics, Master the Mindset · Jeff Schuster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f0efe4; --panel:#e6e2d2; --rule:#cfc9b4;
+    --acc:#ae3703; --idx:#19465e; --ink:#1c2b30; --grey:#4a5459; --dim:#77837f;
+  }
+  html,body{height:100%}
+  body{background:#0c0c0a;font-family:'Poppins',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0c0c0a}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Barlow Condensed',Arial,sans-serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:-.005em}
+  .t-title h1{font-size:5vw;max-width:90%}
+  .t-normal h1{font-size:3.6vw;max-width:86%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#26343a 0%,#152025 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:84%;font-style:italic;color:#f2f0e6;font-family:'Barlow Condensed',Arial,sans-serif;font-weight:500}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#26343a 0%,#152025 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:82%;color:#f2f0e6}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#f0c3a8;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500;font-family:'Poppins',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:#93a0a4;font-style:italic;text-align:center;line-height:1.4;font-family:'Poppins',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .arc-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-arc{right:7.5%;bottom:8%;width:16vw}
+  .corner-arc{right:6%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#c9c3ae;z-index:20;font-weight:500;font-family:'Poppins',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#c9c3ae;z-index:20;font-weight:600;font-family:'Poppins',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#c9c3ae;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Poppins',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 23</div>
+<div class="brand-foot">Mechanics &amp; Mindset</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ascending-staircase motif: matches the static ad engine's growth mark -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="arc" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 128 H80 V96 H140 V60 H200 V24" stroke="#ae3703" opacity="0.85"/>
+    <circle cx="200" cy="24" r="7" fill="none" stroke="#ae3703" stroke-width="4.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Master the Mechanics, Master the Mindset',sub:'How one engineer took his firm from a home office to 4 states, and the system to repeat it.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:"You're the best engineer in the building. That's the problem.",body:"You built your firm on being the one who could solve what nobody else could. That skill got you here. It is also the reason the firm cannot run a single week without you in it."},
+ {t:'dark',title:'Most engineering firms do not stall because the work is bad. They stall because the owner never stopped being the technician.'},
+
+ {t:'section',idx:'Part One',title:'The Worktrap'},
+ {t:'normal',k:'The trap',title:'The exact skills that make you excellent are the skills keeping you stuck.',body:'Every technical problem you personally solve is a problem the firm never learns to solve without you. The better you are at the work, the easier it is to keep doing it instead of building what replaces you doing it.'},
+ {t:'normal',k:'The cost',title:'Every hour inside the work is an hour not spent building the firm.',body:'Bidding, staffing, pricing, the client call only you can take. None of it scales, and all of it caps how many states, how many employees, how much revenue the firm can ever reach.'},
+ {t:'dark',title:'A firm that only runs when you are in the room is not a business. It is a job with better wallpaper.'},
+
+ {t:'section',idx:'Part Two',title:'Master the Mechanics'},
+ {t:'normal',k:'Workflow clarity',title:'A firm that runs on your memory cannot run without you.',body:'Every process that lives in your head instead of on paper is a process only you can execute. Writing it down is the first mechanical fix, and the one most owners skip.'},
+ {t:'normal',k:'Delegation',title:'Delegation is not letting go. It is building something that can hold what you hand it.',body:'Handing off work to a team that is not structured to receive it just moves the bottleneck. The structure has to exist before the delegation does.'},
+ {t:'normal',k:'Pricing',title:'What you charge has to fund the firm you are trying to build, not just the one you have.',body:'Pricing based on last year keeps you exactly where you are. Pricing based on where the firm needs to go is what actually funds the next state, the next hire, the next contract size.'},
+ {t:'dark',title:'Mechanics without mindset just makes a well organized bottleneck.'},
+
+ {t:'section',idx:'Part Three',title:'Master the Mindset'},
+ {t:'normal',k:'Decisions',title:'Every decision you make personally is a decision the firm cannot make without you.',body:'The firms that scale build owners who make fewer decisions, not more, because the right people and the right systems are already making the small ones.'},
+ {t:'normal',k:'Leadership',title:'Leading a 30-person, 4-state firm is a different job than leading a 5-person shop.',body:'The mindset that built the firm at year one is not the mindset that scales it to year sixteen. What has to change is not the market. It is you.'},
+ {t:'dark',title:'You cannot fix a bottleneck with mechanics alone, and mindset without structure does not work. Both have to change together.'},
+
+ {t:'section',idx:'Part Four',title:'Home Office to 4 States'},
+ {t:'normal',k:'The firm this builds',title:'Home office to 4 states did not happen from mechanics or mindset alone.',body:'It happened because both moved together, on purpose, over 16 years. Systems that ran without him in the room, and a mindset that kept handing off the next piece instead of holding onto it.'},
+ {t:'normal',k:'Why Jeff Schuster',title:'A mechanical engineer who actually built and sold one.',body:'Jeff Schuster, BSME, spent his early career at Honeywell before starting Ennovate Corporation in 1997, an energy-efficiency and renewable-energy design-build construction firm. He grew it from a home office to more than 30 employees and nearly $10 million a year across 4 states, then sold it to a public company. He is certified through the Institute for Professional Excellence in Coaching and founded Mechanics & Mindset Business Coaching in 2015 to teach the system directly.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With the Audit'},
+ {t:'normal',k:'The Discovery Session',title:'A free conversation, not a pitch.',body:"A 1-on-1 conversation to understand where your firm is stuck today, mechanics or mindset or both, and whether working together makes sense."},
+ {t:'normal',k:'The Business Clarity Audit',title:'A full diagnostic across marketing, sales, operations, finances, team, and leadership.',body:'The same audit Jeff uses with every client, built to find exactly where your firm is losing time or margin before you spend a dollar fixing the wrong thing.'},
+ {t:'cta',title:'Ready to master the mechanics and the mindset?',chips:['Book the free Discovery Session','Start the Business Clarity Audit'],disc:'Educational content for engineering and construction firm owners. No income or revenue result is guaranteed. Results vary by owner, firm, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function arc(kind){return `<svg class="arc-motif ${kind==='title'?'title-arc':'corner-arc'}"><use href="#arc"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Mechanics &amp; <b>Mindset</b> &middot; Jeff Schuster</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=arc(s.arc);
+  else if(s.t==='title') h+=arc('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
