@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The MSP to BSP Masterclass · Start Grow Manage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f6fb; --panel:#ffffff; --rule:#e5e7eb;
+    --acc:#ffd200; --idx:#1a1d2e; --ink:#1a1d2e; --grey:#4a4f63; --dim:#8a8fa3;
+  }
+  html,body{height:100%}
+  body{background:#141522;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#141522}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#a68f00;margin-bottom:2.4vh}
+  h1{font-family:'Manrope',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.95vw;max-width:84%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.45vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.4vw;font-weight:600;color:#6b7091;margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.2vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(160deg,#1a1d2e 0%,#0f0f10 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.25vw;max-width:86%;color:#f6f6fb}
+  .t-cta{background:linear-gradient(160deg,#1a1d2e 0%,#0f0f10 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:82%;color:#f6f6fb}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#ffe363;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-dark .disc,.t-cta .disc{color:#8a8fa3}
+  .scale-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-scale{right:6.5%;bottom:8%;width:22vw}
+  .corner-scale{right:5.5%;bottom:6.5%;width:9vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:#a68f00;font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#5c6180;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5c6180;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#5c6180;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.3vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Start Grow Manage</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- SCALE motif: five ascending tiles, one per phase letter, echoing a diagnostic-dashboard step meter -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="scalebars" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="18" y="104" width="30" height="30" rx="3" stroke="#1a1d2e" stroke-width="2.2" opacity="0.35"/>
+    <rect x="60" y="86" width="30" height="48" rx="3" stroke="#1a1d2e" stroke-width="2.2" opacity="0.45"/>
+    <rect x="102" y="68" width="30" height="66" rx="3" stroke="#1a1d2e" stroke-width="2.2" opacity="0.55"/>
+    <rect x="144" y="50" width="30" height="84" rx="3" stroke="#1a1d2e" stroke-width="2.2" opacity="0.65"/>
+    <rect x="186" y="30" width="30" height="104" rx="3" stroke="#ffd200" stroke-width="2.6" opacity="0.95"/>
+    <line x1="18" y1="20" x2="216" y2="20" stroke="#ffd200" stroke-width="2" opacity="0.7"/>
+    <circle cx="201" cy="20" r="4" fill="#ffd200" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The MSP to BSP Masterclass',sub:'A masterclass for owners of $1M to $3M managed services businesses.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:"You're good at IT. Growing revenue hasn't fixed your margin.",body:'You have taken on more clients, more tickets, more techs. The top line moved. The margin did not move with it, because the model you are scaling is still priced on labor hours.'},
+ {t:'dark',title:'More clients on the same model just means more of the same problem, at a bigger size.'},
+
+ {t:'section',idx:'Part One',title:'The Trap'},
+ {t:'normal',k:'The labor-hour trap',title:'You are paid for hours, and AI is cutting the hours per ticket.',body:'AI tooling is reducing the labor time behind every ticket. A firm priced on hours watches revenue per client compress in real time, even while the client count grows.'},
+ {t:'normal',k:'The cost of staying an MSP',title:'Growth does not fix a pricing problem. It just makes it bigger.',body:'Adding clients to an hourly-priced business adds more of the exact problem you started with. The fix is not more clients. It is a different relationship to the client, priced differently.'},
+ {t:'dark',title:'Growing an MSP does not fix an MSP. It just makes the same problem bigger.'},
+
+ {t:'section',idx:'Part Two',title:'SCALE: The BSP Transformation'},
+ {t:'normal',k:'S, Set the Foundation',title:'Narrow the client profile, reprice on value, install PASTA.',body:'Define a specific Ideal Client Profile sharing a real business problem. Move off hourly pricing to value-based pricing, typically 2 to 5x standard MSP rates. Replace generic selling with PASTA: diagnose the problem and its cost before you ever mention what you sell.'},
+ {t:'normal',k:'C, Construct the Factory',title:'Standardize delivery, then put AI inside it.',body:'Documented delivery SOPs, a rationalized tech stack, and AI integrated into service delivery itself, not bolted onto the sales pitch. The factory has to run the same way regardless of who is on shift.'},
+ {t:'normal',k:'A, Accelerate Success',title:'Strategic Business Reviews replace the quarterly status report.',body:'A QBR is a status report. An SBR is a strategy session: prior objectives, the client's business, trends, recommendations, next steps, on a real cadence. That is where account growth and the marketing engine actually get built.'},
+ {t:'normal',k:'L, Lock In Systems',title:'Documentation, KPI dashboards, a real operating cadence.',body:'The systems that make the first three phases repeatable instead of a one-time push: dashboards, documented problem-solving, a cadence that runs without the owner re-inventing it every quarter.'},
+ {t:'normal',k:'E, Expand with Intent',title:'Org design, leadership, and a plan for the exit.',body:'Once the business sells outcomes and runs on systems, the last phase is building the team and leadership structure that lets it grow, or exit, on the owner's terms.'},
+ {t:'dark',title:'Two operators built this, not one: inside MSP credibility, and outside strategy discipline.'},
+
+ {t:'section',idx:'Part Three',title:'The Repriced Business'},
+ {t:'normal',k:'The business this builds',title:'A firm that gets paid for outcomes, not tickets.',body:'Revenue tied to what the work produces, cost reduction, compliance, competitive advantage, priced 2 to 5x standard MSP rates. A partner sitting alongside the client's business, not a vendor sitting downstream of it.'},
+ {t:'dark',title:'The MSPs that last are not the ones with the most tickets closed. They are the ones that stopped selling tickets.'},
+ {t:'normal',k:'Why Start Grow Manage',title:'Built by two operators, not one.',body:'Joe Rojas built and sold three MSPs, the first nearly ran him into the ground on 120-hour weeks, by the third his team ran it without him. Jeff Loehr brings 20 years in strategy consulting and angel investing. The SCALE framework is the working case those two perspectives built together, not a slide deck theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Why Growing Your MSP Won't Fix It'},
+ {t:'normal',k:'Start with the assessment',title:'The free BSP Readiness Assessment.',body:'A short diagnostic that scores where your business actually sits on the path from MSP to BSP, plus access to the Circle community and weekly content.'},
+ {t:'normal',k:'Go deeper',title:'Transformation Coaching.',body:'The full SCALE program, group implementation in Thrivers, 1:1 advisory in Platinum, plus the SBR Challenge and Prescriptive Sales Program courses for a narrower start.'},
+ {t:'cta',title:'Ready to see where your MSP sits on the path to BSP?',chips:['Take the free assessment','Explore Transformation Coaching'],disc:'Educational content for managed-services business owners. No income, growth, or result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function scalebars(kind){return `<svg class="scale-motif ${kind==='title'?'title-scale':'corner-scale'}"><use href="#scalebars"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Start Grow Manage <b>&middot; SCALE Framework</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=scalebars(s.arc);
+  else if(s.t==='title') h+=scalebars('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
