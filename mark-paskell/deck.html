@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Cradle to Grave System Masterclass · Mark Paskell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f8f5ef; --panel:#ffffff; --rule:#e3d9c5;
+    --acc:#866e51; --chalk:#2c2820; --grey:#56503f; --dim:#8c8570;
+  }
+  html,body{height:100%}
+  body{background:#231d15;font-family:'Karla',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#231d15}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Archivo',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.95vw;max-width:84%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-family:'Karla',sans-serif;font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.4vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.2vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(160deg,#3a2f20 0%,#1c160e 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:86%;font-style:italic;color:#f8f5ef}
+  .t-cta{background:linear-gradient(160deg,#3a2f20 0%,#1c160e 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:82%;color:#f8f5ef}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#e6cfa8;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-dark .disc,.t-cta .disc{color:#b3a58a}
+  .checklist-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-checklist{right:6.5%;bottom:6%;width:16vw}
+  .corner-checklist{right:5.5%;bottom:6.5%;width:8vw;opacity:.42}
+  .brandline{font-family:'Karla',sans-serif;font-size:1.26vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#d6c7ab;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#d6c7ab;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#d6c7ab;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">The Contractor Coaching Partnership</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- checklist motif: a job-file clipboard corner, ruled lines + checkmarks, echoing a punch-list -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="checklist" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="60" y="10" width="140" height="130" rx="6" stroke="#866e51" opacity="0.3"/>
+    <rect x="92" y="2" width="76" height="16" rx="3" stroke="#866e51" opacity="0.3"/>
+    <line x1="80" y1="48" x2="180" y2="48" stroke="#866e51" opacity="0.22"/>
+    <line x1="80" y1="76" x2="180" y2="76" stroke="#866e51" opacity="0.22"/>
+    <line x1="80" y1="104" x2="180" y2="104" stroke="#866e51" opacity="0.22"/>
+    <path d="M68 48 l6 6 l11 -13" stroke="#866e51" opacity="0.9"/>
+    <path d="M68 76 l6 6 l11 -13" stroke="#866e51" opacity="0.9"/>
+    <path d="M68 104 l6 6 l11 -13" stroke="#866e51" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Cradle to Grave System Masterclass',sub:'A masterclass for owners of residential contracting and remodeling firms.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You can build almost anything. Keeping track of it is a different job.',body:'Bidding, crews, material orders, punch lists. None of that is the paperwork that follows a job from the first phone call to the final invoice, and that paperwork is where the money quietly goes missing.'},
+ {t:'dark',title:'Being great at building does not mean the paperwork behind it is protecting you.'},
+
+ {t:'section',idx:'Part One',title:'Where It Falls Apart'},
+ {t:'normal',k:'The handoff nobody owns',title:'Every job changes hands two or three times before it is done.',body:'Sales hands off to production. Production hands off to closeout. If nothing written travels with the job at each handoff, whatever the salesperson promised is not what the crew builds, and nobody catches it until the customer does.'},
+ {t:'normal',k:'The cost of no system',title:'A full schedule can hide a business quietly losing money on half its jobs.',body:'Without a written system, a busy year and a profitable year are two different things. The gaps are not big mistakes. They are small ones, repeated on every job, that never get caught because nothing forces a review.'},
+ {t:'dark',title:'A full schedule does not mean your paperwork is protecting your margin.'},
+
+ {t:'section',idx:'Part Two',title:'The Cradle to Grave System'},
+ {t:'normal',k:'The front end',title:'Five phases before a shovel ever moves.',body:'Lead Generation, Needs Assessment, Measurement and Selection, Estimation, and Contract. Each phase has its own forms, so what the customer agreed to is written down before production ever starts.'},
+ {t:'normal',k:'The handoff that breaks projects',title:'A file checklist that moves with the job, not around it.',body:'The Sales-to-Production Handoff is its own named phase: a checklist that ensures nothing the salesperson promised gets lost on the way to the crew that builds it.'},
+ {t:'normal',k:'Running the job',title:'Pre-Construction and Production, tracked the same way every time.',body:'Office and site meetings with their own checklists, then job logs that track progress against the plan, not against memory.'},
+ {t:'normal',k:'Closing it out right',title:'Project Closeout and Forensic Review: the two phases most businesses skip.',body:'Final documentation and customer feedback at closeout, then a Forensic Review, a post-project analysis of what worked and what to fix on the next one. Ten phases, four business departments, one system.'},
+ {t:'dark',title:'A system you only use for half the phases is not a system. It is a habit.'},
+
+ {t:'section',idx:'Part Three',title:'A Business Run On The System'},
+ {t:'normal',k:'The business this builds',title:'Marketing, sales, production, and admin, all reading from the same file.',body:'Nothing falls through the cracks because every department hands off on paper, not on memory. The Lead Carpenter System backs it up on site: the roles and quality control that make sure what got built matches what got sold.'},
+ {t:'dark',title:'The contractors who last are not the ones working the hardest. They are the ones who never lose track.'},
+ {t:'normal',k:'Why Mark',title:'25+ years running his own jobs before he taught the system.',body:'Mark Paskell spent over 35 years hands-on in residential construction, including 25+ years as a working contractor himself, before founding The Contractor Coaching Partnership in 2007-2008. He is a licensed builder, a Massachusetts Public Adjuster, and an EPA/RRP and OSHA Certified Trainer.'},
+
+ {t:'section',idx:'Your Next Step',title:'Run Every Job Cradle to Grave'},
+ {t:'normal',k:'Start with the consultation',title:'The free coaching consultation.',body:'A no-obligation conversation about where your paperwork stands today and what the Cradle to Grave System would look like applied to your jobs.'},
+ {t:'normal',k:'Go deeper',title:'The Lead Carpenter System and Design/Build Sales Training.',body:'Workshops co-taught with Shawn McCadden on production leadership, plus his Design/Build Sales Training for the front end of the handoff.'},
+ {t:'cta',title:'Ready to run every job cradle to grave?',chips:['Take the free consultation','See the workshop calendar'],disc:'Educational content for residential contracting and remodeling business owners. No income, growth, or result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function checklist(kind){return `<svg class="checklist-motif ${kind==='title'?'title-checklist':'corner-checklist'}"><use href="#checklist"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Contractor Coaching Partnership <b>&middot; Cradle to Grave System</b> &middot; Mark Paskell</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=checklist(s.arc);
+  else if(s.t==='title') h+=checklist('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
