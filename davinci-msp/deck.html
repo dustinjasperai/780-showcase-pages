@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Get, Close, Serve, Keep Masterclass &middot; DaVinci MSP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f9fb; --panel:#ffffff; --rule:#dde3ea;
+    --acc:#0d84c9; --ink:#1f2429; --grey:#4a4f5c; --dim:#7a8290;
+  }
+  html,body{height:100%}
+  body{background:#12161a;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#12161a}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Oswald',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:90%}
+  .t-normal h1{font-size:2.85vw;max-width:86%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-family:'Open Sans',sans-serif;font-size:1.65vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.35vw;font-weight:600;color:#5c7a91;margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(160deg,#1f2429 0%,#12161a 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.15vw;max-width:86%;color:#f7f9fb}
+  .t-cta{background:linear-gradient(160deg,#1f2429 0%,#12161a 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.4vw;max-width:82%;color:#f7f9fb}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#7fc4ec;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-dark .disc,.t-cta .disc{color:#7a8290}
+  .gcsk-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-gcsk{right:6.5%;bottom:9%;width:20vw}
+  .corner-gcsk{right:5.5%;bottom:6.5%;width:8.4vw;opacity:.5}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#5c6472;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5c6472;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#5c6472;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:4.9vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.3vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">DaVinci MSP</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- GCSK motif: four ascending step-tiles, one per stage letter, echoing DaVinci's own 4-part Deep Dive -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gcskbars" viewBox="0 0 240 140">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="14" y="94" width="38" height="36" rx="3" stroke="#1f2429" stroke-width="2.2" opacity="0.35"/>
+    <rect x="68" y="72" width="38" height="58" rx="3" stroke="#1f2429" stroke-width="2.2" opacity="0.48"/>
+    <rect x="122" y="48" width="38" height="82" rx="3" stroke="#0d84c9" stroke-width="2.6" opacity="0.9"/>
+    <rect x="176" y="24" width="38" height="106" rx="3" stroke="#1f2429" stroke-width="2.2" opacity="0.6"/>
+    <text x="33" y="118" font-family="Open Sans" font-size="14" fill="#1f2429" opacity="0.55">G</text>
+    <text x="87" y="110" font-family="Open Sans" font-size="14" fill="#1f2429" opacity="0.6">C</text>
+    <text x="141" y="94" font-family="Open Sans" font-size="14" fill="#0d84c9" opacity="0.95">S</text>
+    <text x="195" y="70" font-family="Open Sans" font-size="14" fill="#1f2429" opacity="0.7">K</text>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Client Isn't Always Right",sub:'The Get, Close, Serve, Keep Masterclass for MSP owners.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:"You've heard ‘the customer is always right’ your whole career. In an MSP, it's the rule that breaks first.",body:"You took on the client who wanted ‘more security’ and ‘fewer restrictions’ in the same sentence. You said yes to both, because that's what a good service provider does. And then one of those two things bit you."},
+ {t:'dark',title:'Happy clients and a safe network are not always the same request.'},
+
+ {t:'section',idx:'Part One',title:'The Trap'},
+ {t:'normal',k:'The contradiction',title:'A client who wants to be secure will still ask for shared logins, USB backups, and admin rights for everyone.',body:'Most service industries run on one rule: the client is always right. In MSP work, the client is asking for two things that cannot both be true. Following the customer-is-always-right rule here does not make the client happy. It makes the network unsafe, and it is still your name on the contract when it fails.'},
+ {t:'normal',k:'Why more clients does not fix it',title:'Growth just multiplies the same contradiction across more accounts.',body:"Adding clients on top of an unresolved yes-to-everything habit does not average out the risk. It multiplies it. The fix is not more clients. It is knowing how to serve a client correctly when what they are asking for is not what they need."},
+ {t:'dark',title:'More clients on an unresolved yes-to-everything habit is not growth. It is more exposure.'},
+
+ {t:'section',idx:'Part Two',title:'Get, Close, Serve, Keep'},
+ {t:'normal',k:'Get Clients',title:'The first stage most owners skip straight past.',body:'Before an owner can close or serve a client well, they need a repeatable way to get in front of the right ones in the first place, not whoever calls first. Owners who never fix this stage spend years serving clients they never should have taken on.'},
+ {t:'normal',k:'Close Clients',title:'What gets agreed to here decides how hard Serve becomes later.',body:'A close that sets expectations honestly, including where the client’s convenience requests will not be honored, makes every future conversation easier. A close that just says yes to get the signature is the reason Serve becomes a fight six months in.'},
+ {t:'normal',k:'Serve Clients, the stage this masterclass centers on',title:"The client isn't always right, and isn't even right most of the time.",body:"This is the core of DaVinci's own coaching. The client isn't always right, and isn't even right most of the time. Learning how to hold the technically correct line, security over convenience, without losing the relationship, is what separates an MSP that survives its own client list from one that doesn't."},
+ {t:'normal',k:'Keep Clients',title:'A client who trusts a correct no stays longer than one who was told yes to everything.',body:'Keeping a client is not the same as keeping them happy in the moment. An owner who serves correctly, and explains why, builds the kind of trust that survives the next contradictory request instead of getting re-litigated every time.'},
+ {t:'dark',title:'Two operators built this from their own MSP, not a theory. Jerome Garrett and Josh Fellman.'},
+
+ {t:'section',idx:'Part Three',title:'The 39% Margin Business'},
+ {t:'normal',k:'The margin, explained',title:'A business that gets paid to be right, not just to be liked.',body:'An MSP that serves correctly stops absorbing the hidden cost of yes-to-everything: the emergency calls, the breach cleanups, the accounts that were never profitable once the real risk is counted. What is left is a business that can actually be measured and priced on its own terms.'},
+ {t:'dark',title:'The margin was not found by growing faster. It was found by serving correctly.'},
+ {t:'normal',k:'Why DaVinci MSP',title:'Built by two operators who lived this, not consultants who read about it.',body:"Jerome Garrett and Josh Fellman started their first managed services business in 2007 and grew it into the largest, most profitable MSP in their local market, reaching a 39% net profit margin after their own salaries, twice what they call the industry's own ‘highly profitable’ benchmark. In 2017 they stepped back from running it day to day to coach other MSP owners full time."},
+
+ {t:'section',idx:'Your Next Step',title:"Why The Client Isn't Always Right"},
+ {t:'normal',k:'Start with a conversation',title:'A free consultation, and a $1 first coaching session.',body:'A short call to see where Get, Close, Serve, and Keep actually stand in your business today, and where the yes-to-everything habit is costing you the most.'},
+ {t:'normal',k:'Go deeper',title:'The 18-month coaching program.',body:'Weekly one-hour sessions with you, plus thirty minutes each with your sales, operations, and client-relations leads, roughly two and a half hours a week of coaching across your whole team. Capped at 10 clients per coach to protect the time.'},
+ {t:'cta',title:'Ready to see where Get, Close, Serve, and Keep stand in your business?',chips:['Book the free consultation','Ask about the $1 first session'],disc:'Educational content for managed-services business owners. No income, growth, or result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function gcskbars(kind){return `<svg class="gcsk-motif ${kind==='title'?'title-gcsk':'corner-gcsk'}"><use href="#gcskbars"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">DaVinci MSP <b>&middot; Get, Close, Serve, Keep</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=gcskbars(s.arc);
+  else if(s.t==='title') h+=gcskbars('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
