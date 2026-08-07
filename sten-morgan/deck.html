@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Whiteboard Method: Sten Morgan · Elite Advisor Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F5F8FA; --panel:#EAF1F4; --rule:#C9D8DF;
+    --ink:#151515; --navy:#1c455f; --accent:#4ac6e0; --dim:#5b7c8c;
+  }
+  html,body{height:100%}
+  body{background:#DCE6EA;font-family:'Manrope',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#DCE6EA}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .disp{font-family:'Bebas Neue',sans-serif}
+  .kicker{font-family:'Manrope',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Bebas Neue',sans-serif;font-weight:400;color:var(--navy);line-height:1.02;letter-spacing:.005em}
+  .t-title h1{font-size:5.6vw}
+  .t-normal h1{font-size:3.7vw;max-width:88%}
+  .t-normal .body{font-family:'Manrope',sans-serif;font-size:1.5vw;color:#3a4a52;margin-top:2.6vh;max-width:74%;line-height:1.5;font-weight:400}
+  .sub{font-family:'Manrope',sans-serif;font-size:1.82vw;color:#3a4a52;margin-top:3.2vh;max-width:80%;line-height:1.44;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Bebas Neue',sans-serif;font-size:1.6vw;font-weight:400;color:var(--dim);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:90%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--navy);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:86%;font-weight:400;color:#F5F8FA;font-family:'Manrope',sans-serif;font-style:italic}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:3.1vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.4vw;padding:2.4vh 1.1vw;width:12vw;min-height:14vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Bebas Neue',sans-serif;font-size:2.1vw;font-weight:400;color:var(--accent);line-height:1}
+  .flowcard .l{font-family:'Manrope',sans-serif;font-size:1.08vw;font-weight:700;color:var(--navy);line-height:1.25}
+  .t-cta{background:var(--navy);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.1vw;max-width:86%;color:#fff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#cdeef7;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Manrope',sans-serif;font-size:1.2vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Manrope',sans-serif;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-dark .disc,.t-cta .disc{color:#a9c3cf}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frames{position:absolute;pointer-events:none;opacity:.85}
+  .title-frames{right:6%;bottom:9%;width:24vw}
+  .corner-frames{right:5.5%;bottom:7%;width:11vw;opacity:.6}
+  .brandline{font-family:'Manrope',sans-serif;font-size:1.3vw;color:#3a4a52;margin-top:3.4vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--navy);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:5.6vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Elite Advisor Network</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- whiteboard-corner motif: a plan sketched live, marker stroke + circled point -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frames" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="14" y="16" width="232" height="118" rx="4" stroke="#1c455f" opacity="0.5"/>
+    <path d="M40 108 H86 V80 H132 V52 H178" stroke="#4ac6e0" opacity="0.95"/>
+    <circle cx="178" cy="52" r="7" fill="none" stroke="#4ac6e0" stroke-width="3"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Whiteboard Method',sub:'How elite advisors turn a blank page into a higher planning fee, live, in the room, without another slide deck.',brand:true,frames:'title'},
+ {t:'normal',k:'Who this is for',title:'Advisors who present a plan and get a nod, not a signature on a higher fee.',body:'You will walk away with the Whiteboard Method: the exact technique behind it, and how it changes the fee conversation.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a guarantee.',body:'The results and averages shared here are Elite Advisor Network’s own reported figures. Yours will be your own; what matters is the method that produces them.',disc:'Educational content only. Figures cited are Elite Advisor Network’s own reported averages, not a guarantee of results. Outcomes vary by practice.'},
+ {t:'normal',k:'Who’s teaching this',title:'Sten Morgan, founder of Elite Advisor Network and host of The Elite Financial Advisor Podcast.',body:'244 episodes and counting, teaching practicing advisors across the country. He still runs his own advisory practice, Legacy Investment Planning.'},
+
+ {t:'section',idx:'Part One',title:'The Blank-Page Problem'},
+ {t:'normal',k:'The old way',title:'A printed plan gets handed across the desk. A slide deck gets clicked through.',body:'Either way, the client is a spectator. They nod along, and the fee gets negotiated like a commodity because the value never became visible.'},
+ {t:'dark',title:'Your client does not remember a single slide from your last meeting. They remember what they watched get built.'},
+ {t:'normal',k:'The shift',title:'Stop presenting the plan. Start drawing it, live, in front of them.'},
+
+ {t:'section',idx:'Part Two',title:'The Whiteboard Method'},
+ {t:'flow',k:'The technique',title:'Four moves, every client meeting',items:[
+   {n:'01',l:'Draw their numbers'},{n:'02',l:'Build the gap'},
+   {n:'03',l:'Let them watch it'},{n:'04',l:'Price what they saw'}]},
+ {t:'normal',k:'01-02 · Draw their numbers, build the gap',title:'Sketch where they are and where the plan takes them, using their own numbers.',body:'Not a template. Not a printout. A blank board that fills in while they watch.'},
+ {t:'normal',k:'03-04 · Let them watch it, price what they saw',title:'The client sees the value get built, so the fee is no longer an abstract number.',body:'This is the throughline into how EAN teaches advisors to charge: the board does the convincing before the price ever comes up.'},
+ {t:'dark',title:'A number on a rate sheet is a debate. A number that follows what they just watched get drawn is a decision.'},
+
+ {t:'section',idx:'Part Three',title:'What It Does to the Fee Conversation'},
+ {t:'normal',k:'The reported result',title:'EAN advisors report raising their minimum planning fee 200% after adopting the method.',body:'Attributed to EAN’s own tracking, not a promise: some advisors who attend "How to Charge" report collecting over $10,000 in new planning fees within 90 days.'},
+ {t:'normal',k:'Why it works',title:'A client who participates in building the plan values it differently than a client who receives it.',body:'The whiteboard is not a visual aid. It is the mechanism that makes a higher fee feel earned instead of imposed.'},
+
+ {t:'section',idx:'Part Four',title:'Making It Real'},
+ {t:'normal',k:'This week',title:'Your next client meeting, without a single slide.',body:'Pick one upcoming meeting. Leave the deck closed. Draw the plan instead, and watch what happens to the conversation before you ever mention price.'},
+
+ {t:'section',idx:'Part Five',title:'Where to Start'},
+ {t:'normal',k:'Homework',title:'Take the free Whiteboard Wisdom class.',body:'Three days, self-paced, straight from Sten: the full technique, ready to use in your next meeting.'},
+ {t:'cta',title:'Stop presenting the plan. Start drawing it.',chips:['Take the free class','Explore EAN Plus'],disc:'Educational content, not a guarantee of results. Figures are Elite Advisor Network’s own reported averages. Outcomes vary by practice.'},
+];
+
+const deck=document.getElementById('deck');
+function frames(kind){return `<svg class="frames ${kind==='title'?'title-frames':'corner-frames'}"><use href="#frames"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx disp">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Elite Advisor <b>Network</b> · Sten Morgan</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frames) h+=frames(s.frames);
+  else if(s.t==='title') h+=frames('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
