@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Who Pays for What · Mike Anderson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F8F9FD; --panel:#ECEFFB; --rule:#D7DCF0;
+    --acc:#3140FC; --idx:#1A1E66; --chalk:#14163A; --grey:#4A4F6B; --dim:#8890B3;
+  }
+  html,body{height:100%}
+  body{background:#0B0D1A;font-family:'Poppins',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0B0D1A}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Abril Fatface',Georgia,serif;font-weight:400;color:var(--idx);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.9vw;max-width:88%}
+  .t-normal h1{font-size:2.9vw;max-width:84%}
+  .t-normal .body{font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.6vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.3vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.1vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(180deg,var(--idx) 0%,#0D0F35 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:82%;font-style:italic;color:#F5F6FC}
+  .t-cta{background:linear-gradient(180deg,var(--idx) 0%,#0D0F35 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:80%;color:#F5F6FC}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#DDE3FF;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#9BA4D6}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-motif{right:7%;bottom:9%;width:20vw}
+  .corner-motif{right:6%;bottom:7.5%;width:9vw;opacity:.55}
+  .brandline{font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(20,22,58,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Collision Advice</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- benchmark-bar motif: ascending peer-comparison bars, one bar picked out in accent -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bars" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round">
+    <line x1="14" y1="128" x2="246" y2="128" stroke="#1A1E66" stroke-width="2" opacity="0.3"/>
+    <rect x="34" y="96" width="22" height="32" rx="3" fill="#1A1E66" opacity="0.22"/>
+    <rect x="76" y="76" width="22" height="52" rx="3" fill="#1A1E66" opacity="0.32"/>
+    <rect x="118" y="52" width="22" height="76" rx="3" fill="#3140FC" opacity="0.85"/>
+    <rect x="160" y="88" width="22" height="40" rx="3" fill="#1A1E66" opacity="0.22"/>
+    <rect x="202" y="64" width="22" height="64" rx="3" fill="#1A1E66" opacity="0.32"/>
+    <circle cx="129" cy="46" r="5" fill="#3140FC"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Who Pays for What',sub:'A masterclass for collision repair shop owners on estimate accuracy, insurer reimbursement, and where you really stand against your peers.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You fix cars right. Insurers still fight to pay you less for it.',body:'You run a collision shop and every estimate you write turns into a negotiation you did not choose to have. You know the work was done correctly. Getting paid for it is a different fight entirely.'},
+ {t:'dark',title:'Most shops do not know they are underpaid. They just know they are not profitable.'},
+
+ {t:'section',idx:'Part One',title:'Why Shops Leave Money on the Table'},
+ {t:'normal',k:'The invisible gap',title:'Most shops run on gut feel because they have nothing to compare against.',body:'Without real data from other shops, there is no way to know if a reimbursement number is fair, low, or standard for the operation. Owners guess, and guessing has a cost that never shows up as a single line item.'},
+ {t:'normal',k:'The fight nobody trained you for',title:'Insurer procedures are not the same shop to shop, or state to state.',body:'What one insurer pays for a scan, a calibration, or a paint procedure in one state is not what they pay two states over, and the reimbursement rules shift constantly. Fighting that blind, one estimate at a time, is exhausting and expensive.'},
+ {t:'dark',title:'A repair order priced on hope pays exactly what the insurer feels like paying.'},
+
+ {t:'section',idx:'Part Two',title:'The Two Numbers That Change Everything'},
+ {t:'normal',k:'Who Pays for What',title:'A quarterly survey of 28,000-plus collision professionals on what insurers actually pay.',body:'Real, current data on reimbursement practices by operation and by region, gathered from the professionals living it every day. This is the first number: what the market is actually paying, not what any single insurer claims it pays.'},
+ {t:'normal',k:'Estimate auditing',title:'A systematic review of your own estimates against that real data.',body:'Not a hunch that something looks off. A structured audit of the estimate itself, checked line by line against documented reimbursement patterns, to find exactly where the gap is and fix it before it repeats on the next hundred repair orders.'},
+ {t:'normal',k:'Peer benchmarking',title:'Comparing your real numbers against 400-plus shops fighting the same fight.',body:'Twenty-five years of Spartan 300 and Business Council 20 Group data means your numbers are never sitting in isolation. You can see exactly where your shop stands next to shops that look like yours, run by owners who compare notes instead of guessing alone.'},
+ {t:'dark',title:'You cannot fix a number you have never compared to anyone else’s.'},
+
+ {t:'section',idx:'Part Three',title:'The Shop That Stops Guessing'},
+ {t:'normal',k:'The shop this builds',title:'Paid fairly, priced with data, no longer guessing.',body:'A shop that writes estimates backed by real reimbursement data, catches the underpayment before it happens instead of after, and knows exactly where it stands against 400 peer shops instead of wondering.'},
+ {t:'normal',k:'Why Mike Anderson',title:'Twenty-five years of real numbers, taught in the open.',body:'Mike Anderson owned and operated multiple collision centers voted the number one shop in the Washington DC, Maryland, and Virginia market twelve years running. He has spent 300-plus days a year for over a decade consulting on-site, co-facilitates Business Council 20 Groups with Axalta, and holds the AMAM designation through the Automotive Management Institute.'},
+
+ {t:'section',idx:'Your Next Step',title:'Get Your Real Numbers'},
+ {t:'normal',k:'Spartan 300 / Legacy Group',title:'Twenty-five years of peer benchmarking, built for OEM-certified shops.',body:'In-person meetings three times a year, a monthly training webinar, an annual Symposium, and the Legacy Group reporting suite that turns your numbers into something you can actually compare.'},
+ {t:'normal',k:'Business Council 20 Groups / on-site consulting',title:'Structured financial benchmarking, or a deeper one-on-one path.',body:'Business Council 20 Groups, co-facilitated with Axalta, for shops that want structured peer accountability. On-site consulting and estimate auditing for owners who want the audit done in their own shop first.'},
+ {t:'cta',title:'Ready to know where you really stand?',chips:['Explore Spartan 300 / Legacy Group','Join a Business Council 20 Group'],disc:'Educational content for collision repair shop owners. No reimbursement amount, income, or business result is guaranteed. Results vary by shop, market, and insurer.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#bars"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Collision <b>Advice</b> · Mike Anderson</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
