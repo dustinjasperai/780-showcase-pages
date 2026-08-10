@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Local Ranking Playbook · George, Coatings by the Bay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FBFBFA; --panel:#F1F1EE; --rule:#DCDCD8;
+    --blue:#2EA3F2; --green:#1A5C3A; --ink:#26282B; --grey:#5B5E63; --dim:#8B8E93;
+  }
+  html,body{height:100%}
+  body{background:#111;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#111}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:2.4vh}
+  h1{font-family:'Noto Serif',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.7vw}
+  .t-normal h1{font-size:3.1vw;max-width:84%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.48vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Open Sans',sans-serif;font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--green);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--blue),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#2E323A 0%,#111213 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:84%;color:#F6F7F5;font-family:'Noto Serif',Georgia,serif}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#20362A 0%,#111213 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:82%;color:#F6F7F5;font-family:'Noto Serif',Georgia,serif}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--green);color:#8FD3AE;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500;font-family:'Open Sans',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4;font-family:'Open Sans',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .pin-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-pin{right:7%;bottom:8%;width:15vw}
+  .corner-pin{right:6%;bottom:7.5%;width:7.5vw;opacity:.5}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--blue);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--blue);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#999;z-index:20;font-weight:500;font-family:'Open Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#999;z-index:20;font-weight:600;font-family:'Open Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#999;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Open Sans',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Coatings by the Bay</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ascending rank / location-pin motif, drawn from the #1-organic-ranking IP -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="pin" viewBox="0 0 200 160">
+  <g fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 138 L70 108 L118 122 L182 46" stroke="#DCDCD8" opacity="0.7"/>
+    <path d="M118 122 L182 46" stroke="#2EA3F2" opacity="0.95"/>
+    <circle cx="182" cy="46" r="6" fill="#2EA3F2" stroke="none"/>
+  </g>
+  <g>
+    <path d="M182 20 C168 20 158 30 158 44 C158 60 182 78 182 78 C182 78 206 60 206 44 C206 30 196 20 182 20 Z" fill="#1A5C3A" opacity="0.92"/>
+    <circle cx="182" cy="43" r="8" fill="#FBFBFA"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Local Ranking Playbook',sub:'A masterclass on getting a detail or coating shop found first, from an owner who has done it four times, from a cold start.',brand:true,pin:'title'},
+ {t:'normal',k:'Who this is for',title:'Your work is great. Nobody can find you.',body:'You can lay down a flawless ceramic coating and still lose the month to a shop with a worse install and a better Google listing. Most owners assume the fix is another ad campaign. It usually is not.'},
+ {t:'dark',title:'You do not have a detailing problem. You have a findability problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Most Shops Stay Invisible'},
+ {t:'normal',k:'The real obstacle',title:'Google Ads before the foundation just buys a weak listing more visitors.',body:'Most shops turn on Google Ads before their Google Business Profile, on-page SEO, and site even work in their favor. Every dollar in the account covers for that gap instead of fixing it, so leads stay expensive no matter how the campaign is tuned.'},
+ {t:'normal',k:'The hidden cost',title:'A weak local foundation makes every lead a tire kicker.',body:'When the listing is generic and the site does not pre-qualify anyone, every click looks the same: some ready to book, most just comparing prices. Owners burn appointment slots sorting the two apart by hand.'},
+ {t:'dark',title:'A stronger foundation is what turns visitors into booked jobs, not a bigger budget.'},
+
+ {t:'section',idx:'Part Two',title:'The Local Ranking Playbook'},
+ {t:'normal',k:'Local SEO foundation',title:'Rank organically before you ever pay for a click.',body:'On-page SEO and local SEO signals are what put a shop in front of buyers for free, every day, without a media budget. This is the lever that got a brand-new Wisconsin shop to #1 organic for "ceramic coating" across 700+ square miles.'},
+ {t:'normal',k:'Google Ads done right',title:'Google Ads should get cheaper over time, not carry the whole shop.',body:'Once the organic foundation is in place, a Google Ads account converts better and gets more efficient, because it is not fighting a weak listing anymore. It becomes an amplifier on top of what already ranks, not a crutch propping up what does not.'},
+ {t:'normal',k:'Lead filtering',title:'Stop letting tire kickers eat your calendar.',body:'A simple filtering system, built into the site and the intake process, separates people ready to book from people still comparing prices, before either one takes up appointment time.'},
+ {t:'normal',k:'Continuous improvement',title:'Small, constant fixes beat one big relaunch.',body:'CTAs, forms, and CRM follow-up get tuned in small steps on a regular cadence, not redone once a year. Conversion rate compounds the same way ranking does.'},
+ {t:'dark',title:'Four levers. One shop ranked number one across 700 miles.'},
+
+ {t:'section',idx:'Part Three',title:'Proof, Not a Pitch'},
+ {t:'normal',k:'The proof',title:'Built from zero. Four times.',body:'A shop in Indiana, co-owned with his brother, built past $250K with just the two of them. Closed it, relocated to Wisconsin, and built a brand-new shop that already ranks number one organically in its market. Four different companies now, four times to page one.'},
+ {t:'normal',k:'How he runs it',title:'Transparency first, community built in.',body:'Every recommendation gets explained, not just handed down. A minimum of 5% of gross sales goes back to community charities every year, a standing commitment, not a one-time gesture.'},
+
+ {t:'section',idx:'Your next step',title:'Build It With Me'},
+ {t:'normal',k:'How I can help',title:'Coaching for detail and coating shop owners who want to be found first.',body:'Through Coatings by the Bay I run month-to-month coaching, no contracts: a single strategy call, a short Getting Started series, or Diving in Deep, the full 6+ session local-ranking and PPC engagement most owners land on.'},
+ {t:'cta',title:'Ready to get found first?',chips:['Book Discovery Session','See coaching options'],disc:'Educational content for detail and coating shop owners. No income, ranking, or business result is guaranteed. Results vary by market, competition, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function pin(kind){return `<svg class="pin-motif ${kind==='title'?'title-pin':'corner-pin'}"><use href="#pin"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Coatings by the <b>Bay</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.pin) h+=pin(s.pin);
+  else if(s.t==='title') h+=pin('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
