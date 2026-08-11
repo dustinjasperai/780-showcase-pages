@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Three-Legged Stool · Dan &amp; Sandy Apple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#17140F; --panel:#221D16; --rule:#3D362B;
+    --acc:#C23B2A; --idx:#F7F7F7; --chalk:#F5F1EA; --grey:#C9BFAF; --dim:#8A8172;
+  }
+  html,body{height:100%}
+  body{background:#0B0A08;font-family:'Lato',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0B0A08}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Cabin',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.9vw;max-width:88%}
+  .t-normal h1{font-size:2.9vw;max-width:84%}
+  .t-normal .body{font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.6vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.3vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.1vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(180deg,var(--panel) 0%,#0B0A08 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:82%;font-style:italic;color:var(--idx)}
+  .t-cta{background:linear-gradient(180deg,var(--panel) 0%,#0B0A08 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:80%;color:var(--idx)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#F1D9D2;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#B9AFA0}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-motif{right:7%;bottom:9%;width:18vw}
+  .corner-motif{right:6%;bottom:7.5%;width:8vw;opacity:.55}
+  .brandline{font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(245,241,234,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">The Apple Group</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- three-legged-stool motif: a simple seat over three legs, one leg picked out in accent -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stool" viewBox="0 0 260 170">
+  <g fill="none" stroke-linecap="round">
+    <rect x="40" y="34" width="180" height="16" rx="6" fill="#F5F1EA" opacity="0.85"/>
+    <line x1="62" y1="50" x2="52" y2="150" stroke="#F5F1EA" stroke-width="8" opacity="0.28"/>
+    <line x1="130" y1="50" x2="130" y2="150" stroke="#C23B2A" stroke-width="9" opacity="0.9"/>
+    <line x1="198" y1="50" x2="208" y2="150" stroke="#F5F1EA" stroke-width="8" opacity="0.28"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Three-Legged Stool',sub:'A masterclass for garage door dealership owners on sales, operations, and finance, taught by the owner who built an 8-store dealership and sold it.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You run a good shop. You still cannot tell which leg is weak.',body:'You run a garage door dealership and every month looks fine until it does not. You know sales, ops, and the books all matter. What you do not have is someone who has run a multi-location dealership telling you which leg is actually about to give.'},
+ {t:'dark',title:'A stool with one weak leg still looks fine, right up until someone leans on it.'},
+
+ {t:'section',idx:'Part One',title:'Why Dealerships Wobble Without Knowing It'},
+ {t:'normal',k:'The invisible wobble',title:'Most owners run the whole business off one leg they are naturally good at.',body:'A great salesperson-turned-owner watches sales and lets operations and finance run on autopilot. A great technician-turned-owner watches the trucks and lets sales and the books run on autopilot. The business survives on the strong leg long after the weak one starts costing real money.'},
+ {t:'normal',k:'The fight nobody trained you for',title:'Nobody hands a new dealership owner a manual for the other two legs.',body:'You learn the trade you started in. Nobody sits you down and teaches the other two disciplines the same way, so most owners are guessing at whichever leg they did not come up through, and guessing has a cost that never shows up as a single line item.'},
+ {t:'dark',title:'A dealership priced on gut feel and staffed on gut feel runs exactly as well as the owner’s gut.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Legs, Named'},
+ {t:'normal',k:'Leg one: sales',title:'A formal, sequenced process, not personality-dependent hustle.',body:'The 7-Step Selling Process turns selling into something you can teach a new hire in a single session instead of hoping they pick it up over a year. It is the difference between a sales pro who sells value and an order taker who only quotes price.'},
+ {t:'normal',k:'Leg two: operations',title:'Scheduling, field techs, and material management that run without you in the room.',body:'Operations that Rock is the discipline of a dealership that does not fall apart the one week the owner takes off: dispatch, parts, and customer-service coordination running on a system instead of on the owner’s memory.'},
+ {t:'normal',k:'Leg three: finance',title:'Reading your own numbers instead of handing them to someone else to worry about.',body:'Financial Fitness, taught by a CPA who has spent 20 years inside this industry, is the leg most owners avoid entirely: real financial controls and the ability to read your own statement instead of finding out you had a bad quarter three months after it happened.'},
+ {t:'dark',title:'You cannot fix a leg you have never actually looked at.'},
+
+ {t:'section',idx:'Part Three',title:'The Dealership That Stops Wobbling'},
+ {t:'normal',k:'The shop this builds',title:'Balanced on all three legs, not just standing on the one you are good at.',body:'A dealership where sales runs on a repeatable process, operations runs without the owner babysitting it, and the owner can read their own financial statement and see a problem coming instead of finding it after the fact.'},
+ {t:'normal',k:'Why Dan and Sandy Apple',title:'One of them built and sold a dealership. The other has audited this industry’s books for two decades.',body:'Dan Apple grew Apple Door Systems into Virginia’s largest garage door dealer, 8 locations, before selling it to his own employees in 2011. He then co-founded IDEA and served as its first president, writing the national accreditation designation the trade runs on today. Sandy Apple has been a CPA since 1972, with 20 years of that career spent inside the garage door industry.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Weak Leg'},
+ {t:'normal',k:'Free 30-minute consultation',title:'A no-obligation conversation about where your dealership actually stands.',body:'No pitch deck, no pressure. A straight conversation about which of the three legs needs attention first, from the two people in this trade most qualified to tell you.'},
+ {t:'normal',k:'A specific training session',title:'If you already know your weak leg, start there.',body:'Sales Training, Management Training, and Financial Fitness are each built as focused, single-session training, 90 minutes to 2 hours, for owners who already know which leg needs the work.'},
+ {t:'cta',title:'Ready to find out which leg is weak?',chips:['Book the free consultation','Explore a training session'],disc:'Educational content for garage door dealership owners. No income or business result is guaranteed. Results vary by dealership, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#stool"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The <b>Apple Group</b> · Dan &amp; Sandy Apple</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
