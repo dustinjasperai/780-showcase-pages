@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Utility-Scale Project Management Accelerator &middot; Taylor Jackson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F2F4F4; --panel:#E4E9EC; --rule:#D2DADD;
+    --ink:#212121; --soft:#4A5259; --dim:#7A828A;
+    --acc:#0C2288; --acc2:#93B5E4;
+    --night:#0C2288; --night-ink:#F2F4F4; --night-soft:#C9D6EA;
+  }
+  html,body{height:100%}
+  body{background:#DCE1E2;font-family:'Archivo',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#DCE1E2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Space Grotesk',Arial,sans-serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.008em}
+  .t-title h1{font-size:3.75vw;max-width:88%}
+  .t-normal h1{font-size:2.85vw;max-width:84%}
+  .t-normal .body{font-size:1.42vw;color:var(--soft);margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--soft);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Archivo',sans-serif;font-size:1.3vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--night);align-items:center;text-align:center}
+  .t-dark .kicker{color:var(--night-soft)}
+  .t-dark h1{font-size:3.2vw;max-width:82%;color:var(--night-ink);font-style:italic}
+  .t-cta{background:var(--night);align-items:center;text-align:center}
+  .t-cta .kicker{color:var(--night-soft)}
+  .t-cta h1{font-size:3.4vw;max-width:80%;color:var(--night-ink)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc2);color:var(--night-ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:var(--night-soft)}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-motif{right:7%;bottom:9%;width:19vw}
+  .corner-motif{right:6%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-size:1.24vw;color:var(--soft);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(33,33,33,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Generation Solar</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- utility-scale-array motif: rows of panel bars, converging/growing toward the right -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="array" viewBox="0 0 260 170">
+  <g fill="none" stroke-linecap="round">
+    <rect x="18" y="132" width="26" height="14" rx="2" fill="#0C2288" opacity="0.22"/>
+    <rect x="54" y="118" width="34" height="28" rx="2" fill="#0C2288" opacity="0.32"/>
+    <rect x="98" y="98" width="42" height="48" rx="2" fill="#0C2288" opacity="0.5"/>
+    <rect x="150" y="70" width="52" height="76" rx="2" fill="#0C2288" opacity="0.72"/>
+    <rect x="212" y="34" width="34" height="112" rx="2" fill="#0C2288" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Utility-Scale Project Management Accelerator',sub:'A masterclass for solar company leaders on scope, risk, negotiation, and schedule, taught by the COO who took a residential installer to a top national utility-scale EPC.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You run a good shop. The contracts just got bigger and the shop didn’t keep up.',body:'You run a solar company that does solid work. Then a bigger, more complex opportunity lands on the table, and the playbook that worked at residential and regional scale starts breaking in places you did not expect.'},
+ {t:'dark',title:'A company that scales its ambition without scaling its systems does not grow. It just fails on a bigger contract.'},
+
+ {t:'section',idx:'Part One',title:'Why the Leap Breaks Companies That Were Fine Before'},
+ {t:'normal',k:'The invisible plateau',title:'Residential and regional work forgives things utility-scale work never will.',body:'A loose scope, a soft negotiating position, a schedule padded with guesswork: all of it survives at smaller scale. None of it survives once the contract size and the stakes go up together.'},
+ {t:'normal',k:'The fight nobody trained you for',title:'Nobody hands a growing solar company a manual for utility-scale work.',body:'You learn the business you started in. Nobody sits you down and teaches the disciplines the next tier of work actually requires, so most leaders are guessing their way through their first big contract instead of running it.'},
+ {t:'dark',title:'A company that guesses its way through one utility-scale contract usually does not get a second one.'},
+
+ {t:'section',idx:'Part Two',title:'The Four Disciplines, Named'},
+ {t:'normal',k:'Discipline one: scope',title:'What "in scope" actually means once a contract gets complex.',body:'Manage Scope turns a vague agreement into a defined one before work starts, so the disputes that kill margin on utility-scale jobs never get a foothold in the first place.'},
+ {t:'normal',k:'Discipline two: subsurface risk',title:'The risk a residential company never had to plan for.',body:'Handle Subsurface Risk is the discipline of finding out what is actually under a utility-scale site before it becomes a change order, a delay, or a number nobody budgeted for.'},
+ {t:'normal',k:'Discipline three: negotiation',title:'Holding your position on a contract that actually matters.',body:'Negotiate Effectively is what keeps a company from trading away its own margin just to close a bigger deal than it has closed before.'},
+ {t:'normal',k:'Discipline four: schedule and production',title:'Running a job once the size and the stakes both go up.',body:'Manage Production, Schedule, and Efficiency is the discipline that keeps a much larger job moving on a timeline the company actually controls, instead of one that controls the company.'},
+ {t:'dark',title:'You cannot manage a discipline you have never actually named.'},
+
+ {t:'section',idx:'Part Three',title:'The Company That Makes the Leap'},
+ {t:'normal',k:'The shop this builds',title:'Running all four disciplines, not just the one you learned on the way up.',body:'A solar company that can scope, de-risk, negotiate, and schedule a utility-scale contract with the same confidence it already brings to residential and regional work.'},
+ {t:'normal',k:'Why Taylor Jackson',title:'The person who actually made this leap, not someone who studied it.',body:'As COO of Joule Energy from 2016 to 2019, Taylor Jackson ran the operational build-out that took it from a regional residential solar installer in New Orleans to one of the country’s top utility-scale solar EPCs and developers. He founded Finial Solar Consulting in 2019, then Generation Solar in 2022, to teach other solar company leaders the same disciplines.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Weak Discipline'},
+ {t:'normal',k:'Free 30-minute consultation',title:'A straight conversation about where your company actually stands.',body:'No pitch, no pressure. A conversation about which of the four disciplines needs attention first, from someone who has actually run the leap you are trying to make.'},
+ {t:'normal',k:'A specific bootcamp or workshop',title:'If you already know your weak discipline, start there.',body:'Risky Business, Manage to Succeed, The Purposeful Professional, and custom bootcamps by position are each built as focused training for leaders who already know which discipline needs the work.'},
+ {t:'cta',title:'Ready to find your weak discipline?',chips:['Book the free consultation','Explore a bootcamp'],disc:'Educational content for solar company leadership. No income or business result is guaranteed. Results vary by company, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#array"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Generation Solar &middot; <b>Taylor Jackson</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
