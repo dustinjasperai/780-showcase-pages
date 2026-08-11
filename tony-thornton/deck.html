@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Fenceline to Success · Tony Thornton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F8F6F1; --panel:#EFEAE0; --rule:#E1DCCF;
+    --ink:#232F3D; --body:#333333; --acc:#D59229; --grey:#6B6459; --dim:#948C7E;
+  }
+  html,body{height:100%}
+  body{background:#DAD3C2;font-family:'Open Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#DAD3C2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.75vw;max-width:84%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.42vw;color:var(--body);margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-family:'Open Sans',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(180deg,var(--ink) 0%,#161D28 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.1vw;max-width:82%;font-style:italic;color:#F5F1E8}
+  .t-cta{background:linear-gradient(180deg,var(--ink) 0%,#161D28 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:80%;color:#F5F1E8}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#F6E3C2;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#C9BFA8}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-motif{right:7%;bottom:9%;width:19vw}
+  .corner-motif{right:6%;bottom:7.5%;width:8.5vw;opacity:.55}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(35,47,61,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--ink);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--ink);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.4vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Fence Consulting Group</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- five-area gauge motif: a dial with five segments, one segment picked out in accent -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gauge" viewBox="0 0 260 170">
+  <g fill="none" stroke-linecap="round">
+    <path d="M30 150 A100 100 0 0 1 66 66" stroke="#232F3D" stroke-width="10" opacity="0.22"/>
+    <path d="M66 66 A100 100 0 0 1 116 36" stroke="#232F3D" stroke-width="10" opacity="0.22"/>
+    <path d="M116 36 A100 100 0 0 1 174 36" stroke="#D59229" stroke-width="10" opacity="0.95"/>
+    <path d="M174 36 A100 100 0 0 1 224 66" stroke="#232F3D" stroke-width="10" opacity="0.22"/>
+    <path d="M224 66 A100 100 0 0 1 260 150" stroke="#232F3D" stroke-width="10" opacity="0.22"/>
+    <circle cx="145" cy="150" r="7" fill="#D59229"/>
+    <line x1="145" y1="150" x2="150" y2="80" stroke="#232F3D" stroke-width="5" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Fenceline to Success',sub:'A masterclass for fence company owners on the five areas that decide whether a shop scales or stalls, taught by the man who ran the trade’s own national association.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You can build a fence better than almost anyone. Can you run the company that builds it?',body:'You started on a crew, learned the trade, and now you own the company. You know product, install quality, and how to keep a schedule moving. What most owners never get taught is how to run the business underneath the trade, and that gap is what quietly caps how big the company gets.'},
+ {t:'dark',title:'A crew can build a perfect fence around a business that is quietly falling apart.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Installers Make Struggling Owners'},
+ {t:'normal',k:'The trade teaches one skill',title:'Nobody trains you to own a company. They train you to build fence.',body:'Most fence company owners came up the same way: apprentice, installer, crew lead, owner. Every step of that path teaches product and install craft. None of it teaches sales process, financial controls, or how to run operations without the owner personally holding it all together.'},
+ {t:'normal',k:'The five-area blind spot',title:'A company usually has one strong area and four the owner has never actually measured.',body:'An owner who came up in sales runs a great sales conversation and has no idea what the crew’s true install cost is. An owner who came up on the tools runs a tight crew and has never looked at a real leadership or marketing plan. Both are running a business on one strong leg while the other four go unmeasured.'},
+ {t:'dark',title:'You cannot fix what you have never actually measured.'},
+
+ {t:'section',idx:'Part Two',title:'The Five Areas, Named'},
+ {t:'normal',k:'Area one: leadership and management',title:'Whether the company can run a day without you standing in the middle of it.',body:'Leadership and management is the area that decides if the business is a company or just a job with employees. It covers how decisions get made, how the team is structured, and whether the owner is the bottleneck every problem still has to pass through.'},
+ {t:'normal',k:'Area two: sales and marketing',title:'A repeatable way to win the next job, not just the next referral.',body:'Sales and marketing looks at how new work actually comes in today, and whether that pipeline depends entirely on the owner’s reputation or runs as a process someone else on the team could execute.'},
+ {t:'normal',k:'Area three: accounting and financials',title:'Reading your own numbers instead of finding out at tax time.',body:'Accounting and financials covers whether the owner can see margin by job type, cash position, and true overhead in real time, or whether the real financial picture only shows up months later.'},
+ {t:'normal',k:'Area four: operations and workflow',title:'How a job moves from sold to scheduled to done.',body:'Operations and workflow is the system between a signed contract and a finished fence: scheduling, material ordering, crew dispatch, and whether that whole chain runs on a process or on the owner’s memory.'},
+ {t:'normal',k:'Area five: installation and production',title:'Quality and speed on the ground, the area most owners already know best.',body:'Installation and production is where most owners are strongest, since it is the trade they came up in. The five-area review still checks it formally, because the strongest area is also the easiest one to assume is fine without ever actually confirming it.'},
+ {t:'dark',title:'Most fence companies are one strong area propping up four the owner has never measured.'},
+
+ {t:'section',idx:'Part Three',title:'The Company That Runs On All Five'},
+ {t:'normal',k:'The shop this builds',title:'A business that can be measured, not just a crew that can build well.',body:'A fence company where leadership does not bottleneck on the owner, sales runs on a repeatable process, the financials are current, operations move jobs without heroics, and installation quality is confirmed rather than assumed.'},
+ {t:'normal',k:'Why Tony Thornton',title:'He ran the fence trade’s own national association and built the credential it certifies dealers against.',body:'Tony Thornton spent 9 years as Operations Manager at Jefcoat Fence, then years building a national gate-automation distribution business, then 9-plus years as a regional sales manager at DKS. From 2014 to 2022 he was Executive Director of the American Fence Association, where he personally developed the ACI accreditation system the trade certifies dealers against today. In 2026 he was inducted into the AFA Hall of Fame.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Weak Area'},
+ {t:'normal',k:'Get started',title:'A conversation about where your company actually stands across all five areas.',body:'No pitch deck, no pressure. A straight conversation about which of the five areas needs attention first, from someone who ran fence and gate-automation operations himself and then ran the trade’s own national association for eight years.'},
+ {t:'normal',k:'A specific consulting tier',title:'If you already know your gap, start there.',body:'The 4x Silver, 6x Gold, and 12x Platinum programs are each built around the same five-area business analysis, at increasing levels of ongoing, one-on-one accountability for owners who already know they are ready for real coaching.'},
+ {t:'cta',title:'Ready to find your weak area?',chips:['Get started today','Explore a consulting tier'],disc:'Educational content for fence company owners. No income or business result is guaranteed. Results vary by company, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#gauge"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Thornton <b>Fence Consulting Group</b> · Tony Thornton</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
