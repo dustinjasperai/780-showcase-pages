@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Vision Day Masterclass &middot; Robert Whittaker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAF7FC; --panel:#F1E7F9; --rule:#DCC7EC;
+    --acc:#7F3AC1; --deep:#4D1979; --ink:#2B2430; --dim:#8A7A99; --paper:#FDFBFE;
+  }
+  html,body{height:100%}
+  body{background:#EFE6F5;font-family:'Roboto',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#EFE6F5}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Cairo',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.9vw;max-width:88%}
+  .t-normal h1{font-size:2.9vw;max-width:84%}
+  .t-normal .body{font-size:1.42vw;color:#5B4F63;margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.6vw;color:#5B4F63;margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Roboto',sans-serif;font-size:1.3vw;font-weight:600;color:var(--deep);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.1vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(180deg,var(--deep) 0%,#2E0F52 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:82%;font-style:italic;color:var(--paper)}
+  .t-cta{background:linear-gradient(180deg,var(--deep) 0%,#2E0F52 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:80%;color:var(--paper)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#F0E4F8;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#D9C6E8}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-motif{right:7%;bottom:9%;width:15vw}
+  .corner-motif{right:6%;bottom:7.5%;width:7vw;opacity:.6}
+  .brandline{font-size:1.24vw;color:#5B4F63;margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(43,36,48,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Purple Coaching &amp; Consulting</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- sightline / vision motif: aim rings with an accent center, tied to Vision Day -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="sight" viewBox="0 0 200 200">
+  <g fill="none">
+    <circle cx="100" cy="100" r="76" stroke="#4D1979" stroke-width="3" opacity="0.22"/>
+    <circle cx="100" cy="100" r="48" stroke="#4D1979" stroke-width="3" opacity="0.32"/>
+    <line x1="100" y1="8" x2="100" y2="34" stroke="#4D1979" stroke-width="4" opacity="0.35" stroke-linecap="round"/>
+    <line x1="100" y1="166" x2="100" y2="192" stroke="#4D1979" stroke-width="4" opacity="0.35" stroke-linecap="round"/>
+    <line x1="8" y1="100" x2="34" y2="100" stroke="#4D1979" stroke-width="4" opacity="0.35" stroke-linecap="round"/>
+    <line x1="166" y1="100" x2="192" y2="100" stroke="#4D1979" stroke-width="4" opacity="0.35" stroke-linecap="round"/>
+    <circle cx="100" cy="100" r="13" fill="#7F3AC1"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Vision Day Masterclass',sub:'For contractors and home service owners, taught by the fence boss who built and sold three companies.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You run a good shop. You still could not sell it tomorrow.',body:'You run a contracting or home service business, and every big decision, every big quote, every hire still runs through you. You built a job. You have not yet built a business someone else could run, or buy.'},
+ {t:'dark',title:'A business that cannot run a day without you is not a business. It is a job with more paperwork.'},
+
+ {t:'section',idx:'Part One',title:'Why Contractors Build Jobs, Not Businesses'},
+ {t:'normal',k:'The invisible ceiling',title:'Most owners are the best salesperson, estimator, and tech in the company.',body:'That is exactly why growth stops at the owner’s own hours. The business runs beautifully as long as the owner is in the room, and it cannot run any faster than one person can work.'},
+ {t:'normal',k:'The trap nobody names',title:'Owners obsess over the how. They almost never build the who.',body:'You know how to build a fence, a driveway, a roof, a route. Nobody ever taught you how to build the team that could do it without you standing over the job.'},
+ {t:'dark',title:'You already know how to build the thing you sell. You were never taught how to build the company around it.'},
+
+ {t:'section',idx:'Part Two',title:'The Rhythm: Vision Day, Quarterly Mission Meet-ups, Huddle &amp; Hustle'},
+ {t:'normal',k:'Vision Day',title:'One session with your whole leadership team sets the direction.',body:'Vision Day is where the company gets its core values, mission, vision, and KPIs written down with the people who actually have to run them, not just the owner alone in an office.'},
+ {t:'normal',k:'Quarterly Mission Meet-ups',title:'The direction stays alive instead of dying on a whiteboard by February.',body:'A plan set once and never revisited is a poster on the wall. Quarterly Mission Meet-ups are the recurring rhythm that keeps the whole team accountable to what Vision Day actually decided.'},
+ {t:'normal',k:'Huddle &amp; Hustle',title:'The weekly sales rhythm that turns vision into booked jobs.',body:'Huddle & Hustle is the weekly sales session where the vision becomes pipeline, then becomes work on the schedule. It is the execution leg, not another planning meeting.'},
+ {t:'dark',title:'A vision without a rhythm is a poster on the wall. A rhythm without a vision is just busy.'},
+
+ {t:'section',idx:'Part Three',title:'The Business That Could Sell Itself'},
+ {t:'normal',k:'The shop Vision Day builds',title:'KPIs the owner does not have to personally track in their head.',body:'A leadership team that can run its own Quarterly Mission Meet-up. A sales rhythm that keeps booking work whether or not the owner is on every call. Numbers the owner can read, not just hand off and hope.'},
+ {t:'normal',k:'Why Robert Whittaker',title:'He built and sold three companies before he ever coached one.',body:'Robert built Magnolia Fence & Patio from zero to over $8 million in Fort Worth, earning him the trade nickname The Fence Boss, then exited it. He built Paradise Lawn & Landscape to $3.5 million before a 2011 sale, and Mean Green Lawn & Landscape to $7 million plus before a 2023 sale. This is the same rhythm he ran on his own companies.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Rhythm'},
+ {t:'normal',k:'The Meet & Greet',title:'A no-pressure conversation about where your business actually stands.',body:'No pitch deck, no obligation. A straight conversation about your business today, from someone who has personally built and sold three companies, one of them a fencing company that carried his name in the trade.'},
+ {t:'normal',k:'Fractional C-Suite',title:'If the backend already needs help, start there.',body:'Bookkeeping, HR, and automation support for owners whose books and systems need a hand while the bigger rhythm gets built. Ancillary support, not a replacement for Vision Day.'},
+ {t:'cta',title:'Ready to find your rhythm?',chips:['Book the Meet & Greet','Ask about Fractional C-Suite'],disc:'Educational content for contractors and home service business owners. No income or business result is guaranteed. Results vary by business, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#sight"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Purple <b>Coaching &amp; Consulting</b> &middot; Robert Whittaker</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
