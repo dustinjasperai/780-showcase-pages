@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Operational Triggers Masterclass &middot; Randy O'Connor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F5F4EF; --panel:#EAE7DF; --rule:#D6D2C7;
+    --acc:#3D5D82; --deep:#223247; --ink:#2A2926; --dim:#6B675D; --paper:#FAF9F6;
+  }
+  html,body{height:100%}
+  body{background:#E4E1D8;font-family:'Public Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#E4E1D8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'PT Serif',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.8vw;max-width:84%}
+  .t-normal .body{font-size:1.4vw;color:#4E4A42;margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.55vw;color:#4E4A42;margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Public Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--deep);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:linear-gradient(180deg,var(--deep) 0%,#101B26 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.15vw;max-width:82%;font-style:italic;color:var(--paper)}
+  .t-cta{background:linear-gradient(180deg,var(--deep) 0%,#101B26 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.4vw;max-width:80%;color:var(--paper)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#EAF0F6;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#C7D3DD}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-motif{right:7%;bottom:9%;width:12vw}
+  .corner-motif{right:6%;bottom:7.5%;width:6vw;opacity:.6}
+  .brandline{font-size:1.22vw;color:#4E4A42;margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(42,41,38,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.4vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">D2D Development Group</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- trigger-point / dial motif: a gauge tick with a solid accent indicator, tied to Operational Triggers -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="trig" viewBox="0 0 200 200">
+  <g fill="none">
+    <path d="M30 140 A 85 85 0 1 1 170 140" stroke="#223247" stroke-width="4" opacity="0.28" stroke-linecap="round"/>
+    <line x1="100" y1="100" x2="140" y2="58" stroke="#3D5D82" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="100" cy="100" r="9" fill="#3D5D82"/>
+    <circle cx="30" cy="140" r="4" fill="#223247" opacity="0.5"/>
+    <circle cx="170" cy="140" r="4" fill="#223247" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Operational Triggers Masterclass",sub:"For independent tire and auto service shop owners, taught by the operator who bought the tire industry's own 20 Group back to independent ownership.",brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You know your numbers are off. You just find out at month end.',body:'You run a good shop. But most of what tells you something is wrong only shows up once the month closes: a report, a review, a number that already happened. By the time you see it, whatever caused it has been running for weeks.'},
+ {t:'dark',title:'By the time a problem shows up on your financial report, it is already a month old.'},
+
+ {t:'section',idx:'Part One',title:'The Lag Every Shop Runs On'},
+ {t:'normal',k:'The invisible lag',title:'Something goes wrong on the floor. Nobody sees it for weeks.',body:'A margin slips. A tech starts cutting a corner. A customer leaves quietly instead of coming back. None of it shows up anywhere until the numbers get pulled together at month end, and by then it is not one week of damage. It is four.'},
+ {t:'normal',k:'Discipline, not more meetings',title:'Most shops do not lack meetings. They lack a reason to look sooner.',body:'Owners already meet with their team. What is missing is not another meeting. It is a specific signal, tied to a real number, that tells someone to look BEFORE the month-end report does.'},
+ {t:'dark',title:'A monthly report tells you what already happened. A trigger tells you while you can still do something about it.'},
+
+ {t:'section',idx:'Part Two',title:'Operational Triggers, Named'},
+ {t:'normal',k:'What a trigger actually is',title:'A specific number in your business, watched on purpose.',body:'Not a vague sense that something feels off. A pre-set signal tied to a real ratio, rate, or threshold in your own shop, that tells you or a manager to look now, not next month. Built once, then watched on a rhythm.'},
+ {t:'normal',k:'The Customer Journey, mapped',title:'You cannot decide what to trigger on until you know where value actually moves.',body:'Map the path a customer actually takes, from the moment their car pulls in to the follow-up call. Most shops can point to where they WANT to build loyalty. Very few can point to the exact stage where it is actually won or lost.'},
+ {t:'normal',k:'Two people at a time',title:'A trigger system only works if the team actually uses it.',body:'Culture does not change because it got announced once at a staff meeting. It changes when it gets taught and modeled through direct relationships, two people at a time, until using the trigger is just how the shop runs.'},
+ {t:'dark',title:'You do not fix a shop by hiring smarter people. You fix it by giving the people you already have a signal they can trust.'},
+
+ {t:'section',idx:'Part Three',title:'Inside A Shop Running On Triggers'},
+ {t:'normal',k:'The number, seen early',title:'A trigger on labor hours or parts margin catches the drift while it is small.',body:'Instead of finding out at month end that labor cost crept up three points, a trigger flags it the week it starts moving, while it is still a small correction and not a quarter of thin margins.'},
+ {t:'normal',k:'Why Randy O’Connor',title:'He ran this inside three tire retailers before he ever coached one.',body:'Randy worked operations at Colony Tire, American Tire Distributors-Tire Pros, and Big Brand Tire and Service, and served as Associate Director of the tire industry’s original 20 Group. He later bought that same 20 Group back to independent ownership. This is the same diagnostic work he ran inside real shops, not theory borrowed from outside the trade.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Own Triggers'},
+ {t:'normal',k:'The 20 Group',title:'Three in-person meetings a year. Monthly numbers, benchmarked against real peers.',body:'Placement in a curated group of non-competing independent shop owners, monthly financial reporting and benchmarking, and three in-person meetings a year that hold the group accountable to what the numbers actually show.'},
+ {t:'normal',k:'Executive coaching',title:'If your shop needs more than the group meetings, start there.',body:'One-on-one executive coaching and training for owners who want the Operational Triggers work applied directly inside their own shop, not just discussed at a meeting three times a year.'},
+ {t:'cta',title:'Ready to find your shop’s triggers?',chips:['Apply for Membership','Ask About Executive Coaching'],disc:'Educational content for independent tire and auto service shop owners. No income or business result is guaranteed. Results vary by shop, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#trig"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">D2D <b>Development Group</b> &middot; Randy O'Connor</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
