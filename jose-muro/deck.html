@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The 10-Step Hiring Plan · Jose Muro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F7F8FC; --panel:#FFFFFF; --rule:#DEE1EE;
+    --acc:#3E4B9A; --idx:#6A76C4; --ink:#171717; --grey:#4A4F5C; --dim:#8489A0;
+  }
+  html,body{height:100%}
+  body{background:#0B0C12;font-family:'Work Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0B0C12}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',Arial,sans-serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4vw;max-width:88%}
+  .t-normal h1{font-size:3vw;max-width:84%}
+  .t-normal .body{font-size:1.44vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.66vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Work Sans',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#1B2050 0%,#0B0C12 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.4vw;max-width:86%;font-style:italic;color:#F1F2FA}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#1B2050 0%,#0B0C12 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:82%;color:#F1F2FA}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#D6DAF5;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .step-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-step{right:6%;bottom:6%;width:16vw}
+  .corner-step{right:5%;bottom:6.5%;width:8vw;opacity:.5}
+  .brandline{font-size:1.28vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#8489A0;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8489A0;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#8489A0;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 17</div>
+<div class="brand-foot">Premier Towing Consultants</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- step motif: a rising staircase, echoing the 10-step plan and the render_static_ad step glyph -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stepglyph" viewBox="0 0 260 130">
+  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 118 H60 V88 H110 V58 H160 V28 H210" stroke="#3E4B9A" opacity="0.85"/>
+    <circle cx="210" cy="28" r="7" fill="none" stroke="#3E4B9A" stroke-width="4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The 10-Step Hiring Plan',sub:'A live masterclass for towing company owners, built from Jose Muro\'s recruiting and onboarding plan.',brand:true,signal:'title'},
+ {t:'normal',k:'Who this is for',title:'Every rushed hire costs more than the one you\'re about to make again.',body:'A truck sits short-staffed, a driver walks off the job, and the next hire gets picked under deadline pressure instead of a plan. That hire rarely lasts either.'},
+ {t:'dark',title:'A roster built one emergency hire at a time was never actually a roster.'},
+
+ {t:'section',idx:'Part One',title:'Why Reactive Hiring Loses The Season'},
+ {t:'normal',k:'The trap',title:'Hiring in a hurry trains you to settle.',body:'When the truck is already short a driver, the goal quietly shifts from finding the right person to finding any person. That is how the same seat gets filled three times in a year.'},
+ {t:'normal',k:'What it costs before a truck even rolls',title:'Turnover shows up on paper before it shows up on the road.',body:'A thin, high-turnover roster is one of the first things that stands out in a contract review, before price, before trucks. That review happens whether an owner is thinking about it or not.'},
+ {t:'dark',title:'The company that keeps its people looks different on paper long before it looks different on the street.'},
+
+ {t:'section',idx:'Part Two',title:'The 10-Step Hiring Plan'},
+ {t:'normal',k:'Built for two failure points, not one',title:'Recruiting is only half the job.',body:'The plan covers recruiting and onboarding, because towing companies do not just lose candidates before they are hired. They lose new hires in the first few weeks, when the odd hours and the pressure of towing-specific calls catch up to them.'},
+ {t:'normal',k:'Why it holds up',title:'Built by someone who has seen both sides of the roster.',body:'Jose Muro owned towing, repair, and body shop operations himself, then spent decades reviewing towing company rosters as an executive at Allstate Roadside Services and AAA-The Auto Club Group. He has seen which hires last and which ones do not, from inside the company and from outside it.'},
+ {t:'dark',title:'A plan built from both sides of the table catches what a plan built from only one side misses.'},
+
+ {t:'section',idx:'Part Three',title:'Where It Lands, Every Shift'},
+ {t:'normal',k:'The team this builds',title:'A roster that was built, not just filled.',body:'A dispatcher and driver bench that was recruited and onboarded on purpose, not assembled one emergency at a time.'},
+ {t:'normal',k:'Why Jose Muro',title:'Thirty-five years on both sides of the table.',body:'Jose Muro has run towing and automotive operations, and led at Allstate Roadside Services and AAA-The Auto Club Group. He is the recipient of the Ed Shatzman Leadership Award, and now runs Premier Towing Consultants, offering consulting, one-on-one coaching, and planning for towing business owners.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring The Plan To Your Roster'},
+ {t:'normal',k:'How it\'s delivered',title:'Consulting, one-on-one coaching, and planning, including the 10-step plan.',body:'Premier Towing Consultants works directly with towing owners on personnel, contracts, and truck maintenance, one-on-one coaching for the owner, and planning for succession, finances, and fleet, with the 10-step hiring plan as the starting point for the roster itself.'},
+ {t:'cta',title:'Ready to build a roster that holds?',chips:['Get In Touch','Premier Towing Consultants'],disc:'Educational content for towing company owners and their teams. No income or hiring-result guarantee is made. Results vary by company, market, and team.'},
+];
+
+const deck=document.getElementById('deck');
+function stepGlyph(kind){return `<svg class="step-motif ${kind==='title'?'title-step':'corner-step'}"><use href="#stepglyph"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Premier <b>Towing</b> Consultants &middot; Jose Muro</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.signal) h+=stepGlyph(s.signal);
+  else if(s.t==='title') h+=stepGlyph('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
