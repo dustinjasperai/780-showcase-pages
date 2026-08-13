@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Six Areas · Will Mattingly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAF6EF; --panel:#F1EBDD; --rule:#D8CFBB;
+    --acc:#E1502F; --idx:#B8401F; --ink:#0B1F38; --ink-soft:#3A4A61; --dim:#8A8067;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Jost',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Domine',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.9vw;max-width:88%}
+  .t-normal h1{font-size:2.9vw;max-width:84%}
+  .t-normal .body{font-size:1.4vw;color:var(--ink-soft);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.6vw;color:var(--ink-soft);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.36vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.2vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#16233A 0%,#0B1220 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:86%;font-style:italic;color:#F4EFE4}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#16233A 0%,#0B1220 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.6vw;max-width:82%;color:#F4EFE4}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#FBD9CC;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:#9AA4B5;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .joint-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-joint{right:5%;bottom:5%;width:26vw}
+  .corner-joint{right:5%;bottom:6%;width:11vw;opacity:.55}
+  .brandline{font-size:1.26vw;color:var(--ink-soft);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#8A8067;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8A8067;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#8A8067;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Flatwork Kings Consulting</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- control-joint motif: the scored lines cut into a poured concrete slab -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="joint" viewBox="0 0 280 200">
+  <g fill="none" stroke-width="2" stroke-linecap="round">
+    <path d="M4 40 H276" stroke="#E1502F" opacity="0.7"/>
+    <path d="M4 100 H276" stroke="#E1502F" opacity="0.4"/>
+    <path d="M4 160 H276" stroke="#E1502F" opacity="0.22"/>
+    <path d="M70 4 V196" stroke="#0B1F38" opacity="0.28"/>
+    <path d="M210 4 V196" stroke="#0B1F38" opacity="0.18"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Six Areas',sub:'What it actually took to grow a concrete company to $10M, taught by the owner who lived it.',brand:true,joint:'title'},
+ {t:'normal',k:'Who this is for',title:'You already know how to pour a slab. That was never the hard part.',body:'Most concrete and masonry contractors are excellent in the field long before they are ever good at running a company. The work gets done. The business around it does not build itself.'},
+ {t:'dark',title:'The company that pours the best concrete is not always the one still standing in twenty years. The one that masters six areas beyond the truck is.'},
+
+ {t:'section',idx:'Part One',title:'Why Field Skill Alone Doesn’t Grow A Company'},
+ {t:'normal',k:'The trap',title:'Great work fills the schedule. It doesn’t build the business.',body:'A crew that pours clean, straight, on-time jobs earns the next referral. It says nothing about whether the marketing, the money, the people, the contracts, or the network behind it can carry fifty employees and ten million dollars in revenue.'},
+ {t:'normal',k:'The 2014 handoff',title:'A shop passed down is not the same as a shop you can run.',body:'When the keys changed hands, the trade knowledge came with them. The other six areas did not. Every one of them had to be learned fast, on the job, with real payroll on the line.'},
+ {t:'dark',title:'Nobody hands you the six areas with the truck keys. You learn them, or the company stalls.'},
+
+ {t:'section',idx:'Part Two',title:'The Six Areas'},
+ {t:'normal',k:'One : Marketing, Tactical Growth',title:'Referrals fill a crew. They rarely fill fifty.',body:'Marketing for a concrete company is not a logo or a boosted post. It is a repeatable way to keep the pipeline full past the point where word of mouth runs out.'},
+ {t:'normal',k:'Two : Purchasing, Borrowing, Saving',title:'What you buy and how you finance it decides your margin before the job starts.',body:'Equipment, materials, and the debt behind them either protect a concrete company’s margin or quietly erase it. This area is where that gets decided.'},
+ {t:'normal',k:'Three : Employees',title:'A crew you can’t keep is a company you can’t scale.',body:'Hiring, firing, and retention are their own discipline, separate from knowing how to finish a slab. Fifty employees do not stay for a paycheck alone.'},
+ {t:'normal',k:'Four : Spirituality and Morals',title:'Leadership philosophy is a business system, not a soft add-on.',body:'How an owner treats a struggling employee, a hard client, or a bad month is a decision that compounds. Most concrete coaches never name this as its own area. It gets one here.'},
+ {t:'normal',k:'Five : Contracts, Estimating, Collecting',title:'The job isn’t profitable until the invoice clears.',body:'Estimating protects the margin on paper. Contracts and collecting protect it in practice, from the client relationship all the way through getting paid.'},
+ {t:'normal',k:'Six : Networking and Relationship Building',title:'The trade is smaller than it looks, and word travels.',body:'Who a concrete company owner knows, inside and outside the trade, opens doors that no ad ever will. Building that network is its own area to work.'},
+ {t:'dark',title:'Six areas, learned fast, out of necessity, turned a five-person shop into fifty employees and ten million a year.'},
+
+ {t:'section',idx:'Part Three',title:'What It Looks Like Running Well'},
+ {t:'normal',k:'The company this builds',title:'A concrete business that runs on all six, not just the one you’re best at.',body:'An owner who can run marketing, money, people, values, contracts, and network with the same confidence they bring to a pour.'},
+ {t:'normal',k:'Why Will Mattingly',title:'He took over in 2014 and had to learn every one of these fast.',body:'Will Mattingly has grown Mattingly Concrete from a small crew to 50+ employees and $10M+ a year, 600 to 700 jobs a season. He is a two-time Inc. 5000 honoree, an Indianapolis Business Journal Fast 25 name, a Concrete Decor Show speaker, and a Decorative Concrete Council board member.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring The Six Areas To Your Company'},
+ {t:'normal',k:'How it’s delivered',title:'The Mastermind, on-site consulting, and a free initial call to start.',body:'Flatwork Kings Consulting runs an annual Mastermind Event built from an 8,000-member concrete-contractor community, plus on-site consulting for owners working through the six areas directly.'},
+ {t:'cta',title:'Ready to run all six, not just the one you’re best at?',chips:['Book a Time','Flatwork Kings Consulting'],disc:'Educational content for concrete and masonry contractor owners. No income or sales result is guaranteed. Results vary by company, market, and team.'},
+];
+
+const deck=document.getElementById('deck');
+function joint(kind){return `<svg class="joint-motif ${kind==='title'?'title-joint':'corner-joint'}"><use href="#joint"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Flatwork <b>Kings</b> &middot; Will Mattingly</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.joint) h+=joint(s.joint);
+  else if(s.t==='title') h+=joint('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
