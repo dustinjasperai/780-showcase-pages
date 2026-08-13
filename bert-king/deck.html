@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Financial Resilience Read · Bert King</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F7F4EE; --panel:#EFEAE0; --rule:#DCD5C6;
+    --acc:#5e7d63; --idx:#3f5b47; --ink:#1b1b1b; --grey:#4a4f4b; --dim:#8a8478;
+    --dbg:#1b1b1b; --dpanel:#242320; --dchalk:#F7F4EE; --dgrey:#C9C4B8; --ddim:#8a8478; --dacc:#8FB89A;
+  }
+  html,body{height:100%}
+  body{background:#0e0d0b;font-family:'Karla',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0e0d0b}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Old Standard TT',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4vw;max-width:88%}
+  .t-normal h1{font-size:3vw;max-width:84%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.44vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-family:'Karla',sans-serif;font-size:1.66vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.4vw;font-weight:700;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--dbg);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Old Standard TT',Georgia,serif;font-size:3.2vw;max-width:86%;font-style:italic;color:var(--dchalk)}
+  .t-cta{background:var(--dbg);align-items:center;text-align:center}
+  .t-cta h1{font-family:'Old Standard TT',Georgia,serif;font-size:3.6vw;max-width:82%;color:var(--dchalk)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--dacc);color:#DCEFE2;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:600;font-family:'Karla',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--ddim);font-style:italic;text-align:center;line-height:1.4;font-family:'Karla',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .ledger-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-ledger{right:6%;bottom:6%;width:20vw}
+  .corner-ledger{right:5%;bottom:6.5%;width:9vw;opacity:.45}
+  .brandline{font-family:'Karla',sans-serif;font-size:1.28vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#c9c4b8;z-index:20;font-weight:600;font-family:'Karla',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#c9c4b8;z-index:20;font-weight:700;font-family:'Karla',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#c9c4b8;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Karla',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">KAPS</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ledger motif: a simple balance-sheet ruled-line mark, literal to reading a financial statement -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ledger" viewBox="0 0 260 140">
+  <g stroke-width="2.4" stroke-linecap="round" fill="none">
+    <line x1="16" y1="20" x2="244" y2="20" stroke="#5e7d63" opacity="0.85"/>
+    <line x1="16" y1="62" x2="192" y2="62" stroke="#5e7d63" opacity="0.5"/>
+    <line x1="16" y1="104" x2="138" y2="104" stroke="#5e7d63" opacity="0.28"/>
+  </g>
+  <circle cx="244" cy="20" r="6.5" fill="none" stroke="#5e7d63" stroke-width="2.6"/>
+</symbol>
+<symbol id="ledger-dark" viewBox="0 0 260 140">
+  <g stroke-width="2.4" stroke-linecap="round" fill="none">
+    <line x1="16" y1="20" x2="244" y2="20" stroke="#8FB89A" opacity="0.9"/>
+    <line x1="16" y1="62" x2="192" y2="62" stroke="#8FB89A" opacity="0.55"/>
+    <line x1="16" y1="104" x2="138" y2="104" stroke="#8FB89A" opacity="0.3"/>
+  </g>
+  <circle cx="244" cy="20" r="6.5" fill="none" stroke="#8FB89A" stroke-width="2.6"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Financial Resilience Read',sub:'A live financial diagnostic masterclass for towing company owners, built from Bert King\'s Financial Insight pillar.',brand:true,ledger:'title'},
+ {t:'normal',k:'Who this is for',title:'You can recite your fleet count. Can you recite your cost per tow?',body:'Most towing owners know their trucks, their routes, and their drivers cold. Far fewer have ever had an outside financial read on the business itself, the way a banker evaluating a loan would.'},
+ {t:'dark',title:'A company that looks like it\'s growing on paper can still be starving in the bank account.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Without A Financial Read Bleeds Owners Dry'},
+ {t:'normal',k:'The trap',title:'Cash flow gaps stay invisible until they force a decision.',body:'A new truck, a new location, a bad insurance year: none of it shows up as a single alarming number. It shows up as a slow erosion that only becomes obvious once it has already cost real money.'},
+ {t:'normal',k:'The owner\'s blind spot',title:'Nobody starts a towing company to read a balance sheet.',body:'Owners are built for dispatch boards and driver schedules, not trend lines and cost-per-tow ratios. That is not a flaw. It is exactly the gap a financial read is supposed to close.'},
+ {t:'dark',title:'Every quarter without a financial read is a quarter of decisions made on instinct instead of evidence.'},
+
+ {t:'section',idx:'Part Two',title:'The Financial Insight Pillar'},
+ {t:'normal',k:'What it measures',title:'Monthly assessments that catch problems while they are still cheap to fix.',body:'A structured monthly look at the numbers that actually move a towing company: cash position, cost creep, and which service lines are quietly unprofitable, before any of it turns into a forced decision.'},
+ {t:'normal',k:'Trend analysis',title:'One month tells you where you are. A trend line tells you where you are headed.',body:'A single snapshot can look fine right up until it does not. Watching the trend is what gives an owner the lead time to fix something before it becomes an emergency.'},
+ {t:'normal',k:'Budgeting and planning',title:'Growth decisions get made with real numbers, not gut feel.',body:'Adding a truck, a route, or a whole new location is a financial decision before it is an operational one. This pillar is the planning work that happens before the growth, not the cleanup after it.'},
+ {t:'dark',title:'The same read that tells a banker whether to approve a loan can tell an owner whether to open the next location.'},
+
+ {t:'section',idx:'Part Three',title:'Where This Lands, Every Quarter'},
+ {t:'normal',k:'The owner this builds',title:'An owner who makes the next call with real numbers, not a guess.',body:'Someone who can look at a growth decision, a hiring decision, or a bad month and know, from the trend, whether it is noise or a real problem.'},
+ {t:'normal',k:'Why Bert King',title:'A banker who bought the trucks instead of just financing them.',body:'Bert King became a Vice President at his bank in mergers and acquisitions before turning 30. In 1997, with a national towing consolidator\'s buyout offer already on the table, he chose to buy a majority interest in Guy\'s Towing Service himself instead. He ran it for 21 years, growing it from a single Lafayette base to multiple Louisiana locations and roughly 50 trucks, before building King Consulting Group and KAPS around that same financial read.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring The Financial Read To Your Own Numbers'},
+ {t:'normal',k:'How it\'s delivered',title:'Financial Insight, Operational Performance, Workforce Development, and a Best Practices peer group.',body:'KAPS runs the Financial Insight read directly on your numbers, alongside Operational Performance planning as you grow, Workforce Development for the team executing it, and a facilitated Best Practices peer group of other towing owners doing the same work.'},
+ {t:'cta',title:'Ready to see what your own numbers are telling you?',chips:['Contact KAPS','Best Practices Groups'],disc:'Educational content for towing company owners and their leadership teams. No income or financial result is guaranteed. Results vary by company, market, and team.'},
+];
+
+const deck=document.getElementById('deck');
+function ledger(kind){return `<svg class="ledger-motif ${kind==='title'?'title-ledger':'corner-ledger'}"><use href="${kind==='dark'?'#ledger-dark':'#ledger'}"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">KAPS &middot; <b>Bert King</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  const isDarkSlide = (s.t==='dark' || s.t==='cta');
+  if(s.t==='title') h+=ledger('title');
+  else if(isDarkSlide) h+=ledger('dark');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
