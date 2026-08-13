@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Own The Asset, Not Just The Job &middot; Kyle Hedin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Bitter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAF9F6; --panel:#EFEFEF; --rule:#D9DEE3;
+    --acc:#2C84B9; --idx:#1F5C85; --chalk:#1B2430; --grey:#4B5768; --dim:#8A94A3;
+  }
+  html,body{height:100%}
+  body{background:#20242b;font-family:'Bitter',Georgia,serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#20242b}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Work Sans',Arial,sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Work Sans',Arial,sans-serif;font-weight:600;color:var(--chalk);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.7vw;max-width:84%}
+  .t-normal .body{font-family:'Bitter',Georgia,serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Bitter',Georgia,serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Work Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#2A3A4C 0%,#151B23 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Bitter',Georgia,serif;font-size:2.7vw;max-width:78%;font-style:italic;font-weight:500;color:#F3F1EC}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#2A3A4C 0%,#151B23 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:82%;color:#F3F1EC}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#DCEBF5;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Work Sans',sans-serif;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Bitter',Georgia,serif;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-dark .disc,.t-cta .disc{color:#94A3B5}
+  .plank-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-plank{right:6%;bottom:7%;width:19vw}
+  .corner-plank{right:5%;bottom:7%;width:8.5vw;opacity:.45}
+  .brandline{font-family:'Work Sans',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Work Sans',sans-serif;font-size:12px;letter-spacing:.14em;color:#B7C0CC;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Work Sans',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#B7C0CC;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Work Sans',sans-serif;font-size:11px;color:#B7C0CC;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Floor Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- plank motif: staggered hardwood-plank bars, echoing a flooring joint pattern -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="planks" viewBox="0 0 260 160">
+  <g stroke-linecap="round">
+    <rect x="10" y="20" width="150" height="16" rx="3" fill="#2C84B9" opacity="0.85"/>
+    <rect x="50" y="48" width="200" height="16" rx="3" fill="#5FA8D9" opacity="0.55"/>
+    <rect x="10" y="76" width="110" height="16" rx="3" fill="#1F5C85" opacity="0.35"/>
+    <rect x="70" y="104" width="180" height="16" rx="3" fill="#2C84B9" opacity="0.2"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Own The Asset, Not Just The Job',sub:'A live business masterclass for flooring, tile, and stone contractors, built from Kyle Hedin\'s own teaching.',brand:true,signal:'title'},
+ {t:'normal',k:'Who this is for',title:'You can install anything. Right now the business only runs through you.',body:'You bid the job, run the crew, order the materials, chase the invoice, and answer the phone at seven on a Saturday. That makes you good at your trade. It does not make you the owner of anything but a job.'},
+ {t:'dark',title:'A job pays you for showing up. An asset pays you whether you show up or not.'},
+
+ {t:'section',idx:'Part One',title:'The Job That Owns You'},
+ {t:'normal',k:'The trap',title:'Being the only one who can do it is not a strength. It is a ceiling.',body:'Every skill you refuse to hand off is a skill that caps how big the business can get. If the estimate only happens when you write it, the business stops growing the day you stop.'},
+ {t:'normal',k:'What busy actually costs',title:'A full calendar is not the same as a business that is worth something.',body:'Revenue that requires you personally on every job is wages with extra steps. An asset is worth something to someone else, which means it has to work without you standing in the room.'},
+ {t:'dark',title:'A business that only works when you are in it is not a business. It is a job with more paperwork.'},
+
+ {t:'section',idx:'Part Two',title:'The Shift, Three Moves'},
+ {t:'normal',k:'Move one, specialize',title:'Say no to the jobs that keep you generic.',body:'Master a narrow set of flooring types deliberately instead of chasing every bid that comes in. Charge what the specialty is worth, and hold that line instead of underselling yourself to stay busy.'},
+ {t:'normal',k:'Move two, build the team that is not you',title:'Delegate to people better at their job than you are at it.',body:'A real bench: a mentor or mastermind community for judgment calls, and professional advisors, an accountant, a lawyer, an insurance agent, a marketer, plus apprentices coming up behind you. None of that gets built by accident.'},
+ {t:'normal',k:'Move three, systems that outlast you',title:'Retention, pay, and recurring revenue that run without a daily push.',body:'How you retain the good employees. How performance pay actually gets calculated. Where the recurring revenue and repeat services come from. Which vendor relationships add value beyond the install. These are learnable, repeatable systems, not personality.'},
+ {t:'normal',k:'The compounding move',title:'Add revenue streams that do not require you to bid another job.',body:'Upsells on work already in the house, new services layered onto existing customers, and vendor relationships that route work back to you. Growth that does not scale linearly with your own hours.'},
+ {t:'dark',title:'None of this makes you a bigger craftsman. All of it makes you a real owner.'},
+
+ {t:'section',idx:'Part Three',title:'Inside A Small Flooring Shop'},
+ {t:'normal',k:'What owners report back',title:'The changes are specific, not vague motivation.',body:'One flooring business owner in this exact room, after rebuilding SOPs and performance pay, reported his revenue up 28% and net profit up 168% year over year, and paid his field technicians an extra $55,000 in bonuses on top of their hourly rate. His numbers, his own account.'},
+ {t:'normal',k:'Why Kyle Hedin',title:'He apprenticed his way in, then built the room he wished existed.',body:'Kyle cold-called thirty contractors in 2015 asking for an apprenticeship, and was running his own flooring business by September 2017. In 2019 he started Floor Academy to help craftsmen stop playing contractor and start becoming businessmen, and he has interviewed hundreds of flooring, tile, and stone contractors on the podcast since.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring This Into Your Business'},
+ {t:'normal',k:'How it is delivered',title:'The Saturday Masterclass, and the Mastermind for the deeper work.',body:'The Floor Academy Business Masterclass is $99 a month, no contract, cancel anytime. The Mastermind, League of Extraordinary Minds, is a 6-month, 5-person cohort at $499 a month, for owners who want ongoing accountability, not just one session.'},
+ {t:'normal',k:'What actually happens',title:'Third Saturday, every month, 7 to 10am Arizona time.',body:'A live Zoom room, not a recording. Forty-five to sixty minutes of training on a real topic, taught by Kyle or a hand-selected expert, then open floor for whatever is actually stuck in your business that week.'},
+
+ {t:'cta',title:'Ready to start owning the asset instead of just the job?',chips:['Join The Masterclass','Floor Academy'],disc:'Educational content for flooring, tile, and stone business owners. No income or business result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="plank-motif ${kind==='title'?'title-plank':'corner-plank'}"><use href="#planks"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Floor <b>Academy</b> &middot; Kyle Hedin</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.signal) h+=motif(s.signal);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
