@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Breaking The Owner Overload Loop · Justin Shaw</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F4EFE2; --panel:#EDE6D4; --rule:#D8CFB8;
+    --acc:#C2532E; --idx:#8A6A4E; --ink:#171412; --grey:#524B41; --dim:#8C8271;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Barlow Condensed',Arial,sans-serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4vw;max-width:88%}
+  .t-normal h1{font-size:3vw;max-width:84%}
+  .t-normal .body{font-size:1.44vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.66vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#E8DEC7 0%,#F4EFE2 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.4vw;max-width:86%;font-style:italic;color:#171412}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#E8DEC7 0%,#F4EFE2 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#7A3419;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .facet-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-facet{right:6%;bottom:6%;width:20vw}
+  .corner-facet{right:5%;bottom:6.5%;width:9vw;opacity:.5}
+  .brandline{font-size:1.28vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Driven For Growth</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- facet motif: overlapping angular planes, a cut-stone/tile facet mark -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="facet" viewBox="0 0 260 260">
+  <g fill="none" stroke-width="2.2" stroke-linejoin="round">
+    <polygon points="130,30 220,90 190,190 70,190 40,90" stroke="#C2532E" opacity="0.8"/>
+    <polygon points="130,70 185,105 165,175 95,175 75,105" stroke="#8A6A4E" opacity="0.45"/>
+    <line x1="130" y1="30" x2="130" y2="70" stroke="#C2532E" opacity="0.6"/>
+    <line x1="220" y1="90" x2="185" y2="105" stroke="#8A6A4E" opacity="0.4"/>
+    <line x1="40" y1="90" x2="75" y2="105" stroke="#8A6A4E" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Breaking The Owner Overload Loop',sub:'A live masterclass for stone, tile, and flooring business owners, built from Justin Shaw\'s Leadership Engine.',brand:true,signal:'title'},
+ {t:'normal',k:'Who this is for',title:'You built a $1M-$35M business. It still runs through you.',body:'Every job, every decision, every fire, still lands on your desk. That\'s not a business anymore. It\'s a very demanding job with your name over the door.'},
+ {t:'dark',title:'A business that depends on the owner every day is not an asset. It is a job that never clocks out.'},
+
+ {t:'section',idx:'Part One',title:'Why The Loop Never Breaks Itself'},
+ {t:'normal',k:'The trap',title:'Growth usually makes the loop worse, not better.',body:'More revenue means more jobs, more crews, more estimates, more fires, all still routed through the owner. Without a system underneath it, scaling a $1M business to $10M just multiplies the hours it takes from you.'},
+ {t:'normal',k:'The feast-and-famine cycle',title:'Demand and delivery take turns being the crisis.',body:'Some months it\'s chasing leads. Other months it\'s drowning in jobs with no one to run them. Both versions of the cycle keep the owner as the only person who can hold the whole picture together.'},
+ {t:'dark',title:'You can\'t out-hustle a business that was never built to run without you.'},
+
+ {t:'section',idx:'Part Two',title:'The Leadership Engine'},
+ {t:'normal',k:'The keystone system',title:'The Leadership Engine gets you out of the day-to-day.',body:'Real cadence and real systems, so decisions stop routing through you by default. This is the piece that has to go in first, because the other three engines only compound once someone besides the owner can run the business day to day.'},
+ {t:'normal',k:'Sales Engine',title:'A sales process that closes jobs without you closing every deal.',body:'A repeatable way to turn estimates and bids into closed work at your revenue scale, so growth doesn\'t depend on the owner personally being in every sales conversation.'},
+ {t:'normal',k:'Marketing Machine',title:'Demand that shows up on a schedule, not a mood.',body:'A system for keeping jobs coming in consistently, instead of leaning on referral reputation alone and riding the feast-and-famine cycle every year.'},
+ {t:'normal',k:'Conversion Content Formula',title:'One client turned a $100-a-month channel into $1M in booked work.',body:'The named content system behind that result: consistent content that earns attention and turns it into real, closed business, without adding headcount or hours to the owner\'s week.'},
+ {t:'dark',title:'Four engines, one business that finally runs whether or not the owner is in the room.'},
+
+ {t:'section',idx:'Part Three',title:'The Business On The Other Side Of The Loop'},
+ {t:'normal',k:'The business this builds',title:'A company that keeps its numbers when you take a week off.',body:'Two documented outcomes from owners who installed these systems: 2x revenue in 10 months, and one company that grew from $6M to $20M.'},
+ {t:'normal',k:'Why Justin Shaw',title:'He rebuilt his own company before he ever coached anyone else\'s.',body:'Justin Shaw took a company from near-bankrupt to $9M in revenue in three years as Regional Director, then founded Driven For Growth to fix the same trap for 50+ other stone, tile, and flooring business owners. Co-founder Wes Fields came up the other way: installer to General Manager of a multimillion-dollar surface company, so the Engine is built from both seats.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring The Leadership Engine To Your Business'},
+ {t:'normal',k:'How it\'s delivered',title:'The 90-Day Growth Engine Program: all four engines, installed together.',body:'Driven For Growth runs the Leadership Engine, Sales Engine, Marketing Machine, and Conversion Content Formula as one connected system for $1M-$35M stone, tile, and flooring business owners, with regular teaching at TISE, Coverings, NWFA, and ISFA.'},
+ {t:'cta',title:'Ready to build a business that runs without you in the room?',chips:['Book a Game Plan Call','90-Day Growth Engine Program'],disc:'Educational content for stone, tile, and flooring business owners. No income or sales result is guaranteed. Results vary by company, market, and team.'},
+];
+
+const deck=document.getElementById('deck');
+function signal(kind){return `<svg class="facet-motif ${kind==='title'?'title-facet':'corner-facet'}"><use href="#facet"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Driven For <b>Growth</b> &middot; Justin Shaw</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.signal) h+=signal(s.signal);
+  else if(s.t==='title') h+=signal('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
