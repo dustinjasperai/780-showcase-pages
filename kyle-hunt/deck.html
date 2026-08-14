@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Charge More, Work Less &middot; Kyle Hunt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAFAF8; --panel:#EFEDE8; --rule:#DAD9D3;
+    --acc:#0170B9; --idx:#0D5A8C; --chalk:#33373D; --grey:#4B4F58; --dim:#8B8F94;
+  }
+  html,body{height:100%}
+  body{background:#20242A;font-family:'Source Serif 4',Georgia,serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#20242A}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',Arial,sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Poppins',Arial,sans-serif;font-weight:600;color:var(--chalk);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.7vw;max-width:84%}
+  .t-normal .body{font-family:'Source Serif 4',Georgia,serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Source Serif 4',Georgia,serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.3vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#2B3440 0%,#181C22 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Source Serif 4',Georgia,serif;font-size:2.7vw;max-width:78%;font-style:italic;font-weight:500;color:#F5F4F0}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#2B3440 0%,#181C22 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:82%;color:#F5F4F0}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#DCEAF5;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Source Serif 4',Georgia,serif;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-dark .disc,.t-cta .disc{color:#98A0AC}
+  .blueprint-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-blueprint{right:6%;bottom:7%;width:19vw}
+  .corner-blueprint{right:5%;bottom:7%;width:8.5vw;opacity:.4}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.14em;color:#B6BEC7;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#B6BEC7;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Poppins',sans-serif;font-size:11px;color:#B6BEC7;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Remodelers On The Rise</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- blueprint motif: thin ruled lines suggesting a floor-plan / elevation sketch -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="blueprint" viewBox="0 0 260 160">
+  <g fill="none" stroke-linecap="round">
+    <rect x="14" y="18" width="150" height="96" rx="2" stroke="#0170B9" stroke-width="3" opacity="0.85"/>
+    <line x1="14" y1="58" x2="164" y2="58" stroke="#0170B9" stroke-width="2" opacity="0.5"/>
+    <line x1="90" y1="18" x2="90" y2="114" stroke="#0170B9" stroke-width="2" opacity="0.4"/>
+    <circle cx="200" cy="46" r="20" stroke="#5FA8D9" stroke-width="2.5" opacity="0.55"/>
+    <line x1="180" y1="46" x2="220" y2="46" stroke="#5FA8D9" stroke-width="1.5" opacity="0.4"/>
+    <line x1="200" y1="26" x2="200" y2="66" stroke="#5FA8D9" stroke-width="1.5" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Charge More, Work Less',sub:'A live business masterclass for kitchen, bath, and addition remodeling contractors, built from Kyle Hunt\'s own Sales Process and C.O.P.E. teaching.',brand:true,signal:'title'},
+ {t:'normal',k:'Who this is for',title:'You are skilled, booked, and still not sure where the profit went.',body:'You can walk a client through a full kitchen remodel in your sleep. The calendar is full. But between free design time up front and pricing that is really just a guess dressed up as a markup, the revenue does not turn into profit the way it should.'},
+ {t:'dark',title:'A full calendar and a profitable business are not the same thing.'},
+
+ {t:'section',idx:'Part One',title:'The Two Places Profit Actually Leaks'},
+ {t:'normal',k:'Leak one',title:'Free design and estimating time that never turns into a signed job.',body:'Every hour spent drawing up a kitchen layout or pricing an addition before a client has committed is an hour you are not paid for if they walk. Most remodelers treat that as the cost of doing business. It does not have to be.'},
+ {t:'normal',k:'Leak two',title:'Pricing off a markup guess instead of your true cost to execute.',body:'A standard markup does not account for what a specific job actually costs to run: overhead, capacity, and the real management time behind it. That gap is invisible until the job is finished and the margin is not what the estimate said it would be.'},
+ {t:'dark',title:'Busy hides the leak. It does not fix it.'},
+
+ {t:'section',idx:'Part Two',title:'The Shift, In Two Systems'},
+ {t:'normal',k:'System one, the Sales Process',title:'Charge for the sales process before you ever pick up a pencil.',body:'A defined sequence from first contact through post-project retention: qualify the prospect, set expectations early with a clear "this is how we work" conversation, charge for design and project development instead of giving it away, then track the pipeline through to close.'},
+ {t:'normal',k:'System two, C.O.P.E.',title:'Price on true Cost Of Project Execution, not a markup guess.',body:'Calculate real comprehensive overhead. Estimate using management codes with overhead properly assigned. Use capacity, not just hours, to determine what a job actually needs to recover. The result is a margin you can defend, not one you hope survives the job.'},
+ {t:'normal',k:'Why both, together',title:'One protects the front of the job. The other protects the back.',body:'The Sales Process stops you from underselling and overworking before a client signs. C.O.P.E. stops you from underpricing and reworking after they do. Run one without the other and the leak just moves.'},
+ {t:'dark',title:'More profit and fewer hours are not opposites. They come from fixing the same two leaks.'},
+
+ {t:'section',idx:'Part Three',title:'Inside A Small Kitchen And Bath Shop'},
+ {t:'normal',k:'What changes on the job site',title:'A defined pipeline, a defensible margin, and a client who trusts the process.',body:'Prospects move through the same qualifying conversation every time. Every estimate reflects true cost, not a guess. Clients get a transparent look at where the number comes from instead of an adversarial fight over a change order.'},
+ {t:'normal',k:'Why Kyle Hunt',title:'He ran the division before he ever taught the system.',body:'Kyle led a Michigan remodeling company\'s bath and kitchen design division to double-digit growth in revenue and profits by improving the systems behind it, then founded Remodelers On The Rise in 2008 to teach kitchen, bath, and addition remodelers the same shift. 17 years, a weekly podcast, and a 2,000+-member community later, this is still the same core teaching.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring This Into Your Business'},
+ {t:'normal',k:'How it is delivered',title:'The Remodelers VIP Club, and 1:1 coaching for the deeper work.',body:'The Sales Process and C.O.P.E. courses are delivered through the Remodelers VIP Club at $497 a month, alongside the Remodelers Vault resource library and RAP, Kyle\'s own done-for-you client-retention system. For owners who want it built alongside them directly, a full 1:1 engagement is $5,000.'},
+ {t:'normal',k:'What actually happens',title:'A live session, not a recording, with real tools you can use the same week.',body:'Templates for tracking, pricing, and client communication ship with the training. This masterclass is the same teaching, condensed into one live session for remodelers who have not found Kyle yet.'},
+
+ {t:'cta',title:'Ready to charge for the value you already deliver?',chips:['Join The VIP Club','Remodelers On The Rise'],disc:'Educational content for kitchen, bath, and addition remodeling business owners. No income or business result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="blueprint-motif ${kind==='title'?'title-blueprint':'corner-blueprint'}"><use href="#blueprint"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Remodelers On <b>The Rise</b> &middot; Kyle Hunt</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.signal) h+=motif(s.signal);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
