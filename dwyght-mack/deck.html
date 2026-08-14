@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Owner's P&amp;L &middot; Mack's Moving Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0c0f14; --panel:#111827; --rule:#26313f;
+    --accent:#ff7516; --blue:#188bf6;
+    --chalk:#f5f6fa; --grey:#aab2c0; --dim:#8b93a1;
+  }
+  html,body{height:100%}
+  body{background:#08090c;font-family:'Roboto',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#08090c}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s ease;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:8% 9% 13% 9%}
+  .slide.active{opacity:1;visibility:visible}
+  .t-normal::after{content:'';position:absolute;left:0;right:0;bottom:0;height:.55vh;
+    background:repeating-linear-gradient(90deg,var(--accent) 0 2.6vw,transparent 2.6vw 5.2vw)}
+  .kicker{font-family:'Roboto',sans-serif;font-size:.92vw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;color:var(--chalk);line-height:1.02;letter-spacing:.01em;text-transform:uppercase}
+  .t-title{justify-content:center}
+  .t-title h1{font-size:5.6vw;max-width:82%;color:var(--accent)}
+  .t-title .sub{font-family:'Roboto',sans-serif;font-size:1.4vw;color:var(--grey);margin-top:3.4vh;max-width:64%;line-height:1.6;font-weight:300;text-transform:none}
+  .t-normal h1{font-size:3vw;max-width:82%}
+  .t-normal .body{font-family:'Roboto',sans-serif;font-size:1.32vw;color:var(--grey);margin-top:2.8vh;max-width:72%;line-height:1.62;font-weight:300}
+  .t-section{background:var(--panel);justify-content:center;border-left:1.6vw solid var(--accent)}
+  .t-section .idx{font-family:'Roboto',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  .t-section h1{font-size:4.3vw;max-width:76%}
+  .t-hit{background:var(--bg);justify-content:center;align-items:flex-start}
+  .t-hit h1{font-size:3.2vw;max-width:80%;color:var(--accent);line-height:1.12;text-transform:none;font-family:'Roboto',sans-serif;font-weight:700}
+  .t-hit .body{font-family:'Roboto',sans-serif;font-size:1.28vw;color:var(--grey);margin-top:3vh;max-width:64%;font-weight:300}
+  .t-cta{background:var(--panel);justify-content:center;align-items:center;text-align:center;border-top:1.1vh solid var(--accent)}
+  .t-cta h1{font-size:3.9vw;max-width:82%;color:var(--accent)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Roboto',sans-serif;border:1.5px solid var(--accent);color:var(--accent);padding:1.2vh 1.8vw;font-size:1.02vw;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .brandline{font-family:'Roboto',sans-serif;font-size:1vw;color:var(--grey);margin-top:3.6vh;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:9%;right:9%;bottom:4.6vh;font-family:'Roboto',sans-serif;font-size:.8vw;color:var(--dim);line-height:1.45;font-weight:300}
+  .t-cta .disc{text-align:center;bottom:3.4vh}
+  .route{position:absolute;pointer-events:none}
+  .route.big{right:5%;top:9%;width:19vw;opacity:.8}
+  .route.small{right:6%;top:11%;width:8vw;opacity:.4}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(245,246,250,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:12px;right:18px;font-family:'Roboto',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Roboto',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:11px;left:50%;transform:translateX(-50%);font-family:'Roboto',sans-serif;font-size:10px;color:var(--dim);z-index:20;letter-spacing:.14em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.5vw}.t-title h1{font-size:9.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:2.9vw}
+    .t-title .sub{font-size:3.1vw}.t-section h1{font-size:7.4vw}.t-hit h1{font-size:5.8vw}.t-cta h1{font-size:6.8vw}.chip{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Mack's Moving Training</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- a dispatch-board route line: dashed road with square waypoint stops, one stroke -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="route" viewBox="0 0 200 200">
+  <g fill="none" stroke="#ff7516" stroke-linecap="round">
+    <path d="M10 170 C 60 170, 60 110, 100 110 S 140 50, 190 50" stroke-width="3" stroke-dasharray="1 14"/>
+  </g>
+  <g fill="none" stroke="#ff7516" stroke-width="2.4">
+    <rect x="4" y="164" width="12" height="12"/>
+    <rect x="94" y="104" width="12" height="12"/>
+    <rect x="184" y="44" width="12" height="12"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Owner's P&L",sub:"Why the moving companies that grow the fastest are not always the ones that make the most money, and the three numbers that decide which kind you run.",brand:true,line:'big'},
+
+ {t:'normal',k:'Who this is for',title:'Owners booking more jobs every year, still surprised by what is left after payroll.',body:'You are not slow. Trucks are full, the phone rings, crews are out five and six days a week. And the number in the account at the end of the month still does not match how hard the year felt.'},
+ {t:'normal',k:'What you will walk away with',title:'How to price a job, a flat-rate packing structure, and a cash rhythm that holds through the slow months.',body:'Not theory. The same math a moving company owner runs before quoting a job, structuring a crew day, or deciding what this quarter can actually afford.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every market, fleet, and labor cost is different. What matters is the version of this math that fits your trucks, your crews, and your region.',disc:'Educational content. Nothing here is a promise of income, growth, or business results. No outcome is guaranteed and results vary by company and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Dwyght Mack. Built Mack&#39;s Moving Company from $500 to $4M.',body:'He ran the crews himself before he ever coached anyone else&#39;s. Every number in this class is one his own company had to get right first, not a case study borrowed from someone else&#39;s trucks.'},
+
+ {t:'section',idx:'Part One',title:'Why Revenue Growing Does Not Mean The Business Is'},
+ {t:'normal',k:'The pricing guess',title:'Most owners price a job the way they were priced when they started: by feel.',body:'An hourly number that felt right two years ago, a flat rate quoted off gut instinct for a big job, no real math behind either one. It works fine right up until fuel, labor, or insurance moves and nobody notices the floor shifted.'},
+ {t:'hit',body:'A rate you feel your way to is a guess with a dollar sign on it. A rate you calculate is a business decision.'},
+ {t:'normal',k:'The claim that eats the month',title:'Damage claims are the quiet leak most owners never actually measure.',body:'A moving company running claims at 3% of revenue and getting it down to 1% or better is not a small win. On a company of meaningful size that gap alone is worth $40,000 or more a year, money that was never a pricing problem, it was a process problem.'},
+ {t:'normal',k:'What most owners try',title:'Working more hours instead of working the numbers.',body:'More jobs, more trucks on the road, more hours in the office. It buys a season. It does not fix a rate that was never calculated or a claims process nobody wrote down.'},
+
+ {t:'section',idx:'Part Two',title:'A Finance Strategy Built For A Moving Company'},
+ {t:'normal',k:'Start with the hourly rate',title:'What your crew, truck, and overhead actually cost for one hour of work.',body:'Labor, fuel, insurance, equipment, and the office that keeps the phone answered, run through one number. Until that number exists, every quote is a guess wearing a price tag.'},
+ {t:'normal',k:'Then the flat-rate structure',title:'A repeatable way to price the big jobs without re-guessing every time.',body:'Built off the same hourly math, so a flat-rate quote and an hourly quote never quietly disagree with each other on the same size job.'},
+ {t:'normal',k:'Then cash management',title:'A rhythm for the money that survives a slow month, not just a busy one.',body:'Moving is seasonal. A cash strategy built only for the summer runs out of road in January. The budgeting fundamentals in this module are built to hold through both.'},
+ {t:'hit',body:'Growth does not fix a rate that was never calculated. It just moves the same problem through more trucks.'},
+ {t:'normal',k:'And it connects to operations',title:'Dispatch and documented process are what make the pricing math actually hold.',body:'A rate is only real if the job runs the way it was priced. Dispatch discipline and written, repeatable process are what keep a calculated rate from quietly drifting back into a guess three jobs later.'},
+
+ {t:'section',idx:'Part Three',title:'The Same Math On A Real Company'},
+ {t:'normal',k:'An illustrative example',title:'A company doing $1.2M a year, cutting claims from 3% to 1%.',body:'That is roughly $24,000 a year staying in the business instead of leaking out through claims, before the pricing math changes a single quote. Illustrative only, scaled to a company of that size, not a specific client result.'},
+ {t:'normal',k:'What changes',title:'Quotes stop being arguments with yourself, and slow months stop being emergencies.',body:'A rate you can defend, a flat-rate structure that matches it, and a cash rhythm that already planned for the quiet stretch.'},
+ {t:'normal',k:'Where to take it next',title:'The Owner&#39;s Leadership Program is the full stack, taught module by module.',body:'Finance Strategy, Marketing, Sales, and Operations, plus Training Your Team, with group and personal coaching calls, weekly group calls, and private chat access along the way.'},
+ {t:'cta',title:"Price it right. Watch the cash. Keep more of the year.",chips:["Owner's Leadership Program",'Schedule a free demo'],brand:true,disc:'Educational content only. No income, growth, or business result is guaranteed. Results vary by company, market, and cost base.'},
+];
+
+const deck=document.getElementById('deck');
+function routeMark(kind){return `<svg class="route ${kind==='big'?'big':'small'}" viewBox="0 0 200 200"><use href="#route"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    if(s.title) h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Mack's <b>Moving Training</b> &middot; Dwyght Mack</div>`;
+  }
+  if(s.line) h+=routeMark(s.line);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
