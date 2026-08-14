@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Moving Company That Runs Without You In The Truck &middot; Movified Nation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Squada+One&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fdf9ef; --panel:#fff3d6; --rule:#ecdca8;
+    --accent:#fec42d; --accent2:#ff6287;
+    --ink:#1c1a10; --ink-soft:#4a4534; --ink-dim:#8a836c;
+  }
+  html,body{height:100%}
+  body{background:#f3ead2;font-family:'Montserrat',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f3ead2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s ease;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:8% 9% 13% 9%}
+  .slide.active{opacity:1;visibility:visible}
+  .t-normal::after{content:'';position:absolute;left:0;right:0;bottom:0;height:.55vh;
+    background:repeating-linear-gradient(90deg,var(--accent) 0 2.6vw,transparent 2.6vw 5.2vw)}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:.92vw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent2);margin-bottom:2.6vh}
+  h1{font-family:'Squada One',Impact,sans-serif;font-weight:400;color:var(--ink);line-height:1.05;letter-spacing:.005em}
+  .t-title{justify-content:center}
+  .t-title h1{font-size:4.9vw;max-width:84%;color:var(--ink)}
+  .t-title .sub{font-family:'Montserrat',sans-serif;font-size:1.32vw;color:var(--ink-soft);margin-top:3.4vh;max-width:62%;line-height:1.6;font-weight:300}
+  .t-normal h1{font-size:2.75vw;max-width:82%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.28vw;color:var(--ink-soft);margin-top:2.8vh;max-width:72%;line-height:1.62;font-weight:300}
+  .t-section{background:var(--panel);justify-content:center;border-left:1.6vw solid var(--accent)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent2);margin-bottom:2.4vh}
+  .t-section h1{font-size:4vw;max-width:78%}
+  .t-hit{background:var(--ink);justify-content:center;align-items:flex-start}
+  .t-hit h1{font-size:2.9vw;max-width:80%;color:var(--accent);line-height:1.16;text-transform:none;font-family:'Montserrat',sans-serif;font-weight:600}
+  .t-hit .body{font-family:'Montserrat',sans-serif;font-size:1.24vw;color:#e7e0cc;margin-top:3vh;max-width:64%;font-weight:300}
+  .t-cta{background:var(--panel);justify-content:center;align-items:center;text-align:center;border-top:1.1vh solid var(--accent)}
+  .t-cta h1{font-size:3.5vw;max-width:82%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Montserrat',sans-serif;border:1.5px solid var(--ink);color:var(--ink);padding:1.2vh 1.8vw;font-size:1.02vw;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1vw;color:var(--ink-soft);margin-top:3.6vh;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+  .brandline b{color:var(--accent2);font-weight:700}
+  .disc{position:absolute;left:9%;right:9%;bottom:4.6vh;font-family:'Montserrat',sans-serif;font-size:.8vw;color:var(--ink-dim);line-height:1.45;font-weight:300}
+  .t-cta .disc{text-align:center;bottom:3.4vh}
+  .route{position:absolute;pointer-events:none}
+  .route.big{right:5%;top:9%;width:18vw;opacity:.85}
+  .route.small{right:6%;top:11%;width:7.5vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(28,26,16,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent2);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:12px;right:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--ink-dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:11px;left:50%;transform:translateX(-50%);font-family:'Montserrat',sans-serif;font-size:10px;color:var(--ink-dim);z-index:20;letter-spacing:.14em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.5vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:2.9vw}
+    .t-title .sub{font-size:3.1vw}.t-section h1{font-size:7vw}.t-hit h1{font-size:5.6vw}.t-cta h1{font-size:6.4vw}.chip{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Movified Nation</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- dispatch-board route: dashed road with square waypoint stops, gold on cream -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="route" viewBox="0 0 200 200">
+  <g fill="none" stroke="#fec42d" stroke-linecap="round">
+    <path d="M10 170 C 60 170, 60 110, 100 110 S 140 50, 190 50" stroke-width="3" stroke-dasharray="1 14"/>
+  </g>
+  <g fill="none" stroke="#ff6287" stroke-width="2.4">
+    <rect x="4" y="164" width="12" height="12"/>
+    <rect x="94" y="104" width="12" height="12"/>
+    <rect x="184" y="44" width="12" height="12"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Moving Company That Runs Without You In The Truck',sub:'Why the moving companies that grow the fastest eventually cost their owners the one thing growth was supposed to buy back: time. And the systems that change that.',brand:true,line:'big'},
+
+ {t:'normal',k:'Who this is for',title:'Owners past $1M who are still the dispatcher, the quoter, and the 6pm call.',body:'Trucks are full. The phone rings all day. And you are still the one who quotes the tricky job, still the one dispatch calls when a truck runs late, still the one who answers &quot;where is my stuff&quot; at six in the evening.'},
+ {t:'normal',k:'What you will walk away with',title:'A way to run quoting, dispatch, and job management as a system, not a memory.',body:'Not theory. The same operational structure two working moving-company owners run in their own trucks and offices today.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every fleet, market, and crew is different. What matters is the version of these systems that fits your company.',disc:'Educational content. Nothing here is a promise of income, growth, or business results. No outcome is guaranteed and results vary by company and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Mark Hirschi and Steven Reed. Both still run moving companies today.',body:'Hirschi owns Salmon&#39;s Moving and Storage, established 1913, and Ellis Moving and Storage. Reed co-owns Big League Movers and On Deck Deliveries. Neither built this from a case study; they built it from their own dispatch boards.'},
+
+ {t:'section',idx:'Part One',title:'Why More Trucks Does Not Mean More Freedom'},
+ {t:'normal',k:'The growth trap',title:'Adding trucks without adding systems just multiplies the chaos.',body:'More crews on the road means more calls, more quotes, more exceptions, and more of you needed everywhere at once. Revenue goes up. The job does not get smaller.'},
+ {t:'hit',body:'A company that only runs when the owner is in it is not a business. It is a job with better trucks.'},
+ {t:'normal',k:'The quiet cost',title:'Every hour you spend quoting and dispatching is an hour the business cannot run without you.',body:'It is not a time-management problem. It is a systems gap, and it shows up first in the parts of the day that feel the most urgent: the quote, the dispatch board, the six o&#39;clock call.'},
+
+ {t:'section',idx:'Part Two',title:'Systems That Scale'},
+ {t:'normal',k:'Start with quoting',title:'A repeatable way to price a job that does not live in your head.',body:'Local vs. long-haul, residential vs. commercial: each has its own math. Once that math is written down, anyone on your team can quote consistently, not just you.'},
+ {t:'normal',k:'Then dispatching',title:'A dispatch process that runs on a system, not a phone call to the owner.',body:'Turning daily operations into an organized, trackable structure that still runs smoothly on the day you are not there.'},
+ {t:'normal',k:'Then job management',title:'A way to track a job from quote to invoice without it living in three different places.',body:'When quoting, dispatch, and job tracking share one system, the six o&#39;clock call stops needing to come to you specifically.'},
+ {t:'hit',body:'Systems do not remove the owner from the business. They remove the owner from being the only person who can run it.'},
+ {t:'normal',k:'And it connects to the numbers',title:'Financial Control turns activity into margin you can actually see.',body:'Job costing and expense tracking by job type are what tell you which trucks and which jobs are actually making you money, not just which ones are busy.'},
+
+ {t:'section',idx:'Part Three',title:'The Owner Off The Truck'},
+ {t:'normal',k:'The leadership piece',title:'A team and a culture that can run a route without calling you first.',body:'Systems only hold if the people running them are trained and trusted to run them. That is the other half of the work.'},
+ {t:'normal',k:'What changes',title:'Quoting stops being a guess, dispatch stops being a phone tree, and the six o&#39;clock call goes to someone else.',body:'A company that runs on systems is also a company you could eventually step back from, scale, or sell, the last of the five pillars this program teaches.'},
+ {t:'normal',k:'Where to take it next',title:'Movified Nation is the full mastermind, taught pillar by pillar.',body:'Systems That Scale, Leadership and Team Culture, Financial Control and Profitability, Marketing and Brand Strategy, and Scaling, Automation and Exit Readiness, with monthly group sessions, workshops, and accountability built in.'},
+ {t:'cta',title:'Run the systems. Get your evenings back. Build a company that can run without you in the truck.',chips:['Movified Nation Mastermind','Apply to join'],brand:true,disc:'Educational content only. No income, growth, or business result is guaranteed. Results vary by company, market, and cost base.'},
+];
+
+const deck=document.getElementById('deck');
+function routeMark(kind){return `<svg class="route ${kind==='big'?'big':'small'}" viewBox="0 0 200 200"><use href="#route"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    if(s.title) h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Movified <b>Nation</b> &middot; Mark Hirschi &amp; Steven Reed</div>`;
+  }
+  if(s.line) h+=routeMark(s.line);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
