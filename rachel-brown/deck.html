@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Builder's Blind Spot &middot; Rachel Brown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0B0B0C; --panel:#16161A; --rule:#2B2B30;
+    --acc:#C6A15B; --idx:#D9BC80; --ink:#F5F1E8; --grey:#B9B4A8; --dim:#7C776C;
+  }
+  html,body{height:100%}
+  body{background:#050505;font-family:'Public Sans',Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050505}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Public Sans',Arial,sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.7vw;max-width:84%}
+  .t-normal .body{font-family:'Public Sans',Arial,sans-serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Public Sans',Arial,sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Public Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#201A0C 0%,#050505 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Spectral',Georgia,serif;font-size:2.7vw;max-width:78%;font-style:italic;font-weight:500;color:#F3EFE3}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#201A0C 0%,#050505 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:82%;color:#F3EFE3}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#F0E1BF;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Public Sans',sans-serif;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Public Sans',Arial,sans-serif;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-dark .disc,.t-cta .disc{color:#9C9384}
+  .bp-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-bp{right:6%;bottom:9%;width:17vw}
+  .corner-bp{right:5%;bottom:8%;width:9vw;opacity:.5}
+  .brandline{font-family:'Public Sans',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Public Sans',sans-serif;font-size:12px;letter-spacing:.14em;color:#C8BEA5;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Public Sans',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#C8BEA5;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Public Sans',sans-serif;font-size:11px;color:#C8BEA5;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">RBH Coaching</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- blueprint corner-mark motif: a thin dimension line with node points, architectural drafting feel -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bpmark" viewBox="0 0 260 40">
+  <line x1="10" y1="6" x2="10" y2="34" stroke="#C6A15B" stroke-width="2.4"/>
+  <line x1="10" y1="20" x2="70" y2="20" stroke="#C6A15B" stroke-width="2.4"/>
+  <circle cx="10" cy="20" r="4.5" fill="#C6A15B"/>
+  <line x1="96" y1="20" x2="248" y2="20" stroke="#C6A15B" stroke-width="2" stroke-dasharray="4 9" stroke-linecap="round"/>
+  <circle cx="252" cy="20" r="4.5" fill="none" stroke="#C6A15B" stroke-width="2.2"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Builder\'s Blind Spot',sub:'A live masterclass on the business assessment Rachel Brown runs with one-on-one coaching clients, for custom home builders and designers ready to see what their own numbers are hiding.',brand:true,signal:'title'},
+ {t:'normal',k:'Who this is for',title:'You know how to build a house. Do you know where your business leaks?',body:'You can read a set of plans, run a crew, and hand over a home a client loves. That makes you a builder. It does not automatically make you someone who can see, from the inside, where your own company is quietly losing margin.'},
+ {t:'dark',title:'The skill that built your homes is not the same skill that reads your numbers.'},
+
+ {t:'section',idx:'Part One',title:'The Blind Spot Itself'},
+ {t:'normal',k:'The trap',title:'Busy on every job site, still guessing at the business behind it.',body:'Custom home building runs on estimates made early and decisions made late: allowances, change orders, scope that drifts between the contract and the framing walk-through. Most of that drift never gets traced back to a number, so it never gets fixed, it just gets absorbed into the next bid.'},
+ {t:'normal',k:'What guessing actually costs',title:'A full pipeline is not the same as a business that is priced right.',body:'A builder can be booked solid a year out and still be quietly undercharging on every allowance line. Busy and profitable are two different questions, and most builders have only ever really answered the first one.'},
+ {t:'dark',title:'A full schedule tells you the phone works. It does not tell you the pricing does.'},
+
+ {t:'section',idx:'Part Two',title:'The Assessment Lens'},
+ {t:'normal',k:'Step one, the real conversation',title:'Start with the goals and the problems, not the paperwork.',body:'Before anything else, get a real, thorough grasp of what you are actually trying to build, what is actually in your way, and what you have already tried. That conversation decides what the rest of the assessment focuses on, instead of running a generic checklist against a business it does not know yet.'},
+ {t:'normal',k:'Step two, the business assessment',title:'Read the pricing and the sales conversation the way you would read a punch list.',body:'A close look at where estimates are built on gut feel instead of real numbers, where the sales conversation with a custom client sets expectations that the contract cannot actually protect, and where the strengths already in the business get buried instead of built on.'},
+ {t:'normal',k:'Step three, the workshops',title:'Build the specific skill, not a generic business course.',body:'Once the blind spots are named, the work is skill-specific: pricing and estimating discipline, the sales and close conversation with a custom-home client, and the team and leadership layer that lets a builder step back from being the only person who can run a job.'},
+ {t:'dark',title:'None of this makes you a bigger builder. All of it makes you a business owner who can see the business.'},
+
+ {t:'section',idx:'Part Three',title:'What A Corrected Assessment Looks Like'},
+ {t:'normal',k:'What changes',title:'The same jobs, priced and sold with the leak already found.',body:'Not a different company and not more work, the same custom homes, sold and estimated with the blind spot already named instead of discovered on the next change order.'},
+ {t:'normal',k:'Why Rachel Brown',title:'She is still running the company this is built from.',body:'Founder and CEO of Rachel Brown Homes, a NAHB-award-winning custom home building company in Huntsville, AL, where she has been a practicing builder and land developer for 20+ years. IBS 2026 speaker. Named an ENR "Groundbreaking Women in Construction" honoree. This is not a coach who left the trade, it is an active operator teaching from the same numbers she reads in her own company.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring This Into Your Own Business'},
+ {t:'normal',k:'How it works',title:'One-on-one coaching with RBH Coaching: the conversation, the assessment, the workshops.',body:'An initial consultation to map your goals and challenges, a business assessment of your specific pricing, sales, and team strengths and weaknesses, and specialized workshops built around what the assessment actually finds. Plus the Home Builders Mastermind community for builders and designers doing the same work.'},
+ {t:'normal',k:'What actually happens',title:'Your business gets read, not a generic case study.',body:'The assessment is built around your real numbers, your real estimates, and your real sales conversations, not a template applied to every custom builder the same way.'},
+
+ {t:'cta',title:'Ready to find your blind spot?',chips:['Work With RBH Coaching','RBH Coaching'],disc:'Educational content for custom home builders, designers, and real estate professionals. No income or business result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="bp-motif ${kind==='title'?'title-bp':'corner-bp'}"><use href="#bpmark"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">RBH <b>Coaching</b> &middot; Rachel Brown</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.signal) h+=motif(s.signal);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
