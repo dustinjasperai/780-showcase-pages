@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Legacy Execution Masterclass &middot; Legacy Decks Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Public+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fcfcfc; --panel:#23262b; --rule:#d8dade;
+    --ink:#333333; --blue:#2ea3f2; --red:#e02b20; --dim:#6f7681;
+  }
+  html,body{height:100%}
+  body{background:#0d0f12;font-family:'Public Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d0f12}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9.5% 12% 8% 12%}
+  .slide.active{opacity:1;visibility:visible}
+  .hairline{position:absolute;left:12%;right:12%;top:7.2%;height:1px;background:var(--rule)}
+  .runhead{position:absolute;left:12%;top:4.4%;font-size:.86vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+  .runfoot{position:absolute;right:12%;top:4.4%;font-size:.86vw;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+  .kicker{font-size:.98vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:2.4vh}
+  h1{font-family:'Zilla Slab',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.2;letter-spacing:-.004em}
+  .t-title h1{font-size:4.1vw;max-width:92%}
+  .t-normal h1{font-size:2.6vw;max-width:86%}
+  .t-normal .body{font-family:'Public Sans',sans-serif;font-size:1.34vw;color:#4a4f56;margin-top:2.8vh;max-width:80%;line-height:1.68;font-weight:300}
+  .sub{font-family:'Public Sans',sans-serif;font-size:1.55vw;color:#4a4f56;margin-top:3.2vh;max-width:78%;line-height:1.56;font-weight:300}
+  .t-section{background:var(--bg);justify-content:center}
+  .t-section .idx{font-family:'Public Sans',sans-serif;font-size:1vw;font-weight:600;color:var(--red);margin-bottom:2.2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:3.6vw;max-width:88%;font-style:italic}
+  .t-section .bar{width:9vw;height:3px;background:var(--red);margin-top:3.6vh}
+  .t-dark{background:var(--panel);align-items:flex-start}
+  .t-dark h1{font-size:2.95vw;max-width:86%;color:#f5f6f8}
+  .t-dark .hairline{background:rgba(255,255,255,.14)}
+  .t-dark .runhead{color:#9aa1ab}.t-dark .runfoot{color:#7ec4f5}
+  .t-dark .attr{font-family:'Public Sans',sans-serif;font-size:1.05vw;color:#b7bcc4;margin-top:3vh;letter-spacing:.02em}
+  .t-cta{background:var(--panel)}
+  .t-cta h1{font-size:3.3vw;max-width:86%;color:#f5f6f8}
+  .t-cta .hairline{background:rgba(255,255,255,.14)}
+  .t-cta .runhead{color:#9aa1ab}.t-cta .runfoot{color:#7ec4f5}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1px solid rgba(255,255,255,.4);color:#eef0f4;padding:1.2vh 1.5vw;font-size:1.1vw;font-weight:500;font-family:'Public Sans',sans-serif}
+  .disc{position:absolute;left:12%;right:12%;bottom:4vh;font-size:.8vw;color:#a2a8b3;line-height:1.5;max-width:76%;font-family:'Public Sans',sans-serif}
+  .t-normal .disc,.t-title .disc{color:var(--dim)}
+  .brandline{font-family:'Public Sans',sans-serif;font-size:1.14vw;color:#4a4f56;margin-top:3.6vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--blue);font-weight:600}
+  .level{position:absolute;pointer-events:none;opacity:.85}
+  .level-title{right:8%;bottom:8%;width:22vw}
+  .level-corner{right:9%;bottom:7%;width:9vw;opacity:.45}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--blue);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:#7c848f;z-index:20;font-weight:500;font-family:'Public Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7c848f;z-index:20;font-weight:600;font-family:'Public Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#7c848f;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Public Sans',sans-serif}
+  @media(max-width:640px){
+    .slide{padding:13% 8% 11% 8%}.hairline{left:8%;right:8%}.runhead{left:8%}.runfoot{right:8%}
+    .kicker{font-size:2.4vw}.runhead,.runfoot{font-size:2vw}
+    .t-title h1{font-size:7.2vw}.t-normal h1{font-size:4.9vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.5vw}.disc{left:8%;right:8%;font-size:1.9vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Legacy Decks Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the level line: a deck builder's own reference mark, plumb and true -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="level" viewBox="0 0 260 90">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round">
+    <line x1="10" y1="66" x2="250" y2="66" stroke="#2ea3f2" opacity="0.85"/>
+    <line x1="34" y1="56" x2="34" y2="76" stroke="#e02b20" opacity="0.7"/>
+    <line x1="80" y1="56" x2="80" y2="76" stroke="#e02b20" opacity="0.7"/>
+    <line x1="126" y1="56" x2="126" y2="76" stroke="#e02b20" opacity="0.7"/>
+    <line x1="172" y1="56" x2="172" y2="76" stroke="#e02b20" opacity="0.7"/>
+    <line x1="218" y1="56" x2="218" y2="76" stroke="#e02b20" opacity="0.7"/>
+    <circle cx="34" cy="30" r="7" stroke="#2ea3f2" stroke-width="2.4"/>
+    <line x1="34" y1="37" x2="34" y2="56" stroke="#2ea3f2" opacity="0.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',rh:'Legacy Decks Academy',rf:'Masterclass',title:'The Legacy Execution Masterclass',sub:'How a deck-building company stops running on chaos and starts running on a real operating system, without the owner living on the jobsite.',brand:true,level:'title'},
+ {t:'normal',rh:'Start here',rf:'01',k:'Who this is for',title:'You built the company. Now the company runs you.',body:'The phone never stops. Every crew question, every client call, every change order still runs through you, even with a full schedule of jobs booked. More work should feel like more freedom. Instead it feels like less.'},
+ {t:'dark',rh:'Reframe',rf:'02',title:'You do not need to work more hours. You need a system that does not need you every hour.'},
+
+ {t:'section',rh:'Part one',rf:'03',idx:'Part one',title:'The Trap Every Growing Deck Company Falls Into'},
+ {t:'normal',rh:'Part one',rf:'04',k:'The math of chaos',title:'More jobs should mean more freedom. It rarely does.',body:'A bigger backlog usually just means a bigger version of the same problem: more decisions stacked on one person, more things only you remember, more days that end later than they started.'},
+ {t:'normal',rh:'Part one',rf:'05',k:'Why hiring alone does not fix it',title:'A bigger crew still waits on your memory.',body:'Add people without a system and you have simply added more people who need you to tell them what to do. Headcount is not the fix. What runs the company when you are not standing in front of it is the fix.'},
+ {t:'normal',rh:'Part one',rf:'06',k:'What actually changes it',title:'A vision only works once it is broken into ninety days.',body:'A five-year goal does nothing on a Tuesday morning. The Legacy Execution Course takes the long-term vision for the company and works it backward into the next ninety days, so there is always a next right move, not just a someday.'},
+ {t:'dark',rh:'Reframe',rf:'07',title:'Write the vision down once. Then work backward to the next ninety days, every quarter.'},
+
+ {t:'section',rh:'Part two',rf:'08',idx:'Part two',title:'The Custom Company Operating System'},
+ {t:'normal',rh:'Part two',rf:'09',k:'One, the vision',title:'Get everyone rowing toward the same target.',body:'Before any meeting or metric, the whole leadership team writes down the same answer to where the company is going and why. Without that page, every other tool in this system has nothing to point at.'},
+ {t:'normal',rh:'Part two',rf:'10',k:'Two, the Rocks',title:'Pick three to seven priorities a quarter. Nothing else.',body:'A Rock is a priority big enough to move the company and small enough to actually finish in ninety days. Everything that is not one of the Rocks waits. That constraint is the entire point.'},
+ {t:'normal',rh:'Part two',rf:'11',k:'Three, the weekly meeting',title:'One structured meeting a week replaces a hundred interruptions.',body:'The Effective Meetings Course trains the team to run the same ninety-minute agenda every week: scorecard, Rocks, issues. Once the meeting is real, the hallway ambushes and the after-hours texts mostly stop.'},
+ {t:'normal',rh:'Part two',rf:'12',k:'Four, the scorecard',title:'Five to fifteen numbers, checked every week.',body:'Not a year-end report. A short, honest list of the numbers that tell you Monday morning whether the company is on track or drifting, before it shows up in the bank account three months later.'},
+ {t:'normal',rh:'Part two',rf:'13',k:'Five, the issues list',title:'Write the problem down once. Solve it for good.',body:'Every recurring headache goes on one list and gets solved at the root in the weekly meeting, instead of being re-solved from scratch every time it flares up. The list gets shorter. The company gets quieter.'},
+ {t:'dark',rh:'Reframe',rf:'14',title:'By looking at the big picture every week, you react faster and free up a lot of mental capacity.',attr:'Chris Breen, on running Legacy Decks through the Operating System'},
+
+ {t:'section',rh:'Part three',rf:'15',idx:'Part three',title:'Where The System Actually Lands'},
+ {t:'normal',rh:'Part three',rf:'16',k:'The design-first sale',title:'Sell the design. The price stops being the argument.',body:'A design-first sales process, paired with a real Markup and Margin Calculator and a Hiring Matrix, changes the conversation from a bid war on price to a decision about the right design. That is where the margin lives.'},
+ {t:'normal',rh:'Part three',rf:'17',k:'The person, not just the plan',title:'The system only holds if the owner changes too.',body:'A binder full of Rocks and scorecards will not save a company run by an owner who has not changed how they lead. The Legacy Day Experience exists for exactly that: becoming a better leader, partner and parent, not just a better operator.'},
+ {t:'normal',rh:'Part three',rf:'18',k:'Why listen to them',title:'They still run the company they are teaching from.',body:'Chris and Amy Breen started Legacy Decks in 2016 and still run it today, a NADRA Recognition Award-winning company. Every system in this masterclass is the one running inside their own business, not a theory borrowed from another trade.'},
+ {t:'dark',rh:'Reframe',rf:'19',title:'The company runs whether you are on the jobsite or not. That is the whole point of building it this way.'},
+
+ {t:'section',rh:'Next',rf:'20',idx:'Your next step',title:'Build Your Own Operating System'},
+ {t:'cta',rh:'Next',rf:'21',title:'Ready to see if it fits your company?',chips:['Legacy Decks Academy','Pro / Inner Circle / Legends','Book a Fit Meeting'],disc:'Educational content for deck and patio business owners. Nothing here is a guarantee of income, revenue, growth or business results. Results vary by company, market and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function level(kind){return `<svg class="level ${kind==='title'?'level-title':'level-corner'}" viewBox="0 0 260 90"><use href="#level"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h=`<div class="runhead">${s.rh||''}</div><div class="runfoot">${s.rf||''}</div><div class="hairline"></div>`;
+  if(s.t==='section'){ h+=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="bar"></div>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.attr) h+=`<div class="attr">${s.attr}</div>`;
+    if(s.brand) h+=`<div class="brandline">Legacy Decks <b>Academy</b> &middot; Chris &amp; Amy Breen</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.level) h+=level(s.level);
+  else if(s.t==='section') h+=level('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
