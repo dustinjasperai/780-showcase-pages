@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Find the Constraint, Fix the Shop &middot; Sign Shop Mastermind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f5f0; --panel:#eeece8; --rule:#99b3c9;
+    --ink:#001a30; --ink-soft:#333333; --accent:#d62839; --accent2:#009adc; --dim:#5b6b7a;
+  }
+  html,body{height:100%}
+  body{background:#e4e1d9;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e4e1d9}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9.5% 12% 8% 12%}
+  .slide.active{opacity:1;visibility:visible}
+  .hairline{position:absolute;left:12%;right:12%;top:7.2%;height:1px;background:var(--rule)}
+  .runhead{position:absolute;left:12%;top:4.4%;font-size:.86vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+  .runfoot{position:absolute;right:12%;top:4.4%;font-size:.86vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .kicker{font-size:.98vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',-apple-system,sans-serif;font-weight:700;color:var(--ink);line-height:1.2;letter-spacing:-.006em}
+  .t-title h1{font-size:3.7vw;max-width:92%}
+  .t-normal h1{font-size:2.45vw;max-width:86%}
+  .t-normal .body{font-family:'IBM Plex Sans',sans-serif;font-size:1.3vw;color:var(--ink-soft);margin-top:2.8vh;max-width:80%;line-height:1.68;font-weight:400}
+  .sub{font-family:'IBM Plex Sans',sans-serif;font-size:1.46vw;color:var(--ink-soft);margin-top:3.2vh;max-width:78%;line-height:1.58;font-weight:400}
+  .t-section{background:var(--panel);justify-content:center}
+  .t-section .idx{font-family:'IBM Plex Sans',sans-serif;font-size:1vw;font-weight:600;color:var(--accent2);margin-bottom:2.2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:3.3vw;max-width:88%}
+  .t-section .bar{width:9vw;height:3px;background:var(--accent);margin-top:3.6vh}
+  .t-section .hairline{background:rgba(0,26,48,.14)}
+  .t-dark{background:var(--ink);align-items:flex-start}
+  .t-dark h1{font-size:2.7vw;max-width:86%;color:#f7f5f0}
+  .t-dark .hairline{background:rgba(247,245,240,.16)}
+  .t-dark .runhead{color:#8fa0b3}.t-dark .runfoot{color:#ff8a94}
+  .t-dark .attr{font-family:'IBM Plex Sans',sans-serif;font-size:1.05vw;color:#c7d0d9;margin-top:3vh;letter-spacing:.02em;font-style:italic}
+  .t-cta{background:var(--panel)}
+  .t-cta h1{font-size:3.05vw;max-width:86%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1px solid rgba(0,26,48,.32);color:var(--ink);padding:1.2vh 1.5vw;font-size:1.1vw;font-weight:500;font-family:'IBM Plex Sans',sans-serif}
+  .disc{position:absolute;left:12%;right:12%;bottom:4vh;font-size:.8vw;color:var(--dim);line-height:1.5;max-width:76%;font-family:'IBM Plex Sans',sans-serif}
+  .brandline{font-family:'IBM Plex Sans',sans-serif;font-size:1.12vw;color:var(--ink-soft);margin-top:3.6vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .motif-title{right:8%;bottom:8%;width:22vw}
+  .motif-corner{right:9%;bottom:7%;width:9vw;opacity:.55}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,26,48,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:#6d7c8a;z-index:20;font-weight:500;font-family:'IBM Plex Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6d7c8a;z-index:20;font-weight:600;font-family:'IBM Plex Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#6d7c8a;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'IBM Plex Sans',sans-serif}
+  @media(max-width:640px){
+    .slide{padding:13% 8% 11% 8%}.hairline{left:8%;right:8%}.runhead{left:8%}.runfoot{right:8%}
+    .kicker{font-size:2.4vw}.runhead,.runfoot{font-size:2vw}
+    .t-title h1{font-size:7vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.6vw}.chip{font-size:2.5vw}.disc{left:8%;right:8%;font-size:1.9vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Sign Shop Mastermind</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the bottleneck motif: a flow narrowing to one point, then widening past it -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bottleneck" viewBox="0 0 260 90">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 24 H70 L112 45 L70 66 H8" stroke="#001a30" opacity="0.28"/>
+    <path d="M112 45 H140" stroke="#d62839" opacity="0.9"/>
+    <circle cx="140" cy="45" r="6" fill="#d62839" stroke="none"/>
+    <path d="M140 45 L182 24 H252 M140 45 L182 66 H252" stroke="#009adc" opacity="0.75"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',rh:'Sign Shop Mastermind',rf:'Masterclass',title:'Find the Constraint, Fix the Shop',sub:'How to find the one thing actually slowing your sign shop down, before you spend another dollar on more sales, more staff, or more equipment.',brand:true,motif:'title'},
+ {t:'normal',rh:'Start here',rf:'01',k:'Who this is for',title:'You keep adding capacity. The shop still feels stuck.',body:'A new machine. Another hire. A push for more sales. Each one helps for a month, then the same bottleneck shows back up somewhere else on the floor. That is usually a sign the fix landed on a symptom, not the actual constraint underneath it.'},
+ {t:'dark',rh:'Reframe',rf:'02',title:'More sales aimed at a bottlenecked shop just pile more work up behind the same constraint.',attr:'John Hackley'},
+
+ {t:'section',rh:'Part one',rf:'03',idx:'Part one',title:'The Trap: Selling Into A Bottleneck'},
+ {t:'normal',rh:'Part one',rf:'04',k:'The obvious fixes',title:'More sales. More staff. More equipment. None of it moves the needle.',body:'Every one of those is a reasonable move in isolation. None of them is aimed at anything specific. Without knowing the real constraint first, a shop just cycles through fixes and calls it growth.'},
+ {t:'normal',rh:'Part one',rf:'05',k:'Why the obvious fixes stall',title:'A fix aimed at the wrong station just moves the queue, not the output.',body:'A shop that is actually capacity-constrained at one machine does not get fixed by a new salesperson. A shop that is actually sequencing-constrained does not get fixed by a bigger printer. The fix has to match the real bottleneck, not the loudest symptom.'},
+ {t:'normal',rh:'Part one',rf:'06',k:'The origin of the method',title:'A friend sent a book instead of advice. That book changed everything.',body:'John nearly quit his own shop years ago, financially unsuccessful despite steady work and loyal staff. A friend attending Harvard Business School sent him The Goal, by Eliyahu Goldratt. He hired a Goldratt Institute consultant and spent two decades building what he now teaches.'},
+ {t:'dark',rh:'Reframe',rf:'07',title:'Find the one constraint, and the whole shop starts moving again.'},
+
+ {t:'section',rh:'Part two',rf:'08',idx:'Part two',title:'The Three-Part Production System'},
+ {t:'normal',rh:'Part two',rf:'09',k:'One, Theory of Constraints',title:'Find the single bottleneck actually limiting output.',body:'Not a list of ten things to fix. The one station, the one step, that is actually load-bearing, the thing that, once addressed, makes half the other symptoms quiet down on their own.'},
+ {t:'normal',rh:'Part two',rf:'10',k:'Two, 5S',title:'Workplace organization that changes what the floor can get done in a day.',body:'A structured approach to the shop floor itself, so time is not lost hunting for tools, materials, or the next job in the queue. The method behind John’s own free 5S Starter Guide.'},
+ {t:'normal',rh:'Part two',rf:'11',k:'Three, Gemba walks',title:'The real diagnosis happens on the floor, not in a spreadsheet.',body:'Observe what happens where the value is actually created and flows. A report can tell you a station is behind. Only walking it tells you why.'},
+ {t:'dark',rh:'Reframe',rf:'12',title:'A system that is organized, constraint-aware, and observed from the floor is a system an owner can actually trust.'},
+
+ {t:'section',rh:'Part three',rf:'13',idx:'Part three',title:'What Changes Once You Find It'},
+ {t:'normal',rh:'Part three',rf:'14',k:'Why listen to him',title:'He built his own shop into what he calls his industry’s gold standard.',body:'John Hackley has 40 years of hands-on experience in sign and visual-communications manufacturing. He is an Accredited Small Business Consultant, a licensed contractor since 1989, a past Board Director of the California Sign Association, a speaker for the International Sign Association, and a Contributing Author to Sign Builder Illustrated.'},
+ {t:'normal',rh:'Part three',rf:'15',k:'What the method targets',title:'Less firefighting. More predictable lead times. Profit that follows, not chases.',body:'The shift is from reacting to whatever station is loudest today, to knowing exactly which constraint to fix next, and why. That is the difference between running a shop and being run by it.'},
+ {t:'dark',rh:'Reframe',rf:'16',title:'The shop that knows its one constraint outgrows the shop that is still adding capacity everywhere at once.'},
+
+ {t:'section',rh:'Next',rf:'17',idx:'Your next step',title:'Find the Real Constraint in Your Shop'},
+ {t:'cta',rh:'Next',rf:'18',title:'Ready to find out what is actually slowing your shop down?',chips:['Lean Shop Manager','Sign Shop Mastermind','Schedule a Free Consultation'],disc:'Educational content for sign company owners. Nothing here is a guarantee of income, revenue, growth or business results. Results vary by shop, market and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'motif-title':'motif-corner'}" viewBox="0 0 260 90"><use href="#bottleneck"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h=`<div class="runhead">${s.rh||''}</div><div class="runfoot">${s.rf||''}</div><div class="hairline"></div>`;
+  if(s.t==='section'){ h+=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="bar"></div>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.attr) h+=`<div class="attr">${s.attr}</div>`;
+    if(s.brand) h+=`<div class="brandline">Lean Shop <b>Manager</b> &middot; John Hackley</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='section') h+=motif('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
