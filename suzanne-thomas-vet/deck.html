@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Difference Is Not a Disruption &middot; Suzanne Thomas, LVT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FBF8F6; --panel:#FFFFFF; --rule:#EDE3E7;
+    --acc:#E957AF; --idx:#B15C8A; --ink:#241C22; --soft:#5B4E54; --dim:#9C8D93;
+    --chalk:#F5F1F3; --grey:#D8CBD1;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Lato',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.18;letter-spacing:-.005em}
+  .t-title h1{font-size:4.3vw;max-width:88%}
+  .t-normal h1{font-size:3.2vw;max-width:86%}
+  .t-normal .body{font-size:1.46vw;color:var(--soft);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-size:1.7vw;color:var(--soft);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.3vw;font-weight:700;color:var(--idx);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#3A1830 0%,#1A0913 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:84%;font-style:italic;color:var(--chalk)}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#3A1830 0%,#1A0913 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:82%;color:var(--chalk)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#F6CFE3;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .converge-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-mot{right:7.5%;bottom:8%;width:20vw}
+  .corner-mot{right:6%;bottom:7.5%;width:9vw;opacity:.45}
+  .brandline{font-size:1.3vw;color:var(--soft);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Leading Veterinary Teams</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- converging-lines motif: two divergent lines that re-converge at a single node -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="conv" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 128 Q100 128 150 90 Q190 60 246 44" stroke="#B15C8A" opacity="0.35"/>
+    <path d="M14 60 Q100 60 150 88 Q190 60 246 44" stroke="#E957AF" opacity="0.9"/>
+    <circle cx="14" cy="128" r="5" fill="none" stroke="#B15C8A" stroke-width="2.6"/>
+    <circle cx="14" cy="60" r="5" fill="none" stroke="#E957AF" stroke-width="2.6"/>
+    <circle cx="246" cy="44" r="6" fill="none" stroke="#E957AF" stroke-width="2.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Difference Is Not a Disruption',sub:'A CLARITY OS masterclass for veterinary hospital leaders.',brand:true,mot:'title'},
+ {t:'normal',k:'Who this is for',title:'You got promoted for medicine. Nobody taught you how to lead.',body:'You run the floor now, or the team, or the whole hospital. The skills that got you here were clinical. The job you actually do all day is human. Nobody handed you a playbook for that part.'},
+ {t:'dark',title:'The tech who processes everything differently than you is not the problem. Leading her like she is not different, is.'},
+
+ {t:'section',idx:'Part One',title:'The Trap of Leading by Imitation'},
+ {t:'normal',k:'What actually happened',title:'You lead the way you were led, whether it worked or not.',body:'Most managers copy the last manager they had, good habits and bad ones both. It works on the people who think and communicate the way you do. It quietly fails everyone else on the team.'},
+ {t:'normal',k:'The cost',title:'Every person you cannot reach is a person you manage around, not lead.',body:'The tech who needs instructions written down instead of spoken fast in a hallway. The associate who shuts down under public correction. Managing around them costs more than leading them ever would.'},
+ {t:'dark',title:'A team led by imitation only works for the people who already think like the leader.'},
+
+ {t:'section',idx:'Part Two',title:'The CLARITY OS Framework'},
+ {t:'normal',k:'Layer one','title':'You Can’t Lead What You Haven’t Met.',body:'Self-awareness, regulation, and emotional steadiness. Before you can lead anyone else through a hard shift, you have to know what your own stress response does to the room.'},
+ {t:'normal',k:'Layer two',title:'Your People Are Not the Problem.',body:'Trust, accountability, and psychological safety. The behavior you are frustrated by is almost always a symptom. Naming the real issue, without blame, is what makes accountability stick.'},
+ {t:'normal',k:'Layer three, the centerpiece',title:'Difference Is Not a Disruption.',body:'Leading across neurodiversity and operational difference. The team member who needs things written down, or struggles with sudden change, or reads social cues differently, is not a management problem to solve. She is a leadership skill to build.'},
+ {t:'normal',k:'Layer four',title:'What You Call a Team Might Not Be a Team.',body:'Team dynamics, cohesion, and shared norms. A group of good individual clinicians is not automatically a team. Cohesion gets built on purpose, or it does not happen at all.'},
+ {t:'normal',k:'Layer five',title:'Sustainability Is Not a Luxury.',body:'Systems, sustainability, and long-term leadership capacity. A leadership style that burns you out in eighteen months was never going to hold the team together for five years.'},
+ {t:'dark',title:'Difference is not the disruption. Leading it like sameness is.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes on the Floor'},
+ {t:'normal',k:'The leader this builds',title:'Fewer blowups, fewer resignations, a floor that runs when you are not in the room.',body:'A leader who can read what is actually happening with a struggling team member catches problems while they are still small, and keeps the people worth keeping.'},
+ {t:'normal',k:'Why Suzanne Thomas',title:'A licensed veterinary technician teaching from inside the work.',body:'Suzanne Thomas, LVT, built CLARITY OS from her own time on the floor, then packaged it into a live framework other veterinary leaders could use. She hosts Leading Veterinary Teams On Air and leads a community built around exactly this work.'},
+
+ {t:'section',idx:'Your Next Step',title:'Apply the Framework to Your Own Team'},
+ {t:'normal',k:'The CLARITY OS Cohort',title:'Eight weeks, live, capped at 12 seats.',body:'Weekly 90-minute live sessions, a private welcome call, pre-work built on the CLARITY Assessment, a CLARITY OS Leadership Certificate on completion, and lifetime access to the alumni community.'},
+ {t:'normal',k:'1:1 Mentorship',title:'For leaders who want the work done one-on-one first.',body:'An application-based mentorship path for hospital managers, lead technicians, supervisors, and emerging leaders who want direct, individual work before joining a cohort.'},
+ {t:'cta',title:'Ready to lead the team you actually have?',chips:['Apply to the CLARITY OS Cohort','Start with 1:1 mentorship'],disc:'Educational content for veterinary leaders. No income, retention, or clinical outcome is guaranteed. Results vary by hospital, team, and leader.'},
+];
+
+const deck=document.getElementById('deck');
+function mot(kind){return `<svg class="converge-motif ${kind==='title'?'title-mot':'corner-mot'}"><use href="#conv"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Leading <b>Veterinary Teams</b> &middot; Suzanne Thomas, LVT</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mot) h+=mot(s.mot);
+  else if(s.t==='title') h+=mot('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
