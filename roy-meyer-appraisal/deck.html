@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Outsourcing Guide for Appraisers &middot; Roy Meyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0e182c; --panel:#152741; --rule:#233a5e;
+    --acc:#205cff; --amber:#f6ad55; --ink:#f5f7fb; --dim:#7f92ad; --paper:#fcfaf6;
+  }
+  html,body{height:100%}
+  body{background:#081120;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#081120}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:2.4vh}
+  h1{font-family:'Plus Jakarta Sans',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.7vw;max-width:84%}
+  .t-normal .body{font-size:1.4vw;color:#c3cede;margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.55vw;color:#c3cede;margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.3vw;font-weight:600;color:var(--amber);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 140% at 15% 10%,#152741 0%,#081120 68%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.1vw;max-width:82%;font-style:italic;color:var(--paper)}
+  .t-cta{background:radial-gradient(120% 140% at 85% 90%,#152741 0%,#081120 68%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:80%;color:var(--paper)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#cfe0ff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#a9b6cc}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-motif{right:7%;bottom:9%;width:15vw}
+  .corner-motif{right:6%;bottom:7.5%;width:6.6vw;opacity:.6}
+  .brandline{font-size:1.22vw;color:#c3cede;margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--amber);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.4vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">Appraiser Insider Mastermind</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- roofline-to-node motif: a simple house roofline resolving into small connected circuit
+     nodes -- the traditional appraisal transformed by systemization and AI -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="roofnode" viewBox="0 0 200 140">
+  <g fill="none" stroke="#205cff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 96 L60 52 L106 96" opacity="0.85"/>
+    <path d="M106 96 L140 96 L140 66" opacity="0.55"/>
+    <path d="M140 66 L172 66" opacity="0.55"/>
+    <circle cx="60" cy="52" r="5" fill="#f6ad55" stroke="none"/>
+    <circle cx="140" cy="66" r="4.5" fill="#205cff" stroke="none" opacity="0.9"/>
+    <circle cx="172" cy="66" r="4.5" fill="#205cff" stroke="none" opacity="0.6"/>
+    <rect x="34" y="96" width="52" height="30" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Outsourcing Guide for Appraisers',sub:'A live masterclass on scaling with AI and virtual teams, taught by a Certified Appraiser with nearly 24 years in the profession.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the busiest person in your own appraisal business.',body:'You run inspections, write reports, chase non-lender leads, and answer the phone, often all in the same day. You know the business needs to grow into new revenue, but there is no time left in the week to build anything new.'},
+ {t:'dark',title:'An appraisal practice that only runs when you are behind the keyboard is not a business. It is a job with more paperwork.'},
+
+ {t:'section',idx:'Part One',title:'Why Appraisers Stay the Bottleneck'},
+ {t:'normal',k:'The real trap',title:'Adding more leads does not fix a business with no one to hand them to.',body:'Most growth advice for appraisers stops at "diversify into non-lender work." That is true, and also useless on its own, because a solo owner with a full inspection calendar has nowhere to put a single new client.'},
+ {t:'normal',k:'The actual fix',title:'The bottleneck moves. It never disappears, unless something changes who does the work.',body:'Every hour you spend on a task only you can do is an hour you are not spending growing the business. The fix is not working harder. It is building a system that lets AI and a virtual team carry what does not require you personally.'},
+ {t:'dark',title:'The outsourcing guide exists because information was never the problem. Delegation was.'},
+
+ {t:'section',idx:'Part Two',title:'The Four Pillars, Named'},
+ {t:'normal',k:'High-Value Focus',title:'Concentrate your week on the work that actually moves income.',body:'Most appraisal-business weeks are full of low-yield tasks that feel productive but do not move revenue. High-Value Focus is a deliberate filter: keep the work only you can do, hand off the rest.'},
+ {t:'normal',k:'Smart Diversification',title:'Non-lender work, without betting the whole practice on lending volume.',body:'Diversification only works if it does not require you to personally run two businesses at once. This pillar is about building non-lender revenue that survives a lending slowdown, on a schedule the rest of the system supports.'},
+ {t:'normal',k:'AI-Driven Growth',title:'AI automating the complex tasks, not just the easy ones.',body:'This is the pillar Roy built the mastermind around: using AI to automate real workflow, from scheduling to report drafting assistance to triage, so growth does not require more hours from the owner.'},
+ {t:'normal',k:'Virtual Assistant Mastery',title:'Delegation and outsourcing, documented and repeatable.',body:'The subject of Roy’s own book, The Outsourcing Guide for Appraisers: how to hand off real work to a virtual team without losing quality or control, so output grows without payroll growing at the same rate.'},
+ {t:'dark',title:'Four pillars. Not four more things to learn. Four things you can start installing this month.'},
+
+ {t:'section',idx:'Part Three',title:'What a Practice Looks Like With All Four Running'},
+ {t:'normal',k:'Why Roy Meyer',title:'Nearly 24 years appraising, plus the guide the industry uses.',body:'Roy is a Certified Appraiser, co-founder of the Appraiser’s Club, and author of The Outsourcing Guide for Appraisers. He has consulted with hundreds of appraisers, brokers, Realtors, and investors on exactly this shift.'},
+
+ {t:'section',idx:'Your Next Step',title:'Apply for Appraiser Insider Mastermind'},
+ {t:'normal',k:'How it works',title:'A short application, a 1-on-1 discovery call, then the room.',body:'Appraiser Insider Mastermind runs on application and a personal discovery call, not a sales page. Members get bi-monthly deep-dives, a VA and outsourcing training library, and AI-transformation content built specifically for appraisers.'},
+ {t:'cta',title:'Ready to install all four pillars?',chips:['Apply for the mastermind','Book your discovery call'],disc:'Educational content for licensed real estate appraisers. No income or production-volume result is guaranteed. Results vary by practice, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#roofnode"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Appraiser Insider <b>Mastermind</b> &middot; Roy Meyer</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
