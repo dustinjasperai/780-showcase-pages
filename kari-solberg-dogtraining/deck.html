@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Business Only You Could Build · Kari Solberg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FDF6EF; --panel:#F1E4DA; --rule:#E4D5C8;
+    --ink:#180D2F; --accent:#FC6A2B; --grey:#5C5468; --dim:#8A8296;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Raleway',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Petrona',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4vw;max-width:88%}
+  .t-normal h1{font-size:2.95vw;max-width:84%}
+  .t-normal .body{font-family:'Raleway',sans-serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Raleway',sans-serif;font-size:1.65vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Raleway',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.2vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.2vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .leash-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-leash{right:6%;bottom:8%;width:15vw}
+  .corner-leash{right:6%;bottom:7%;width:6.4vw;opacity:.55}
+  .brandline{font-family:'Raleway',sans-serif;font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Raleway',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Raleway',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Raleway',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.4vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">Under the Sun Training and Daycare</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- leash motif: a loose looping leash-line that coils and releases, echoing "connection, not force" over a rigid growth-chart line -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="leash" viewBox="0 0 260 90">
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M8,70 C40,20 70,90 105,45 C130,15 155,55 180,35 C200,20 215,40 235,22" stroke="#E4D5C8" opacity="0.8"/>
+    <path d="M180,35 C200,20 215,40 235,22" stroke="#FC6A2B" opacity="0.95"/>
+    <circle cx="235" cy="22" r="5" fill="#FC6A2B" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Business Only You Could Build',sub:'A masterclass for dog training business owners on building a business around what makes YOUR facility different, instead of running someone else’s playbook.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You followed a certification, then a franchise-style "system," to build your training business.',body:'Most business advice sold to dog trainers comes from one school teaching its one method’s playbook: the same pricing tiers, the same class structure, the same growth checklist, for every facility. It was never built around what your business actually is.'},
+ {t:'dark',title:'A playbook built for every facility is a playbook built for none of them.'},
+
+ {t:'section',idx:'Part One',title:'Why the Cookie-Cutter Playbook Fails Trainers'},
+ {t:'normal',k:'One school, one system',title:'A trainer certified in one method usually ends up teaching that one method’s business model, too.',body:'Pricing, class formats, even how you talk to clients get inherited from whichever certification you came up through. That works fine until your facility, your market, or your own training style doesn’t fit the mold it came from.'},
+ {t:'normal',k:'Revenue hides the real problem',title:'A full class schedule can still be the wrong business if it was never built around your strengths.',body:'Busy is not the same as built-right. Plenty of trainers are fully booked running someone else’s system, wondering why it feels harder than it should. The fix usually is not "work more hours." It is building the business around what actually makes you good at this.'},
+ {t:'dark',title:'You do not need a bigger system. You need your own.'},
+
+ {t:'section',idx:'Part Two',title:'Building the Business Only You Could Run'},
+ {t:'normal',k:'Customize the business, not the template',title:'One-size-fits-all does not work. The plan gets built around what makes YOUR business unique.',body:'Instead of a standard growth checklist, the starting point is your actual facility, your actual clients, and your actual local market. Pricing, service mix, and positioning get built around what makes your business different, not stripped out of it.'},
+ {t:'normal',k:'A blend of methods, not one school',title:'Real mentoring pulls from a blend of diverse experiences, not one certification path.',body:'Most business coaching for trainers comes from someone certified in a single method, teaching that method’s playbook. Kari trains and mentors across formats, private lessons, group classes, day training, boarding and daycare, because a business built on one narrow lens breaks the moment your clients need something outside it.'},
+ {t:'normal',k:'Learn it inside a real, running business',title:'Shadow weeks and site visits put you inside Under the Sun, not in front of a recorded course.',body:'A week or a month shadowing consults, in-board training, private lessons, group classes, and day trains, in a facility that is actually operating, not a case study. You watch the real decisions get made in real time, then bring them home to your own business.'},
+ {t:'dark',title:'You cannot learn how to run a real facility from a course that has never run one.'},
+
+ {t:'section',idx:'Part Three',title:'Building It Into Your Own Facility'},
+ {t:'normal',k:'What changes first',title:'Owners usually start with the three things costing them the most: pricing, class structure, and where their time actually goes.',body:'The 2-hour call identifies your top 3 issues and an action plan built around your business specifically, not a generic top-10 list every trainer gets handed.'},
+ {t:'normal',k:'Why Kari Solberg',title:'12+ years training dogs, and still running the facility she teaches from.',body:'Kari started training in 2014, fostered over 50 dogs in a single year, and built that into Under the Sun Training and Daycare in Colorado Springs. She is an International Association of Canine Professionals member, AKC CGC evaluator, and Certified Pet Food Nutrition Specialist, and she is teaching from a business she is running today, not one she used to run.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Business Only You Could Run'},
+ {t:'normal',k:'How the mentorship works',title:'Coaching for the business decisions, shadow weeks for seeing them made.',body:'Coaching calls (from a single 2-hour session up to ongoing monthly coaching) work through pricing, structure, and growth decisions. Shadow weeks and site visits put you inside Under the Sun to see those same decisions handled in a real, operating facility.'},
+ {t:'cta',title:'Ready to build the business only you could run?',chips:['Book a 2-Hour Coaching Call','Apply for a Shadow Week'],disc:'Educational content for dog training business owners. No income, growth, or business result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function leashSvg(kind){return `<svg class="leash-motif ${kind==='title'?'title-leash':'corner-leash'}"><use href="#leash"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Under the Sun <b>Training and Daycare</b> &middot; Kari Solberg</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=leashSvg(s.arc);
+  else if(s.t==='title') h+=leashSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
