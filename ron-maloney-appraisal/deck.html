@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Reviewer's Mindset &middot; Ron Maloney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f2f4f2; --panel:#ffffff; --rule:#d7ddda;
+    --acc:#2f4a52; --green:#4c8a1f; --ink:#232323; --dim:#7c8785; --paper:#ffffff;
+  }
+  html,body{height:100%}
+  body{background:#dfe4e1;font-family:'Karla',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dfe4e1}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.7vw;max-width:84%}
+  .t-normal .body{font-size:1.4vw;color:#4a4a4a;margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.55vw;color:#4a4a4a;margin-top:3.2vh;max-width:76%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.3vw;font-weight:600;color:var(--green);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 140% at 15% 10%,#1c2e30 0%,#0f1b1c 68%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.1vw;max-width:82%;font-style:italic;color:var(--paper)}
+  .t-cta{background:radial-gradient(120% 140% at 85% 90%,#1c2e30 0%,#0f1b1c 68%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.3vw;max-width:80%;color:var(--paper)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #6fb08a;color:#e8f3ea;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.88vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#b9c7c2}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-motif{right:7%;bottom:9%;width:13vw}
+  .corner-motif{right:6%;bottom:7.5%;width:5.6vw;opacity:.6}
+  .brandline{font-size:1.22vw;color:#4a4a4a;margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--green);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#5b6462;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5b6462;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#5b6462;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.4vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">Appraisers Success Group</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- magnifying-glass-over-flagged-line motif: the Reviewer's Mindset made visual, catching
+     a flagged item on a report before it becomes a problem -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="reviewglass" viewBox="0 0 200 140">
+  <g fill="none" stroke="#2f4a52" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="18" y="18" width="120" height="94" rx="4" opacity="0.55"/>
+    <line x1="34" y1="40" x2="106" y2="40" opacity="0.45"/>
+    <line x1="34" y1="58" x2="106" y2="58" opacity="0.45"/>
+    <line x1="34" y1="76" x2="80" y2="76" opacity="0.45"/>
+    <circle cx="128" cy="90" r="26" opacity="0.9"/>
+    <line x1="147" y1="109" x2="172" y2="134" opacity="0.9"/>
+  </g>
+  <circle cx="106" cy="76" r="5" fill="#4c8a1f" stroke="none"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Reviewer's Mindset",sub:'A live masterclass on catching your own red flags before anyone else does, taught by a 44-year appraiser and former bank review-department reviewer.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You sign your own reports with no second set of eyes.',body:"You inspect the property, write the report, and sign your name to it, and unless something goes wrong later, nobody else ever looks at it the way a reviewer would. Most appraisers have never actually been reviewed, not once."},
+ {t:'dark',title:'Every report you sign is a liability exposure you cannot see until someone else finds it.'},
+
+ {t:'section',idx:'Part One',title:'The Blind Spot Every Solo Appraiser Has'},
+ {t:'normal',k:'The real trap',title:'You cannot review your own work the way an outsider would.',body:'The person who wrote the report is the worst-positioned person to catch what is wrong with it. That is not a skill gap, it is a structural blind spot: you already believe your own reasoning, so you cannot see past it the way a fresh set of eyes can.'},
+ {t:'normal',k:'The cost of skipping it',title:'The gap only shows up when it is expensive: an E&O claim, a license complaint, a lost referral relationship.',body:'Most appraisers never find out what a reviewer would have flagged until a lender, an underwriter, or a board does it for them, after the fact, when it is no longer a training moment.'},
+ {t:'dark',title:'The best appraisers are not the ones who never make mistakes. They are the ones who catch them first.'},
+
+ {t:'section',idx:'Part Two',title:"The Reviewer's Mindset"},
+ {t:'normal',k:'Where it comes from',title:'Built from real time on the other side of the desk.',body:"Ron spent time in the review department of a major bank, reading other appraisers' reports for exactly the red flags, risk factors, and deficiencies that get missed. Appraisers Success Group is built around teaching that same eye to appraisers reviewing their own work."},
+ {t:'normal',k:'What it actually looks for',title:'Red flags, risk factors, and deficiencies, the same way a bank reviewer would.',body:"Live critique sessions on real 1-4F, co-op, and condo appraisal reports, including Ron's own completed work, so appraisers see exactly what a trained reviewer catches before it becomes a complaint."},
+ {t:'normal',k:'The desktop-specific skill',title:'The Desktop Valuation Blueprint: desktop reviews and desktop appraisals, taught as their own discipline.',body:'A named training inside the group, separate from full-inspection work, teaching the specific review and reconciliation instincts desktop assignments require.'},
+ {t:'normal',k:'Turning the eye into income',title:'How to Make Money Doing Appraisal Reviews: the same mindset, as its own paid service.',body:'The Reviewer\'s Mindset is not only a QC habit. Ron also teaches it as a revenue line of its own, appraisal review work sold separately from origination appraisals.'},
+ {t:'dark',title:'One mindset. A QC habit that protects your license, and a skill you can sell on its own.'},
+
+ {t:'section',idx:'Part Three',title:'A Career Built On That Mindset'},
+ {t:'normal',k:'Why Ron Maloney',title:'44 years appraising. No lawsuits, license issues, complaints, or fines.',body:"Ron has appraised since 1982, owned an appraisal company for nearly two decades, and, by his own site's account, carries a career record with no lawsuits, license issues, complaints, or fines. That is the Reviewer's Mindset applied to his own work, every time."},
+
+ {t:'section',idx:'Your Next Step',title:'Join the Appraisers Success Group Waitlist'},
+ {t:'normal',k:'How it works',title:'A $39.95/month group, currently on a periodic enrollment cadence.',body:'Appraisers Success Group runs live monthly critique calls, real report reviews, desktop training, and a private community for $39.95/month. Enrollment opens periodically; when it is closed, joining the waitlist is the way to get in for the next opening, along with a discount on 1-on-1 coaching.'},
+ {t:'cta',title:'Ready to see what a reviewer would catch in your own reports?',chips:['Join the waitlist','Book a call'],disc:'Educational content for licensed real estate appraisers. No income or production-volume result is guaranteed. Results vary by practice, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#reviewglass"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Appraisers Success <b>Group</b> &middot; Ron Maloney</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
