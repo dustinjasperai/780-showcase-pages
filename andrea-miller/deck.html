@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Lesson Rate Gut Check &middot; Music Studio Startup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fafaf9; --panel:#f2f0ee; --rule:#e5e2df;
+    --accent:#e13a52; --teal:#1f9aa3;
+    --chalk:#1c1f1c; --grey:#5c5c5c; --dim:#8c8c8c;
+  }
+  html,body{height:100%}
+  body{background:#ece9e6;font-family:'Quicksand',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#ece9e6}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s ease;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:8% 9% 13% 9%}
+  .slide.active{opacity:1;visibility:visible}
+  .t-normal::after{content:'';position:absolute;left:0;right:0;bottom:0;height:.9vh;background:var(--accent);opacity:.9}
+  .kicker{font-family:'Quicksand',sans-serif;font-size:.92vw;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Quicksand',sans-serif;font-weight:700;color:var(--chalk);line-height:1.12;letter-spacing:-.005em}
+  .t-title{justify-content:center}
+  .t-title h1{font-family:'Covered By Your Grace',cursive;font-weight:400;font-size:5.6vw;max-width:80%;color:var(--chalk);line-height:1.08}
+  .t-title .sub{font-family:'Quicksand',sans-serif;font-size:1.4vw;color:var(--grey);margin-top:3.4vh;max-width:66%;line-height:1.6;font-weight:500}
+  .t-normal h1{font-size:2.85vw;max-width:82%;font-weight:700}
+  .t-normal .body{font-family:'Quicksand',sans-serif;font-size:1.34vw;color:var(--grey);margin-top:2.8vh;max-width:72%;line-height:1.62;font-weight:500}
+  .t-section{background:var(--panel);justify-content:center;border-left:1.6vw solid var(--accent)}
+  .t-section .idx{font-family:'Quicksand',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  .t-section h1{font-size:3.9vw;max-width:78%;font-weight:700}
+  .t-hit{background:var(--bg);justify-content:center;align-items:flex-start}
+  .t-hit h1{font-size:2.95vw;max-width:78%;color:var(--accent);line-height:1.16;font-weight:700}
+  .t-hit .body{font-family:'Quicksand',sans-serif;font-size:1.28vw;color:var(--grey);margin-top:3vh;max-width:64%;font-weight:500}
+  .t-cta{background:var(--panel);justify-content:center;align-items:center;text-align:center;border-top:1.1vh solid var(--accent)}
+  .t-cta h1{font-family:'Covered By Your Grace',cursive;font-weight:400;font-size:4.6vw;max-width:80%;color:var(--chalk)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Quicksand',sans-serif;border:1.5px solid var(--accent);color:var(--accent);padding:1.2vh 1.8vw;font-size:1.05vw;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .brandline{font-family:'Quicksand',sans-serif;font-size:1vw;color:var(--grey);margin-top:3.6vh;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:9%;right:9%;bottom:4.6vh;font-family:'Quicksand',sans-serif;font-size:.8vw;color:var(--dim);line-height:1.45;font-weight:500}
+  .t-cta .disc{text-align:center;bottom:3.4vh}
+  .mark{position:absolute;pointer-events:none}
+  .mark.big{right:5%;top:9%;width:13vw;opacity:.9}
+  .mark.small{right:6%;top:11%;width:6vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(28,31,28,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:12px;right:18px;font-family:'Quicksand',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Quicksand',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:11px;left:50%;transform:translateX(-50%);font-family:'Quicksand',sans-serif;font-size:10px;color:var(--dim);z-index:20;letter-spacing:.14em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.5vw}.t-title h1{font-size:9.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:2.9vw}
+    .t-title .sub{font-size:3.1vw}.t-section h1{font-size:7vw}.t-hit h1{font-size:5.6vw}.t-cta h1{font-size:7.6vw}.chip{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Music Studio Startup</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- a hand-drawn circle around a number, one stroke: the "gut check" mark -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mark" viewBox="0 0 160 120">
+  <g fill="none" stroke="#e13a52" stroke-linecap="round">
+    <path d="M30 60 C30 30 60 16 84 20 C118 26 138 48 130 74 C122 100 88 108 60 98 C36 89 28 78 30 60 Z" stroke-width="3.4"/>
+    <path d="M62 62 L74 74 L100 46" stroke-width="5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Lesson Rate Gut Check',sub:'Why a well-marketed studio with a broken price just breaks faster, the numbers-first foundation that fixes it, and how it fits inside your own Business Building 101 curriculum.',brand:true,line:'big'},
+
+ {t:'normal',k:'Who this is for',title:'Teachers who are good at marketing and still not sure the numbers work.',body:'You can fill a lesson calendar. What you have not done yet is check whether the rate on that calendar actually supports the business you are trying to build.'},
+ {t:'normal',k:'What you will walk away with',title:'A real gut check on your own lesson rate, and the foundation behind it.',body:'What your rate actually needs to cover, how startup costs and personal budgeting change the number, and why marketing comes after this, not before it.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every studio and every market is different. What matters is the version of this system that fits your costs and your community.',disc:'Educational content. Nothing here is a promise of income or business results. No outcome is guaranteed and results vary by studio and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Andrea Miller. Founder of Music Studio Startup.',body:'A piano teacher turned business coach who works numbers-first: using your actual numbers to figure out what your studio needs, then building toward it. Business Building 101 is the 9-module course she built from that approach.'},
+
+ {t:'section',idx:'Part One',title:'Why Marketing First Makes It Worse'},
+ {t:'normal',k:'It is rarely a marketing problem',title:'A studio built on a guessed rate just fills up faster at the wrong price.',body:'Better marketing does not fix a rate that was never actually calculated. It just gets you more students at a number that was never checked.'},
+ {t:'hit',title:'A well-marketed business with a broken price just breaks faster.',body:'More students at the wrong rate is not growth. It is the same problem, multiplied.',line:'small'},
+ {t:'normal',k:'The quiet cost',title:'A rate you never checked quietly caps everything above it.',body:'Every raise feels risky when you never confirmed the number in the first place. So it does not happen, and the studio absorbs the gap instead.'},
+ {t:'normal',k:'What most owners try',title:'Raising prices a little, nervously, once a year.',body:'It moves the number without ever answering the actual question: what does a lesson need to cost to make this a sustainable business, not just a full calendar.'},
+
+ {t:'section',idx:'Part Two',title:'The Financial Foundation'},
+ {t:'normal',k:'Start with your own budget',title:'Personal budgeting comes before studio budgeting, on purpose.',body:'What you personally need from the business is part of the math, not an afterthought you hope works out once the studio is bigger.'},
+ {t:'normal',k:'Then the real costs',title:'Startup costs and financial modeling turn guesses into a plan you can read.',body:'What it actually costs to run the studio, and a way to read your own numbers instead of hoping they work out at tax time.'},
+ {t:'hit',title:'This is not a marketing course. It is a business worth marketing.',line:'small'},
+ {t:'normal',k:'Pricing and policy',title:'A pricing strategy and studio policies designed around the real numbers.',body:'Profitable lesson packages instead of guessed-at rates, and enforceable policies that protect the business the pricing was built to support.'},
+
+ {t:'section',idx:'Part Three',title:'The Gut Check, Done Right'},
+ {t:'normal',k:'The proof',title:'This is the same sequence behind Business Building 101, module by module.',body:'Not a summary of someone else\'s framework. The actual order Andrea teaches paying students in her own 9-module course today.'},
+ {t:'normal',k:'Where to take it next',title:'Marketing Planning is module 8. On purpose.',body:'Only after the foundation is real does Business Building 101 get to promotion, and by then there is finally something worth promoting.'},
+ {t:'hit',title:'The goal is not a fuller calendar. It is a studio the calendar is actually worth filling.',line:'small'},
+
+ {t:'normal',k:'One more thing',title:'Business Finance for Music Teachers goes deeper.',body:'For studios ready to go further into the numbers once the foundation is in place, a full course exists for that too.'},
+ {t:'cta',title:'Check the number. Then build the funnel.',chips:['Business Building 101','Book a call'],brand:true,disc:'Educational content only. No income or business result is guaranteed. Results vary by studio, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function markSvg(kind){return `<svg class="mark ${kind==='big'?'big':'small'}" viewBox="0 0 160 120"><use href="#mark"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Music Studio <b>Startup</b> &middot; Andrea Miller</div>`;
+  }
+  if(s.line) h+=markSvg(s.line);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
