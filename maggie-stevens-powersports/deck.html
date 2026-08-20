@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Money Leak Masterclass · Maggie Stevens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#F7F4EE; --panel:#EFE9DD; --rule:#DCD5C6;
+    --ink:#22262B; --accent:#781C9F; --grey:#5B5652; --dim:#8C8578; --data:#2E5F82;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Work Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Prata',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:88%}
+  .t-normal h1{font-size:2.75vw;max-width:84%}
+  .t-normal .body{font-family:'Work Sans',sans-serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Work Sans',sans-serif;font-size:1.6vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Work Sans',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.9vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.2vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .gauge-motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-gauge{right:6%;bottom:8%;width:15vw}
+  .corner-gauge{right:6%;bottom:7%;width:6.4vw;opacity:.55}
+  .brandline{font-family:'Work Sans',sans-serif;font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Work Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Work Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Work Sans',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">Powersports Playbook</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- gauge motif: a service-bay dial sweeping from a shaded "leak" zone into a clean "found" zone, echoing the Money Leak measurement philosophy over a generic growth-arrow -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gauge" viewBox="0 0 260 140">
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M20,120 A110,110 0 0 1 130,10" stroke="#DCD5C6" opacity="0.85"/>
+    <path d="M130,10 A110,110 0 0 1 240,120" stroke="#781C9F" opacity="0.95"/>
+    <line x1="130" y1="120" x2="205" y2="48" stroke="#22262B" stroke-width="4"/>
+    <circle cx="130" cy="120" r="7" fill="#22262B" stroke="none"/>
+    <circle cx="205" cy="48" r="4" fill="#781C9F" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Profit That Was Already In The Building',sub:'A masterclass for motorcycle and powersports dealership owners on finding the money already leaking out of parts and service, without new hires or new software.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are chasing more sales leads while parts and service quietly leak margin every month.',body:'Most advice sold to dealership owners is about selling more units: more leads, better closing, faster financing. Meanwhile the two departments that already exist, parts and service, run on guesswork about what they are actually worth.'},
+ {t:'dark',title:'More leads does not fix a leak you cannot see.'},
+
+ {t:'section',idx:'Part One',title:'Why the Leak Stays Invisible'},
+ {t:'normal',k:'Support department, not profit center',title:'Parts and service get treated like the back office, when they are often the most reliable margin in the building.',body:'Headcount, attention, and marketing dollars chase the showroom. The parts counter and the service bay, statistically the steadier profit centers, keep running on whatever process has always been there, unmeasured and unquestioned.'},
+ {t:'normal',k:'Tracked wrong, or not at all',title:'Book rates and billable hours rarely get tracked the way the department actually needs them tracked.',body:'Without a measurement system built for the service bay specifically, real technician capacity and real job-type profitability stay invisible. Leaks compound quietly, month after month, and nobody can point to where they started.'},
+ {t:'dark',title:'You do not need more traffic. You need to see where the money already went.'},
+
+ {t:'section',idx:'Part Two',title:'The Money Leak System'},
+ {t:'normal',k:'The Four Pillars of Dealership Operations',title:'Sales, service, parts, and F&I as one connected system, not four departments competing for headcount.',body:'Most of the profitability gap owners chase in sales is actually sitting in the other three pillars. Harmonize them and the dealership starts running as one machine instead of four separate ones pulling against each other.'},
+ {t:'normal',k:'The 7-Day Profit Leak Audit',title:'A structured audit through the dealership’s own operations and data, not a generic checklist.',body:'The audit surfaces a Custom Fix Blueprint: 3-5 specific actions the GM can run that month. Most dealers who go through it find $5,000 to $10,000 a month in recoverable profit they did not know was there.'},
+ {t:'normal',k:'Book-rate and technician-efficiency tracking',title:'A measurement system built for the service bay specifically.',body:'Once real capacity and real profitability per technician and per job type become visible, the fix stops being a guess. The Accelerator tier adds department trainings and a Day-30 accountability call so the fix actually sticks.'},
+ {t:'dark',title:'Proven on her own department first, not just taught.'},
+
+ {t:'section',idx:'Part Three',title:'Proof It Works'},
+ {t:'normal',k:'$230K to $1M+, 38% margins, no discounting',title:'A struggling franchise parts department, turned around with a three-person team.',body:'No discounting. No reliance on online sales. Just pricing structure, staffing, and counter process, the same discipline now taught to other dealers’ parts departments instead of the industry’s default move of discounting to clear inventory.'},
+ {t:'normal',k:'Why Maggie Stevens',title:'She built a dealership before she started coaching other owners on running one.',body:'Co-founded and scaled Cotee River Cycles from an 800-square-foot shop into her Florida market’s largest independent dealership, self-funded. Spark Award winner 2023 and 2024, Powersports Business cover feature, AIMExpo 2025 panelist, host of Beyond the Showroom.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Leak'},
+ {t:'normal',k:'How it works',title:'A $199 call finds the top leak. The Audit and Accelerator turn it into a 30-day fix.',body:'The Fixed Ops Strategy Call identifies your biggest leak and a first blueprint. The Money Leak Audit and Accelerator go deeper: department trainings, a Day-30 owner and GM accountability call, and 60 days of support to make sure the fix holds.'},
+ {t:'cta',title:'Ready to find the profit that is already in your building?',chips:['Book the $199 Fixed Ops Strategy Call','Get a Money Leak Audit'],disc:'Educational content for motorcycle and powersports dealership owners. No income, growth, or business result is guaranteed. Results vary by dealership, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function gaugeSvg(kind){return `<svg class="gauge-motif ${kind==='title'?'title-gauge':'corner-gauge'}"><use href="#gauge"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Powersports <b>Playbook</b> &middot; Maggie Stevens</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=gaugeSvg(s.arc);
+  else if(s.t==='title') h+=gaugeSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
