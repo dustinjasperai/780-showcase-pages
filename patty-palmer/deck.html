@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Studio Lesson Isn't a School Lesson · Patty Palmer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fdfcf9; --panel:#eaf7ff; --rule:#d7ecf5;
+    --ink:#1b2120; --accent:#04a6e1; --grey:#58595b; --dim:#8a9a9d;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Karla',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Quicksand',sans-serif;font-weight:700;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.9vw;max-width:88%}
+  .t-normal h1{font-size:2.9vw;max-width:84%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.4vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Karla',sans-serif;font-size:1.6vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:4px;border-radius:4px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.05vw;max-width:82%;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.4vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:600;background:#fff}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .crayon-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-crayon{right:6%;bottom:8%;width:15vw}
+  .corner-crayon{right:6%;bottom:7%;width:6.4vw;opacity:.55}
+  .brandline{font-family:'Karla',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600;font-family:'Karla',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700;font-family:'Karla',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Karla',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.6vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6.2vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">Primerry PRO</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- crayon motif: a loose, wobbly crayon-stroke line with a rounded dot, like a child's art-supply scribble, echoing "handmade and playful" over a rigid growth-chart line -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="crayon" viewBox="0 0 260 90">
+  <g fill="none" stroke-width="7" stroke-linecap="round">
+    <path d="M8,55 C35,20 55,80 82,42 C102,14 118,58 142,34 C160,16 178,44 198,30 C214,20 222,36 236,26" stroke="#d7ecf5" opacity="0.9"/>
+    <path d="M160,16 C178,44 198,30 C214,20 222,36 236,26" stroke="#04a6e1" opacity="0.95"/>
+    <circle cx="236" cy="26" r="7" fill="#04a6e1" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Studio Lesson Isn't a School Lesson",sub:'A live masterclass for art studio owners on running a paid, parent-facing class business, and choosing the right kind of art business in the first place.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You planned this week\'s project the same way you would for a classroom.',body:'Most art-class business owners come from teaching backgrounds, so the lesson plan habits carry straight over: pick a project, teach the technique, move to the next one. That works in a school. It is not what makes a paying parent re-enroll their kid next session.'},
+ {t:'dark',title:'A great lesson plan and a great paid class are not the same skill.'},
+
+ {t:'section',idx:'Part One',title:'Why the Classroom Habit Doesn\'t Transfer'},
+ {t:'normal',k:'A lesson plan has no audience',title:'A school lesson answers to a curriculum. A studio lesson answers to a parent who is deciding whether to come back.',body:'Nobody is grading a studio class on standards coverage. They are deciding, session by session, whether it was worth the money and the drive. Pacing, the "wow" moment, and what ends up in a phone camera roll all matter in a way they never did in a classroom.'},
+ {t:'normal',k:'Busy is not the same as built right',title:'A full roster can still be the wrong business if it was never built around a paying customer\'s experience.',body:'Plenty of studio owners are fully booked running what is, underneath, still a classroom curriculum with a price tag on it. It works until enrollment plateaus, and most owners never find the actual lever, because it is not a marketing problem. It is a design problem in the class itself.'},
+ {t:'dark',title:'You do not need a bigger class list. You need a different kind of class.'},
+
+ {t:'section',idx:'Part Two',title:'The Studio Lesson vs. the School Lesson'},
+ {t:'normal',k:'Teaching your own art classes is not the same as teaching in a school',title:'A paid, parent-facing studio lesson gets designed differently, on purpose.',body:'Pacing built for a customer, not a bell schedule. Presentation built for the moment a parent walks in or opens a photo, not just the finished piece. Projects chosen partly for how they photograph and market themselves. This is the distinction most art-business coaching skips entirely, because most coaches never ran the classroom side to see the difference.'},
+ {t:'normal',k:'The 7 types of creative enterprises',title:'Before any of that works, you have to pick the right business model for how you actually want to work.',body:'Studio-based, home-based, online, hybrid, camps-led, party-led, or curriculum-licensing: seven distinct shapes an art-class business can take, matched to your skillset, your background, your available time, and what you actually enjoy. Most owners default into one model instead of choosing it.'},
+ {t:'normal',k:'Where your studio actually fits',title:'The right model still has to fit where you live and how you want to run your life.',body:'A structured pass on matching the business model to your local resources, whether you want this full-time or as a side income, and what a realistic version of "hybrid" looks like for your actual town, not a hypothetical one.'},
+ {t:'dark',title:'Pick the model on purpose. Then design the lesson like a business, not a plan.'},
+
+ {t:'section',idx:'Part Three',title:'Building It Into Your Own Studio'},
+ {t:'normal',k:'What changes first',title:'Owners usually start with the same three things: which model they are actually running, how a single class is paced, and what gets shown after.',body:'Once the model is chosen on purpose and a class is designed to be a performance instead of a plan, the same roster starts re-enrolling for reasons that have nothing to do with running more ads.'},
+ {t:'normal',k:'Why Patty Palmer',title:'She built the classroom-teacher business and the studio-owner business, not just one of them.',body:'Patty founded Deep Space Sparkle and grew The Sparklers\' Club, a membership for classroom art teachers now in its 8th year with over 1,000 members. She has also run Primerry, an at-home art-lesson subscription, alongside Primerry PRO, the business coaching for studio owners. Seeing both sides is exactly what makes the studio-lesson distinction hers to teach.'},
+
+ {t:'section',idx:'Your Next Step',title:'Choose the Model, Then Build the Lesson'},
+ {t:'normal',k:'How Primerry PRO works',title:'The Academy is a business course plus an 8-week cohort community, built around the 7 types and the studio-lesson distinction.',body:'One enrollment window a year, alongside the ongoing Primerry PRO Studio membership: monthly Art Kits, marketing assets, a private community, and monthly group Mentor Calls with Patty for owners who want support between Academy cohorts.'},
+ {t:'cta',title:'Ready to build the business that fits you, and teach the lesson that keeps them coming back?',chips:['Join the Primerry PRO Waitlist','Explore Primerry PRO Studio'],disc:'Educational content for art studio business owners. No income, enrollment, or business result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function crayonSvg(kind){return `<svg class="crayon-motif ${kind==='title'?'title-crayon':'corner-crayon'}"><use href="#crayon"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Primerry <b>PRO</b> &middot; Patty Palmer</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=crayonSvg(s.arc);
+  else if(s.t==='title') h+=crayonSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
