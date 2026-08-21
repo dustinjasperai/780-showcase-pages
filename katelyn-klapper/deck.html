@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>List Development Without Losing Your Independence &middot; IEC Business Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f8f6f2; --panel:#eef1f6; --rule:#dde2ea;
+    --accent:#06039b; --amber:#9b5903;
+    --ink:#201713; --grey:#424243; --dim:#8a8a8a;
+  }
+  html,body{height:100%}
+  body{background:#e4e1db;font-family:'Source Sans Pro',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e4e1db}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .38s ease;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:8% 9% 13% 9%}
+  .slide.active{opacity:1;visibility:visible}
+  .t-normal::after{content:'';position:absolute;left:0;right:0;bottom:0;height:.9vh;background:var(--accent);opacity:.9}
+  .kicker{font-family:'Source Sans Pro',sans-serif;font-size:.92vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Fjalla One',sans-serif;font-weight:400;color:var(--ink);line-height:1.1;letter-spacing:0}
+  .t-title{justify-content:center}
+  .t-title h1{font-size:4.6vw;max-width:82%;color:var(--ink);line-height:1.12}
+  .t-title .sub{font-family:'Source Sans Pro',sans-serif;font-size:1.34vw;color:var(--grey);margin-top:3.4vh;max-width:66%;line-height:1.6;font-weight:400}
+  .t-normal h1{font-size:2.7vw;max-width:82%}
+  .t-normal .body{font-family:'Source Sans Pro',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:2.8vh;max-width:72%;line-height:1.6;font-weight:400}
+  .t-section{background:var(--panel);justify-content:center;border-left:1.6vw solid var(--accent)}
+  .t-section .idx{font-family:'Source Sans Pro',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  .t-section h1{font-size:3.6vw;max-width:78%}
+  .t-hit{background:var(--bg);justify-content:center;align-items:flex-start}
+  .t-hit h1{font-size:2.8vw;max-width:78%;color:var(--accent);line-height:1.18}
+  .t-hit .body{font-family:'Source Sans Pro',sans-serif;font-size:1.24vw;color:var(--grey);margin-top:3vh;max-width:64%;font-weight:400}
+  .t-cta{background:var(--panel);justify-content:center;align-items:center;text-align:center;border-top:1.1vh solid var(--accent)}
+  .t-cta h1{font-size:3.4vw;max-width:80%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Source Sans Pro',sans-serif;border:1.5px solid var(--accent);color:var(--accent);padding:1.2vh 1.8vw;font-size:1.02vw;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .brandline{font-family:'Source Sans Pro',sans-serif;font-size:.98vw;color:var(--grey);margin-top:3.6vh;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:9%;right:9%;bottom:4.6vh;font-family:'Source Sans Pro',sans-serif;font-size:.78vw;color:var(--dim);line-height:1.45;font-weight:400}
+  .t-cta .disc{text-align:center;bottom:3.4vh}
+  .mark{position:absolute;pointer-events:none}
+  .mark.big{right:5%;top:9%;width:11vw;opacity:.85}
+  .mark.small{right:6%;top:11%;width:5.4vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(32,23,19,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:12px;right:18px;font-family:'Source Sans Pro',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Source Sans Pro',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:11px;left:50%;transform:translateX(-50%);font-family:'Source Sans Pro',sans-serif;font-size:10px;color:var(--dim);z-index:20;letter-spacing:.14em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.5vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:2.9vw}
+    .t-title .sub{font-size:3.1vw}.t-section h1{font-size:6.6vw}.t-hit h1{font-size:5.4vw}.t-cta h1{font-size:6.6vw}.chip{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">IEC Business Coaching</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- a checkmark inside an open book, one stroke: the "coursework/instructor" mark -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mark" viewBox="0 0 160 120">
+  <g fill="none" stroke="#06039b" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 30 C48 20 68 26 80 38 C92 26 112 20 140 30 L140 92 C112 82 92 88 80 100 C68 88 48 82 20 92 Z" stroke-width="3.2"/>
+    <path d="M62 54 L74 66 L100 40" stroke-width="5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'List Development Without Losing Your Independence',sub:'How a collaborative model gives independent IEC owners real list-building leverage, without folding into a bigger practice to get it.',brand:true,line:'big'},
+
+ {t:'normal',k:'Who this is for',title:'IEC owners who are good counselors and still building their client list alone.',body:'You know how to counsel a family through admissions. What you have not had is a way to build your list with the kind of firepower a bigger firm has, without becoming an employee of one.'},
+ {t:'normal',k:'What you will walk away with',title:'A real look at collaborative list-development, and where it fits your practice.',body:'What collaborative list building actually looks like session by session, what it does not require you to give up, and how it fits your own business plan.'},
+ {t:'normal',k:'An honest note',title:'This is education, not a promise.',body:'Every practice and every market is different. What matters is the version of this model that fits your own client base and goals.',disc:'Educational content. Nothing here is a promise of income or business results. No outcome is guaranteed and results vary by practice and market.'},
+ {t:'normal',k:'Who is teaching this',title:'Katelyn Klapper, CEP. IEC Business Coaching, a division of College Options.',body:'A Certified Educational Planner who built College Options to capacity within 3 years, then spent the last decade-plus teaching the UC Irvine IEC practicum. She has coached hundreds of independent consultants directly.'},
+
+ {t:'section',idx:'Part One',title:'The Merge-Or-Struggle Trap'},
+ {t:'normal',k:'The real choice most IECs face',title:'List-building leverage usually means joining a bigger firm.',body:'The consultants with real list-development firepower are almost always inside multi-consultant practices. Going solo often means rebuilding that knowledge alone, one family at a time.'},
+ {t:'hit',title:'You should not have to give up your practice to get the resources of a bigger one.',body:'That is the trade most independent IECs think they have to make. It is not the only option.',line:'small'},
+ {t:'normal',k:'What gets lost in a merge',title:'Ownership, pricing control, and the practice you built.',body:'Joining a bigger firm can solve the list-building problem. It also usually means someone else now has a say in your pricing, your clients, and your name.'},
+ {t:'normal',k:'What most owners try instead',title:'Figuring out list development alone, slowly.',body:'Reading, trial and error, and years of trusting your own instincts on what actually works, without anyone who has done it thousands of times checking your work.'},
+
+ {t:'section',idx:'Part Two',title:'The Collaborative List-Development Model'},
+ {t:'normal',k:'How it starts',title:'A 30-minute orientation to real list-development strategy.',body:'Before anything else, an orientation session grounds you in the same basic strategies used across thousands of client relationships and hundreds of college visits.'},
+ {t:'normal',k:'Then five working sessions',title:'Five collaborative 30-minute coaching sessions, over 18 months.',body:'Not a lecture. Working sessions built around your actual list, spaced across multiple student class years so the guidance keeps pace with real cases, not a single snapshot.'},
+ {t:'hit',title:'The firepower of a bigger practice. None of the ownership you would have to give up.',line:'small'},
+ {t:'normal',k:'What it draws on',title:'Experience with thousands of clients, hundreds of college visits.',body:'The guidance behind each session comes from decades of direct admissions work, not a generic playbook written for any consultant in any market.'},
+
+ {t:'section',idx:'Part Three',title:'Where This Fits Your Practice'},
+ {t:'normal',k:'The proof',title:'This is the same Collaborative List-Development Package, not a summary of someone else\'s framework.',body:'The orientation and five-session structure are exactly what Katelyn runs with paying IEC clients today.'},
+ {t:'normal',k:'Beyond the list',title:'The same self-assessment approach applies to pricing, curriculum, and scaling.',body:'Her Personalized Business Consulting track starts with a guided self-assessment before touching budgeting, service design, marketing, hiring, or transition planning, the same collaborative instinct applied to the rest of the business.'},
+ {t:'hit',title:'The goal is not a bigger firm. It is a stronger independent one.',line:'small'},
+
+ {t:'normal',k:'One more thing',title:'You are also learning from someone who has taught the field itself.',body:'As the UC Irvine IEC practicum instructor since 2015, Katelyn has taught business planning, ethics, and counseling skills to hundreds of the consultants now practicing in this space.'},
+ {t:'cta',title:'Build your list. Keep your practice.',chips:['Collaborative List-Development Package','Book a call'],brand:true,disc:'Educational content only. No income or business result is guaranteed. Results vary by practice, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function markSvg(kind){return `<svg class="mark ${kind==='big'?'big':'small'}" viewBox="0 0 160 120"><use href="#mark"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">IEC Business <b>Coaching</b> &middot; Katelyn Klapper, CEP</div>`;
+  }
+  if(s.line) h+=markSvg(s.line);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
