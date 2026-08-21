@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Experience. Data. Relationships. · David Johnson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FBF0E1; --panel:#633761; --rule:#D9C6B4;
+    --ink:#221318; --accent:#633761; --grey:#5a4a52; --dim:#9c8f95;
+    --ink-on-panel:#FBF0E1;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Karla',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Quicksand',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.01em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.6vw;max-width:84%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.35vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Karla',sans-serif;font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Karla',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.8vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark .kicker{color:var(--ink-on-panel);opacity:.75}
+  .t-dark h1{font-size:2.7vw;max-width:80%;color:var(--ink-on-panel)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3vw;max-width:80%;color:var(--ink-on-panel)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--ink-on-panel);color:var(--ink-on-panel);border-radius:6px;padding:1.3vh 1.6vw;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.84vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:rgba(251,240,225,.6)}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .route-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-route{right:6%;bottom:8%;width:13vw}
+  .corner-route{right:6%;bottom:7%;width:5.6vw;opacity:.5}
+  .brandline{font-family:'Karla',sans-serif;font-size:1.18vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Karla',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Karla',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Karla',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Pickleball Consulting Group</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- route motif: three short connected lines converging on one point, echoing three legs of a
+     business (retail, tournament-data, facility) meeting in one advisory practice, rather than a
+     generic growth arrow -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="route" viewBox="0 0 200 220">
+  <g fill="none" stroke="#633761" stroke-width="3" stroke-linecap="round">
+    <path d="M20,190 L100,120" opacity="0.9"/>
+    <path d="M180,190 L100,120" opacity="0.9"/>
+    <path d="M100,120 L100,30" opacity="0.9"/>
+  </g>
+  <g fill="#633761">
+    <circle cx="20" cy="190" r="5"/><circle cx="180" cy="190" r="5"/>
+    <circle cx="100" cy="120" r="6"/><circle cx="100" cy="30" r="5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Experience. Data. Relationships.',sub:'A masterclass for pickleball facility owners built by someone who has built or grown the largest company in two legs of this business, and run a facility in the third, not just one angle.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are getting advice from one angle, and paying for the gap it leaves.',body:'Most facility-owner advice comes from a construction firm that only knows building, or a fellow owner who only knows their own club. What almost nobody advising you has actually done is build the retail side, the tournament and ratings side, and run a facility floor, all three.'},
+ {t:'dark',title:'A great facility built on one angle of advice is still missing the other two.'},
+
+ {t:'section',idx:'Part One',title:'Experience: What Running the Floor Actually Teaches'},
+ {t:'normal',k:'Started at the kitchen table',title:'Pickleball Central started as an idea at the kitchen table in 2006, at the very start of the boom.',body:'My wife Anna and I built it into the largest pickleball e-commerce retailer, then ran it for roughly sixteen years before selling. Watching a market grow from nothing changes what you notice about a facility today, most of what looks new to an owner, I have already seen once.'},
+ {t:'normal',k:'Then I ran a facility myself',title:'Pickleball Station was one of the first dedicated indoor pickleball facilities in the world.',body:'I operated it directly, not as an investor or a consultant watching from outside. What follows on programming, staffing, and day-to-day operations comes from actually carrying those decisions myself, not watching someone else carry them.'},
+ {t:'dark',title:'Most consultants have seen a hundred facilities from the outside. I ran one from the inside.'},
+
+ {t:'section',idx:'Part Two',title:'Data: What Running a Tournament-Software Company Shows'},
+ {t:'normal',k:'Grew the largest tournament and ratings platform',title:'PickleballTournaments.com, which I acquired and grew, is by my own account the largest pickleball tournament-software business.',body:'Running the software that tournaments, ratings, and rankings sit on top of gave me a view of player and event activity across the whole sport, not just one club’s own numbers. A single-facility owner never sees that side of the picture.'},
+ {t:'normal',k:'Why that matters for programming',title:'Facility decisions made on one club’s own numbers alone are decisions made half-blind.',body:'A rough read on where player activity is actually growing, not just where it feels busy inside one building, is the kind of context this angle adds to a programming or expansion conversation.'},
+ {t:'dark',title:'Everyone can read their own court calendar. Almost nobody can read the sport’s.'},
+
+ {t:'section',idx:'Part Three',title:'Relationships: Why the Advisory Practice Is Ongoing, Not a One-Off Audit'},
+ {t:'normal',k:'Board Membership, Marketing, or Partnerships',title:'His current advisory work centers on sitting inside a facility’s leadership, not dropping in once.',body:'A Board Membership engagement or a Marketing or Partnerships relationship means being in the room on an ongoing basis, not handing over a report and moving on to the next client.'},
+ {t:'normal',k:'A Strategy Review that starts the relationship',title:'For owners who want a starting point first, a Strategy Review is the entry point into the same ongoing relationship.',body:'It is built to lead somewhere, into Board Membership or a Marketing or Partnerships engagement, once the review surfaces where the facility actually needs the ongoing help.'},
+
+ {t:'section',idx:'Where This Comes From',title:'Why David Johnson'},
+ {t:'normal',k:'Roughly twenty years across all three legs',title:'Retail, tournament technology, and facility operations, built or run firsthand, not observed.',body:'Co-founded Pickleball Central in 2006, acquired PickleballTournaments.com and Pickleball, Inc. along the way, founded and ran Pickleball Station. Sold the retail and tournament-technology business to Dundon Capital after roughly sixteen years. Seattle-based, back in the industry as a consultant since.'},
+
+ {t:'section',idx:'Your Next Step',title:'Get the Three-Sided View on Your Facility'},
+ {t:'normal',k:'How it works',title:'Start with a conversation, then decide whether a Strategy Review, Board Membership, or a Marketing or Partnerships engagement fits.',body:'There is no fixed package here. The starting point is a direct conversation about what your facility actually needs from someone who has built all three sides of this business.'},
+ {t:'cta',title:'Ready for advice from all three sides, not just one?',chips:['Start the conversation'],disc:'Educational content for pickleball facility owners. No income, growth, or business result is guaranteed. Results vary by facility, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function routeSvg(kind){return `<svg class="route-motif ${kind==='title'?'title-route':'corner-route'}"><use href="#route"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Pickleball Consulting Group &middot; <b>David Johnson</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=routeSvg(s.arc);
+  else if(s.t==='title') h+=routeSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
