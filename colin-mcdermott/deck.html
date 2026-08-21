@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Artificial Printelligence Masterclass &middot; Colin McDermott</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0e1115; --panel:#15181e; --rule:#272c35;
+    --ink:#f2f2f2; --accent:#30b4e8; --grey:#a9b0bc; --dim:#818898; --data:#6ecdf2;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.2;letter-spacing:-.005em}
+  .t-title h1{font-size:3.3vw;max-width:88%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.35vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.65vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .reg-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-reg{right:6%;bottom:8%;width:11vw}
+  .corner-reg{right:6%;bottom:7%;width:4.6vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Inter',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Inter',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Inter',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">The Online Print Coach</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- registration-mark motif: the four-corner print-alignment cross-in-circle used on every real
+     print job, cyan on near-black, echoing the print trade itself over a generic growth-arrow
+     or gauge/dial motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="reg" viewBox="0 0 120 120">
+  <g fill="none" stroke="#30b4e8" stroke-width="3">
+    <circle cx="60" cy="60" r="34"/>
+    <line x1="60" y1="4" x2="60" y2="116"/>
+    <line x1="4" y1="60" x2="116" y2="60"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Artificial Printelligence Masterclass',sub:'A masterclass for print, signage, garment decoration, promotional, and labels &amp; packaging shop owners on turning six blind spots into a measured system, not a set of guesses passed down from whoever ran the shop before you.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are quoting the same kind of job three different ways and hoping one of the numbers is right.',body:'Most print shop owners learned pricing, sales, and hiring the way the last owner did it, by feel. That works until the market shifts, a big client leaves, or a hire does not work out, and there is no system underneath to explain why.'},
+ {t:'dark',title:'Feel is not a pricing strategy. It is a guess with an invoice number on it.'},
+
+ {t:'section',idx:'Part One',title:'Where the Money Actually Leaks'},
+ {t:'normal',k:'A price set once, never tested',title:'Most shops set a price years ago and have never deliberately tested it since, even as costs, competitors, and the work itself have all changed.',body:'Underpricing does not announce itself. It just shows up as thinner margins, busier weeks that somehow do not translate into more profit, and an owner who assumes that is just what the print business is like.'},
+ {t:'normal',k:'Six blind spots, not one problem',title:'Visibility, Automation, Intelligence, Personalisation, Authority, Systems. Most shops are weak in more than one of these at the same time.',body:'A shop can be great at production and invisible online. Great at sales and running on paper-based systems that nobody else in the shop understands. Each gap compounds the others, which is why a single fix, a new website or one sales training, rarely moves the number on its own.'},
+ {t:'dark',title:'You do not have a marketing problem or a pricing problem. You have six blind spots and no way to see them at once.'},
+
+ {t:'section',idx:'Part Two',title:'The Artificial Printelligence Framework'},
+ {t:'normal',k:'Visibility &amp; Authority',title:'Being findable by the right buyer, and being the shop they trust once they find you.',body:'Print buyers now research before they call. A shop with no visible authority in its own specialty, whether that is signage, garment decoration, or packaging, loses jobs it never even gets a chance to quote.'},
+ {t:'normal',k:'Automation &amp; Systems',title:'The parts of running a print shop that should not depend on one person remembering to do them.',body:'Quoting, follow-up, and production handoffs that live in one owner’s head do not scale and do not survive a hire, a holiday, or a busy week. Automation and systems turn those into something the whole shop can run.'},
+ {t:'normal',k:'Intelligence &amp; Personalisation',title:'Using the shop’s own data to make decisions, and treating different clients differently on purpose.',body:'Most shops quote every client the same way regardless of order history, margin, or fit. Intelligence means knowing which clients and which jobs are actually worth chasing. Personalisation means acting on that instead of treating every enquiry the same.'},
+ {t:'dark',title:'Six pillars, one connected system, not six separate problems to solve alone.'},
+
+ {t:'section',idx:'Part Three',title:'Proof It Works'},
+ {t:'normal',k:'Price-elasticity testing',title:'One shop raised prices 12.5% with zero client pushback.',body:'Instead of guessing at a single increase and hoping, this is a structured, incremental test: raise, watch the response, adjust. Most owners are more afraid of a price increase than their clients actually are.'},
+ {t:'normal',k:'The dormant-customer reactivation system',title:'Five calls a day to your own past clients added 35% in revenue for one shop, before a single new lead came in.',body:'Every past client gets a call at least once every three months. It is not a new marketing channel, it is a shop picking up business that already trusts it and has simply not heard from it in a while.'},
+ {t:'normal',k:'The Leading Energy Profile',title:'Most print-shop hiring mistakes are not skill mistakes. They are communication mistakes nobody diagnosed.',body:'A licensed psychometric tool used to understand how an owner and a team actually communicate, so hiring and team friction get addressed as a specific, diagnosable problem instead of just "bad luck with staff."'},
+ {t:'dark',title:'Proven inside real print shops, not a theory on a slide.'},
+
+ {t:'section',idx:'Part Four',title:'Why Colin McDermott'},
+ {t:'normal',k:'Why Colin',title:'He built, lost, and rebuilt his own print business before he ever coached one.',body:'25+ years inside the print industry: starting, scaling, and franchising his own print business across 12 UK locations, including losing and rebuilding it along the way. Fully certified with the World Association of Business Coaches, and a licensed practitioner of the Leading Energy Profile. Regular speaker at The Print &amp; Show, FESPA Global, PRINTING United, and Dscoop Edge.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Blind Spots'},
+ {t:'normal',k:'How it works',title:'A free discovery call matches you to the right level of support, whether that is the Print Mastermind community or 1-to-1 coaching.',body:'Every plan starts by finding out which of the six pillars is actually costing the shop the most, then building the pricing, sales, and systems fix around that, not a generic checklist.'},
+ {t:'cta',title:'Ready to see where your shop is actually leaking margin?',chips:['Book the Free Discovery Call'],disc:'Educational content for print, signage, garment decoration, promotional, and labels &amp; packaging business owners. No income, growth, or business result is guaranteed. Results vary by shop, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function regSvg(kind){return `<svg class="reg-motif ${kind==='title'?'title-reg':'corner-reg'}"><use href="#reg"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Online Print Coach &middot; <b>Print Mastermind</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=regSvg(s.arc);
+  else if(s.t==='title') h+=regSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
