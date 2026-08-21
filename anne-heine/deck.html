@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Clarity System · Anne Heine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1a1a1a; --panel:#221f1c; --rule:#3a3632;
+    --ink:#f5f3ef; --accent:#4aada4; --grey:#b8b4ae; --dim:#7d7972; --data:#ffc124;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Jost',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'EB Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.6vw;max-width:84%}
+  .t-normal .body{font-family:'Jost',sans-serif;font-size:1.35vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Jost',sans-serif;font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:82%;font-style:italic;color:var(--ink)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3vw;max-width:80%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--ink);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .step-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-step{right:6%;bottom:8%;width:16vw}
+  .corner-step{right:6%;bottom:7%;width:6.4vw;opacity:.5}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Jost',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Jost',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Jost',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">College Made Clear</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- stepped-line motif: three connected nodes rising left to right, echoing Anne's own named
+     3-stage process (Connection, Exploration, Application & Decision) over a generic
+     growth-arrow or dial -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="steps" viewBox="0 0 260 140">
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M20,110 H90 V70 H170 V30 H240" stroke="#3a3632" opacity="0.9"/>
+    <circle cx="20" cy="110" r="7" fill="#4aada4" stroke="none"/>
+    <circle cx="90" cy="70" r="7" fill="#4aada4" stroke="none"/>
+    <circle cx="170" cy="30" r="7" fill="#ffc124" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Clarity System',sub:'A masterclass for solo Independent Educational Consultants on running your practice on a documented, staged system, not on instinct and inbox triage.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You built a practice around deeply personal, case-by-case work, and the business itself never got a system.',body:'Every student is different, every family situation is different, and that variability is real. But somewhere along the way, "every case is different" became the excuse for the business side never getting documented, repeatable structure of its own.'},
+ {t:'dark',title:'More hours is not the same thing as more leverage.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Means More Hours, Not More Leverage'},
+ {t:'normal',k:'The reactive default',title:'Without a documented business process, the owner becomes the bottleneck for every decision, every client, every season.',body:'New inquiries get handled however they get handled that week. Pricing conversations happen ad hoc. There is no client experience that runs the same way twice, so nothing about the practice can scale beyond what one person can personally hold in their head.'},
+ {t:'normal',k:'Clarity for clients, chaos for the owner',title:'The paradox: IECs are hired to bring order to a confusing process for families, while running their own business with none of that same order.',body:'The skill that makes the client-facing work excellent, organizing complexity into a clear path forward, rarely gets pointed at the business itself. It stays a client-facing skill instead of becoming the operating system for the practice.'},
+ {t:'dark',title:'The same discipline that serves your clients can run your business too.'},
+
+ {t:'section',idx:'Part Two',title:'The Clarity System'},
+ {t:'normal',k:'Stage One: Connection',title:'Every engagement starts with a real assessment before any advice gets given.',body:'In the client-facing version of this, it means reviewing transcripts, evaluating strengths, and setting objectives before recommending a single school. Applied to the business itself, it means a documented intake and positioning step for every new business decision, not a different starting point each time.'},
+ {t:'normal',k:'Stage Two: Exploration',title:'Research and discovery come before commitment, every time, no exceptions.',body:'On the client side, this is building a targeted list matched to a real profile. On the business side, it is the discipline of testing and researching a pricing change, a new service line, or a marketing move before committing the whole practice to it.'},
+ {t:'normal',k:'Stage Three: Application & Decision',title:'Execution runs through a documented system, not memory.',body:'A proprietary client portal turns the final stage into something trackable and repeatable rather than something the owner has to hold in their head. The same principle, an actual documented system for execution, is what most solo IEC practices are missing on their own business side.'},
+ {t:'dark',title:'"Clarity is my superpower." It is a method, not a slogan.'},
+
+ {t:'section',idx:'Part Three',title:'Why This Comes From an Operator, Not Just a Counselor'},
+ {t:'normal',k:'Two decades before the first client',title:'Two decades running strategic marketing and business development for high-tech consumer businesses, long before founding an IEC practice.',body:'A B.S. in Foreign Service, International Economics & Finance from Georgetown, and an M.B.A. from the Robert H. Smith School of Business, University of Maryland. The instinct for documented process and clear systems came from corporate strategy work, then got applied to education.'},
+ {t:'normal',k:'A business that fits your life',title:'The goal is not growth at any cost. It is a practice with real structure, so it does not run the owner into the ground.',body:'Solo IEC work is fulfilling and exciting, and it is also lonely, draining, and confusing to run alone. A documented system is what makes it possible to have a thriving practice and an actual life outside of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring the System to Your Own Practice'},
+ {t:'normal',k:'How it works',title:'A free initial consultation is the starting point. From there, coaching is customized 1:1, built around your specific practice.',body:'This is not a group program or a certification course. It is personalized work on your business, using the same documented, staged process this masterclass walks through, applied to your practice instead of a client.'},
+ {t:'cta',title:'Ready to run your practice on a system instead of instinct?',chips:['Book Your Free Consultation'],disc:'Educational content for independent educational consultants. No income, growth, or business result is guaranteed. Results vary by practice and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function stepSvg(kind){return `<svg class="step-motif ${kind==='title'?'title-step':'corner-step'}"><use href="#steps"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">College Made <b>Clear</b> &middot; Anne Heine</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=stepSvg(s.arc);
+  else if(s.t==='title') h+=stepSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
