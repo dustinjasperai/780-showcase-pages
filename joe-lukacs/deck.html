@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Advisor Operating System, Coach Joe Lukacs · The Magellan Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#02202C; --panel:#0B2E3B; --rule:#1D3E4A;
+    --teal:#5BB0CE; --gold:#E6C84F; --chalk:#F4F1E9; --grey:#9DB3BD; --dim:#5C7480;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Archivo',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .disp{font-family:'Fraunces',Georgia,serif}
+  .kicker{font-family:'Archivo',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:2.4vh}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.08;letter-spacing:-.01em}
+  .t-title h1{font-size:5vw;font-weight:600}
+  .t-normal h1{font-size:3.4vw;max-width:86%}
+  .t-normal .body{font-family:'Archivo',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.5;font-weight:300}
+  .sub{font-family:'Archivo',sans-serif;font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.44;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Fraunces',serif;font-size:1.5vw;font-weight:600;color:var(--gold);margin-bottom:2vh;letter-spacing:.1em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:90%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--teal),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#0B2E3B 0%,#02161E 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:88%;font-weight:500;color:#EAF3F5;font-style:italic}
+  .t-flow .kicker{text-align:center}
+  .t-flow h1{font-size:2.9vw;text-align:center;margin-bottom:4.6vh}
+  .flowrow{display:flex;gap:1.1vw;justify-content:center;flex-wrap:wrap}
+  .flowcard{background:var(--panel);border:1px solid var(--rule);border-radius:.7vw;padding:2.4vh 1.2vw;width:12.4vw;min-height:15vh;display:flex;flex-direction:column;gap:1vh}
+  .flowcard .n{font-family:'Fraunces',serif;font-size:2vw;font-weight:700;color:var(--teal);line-height:1}
+  .flowcard .l{font-family:'Archivo',sans-serif;font-size:1.12vw;font-weight:600;color:var(--chalk);line-height:1.25}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#0C323F 0%,#02161E 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:86%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--teal);color:#BFE3EF;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Archivo',sans-serif;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Archivo',sans-serif;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frames{position:absolute;pointer-events:none;opacity:.92}
+  .title-frames{right:7%;bottom:8%;width:26vw}
+  .corner-frames{right:5.5%;bottom:7%;width:12vw;opacity:.5}
+  .brandline{font-family:'Archivo',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--teal);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--teal);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:5.8vw}.t-flow h1{font-size:5vw}
+    .flowcard{width:26vw}.flowcard .n{font-size:4vw}.flowcard .l{font-size:2.3vw}.t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 24</div>
+<div class="brand-foot">The Magellan Network</div>
+<div class="hint" id="hint">→ click or arrow keys</div>
+
+<!-- navigator's-compass motif: today → 10-year vision, charted -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frames" viewBox="0 0 260 150">
+  <g fill="none" stroke-linecap="round">
+    <!-- charted course arriving from the lower-left -->
+    <path d="M20 134 Q88 122 118 94 T186 62" stroke="#9DB3BD" stroke-width="1.6" stroke-dasharray="2 6" opacity="0.6"/>
+    <circle cx="20" cy="134" r="3.6" fill="#5BB0CE" stroke="none"/>
+    <!-- compass ring -->
+    <circle cx="190" cy="62" r="45" stroke="#3A5A66" stroke-width="1.6"/>
+    <circle cx="190" cy="62" r="34" stroke="#3A5A66" stroke-width="1" opacity="0.55"/>
+    <!-- 8-point rose -->
+    <path d="M190 62 L204 48 L190 24 L176 48 Z" fill="#E6C84F" opacity="0.9" stroke="none"/>
+    <path d="M190 62 L204 76 L190 100 L176 76 Z" fill="#5BB0CE" opacity="0.92" stroke="none"/>
+    <path d="M190 62 L176 48 L152 62 L176 76 Z" fill="#9DB3BD" opacity="0.4" stroke="none"/>
+    <path d="M190 62 L204 48 L228 62 L204 76 Z" fill="#9DB3BD" opacity="0.55" stroke="none"/>
+    <circle cx="190" cy="62" r="4.2" fill="#F4F1E9" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Advisor Operating System',sub:'Scale your practice, protect your energy, and build your ideal life, live. The daily system behind seven- and eight-figure advisors.',brand:true,frames:'title'},
+ {t:'normal',k:'Who this is for',title:'Advisors who’ve built a real practice, and are quietly running out of room to grow it.'},
+ {t:'normal',k:'What you’ll walk away with',title:'The daily operating system, and the one part of your day that’s capping your growth.',body:'From the first hour of the morning to a ten-year vision, mapped as one system.'},
+ {t:'normal',k:'Who’s teaching this',title:'Coach Joe Lukacs, advisors only, since 1994.',body:'Founder of The Magellan Network & MasterMind. Author of Practice Power. Named a top financial-services coach by Registered Rep / WealthManagement.'},
+
+ {t:'section',idx:'Part One',title:'The Real Bottleneck'},
+ {t:'normal',k:'The problem',title:'You built a plan for every client. You never built one for yourself.'},
+ {t:'dark',title:'You don’t have a time problem. You have an operating-system problem.'},
+
+ {t:'section',idx:'Part Two',title:'The Morning Success Ritual'},
+ {t:'normal',k:'The ritual',title:'How the top operators start the day, on purpose.'},
+ {t:'dark',title:'The day is either designed, or it’s defense. You choose before 9am.'},
+
+ {t:'section',idx:'Part Three',title:'The 10X Daily Game Plan'},
+ {t:'normal',k:'The game plan',title:'Run the day instead of reacting to it.',body:'A short, repeatable structure that puts the few decisive moves first.'},
+
+ {t:'section',idx:'Part Four',title:'Score Your Book'},
+ {t:'flow',k:'The 3+1 client scoring',title:'Not every client belongs in the same seat',items:[
+   {n:'L',l:'Likable'},{n:'C',l:'Coachable'},{n:'P',l:'Profitable'},{n:'+1',l:'Leverageable'}]},
+ {t:'dark',title:'Not every client deserves a seat on your book. Scoring is how you decide on purpose.'},
+
+ {t:'section',idx:'Part Five',title:'From Day to Decade'},
+   {n:'01',l:'The Day'},{n:'02',l:'The Week'},{n:'03',l:'The Quarter'},
+   {n:'04',l:'The Year'},{n:'05',l:'The 10-Year Vision'}]},
+ {t:'normal',k:'The 10-3-1',title:'A year of goals, turned into this week’s three moves.',body:'Ten goals, three priorities, one next action, so the plan touches today.'},
+ {t:'normal',k:'Magellan Vision 10X',title:'Plot the practice from today to a ten-year vision.',body:'A destination the daily system is actually steering toward.'},
+
+ {t:'section',idx:'Part Six',title:'Scaling Without Burning Out'},
+ {t:'dark',title:'Elite athletes have a full team. Why are you scaling your practice alone?'},
+
+ {t:'section',idx:'Part Seven',title:'Your Next Step'},
+ {t:'normal',k:'Homework',title:'Start your free 30-day Magellan Network trial.',body:'Less than three minutes, no credit card, the system, in your hands this week.'},
+ {t:'normal',k:'Talk it through',title:'A Discovery Zoom with Coach Joe.',body:'Your practice, your day, your ten-year vision. No cookie-cutter program.'},
+ {t:'cta',title:'Scale your practice. Protect your energy. Build your ideal life.',chips:['Start the free trial','Book a Discovery Zoom'],disc:'Coaching and training are educational and are not a guarantee of revenue or results. The presenter’s figures are his own. Outcomes vary.'},
+];
+
+const deck=document.getElementById('deck');
+function frames(kind){return `<svg class="frames ${kind==='title'?'title-frames':'corner-frames'}"><use href="#frames"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx disp">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='flow'){
+    h+=`<h1>${s.title}</h1><div class="flowrow">`+s.items.map(it=>`<div class="flowcard"><div class="n">${it.n}</div><div class="l">${it.l}</div></div>`).join('')+`</div>`;
+  }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Magellan <b>Network</b> · Coach Joe Lukacs</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frames) h+=frames(s.frames);
+  else if(s.t==='title') h+=frames('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
