@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Exit-Ready Property Management Company · Bob Preston</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette derived from the Property Management Brainstorm podcast art (see
+       01-deep-research.md ## Palette): white-dominant ground, one blue family. */
+    --bg:#f7f9fb; --panel:#0d2240; --rule:#dbe4ec;
+    --ink:#0d2240; --accent:#0068ad; --sky:#1ea5e0; --grey:#4a5a72; --dim:#8494aa;
+  }
+  html,body{height:100%}
+  body{background:#0a1626;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a1626}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'IBM Plex Serif',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.22;letter-spacing:-.005em}
+  .t-title h1{font-size:3.5vw;max-width:88%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:82%;font-style:italic;color:#f2f7fb}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:80%;color:#f2f7fb}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--sky);color:#f2f7fb;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#9db3c8}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .door-motif{position:absolute;pointer-events:none}
+  .title-doors{right:6%;bottom:9%;width:16vw;opacity:.95}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(13,34,64,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Property Management Brainstorm</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- door-grid motif: a ledger row of doors under management, one lit in the brand blue —
+     Bob's world is doors, fees, and portfolios, and the one accent door is the company a
+     buyer actually wants. Drawn from the podcast art's blue family, not a stock house. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="doors" viewBox="0 0 260 110">
+  <g fill="none" stroke-width="2.5">
+    <rect x="10" y="30" width="34" height="70" stroke="#dbe4ec"/>
+    <rect x="58" y="30" width="34" height="70" stroke="#dbe4ec"/>
+    <rect x="106" y="30" width="34" height="70" stroke="#0068ad" fill="#0068ad" fill-opacity="0.08"/>
+    <rect x="154" y="30" width="34" height="70" stroke="#dbe4ec"/>
+    <rect x="202" y="30" width="34" height="70" stroke="#dbe4ec"/>
+    <circle cx="133" cy="66" r="3" fill="#1ea5e0" stroke="none"/>
+    <line x1="10" y1="14" x2="236" y2="14" stroke="#dbe4ec"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Exit-Ready Property Management Company',sub:'A masterclass for property management company owners on building a company a buyer would pay for, whether or not you ever plan to sell it.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are adding doors and defending fees, inside a company that cannot run a week without you.',body:'Most growth advice sold to property management owners is about the next door: marketing, BDM tactics, lead flow. Meanwhile the company itself, the contracts, the fee schedule, the processes, the team, runs however it has always run. That is the part a buyer reads first, and it is the part that decides what the whole thing is worth.'},
+ {t:'dark',title:'A company that needs you every day is a job. A buyer pays for a company that does not.'},
+
+ {t:'section',idx:'Part One',title:'What a Buyer Actually Reads'},
+ {t:'normal',k:'The diligence lens',title:'An acquirer does not buy your door count. They read what sits underneath it.',body:'Management contract quality. Owner churn and how long clients actually stay. What the fee schedule really collects per door, not what the rate card says. Whether the operation runs on documented process or on the owner’s memory. Bob has sat on both sides of that reading: he sold his own company to PURE Property Management, then spent the years after integrating acquired portfolios as a regional executive.'},
+ {t:'normal',k:'The owner-dependence test',title:'Who signs the new management agreement? Who handles the angry owner? Who decides the fee exception?',body:'If every answer is you, the company’s value walks out the door every evening at whatever time you leave. Owner-dependence is the single discount a buyer applies hardest, and it is also the thing that makes the company exhausting to own in the meantime.'},
+ {t:'dark',title:'Run it like it is for sale, even if you never sell. What a buyer pays for is exactly what makes it better to own.'},
+
+ {t:'section',idx:'Part Two',title:'The Exit-Ready Operating Frame'},
+ {t:'normal',k:'Revenue quality',title:'Recurring revenue a buyer trusts: fee structure, contract terms, and client retention working as one system.',body:'Drawn from Bob’s consulting practice areas: fee optimization, so each door earns what the market allows instead of what a years-old rate card collects. Contract quality, so the revenue survives scrutiny. Retention, because a rent roll that churns is a rent roll a buyer discounts.'},
+ {t:'normal',k:'Operational maturity',title:'Documented process, staffing that fits the portfolio, and technology doing the repetitive work.',body:'Systematization is a running theme across Bob’s podcast and consulting: operations that hold up when the person who "just knows how we do it" is on vacation. Staffing models matched to doors under management. Software and CRM actually integrated instead of half-adopted.'},
+ {t:'normal',k:'Financial discipline',title:'Budgeting, forecasting, and books a stranger could read.',body:'Planning and forecasting is one of Bob’s core consulting areas for a reason: a company that can predict its own next quarter is a company a buyer can price, and a company an owner can steer. Clean financials are not an exit task. They are an operating habit.'},
+ {t:'normal',k:'Team and culture',title:'A team that can be trained, measured, and kept.',body:'Bob’s practice includes structured workshops and training sessions for property management staff, and his Hot Topics series keeps returning to staffing, team performance, and culture. The pattern is consistent: companies with a trained, stable team keep their clients longer and lean on the owner less.'},
+ {t:'dark',title:'None of this requires selling. All of it raises what the company is worth, and lowers what it costs you to run.'},
+
+ {t:'section',idx:'Part Three',title:'The Arc, Lived Once Already'},
+ {t:'normal',k:'Built, sold, then the other side',title:'North County Property Group: founded, grown into a leading San Diego management company, sold to PURE Property Management in 2022.',body:'After the sale Bob stayed on as Western Regional Director, responsible for 28 branch offices and over 12,000 doors. Building a company to an exit is one education. Integrating other people’s companies afterward, seeing exactly which ones were ready and which ones were not, is the second one. This masterclass is built from both.'},
+ {t:'normal',k:'Why Bob Preston',title:'Credentialed on the industry’s own terms, and teaching in public for 160 episodes.',body:'NARPM RMP® and MPM® designations, with the company-level CRMC®. President of NARPM’s California chapter, 2020 to 2023. Host of Property Management Brainstorm, ranked in the top 10% of property management podcasts globally by Listen Score. Before property management: Chief Marketing Officer at two publicly traded technology companies.'},
+
+ {t:'section',idx:'Your Next Step',title:'Read Your Company Like a Buyer Would'},
+ {t:'normal',k:'How it works',title:'A free initial consultation looks at your company through the exit-ready frame and names the gaps worth closing first.',body:'From there, engagements are scoped to the company: consulting, coaching, or mentoring across strategy, operations, financials, and team, the same practice areas this masterclass is drawn from.'},
+ {t:'cta',title:'Want to know what a buyer would see in your company today?',chips:['Schedule a Free Consultation'],disc:'Educational content for property management company owners. No income, valuation, or business result is guaranteed. Results vary by company, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function doorSvg(){return `<svg class="door-motif title-doors"><use href="#doors"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Property Management <b>Brainstorm</b> &middot; Bob Preston</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=doorSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
