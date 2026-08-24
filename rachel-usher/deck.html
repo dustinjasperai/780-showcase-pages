@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Usher Standard &middot; The Business of Interiors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf7f3; --panel:#e9e2df; --rule:#d9d0c9;
+    --ink:#171310; --accent:#000000; --accent2:#a89a8c; --dim:#857c72;
+  }
+  html,body{height:100%}
+  body{background:#e2dbd5;font-family:'PT Serif',Georgia,serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e2dbd5}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9.5% 12% 8% 12%}
+  .slide.active{opacity:1;visibility:visible}
+  .hairline{position:absolute;left:12%;right:12%;top:7.2%;height:1px;background:var(--rule)}
+  .runhead{position:absolute;left:12%;top:4.4%;font-size:.86vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+  .runfoot{position:absolute;right:12%;top:4.4%;font-size:.86vw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .kicker{font-size:.98vw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Gilda Display',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.22;letter-spacing:-.004em}
+  .t-title h1{font-size:3.9vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:86%}
+  .t-normal .body{font-family:'PT Serif',serif;font-size:1.3vw;color:#3f3934;margin-top:2.8vh;max-width:80%;line-height:1.66;font-weight:400}
+  .sub{font-family:'PT Serif',serif;font-size:1.48vw;color:#3f3934;margin-top:3.2vh;max-width:78%;line-height:1.56;font-weight:400}
+  .t-section{background:var(--panel);justify-content:center}
+  .t-section .idx{font-family:'PT Serif',serif;font-size:1vw;font-weight:700;color:var(--dim);margin-bottom:2.2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:3.4vw;max-width:88%;font-style:italic}
+  .t-section .bar{width:9vw;height:2px;background:var(--accent);margin-top:3.6vh}
+  .t-section .hairline{background:rgba(0,0,0,.1)}
+  .t-section .runhead{color:#8a8078}.t-section .runfoot{color:#171310}
+  .t-dark{background:var(--panel);align-items:flex-start}
+  .t-dark h1{font-size:2.75vw;max-width:88%;color:var(--ink);font-style:italic}
+  .t-dark .hairline{background:rgba(0,0,0,.12)}
+  .t-dark .runhead{color:#8a8078}.t-dark .runfoot{color:#171310}
+  .t-dark .attr{font-family:'PT Serif',serif;font-size:1.05vw;color:#544c45;margin-top:3vh;letter-spacing:.02em;font-style:italic}
+  .t-cta{background:var(--panel)}
+  .t-cta h1{font-size:3vw;max-width:88%;color:var(--ink)}
+  .t-cta .hairline{background:rgba(0,0,0,.12)}
+  .t-cta .runhead{color:#8a8078}.t-cta .runfoot{color:#171310}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1px solid rgba(23,19,16,.4);color:var(--ink);padding:1.2vh 1.5vw;font-size:1.05vw;font-weight:700;font-family:'PT Serif',serif}
+  .disc{position:absolute;left:12%;right:12%;bottom:4vh;font-size:.8vw;color:var(--dim);line-height:1.5;max-width:76%;font-family:'PT Serif',serif}
+  .t-normal .disc,.t-title .disc{color:var(--dim)}
+  .brandline{font-family:'PT Serif',serif;font-size:1.1vw;color:#3f3934;margin-top:3.6vh;font-weight:700;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none;opacity:.85}
+  .motif-title{right:8%;bottom:8%;width:20vw}
+  .motif-corner{right:9%;bottom:7%;width:8vw;opacity:.55}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(23,19,16,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:#8a8078;z-index:20;font-weight:700;font-family:'PT Serif',serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8a8078;z-index:20;font-weight:700;font-family:'PT Serif',serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#8a8078;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'PT Serif',serif}
+  @media(max-width:640px){
+    .slide{padding:13% 8% 11% 8%}.hairline{left:8%;right:8%}.runhead{left:8%}.runfoot{right:8%}
+    .kicker{font-size:2.4vw}.runhead,.runfoot{font-size:2vw}
+    .t-title h1{font-size:7vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.6vw}.chip{font-size:2.5vw}.disc{left:8%;right:8%;font-size:1.9vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Business of Interiors</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the ground line: building a pricing model on checked, solid ground -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="groundline" viewBox="0 0 260 90">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 70 H 220" stroke="#000000" opacity="0.85"/>
+    <path d="M60 70 V46 L84 46 L84 70" stroke="#000000" opacity="0.9"/>
+    <circle cx="84" cy="34" r="6" fill="none" stroke="#a89a8c" opacity="0.8"/>
+    <path d="M84 34 V20" stroke="#a89a8c" opacity="0.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',rh:'The Business of Interiors',rf:'Masterclass',title:'The Usher Standard',sub:'How to rebuild your studio’s services and pricing on solid ground, so growth stops depending on saying yes to every client that asks.',brand:true,motif:'title'},
+ {t:'normal',rh:'Start here',rf:'01',k:'Who this is for',title:'Fully booked. Still bracing for the next invoice.',body:'The enquiries keep coming. The portfolio looks the part. And the number left over at the end of a project still depends on nobody asking for anything extra. That is not a sales problem. It is a structure problem.'},
+ {t:'dark',rh:'Reframe',rf:'02',title:'You are not disorganized. You are building on ground nobody ever checked.'},
+
+ {t:'section',rh:'Part one',rf:'03',idx:'Part one',title:'The Trap: Growing By Guesswork'},
+ {t:'normal',rh:'Part one',rf:'04',k:'The obvious fix',title:'Raise the rate card. It buys you a season, then the gap comes back.',body:'A higher day rate is a reasonable move. It is not a structure. Without something underneath it, the same gaps that ate the old rate start eating the new one within a year.'},
+ {t:'normal',rh:'Part one',rf:'05',k:'Why it stalls',title:'A rate copied from someone else’s studio is not a rate built for yours.',body:'Pricing has to start from your own numbers and your own goals, not a guess at what a competitor charges. A figure borrowed from another studio rarely survives contact with your actual overhead.'},
+ {t:'normal',rh:'Part one',rf:'06',k:'Where it actually breaks',title:'Nobody ever audited the business side.',body:'Finances, systems, team, risk. Most studios can describe their design process in detail and could not tell you, room by room, whether the last project actually made money.'},
+ {t:'dark',rh:'Reframe',rf:'07',title:'A pricing model is not a rate card. It is what protects the number you already quoted.'},
+
+ {t:'section',rh:'Part two',rf:'08',idx:'Part two',title:'The Usher Standard'},
+ {t:'normal',rh:'Part two',rf:'09',k:'The Download',title:'Start with an honest audit, not a guess.',body:'A structured look at finances, systems, team and risk, resolving into one clear picture of where the studio actually stands before anything gets rebuilt.'},
+ {t:'normal',rh:'Part two',rf:'10',k:'The Engine Room',title:'Rebuild services and pricing so they are logical, defensible, and actually profitable.',body:'The Usher Standard applies directly to your own numbers, not a template. The output is a services and pricing model built to be used on the next quote, not filed away.'},
+ {t:'normal',rh:'Part two',rf:'11',k:'Operations',title:'Streamline what is underneath the pricing.',body:'Growth without a system behind it just means more chaos at a bigger size. The operations work sits directly under the new pricing model, not bolted on after it.'},
+ {t:'dark',rh:'Reframe',rf:'12',title:'Build the structure in before you need it. Not after you have already outgrown the last one.'},
+
+ {t:'section',rh:'Part three',rf:'13',idx:'Part three',title:'What Changes Once It Holds'},
+ {t:'normal',rh:'Part three',rf:'14',k:'The Client Experience',title:'Attract better-fit clients, on purpose.',body:'Once the pricing and services are rebuilt, the acquisition and client journey get redesigned around them, so the studio stops taking on work it was never structured to profit from.'},
+ {t:'normal',rh:'Part three',rf:'15',k:'Protection',title:'Contracts and risk work that hold once a project starts.',body:'The number gets protected once work is underway, not discovered as a shortfall at the very end. Risk gets named and mitigated before it becomes a problem.'},
+ {t:'normal',rh:'Part three',rf:'16',k:'Why listen to her',title:'She has run the studio, not just coached one.',body:'Rachel Usher founded Usher & Co in 2012 and built it into an award-winning studio handling significant luxury projects. In 2023 she founded The Business of Interiors because the business side of running a design practice had been shrouded in secrecy for too long.'},
+ {t:'dark',rh:'Reframe',rf:'17',title:'The studio built on solid ground keeps what it earns. The studio without one just grows into the same gap.'},
+
+ {t:'section',rh:'Next',rf:'18',idx:'Your next step',title:'Build A Studio That Holds'},
+ {t:'cta',rh:'Next',rf:'19',title:'Ready to stop guessing at your own numbers?',chips:['The Principals Programme','Book a Strategic Session','Join the Community Summit'],disc:'Educational content for interior design studio founders. Nothing here is a guarantee of income, revenue, growth or business results. Results vary by studio, market and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'motif-title':'motif-corner'}" viewBox="0 0 260 90"><use href="#groundline"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h=`<div class="runhead">${s.rh||''}</div><div class="runfoot">${s.rf||''}</div><div class="hairline"></div>`;
+  if(s.t==='section'){ h+=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="bar"></div>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.attr) h+=`<div class="attr">${s.attr}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Business <b>of Interiors</b> &middot; Rachel Usher</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='section') h+=motif('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
