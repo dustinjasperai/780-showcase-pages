@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Read the Athlete Before You Program Them · Joel Smith</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f6f3; --panel:#eeece7; --rule:#ddd9d0;
+    --acc:#d92d32; --idx:#a63a2f; --ink:#111111; --grey:#4a4a48; --dim:#8a857c;
+  }
+  html,body{height:100%}
+  body{background:#0d0d0d;font-family:'Poppins',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d0d0d}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;color:var(--ink);line-height:1.08;letter-spacing:.005em}
+  .t-title h1{font-size:5.2vw;max-width:88%}
+  .t-normal h1{font-size:3.7vw;max-width:84%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:5.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--ink);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Poppins',sans-serif;font-style:italic;font-weight:400;font-size:2.7vw;max-width:78%;color:#f7f6f3;line-height:1.35}
+  .t-cta{background:var(--ink);align-items:center;text-align:center}
+  .t-cta h1{font-family:'Bebas Neue',sans-serif;font-size:4.4vw;max-width:82%;color:#f7f6f3}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#f7f6f3;border-radius:100px;padding:1.3vh 1.6vw;font-family:'Poppins',sans-serif;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Poppins',sans-serif;font-size:.92vw;color:#a8a39a;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .step-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-step{right:7.5%;bottom:8%;width:20vw}
+  .corner-step{right:6%;bottom:7.5%;width:9vw;opacity:.5}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.14em;color:#8a857c;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8a857c;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Poppins',sans-serif;font-size:11px;color:#8a857c;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Just Fly Sports Performance</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- step motif: an ascending velocity/jump-curve line, three risers -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="step" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="128" x2="246" y2="128" stroke="#8a857c" opacity="0.3"/>
+    <path d="M28 118 H86 V88 H144 V56 H202 V24" stroke="#d92d32" opacity="0.9"/>
+    <circle cx="202" cy="24" r="6" fill="none" stroke="#d92d32" stroke-width="3.2"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Read the Athlete Before You Program Them',sub:'A masterclass for speed and power coaches on training the athlete’s actual structure, not a template.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You already know two athletes never respond to the same program the same way.',body:'You coach speed, power and jump development for real athletes, not a generic gym population. You have watched two athletes run the identical program and get two completely different results.'},
+ {t:'dark',title:'Most training plans do not fail because the exercises are wrong. They fail because the athlete was never actually read.'},
+
+ {t:'section',idx:'Part One',title:'Why Programs Miss'},
+ {t:'normal',k:'The default',title:'Cookie-cutter programming trains the sport, not the athlete.',body:'A template built for "a sprinter" or "a jumper" in general gets handed to every athlete on the roster, regardless of their own skeletal structure, movement history or neuromuscular pattern.'},
+ {t:'normal',k:'The cost',title:'An athlete trained against their own structure gets hurt or plateaus.',body:'The program looks right on paper. It just was not built for the body running it, and the result is an injury, a stall, or both.'},
+ {t:'dark',title:'A program that ignores the athlete’s own structure is coaching the drill, not the person.'},
+
+ {t:'section',idx:'Part Two',title:'The Integration'},
+ {t:'normal',k:'The starting layer',title:'Elastic Essentials: the feet, the plyometrics, the movement dynamics.',body:'Core bodyweight training and movement dynamics, starting from foot function and building through plyometrics and running mechanics, the foundation everything else stands on.'},
+ {t:'normal',k:'The acceleration piece',title:'Sprint Acceleration Essentials: hip extension and rotational power.',body:'Concentric power production through hip extension dynamics and rotational movement patterns, specific to the acceleration phase of a sprint.'},
+ {t:'normal',k:'The diagnostic',title:'Speed ID: individualizing to the athlete’s own skeleton and neuromuscular pattern.',body:'Instead of running every athlete through the same sprint program, Speed ID reads their own skeletal structure and neuromuscular characteristics first, then builds the program to fit.'},
+ {t:'normal',k:'The integration',title:'Athletic Fusion: speed, strength, skill and play in one system.',body:'An 8-week interactive mentorship that puts speed, strength, skill work and play-based methods together into one training system, capped at 30 coaches per cohort.'},
+ {t:'dark',title:'Read the structure first. Program second.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes for the Athlete'},
+ {t:'normal',k:'The result',title:'Programs that fit the athlete instead of asking the athlete to fit the program.',body:'Fewer athletes trained into an injury a template never saw coming, and a coaching system built on a diagnostic instead of a guess.'},
+ {t:'normal',k:'Why Joel Smith',title:'Two decades reading athletes at the highest level.',body:'8 years as a strength coach at UC Berkeley, 11 years as a track coach, and 5 athletes he has worked with have reached Olympic berths, producing 9 medals and a world record. CSCS certified, 500+ episodes into the Just Fly Performance Podcast.'},
+
+ {t:'section',idx:'Your Next Step',title:'Go Deeper'},
+ {t:'normal',k:'The certification',title:'ISPC: Integrative Sports Performance Coach.',body:'A professional certification teaching coaches to read and train the structure, function and integration of the athletic body as one system.'},
+ {t:'normal',k:'The cohort',title:'Athletic Fusion Cohort.',body:'An 8-week interactive mentorship putting the whole integration to work with a small group of coaches, 30 spots per cohort.'},
+ {t:'cta',title:'Ready to read your athletes instead of guessing?',chips:['Explore the ISPC Certification','Join the Athletic Fusion Cohort'],disc:'Educational content for coaches and trainers. No injury-prevention, performance, or income outcome is guaranteed. Results vary by athlete, sport and program.'},
+];
+
+const deck=document.getElementById('deck');
+function step(kind){return `<svg class="step-motif ${kind==='title'?'title-step':'corner-step'}"><use href="#step"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Joel Smith · <b>Just Fly Sports Performance</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=step(s.arc);
+  else if(s.t==='title') h+=step('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
