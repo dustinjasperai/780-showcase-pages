@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The H.E.A.R.T. System · Amy Pazahanick</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#241a30; --panel:#14101c; --rule:#5c4470;
+    --chalk:#f7f2f9; --accent:#b48fd1; --grey:#c9b6d9; --dim:#8a749c;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Open Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Belleza',sans-serif;font-weight:400;color:var(--chalk);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.5vw;max-width:88%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.32vw;color:var(--grey);margin-top:2.6vh;max-width:78%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Open Sans',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.28vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark .kicker{color:var(--chalk);opacity:.7}
+  .t-dark h1{font-size:2.6vw;max-width:80%;color:var(--chalk)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:80%;color:var(--chalk)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--chalk);color:var(--chalk);border-radius:6px;padding:1.3vh 1.6vw;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.84vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .route-motif{position:absolute;pointer-events:none;opacity:.85}
+  .title-route{right:6%;bottom:8%;width:11vw}
+  .corner-route{right:6%;bottom:7%;width:5vw;opacity:.5}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.16vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500;font-family:'Open Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Open Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Open Sans',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Amy Pazahanick</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- court-corner motif: two perpendicular hairlines meeting at a corner point, echoing a court
+     boundary line rather than a literal illustration or a generic growth arrow -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="court" viewBox="0 0 200 200">
+  <g fill="none" stroke="#b48fd1" stroke-width="3" stroke-linecap="round">
+    <path d="M20,180 L20,40" opacity="0.9"/>
+    <path d="M20,180 L180,180" opacity="0.9"/>
+    <path d="M20,60 L60,60" opacity="0.55"/>
+    <path d="M40,180 L40,140" opacity="0.55"/>
+  </g>
+  <circle cx="20" cy="180" r="6" fill="#b48fd1"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The H.E.A.R.T. System',sub:'A masterclass for tennis and pickleball facility owners on how to scale past one location without losing the standard that made the first one work.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You built one great location by being everywhere at once.',body:'You know every member by name, you can feel when a court is running behind, and you fix problems before anyone has to ask. That is exactly what a second location cannot run on.'},
+ {t:'dark',title:'A second location does not multiply what you built. It multiplies what you never wrote down.'},
+
+ {t:'section',idx:'Part One',title:'The Plateau Nobody Talks About'},
+ {t:'normal',k:'The real ceiling',title:'Most facility owners do not plateau because they run out of demand.',body:'They plateau because everything that makes their location good lives in their own head. There is no shared standard anyone else can run without them in the room.'},
+ {t:'normal',k:'Why hiring more people does not fix it',title:'You can hire hands. You cannot hire your own instincts.',body:'Add staff without a real standard behind them, and quality drops the moment you step away, at exactly the moment you are trying to be in two places.'},
+ {t:'dark',title:'More courts without a shared standard is just more chaos, faster.'},
+
+ {t:'section',idx:'Part Two',title:'The H.E.A.R.T. System'},
+ {t:'normal',k:'Honesty and Excellence',title:'These two set the floor every decision gets measured against.',body:'Honesty means the truth about a court, a coach, or a member gets said out loud, not smoothed over. Excellence means there is one standard for what good looks like, applied the same way whether the owner is watching or not.'},
+ {t:'normal',k:'Attitude and Responsibility',title:'These two decide what happens when something goes wrong.',body:'Attitude is how a coach or a front-desk lead responds under pressure, on a rained-out weekend or a double-booked court. Responsibility means someone owns the fix instead of waiting to be told.'},
+ {t:'normal',k:'Teamwork',title:'This is the one that lets nine locations run like one.',body:'Teamwork means a coach at one site trusts a manager at another, and a new location inherits the same culture instead of starting from zero.'},
+ {t:'dark',title:'H.E.A.R.T. only works if you hire against it, train against it, and evaluate against it. Not hang it on a wall.'},
+
+ {t:'section',idx:'Part Three',title:'Nine Locations, One Standard'},
+ {t:'normal',k:'From one court to a real operation',title:'H.E.A.R.T. is the standard behind hiring and training 185 coaches and administrators the same way it would be done in person.',body:'Every new site starts with the same five values, not a new culture built from scratch.'},
+ {t:'normal',k:'Private and public, both',title:'The same standard runs across private clubs and municipal parks and recreation contracts.',body:'Writing an RFP for a city and running a private academy call for different skills. H.E.A.R.T. is what makes both sides answer to the same bar.'},
+ {t:'normal',k:'What that has produced',title:'Nine locations across two coasts. 100 tennis courts, 83 pickleball courts, 3 platform tennis courts.',body:'Named National Public Provider of the Year in 2022, alongside recognition from the U.S. House, the California Legislature, and Orange County for economic impact that same year.'},
+
+ {t:'section',idx:'Credibility',title:'Why Amy Pazahanick'},
+ {t:'normal',k:'Two decades in racquet sports',title:'Amy Pazahanick founded Agape Tennis Academy in 2012 and built it into a nine-location tennis and pickleball academy across Georgia and Southern California.',body:'She holds public-sector management contracts with the City of Fountain Valley, the City of Oxnard, Pleasant Valley Recreation and Parks District, the City of Atlanta, and DeKalb County, alongside private-club and academy work.'},
+
+ {t:'section',idx:'Your Next Step',title:'Where H.E.A.R.T. Goes From Here'},
+ {t:'normal',k:'How it works',title:'Start with a free discovery call.',body:'That is where the conversation happens about where your location actually is, and whether coaching or a consulting engagement is the right next step.'},
+ {t:'cta',title:'Ready to scale past one location without losing what made it good?',chips:['Book a free discovery call'],disc:'Educational content for tennis and pickleball facility owners. No income, growth, or business result is guaranteed. Results vary by facility, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function routeSvg(kind){return `<svg class="route-motif ${kind==='title'?'title-route':'corner-route'}"><use href="#court"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Agape Tennis Academy &middot; <b>Amy Pazahanick</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=routeSvg(s.arc);
+  else if(s.t==='title') h+=routeSvg('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
