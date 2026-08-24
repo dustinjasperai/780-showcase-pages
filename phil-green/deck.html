@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Handyman Pro Toolkit Masterclass · Phil Green</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette derived from handymanprotoolkit.com's own site probe (extract_brand.js):
+       light scheme, black-on-white, one ranked accent #34322d (a warm near-black used
+       on the H1). Used verbatim as the deck accent/ink. */
+    --bg:#FAF9F4; --panel:#EFEDE2; --rule:#DDD9CC;
+    --ink:#34322d; --accent:#34322d; --grey:#5b574c; --dim:#8b8677;
+  }
+  html,body{height:100%}
+  body{background:#20201c;font-family:'Public Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#20201c}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Barlow Condensed',sans-serif;font-size:1.15vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4.1vw;max-width:90%}
+  .t-normal h1{font-size:2.75vw;max-width:84%}
+  .t-normal .body{font-family:'Public Sans',sans-serif;font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Public Sans',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Barlow Condensed',sans-serif;font-size:1.35vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.85vw;max-width:80%;color:var(--ink);font-weight:600}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3vw;max-width:78%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Public Sans',sans-serif;border:1.5px solid var(--accent);color:var(--ink);border-radius:4px;padding:1.3vh 1.6vw;font-size:1.1vw;font-weight:600}
+  .disc{font-family:'Public Sans',sans-serif;position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.84vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .tab{position:absolute;top:0;right:9%;width:6vw;height:2.2vh;background:var(--accent);border-radius:0 0 6px 6px}
+  .level-motif{position:absolute;pointer-events:none}
+  .title-level{right:6%;bottom:10%;width:19vw;opacity:.95}
+  .brandline{font-family:'Public Sans',sans-serif;font-size:1.24vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(52,50,45,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Public Sans',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Public Sans',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Public Sans',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.8vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3.1vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.2vw}
+    .t-cta h1{font-size:6vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Handyman Pro Toolkit</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- level motif: a simple spirit-level bar with a centered bubble, on-brand for a
+     "Toolkit" without borrowing another vertical's blueprint/grid look. Monochrome +
+     one accent, matching the site's near-black-on-white register. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="lvl" viewBox="0 0 260 60">
+  <g fill="none" stroke="#34322d" stroke-width="2">
+    <rect x="6" y="18" width="248" height="24" rx="3"/>
+    <line x1="6" y1="30" x2="254" y2="30" stroke-width="1" opacity=".35"/>
+    <circle cx="130" cy="30" r="13" fill="none"/>
+    <circle cx="126" cy="30" r="6.5" fill="#34322d"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Handyman Pro Toolkit Masterclass',sub:'A live masterclass for handyman and remodeling business owners on the four systems that take you from tools-on technician to systems-driven CEO.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You built the business. Now the business owns you.',body:'Every job still routes through you: the estimate, the schedule, the callback, the crew question. Revenue only grows when you personally work more hours, and there is a hard ceiling on how many hours one person has.'},
+ {t:'dark',title:'A bigger truck and a bigger crew do not fix a one-man system.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Stalls'},
+ {t:'normal',k:'The technician trap',title:'Every skill that built the company keeps you stuck inside it.',body:'You are the best estimator, the best closer, the best fix for a job that goes sideways. That is exactly why nothing runs without you. Being needed everywhere is not the same as running a company.'},
+ {t:'normal',k:'The real ceiling',title:'The bottleneck is rarely leads. It is the systems behind them.',body:'Quoting delays and underpricing when you try to move fast. A schedule that lives in your head. Hiring that stalls because training someone new takes more of your time than the job itself. None of that gets fixed by more marketing.'},
+ {t:'dark',title:'You do not need more jobs. You need a company that runs a job without you on it.'},
+
+ {t:'section',idx:'Part Two',title:'The Toolkit'},
+ {t:'normal',k:'Four systems, one operator',title:'Estimating, scheduling, marketing and hiring, run as one structure.',body:'The Handyman Pro Toolkit is not four separate courses. It is the same four systems Phil runs inside Rapid Repair Pro every week, packaged so another owner can install them without rebuilding them from scratch.'},
+ {t:'normal',k:'Estimating & Quoting',title:'Stop losing the job to a slow, underpriced quote.',body:'A repeatable estimating process that prices the work correctly the first time, so quoting speed stops being the reason jobs get missed or margins run thin.'},
+ {t:'normal',k:'Scheduling',title:'A schedule that runs without living in your head.',body:'The dispatch and job-scheduling structure that keeps a crew moving on a $1M+/yr book of work without the owner personally routing every job.'},
+ {t:'normal',k:'Marketing',title:"The client-acquisition system Rapid Repair Pro runs on itself.",body:"The same process that fills Phil's own pipeline, packaged for another owner to install rather than guess at from scratch."},
+ {t:'normal',k:'Hiring & Culture',title:'Build a crew you can actually leave a job with.',body:'How Phil hires, onboards and builds a culture that keeps people, the same approach that took Rapid Repair Pro from one truck to a real company.'},
+ {t:'dark',title:'One operator, four systems, a company that runs without you on every job.'},
+
+ {t:'section',idx:'Part Three',title:'Taught From the Truck, Not a Stage'},
+ {t:'normal',k:'Who is teaching this',title:'A master carpenter and certified HVAC tech who still runs the company.',body:'Phil Green is a 30+ year construction veteran and a U.S. Coast Guard veteran. Rapid Repair Pro, his own handyman and remodeling company in the St. Louis metro, is a Service-Disabled Veteran-Owned Small Business and a federal facility-maintenance contractor, grown to $1M+/yr in revenue.'},
+ {t:'normal',k:'No-fluff, by design',title:'Every system in the Toolkit is one he runs this week, not a case study from years ago.',body:'The estimating, scheduling, marketing and hiring systems inside the Toolkit are the same ones running inside Rapid Repair Pro right now. Nothing in the program is theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Install the Systems, Keep the Truck'},
+ {t:'normal',k:'How it works',title:'The masterclass teaches the four systems. The next step is installing them.',body:'The Handyman Pro Toolkit membership carries the full course library, group coaching and the private community. For owners who want Phil directly in their corner, the application-gated 1:1 track goes deeper on the specific bottleneck in your company.'},
+ {t:'cta',title:'Ready to run the company instead of every job in it?',chips:['Join the Toolkit','Apply for 1:1 coaching'],disc:"Educational content for handyman and remodeling business owners. No income, revenue, or business result is guaranteed. Results vary by owner, market and effort. All business and credential figures are Phil Green's own published claims about Rapid Repair Pro; individual results vary."},
+];
+
+const deck=document.getElementById('deck');
+function lvlSvg(){return `<svg class="level-motif title-level"><use href="#lvl"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Handyman Pro <b>Toolkit</b> &middot; Phil Green, Rapid Repair Pro</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=lvlSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
