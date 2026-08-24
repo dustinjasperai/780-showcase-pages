@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Blue-print Masterclass · Josh Phegan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette from his own app.css (Wayback 2026-02 capture): white ground, near-black
+       ink, the site's dominant custom accent #5f68f3. Sans-only, like his site. */
+    --bg:#ffffff; --panel:#1a1a1a; --rule:#e4e6ee;
+    --ink:#1a1a1a; --accent:#5f68f3; --grey:#4c5160; --dim:#8b90a0;
+  }
+  html,body{height:100%}
+  body{background:#101018;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#101018}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Outfit',sans-serif;font-weight:700;color:var(--ink);line-height:1.18;letter-spacing:-.01em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:82%;color:#ffffff;font-weight:600}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:80%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#9aa0b6}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .bp-motif{position:absolute;pointer-events:none}
+  .title-bp{right:6%;bottom:9%;width:17vw;opacity:.95}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(26,26,26,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.6vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Josh Phegan</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- blueprint motif: a drafting grid with one plotted workflow line in his indigo, echoing
+     the Blue-print workflow poster his flagship event is known for. Monochrome + one
+     accent, matching the near-black/white register of his own brand. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bp" viewBox="0 0 260 130">
+  <g fill="none" stroke-width="1.4">
+    <path d="M20,10 H240 M20,40 H240 M20,70 H240 M20,100 H240 M20,10 V100 M75,10 V100 M130,10 V100 M185,10 V100 M240,10 V100" stroke="#e4e6ee"/>
+    <path d="M20,100 L75,70 L130,78 L185,34 L240,22" stroke="#5f68f3" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="240" cy="22" r="5" fill="#5f68f3" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Blue-print Masterclass',sub:'A live masterclass for real estate agents on the one system behind consistent, repeatable performance: prospecting, listing, negotiation and growth, run as a single operating rhythm.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You are writing deals, but every month starts from zero.',body:'Most agents run on bursts: a strong quarter, then an empty pipeline, then the scramble. The market gets blamed, the CRM gets blamed, the leads get blamed. Meanwhile the agents at the very top of the industry have boringly consistent months, in the same market, with the same tools.'},
+ {t:'dark',title:'The best agents are not luckier. They run a better week.'},
+
+ {t:'section',idx:'Part One',title:'Why Bursts Beat You'},
+ {t:'normal',k:'The energy trap',title:'Effort without a system produces income without a pattern.',body:'A big month funds a quiet month, prospecting stops the moment listings arrive, and the pipeline empties exactly when you can least afford it. The result is a career that feels like starting over every season, no matter how good the last one was.'},
+ {t:'normal',k:'The consistency gap',title:'What separates the top of the industry is not talent. It is cadence.',body:'Josh has trained and coached the who’s who of Australian real estate, including the country’s number one writers, and the pattern at the top is the same everywhere: the calls happen every day, the pipeline is measured, and the week is designed before it starts.'},
+ {t:'dark',title:'You do not need a better market. You need a repeatable week.'},
+
+ {t:'section',idx:'Part Two',title:'The Blue-print'},
+ {t:'normal',k:'One system, four disciplines',title:'Prospecting, listing, negotiation and growth, drawn as one connected workflow.',body:'The Blue-print is the system Josh has taught since 2011 at his flagship industry event of the same name: not four separate skills to binge, but one operating rhythm where daily prospecting feeds listing opportunities, listings are won with a repeatable process, negotiation protects the fee, and growth compounds it.'},
+ {t:'normal',k:'Prospecting',title:'The daily call rhythm that fills the pipeline before you need it.',body:'Connects, appointments and stock measured as numbers, not feelings. The discipline his Intense Program drills every business day for a month: driving call sessions, measuring calls, connects and appointments, and clearing stock more often.'},
+ {t:'normal',k:'Listing',title:'Win the listing with a process, not a personality.',body:'A repeatable listing presentation that works when you are tired, new to an area, or up against the local incumbent. The same List Sell Negotiate discipline Josh has taught in rooms full of the industry’s best since 2010.'},
+ {t:'normal',k:'Negotiation and growth',title:'Protect the fee, then compound the business.',body:'Negotiation as a taught skill that defends your fee under pressure, and growth as a planned stage: when to hire, how to build a team, and how the best operators structure their business so this year’s effort raises next year’s baseline.'},
+ {t:'dark',title:'One system, one philosophy, one approach. That is the whole idea.'},
+
+ {t:'section',idx:'Part Three',title:'Taught From the Top'},
+ {t:'normal',k:'Who is teaching this',title:'The number one preferred trainer for Australia’s top 100 agents.',body:'Josh Phegan coaches the who’s who of the industry, including a number one sales agent writing over $20.5m in fees across 250+ transactions and $1.1 billion in sales. In 2026 he is set to perform in 300 events across the UK, UAE, New Zealand and Australia, alongside the daily email read by over 15,000 professionals.'},
+ {t:'normal',k:'Since 2007',title:'From phone coaching to the industry’s stage.',body:'What started as specialist phone coaching for high-performance agents in 2007 became the Real Estate Blue-print event, the List Sell Negotiate seminar, the Rapid Focus series, and the High-Performance podcast. The system in this masterclass is the same one running underneath all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Run the Week the Top Agents Run'},
+ {t:'normal',k:'How it works',title:'The masterclass teaches the Blue-print. The next step is living it.',body:'Josh Phegan Digital carries the full Blue-print curriculum with short courses, interviews and the resource library. For agents who want momentum fast, the Intense Program puts Josh in your corner every business day for four weeks, and Private Coaching sessions take on the specific blockages in your business.'},
+ {t:'cta',title:'Ready to trade the bursts for a system?',chips:['Explore Josh Phegan Digital','Apply for the Intense Program'],disc:'Educational content for real estate agents. No income, fee, or business result is guaranteed. Results vary by agent, market, and effort. Client figures cited are Josh Phegan’s own published examples.'},
+];
+
+const deck=document.getElementById('deck');
+function bpSvg(){return `<svg class="bp-motif title-bp"><use href="#bp"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Josh <b>Phegan</b> &middot; Real Estate Training</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=bpSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
