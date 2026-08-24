@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Pay Yourself First &middot; Blaine Feyen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4ee; --panel:#fffdf9; --rule:#e3ddd0;
+    --acc:#1874d6; --coral:#d9673f; --ink:#171b26; --soft:#4a5568; --dim:#8a8f9c; --dark:#171b26;
+  }
+  html,body{height:100%}
+  body{background:#e9e4d8;font-family:'Lato',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9e4d8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:3.6vw;max-width:88%}
+  .t-normal h1{font-size:2.6vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--soft);margin-top:2.6vh;max-width:78%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.5vw;color:var(--soft);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.28vw;font-weight:700;color:var(--coral);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 140% at 15% 10%,#20283a 0%,var(--dark) 68%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3vw;max-width:82%;font-style:italic;color:#fbf9f4;font-family:'Playfair Display',Georgia,serif}
+  .t-cta{background:radial-gradient(120% 140% at 85% 90%,#20283a 0%,var(--dark) 68%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.2vw;max-width:80%;color:#fbf9f4}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#dcebff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#b7bfcf}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-motif{right:7%;bottom:9%;width:15vw}
+  .corner-motif{right:6%;bottom:7.5%;width:6.6vw;opacity:.55}
+  .brandline{font-size:1.2vw;color:var(--soft);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--coral);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:#6b7280;z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6b7280;z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#6b7280;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.4vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Real Value Coaching Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- ledger-to-bar motif: a ledger line resolving into an upward bar, with one coral node
+     on the "profit" line -- the numbers discipline (the ledger) driving the growth (the bar) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ledgerbar" viewBox="0 0 200 140">
+  <g fill="none" stroke="#1874d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 34 H150" opacity="0.35"/>
+    <path d="M12 58 H150" opacity="0.35"/>
+    <path d="M12 82 H120" opacity="0.35"/>
+    <rect x="24" y="96" width="20" height="30" opacity="0.5"/>
+    <rect x="56" y="80" width="20" height="46" opacity="0.7"/>
+    <rect x="88" y="58" width="20" height="68" opacity="0.9"/>
+    <rect x="120" y="34" width="20" height="92"/>
+    <circle cx="130" cy="34" r="5.5" fill="#d9673f" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Pay Yourself First',sub:'A live masterclass on running an appraisal business that serves your life, taught by an appraiser who has run his own firm on it since 2005.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'Your business looks profitable. Your bank account disagrees.',body:'You are busy every week: inspections booked, reports out the door, AMC relationships steady. Revenue looks fine on paper. But at the end of the month there is never quite as much left over as the numbers suggested there should be.'},
+ {t:'dark',title:'Busy is not the same as profitable. A full calendar can still leave you broke.'},
+
+ {t:'section',idx:'Part One',title:'Why the Numbers Lie'},
+ {t:'normal',k:'The real trap',title:'Most appraisers run on whatever is left over, not on a plan.',body:'The standard model is simple and quietly broken: revenue comes in, expenses get paid, and profit is whatever happens to remain. When nothing is left, the appraiser assumes the fix is more volume. It rarely is.'},
+ {t:'normal',k:'The actual fix',title:'Profit is a decision you make first, not a leftover you hope for.',body:'Reverse the order. Take profit off the top before expenses get to spend it, and the business is forced to operate on what remains. This is the Profit First system, adapted for an appraisal practice.'},
+ {t:'dark',title:'Pay yourself first. Then run the business on what is left. Not the other way around.'},
+
+ {t:'section',idx:'Part Two',title:'The Seven Coaching Pillars'},
+ {t:'normal',k:'Pillar 1 &middot; Mastering Your Numbers',title:'Profit First is the anchor pillar. Everything else sits on top of it.',body:'Before marketing, before mindset, before anything else: know where every dollar goes, and pay yourself first out of it. This is the pillar the other six depend on.'},
+ {t:'normal',k:'Pillar 2 &middot; Success and Wealth Mindsets',title:'The numbers only stick if the mindset behind them changes too.',body:'Scarcity thinking keeps appraisers underpricing and overworking. This pillar addresses the mental model that makes Profit First sustainable instead of a one-month experiment.'},
+ {t:'normal',k:'Pillar 3 &middot; Marketing',title:'Becoming the go-to authority, not the cheapest bid.',body:'A practice that competes on price alone has no room for Profit First margins. This pillar builds the positioning that lets an appraiser charge what the numbers actually require.'},
+ {t:'normal',k:'Pillars 4 &amp; 5 &middot; Communication and Relationships',title:'A relationship-based business, not a transactional one.',body:'The referral engine behind repeat AMC and non-lender work runs on communication most solo appraisers were never trained on, and on relationships built deliberately, not left to chance.'},
+ {t:'normal',k:'Pillars 6 &amp; 7 &middot; Health and Wellness, Giving',title:'The payoff, built in as pillars, not left as an afterthought.',body:'A business that pays you first, on a mindset and marketing foundation that holds, is a business that can afford an owner who is well, and generous. This is the point of the other five pillars.'},
+ {t:'dark',title:'Seven pillars. One system. Not seven more things to learn, one practice to run differently.'},
+
+ {t:'section',idx:'Part Three',title:'A Practice Running on All Seven Pillars'},
+ {t:'normal',k:'Why Blaine Feyen',title:'He runs his own firm on this, since 2005.',body:'Blaine founded Real Value Group and has operated it in West Michigan for two decades, using the same Profit First discipline he now teaches. Real Value Coaching Academy is built from what actually works in his own practice, not a theory borrowed from another industry.'},
+
+ {t:'section',idx:'Your Next Step',title:'Book the Free Coaching Call'},
+ {t:'normal',k:'How it works',title:'A free call, a 60-day guarantee, and the Appraiser Increase Academy behind it.',body:'Real Value Coaching Academy runs on a free introductory coaching call, backed by a 60-day money-back guarantee on the Appraiser Increase Academy: guest coaching interviews, video training, coaching exercises, and a private community, all built for appraisers.'},
+ {t:'cta',title:'Ready to pay yourself first?',chips:['Book the free call','Explore the Academy'],disc:'Educational content for licensed real estate appraisers. No income or production-volume result is guaranteed. Results vary by practice, market, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#ledgerbar"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Real Value <b>Coaching Academy</b> &middot; Blaine Feyen</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=motif(s.arc);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
