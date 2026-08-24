@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>19,000 Hours of Tennis. 30 Hours of Business. · David Martins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette from his own live site probe (brand.json): white ground, navy #1b263a,
+       his coral #ff8257 accent. Fjalla One + Libre Franklin are the site's own faces. */
+    --bg:#ffffff; --panel:#1b263a; --rule:#e8e8ee;
+    --ink:#1b263a; --accent:#ff8257; --teal:#52c2c8; --grey:#4b556b; --dim:#8b93a6;
+  }
+  html,body{height:100%}
+  body{background:#10182a;font-family:'Libre Franklin',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#10182a}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Fjalla One',sans-serif;font-weight:400;color:var(--ink);line-height:1.16;letter-spacing:.002em}
+  .t-title h1{font-size:3.7vw;max-width:90%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:82%;color:#ffffff}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:80%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#9aa4bd}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .hours-motif{position:absolute;pointer-events:none}
+  .title-hours{right:6%;bottom:9%;width:17vw;opacity:.95}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(27,38,58,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:6.8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Tennis Business Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- hours-tally motif: two court-line strokes, the long navy one (19,000 hours of tennis)
+     and the short coral one (30 hours of business) — his own origin story drawn as a
+     training log, from the brand.json probe of his site. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="hours" viewBox="0 0 260 110">
+  <g fill="none" stroke-linecap="round">
+    <line x1="18" y1="38" x2="242" y2="38" stroke="#1b263a" stroke-width="10"/>
+    <line x1="18" y1="74" x2="44" y2="74" stroke="#ff8257" stroke-width="10"/>
+    <line x1="18" y1="20" x2="18" y2="92" stroke="#e8e8ee" stroke-width="2"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'19,000 Hours of Tennis. 30 Hours of Business.',sub:'A live masterclass for tennis coaches and club owners on closing the gap that actually decides whether a coaching business grows.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You can win a rally from anywhere on the court. The business side never got that kind of practice.',body:'Coaching qualifications, thousands of court hours, a program people like. And still: quiet months, guesswork pricing, a schedule that only pays when you are standing on the court. Nobody gave the business half of this career its ten thousand hours.'},
+ {t:'dark',title:'For every 10,000 hours we spend learning tennis, we spend about a thousand learning business.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Coaches Stall'},
+ {t:'normal',k:'The court trap',title:'Your income is capped at the hours you can physically coach.',body:'More sessions is the only lever most coaches ever pull, and it maxes out fast. The coaches and club managers who get past it stop selling hours and start running a business: programs, retention, pricing, a pipeline of new players that does not depend on word of mouth alone.'},
+ {t:'normal',k:'The retention leak',title:'Most coaching businesses lose players faster than they recruit them.',body:'Player retention and lifetime value is the theme David returns to across the Tennis Business Academy Podcast for a reason: keeping a player one more season is worth more than most acquisition tricks, and almost nobody measures it.'},
+ {t:'dark',title:'You do not need more court hours. You need the 10% of your time that runs the business.'},
+
+ {t:'section',idx:'Part Two',title:'The Business Half, Trained'},
+ {t:'normal',k:'The 10-to-1 thesis',title:'Give the business the same deliberate practice you gave your forehand.',body:'David Martins spent roughly 19,000 hours on tennis before his first 30 on business. Then four years inside a London consultancy, managing 20+ consultants and growing a department to £2M in annual revenue, taught him the other half. Tennis Business Academy exists to close that same gap for coaches, deliberately, not accidentally.'},
+ {t:'normal',k:'New players, on purpose',title:'A pipeline of new players that runs on a system, not on luck.',body:'The same disciplines his Get More Players Guide teaches: making the program visible, making joining easy, and measuring what actually brings players in, so growth stops being a happy accident.'},
+ {t:'normal',k:'Retention and lifetime value',title:'Keep the players you already won.',body:'Payment models that smooth income, customer service that parents notice, and the retention metrics that tell you a player is drifting before the term invoice does.'},
+ {t:'normal',k:'Running it like a CEO',title:'Pricing, management, negotiation: the skills the court never taught.',body:'The Club teaches customer service, marketing, sales, management, leadership and negotiation to tennis coaches running their own businesses and to club managers and directors, the exact skill list the job actually demands once you are the one responsible for the whole program.'},
+ {t:'dark',title:'The coaches who grow are not better on court. They are better at the other 10%.'},
+
+ {t:'section',idx:'Part Three',title:'Who Is Teaching This'},
+ {t:'normal',k:'Both sides of the gap',title:'A former ATP-ranked player who then ran the numbers side of a real business.',body:'ATP-ranked doubles, LTA Level 4, about ten years coaching in Portugal and the UK. Then 2014 to 2018 inside a London consultancy: 20+ consultants managed, a department grown to £2M annual revenue. The Tennis Business Academy Podcast now carries 30 episodes of that thinking, made for coaches and clubs.'},
+ {t:'normal',k:'Built against bingeing',title:'The Club is designed to change your week, not fill your watch list.',body:'New members start with a 24-hour onboarding mission before the content opens up, a structure built so the first thing you do is act on your business, not binge another course.'},
+
+ {t:'section',idx:'Your Next Step',title:'Train the Other 10%'},
+ {t:'normal',k:'How it works',title:'The masterclass teaches the gap. The Club is where you close it.',body:'Inside Tennis Business Academy: the community, the teaching, and the structure to put 10% of your week on the business, with the Get More Players Guide as the free first step.'},
+ {t:'cta',title:'Ready to give the business its hours?',chips:['Join The Club at Tennis Business Academy','Get the free Get More Players Guide'],disc:'Educational content for tennis coaches and club owners. No income, player-count, or business result is guaranteed. Results vary by coach, market, and effort. Figures cited are David Martins’ own published history.'},
+];
+
+const deck=document.getElementById('deck');
+function hoursSvg(){return `<svg class="hours-motif title-hours"><use href="#hours"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Tennis Business <b>Academy</b> &middot; David Martins</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=hoursSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
