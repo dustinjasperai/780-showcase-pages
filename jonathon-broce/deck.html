@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Build to Keep · Day 41 Thrive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0e0e14; --panel:#191019; --rule:#2a2a33;
+    --ink:#ffffff; --accent:#ff1493; --grey:#b7b3bd; --dim:#6f6b76;
+  }
+  html,body{height:100%}
+  body{background:#08080c;font-family:'Montserrat',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#08080c}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:800;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .t-title h1{font-size:3.8vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:78%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.8vw;max-width:90%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:86%;color:#ffffff}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:84%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#a79aa3}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .rise-motif{position:absolute;pointer-events:none}
+  .title-rise{right:6.5%;bottom:10%;width:17vw;opacity:.96}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Day 41 Thrive</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="keepmark" viewBox="0 0 260 120">
+  <g fill="none">
+    <line x1="16" y1="100" x2="244" y2="100" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28,100 L120,60 L214,26" stroke="#ff1493" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28" cy="100" r="8" fill="#ff1493"/>
+    <circle cx="222" cy="22" r="12" fill="none" stroke="#ff1493" stroke-width="4"/>
+    <text x="222" y="27" font-family="Montserrat,sans-serif" font-size="12" font-weight="800" fill="#ff1493" text-anchor="middle">41</text>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Build to Keep',sub:'A live masterclass for roofing and contractor owners on building a company strong enough to keep for life, or sell on your own terms.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You built this company with your own hands. The real question is whether it can run, and sell, without them.',body:'This is for the owner who is still the business. Every big estimate, every hire, every problem that actually matters routes back through you. The company grows only when you personally grind harder, and it stalls the week you step away.'},
+ {t:'dark',title:'A company that cannot run without you is not an asset. It is a job you are not allowed to quit.'},
+
+ {t:'section',idx:'Part One',title:'The Roll-Up at Your Door'},
+ {t:'normal',k:'Somebody is buying your industry',title:'Private equity is quietly rolling up roofing, one owner at a time.',body:'Backed consolidators are knocking on good companies with an offer that looks like a windfall on the first page. Read further and it comes with an earn-out that keeps you working, now as an employee of the people who bought your name.'},
+ {t:'normal',k:'Weak sellers and strong sellers',title:'Most owners sell from weakness, because they never built anything else.',body:'When the revenue lives in the owner and there are no systems underneath, the only exit is a discounted sale on the buyer\'s terms. The owner who built something that runs without him sells from strength, and gets to choose whether to sell at all.'},
+ {t:'dark',title:'You do not beat the roll-up by getting bigger. You beat it by building a company that runs without you, and is worth more because it does.'},
+
+ {t:'section',idx:'Part Two',title:'The 5C Growth Framework'},
+ {t:'normal',k:'Capture, your marketing',title:'Capture: a lead engine that fills the schedule without you selling every job.',body:'The first C is marketing built as a system, not a hustle. Predictable demand coming in the door so the calendar stays full whether or not the owner is the one out chasing it.'},
+ {t:'normal',k:'Convert, your sales',title:'Convert: a sales system, not a sales hero.',body:'A repeatable process and a trained team, so deals close on the company\'s method instead of the owner\'s personality. The number stops depending on who ran the appointment.'},
+ {t:'normal',k:'Create, your production',title:'Create: production that delivers the same result on every roof.',body:'Standardized operating standards, the RoofOps41 way, so quality is built into the process and does not ride on which crew happened to show up that morning.'},
+ {t:'normal',k:'Control, your admin',title:'Control: know your numbers before they surprise you.',body:'The finance and back-office controls that tell you your margin, your cash, and your overhead in real time. Owners lose companies to problems they could not see coming; Control is how you see them.'},
+ {t:'normal',k:'Culture, your people',title:'Culture: the plus-one that holds the other four together.',body:'People and leadership, the THRIVE values in practice, so your team actually runs the four systems when you step back. Without Culture the other four collapse the day you leave the room.'},
+ {t:'dark',title:'Five systems. Install them and the company stops depending on you, and starts being worth something without you.'},
+
+ {t:'section',idx:'Part Three',title:'Build the Owner Out'},
+ {t:'normal',k:'The test of a real business',title:'The goal is a company that runs a great week while you are gone.',body:'Build the owner out of the daily work on purpose. When the business delivers without you in every seat, you have an asset instead of a very demanding job, and you finally get your time back.'},
+ {t:'normal',k:'Keep it, or sell it high',title:'Built to keep is exactly what a buyer pays a premium for.',body:'The same systems that let you hold this company for life are what turn a nervous, discounted offer into a real one. You negotiate from strength, and you keep it or sell it on your terms, not theirs.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'Someone Who Built It, Sold It, and Saw the Machine From Inside'},
+ {t:'normal',k:'Not theory',title:'A fourth-generation roofer who scaled a company, sold it, and stayed inside the roll-up.',body:'This is not a plan drawn on a whiteboard. The person teaching it built a roofing company with a partner, sold it to a backed consolidator, and stayed inside as a regional leader long enough to watch exactly how owners get squeezed, before leaving to teach owners to build to keep.'},
+ {t:'normal',k:'How it works',title:'The masterclass gives you the map. The room is where you install it.',body:'This live hour lays it out: the roll-up wave, the 5C framework, and the build-to-keep path. From there, the free Growth Gauge shows you which C is weakest, and RoofOps41 and Route 41 are where you install the rest with support.'},
+ {t:'cta',title:'Ready to build a roofing company worth keeping?',chips:['Take the free Growth Gauge','Book your diagnostic call'],disc:'Educational content for roofing and contractor owners building a business. No income, revenue, or sale outcome is guaranteed. Results vary by owner, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function riseSvg(){return `<svg class="rise-motif title-rise"><use href="#keepmark"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Day 41 Thrive &middot; <b>Build to Keep</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=riseSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
