@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Hero Sales Culture · Contractor Coach PRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#06182d; --panel:#1f3247; --rule:#24405c;
+    --ink:#f8fafc; --accent:#f45c25; --grey:#9fb0c4; --dim:#6b7d94;
+  }
+  html,body{height:100%}
+  body{background:#030c17;font-family:'Plus Jakarta Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#030c17}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Sora',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.005em}
+  .t-title h1{font-size:3.8vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:78%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.8vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:86%;color:#ffffff}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:84%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#aeb9cc}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .rise-motif{position:absolute;pointer-events:none}
+  .title-rise{right:6.5%;bottom:10%;width:18vw;opacity:.96}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(248,250,252,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Contractor Coach PRO · Coach T</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="buildup" viewBox="0 0 260 120">
+  <g fill="none">
+    <line x1="16" y1="104" x2="244" y2="104" stroke="#9fb0c4" stroke-width="3" stroke-linecap="round"/>
+    <rect x="30" y="78" width="34" height="26" fill="#f45c25" opacity="0.55"/>
+    <rect x="88" y="56" width="34" height="48" fill="#f45c25" opacity="0.75"/>
+    <rect x="146" y="34" width="34" height="70" fill="#f45c25"/>
+    <path d="M40,70 L104,48 L166,24 L214,14" stroke="#f45c25" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="214" cy="14" r="7" fill="none" stroke="#f45c25" stroke-width="4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Hero Sales Culture',sub:'A live masterclass for roofing contractors on building a sales team that sells when you are on the roof, not in the room.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You did not start a roofing company to be its only salesperson.',body:'This is for the owner who still runs every big estimate, closes every important job, and watches revenue flatten the moment they step off the truck. The craft is not the problem. The company living or dying on one person is.'},
+ {t:'dark',title:'As long as you are the only one who can really sell, your calendar is your ceiling.'},
+
+ {t:'section',idx:'Part One',title:'Why Roofing Companies Stall at the Owner'},
+ {t:'normal',k:'The owner-closer trap',title:'The best salesperson in your company is you, and that is the problem.',body:'Every serious deal routes through you, so growth stops at the number of hours you can personally sell. You cannot take a week off without the pipeline going quiet, and the business is worth less because it cannot run without you in the room.'},
+ {t:'normal',k:'Hire and hope',title:'You keep hiring reps who cannot sell the way you do.',body:'Without a real system to recruit, train, and lead them, new reps ride along, underperform, and quit inside a season. So you step back in to save the deal, the door keeps revolving, and you quietly decide it is easier to just do it yourself.'},
+ {t:'dark',title:'A rep problem is almost always a culture and leadership problem wearing a rep’s name.'},
+
+ {t:'section',idx:'Part Two',title:'Hero Sales Culture'},
+ {t:'normal',k:'Belief and ownership',title:'A team sells when it believes what it sells and owns the result.',body:'Culture comes first: reps who take ownership of the number, not just the appointment. That belief is what a homeowner hears at the door, and it is the difference between a rep who quotes a price and a rep who earns the signature.'},
+ {t:'normal',k:'Recruit for the trait, not the resume',title:'Hire the person you can coach to sell, not the one with the smoothest pitch.',body:'A simple way to source, screen, and choose reps who fit a roofing sales floor, so you stop betting your season on a lucky hire and start building a bench you can count on.'},
+ {t:'normal',k:'Lead the number, not the busywork',title:'Reps rise to the standard you coach to, every single week.',body:'A repeatable leadership rhythm of ride-alongs, honest scorekeeping, and one-on-ones that turns a group of individuals into a team that hits the number without you sitting in every meeting.'},
+ {t:'dark',title:'You do not need to sell more. You need a team that sells the way you would.'},
+
+ {t:'section',idx:'Part Three',title:'The Company That Runs Without You'},
+ {t:'normal',k:'The owner steps back',title:'Estimates get sold when you are nowhere near them.',body:'The day-to-day of a roofing company where the sales floor runs on the standard instead of the founder. You review the scoreboard and coach the team, rather than personally carrying every close.'},
+ {t:'normal',k:'The season stops being a gamble',title:'Storm season becomes a system, not a scramble.',body:'A trained bench and a culture that onboards fast means a spike in demand is capacity you planned for, not chaos you survived. Growth, control, and the freedom to build the company you actually wanted.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'Coach T and Contractor Coach PRO'},
+ {t:'normal',k:'Not theory',title:'Twenty-plus years in home services, and hundreds of contractors coached.',body:'Coach T is Lead Coach at Contractor Coach PRO and co-host of Contractor Radio, focused on sales culture, recruiting, and leadership for contractor teams. This is the sales-team work he does with roofers every week.'},
+ {t:'normal',k:'How it works',title:'This hour lays out the map. The coaching is where you build it.',body:'The masterclass walks the model: the owner trap, the Hero Sales Culture, and the leadership rhythm that runs a sales floor. From there, Contractor Coach PRO is the room where you install it with a coach beside you.'},
+ {t:'cta',title:'Ready to build a sales team that sells without you?',chips:['Take the free Contractor Assessment'],disc:'Educational content for roofing contractors building a sales team. No income, revenue, or business result is guaranteed. Results vary by company, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function riseSvg(){return `<svg class="rise-motif title-rise"><use href="#buildup"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Contractor Coach PRO &middot; <b>Coach T</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=riseSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
