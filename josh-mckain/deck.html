@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Your Shop Floor Isn't a Machine Problem · Josh McKain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette from his own live site probe (brand.json): white ground, his throughput
+       green #109c7b (120 uses, dominant), deep forest-teal #173938 (his anchor color),
+       pale lime #f6fc9b spark. Roboto Condensed + Roboto are the site's own faces. */
+    --bg:#ffffff; --panel:#173938; --rule:#e3ebe8;
+    --ink:#173938; --accent:#109c7b; --lime:#f6fc9b; --grey:#4b5b57; --dim:#8ba39b;
+  }
+  html,body{height:100%}
+  body{background:#0d201f;font-family:'Roboto',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d201f}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Roboto Condensed',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:.004em}
+  .t-title h1{font-size:3.9vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:75%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:4px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:84%;color:#ffffff}
+  .t-dark .accentword{color:var(--lime)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:82%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#8ba39b}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .flow-motif{position:absolute;pointer-events:none}
+  .title-flow{right:6.4%;bottom:9%;width:22vw;opacity:.96}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(23,57,56,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Throughput Mastery</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- throughput-flow motif: three staged segments (clarity, accountability, execution)
+     drawn as a process line in his green, with the last node lit — the operational
+     metaphor his whole method turns on. From the brand.json probe of his site. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="flow" viewBox="0 0 300 84">
+  <g fill="none" stroke-linecap="round">
+    <line x1="26" y1="42" x2="274" y2="42" stroke="#173938" stroke-width="3" opacity="0.35"/>
+    <circle cx="26" cy="42" r="13" fill="#ffffff" stroke="#109c7b" stroke-width="4"/>
+    <circle cx="150" cy="42" r="13" fill="#ffffff" stroke="#109c7b" stroke-width="4"/>
+    <circle cx="274" cy="42" r="14" fill="#109c7b" stroke="#109c7b" stroke-width="4"/>
+    <line x1="268" y1="42" x2="280" y2="42" stroke="#f6fc9b" stroke-width="4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"Your Shop Floor Isn't a Machine Problem",sub:'A live masterclass for manufacturing and machine-shop owners on why throughput stalls, and the 90-day rhythm that fixes it at the source.',brand:true},
+
+ {t:'normal',k:'Who this is for',title:'You can hold a tolerance to a tenth. The business somehow still runs behind.',body:'Skilled people, good machines, a book of work. And still: missed ship dates, a floor that firefights all day, capacity you added that never turned into more out the door. The craft is not the problem. Something upstream of the machines is.'},
+
+ {t:'dark',title:'When the floor is not executing, it is almost never a talent problem. It is a <span class="accentword">clarity, accountability, and follow-through</span> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Shops Stall'},
+ {t:'normal',k:'The firefighting trap',title:'When everything is a priority, nothing gets finished.',body:'Reactive management feels like leadership, but it caps the shop. The floor jumps from fire to fire, the important work slides, and the owner ends the week exhausted with the same problems still open. More hustle does not clear it. A shorter list of the right priorities does.'},
+ {t:'normal',k:'The isolation trap',title:'Smart owners plateau because they lead alone.',body:'Josh built Throughput Mastery after watching the same pattern again and again: capable, savvy leaders with no outside support lose steam and get stuck. There is no impartial peer to pressure-test the call, so the hard decisions get deferred and the shop coasts on the owner alone.'},
+ {t:'dark',title:'You do not need another machine. You need the few priorities that actually move throughput.'},
+
+ {t:'section',idx:'Part Two',title:'Throughput at the Source'},
+ {t:'normal',k:'Clarity',title:'Name the real constraint before you touch a machine.',body:'Most shop-floor misses trace back to one of three things being broken: clarity, accountability, or follow-through. The first move is naming which one, out loud. It is usually not the talent and not the equipment, and calling it correctly saves you from spending money on the wrong fix.'},
+ {t:'normal',k:'Accountability',title:'A room of owners who are in the trenches too.',body:'A dedicated group of manufacturing leaders, meeting on a steady rhythm, sharing wins and working through the hard ones together. Follow-through stops being willpower and becomes something the room expects of you. This is the piece an owner cannot build alone, and the reason isolation quietly caps a shop.'},
+ {t:'normal',k:'Execution',title:'The 90-Day Throughput Plan: a short list, refreshed every quarter.',body:'Not a binder nobody reads. A focused ninety-day roadmap of the handful of priorities that actually move throughput, so the whole shop knows the next ninety days and what to ignore. Then you rebuild it each quarter, so the plan never goes stale and progress compounds.'},
+ {t:'normal',k:'The Jumpstart',title:'A targeted assessment, a working session, and a roadmap.',body:'The starting point: figure out what to fix, what to ignore, and how to get the team executing again. You walk out with a 90-day plan you can put in front of the floor on Monday, not a diagnosis you have to go interpret alone.'},
+ {t:'dark',title:'The shops that pull ahead are not the ones with the newest machines. They are the ones that fix execution first.'},
+
+ {t:'section',idx:'Part Three',title:'Ninety Days From Now'},
+ {t:'normal',k:'What changes',title:'Faster decisions, fewer fires, a team that follows through.',body:'Not a transformation slogan. The concrete difference is a floor with a short list it understands, an owner who is no longer the only one carrying the plan, and a steady rhythm of progress instead of another quarter of reacting.'},
+ {t:'normal',k:'Who is teaching this',title:'A decade across shops, from family operations to large-scale manufacturers.',body:'Josh McKain has spent over a decade in strategic planning and project management across North American manufacturing. He built Throughput Mastery for the leaders he kept meeting who were good at the work and stuck on the business, and who had no trusted circle to think it through with.'},
+ {t:'normal',k:'The part nobody says out loud',title:'A shop that runs smoother should give you your life back, not take more of it.',body:'The point of fixing throughput is not to grind harder. Josh builds this on a simple belief: lasting success in the shop comes from stability at home. Clarity, accountability and measurable growth, without the buzzwords and the busywork.'},
+
+ {t:'section',idx:'Your Next Step',title:'Fix It at the Source'},
+ {t:'normal',k:'How it works',title:'The masterclass teaches the diagnosis. The mastermind is where you run the rhythm.',body:'Inside Throughput Mastery: the peer room, the quarterly guest experts, the private time with Josh, and the 90-day plan that keeps the whole thing moving. The Jumpstart Plan is the way in, and it applies toward your first quarter.'},
+ {t:'cta',title:'Ready to fix throughput at the source?',chips:['Book a call to join Throughput Mastery','Start with the Jumpstart Plan'],disc:'Educational content for manufacturing and machine-shop owners. No revenue, throughput, or business result is guaranteed. Results vary by shop, market, and effort. Statements reflect Josh McKain’s own published approach.'},
+];
+
+const deck=document.getElementById('deck');
+function flowSvg(){return `<svg class="flow-motif title-flow"><use href="#flow"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Throughput <b>Mastery</b> &middot; Josh McKain</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=flowSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
