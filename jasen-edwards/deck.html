@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Done Before One · Jasen Edwards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f3f5f9; --panel:#0b265d; --rule:#d9e0ee;
+    --ink:#161e2a; --accent:#0b265d; --grey:#595959; --dim:#9aa3b2;
+  }
+  html,body{height:100%}
+  body{background:#0a1732;font-family:'Libre Franklin',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a1732}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:.005em}
+  .t-title h1{font-size:4.4vw;max-width:94%;text-transform:uppercase;letter-spacing:.02em}
+  .t-normal h1{font-size:2.55vw;max-width:84%}
+  .t-normal .body{font-family:'Libre Franklin',sans-serif;font-size:1.36vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Libre Franklin',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.54;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.3vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4vw;max-width:88%;text-transform:uppercase}
+  .t-section .rule{width:15vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.8vw;max-width:86%;color:#ffffff;text-transform:none;font-weight:500;line-height:1.22}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3vw;max-width:84%;color:#ffffff;text-transform:none;font-weight:500;line-height:1.2}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Oswald',sans-serif;border:1.5px solid #ffffff;color:#ffffff;border-radius:100px;padding:1.3vh 1.8vw;font-size:1.2vw;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Libre Franklin',sans-serif;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#aeb9d2}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .clock-motif{position:absolute;pointer-events:none}
+  .title-clock{right:6.5%;bottom:9%;width:15vw;opacity:.95}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(11,38,93,.14);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.4vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Jasen Edwards · Done Before One</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="clock" viewBox="0 0 120 120">
+  <g fill="none" stroke="#0b265d" stroke-linecap="round">
+    <circle cx="60" cy="60" r="46" stroke-width="4"/>
+    <line x1="60" y1="18" x2="60" y2="26" stroke-width="4"/>
+    <line x1="102" y1="60" x2="94" y2="60" stroke-width="4"/>
+    <line x1="60" y1="102" x2="60" y2="94" stroke-width="4"/>
+    <line x1="18" y1="60" x2="26" y2="60" stroke-width="4"/>
+    <line x1="60" y1="60" x2="60" y2="30" stroke-width="5"/>
+    <line x1="60" y1="60" x2="82" y2="46" stroke-width="5"/>
+    <circle cx="60" cy="60" r="4" fill="#0b265d" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Done Before One',sub:'A live masterclass for self-employed agents on finishing the real, money-making work before 1 PM, charging above-average fees, and taking your life back.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You did not go independent to work more hours than you ever did for a boss.',body:'This is for the producing agent who is good at the job and quietly drowning in it: the phone that never stops, the admin that eats the day, the guilt every time you try to take an afternoon off. You are making a living. It is costing you your life.'},
+ {t:'dark',title:'Somewhere along the way, busy became the job. The calendar filled, the income flattened, and the day stopped ending.'},
+
+ {t:'section',idx:'Part One',title:'Why Working More Stopped Working'},
+ {t:'normal',k:'The busy trap',title:'The market rewards output, so you paid for more of it with your own hours.',body:'More calls, more showings, more late nights answering email that could have waited. It works for a while, then it plateaus, because there are only so many hours and you have already sold most of them. Effort is not the lever anymore. It is the ceiling.'},
+ {t:'normal',k:'The wrong hours',title:'You are spending your best hours on your cheapest work.',body:'Your sharpest, highest-value thinking happens in the morning, and most agents burn it on reactive busywork: inbox, logistics, putting out fires. The work that actually earns you money gets whatever is left over, tired and late in the day.'},
+ {t:'dark',title:'The problem was never that you work too little. It is that you grind from the wrong beliefs, on the wrong work.'},
+
+ {t:'section',idx:'Part Two',title:'Done Before One'},
+ {t:'normal',k:'The premise',title:'Finish the real, money-making work before one o\'clock.',body:'Done Before One starts with an identity shift, from busy equals worthy to done equals free. When you stop measuring yourself by how full the day looks and start measuring by whether the work that pays you is finished, the whole day reorganizes around what matters.'},
+ {t:'normal',k:'The operating system',title:'Engineer the morning around the few things that actually move the business.',body:'Name the small handful of income-producing activities that genuinely drive your income, then build the routine and the habits that compress them into the first hours of the day. Everything else gets batched, delegated, or dropped. The morning is the business. The rest is maintenance.'},
+ {t:'normal',k:'Charge more, work less',title:'Raise your fee, defend your value, and stop buying income with hours.',body:'The freedom half is priced in. When you are the agent worth choosing, you can charge an above-average fee and stop making up the difference with volume. Fewer clients, served better, at a rate that respects your time. That is what turns a compressed morning into a real living.'},
+ {t:'dark',title:'Done is a system you install once and run every morning. Not a reward you keep promising yourself after one more late night.'},
+
+ {t:'section',idx:'Part Three',title:'Life After One'},
+ {t:'normal',k:'The morning',title:'By one o\'clock, the work that pays you is already done.',body:'Not rushed, not skipped. Done. The listings worked, the follow-up made, the money-making activity handled while your mind was sharp. There is nothing hanging over the afternoon, because the thing that used to hang over it is finished.'},
+ {t:'normal',k:'The afternoon',title:'The hours you fought for are yours again, without the guilt.',body:'The gym, the family, the long lunch, the walk, the second business you always meant to build. You take the afternoon because the work is done, not because you gave up on it. Regular time off stops being a reward you never let yourself claim.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'One House in Eighteen Months to the Top of the List'},
+ {t:'normal',k:'Not theory',title:'I sold one house in my first eighteen months and borrowed money to make rent.',body:'Then I found a coach, learned the craft, and turned it around fast: the youngest person ever named to the Austin Business Journal Top 50, a REALTOR Magazine cover before thirty, and the rank of Master Trainer granted by Floyd Wickman. I have been teaching self-employed people to work smarter ever since.'},
+ {t:'normal',k:'How it works',title:'This hour is the map. The coaching is where you build the routine with support.',body:'Today lays out the whole idea: why more hours stopped working, the Done Before One operating system, and what a compressed morning and a reclaimed afternoon actually look like. From there, working with me is how you install it in your own week, with someone who has walked the road.'},
+ {t:'cta',title:'Ready to get your afternoons back without trading away your production?',chips:['Work with Jasen'],disc:'Educational content for self-employed agents building a better way to work. No income, revenue, or business result is guaranteed. Results vary by agent, market, habits, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function clockSvg(){return `<svg class="clock-motif title-clock"><use href="#clock"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Jasen Edwards &middot; <b>Done Before One</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=clockSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
