@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Cash From Day One · CashPT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* Palette from his own live site probe (brand.json): light scheme, white ground,
+       brand navy #134aa1 / #072B63 and the live link blue #0046dd; Open Sans is his
+       own face. Panel is a deepened navy for the section-break slides. */
+    --bg:#ffffff; --panel:#0b2f6e; --rule:#e6ebf3;
+    --ink:#16233a; --accent:#0046dd; --grey:#55617a; --dim:#9aa3b2;
+  }
+  html,body{height:100%}
+  body{background:#0a1830;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a1830}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Archivo',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.005em}
+  .t-title h1{font-size:3.8vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.8vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.7vw;max-width:84%;color:#ffffff}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:82%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.15vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#b9c4d8}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .rise-motif{position:absolute;pointer-events:none}
+  .title-rise{right:6.5%;bottom:10%;width:17vw;opacity:.96}
+  .brandline{font-size:1.22vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(22,35,58,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">LeBauer Consulting · CashPT</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- rise motif: the day-one cash start drawn as a single line off the block, a starting
+     dot at day one and one confident upstroke. Brand navy + #0046dd from brand.json. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="dayone" viewBox="0 0 260 120">
+  <g fill="none">
+    <line x1="16" y1="100" x2="244" y2="100" stroke="#16233a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28,100 L120,62 L232,20" stroke="#0046dd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28" cy="100" r="8" fill="#0046dd"/>
+    <circle cx="232" cy="20" r="7" fill="none" stroke="#0046dd" stroke-width="4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Cash From Day One',sub:'A live masterclass for physical therapists on building a cash-based practice that gets paid in full, without waiting on insurance.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You became a PT to treat people, not to argue with insurance companies.',body:'This is for the therapist who is great in the room and tired of the model around it: reimbursements that shrink every year, visit caps written by someone who has never met your patient, and a paycheck that only grows if you personally see more bodies in less time.'},
+ {t:'dark',title:'Every year, insurance pays you a little less to do a little more. The ceiling is built into the model.'},
+
+ {t:'section',idx:'Part One',title:'Why the Insurance Model Caps You'},
+ {t:'normal',k:'The discount treadmill',title:'Your rate is set by someone who will never sit on your table.',body:'In-network means a third party decides what an hour of your expertise is worth, then trims it at renewal. You run faster, add visits, hire front-desk staff to chase claims, and the margin still thins. Effort is not the problem. The price-setter is.'},
+ {t:'normal',k:'The invisible expert',title:'The best therapist in town is usually the one nobody can find.',body:'Your skill speaks for itself inside the clinic and nowhere else. No direct relationship with the patients who would gladly pay for the best, no way for them to find you without a referral. The expertise is real; the path to it is missing.'},
+ {t:'dark',title:'The ceiling is not your skill. It is who you let set your price.'},
+
+ {t:'section',idx:'Part Two',title:'The CashPT Blueprint'},
+ {t:'normal',k:'Position as the direct-pay expert',title:'Stop being a provider on a list. Become the person they came to see.',body:'The Blueprint starts with positioning: a clear promise to a specific patient who values getting better fast over getting billed slowly. When you are the obvious choice for that person, price stops being the conversation.'},
+ {t:'normal',k:'Market directly to patients',title:'Go around the referral gate and speak to the patient yourself.',body:'Content, community, and a simple local presence that reaches the patient before a doctor ever does. Direct-to-patient marketing is the engine of a cash practice: it fills the schedule with people who already decided they want you.'},
+ {t:'normal',k:'Convert and price for cash',title:'The discovery visit does the selling. The price reflects the outcome.',body:'A repeatable first-visit conversation that turns interest into a plan of care, and cash pricing built on the result you deliver rather than a fee schedule. This is the mechanic that makes a full-fee practice actually run.'},
+ {t:'dark',title:'A cash practice is not a leap of faith. It is a system you install, one piece at a time.'},
+
+ {t:'section',idx:'Part Three',title:'Three Ways to Start'},
+ {t:'normal',k:'The clinic path',title:'Open the doors as a cash practice from the first patient.',body:'The original CashPT move: a lean direct-pay clinic that never signs an insurance contract, so every visit is paid in full and every hour is yours to price. It is how this whole thing started, straight out of school.'},
+ {t:'normal',k:'The gym path',title:'Build the practice where the athletes already are.',body:'The GymPT Formula: partner with a CrossFit box, yoga studio, or fitness facility, embed a PT service line into a room full of active people, and convert members into cash patients without a lease of your own.'},
+ {t:'normal',k:'The mobile path',title:'Run the whole practice from a car and a calendar.',body:'The MobilePT Academy path: near-zero overhead, house-call delivery, and the scheduling and local marketing to keep it full. The lowest-risk way to test cash demand before you ever sign for space.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'Proof It Works From Day One'},
+ {t:'normal',k:'Not theory',title:'A cash practice built out of PT school, and a clinic still running today.',body:'This is not a plan drawn on a whiteboard. It started as one direct-pay practice that never took insurance, grew into a multi-therapist clinic, and became the method thousands of PTs have used to leave the reimbursement treadmill behind.'},
+ {t:'normal',k:'How it works',title:'The masterclass teaches the model. The Mastermind is where you build it with support.',body:'This hour lays out the map: why the model caps you, the Blueprint, and the path that fits your life. From there, the CashPT Platinum Mastermind is the room where you install it alongside PTs doing the same.'},
+ {t:'cta',title:'Ready to get paid in full for the work you already do best?',chips:['Join the CashPT Platinum Mastermind'],disc:'Educational content for physical therapists building a practice. No income, revenue, or business result is guaranteed. Results vary by therapist, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function riseSvg(){return `<svg class="rise-motif title-rise"><use href="#dayone"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">LeBauer Consulting &middot; <b>CashPT</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=riseSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
