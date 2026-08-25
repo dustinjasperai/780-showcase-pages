@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Insurance Exit · Cash-Based Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#ffffff; --panel:#122262; --rule:#e2e6ef;
+    --ink:#24303f; --accent:#17766a; --grey:#55617a; --dim:#9aa3b2;
+  }
+  html,body{height:100%}
+  body{background:#0b1430;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b1430}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:92%}
+  .t-normal h1{font-size:2.45vw;max-width:84%}
+  .t-normal .body{font-size:1.36vw;color:var(--grey);margin-top:2.6vh;max-width:77%;line-height:1.62;font-weight:400}
+  .sub{font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.54;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.28vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:15vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.65vw;max-width:84%;color:#ffffff}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.85vw;max-width:82%;color:#ffffff}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#ffffff;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.12vw;font-weight:700}
+  .steps{display:flex;gap:1vw;margin-top:3.4vh;flex-wrap:wrap}
+  .step{border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:6px;padding:1.5vh 1.4vw;font-size:1.02vw;color:var(--ink);font-weight:600;background:#f7f9fc}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#b9c4d8}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .step-motif{position:absolute;pointer-events:none}
+  .title-motif{right:6.5%;bottom:10%;width:18vw;opacity:.96}
+  .brandline{font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(36,48,63,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}.step{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Dr. Jarod Carter · Cash-Based Practice</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stepdown" viewBox="0 0 260 130">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20,26 L74,26 L74,58 L128,58 L128,90 L182,90 L182,116 L240,116" stroke="#c9d2e2" stroke-width="5"/>
+    <path d="M20,116 L74,90 L128,66 L182,44 L240,22" stroke="#17766a" stroke-width="6"/>
+    <circle cx="20" cy="116" r="7" fill="#17766a"/>
+    <circle cx="240" cy="22" r="7" fill="none" stroke="#17766a" stroke-width="4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Insurance Exit',sub:'A live masterclass for physical therapists who already run a practice and want off insurance, without the month where the income drops.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You already built a practice. Insurance is quietly shrinking it.',body:'This is for the therapist who is booked but frustrated: a schedule full of in-network visits, reimbursements trimmed a little more every year, and a paycheck that only holds if you keep seeing more people in less time. You are not starting over. You are trying to get out of a model you already know is capping you.'},
+ {t:'dark',title:'Waiting for reimbursements to recover is the one plan guaranteed to make it worse.'},
+
+ {t:'section',idx:'Part One',title:'Why the In-Network Trap Holds'},
+ {t:'normal',k:'The discount treadmill',title:'A third party sets your rate, then trims it at renewal.',body:'In-network means someone who will never sit on your table decides what an hour of your expertise is worth. You respond the only way the model allows, with more visits and more front-desk staff to chase the claims, and the margin still thins. The effort is not the problem. The price-setter is.'},
+ {t:'normal',k:'The fear that keeps you in',title:'You stay because dropping insurance feels like turning off the income.',body:'Every established owner runs the same math: my schedule is full of in-network patients, so if I cut the contracts, next month collapses. That fear is rational, and it is exactly why most PTs never leave. The answer is not more courage. It is a sequence that removes the gap before you ever cut a payer.'},
+ {t:'dark',title:'The trap is not insurance. It is trying to leave it all at once.'},
+
+ {t:'section',idx:'Part Two',title:'The Staged Exit'},
+ {t:'normal',k:'Stage one, position first',title:'Become the obvious choice for a specific patient before you touch pricing.',body:'The transition starts with positioning: a clear promise to the patient who values getting better fast over getting billed slowly. When you are the person that patient came to see, price stops being the conversation, and the cash side has something to sell before you unplug anything.'},
+ {t:'normal',k:'Stage two, build cash while still in-network',title:'Stand up direct-pay demand while the insurance schedule still pays the bills.',body:'You market directly to patients now, with content, a simple local presence, and a discovery-visit conversation that fills cash slots without waiting on a referral. You grow the cash line while the in-network line is still running, so the practice is never living on one income at a time.'},
+ {t:'normal',k:'Stage three, drop payers deliberately',title:'Cut contracts one at a time, only after cash covers the gap.',body:'Now the exit is arithmetic, not a leap. You retire the worst-paying contract first, watch the cash volume hold the revenue, then retire the next. Sequenced this way the income line is built to hold instead of drop, which is the whole reason a staged exit beats a cold turnoff.'},
+ {t:'dark',title:'Build the cash side first. Cut insurance last. That is the entire method.'},
+
+ {t:'section',idx:'Part Three',title:'What a Finished Cash Practice Has'},
+ {t:'normal',k:'The finished-practice scorecard',title:'A fully transitioned practice tends to share the same handful of traits.',body:'In this class you would score a practice against the profile that keeps coming up: clear positioning, pricing built on the outcome, a patient experience worth paying for, marketing that reaches patients directly, and systems that let it run without you. That profile is the destination once the last payer is gone.'},
+ {t:'normal',k:'How to use the scorecard',title:'Whichever trait is weakest is usually what is stalling the transition.',body:'The value of scoring all of them is diagnosis. When a transition slows down it is almost always a single soft spot, positioning that is still fuzzy, or pricing that apologizes for itself, or no direct patient marketing. The scorecard points you at the piece to fix next instead of guessing.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'A Model Still Running Today'},
+ {t:'normal',k:'Not theory',title:'A cash clinic opened in 2010, still open, still fully out of network.',body:'This is not a plan drawn on a whiteboard. It started as one direct-pay clinic in Austin that filled inside six months and never signed an insurance contract, and it is still running. The transition method comes from operating the model for over a decade, plus coaching PTs through the same exit since 2011.'},
+ {t:'normal',k:'How it works from here',title:'The masterclass teaches the map. The Mastermind is where you build it.',body:'This hour lays out the exit: why the in-network model caps you, the staged transition, and the finished-practice scorecard. From there, the Cash-Based Practice Mastermind is the room where you install it alongside PTs making the same move, with the scripts and support to keep the income line steady the whole way.'},
+ {t:'cta',title:'Ready to leave insurance without betting the practice to do it?',chips:['Join the Cash-Based Practice Mastermind'],disc:'Educational content for physical therapists transitioning a practice. No income, revenue, or business result is guaranteed. Results vary by therapist, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function stepSvg(){return `<svg class="step-motif title-motif"><use href="#stepdown"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Dr. Jarod Carter &middot; <b>Cash-Based Practice</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=stepSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
