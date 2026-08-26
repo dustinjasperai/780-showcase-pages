@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Service Over Sales · The Plumbing Sales Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Roboto+Slab:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0c1c30; --panel:#13293f; --deep:#081524; --rule:#284a63;
+    --ink:#f5efe6; --accent:#fbb03b; --bright:#ffb84d; --grey:#a9b6c4; --dim:#7c8a9a;
+  }
+  html,body{height:100%}
+  body{background:#050d18;font-family:'Roboto Slab',Georgia,serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050d18}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;color:var(--ink);line-height:1.08;letter-spacing:.005em;text-transform:uppercase}
+  .t-title h1{font-size:5vw;max-width:94%}
+  .t-normal h1{font-size:3vw;max-width:86%}
+  .t-normal .body{font-family:'Roboto Slab',serif;font-size:1.4vw;color:var(--grey);margin-top:2.8vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Roboto Slab',serif;font-size:1.55vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:90%}
+  .t-section .rule{width:16vw;height:4px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--deep);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.1vw;max-width:86%;color:var(--ink)}
+  .t-dark .accentword{color:var(--accent)}
+  .t-cta{background:var(--deep);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.2vw;max-width:84%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Oswald',sans-serif;border:2px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.8vw;font-size:1.2vw;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-family:'Roboto Slab',serif;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1vw;margin-top:3.4vh;max-width:80%}
+  .seat{border:1.5px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:1.6vh 1.2vw;background:var(--panel)}
+  .seat .r{font-family:'Oswald',sans-serif;font-size:1.15vw;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink)}
+  .seat .d{font-family:'Roboto Slab',serif;font-size:.92vw;color:var(--grey);margin-top:.5vh;line-height:1.4}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.25vw;color:var(--grey);margin-top:3.4vh;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(245,239,230,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Roboto Slab',serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  .pipe-motif{position:absolute;right:6%;bottom:9%;width:18vw;opacity:.9;pointer-events:none}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3.2vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:3vw}.seat .r{font-size:3vw}.seat .d{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 18</div>
+<div class="brand-foot">The Plumbing Sales Coach</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="pipe" viewBox="0 0 260 110">
+  <g fill="none" stroke="#fbb03b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 92 H96 V54 H168 V22 H236"/>
+    <circle cx="18" cy="92" r="7" fill="#fbb03b" stroke="none"/>
+    <circle cx="236" cy="22" r="8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Service Over Sales',sub:'A live masterclass for plumbing owners and their teams on winning the in-home conversation without pressure, without discounting, and without sounding like a salesperson.',brand:true},
+
+ {t:'normal',k:'Who this is for',title:'You run a plumbing shop. You did not sign up to run a discount factory.',body:'This is for the owner with strong techs who still watch the ticket shrink at the kitchen table: the technician who is great with a wrench and freezes on the conversation, drops to the cheapest fix by reflex, and never lays out the options. Great work in the field, money left on the truck.'},
+
+ {t:'dark',title:'People do not want to be sold. They want to be <span class="accentword">served.</span> Lead with service and the money follows.'},
+
+ {t:'section',idx:'Part One',title:'Why the Old Sales Playbook Caps the Shop'},
+ {t:'normal',k:'The discount reflex',title:'When the tech is not sure, the price goes down.',body:'Scripts, pressure, and objection-handling teach a technician to push. So the moment a homeowner hesitates, the tech does the only thing that feels safe: he cuts the price. The margin walks out the door one call at a time, and the customer still does not feel taken care of.'},
+ {t:'normal',k:'The frozen conversation',title:'Your best hands are often your quietest voices.',body:'The tech who can diagnose a failing system in ninety seconds will still mumble through the part where he explains it. No relationship, no whole-home picture, no options laid out. The skill is real. The conversation is where the job is won or lost, and nobody trained him for it.'},
+ {t:'normal',k:'The call before the truck',title:'Half the job is decided before anyone turns a wrench.',body:'The CSR who answers the phone sets the whole tone: booked or lost, premium or price-shopper. When the front line is not trained the same way as the field, the best in-home conversation in the world is fixing a call that was already half broken.'},
+ {t:'dark',title:'The ceiling is not your skill. It is the <span class="accentword">conversation</span> nobody trained the team to have.'},
+
+ {t:'section',idx:'Part Two',title:'Always Be Serving'},
+ {t:'normal',k:'Step one · Relationship',title:'The customer has to feel served before they ever feel sold.',body:'Before a single option comes out, the technician earns the room: respect the home, explain what he sees in plain language, and make it obvious he is there to help, not to hunt a ticket. The relationship is not small talk. It is the thing that makes everything after it believable.'},
+ {t:'normal',k:'Step two · Diagnose',title:'Look at the whole system, not just the part that broke.',body:'A serve-first technician checks what else is at risk in the home before he quotes anything. The homeowner called about one problem; the honest diagnosis is the full picture. That is not upselling. It is telling the truth about the system the family lives with.'},
+ {t:'normal',k:'Step three · Value Stack',title:'Three honest options. The tech informs, the customer decides.',body:'Instead of one take-it-or-leave-it price, the customer sees a good, better, and best path at different price points, each one honest. The technician lays out the trade-offs and then gets out of the way. People buy more, and feel better about it, when the choice is theirs.'},
+ {t:'normal',k:'Every seat moves together',title:'The business only grows when the whole team runs the same play.',body:'Serve-first is not a technician trick. It is how the owner leads, how the CSR answers, how the service manager coaches. When every seat is trained on the same standard, the customer gets the same experience whoever they talk to.',grid:true},
+ {t:'dark',title:'This is how a plumbing company goes from <span class="accentword">fast food to fine dining.</span>'},
+
+ {t:'section',idx:'Part Three',title:'One House Call, Run the Serve-First Way'},
+ {t:'normal',k:'A served call',title:'The same visit, run the serve-first way.',body:'The tech slows down for two minutes, shows the homeowner what he found, walks the whole system, and hands over three clear options. No pressure, no discount reflex. The customer picks the path that fits, thanks him for being straight, and tells a neighbor. That is the entire method in one house call.'},
+ {t:'normal',k:'Who is teaching this',title:'A Navy veteran who ran the shop before he coached it.',body:'This is not theory from a whiteboard. It comes from running a service plumbing company and then coaching 80-plus plumbing companies on the same standard, recognized as a ServiceTitan Top 20 Plumbing Influencer and a Bradford White training partner, with a plumbing-only podcast in the top 10 percent of home-services shows. Plumbing only. Not a generalist.'},
+
+ {t:'cta',title:'Want your whole team serving first, on every call?',chips:['Listen to The FRESH Approach','Ask about the Blueprint'],disc:'Educational content for plumbing business owners and their teams. No income, revenue, ticket-average, or business result is guaranteed. Results vary by company, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function pipeSvg(){return `<svg class="pipe-motif"><use href="#pipe"/></svg>`}
+const SEATS=[['Owner','Sets the standard'],['Technician','Serves in the home'],['CSR','Wins the first call'],['Service Manager','Coaches the field'],['Ops Manager','Keeps it consistent'],['The Customer','Feels served, decides']];
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.grid) h+=`<div class="grid6">`+SEATS.map(x=>`<div class="seat"><div class="r">${x[0]}</div><div class="d">${x[1]}</div></div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">The Plumbing Sales Coach &middot; <b>Always Be Serving</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=pipeSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
