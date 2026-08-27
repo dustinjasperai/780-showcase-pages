@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Styled Shoot Blueprint · Sarah Wahhab, Mulberry &amp; Moss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4f1ef; --panel:#eae1d8; --rule:#d8cdc2;
+    --acc:#c5a193; --ink:#2e3823; --body:#4a4a44; --dim:#8a8378; --cream:#f4f1ef;
+  }
+  html,body{height:100%}
+  body{background:#e7e0d8;font-family:'Questrial',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7e0d8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Questrial',sans-serif;font-size:1.0vw;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:90%}
+  .t-normal h1{font-size:3.5vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:72%;line-height:1.6}
+  .sub{font-family:'Cormorant',serif;font-style:italic;font-size:2.2vw;color:var(--acc);margin-top:3.2vh;max-width:78%;line-height:1.4}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Questrial',sans-serif;font-size:1.25vw;font-weight:400;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:90%}
+  .t-section .rule{width:15vw;height:1px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 10%,#3a4a2c 0%,#242e1c 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.0vw;max-width:84%;font-style:italic;color:var(--cream);font-weight:400}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#3a4a2c 0%,#242e1c 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:82%;color:var(--cream)}
+  .t-cta .body{color:#e4e6dc}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#efe0d8;border-radius:100px;padding:1.4vh 1.8vw;font-size:1.2vw;font-weight:400}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.6vh;font-size:.9vw;color:#c9cbbe;font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .stem-motif{position:absolute;pointer-events:none}
+  .title-stem{right:8%;bottom:7%;width:16vw;opacity:.9}
+  .corner-stem{right:6.5%;bottom:7%;width:8vw;opacity:.55}
+  .brandline{font-family:'Questrial',sans-serif;font-size:1.2vw;color:var(--body);margin-top:3.6vh;font-weight:400;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:400}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(46,56,35,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:400}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:400}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Mulberry &amp; Moss</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- single-stem motif: a thin stem rising to a bloom node, drawn in blush -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stem" viewBox="0 0 120 180">
+  <g fill="none" stroke="#c5a193" stroke-width="1.6" stroke-linecap="round">
+    <path d="M60 172 C60 130 54 108 60 82" opacity="0.85"/>
+    <path d="M60 118 C46 112 38 100 40 88 C52 90 60 100 60 114" opacity="0.6"/>
+    <path d="M60 104 C74 98 82 86 80 74 C68 76 60 86 60 100" opacity="0.6"/>
+    <circle cx="60" cy="66" r="12" opacity="0.9"/>
+    <circle cx="60" cy="66" r="4" fill="#c5a193" stroke="none" opacity="0.9"/>
+    <path d="M60 66 C60 52 66 44 74 42 M60 66 C60 52 54 44 46 42 M60 66 C72 60 80 62 84 68 M60 66 C48 60 40 62 36 68" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Styled Shoot Blueprint',sub:'How editorial styled shoots become a steady stream of luxury wedding bookings.',brand:true,stem:'title'},
+ {t:'normal',k:'Who this is for',title:'You pour real money into styled shoots. Then hope they lead somewhere.',body:'You are a wedding florist or designer who wants the luxury weddings, not just the pretty portfolio. So you invest in shoots, flowers, a team, a whole day of work, and then wait to see if a booking ever follows.'},
+ {t:'dark',title:'A styled shoot no one books from is a beautiful, expensive hobby.'},
+
+ {t:'section',idx:'Part One',title:'Why Most Shoots Never Book'},
+ {t:'normal',k:'The portfolio trap',title:'A shoot built for likes is not built to book.',body:'Most styled shoots are designed to look good on a feed. They collect saves and compliments, and then nothing moves. The images are gorgeous and the calendar stays exactly as full as it was.'},
+ {t:'normal',k:'The missing bridge',title:'There is no path from a published image to a real inquiry.',body:'A feature gets you seen. It does not get you booked. Without a deliberate bridge from the shoot to the right couples and planners, the reach evaporates and the next season starts from zero again.'},
+ {t:'dark',title:'Editorial without intention is just content.'},
+
+ {t:'section',idx:'Part Two',title:'The Styled Shoot Blueprint'},
+ {t:'normal',k:'Pillar one, design from a feeling',title:'Start with the feeling, not the trend.',body:'Florals that speak in energy, not volume. Layering tone, texture, and restraint so the work moves people without overwhelming the space. A shoot with a clear emotional point of view is the one a dream couple recognizes as theirs.'},
+ {t:'normal',k:'Pillar two, cast it to book',title:'Choose the team the way you choose the booking.',body:'The venue, the planner, the photographer, and the palette all decide who eventually sees the work. Casting a shoot toward the couples and planners you actually want is how a creative day turns into a business decision.'},
+ {t:'normal',k:'Pillar three, build for reach',title:'Design the shoot to be seen by the right rooms.',body:'Foam-free, considered, and publication-ready, so the images earn features and land in front of the planners and couples who book luxury. Reach is not luck. It is designed into the shoot before the first stem is cut.'},
+ {t:'normal',k:'Pillar four, turn images into inquiries',title:'The follow-through is where the booking lives.',body:'Once the images exist, they become the engine: the portfolio, the pitch, the proof, and the reason the right couple reaches out. A shoot you actually use, on purpose, is what fills the calendar.'},
+ {t:'dark',title:'A shoot designed to book is worth ten designed to impress.'},
+
+ {t:'section',idx:'Part Three',title:'When the Shoot Books the Wedding'},
+ {t:'normal',k:'The florist this builds',title:'Fewer one-off gigs. More of the couples you were built for.',body:'A florist who runs shoots on purpose stops chasing every inquiry and starts attracting aligned, higher-budget weddings. The work becomes recognizably yours, and the right people come looking for exactly that.'},
+ {t:'dark',title:'The work does not have to shout to sell.'},
+ {t:'normal',k:'Why Sarah Wahhab',title:'Fifteen years of luxury weddings, taught in the open.',body:'Sarah Wahhab is the founder and creative director of Mulberry and Moss, a Southern California luxury wedding and event studio with more than fifteen years behind it. She teaches the atmospheric, restraint-first method her studio is known for, and the business systems around it, to florists building the same kind of name.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Business Behind the Work'},
+ {t:'normal',k:'Keep going with Sarah',title:'Learn the method and the business around it.',body:'Artfully Arranged walks you through her full design process, from flower selection to foam-free installation. Build a Business You Love and the Inner Circle take you into the business itself: pricing, client experience, and running a floral studio you actually love.'},
+ {t:'cta',title:'Ready to make your next shoot book weddings?',chips:['Explore Artfully Arranged','Join Build a Business You Love'],disc:'Educational content for wedding florists and designers. No income or booking result is guaranteed. Results vary by florist, market, and season.'},
+];
+
+const deck=document.getElementById('deck');
+function stem(kind){return `<svg class="stem-motif ${kind==='title'?'title-stem':'corner-stem'}"><use href="#stem"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Mulberry <b>&amp; Moss</b> · Sarah Wahhab</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.stem) h+=stem(s.stem);
+  else if(s.t==='title') h+=stem('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
