@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Foundations &amp; Ease &middot; Floral Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fdfbf8; --panel:#f7edf0; --rule:#ead9de;
+    --ink:#30353e; --accent:#c23268; --accent2:#304670; --dim:#9a8f92;
+  }
+  html,body{height:100%}
+  body{background:#f1e4e7;font-family:'Josefin Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f1e4e7}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9.5% 12% 8% 12%}
+  .slide.active{opacity:1;visibility:visible}
+  .hairline{position:absolute;left:12%;right:12%;top:7.2%;height:1px;background:var(--rule)}
+  .runhead{position:absolute;left:12%;top:4.4%;font-size:.86vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+  .runfoot{position:absolute;right:12%;top:4.4%;font-size:.86vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .kicker{font-size:.98vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-.004em}
+  .t-title h1{font-size:3.9vw;max-width:94%}
+  .t-normal h1{font-size:2.5vw;max-width:86%}
+  .t-normal .body{font-family:'Josefin Sans',sans-serif;font-size:1.28vw;color:#565b63;margin-top:2.8vh;max-width:80%;line-height:1.7;font-weight:400}
+  .sub{font-family:'Josefin Sans',sans-serif;font-size:1.46vw;color:#565b63;margin-top:3.2vh;max-width:80%;line-height:1.6;font-weight:400}
+  .t-section{background:var(--panel);justify-content:center}
+  .t-section .idx{font-family:'Josefin Sans',sans-serif;font-size:1vw;font-weight:600;color:var(--accent2);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.4vw;max-width:88%;font-style:italic}
+  .t-section .bar{width:9vw;height:2px;background:var(--accent);margin-top:3.6vh}
+  .t-section .hairline{background:rgba(48,53,62,.12)}
+  .t-section .runhead{color:#b39aa2}.t-section .runfoot{color:var(--accent)}
+  .t-dark{background:var(--panel);align-items:flex-start}
+  .t-dark h1{font-size:2.75vw;max-width:90%;color:var(--ink);font-style:italic}
+  .t-dark .hairline{background:rgba(48,53,62,.14)}
+  .t-dark .runhead{color:#b39aa2}.t-dark .runfoot{color:var(--accent)}
+  .t-dark .attr{font-family:'Josefin Sans',sans-serif;font-size:1.05vw;color:#6b6169;margin-top:3vh;letter-spacing:.02em;font-style:italic}
+  .t-cta{background:var(--panel)}
+  .t-cta h1{font-size:3vw;max-width:90%;color:var(--ink)}
+  .t-cta .hairline{background:rgba(48,53,62,.14)}
+  .t-cta .runhead{color:#b39aa2}.t-cta .runfoot{color:var(--accent)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1px solid rgba(194,50,104,.45);color:var(--accent);padding:1.2vh 1.5vw;font-size:1.02vw;font-weight:600;font-family:'Josefin Sans',sans-serif;letter-spacing:.02em}
+  .disc{position:absolute;left:12%;right:12%;bottom:4vh;font-size:.8vw;color:var(--dim);line-height:1.5;max-width:78%;font-family:'Josefin Sans',sans-serif}
+  .brandline{font-family:'Josefin Sans',sans-serif;font-size:1.08vw;color:#565b63;margin-top:3.6vh;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:600}
+  .motif{position:absolute;pointer-events:none;opacity:.9}
+  .motif-title{right:8%;bottom:8%;width:16vw}
+  .motif-corner{right:9%;bottom:7%;width:6.5vw;opacity:.6}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(48,53,62,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:#b39aa2;z-index:20;font-weight:600;font-family:'Josefin Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b39aa2;z-index:20;font-weight:600;font-family:'Josefin Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#b39aa2;z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Josefin Sans',sans-serif}
+  @media(max-width:640px){
+    .slide{padding:13% 8% 11% 8%}.hairline{left:8%;right:8%}.runhead{left:8%}.runfoot{right:8%}
+    .kicker{font-size:2.4vw}.runhead,.runfoot{font-size:2vw}
+    .t-title h1{font-size:7vw}.t-normal h1{font-size:4.8vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.2vw}.t-section h1{font-size:6vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.6vw}.chip{font-size:2.5vw}.disc{left:8%;right:8%;font-size:1.9vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Floral Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the stem: a business built to grow, on foundations that hold -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stem" viewBox="0 0 200 120">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 112 V44" stroke="#304670" opacity="0.75"/>
+    <path d="M100 78 C 78 74 66 60 62 44 C 84 46 96 60 100 78 Z" stroke="#304670" fill="#304670" fill-opacity="0.08" opacity="0.75"/>
+    <path d="M100 66 C 122 62 134 48 138 32 C 116 34 104 48 100 66 Z" stroke="#304670" fill="#304670" fill-opacity="0.08" opacity="0.75"/>
+    <circle cx="100" cy="30" r="12" fill="#c23268" fill-opacity="0.12" stroke="#c23268"/>
+    <circle cx="100" cy="30" r="4" fill="#c23268" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',rh:'The Floral Academy Masterclass',rf:'Live',title:'Foundations &amp; Ease',sub:'How to build a wedding-flower business that grows without running you, on the right foundations and the right mindset.',brand:true,motif:'title'},
+ {t:'normal',rh:'Start here',rf:'01',k:'Who this is for',title:'Booked solid. Still bracing for the next invoice.',body:'The enquiries keep coming. The weddings look beautiful. And the money left at the end of the season still depends on nobody asking for anything extra. That is not a flowers problem. It is a foundations problem.'},
+ {t:'dark',rh:'Reframe',rf:'02',title:'You are not disorganised. You are running a business on ground nobody ever laid.'},
+
+ {t:'section',rh:'Part one',rf:'03',idx:'Part one',title:'The Trap: Chasing The Next Booking'},
+ {t:'normal',rh:'Part one',rf:'04',k:'The obvious fix',title:'Take on more weddings. It buys you a season, then the gap comes back.',body:'More bookings is a reasonable move. It is not a foundation. Without something underneath them, the same gaps that ate last year start eating this year, only now you are busier and more tired.'},
+ {t:'normal',rh:'Part one',rf:'05',k:'Why it stalls',title:'A price copied from another florist is not a price built for you.',body:'Pricing has to start from your own numbers and your own goals, not a guess at what the florist down the road charges. A figure borrowed from someone else rarely survives contact with your real costs.'},
+ {t:'normal',rh:'Part one',rf:'06',k:'Where it actually breaks',title:'Nobody ever laid the business foundations.',body:'Pricing, enquiries, consultations, the systems behind them. Most florists can talk you through a wedding install in detail and could not tell you, booking by booking, whether the last one actually made money.'},
+ {t:'dark',rh:'Reframe',rf:'07',title:'A booking is not a business. Foundations are what protect the number you already quoted.'},
+
+ {t:'section',rh:'Part two',rf:'08',idx:'Part two',title:'Foundations, Mindset, Ease'},
+ {t:'normal',rh:'Part two',rf:'09',k:'The Right Foundations',title:'Start from your own numbers, not a guess.',body:'An honest look at what a wedding actually costs you to deliver, so your pricing is built to be profitable on purpose. This is the foundation everything else sits on, and most florists have never laid it.'},
+ {t:'normal',rh:'Part two',rf:'10',k:'The Right Foundations',title:'A clean path from enquiry to consultation to proposal.',body:'One repeatable flow that qualifies the couple, runs the consultation with intention, and sends a proposal built to lead to the sale. The system does the remembering, so you stop carrying the whole business in your head.'},
+ {t:'normal',rh:'Part two',rf:'11',k:'The Aligned Mindset',title:'Charge what it is worth, and hold it in the room.',body:'Most florists discount themselves before the couple ever asks. The mindset work is how you price with confidence and hold that price in the consultation, so the proposal does the selling instead of you apologising for the number.'},
+ {t:'normal',rh:'Part two',rf:'12',k:'Scale With Ease',title:'Let the systems carry the weight, not you.',body:'Growth without a system behind it just means more chaos at a bigger size. Simplify the offer, let the foundations do the lifting, and the business grows without your hours growing to match it.'},
+ {t:'dark',rh:'Reframe',rf:'13',title:'Lay the foundations in before you need them, not after the busy season has already broken you.'},
+
+ {t:'section',rh:'Part three',rf:'14',idx:'Part three',title:'What Changes Once It Holds'},
+ {t:'normal',rh:'Part three',rf:'15',k:'Better-fit couples',title:'The right weddings, booked on purpose.',body:'Once the pricing and the enquiry flow are built, you stop saying yes to work you were never structured to profit from. The couples who value what you do are the ones who make it through the door.'},
+ {t:'normal',rh:'Part three',rf:'16',k:'The margin holds',title:'The profit survives the wedding, not just the quote.',body:'The number you quoted is protected while the work is happening, not discovered as a shortfall the week after. You finish the season with something to show for it beyond a full calendar.'},
+ {t:'normal',rh:'Part three',rf:'17',k:'Why listen to her',title:'She built the business before she taught it.',body:'Sarita Babber qualified in floristry in 2014 and built her own wedding-flower business from handties through to full installations. She founded the Floral Academy and hosts The Wedding Florist Podcast to give florists the strategy the business side never handed them.'},
+ {t:'dark',rh:'Reframe',rf:'18',title:'The florist built on foundations keeps what she earns. The one without them just grows into the same gap.'},
+
+ {t:'section',rh:'Next',rf:'19',idx:'Your next step',title:'Build A Business That Grows With Ease'},
+ {t:'cta',rh:'Next',rf:'20',title:'Ready to stop guessing at your own numbers?',chips:['Join the Floral Academy','Listen to The Wedding Florist Podcast','Start with a mini course'],disc:'Educational content for wedding and event florists. Nothing here is a guarantee of income, revenue, growth or business results. Results vary by florist, market and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'motif-title':'motif-corner'}" viewBox="0 0 200 120"><use href="#stem"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h=`<div class="runhead">${s.rh||''}</div><div class="runfoot">${s.rf||''}</div><div class="hairline"></div>`;
+  if(s.t==='section'){ h+=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="bar"></div>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.attr) h+=`<div class="attr">${s.attr}</div>`;
+    if(s.brand) h+=`<div class="brandline">Floral Academy &middot; <b>Sarita Babber</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='section') h+=motif('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
