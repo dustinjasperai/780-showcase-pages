@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>How to Break the GMAT Plateau · Brett Ethridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Quattrocento+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#161e2a; --panel:#202b3b; --rule:#33404f;
+    --acc:#e67e22; --amber:#b45f06; --idx:#d69a4c; --chalk:#f4f1ea; --grey:#c3cad4; --dim:#7d8794;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Quattrocento Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.20em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'PT Serif',Georgia,serif;font-weight:700;color:var(--chalk);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.2vw;max-width:90%}
+  .t-normal h1{font-size:3.2vw;max-width:85%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.75vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Quattrocento Sans',sans-serif;font-size:1.4vw;font-weight:700;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#243247 0%,#0d1420 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:86%;font-style:italic;color:#f6efe5}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#243247 0%,#0d1420 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#f2d8bd;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .climb-motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-climb{right:7.5%;bottom:8%;width:23vw}
+  .corner-climb{right:6%;bottom:7.5%;width:10vw;opacity:.42}
+  .brandline{font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Dominate Test Prep</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- climb motif: a flat plateau line that breaks upward to a node (score rising once strategy leads) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="climb" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="130" x2="246" y2="130" stroke="#c3cad4" opacity="0.28"/>
+    <path d="M22 108 H120 L226 26" stroke="#e67e22" opacity="0.92"/>
+    <path d="M30 112 H118" stroke="#f4f1ea" opacity="0.12"/>
+    <circle cx="120" cy="108" r="4.6" fill="none" stroke="#e67e22" stroke-width="2.6"/>
+    <circle cx="226" cy="26" r="5.6" fill="#b45f06" stroke="#e67e22" stroke-width="2.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'How to Break the GMAT Plateau',sub:'A masterclass on the strategy that separates top scorers from everyone who is simply studying harder.',brand:true,climb:'title'},
+ {t:'normal',k:'Who this is for',title:'You have studied for months. The score stopped moving.',body:'You are smart, you are disciplined, and you have put in the hours. Then the practice tests level off, still short of the number you need, and more studying does not seem to move it.'},
+ {t:'dark',title:'The GMAT does not reward the person who studies the most. It rewards the person who thinks the most strategically.'},
+
+ {t:'section',idx:'Part One',title:'Why Studying Harder Stops Working'},
+ {t:'normal',k:'Content is only one third',title:'Content is necessary. It is not where the plateau breaks.',body:'Almost every course sells you more content, more videos, more problem sets. Content matters, but once you know the material, piling on more of it is not what lifts a stuck score.'},
+ {t:'normal',k:'The real gap',title:'A stuck score is a strategy gap, not a knowledge gap.',body:'You already know the material. You are losing points to the clock, to picking the slow path through a question, and to the traps the test writes on purpose. That is strategy, and it is teachable.'},
+ {t:'dark',title:'You cannot outstudy a strategy problem.'},
+
+ {t:'section',idx:'Part Two',title:'The GMAT Success Triad'},
+ {t:'normal',k:'The framework',title:'Content, strategy, and practice, held in balance.',body:'A top score is not one of these maxed out. It is all three in balance. Most people overinvest in content and never build the strategy or the practice that actually converts what they know into points.'},
+ {t:'normal',k:'Strategy, pillar one',title:'Identify the question before you try to solve it.',body:'Every question type has a fastest path. When you can name the type on sight, you reach for the right approach instead of grinding every problem the long, textbook way. Speed comes from recognition, not rushing.'},
+ {t:'normal',k:'Strategy, pillar two',title:'Reason to the answer. Do not memorize your way there.',body:'The test rewards thinking, not recall. You learn to reason to the correct answer with non-traditional approaches, backsolving, estimating, eliminating, rather than reciting a formula or a rule you half remember under pressure.'},
+ {t:'normal',k:'Practice, done right',title:'Practice that builds pattern recognition.',body:'Working real questions with a worked solution for every one, all the way through the Official Guide, until the recurring patterns and traps become automatic. That is what turns knowing into scoring.'},
+ {t:'normal',k:'The plan',title:'A plan that sequences the work.',body:'Progress comes from the right order, not just more hours. A structured, week-by-week study plan sequences content, strategy, and practice so each week builds on the last instead of piling up random review.'},
+ {t:'dark',title:'Balanced, the Triad turns a plateau into a climb.'},
+
+ {t:'section',idx:'Part Three',title:'The Strategic Test-Taker'},
+ {t:'normal',k:'What changes',title:'What changes when strategy leads.',body:'You triage the section fast, you stop bleeding points to traps, you stay calm when the clock is loud, and the number that would not move starts moving again. Same brain, different approach.'},
+ {t:'normal',k:'Why learn it here',title:'Why learn this from Brett Ethridge.',body:'Duke graduate, a master’s in international finance, a Peace Corps stint, and the founder of Dominate Test Prep since 2010, teaching the GMAT, GRE, Executive Assessment, and SAT personally. The method is the same one his own students use to move a stuck score.'},
+ {t:'dark',title:'The test is beatable. It just is not beatable by force.'},
+
+ {t:'section',idx:'Your Next Step',title:'Learn the Whole Method'},
+ {t:'normal',k:'The course',title:'Inside Dominate the GMAT.',body:'Over 100 hours of instruction, a worked video solution for every question in the Official Guide, full-length practice tests, a structured week-by-week study plan, and a direct line to a top-percentile instructor. The whole Success Triad, in order.'},
+ {t:'cta',title:'Ready to study strategically instead of endlessly?',chips:['Start with a free strategy session','Explore Dominate the GMAT'],disc:'Educational content for test-takers. No score, admission, or result is guaranteed. Results vary by student, effort, and starting point.'},
+];
+
+const deck=document.getElementById('deck');
+function climb(kind){return `<svg class="climb-motif ${kind==='title'?'title-climb':'corner-climb'}"><use href="#climb"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Dominate <b>Test Prep</b> · Brett Ethridge, Founder</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.climb) h+=climb(s.climb);
+  else if(s.t==='title') h+=climb('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
