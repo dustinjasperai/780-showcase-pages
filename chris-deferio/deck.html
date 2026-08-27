@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Cafe That Runs Without You Behind the Bar · Chris Deferio · Keys to the Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4ece0; --panel:#2a1d14; --rule:#dccab0;
+    --ink:#1f395e; --acc:#b3801f; --coffee:#755d5f;
+    --grey:#5a5148; --dim:#9a8f80; --chalk:#f4ece0;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Hanken Grotesk',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Hanken Grotesk',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.15;letter-spacing:-.005em}
+  .t-title h1{font-size:4.2vw;max-width:90%}
+  .t-normal h1{font-size:3.15vw;max-width:86%}
+  .t-normal .body{font-family:'Hanken Grotesk',sans-serif;font-size:1.34vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Hanken Grotesk',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Hanken Grotesk',sans-serif;font-size:1.18vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:90%}
+  .t-section .rule{width:15vw;height:3px;background:var(--coffee);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:86%;color:var(--chalk)}
+  .t-dark h1 .em{color:var(--acc)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.6vw;max-width:84%;color:var(--chalk)}
+  .t-cta .kicker{color:var(--acc)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--chalk);border-radius:100px;padding:1.3vh 1.7vw;font-size:1.1vw;font-weight:600;font-family:'Hanken Grotesk',sans-serif;letter-spacing:.02em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-family:'Hanken Grotesk',sans-serif;font-size:.82vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-family:'Hanken Grotesk',sans-serif;font-size:1.14vw;color:var(--coffee);margin-top:3.4vh;font-weight:500;letter-spacing:.06em}
+  .brandline b{color:var(--ink);font-weight:700}
+  .key{position:absolute;pointer-events:none}
+  .title-key{right:7%;bottom:10%;width:15vw;opacity:.9}
+  .corner-key{right:6.6%;bottom:8%;width:6.4vw;opacity:.42}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,0,0,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600;font-family:'Hanken Grotesk',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Hanken Grotesk',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Hanken Grotesk',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Keys to the Shop</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- fine-line key motif (Keys to the Shop): one clean line mark, never clip-art coffee cups -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="key" viewBox="0 0 200 90">
+  <g fill="none" stroke="#b3801f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="40" cy="45" r="24"/>
+    <circle cx="40" cy="45" r="9" stroke="#755d5f"/>
+    <line x1="64" y1="45" x2="184" y2="45"/>
+    <line x1="150" y1="45" x2="150" y2="66"/>
+    <line x1="168" y1="45" x2="168" y2="70"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Cafe That Runs Without You Behind the Bar',sub:'A live masterclass for coffee shop owners on building the team, the training systems, and the leadership that let your shop run well on the mornings you are not there.',brand:true,key:'title'},
+
+ {t:'normal',k:'Who this is for',title:'You opened a coffee shop. Somewhere along the way it became a job you can never leave.',body:'You are the best barista, the trainer, the fixer, the closer, and the person who opens when someone calls in sick. The shop is good because you are standing in it. The day you step away is the day the wheels wobble, so you never really step away.'},
+ {t:'dark',title:'The problem was never the coffee. It is that almost every system in the shop still lives in <span class="em">your head</span>.'},
+
+ {t:'section',idx:'Part One',title:'The Owner-Shaped Bottleneck'},
+ {t:'normal',k:'You are the standard',title:'When you are the standard, the shop can only be as good as the shift you happen to be working.',body:'Your regulars can tell which days you are on bar. Drinks drift, the counter gets loose, the vibe changes with whoever is closing. Not because your team is bad, but because the standard was never written down anywhere except in how you personally do it.'},
+ {t:'normal',k:'The cost of being the only one who knows',title:'Every time someone leaves, your knowledge walks out with them, and you retrain from zero.',body:'A cafe where the owner is the only real trainer runs on turnover it can never get ahead of. You hire fast because you are short, onboard on the fly, and the new person learns by watching whoever is nearest, so the standard slips a little more each time.'},
+ {t:'dark',title:'A cafe that depends on the owner behind the bar is not a business yet. It is a very demanding <span class="em">job</span>.'},
+
+ {t:'section',idx:'Part Two',title:'Build the Team the Shop Runs On'},
+ {t:'normal',k:'One · Hire for the room',title:'Hire for the person you can build a shift around, not just the resume that lists espresso.',body:'A people-first hiring system screens for the character and the hospitality instinct you cannot train, then trains the skills you can. You stop hiring in a panic and start choosing people who make the room better, which is the single decision the rest of the shop is built on.'},
+ {t:'normal',k:'Two · Train it once, on paper',title:'Get the standard out of your head and onto a page, so it holds without you saying it again.',body:'An in-house training system, real onboarding, and the checklists and SOPs behind bar, open, and close mean the standard is a document a new hire can learn from, not a thing they absorb by osmosis. Trained once, well, it holds on the shifts you are nowhere near.'},
+ {t:'normal',k:'Three · Lead people, not just shifts',title:'The owners who get their life back are the ones who learned to lead a team, not to manage tasks.',body:'Clear communication, honest feedback, and a culture people want to stay in are what turn a rota of part-timers into a team that protects the standard when you are not watching. Leadership is the skill that lets you hand off the bar without handing off the quality.'},
+ {t:'normal',k:'Four · Run it on standards',title:'A shop that runs on standards and checklists runs the same on a Tuesday you took off as one you closed.',body:'Operations you can see, a real assessment of where the shop actually leaks time and margin, and the systems that make quality repeatable are what let you open a second location or simply take a morning off without the whole thing wobbling.'},
+ {t:'dark',title:'Great coffee gets someone in the door once. A <span class="em">team and a system</span> are what make them regulars.'},
+
+ {t:'section',idx:'Part Three',title:'The Owner Who Gets to Lead'},
+ {t:'normal',k:'What this builds',title:'Fewer fires, better mornings, and a shop that holds its standard on its own.',body:'You still love the work, you just are not trapped inside it. The team runs the bar to a standard you set, you spend your hours on the decisions only the owner can make, and the shop keeps its quality whether you are behind the counter or not.'},
+ {t:'normal',k:'Why Chris Deferio',title:'Twenty-five years in specialty coffee, and 85-plus coffee businesses coached.',body:'Chris Deferio hosts the Keys to the Shop podcast, built to equip coffee shop leaders, and has spent more than 25 years in specialty coffee coaching owners through exactly this shift. The approach is people-first by design: honesty, real systems, and a genuine stake in the owner getting their business, and their life, back.'},
+ {t:'dark',title:'The best owners stop trying to be the best barista and become the <span class="em">leader the team learns from</span>.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Shop’s Operating System'},
+ {t:'normal',k:'Where the method lives',title:'The full system, from hiring to training to leadership, is Keys to the Shop Consulting and the Key Holder Coaching Groups.',body:'One-on-one consulting to build your shop’s systems around your team, or a Key Holder Coaching Group to do it alongside other owners working the same problem. Either way the goal is the same: a cafe that runs on its people and its systems, so leading it is finally a job you would choose again.'},
+ {t:'cta',k:'Keys to the Shop',title:'Ready to build a shop that runs on its team, not just on you?',chips:['Book a free call','Join a Key Holder group'],disc:'Educational content for coffee shop owners and operators. No income, profit, or business result is guaranteed. Results vary by shop, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function keySvg(kind){return `<svg class="key ${kind==='title'?'title-key':'corner-key'}" viewBox="0 0 200 90"><use href="#key"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Keys to the <b>Shop</b> &middot; Chris Deferio</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=keySvg('title');
+  else if(s.t==='normal' && (i%3===0)) h+=keySvg('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
