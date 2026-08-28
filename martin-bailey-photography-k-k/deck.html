@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Seeing First · Martin Bailey Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#eef3f6; --panel:#dde7ec; --panel2:#e2ebef; --rule:#c4d3db;
+    --acc:#2f7fb0; --ink:#16232b; --body:#3c4a53; --dim:#78909d; --snow:#f7fafb;
+    --plate:#101c24; --plate-ink:#eef3f6;
+  }
+  html,body{height:100%}
+  body{background:#dbe4e9;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dbe4e9}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.13;letter-spacing:.002em}
+  .t-title h1{font-size:4.8vw;max-width:94%}
+  .t-normal h1{font-size:3.3vw;max-width:90%}
+  .t-normal .body{font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Spectral',serif;font-style:italic;font-size:2.1vw;color:var(--acc);margin-top:3.2vh;max-width:82%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel2)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.2vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:92%}
+  .t-section .rule{width:15vw;height:1px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-plate{background:var(--plate);align-items:center;text-align:center}
+  .t-plate h1{font-size:3.8vw;max-width:88%;font-style:italic;color:var(--plate-ink);font-weight:500}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#16303f 0%,#0c161d 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--snow)}
+  .t-cta .body{color:#cfdce3;font-family:'Inter',sans-serif;font-size:1.4vw;margin-top:2.6vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:var(--snow);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.6vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .horizon-motif{position:absolute;pointer-events:none}
+  .title-h{right:8%;bottom:9%;width:22vw;opacity:.9}
+  .corner-h{right:6.5%;bottom:8%;width:12vw;opacity:.55}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.2vw;color:var(--body);margin-top:3.6vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(22,35,43,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-plate h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.t-cta .body{font-size:3vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Martin Bailey Photography</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- horizon-and-accent motif: a single quiet frame with one accent, drawn in glacier blue -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="horizon" viewBox="0 0 200 90">
+  <g fill="none" stroke="#2f7fb0" stroke-width="1.4" stroke-linecap="round">
+    <line x1="12" y1="58" x2="188" y2="58" opacity="0.75"/>
+    <path d="M12 58 L58 40 L92 52 L128 33 L166 49 L188 44" opacity="0.4"/>
+  </g>
+  <circle cx="150" cy="30" r="5.5" fill="#2f7fb0" opacity="0.85"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Seeing First',sub:'How deliberate photographers make the picture before they ever press the shutter.',brand:true,horizon:'title'},
+ {t:'normal',k:'Who this is for',title:'You own the gear. You know the settings. The photos still come home feeling like luck.',body:'You have put in the years. Exposure, focus, the right lens, all of it is second nature now. Yet you stand somewhere beautiful, shoot a hundred frames, and only two or three feel like what you actually saw. The rest are correct and forgettable.'},
+ {t:'plate',title:'A sharp, perfectly exposed photograph can still say nothing at all.'},
+
+ {t:'section',idx:'Part One',title:'Why Better Gear Never Fixed Your Photographs'},
+ {t:'normal',k:'The autopilot trap',title:'Most photographs are taken, not made.',body:'The camera comes up on reflex, you fire, and you hope the frame holds together later on the screen. When you shoot first and decide afterward, the scene chooses the picture for you. You are a witness to it, not the author of it.'},
+ {t:'normal',k:'The rules that quietly run your camera',title:'Rule of thirds, never centre, zoom with your feet. Useful, until they start making the decisions.',body:'Most of us learned a handful of composition rules and then applied them everywhere, as laws. The trouble is that a rule followed without asking whether it serves this scene is just a habit. It flattens the frames that needed you to break it.'},
+ {t:'plate',title:'Gear answers how. It has never once answered what you are trying to say.'},
+
+ {t:'section',idx:'Part Two',title:'Contemplative Composition'},
+ {t:'normal',k:'Pillar one, be deliberate',title:'Decide what the photograph is about before the camera leaves your chest.',body:'Name the subject and the reason it is worth a frame. One clear intention, chosen on purpose, does more for an image than any setting. Deliberate work is the whole difference between a shot you took and a photograph you made.'},
+ {t:'normal',k:'Pillar two, a toolbox, not a rulebook',title:'Carry compositional tools you can reach for, instead of rules you have to obey.',body:'Leading lines, negative space, balance, the accent. Held as options rather than commandments, they become a mental toolbox. The more tools you can genuinely see with, the better your read of whatever the scene in front of you is actually doing.'},
+ {t:'normal',k:'Pillar three, question the rule',title:'Every guideline has a scene it quietly ruins. Learn where each one breaks.',body:'The rule of thirds is a guideline, not a law. Sometimes the subject belongs dead centre. Sometimes the horizon wants the middle of the frame. When you understand a rule well enough to know its failure cases, you break it on purpose instead of by accident.'},
+ {t:'normal',k:'Pillar four, include an accent',title:'One small accent can carry a quiet, almost empty frame.',body:'A lone figure, a single spot of warm colour, one bare tree in a white field. In a minimal composition the accent is where the eye lands and rests. It is the difference between an empty photograph and a still one, and it is the heart of how a winter landscape is built.'},
+ {t:'plate',title:'Minimalism is not an empty frame. It is one thing, chosen on purpose.'},
+
+ {t:'section',idx:'Part Three',title:'In the Field'},
+ {t:'normal',k:'Slowing down in front of the scene',title:'Fewer frames, each one actually decided.',body:'Standing in front of a red-crowned crane or an empty Hokkaido snowfield, the work happens before the shutter. You settle, you look, you decide what the frame is about, and only then do you shoot. On a winter landscape the picture is built by subtraction, one deliberate choice at a time.'},
+ {t:'normal',k:'Shoot, critique, see more next time',title:'A photograph you can explain is a photograph you can repeat.',body:'After the shooting comes the honest part: looking back at the frame and naming why it works or why it does not. That critique loop is what turns a lucky keeper into a repeatable eye. You stop hoping for good photographs and start understanding how you got them.'},
+ {t:'plate',title:'The camera never changed. The way you see through it did.'},
+
+ {t:'normal',k:'Why Martin',title:'Twenty years behind the lens, and behind the microphone.',body:'Martin Bailey has photographed nature, wildlife and landscape from a base in Japan since 1991, and has hosted the Martin Bailey Photography Podcast since 2005. A Capture One ambassador and X-Rite Coloratti with a solo show at Canon in Tokyo, he has spent two decades teaching photographers of every level to see more deliberately.'},
+
+ {t:'section',idx:'Your Next Step',title:'Come and Make Deliberate Photographs'},
+ {t:'cta',title:'Ready to shoot with intention instead of hope?',body:'Practise this in the field on a Hokkaido winter tour, go deeper one to one in the mentorship, or start free inside the podcast community.',chips:['Join a Hokkaido winter tour','Sit in on the mentorship','Start with the community'],disc:'Educational content for enthusiast and aspiring photographers of every level. No specific result is guaranteed. What you get from a photograph varies with practice, place, and light.'},
+];
+
+const deck=document.getElementById('deck');
+function horizon(kind){return `<svg class="horizon-motif ${kind==='title'?'title-h':'corner-h'}" viewBox="0 0 200 90"><use href="#horizon"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Martin Bailey <b>Photography</b> · Podcast since 2005</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.horizon) h+=horizon(s.horizon);
+  else if(s.t==='title') h+=horizon('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
