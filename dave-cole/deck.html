@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Championship Standard: How Every Cup on Your Bar Can Taste Like a World Champion Made It · Dave + Cole</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f5f1e8; --panel:#16150f; --rule:#e0d9c8;
+    --ink:#16150f; --ink-soft:#5b5647; --dim:#8a8474;
+    --accent:#6f7d4d; --accent-pale:#cdd2b9; --ink-dark:#f2eee2;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.06;letter-spacing:0}
+  .t-title h1{font-size:5.2vw;max-width:95%}
+  .t-normal h1{font-size:3.3vw;max-width:92%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.24vw;color:var(--ink-soft);margin-top:2.8vh;max-width:80%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.34vw;color:var(--ink-soft);margin-top:3.2vh;max-width:82%;line-height:1.56;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.05vw;font-weight:600;color:var(--accent);margin-bottom:2.2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:94%}
+  .t-section .rule{width:13vw;height:3px;background:var(--accent);margin-top:3.6vh;border-radius:2px}
+  .t-dark{background:var(--panel);align-items:center;text-align:center;color:var(--ink-dark)}
+  .t-dark h1{font-size:3.5vw;max-width:88%;color:var(--ink-dark)}
+  .t-dark h1 .accent{color:var(--accent-pale);font-style:italic}
+  .t-cta{background:var(--panel);align-items:center;text-align:center;color:var(--ink-dark)}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--ink-dark)}
+  .t-cta .kicker{color:var(--accent-pale)}
+  .t-normal h1 .accent{color:var(--accent);font-style:italic}
+  .chips{display:flex;gap:1vw;margin-top:4.4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent-pale);color:var(--ink-dark);border-radius:100px;padding:1.3vh 1.8vw;font-size:1.02vw;font-weight:600;font-family:'Inter',sans-serif;letter-spacing:.03em}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.6vh;font-family:'Inter',sans-serif;font-size:.8vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.04vw;color:var(--ink-soft);margin-top:3.6vh;font-weight:500;letter-spacing:.06em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none}
+  .title-motif{right:7%;bottom:9.5%;width:19vw;opacity:.9}
+  .corner-motif{right:7.2%;bottom:8.4%;width:8vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,0,0,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600;font-family:'Inter',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Inter',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s;font-family:'Inter',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:2.9vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Buy the Drip &middot; Dave + Cole</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- score-sheet motif: a measured baseline with graduated ticks, one filled (the standard hit) - never coffee-cup clip art -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="marks" viewBox="0 0 200 120">
+  <g fill="none" stroke="#6f7d4d" stroke-width="2.2" stroke-linecap="round">
+    <path d="M14 96 H186"/>
+    <path d="M28 96 V72"/><path d="M52 96 V60"/><path d="M76 96 V78"/>
+    <path d="M100 96 V50"/><path d="M124 96 V70"/><path d="M148 96 V62"/><path d="M172 96 V80"/>
+  </g>
+  <circle cx="100" cy="50" r="7" fill="#6f7d4d"/>
+  <path d="M100 50 V22" stroke="#6f7d4d" stroke-width="2.2" stroke-linecap="round"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Championship Standard',sub:'A live masterclass for coffee shop owners on the training system behind two World Barista Champions, and how it makes every cup on your bar taste the same, from the first shot of the morning to the last of a Saturday rush.',brand:true,arc:'title'},
+
+ {t:'normal',k:'Who this is for',title:'You can hire good baristas and buy great beans. What you cannot seem to buy is the same cup twice.',body:'The espresso a regular falls in love with on Tuesday is a little off by Friday, depending on who is behind the bar. You feel the swing in the reviews, in the reorders, in the regulars who slowly drift. The beans were never the problem. The standard is.'},
+ {t:'dark',title:'Most cafes do not lose regulars because the coffee is bad. They lose them because it is <span class="accent">inconsistent</span>, and no one falls in love with greatness they only get half the time.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Baristas Still Pour Inconsistent Coffee'},
+ {t:'normal',k:'The taste-by-feel trap',title:'If good lives in each barista’s head, you have as many standards as you have staff.',body:'Everyone behind the bar is chasing their own idea of a good shot, so quality drifts with whoever is on shift. Without one shared, written definition of good, a new hire quietly waters it down, and your best barista’s magic walks out the door the day they do.'},
+ {t:'normal',k:'The invisible drift',title:'Nobody decided to lower the bar. It slips a half second and a quarter gram at a time.',body:'Dial-in gets rushed on a busy morning, the milk runs a touch hot, the grinder wanders and no one resets it. None of it looks like a problem on its own. Added up across a week it is the whole difference between a cafe people cross town for and one they settle for.'},
+ {t:'dark',title:'A champion is not someone with better hands. It is someone held to a <span class="accent">standard they can measure</span>, every single rep.'},
+
+ {t:'section',idx:'Part Two',title:'The System Behind Two World Champions'},
+ {t:'normal',k:'Pillar one · The score sheet',title:'The same sheet that scores a World Championship can score your bar on a Tuesday.',body:'The World Barista Championship judges every shot on a technical and sensory score sheet. We train teams off that exact sheet, so good stops being an opinion and becomes a checklist: the dose, the time, the texture, the taste. Everyone on your bar is finally aiming at the same target instead of their own.'},
+ {t:'normal',k:'Pillar two · The choreography',title:'A championship routine is choreography. So is a great bar in the middle of a rush.',body:'A competitor knows every step in order, timed and rehearsed, so they can talk and make coffee at once without the quality slipping. We break your bar workflow into that same repeatable routine, so the tenth coffee of a rush is built exactly like the first, on muscle memory instead of luck.'},
+ {t:'normal',k:'Pillar three · Constant improvement',title:'Score it, taste it together, adjust, run it again. That loop is the whole secret.',body:'A barista goes from good to world class through a tight feedback loop, not raw talent. You taste as a team against the sheet, name what was off in plain language, change one thing, and repeat. Done every week, the whole bar climbs together, and the standard holds even on the days you are not there.'},
+ {t:'dark',title:'One sheet, one routine, one weekly loop. That is the difference between hoping for a good cup and <span class="accent">building one on purpose</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What A Bar Run To The Standard Feels Like'},
+ {t:'normal',k:'For the customer',title:'Every regular gets the drink they fell for, every visit, no matter who is on bar.',body:'Consistency is the quiet thing that turns a first-timer into a regular and a regular into someone who brings friends. They cannot always name it, but they can feel that yours is the cafe that never lets them down, and that feeling is what they keep paying for.'},
+ {t:'normal',k:'For the owner',title:'You stop being the quality-control department and start being the owner again.',body:'When the standard lives on a sheet and in a routine instead of only in your head, you can step off the bar without the coffee getting worse. Training a new hire gets faster and steadier, because they are learning a system, not your personal habits.'},
+ {t:'normal',k:'Why Dave and Cole',title:'Two brothers who coached the last two World Barista Champions, and roast and source at that level every day.',body:'Dave built Rosso Coffee Roasters, whose coffee the last two World Champions competed on. Cole is a two-time Canadian Barista Champion who placed third in the world and sources green coffee straight from producers through Forward. This is the exact system they use to take a barista to a world stage, taught for the bar you actually run.'},
+
+ {t:'section',idx:'Your Next Step',title:'Run Your Bar On The Standard'},
+ {t:'normal',k:'Where the method lives',title:'The full system, from the score sheet to the routine to the weekly loop, is what we coach coffee businesses through.',body:'This masterclass is the first hour of it. When you want it built into your own bar, with your drinks, your team, and your menu, that is the coaching and consulting we do with you directly.'},
+ {t:'cta',k:'Buy the Drip · Dave + Cole',title:'Ready to make every cup on your bar taste like a champion made it?',chips:['Work with Dave and Cole','Subscribe to Buy the Drip'],disc:'Educational content for coffee shop owners and their teams. No revenue, profit, or business result is guaranteed. Results vary by cafe, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motifSvg(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}" viewBox="0 0 200 120"><use href="#marks"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Buy the Drip <b>&middot; Dave + Cole</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=motifSvg('title');
+  else if(s.t==='normal' && (i%3===0)) h+=motifSvg('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
