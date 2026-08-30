@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Fully Booked From Your Own Town · Brooke Jefferson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf6f1; --panel:#f2e7dd; --rule:#e2d1c2;
+    --acc:#964421; --ink:#2a1a12; --body:#5a4a3f; --dim:#a08b7c; --cream:#fbf7f2;
+  }
+  html,body{height:100%}
+  body{background:#efe6db;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe6db}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.4vw;max-width:88%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:2.2vw;color:var(--acc);margin-top:3.2vh;max-width:82%;line-height:1.4;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.2vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#3a231733 0%,#2a1a12 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:88%;font-style:italic;color:var(--cream);font-weight:400}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#3a2317 0%,#2a1a12 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.0vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{color:#e9dccf}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.6vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .cal-motif{position:absolute;pointer-events:none}
+  .title-cal{right:8%;bottom:8%;width:14vw;opacity:.9}
+  .corner-cal{right:6.5%;bottom:7.5%;width:7vw;opacity:.42}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.2vw;color:var(--body);margin-top:3.6vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(42,26,18,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Book More Clients</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- booked-calendar motif: a calendar with one booked square, drawn in terracotta -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="cal" viewBox="0 0 120 120">
+  <g fill="none" stroke="#964421" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="20" y="26" width="80" height="74" rx="8" opacity="0.9"/>
+    <path d="M20 44 H100" opacity="0.7"/>
+    <path d="M40 20 V32 M80 20 V32" opacity="0.85"/>
+    <rect x="66" y="58" width="24" height="22" rx="4" fill="#964421" stroke="none" opacity="0.9"/>
+    <path d="M32 64 h14 M32 84 h30" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Fully Booked From Your Own Town',sub:'How photographers fill the calendar with local marketing and referrals, without paid ads and without burning out.',brand:true,cal:'title'},
+ {t:'normal',k:'Who this is for',title:'You can take the photo. Staying booked is the part no one taught you.',body:'You are a photographer who can shoot beautifully, but the bookings feel like weather. Some months the calendar is full, some months it is quiet, and a slow season is a real fear. Pricing is a guess and marketing happens in panic bursts.'},
+ {t:'dark',title:'A full week now and an empty calendar next month is not a business.'},
+
+ {t:'section',idx:'Part One',title:'Why Talent Is Not Filling Your Calendar'},
+ {t:'normal',k:'The craft-first trap',title:'Getting better at photography does not get you booked.',body:'Most photographers pour their growth into the gear, the editing, and the feed. The images get stronger and the calendar stays exactly as unpredictable as it was, because none of that is a system for getting found and booked in the place you actually live.'},
+ {t:'normal',k:'The feast-or-famine loop',title:'Without a system, bookings arrive in waves you cannot plan around.',body:'When marketing only happens when you notice the calendar is empty, the work comes in bursts. A busy month makes you stop marketing, the quiet month arrives a few weeks later, and the panic starts again. It is exhausting, and it never turns into steady income.'},
+ {t:'dark',title:'Your best marketing channel is not Instagram. It is the town you already live in.'},
+
+ {t:'section',idx:'Part Two',title:'The Fully Booked Method'},
+ {t:'normal',k:'Pillar one, become the go-to',title:'Be the first name people say for your kind of photography in your town.',body:'Positioning comes before any tactic. When you are known for one thing in one place, the family, senior, and newborn clients who want exactly that start coming to you by name. This is what makes every other channel work harder without more effort from you.'},
+ {t:'normal',k:'Pillar two, price for profit',title:'Price for the life you want, not for what the studio down the road charges.',body:'The Pricing for Profit Formula builds your prices from the income you actually need and the value of the work, not from copying the local market or guessing per hour. Booked and broke is still broke. This is the pillar that makes a full calendar pay.'},
+ {t:'normal',k:'Pillar three, local marketing domination',title:'Own your own town before you fight strangers on the internet.',body:'Local partnerships, community visibility, and a Google Business Profile that actually shows up put you in front of the people most ready to book: the ones nearby, right now. This is the pillar most photographers skip, and it is the one that fills the calendar fastest.'},
+ {t:'normal',k:'Pillar four, word-of-mouth amplification',title:'Turn every happy client into the next three bookings.',body:'Reviews, referrals, and repeat clients are the engine that compounds. With a simple system for asking, following up, and staying in touch, one great session becomes a referral, becomes a repeat, becomes a reputation that books you out before you advertise anything.'},
+ {t:'dark',title:'Every happy client is a marketing channel you already paid for.'},
+
+ {t:'section',idx:'Part Three',title:'What a Booked-Out Year Looks Like'},
+ {t:'normal',k:'The photographer this builds',title:'Booked months ahead, calm about the quiet season, done chasing.',body:'A photographer running the whole method stops trading panic for the next booking. The calendar fills on purpose, referrals cover the gaps, and pricing means a full month is also a profitable one. The slow season stops being a threat and becomes time you planned for.'},
+ {t:'normal',k:'A plan you repeat',title:'The 4 Steps to a Fully Booked Year turn all of this into a calendar you run on purpose.',body:'Instead of reacting to an empty week, you work a repeatable annual plan: what to market, when to fill, and how to keep clients coming back season after season. Booking stops being luck and becomes a rhythm you can count on every year.'},
+ {t:'dark',title:'Booked on purpose, not by luck.'},
+ {t:'normal',k:'Why Brooke',title:'Built from a borrowed camera, taught from experience.',body:'Brooke Jefferson started her photography business in 2014 with a baby and a borrowed camera, left teaching in 2018, and built a booked Oklahoma family and senior studio. Since 2019 she has taught this method on the Book More Clients podcast and to hundreds of photographers who wanted a calendar they could count on.'},
+
+ {t:'section',idx:'Your Next Step',title:'Fill Your Calendar From Your Own Town'},
+ {t:'normal',k:'Keep going with Brooke',title:'Three doors, for exactly where you are.',body:'The Fully Booked Method is the eight-week foundation to get booked. The Full Time Blueprint takes an established photographer deeper with a year of coaching and community. Market Like a Tog is the membership that keeps you marketing consistently, with a plug-and-play plan every month.'},
+ {t:'cta',title:'Ready to fill your calendar from your own town?',chips:['Start with the Fully Booked Method','Go deeper with the Full Time Blueprint','Stay consistent with Market Like a Tog'],disc:'Educational content for working and aspiring photographers. No income or booking result is guaranteed. Results vary by photographer, market, and season.'},
+];
+
+const deck=document.getElementById('deck');
+function cal(kind){return `<svg class="cal-motif ${kind==='title'?'title-cal':'corner-cal'}"><use href="#cal"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Brooke <b>Jefferson</b> · Book More Clients</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.cal) h+=cal(s.cal);
+  else if(s.t==='title') h+=cal('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
