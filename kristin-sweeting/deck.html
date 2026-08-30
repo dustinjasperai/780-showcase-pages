@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Charge More, Shoot Less · Kristin Sweeting, Dangerous Creatives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f3ede3; --panel:#e7ded1; --rule:#dccebb;
+    --acc:#a05a3c; --ink:#2a231e; --body:#524a40; --dim:#9a8f80; --cream:#f7f2ea;
+  }
+  html,body{height:100%}
+  body{background:#e8e0d3;font-family:'Jost',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e8e0d3}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Prata',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.14;letter-spacing:.004em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.25vw;max-width:90%}
+  .t-normal .body{font-family:'Jost',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:73%;line-height:1.64;font-weight:400}
+  .sub{font-family:'Prata',serif;font-size:2.0vw;color:var(--acc);margin-top:3.6vh;max-width:84%;line-height:1.42;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:92%}
+  .t-section .rule{width:14vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2f2620 0%,#1f1813 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2f2620 0%,#1f1813 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Jost',sans-serif;color:#e9ddcd;font-size:1.42vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:8.5%;width:15vw;opacity:.92}
+  .corner-vf{right:6.5%;bottom:7.5%;width:7.5vw;opacity:.5}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.06em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(42,35,30,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Dangerous Creatives</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: an editorial corner mark, a thin quarter-frame closing on a filled dot (the confident full stop), drawn in terracotta -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 120 120">
+  <g fill="none" stroke="#a05a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 92 V44 A24 24 0 0 1 44 20 H92" opacity="0.85"/>
+    <path d="M64 40 H100 M100 40 V76" opacity="0.5"/>
+  </g>
+  <circle cx="84" cy="84" r="8" fill="#a05a3c" opacity="0.9"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Charge More, Shoot Less',sub:'How photographers raise their prices, take on fewer clients, and build a business that gives their life back.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'The work was never the problem. The price and the pace are.',body:'You are a photographer whose images are genuinely good, and the inquiries do come in. But you are booked most weekends, priced for the photographer you were three years ago, and quietly exhausted. You keep saying yes because the calendar feels like the only lever you have.'},
+ {t:'dark',title:'A full calendar at the wrong price is just burnout with beautiful lighting.'},
+
+ {t:'section',idx:'Part One',title:'Why More Weddings Stopped Working'},
+ {t:'normal',k:'The volume trap',title:'Booking more at a low rate only buys you a busier version of the same problem.',body:'When money is tight, the instinct is to take on more shoots. But more low-priced work means more editing, more emails, more weekends gone, and the same thin margin at the end of it. You cannot out-hustle a price that is too low. You can only exhaust yourself trying.'},
+ {t:'normal',k:'The underpricing reflex',title:'You are charging what felt brave to charge years ago.',body:'Most photographers set a price once, when they were less experienced and more afraid, and then never really move it. Your skill has grown, your work has grown, your costs have grown. The number on the pricing guide has not. That gap is not a marketing problem. It is a belief you have not updated.'},
+ {t:'dark',title:'You did not build a craft this good to spend it discounting it.'},
+
+ {t:'section',idx:'Part Two',title:'The Dangerous Creatives Method'},
+ {t:'normal',k:'The premise, Danger School',title:'You already have the skill. Fear and self-judgment are what cap the price.',body:'This is the whole idea behind Danger School. You do not need to become a better photographer to earn more. You need to make specific, intentional moves you have been too afraid to make, and build a business around three things at once: impact, financial growth, and autonomy. Growth for the whole person, the bank account and the calendar, not one at the cost of the other.'},
+ {t:'normal',k:'Journey One, Raise and Reposition',title:'Raise your prices and become the name, not the cheapest option.',body:'The first path is repricing and repositioning: naming a real number and holding it, and moving from one more photographer in the search results to the one a certain client specifically wants. Higher prices attract better clients, and better clients are easier and more joyful to work with. The rate does more than pay you. It filters who shows up.'},
+ {t:'normal',k:'Journey Two, Become the Educator',title:'Turn what you already know into income that does not need another shoot.',body:'The second path is building income that is not tied to your camera and your weekends: courses, programs, and teaching. You have spent years learning what most photographers are still guessing at. Packaged well, that knowledge becomes revenue that keeps coming in whether or not you are on a shoot, and it makes you the leader in your market instead of just a vendor in it.'},
+ {t:'normal',k:'Journey Three, Reclaim the Calendar',title:'Free up around twenty hours a week without losing a dollar of revenue.',body:'The third path is getting your life back: automation, batching, outsourcing, and streamlining the work so the business runs without consuming every day. This is how you go from booked and drained to booked and free. Fewer hours in the business is not a reward you earn someday. It is a system you build on purpose.'},
+ {t:'dark',title:'Growth that costs you your health and your calendar is not growth. It is a more expensive trap.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Go Dangerous'},
+ {t:'normal',k:'The photographer this builds',title:'Fewer clients, higher prices, and weekends that belong to you again.',body:'When you reprice and reposition, you stop chasing volume. You take on fewer, better-paid clients who chose you on purpose. A slow week stops being a crisis, because the margin is finally real. And the hours you used to pour into low-paid work go back to your family, your art, and the parts of the business only you can do.'},
+ {t:'dark',title:'Six figures was never the point. A life you do not need a vacation from is.'},
+ {t:'normal',k:'Why Kristin',title:'Took her own studio from eighteen weddings a year to six or seven, at six figures.',body:'Kristin Sweeting is an internationally published wedding, commercial, and branding photographer who built two multiple-six-figure businesses while single parenting. She cut her own wedding load from eighteen a year to six or seven without losing her six-figure income, and through Danger School and the Dangerous Creatives Mastermind she has taught hundreds of creatives to do the same. This is the method behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Business Your Work Deserves'},
+ {t:'normal',k:'Keep going with Kristin',title:'A place to start, and a room for when you are ready to reposition.',body:'Danger School is where you begin: the moves that raise your prices and give your time back. The Dangerous Creatives Mastermind is the room you step into when you are ready to become the market leader, with group and one to one support the whole way. Start where you are, and go as far as you want to.'},
+ {t:'cta',title:'Ready to charge more and shoot less?',body:'Take the next step with Dangerous Creatives.',chips:['Start with Danger School','Apply for the Mastermind'],disc:'Educational content for working and aspiring photographers and creatives. No income or business result is guaranteed. Results vary by photographer, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Dangerous <b>Creatives</b> · Kristin Sweeting</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
