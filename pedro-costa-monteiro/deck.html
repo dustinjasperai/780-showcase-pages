@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complex Cases Made Simpler — a live masterclass with Dr. Pedro Costa Monteiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141414; --panel:#1e1e1e; --ink:#f1f1f1; --muted:#a7adb4;
+    --rule:#2b2b2b; --accent:#008b94; --accent-2:#00666e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Montserrat',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .deck{scroll-snap-type:y mandatory;height:100vh;overflow-y:scroll}
+  section.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;padding:9vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  section.slide::before{content:'';position:absolute;left:8vw;top:9vh;width:54px;height:3px;
+    background:var(--accent);border-radius:2px}
+  .kick{font-size:14px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:26px}
+  h1{font-size:clamp(38px,6vw,84px);line-height:1.03;font-weight:800;letter-spacing:-.015em}
+  h2{font-size:clamp(30px,4.4vw,58px);line-height:1.08;font-weight:700;letter-spacing:-.01em}
+  .em{color:var(--accent)}
+  .sub{font-size:clamp(18px,2vw,27px);line-height:1.5;color:var(--muted);margin-top:28px;max-width:40ch;font-weight:400}
+  .lead{font-size:clamp(20px,2.4vw,34px);line-height:1.4;color:var(--ink);margin-top:26px;max-width:30ch;font-weight:500}
+  .big{font-size:clamp(30px,4.6vw,62px);line-height:1.12;font-weight:700;max-width:20ch}
+  .presenter{margin-top:56px;font-size:19px;font-weight:600;color:var(--ink)}
+  .presenter span{display:block;color:var(--muted);font-weight:400;font-size:16px;margin-top:6px}
+  .partno{font-size:clamp(60px,12vw,150px);font-weight:800;color:var(--accent-2);line-height:.9;letter-spacing:-.03em}
+  ul.pts{list-style:none;margin-top:34px;max-width:34ch}
+  ul.pts li{position:relative;padding-left:34px;margin-bottom:22px;font-size:clamp(17px,1.9vw,24px);
+    line-height:1.4;color:var(--ink)}
+  ul.pts li::before{content:'';position:absolute;left:0;top:.62em;width:14px;height:2px;background:var(--accent)}
+  .num{font-size:clamp(40px,7vw,96px);font-weight:800;color:var(--accent);line-height:1;letter-spacing:-.02em}
+  .pillar-h{margin-top:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:40px;max-width:60ch}
+  .cell{border:1px solid var(--rule);border-radius:12px;padding:20px 18px;background:var(--panel)}
+  .cell.on{background:var(--accent);border-color:var(--accent);color:#04222430}
+  .cell .cl{font-size:clamp(16px,1.7vw,21px);font-weight:700;color:var(--ink)}
+  .cell.on .cl{color:#fff}
+  .cell .cs{font-size:14px;color:var(--muted);margin-top:6px}
+  .cell.on .cs{color:#e6ffff}
+  .recap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:40px;max-width:66ch}
+  .recap .r{border-left:3px solid var(--accent);padding:6px 0 6px 18px}
+  .recap .r b{display:block;font-size:19px;font-weight:700}
+  .recap .r span{color:var(--muted);font-size:15px}
+  .cta-box{margin-top:36px;display:flex;gap:16px;flex-wrap:wrap}
+  .cta-box .b{background:var(--accent);color:#fff;font-weight:700;font-size:18px;padding:16px 30px;border-radius:100px}
+  .cta-box .b.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .disc{margin-top:44px;font-size:14px;line-height:1.6;color:#7d838b;max-width:52ch}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:9}
+  .count{position:fixed;bottom:18px;right:22px;font-size:13px;color:var(--muted);letter-spacing:.1em;z-index:9}
+  @media(max-width:640px){section.slide{padding:11vh 8vw}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="count" id="count"></div>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass for dentists', h:'Complex Cases Made <span class="em">Simpler</span>',
+   sub:'The diagnosis-first method for treating the aligner cases most clinics still refer out.',
+   who:'Dr. Pedro Costa Monteiro', role:'Orthodontist. Founder, Flying with Aligners and Master Aligner Online Academy.'},
+
+  {t:'who', k:'Who this is for', h:'You already do aligners.',
+   lead:'You place them every week, and the straightforward cases go beautifully. This hour is about the ones that do not.'},
+
+  {t:'trap', k:'The honest part', h:'Then a real case walks in.',
+   pts:['Crowding, a shifted midline, an open bite, all in one mouth.',
+        'You quote it in brackets instead, or you refer it out.',
+        'The aligner stays for the easy cases, and the practice you wanted stays out of reach.']},
+
+  {t:'reframe', k:'The reframe', big:'It was never that aligners cannot do it. The plan started from the aligner instead of the diagnosis.'},
+
+  {t:'promise', k:'What you leave with', h:'Three things, in one hour.',
+   pts:['Why appliance-first planning quietly stalls the hard cases.',
+        'The four decisions that make a complex case predictable.',
+        'How one method covers growth cases through complex adults.']},
+
+  {t:'part', no:'Part One', h:'Why the hard cases stall.'},
+
+  {t:'problem', k:'Part One', h:'Appliance-first planning.',
+   lead:'The setup is accepted, the movements are chased, and the biology is discovered halfway through, when it is expensive to fix.',
+   pts:['Anchorage gives way under the movements you needed most.',
+        'Tracking slips, and refinements pile up.',
+        'The case drags, and the conclusion becomes "aligners cannot do this".']},
+
+  {t:'problem2', k:'Part One', h:'The real cost.',
+   lead:'Every referred-out complex case is revenue and reputation leaving the building, and a patient who learns to go elsewhere for the harder work.'},
+
+  {t:'part', no:'Part Two', h:'The diagnosis-first aligner plan.'},
+
+  {t:'intro2', k:'Part Two', h:'Four decisions, made in order.',
+   sub:'Made before the appliance, not during it. This is the method behind the complex cases.'},
+
+  {t:'pillar', num:'01', h:'Diagnosis before mechanics.',
+   lead:'Full records first. Skeletal versus dental, growth and airway, the real limits of the case. The diagnosis drives the aligners, never the reverse.'},
+
+  {t:'pillar', num:'02', h:'Staging with intention.',
+   lead:'Sequence the movements deliberately. Decide what moves first, what waits, and how to protect the difficult movements across the series.'},
+
+  {t:'pillar', num:'03', h:'Anchorage as a priority.',
+   lead:'Plan anchorage before anything else. Attachments, elastics, expansion and MARPE are decided up front so the hard movements actually hold.'},
+
+  {t:'pillar', num:'04', h:'Auxiliaries when the case needs them.',
+   lead:'Aligners plus the right auxiliary, not aligners alone. Knowing when to add, and when to leave it, is what keeps complex cases on track.'},
+
+  {t:'spectrum', k:'One method', h:'The same four decisions, every case.',
+   cells:[['Growth cases','kids',0],['Adolescents','mixed dentition',0],['Adults','aesthetic',1],
+          ['Complex adults','extractions',1],['Finishing','detailing',0],['Retention','stability',0]]},
+
+  {t:'part', no:'Part Three', h:'What it looks like in your clinic.'},
+
+  {t:'apply', k:'Part Three', h:'Complex cases you keep in-house.',
+   pts:['Cases you used to refer out become cases you plan with confidence.',
+        'Fewer mid-treatment surprises, because the biology was decided first.',
+        'The exclusive aligner clinic stops being an idea and becomes the workflow.']},
+
+  {t:'journey', k:'Part Three', h:'The workflow behind it.',
+   pts:['Diagnosis and full records before any setup is approved.',
+        'A staging review on every plan, not just the tricky ones.',
+        'Anchorage and auxiliaries decided up front, then supported through treatment.']},
+
+  {t:'why', k:'Why this method', h:'Where it comes from.',
+   pts:['Twenty years dedicated to orthodontics and facial orthopedics.',
+        'A 100 percent aligner clinic since 2016, complex cases included.',
+        'Invisalign and Angel Aligner Key Opinion Leader and speaker.'],
+   note:'Dr. Pedro Costa Monteiro, founder of Flying with Aligners and the Master Aligner Online Academy.'},
+
+  {t:'recap', k:'In one view', h:'The diagnosis-first plan.',
+   items:[['Diagnosis before mechanics','decide the biology first'],
+          ['Staging with intention','sequence the movements'],
+          ['Anchorage as a priority','make the hard movements hold'],
+          ['Auxiliaries when needed','aligners plus the right addition']]},
+
+  {t:'cta', k:'Keep going with the method', h:'Go deeper with the method.',
+   lead:'If today changed how you see the hard cases, this is where the full method lives, worked case by case.',
+   ctas:['Continue with Flying with Aligners','Join the Master Aligner Online Academy'],
+   disc:'This masterclass is educational. No specific clinical or financial result is guaranteed. Results vary by case, clinician, and practice.'}
+];
+
+function esc(s){return s==null?'':s}
+function render(s){
+  const el=document.createElement('section'); el.className='slide s-'+s.t;
+  let h='';
+  if(s.k) h+='<div class="kick">'+esc(s.k)+'</div>';
+  if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="sub">'+esc(s.sub)+'</div>'+
+       '<div class="presenter">'+esc(s.who)+'<span>'+esc(s.role)+'</span></div>';
+  } else if(s.t==='reframe'){
+    h+='<div class="big">'+esc(s.big)+'</div>';
+  } else if(s.t==='part'){
+    h+='<div class="partno">'+esc(s.no)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>';
+  } else if(s.t==='pillar'){
+    h+='<div class="num">'+esc(s.num)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>'+
+       '<div class="lead">'+esc(s.lead)+'</div>';
+  } else if(s.t==='spectrum'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="grid">'+
+       s.cells.map(c=>'<div class="cell'+(c[2]?' on':'')+'"><div class="cl">'+c[0]+'</div><div class="cs">'+c[1]+'</div></div>').join('')+'</div>';
+  } else if(s.t==='recap'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="recap">'+
+       s.items.map(r=>'<div class="r"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join('')+'</div>';
+  } else if(s.t==='cta'){
+    h+='<h1>'+esc(s.h)+'</h1><div class="lead">'+esc(s.lead)+'</div>'+
+       '<div class="cta-box">'+s.ctas.map((c,i)=>'<div class="b'+(i?' ghost':'')+'">'+c+'</div>').join('')+'</div>'+
+       '<div class="disc">'+esc(s.disc)+'</div>';
+  } else {
+    if(s.h) h+='<h2>'+esc(s.h)+'</h2>';
+    if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+    if(s.lead) h+='<div class="lead">'+esc(s.lead)+'</div>';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.pts) h+='<ul class="pts">'+s.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
+    if(s.note) h+='<div class="presenter">'+esc(s.note)+'</div>';
+  }
+  el.innerHTML=h; return el;
+}
+const deck=document.getElementById('deck');
+S.forEach(s=>deck.appendChild(render(s)));
+const prog=document.getElementById('prog'), count=document.getElementById('count');
+function upd(){
+  const sc=deck.scrollTop, max=deck.scrollHeight-deck.clientHeight;
+  prog.style.width=(max>0?(sc/max*100):0)+'%';
+  const i=Math.round(sc/deck.clientHeight)+1;
+  count.textContent=i+' / '+S.length;
+}
+deck.addEventListener('scroll',upd); upd();
+</script>
+</body>
+</html>
