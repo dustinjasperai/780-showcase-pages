@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Priced to Book · Ben Hartley, Six Figure Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf7f2; --panel:#f1ece3; --rule:#e4dccf;
+    --acc:#e45e4c; --ink:#2b2b2b; --body:#4a4640; --dim:#8a8177; --cream:#f7f2ea;
+  }
+  html,body{height:100%}
+  body{background:#efe9df;font-family:'Poppins',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe9df}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Marcellus',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.2vw;max-width:92%}
+  .t-normal h1{font-size:3.4vw;max-width:90%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Marcellus',serif;font-size:2.1vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.4;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2c2723 0%,#1c1916 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:86%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2c2723 0%,#1c1916 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.0vw;max-width:84%;color:var(--cream)}
+  .t-cta .body{font-family:'Poppins',sans-serif;color:#e7ded2;font-size:1.42vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:8%;width:16vw;opacity:.9}
+  .corner-vf{right:6.5%;bottom:7.5%;width:8vw;opacity:.55}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,43,43,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Six Figure Photography</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- viewfinder motif: focus brackets around a center point, drawn in coral -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 120 120">
+  <g fill="none" stroke="#e45e4c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 36 V18 H36" opacity="0.9"/>
+    <path d="M84 18 H102 V36" opacity="0.9"/>
+    <path d="M102 84 V102 H84" opacity="0.9"/>
+    <path d="M36 102 H18 V84" opacity="0.9"/>
+    <circle cx="60" cy="60" r="12" opacity="0.85"/>
+    <path d="M60 40 V50 M60 70 V80 M40 60 H50 M70 60 H80" opacity="0.55"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Priced to Book',sub:'How photographers command premium rates by selling the story and the experience, not the lowest price.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You can take the photo. Charging what it is worth is the part no one taught you.',body:'You are a photographer whose work is genuinely good and the inquiries do come in. But too many of them open with price, and to win the booking you quietly drop your rate. A slow season feels like it is one "you are too expensive" away.'},
+ {t:'dark',title:'An inbox full of price shoppers is not the same as a booked premium calendar.'},
+
+ {t:'section',idx:'Part One',title:'Why the Race to the Bottom Never Ends'},
+ {t:'normal',k:'The floor is collapsing',title:'The low and middle of the market is being commoditized.',body:'Phones got good, editing got easy, and everyone with a camera calls themselves a photographer. That pushes the low and middle of the market toward free. If you compete on price, you are competing with people who will always, happily, go cheaper than you.'},
+ {t:'normal',k:'The discount reflex',title:'When you lead with price, you train clients to shop you on price.',body:'Every time you drop the rate to win a booking, you teach the market that your number is negotiable. The next inquiry haggles a little harder, the one after that expects the discount, and your best work quietly becomes your cheapest.'},
+ {t:'dark',title:'You did not pick up a camera to become the cheapest option in the inbox.'},
+
+ {t:'section',idx:'Part Two',title:'The Premium Booking Method'},
+ {t:'normal',k:'Belief before price, the Six Core Beliefs',title:'You cannot hold a premium rate you do not believe you are worth.',body:'Before the scripts and the pricing, there is an identity shift. The Six Core Beliefs, being Loving, Confident, a Doer, Fearless, a Storyteller, and a Gift-Giver, are how you name a real number and do not flinch. A premium client is buying the story and the experience, so you have to believe in what you are actually selling.'},
+ {t:'normal',k:'The 5 scripts for more bookings',title:'Most bookings are won or lost in the first reply.',body:'The moment that decides your rate is the inquiry reply, and most photographers improvise it. The five scripts fix that: the inquiry reply that starts a conversation instead of quoting a number, the price reveal that holds your rate, the objection turn, the soft follow-up, and the referral ask. Word for word, so you stop guessing.'},
+ {t:'normal',k:'Keep the calendar full, the 3x5x3',title:'Premium only works when the calendar stays full.',body:'A high rate with an empty month is just anxiety, and anxiety is what makes you discount. The 3x5x3 framework keeps bookings coming: three places your marketing lives (social presence, society, search), five ways to generate work (direct, indirect, partnerships, past clients, in-person), and three questions to sharpen each one.'},
+ {t:'dark',title:'Premium is not a price. It is a story a client will pay to be part of.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Are Priced to Book'},
+ {t:'normal',k:'The photographer this builds',title:'Fewer inquiries, more bookings, and a rate you stop apologizing for.',body:'When you sell the story and hold the number, you attract the couples who want you specifically, not the cheapest date open. The calendar fills at a rate that actually funds the business, and a quiet month stops being a crisis, because the pricing and the system are holding, not your willingness to cut.'},
+ {t:'dark',title:'The goal was never more shoots. It was work that pays what it is worth.'},
+ {t:'normal',k:'Why Ben Hartley',title:'Built a six-figure studio in under two years, now taught to thousands of photographers.',body:'Ben built Style and Story Creative into a wedding studio with packages starting north of four thousand dollars, in under two years, then created Six Figure Photography to teach how. More than 2,400 photographers have gone through Booked Solid, and the podcast has passed a million downloads. This is the method behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Charge What the Work Is Worth'},
+ {t:'normal',k:'Keep going with Ben',title:'The full system, from your first premium booking to a business that holds.',body:'Booked Solid is the two-section path: get consistently booked at premium rates, then build the business behind the bookings so it lasts. Start free with the crash course and the 5 scripts, and apply when you are ready to build the whole thing.'},
+ {t:'cta',title:'Ready to book premium clients without competing on price?',body:'Take the next step with Six Figure Photography.',chips:['Start the free crash course','Apply for Booked Solid'],disc:'Educational content for working and aspiring photographers. No income or booking result is guaranteed. Results vary by photographer, market, and season.'},
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Six Figure <b>Photography</b> · Ben Hartley</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
