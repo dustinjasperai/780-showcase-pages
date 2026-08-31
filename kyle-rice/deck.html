@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Smart PTs Still Fail the NPTE — a live masterclass with Dr. Kyle Rice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Spectral:ital,wght@0,400;0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14283a; --panel:#1d3450; --ink:#eef2f6; --muted:#9fb0c0;
+    --rule:#2b4258; --accent:#00b9f5; --accent-2:#0a6fa0;
+    --serif:'Spectral',Georgia,'Times New Roman',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Montserrat',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .deck{scroll-snap-type:y mandatory;height:100vh;overflow-y:scroll}
+  section.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;padding:9vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  section.slide::before{content:'';position:absolute;left:8vw;top:9vh;width:54px;height:3px;
+    background:var(--accent);border-radius:2px}
+  .kick{font-size:14px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:26px}
+  h1{font-size:clamp(38px,6vw,84px);line-height:1.03;font-weight:800;letter-spacing:-.015em}
+  h2{font-size:clamp(30px,4.4vw,58px);line-height:1.08;font-weight:700;letter-spacing:-.01em}
+  .em{color:var(--accent)}
+  .sub{font-size:clamp(18px,2vw,27px);line-height:1.5;color:var(--muted);margin-top:28px;max-width:42ch;font-weight:400}
+  .lead{font-family:var(--serif);font-size:clamp(20px,2.4vw,34px);line-height:1.42;color:var(--ink);margin-top:26px;max-width:32ch;font-weight:400}
+  .big{font-family:var(--serif);font-size:clamp(30px,4.6vw,60px);line-height:1.14;font-weight:500;max-width:22ch}
+  .presenter{margin-top:56px;font-size:19px;font-weight:600;color:var(--ink)}
+  .presenter span{display:block;color:var(--muted);font-weight:400;font-size:16px;margin-top:6px}
+  .partno{font-size:clamp(60px,12vw,150px);font-weight:800;color:var(--accent-2);line-height:.9;letter-spacing:-.03em}
+  ul.pts{list-style:none;margin-top:34px;max-width:36ch}
+  ul.pts li{position:relative;padding-left:34px;margin-bottom:22px;font-size:clamp(17px,1.9vw,24px);
+    line-height:1.4;color:var(--ink)}
+  ul.pts li::before{content:'';position:absolute;left:0;top:.62em;width:14px;height:2px;background:var(--accent)}
+  .num{font-size:clamp(40px,7vw,96px);font-weight:800;color:var(--accent);line-height:1;letter-spacing:-.02em}
+  .pillar-h{margin-top:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:40px;max-width:62ch}
+  .cell{border:1px solid var(--rule);border-radius:12px;padding:20px 18px;background:var(--panel)}
+  .cell.on{background:var(--accent);border-color:var(--accent)}
+  .cell .cl{font-size:clamp(16px,1.7vw,21px);font-weight:700;color:var(--ink)}
+  .cell.on .cl{color:#06263a}
+  .cell .cs{font-size:14px;color:var(--muted);margin-top:6px}
+  .cell.on .cs{color:#053049}
+  .recap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:40px;max-width:68ch}
+  .recap .r{border-left:3px solid var(--accent);padding:6px 0 6px 18px}
+  .recap .r b{display:block;font-size:19px;font-weight:700}
+  .recap .r span{color:var(--muted);font-size:15px}
+  .cta-box{margin-top:36px;display:flex;gap:16px;flex-wrap:wrap}
+  .cta-box .b{background:var(--accent);color:#06263a;font-weight:700;font-size:18px;padding:16px 30px;border-radius:100px}
+  .cta-box .b.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .disc{margin-top:44px;font-size:14px;line-height:1.6;color:#7f8aa0;max-width:54ch}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:9}
+  .count{position:fixed;bottom:18px;right:22px;font-size:13px;color:var(--muted);letter-spacing:.1em;z-index:9}
+  @media(max-width:640px){section.slide{padding:11vh 8vw}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="count" id="count"></div>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass for PTs and grads', h:'Why Smart PTs Still <span class="em">Fail</span> the NPTE',
+   sub:'And the mindset and test-taking system that fixes it, for the people who know the content and still keep missing the pass.',
+   who:'Dr. Kyle Rice, PT, DPT, OCS', role:'Founder of The PT Hustle. Host of the NPTE Clinical Files podcast.'},
+
+  {t:'who', k:'Who this is for', h:'You already know the content.',
+   lead:'You have studied it more than once. On a good day you can teach it. This hour is not about learning more content. It is about the exam that keeps not reflecting what you know.'},
+
+  {t:'trap', k:'The honest part', h:'Then test day arrives.',
+   pts:['Two answers look right, so you change the one you had.',
+        'The clock speeds up and the questions start to blur.',
+        'You walk out knowing the material and still short of the pass.']},
+
+  {t:'reframe', k:'The reframe', big:'For you, the NPTE stopped being a content test a long time ago. It became a nerve test and a strategy test. More content is the wrong prescription.'},
+
+  {t:'promise', k:'What you leave with', h:'Three things, in one hour.',
+   pts:['Why knowing more content quietly stops moving your score.',
+        'The four moves that turn a near-miss into a pass.',
+        'How to know your real gap and study to it on a clock.']},
+
+  {t:'part', no:'Part One', h:'Why knowing more does not help.'},
+
+  {t:'problem', k:'Part One', h:'The second-guess loop.',
+   lead:'The points you lose late in the exam are rarely points you never knew. They are points you had and talked yourself out of.',
+   pts:['A trap answer is written to look more right than the right one.',
+        'You change a correct answer to a wrong one, and never see it.',
+        'The loop repeats, and the score sits below what you actually know.']},
+
+  {t:'problem2', k:'Part One', h:'What nerves actually cost.',
+   lead:'Test anxiety is not a soft problem. It narrows working memory, speeds the clock, and turns recall you own into recall you cannot reach for three hours. That is a points problem, measured in points.'},
+
+  {t:'part', no:'Part Two', h:'The PT Hustle Method.'},
+
+  {t:'intro2', k:'Part Two', h:'Four moves, made in order.',
+   sub:'Not more content. A way to keep the points you already earn and take back the ones the exam steals.'},
+
+  {t:'pillar', num:'01', h:'Find the real gap.',
+   lead:'Stop studying everything. Read your practice data for where the points actually leak, content you never had versus points you lose to timing and second-guessing, and study to that, not to the whole outline.'},
+
+  {t:'pillar', num:'02', h:'Beat the traps.',
+   lead:'Learn how NPTE questions are built to bait a wrong change. A repeatable way to read the stem, commit to an answer, and know when a second look is discipline and when it is panic.'},
+
+  {t:'pillar', num:'03', h:'Regulate the nerves.',
+   lead:'Calm is a skill, not a personality. Simple regulation you rehearse before test day so working memory stays open and the clock stops running you at question forty.'},
+
+  {t:'pillar', num:'04', h:'Study to a point target, on a clock.',
+   lead:'Know the number of scaled points you need and build a plan to hit it in a fixed window. A target and a timeline beats open-ended review every time.'},
+
+  {t:'spectrum', k:'One method', h:'The same four moves, whatever your gap.',
+   cells:[['Just short','a few points',1],['Repeat sitting','been here before',1],['Frozen on timing','know it, run out',0],
+          ['Anxiety-driven','blank on test day',0],['Big rebuild','far from target',0],['Final push','almost there',0]]},
+
+  {t:'part', no:'Part Three', h:'What a pass actually looks like.'},
+
+  {t:'apply', k:'Part Three', h:'The version of you that passes.',
+   pts:['You walk in with a number and a plan, not a stack of everything.',
+        'You commit to answers and stop donating points to the second guess.',
+        'The nerves are rehearsed, so the last hour is not the hour you lose.']},
+
+  {t:'journey', k:'Part Three', h:'How the method is worked.',
+   pts:['Your practice data is read first, so the plan fits your real gap.',
+        'The trap-reading and timing drills are practiced, not just explained.',
+        'The regulation routine is rehearsed until it holds under pressure.']},
+
+  {t:'why', k:'Why this method', h:'Where it comes from.',
+   pts:['A PT who struggled with standardized testing and built the way out.',
+        'DPT and Orthopedic Certified Specialist, coaching prep full time.',
+        'Thousands of PTs guided, and a podcast working real questions weekly.'],
+   note:'Dr. Kyle Rice, founder of The PT Hustle and host of NPTE Clinical Files.'},
+
+  {t:'recap', k:'In one view', h:'The PT Hustle Method.',
+   items:[['Find the real gap','study where points leak'],
+          ['Beat the traps','stop the wrong change'],
+          ['Regulate the nerves','keep working memory open'],
+          ['Point target on a clock','a number and a timeline']]},
+
+  {t:'cta', k:'Keep going with the method', h:'Ready to work it with me.',
+   lead:'If today changed how you see the exam, this is where the full method lives, worked with you until you pass.',
+   ctas:['Apply for the Coaching Program','Start with the PASS System'],
+   disc:'This masterclass is educational. It is not a guarantee of a passing score or any specific exam result. Outcomes depend on your starting point, your preparation, and factors outside any program.'}
+];
+
+function esc(s){return s==null?'':s}
+function render(s){
+  const el=document.createElement('section'); el.className='slide s-'+s.t;
+  let h='';
+  if(s.k) h+='<div class="kick">'+esc(s.k)+'</div>';
+  if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="sub">'+esc(s.sub)+'</div>'+
+       '<div class="presenter">'+esc(s.who)+'<span>'+esc(s.role)+'</span></div>';
+  } else if(s.t==='reframe'){
+    h+='<div class="big">'+esc(s.big)+'</div>';
+  } else if(s.t==='part'){
+    h+='<div class="partno">'+esc(s.no)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>';
+  } else if(s.t==='pillar'){
+    h+='<div class="num">'+esc(s.num)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>'+
+       '<div class="lead">'+esc(s.lead)+'</div>';
+  } else if(s.t==='spectrum'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="grid">'+
+       s.cells.map(c=>'<div class="cell'+(c[2]?' on':'')+'"><div class="cl">'+c[0]+'</div><div class="cs">'+c[1]+'</div></div>').join('')+'</div>';
+  } else if(s.t==='recap'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="recap">'+
+       s.items.map(r=>'<div class="r"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join('')+'</div>';
+  } else if(s.t==='cta'){
+    h+='<h1>'+esc(s.h)+'</h1><div class="lead">'+esc(s.lead)+'</div>'+
+       '<div class="cta-box">'+s.ctas.map((c,i)=>'<div class="b'+(i?' ghost':'')+'">'+c+'</div>').join('')+'</div>'+
+       '<div class="disc">'+esc(s.disc)+'</div>';
+  } else {
+    if(s.h) h+='<h2>'+esc(s.h)+'</h2>';
+    if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+    if(s.lead) h+='<div class="lead">'+esc(s.lead)+'</div>';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.pts) h+='<ul class="pts">'+s.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
+    if(s.note) h+='<div class="presenter">'+esc(s.note)+'</div>';
+  }
+  el.innerHTML=h; return el;
+}
+const deck=document.getElementById('deck');
+S.forEach(s=>deck.appendChild(render(s)));
+const prog=document.getElementById('prog'), count=document.getElementById('count');
+function upd(){
+  const sc=deck.scrollTop, max=deck.scrollHeight-deck.clientHeight;
+  prog.style.width=(max>0?(sc/max*100):0)+'%';
+  const i=Math.round(sc/deck.clientHeight)+1;
+  count.textContent=i+' / '+S.length;
+}
+deck.addEventListener('scroll',upd); upd();
+</script>
+</body>
+</html>
