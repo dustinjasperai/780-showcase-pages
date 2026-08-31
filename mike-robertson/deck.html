@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Better Programs in Less Time: the R7 System, a live masterclass with Mike Robertson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1a1a; --panel:#242424; --ink:#ededed; --muted:#b6b6b6;
+    --rule:#3a3a3a; --accent:#ae2a24; --accent-2:#7c1c18;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Barlow',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .deck{scroll-snap-type:y mandatory;height:100vh;overflow-y:scroll}
+  section.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;padding:9vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  section.slide::before{content:'';position:absolute;left:8vw;top:9vh;width:60px;height:4px;
+    background:var(--accent)}
+  .kick{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+  h1{font-family:'Oswald',sans-serif;font-size:clamp(38px,6.2vw,88px);line-height:1.02;
+    font-weight:700;letter-spacing:.005em;text-transform:uppercase}
+  h2{font-family:'Oswald',sans-serif;font-size:clamp(30px,4.6vw,60px);line-height:1.06;
+    font-weight:600;letter-spacing:.005em;text-transform:uppercase}
+  .em{color:var(--accent)}
+  .sub{font-size:clamp(18px,2vw,27px);line-height:1.5;color:var(--muted);margin-top:28px;max-width:44ch;font-weight:400}
+  .lead{font-size:clamp(19px,2.3vw,32px);line-height:1.42;color:var(--ink);margin-top:26px;max-width:34ch;font-weight:400}
+  .big{font-size:clamp(28px,4.4vw,58px);line-height:1.16;font-weight:500;max-width:24ch;font-style:italic;color:var(--ink)}
+  .presenter{margin-top:52px;font-family:'Oswald',sans-serif;font-size:20px;font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.04em}
+  .presenter span{display:block;font-family:'Barlow',sans-serif;color:var(--muted);font-weight:400;font-size:16px;margin-top:8px;text-transform:none;letter-spacing:0}
+  .partno{font-family:'Oswald',sans-serif;font-size:clamp(58px,12vw,150px);font-weight:700;color:var(--accent-2);line-height:.9;letter-spacing:-.01em;text-transform:uppercase}
+  ul.pts{list-style:none;margin-top:34px;max-width:38ch}
+  ul.pts li{position:relative;padding-left:34px;margin-bottom:22px;font-size:clamp(17px,1.9vw,24px);
+    line-height:1.4;color:var(--ink)}
+  ul.pts li::before{content:'';position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent)}
+  .num{font-family:'Oswald',sans-serif;font-size:clamp(40px,7vw,96px);font-weight:700;color:var(--accent);line-height:1;letter-spacing:-.01em}
+  .pillar-h{margin-top:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:40px;max-width:70ch}
+  .cell{border:1px solid var(--rule);border-radius:10px;padding:20px 18px;background:var(--panel)}
+  .cell.on{background:var(--accent);border-color:var(--accent)}
+  .cell .cl{font-family:'Oswald',sans-serif;font-size:clamp(16px,1.7vw,21px);font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.03em}
+  .cell.on .cl{color:#1a1a1a}
+  .cell .cs{font-size:14px;color:var(--muted);margin-top:6px}
+  .cell.on .cs{color:#2a0f0d}
+  .recap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:40px;max-width:70ch}
+  .recap .r{border-left:3px solid var(--accent);padding:6px 0 6px 18px}
+  .recap .r b{display:block;font-family:'Oswald',sans-serif;font-size:19px;font-weight:600;text-transform:uppercase;letter-spacing:.02em}
+  .recap .r span{color:var(--muted);font-size:15px}
+  .cta-box{margin-top:36px;display:flex;gap:16px;flex-wrap:wrap}
+  .cta-box .b{font-family:'Oswald',sans-serif;background:var(--accent);color:#1a1a1a;font-weight:600;font-size:18px;padding:16px 30px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em}
+  .cta-box .b.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .disc{margin-top:44px;font-size:14px;line-height:1.6;color:#8a8a8a;max-width:56ch}
+  .prog{position:fixed;top:0;left:0;height:4px;background:var(--accent);width:0;z-index:9}
+  .count{position:fixed;bottom:18px;right:22px;font-family:'Oswald',sans-serif;font-size:13px;color:var(--muted);letter-spacing:.1em;z-index:9}
+  @media(max-width:640px){section.slide{padding:11vh 8vw}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="count" id="count"></div>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass for strength coaches and trainers', h:'Better Programs in <span class="em">Less</span> Time',
+   sub:'The R7 system for writing complete training programs your clients actually feel, without spending your week guessing at design.',
+   who:'Mike Robertson, MS', role:'Founder of Robertson Training Systems, co-owner of IFAST. 20+ years coaching athletes and the coaches who train them.'},
+
+  {t:'who', k:'Who this is for', h:'You already coach well.',
+   lead:'You get results, you care about your clients, and you have collected plenty of certifications. This hour is not about learning more content. It is about the system that turns what you already know into a program, fast.'},
+
+  {t:'trap', k:'The honest part', h:'Then it is Sunday night.',
+   pts:['You stare at a blank program and start pulling exercises from memory.',
+        'The warm-up is whatever you did last week, so the session never really lands.',
+        'You know more than the program shows, and writing it eats your evening.']},
+
+  {t:'reframe', k:'The reframe', big:'The thing holding your results back is not another credential. It is the absence of a system to assemble what you already know into a complete program, every time.'},
+
+  {t:'promise', k:'What you leave with', h:'Three things, in one hour.',
+   pts:['Why collecting more content quietly stops making you a better coach.',
+        'The seven steps of R7, the order that makes a program complete.',
+        'How to write a better program in a fraction of the time it takes you now.']},
+
+  {t:'part', no:'Part One', h:'Why more content is not the answer.'},
+
+  {t:'problem', k:'Part One', h:'The blank-page program.',
+   lead:'Most coaches do not have a knowledge problem. They have an assembly problem. Without a repeatable structure, every program starts from scratch, so it takes too long and quietly skips the pieces that make the rest work.',
+   pts:['Exercises get picked by memory and mood, not by a plan.',
+        'The prep work gets rushed, so the strength work underdelivers.',
+        'Two clients with different needs get near-identical programs.']},
+
+  {t:'problem2', k:'Part One', h:'What a skipped warm-up costs.',
+   lead:'Release, breathing, and readiness are not filler before the real work. They are what lets the real work transfer. Skip them and you are training a body that is not prepared to adapt, then blaming the program when progress stalls.'},
+
+  {t:'part', no:'Part Two', h:'The R7 System.'},
+
+  {t:'intro2', k:'Part Two', h:'Seven steps, made in order.',
+   sub:'R7 is a template you run for every session. It guarantees the prep happens first and every block has a purpose, so you write superior programs in less time.'},
+
+  {t:'spectrum', k:'The system', h:'R1 through R7, every session.',
+   cells:[['R1 Release','soft-tissue prep',1],['R2 Reset','breathing, correctives',1],['R3 Readiness','the warm-up that transfers',1],
+          ['R4 Reactive','speed and power',0],['R5 Resistance','strength',0],['R6 Resiliency','durability',0],['R7 Recovery','bring the system down',0]]},
+
+  {t:'pillar', num:'R1-R3', h:'Prep is the program.',
+   lead:'Release, Reset, and Readiness open every session. Soft-tissue work, breathing and position, then a warm-up built for the day ahead. Done right, the first fifteen minutes are where the results are won.'},
+
+  {t:'pillar', num:'R4-R5', h:'Train the qualities in order.',
+   lead:'Reactive before Resistance. Speed and power when the nervous system is fresh, then strength. The order is not arbitrary, it is how you get both without one stealing from the other.'},
+
+  {t:'pillar', num:'R6-R7', h:'Build durability, then come down.',
+   lead:'Resiliency work keeps clients healthy enough to keep training, and Recovery brings the system back down so they adapt to what you just did. A program that ignores these two is a program that eventually breaks the person running it.'},
+
+  {t:'pillar', num:'00', h:'Assess, do not guess.',
+   lead:'R7 sits on an assessment. You read the client first, then program to what you found, so the same seven-step template produces a genuinely individual program instead of a template everyone gets.'},
+
+  {t:'part', no:'Part Three', h:'R7, once it is yours.'},
+
+  {t:'apply', k:'Part Three', h:'The coach who runs R7.',
+   pts:['You open a template, not a blank page, so a program takes minutes, not a night.',
+        'Every session has prep, purpose, and a plan to come down from.',
+        'Your results get more consistent, and consistent results are what earn premium rates.']},
+
+  {t:'why', k:'Why this system', h:'Where it comes from.',
+   pts:['A masters in sports biomechanics and 20+ years coaching pro athletes.',
+        'Co-founder of IFAST, named a top ten gym in America by Mens Health.',
+        'Two decades teaching the coaches who train everyone else.'],
+   note:'Mike Robertson, founder of Robertson Training Systems and host of the Physical Preparation Podcast.'},
+
+  {t:'recap', k:'In one view', h:'The R7 System.',
+   items:[['R1-R3 Prep','release, reset, readiness'],
+          ['R4-R5 Train','reactive then resistance'],
+          ['R6-R7 Sustain','resiliency and recovery'],
+          ['Assessment first','program to what you find']]},
+
+  {t:'cta', k:'Go deeper on the system', h:'Ready to run R7 in your coaching.',
+   lead:'If today changed how you see program design, this is where the full system lives, taught step by step so you can put it to work this week.',
+   ctas:['Join the Complete Coach Certification','Ask about the Program Design Mentorship'],
+   disc:'This masterclass is educational. It is not a guarantee of any specific business, income, or client result. Outcomes depend on your practice, your clients, and factors outside any program.'}
+];
+
+function esc(s){return s==null?'':s}
+function render(s){
+  const el=document.createElement('section'); el.className='slide s-'+s.t;
+  let h='';
+  if(s.k) h+='<div class="kick">'+esc(s.k)+'</div>';
+  if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="sub">'+esc(s.sub)+'</div>'+
+       '<div class="presenter">'+esc(s.who)+'<span>'+esc(s.role)+'</span></div>';
+  } else if(s.t==='reframe'){
+    h+='<div class="big">'+esc(s.big)+'</div>';
+  } else if(s.t==='part'){
+    h+='<div class="partno">'+esc(s.no)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>';
+  } else if(s.t==='pillar'){
+    h+='<div class="num">'+esc(s.num)+'</div><h2 class="pillar-h">'+esc(s.h)+'</h2>'+
+       '<div class="lead">'+esc(s.lead)+'</div>';
+  } else if(s.t==='spectrum'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="grid">'+
+       s.cells.map(c=>'<div class="cell'+(c[2]?' on':'')+'"><div class="cl">'+c[0]+'</div><div class="cs">'+c[1]+'</div></div>').join('')+'</div>';
+  } else if(s.t==='recap'){
+    h+='<h2>'+esc(s.h)+'</h2><div class="recap">'+
+       s.items.map(r=>'<div class="r"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join('')+'</div>';
+  } else if(s.t==='cta'){
+    h+='<h1>'+esc(s.h)+'</h1><div class="lead">'+esc(s.lead)+'</div>'+
+       '<div class="cta-box">'+s.ctas.map((c,i)=>'<div class="b'+(i?' ghost':'')+'">'+c+'</div>').join('')+'</div>'+
+       '<div class="disc">'+esc(s.disc)+'</div>';
+  } else {
+    if(s.h) h+='<h2>'+esc(s.h)+'</h2>';
+    if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+    if(s.lead) h+='<div class="lead">'+esc(s.lead)+'</div>';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.pts) h+='<ul class="pts">'+s.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
+    if(s.note) h+='<div class="presenter">'+esc(s.note)+'</div>';
+  }
+  el.innerHTML=h; return el;
+}
+const deck=document.getElementById('deck');
+S.forEach(s=>deck.appendChild(render(s)));
+const prog=document.getElementById('prog'), count=document.getElementById('count');
+function upd(){
+  const sc=deck.scrollTop, max=deck.scrollHeight-deck.clientHeight;
+  prog.style.width=(max>0?(sc/max*100):0)+'%';
+  const i=Math.round(sc/deck.clientHeight)+1;
+  count.textContent=i+' / '+S.length;
+}
+deck.addEventListener('scroll',upd); upd();
+</script>
+</body>
+</html>
