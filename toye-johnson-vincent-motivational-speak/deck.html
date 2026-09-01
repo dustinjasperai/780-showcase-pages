@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What the Recruiter Sees — A Masterclass with Toye Johnson-Vincent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12181b; --panel:#1b2429; --rule:#2c3a40;
+    --acc:#00d1d1; --ink:#eef4f4; --body:#c3d0d2; --dim:#7f9297; --deep:#0c1113;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0f11;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:4.9vw;max-width:90%}
+  .t-normal h1{font-size:3.0vw;max-width:86%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.34vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Spectral',serif;font-style:italic;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:82%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 140% at 22% 8%,#12333a 0%,#0a1417 62%,#080f11 100%)}
+  .t-dark h1{color:var(--ink);font-size:3.3vw;max-width:86%;font-style:italic}
+  .t-cta{background:radial-gradient(120% 140% at 22% 8%,#12333a 0%,#0a1417 62%,#080f11 100%)}
+  .t-cta h1{color:var(--ink);font-size:3.2vw;max-width:84%}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#d5e2e3;font-size:1.34vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Inter',sans-serif;font-size:.82vw;color:#8ca0a4;line-height:1.5;max-width:80%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:22vw;height:22vw;opacity:.92}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Toye Johnson-Vincent</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a stage spotlight on a dark room, cyan cone with a single mic silhouette -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#00d1d1" stroke-linecap="round">
+    <path d="M60 6 L92 96 H28 Z" fill="#00d1d1" opacity="0.10" stroke="none"/>
+    <path d="M60 6 L92 96 M60 6 L28 96" stroke-width="1.6" opacity="0.5"/>
+    <circle cx="60" cy="10" r="3.4" fill="#00d1d1" stroke="none" opacity="0.95"/>
+    <rect x="55" y="70" width="10" height="22" rx="5" stroke-width="2.4" opacity="0.9"/>
+    <path d="M60 92 V104 M50 104 H70" stroke-width="2.4" opacity="0.85"/>
+    <circle cx="60" cy="63" r="21" stroke-width="1.4" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'What the Recruiter Sees',sub:'The no sugar coating truth about what actually gets you hired, moved up, and remembered. From someone who spent years on the hiring side of the desk.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are good at the work. Getting the room to see it is the part that never feels solved.',body:'You have the experience and the drive. But the search, the interview, and the next level up all feel like a locked door with no key. You send applications into a void, rehearse answers that still fall flat, and wonder what the people on the other side are really thinking. That gap is not a talent problem.'},
+ {t:'dark',title:'Nobody tells you the truth about why you did not get the call. So you keep guessing.'},
+
+ {t:'section',idx:'Part One',title:'Why Good People Get Passed Over'},
+ {t:'normal',k:'The other side of the desk',title:'A recruiter decides in seconds, and almost never explains why.',body:'I read the resumes, screened the calls, and sat in the interviews. The hard truth is that strong candidates get cut every day for reasons no one ever says out loud. Not because they could not do the job, but because they never showed the room what the room was actually looking for.'},
+ {t:'normal',k:'The confidence gap',title:'The job does not always go to the most qualified. It goes to the most convincing.',body:'When you do not know what is being measured, doubt leaks into everything, your answers, your handshake, your follow up. Two people with the same background walk out with two different offers, and the difference was rarely the resume. It was who owned the room.'},
+ {t:'dark',title:'You are not competing on your experience. You are competing on how clearly you tell its story.'},
+
+ {t:'section',idx:'Part Two',title:'The No Sugar Coating Method'},
+ {t:'normal',k:'Own your brand',title:'Before you say a word, your personal brand has already spoken for you.',body:'Your online presence, your introduction, the first ten seconds, all of it tells a story about you before you get to. We make that story deliberate, so the professional brand people meet is the one you actually chose, not the one left to chance.'},
+ {t:'normal',k:'Network on purpose',title:'The best roles are filled through people, long before they are ever posted.',body:'This is Networking for Business and Beyond: building real connections that open doors instead of collecting contacts that go nowhere. You learn how to be the name that comes up in the room you are not in, which is where most of the good opportunities actually get decided.'},
+ {t:'normal',k:'Win the interview',title:'An interview is not a test of your past. It is an audition for your future.',body:'I will show you what a recruiter is really scoring, how to answer the question behind the question, and how to walk in prepared instead of hopeful. Being organized and ready is not luck, it is a system you can run every single time.'},
+ {t:'normal',k:'Carry yourself',title:'Confidence and business etiquette are not extras. They are the whole first impression.',body:'How you show up, follow up, and handle the room decides whether people trust you with more. We build the presence and the professional habits that make a hiring manager, or a promotion committee, see someone they want to bet on.'},
+ {t:'dark',title:'You may be down, but you are not out. The difference is a method you can repeat.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Run the Method'},
+ {t:'normal',k:'The career this builds',title:'You stop waiting to be picked and start choosing your next move.',body:'When you know what the room is measuring, the search stops feeling like rejection and starts feeling like strategy. You walk in grounded, you follow up like a professional, and the offers, the raises, and the promotions stop being a mystery you cannot influence.'},
+ {t:'dark',title:'The goal was never just a job. It was the confidence to go get the one you actually want.'},
+ {t:'normal',k:'Why Toye',title:'A recruiter, a certified life coach, and a speaker who will not sugar coat it.',body:'Toye Johnson-Vincent spent her career on the hiring side, recruiting for major employers, then became the No Sugar Coating COACH so professionals could finally hear the truth about how it really works. Direct, warm, and honest, because being told the real thing is what changes the outcome.'},
+
+ {t:'section',idx:'Your Next Step',title:'Get the Truth, and the Plan to Use It'},
+ {t:'normal',k:'Keep going with Toye',title:'The full method, from your brand to the offer, one honest step at a time.',body:'This is where the coaching goes deeper: your brand, your network, your interview, and the confidence to carry all three. You bring the ambition, and we build the plan that gets the room to finally see it.'},
+ {t:'cta',title:'Ready to hear what a recruiter actually sees, and fix it?',body:'Take the next step with Toye, the No Sugar Coating COACH.',chips:['Work with Toye one-on-one','Bring the truth to your team or event'],disc:'Educational content for professionals and job seekers. No hiring, promotion, or income result is guaranteed. Outcomes vary by person, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Toye Johnson-Vincent · <b>No Sugar Coating COACH</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
