@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Know Your Stage · Ali Boehm · The Massage Business Mama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#eef0e9; --panel:#e4e8de; --rule:#d5dccb;
+    --acc:#9a6b4f; --ink:#2b2a26; --body:#4c4a41; --dim:#8b8a7c; --cream:#f3efe6;
+  }
+  html,body{height:100%}
+  body{background:#e3e7dd;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e3e7dd}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:.004em}
+  .t-title h1{font-size:6.0vw;max-width:95%;font-weight:700}
+  .t-normal h1{font-size:4.0vw;max-width:92%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.36vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Cormorant Garamond',serif;font-size:2.5vw;color:var(--acc);margin-top:3.2vh;max-width:86%;line-height:1.34;font-weight:500;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.8vw;max-width:93%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#33352c 0%,#20221b 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.4vw;max-width:90%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#33352c 0%,#20221b 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.6vw;max-width:88%;color:var(--cream)}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#e7e2d3;font-size:1.36vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .stage-badge{font-family:'Montserrat',sans-serif;font-size:.92vw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:1.6vh}
+  .stage-badge b{color:var(--acc)}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .path-motif{position:absolute;pointer-events:none}
+  .title-path{right:7%;bottom:8%;width:22vw;opacity:.95}
+  .corner-path{right:6.5%;bottom:7%;width:11vw;opacity:.55}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,42,38,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9.6vw}.t-normal h1{font-size:6.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.6vw}.t-section h1{font-size:8.8vw}.t-dark h1{font-size:7.0vw}
+    .t-cta h1{font-size:7.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.stage-badge{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">The Massage Business Mama</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a five-step path, waypoints rising left to right, in clay - the 5 Stages journey -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="path5" viewBox="0 0 200 120">
+  <g fill="none" stroke="#9a6b4f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 100 L52 82 L90 70 L128 50 L166 26" opacity="0.85"/>
+    <circle cx="14" cy="100" r="5.4" fill="#9a6b4f" stroke="none" opacity="0.55"/>
+    <circle cx="52" cy="82" r="5.4" fill="#9a6b4f" stroke="none" opacity="0.65"/>
+    <circle cx="90" cy="70" r="5.4" fill="#9a6b4f" stroke="none" opacity="0.75"/>
+    <circle cx="128" cy="50" r="5.4" fill="#9a6b4f" stroke="none" opacity="0.85"/>
+    <circle cx="166" cy="26" r="7.2" fill="#9a6b4f" stroke="none" opacity="1"/>
+    <path d="M166 26 l-6 -2 M166 26 l2 7" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Know Your Stage',sub:'The five stages every massage therapist moves through, and how to build a practice that pays you well and does not burn you out, at every one of them.',brand:true,path:'title'},
+ {t:'normal',k:'Who this is for',title:'You love the work. The business is the part nobody taught you.',body:'Massage school trained your hands, not your business. So you have been figuring out marketing, money, and boundaries as you go. Some months feel like you have cracked it, and some feel like you are treading water, and it is hard to tell whether you are actually growing or just staying busy. The effort is there. The map is what is missing.'},
+ {t:'dark',title:'You are not behind. You are at a stage.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Feels So Random'},
+ {t:'normal',k:'The one-size advice trap',title:'Every therapist gets handed the same advice, no matter where they are.',body:'Post more, get more clients, hustle harder. That advice is useless to a brand new grad and just as useless to someone whose calendar is already full. The move that grows you at one stage is the exact move that stalls you at the next. When you cannot see your own stage, you pour real energy into the wrong thing and call it bad luck.'},
+ {t:'normal',k:'The real problem',title:'It is not that you are not working hard enough.',body:'You are working plenty. The problem is aim, not effort. A packed schedule needs a completely different next step than an empty one, and nobody ever showed you which step belongs to which moment. Name the stage you are actually standing in and the right next move stops being a guess.'},
+ {t:'dark',title:'Growth is not one playbook. It is the right move for where you are.'},
+
+ {t:'section',idx:'Part Two',title:'The Five Stages'},
+ {t:'normal',k:'Stage one',badge:'Newbie Kneader',title:'Learning the craft, and quietly learning the business.',body:'You are new, or still in school, working for someone else and building your hands and your reps. The right move here is not to rush out on your own. It is to get genuinely good, and to pay attention to how the business around you actually runs, what fills a schedule, what keeps clients coming back, what quietly drains the owner. You are gathering more than technique.'},
+ {t:'normal',k:'Stage two',badge:'Budding Builder',title:'Standing up a practice that is actually yours.',body:'This is the setup grind. Space, license, insurance, a website, a name that feels like you, often while you still supplement the income somewhere else. The right move is to get the foundation right and get visible, without spending money you do not have yet. Done well, this stage decides how hard every stage after it will be.'},
+ {t:'normal',k:'Stage three',badge:'Grinding Guru',title:'Growing fast, and starting to feel the cost of it.',body:'Now you are testing marketing, refining your services from real feedback, and watching the calendar fill. It feels like winning, and it is. The right move is to keep what genuinely works, let go of what only drains you, and start protecting your time now, before a full schedule quietly becomes your boss instead of your goal.'},
+ {t:'normal',k:'Stage four',badge:'Streamline Strategist',title:'The calendar is full. Now the job changes.',body:'You are consistently booked, and the work shifts from getting clients to keeping your life. Systems, automation that handles the busywork, real boundaries, and rates that hold without apology. This is the stage where full either becomes freedom or becomes burnout, and the difference is entirely by design. You decide what the practice is allowed to ask of you.'},
+ {t:'normal',k:'Stage five',badge:'Serenity Scaler',title:'You have reached the ceiling of your own two hands.',body:'There are only so many hours, and you have found them. The right move now is to grow beyond the table. Offers that are not one more appointment, a team, income that keeps working when you step away. This is where the practice starts funding the life instead of consuming it, financially and energetically both.'},
+ {t:'dark',title:'Every stage has one right next move. The trap is skipping ahead, or staying too long.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Know Your Stage'},
+ {t:'normal',k:'The whole point',title:'A practice that pays you well and leaves you with a life.',body:'The goal was never just a fuller calendar. It was a practice that serves you financially and energetically, one that pays for the life you got into this work to have. Knowing your stage is how you get both at once, one win at a time, instead of chasing every shiny tactic and wondering why you are still tired.'},
+ {t:'normal',k:'The quiet engine',title:'Let your clients build the practice with you.',body:'Underneath all five stages is one steady habit: staying top of mind, so the clients you already have rebook and refer, ethically, with no pressure and no discounting yourself. That is the difference between chasing brand new clients forever and having a practice that grows itself while you sleep. Every stage gets easier when this is running.'},
+ {t:'dark',title:'You do not need to hustle harder. You need to know where you are.'},
+ {t:'normal',k:'Why Ali',title:'A therapist and clinic owner who has stood in every one of these stages.',body:'Ali Boehm, The Massage Business Mama, went to massage school in 2008 and grew her own private practice into a four room treatment center with a team of twelve to fifteen. She has coached massage therapists since 2018 and co-hosts the Align podcast. She built the 5 Stages so you never have to guess your next move again. This is the thinking behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Find Your Stage'},
+ {t:'normal',k:'Keep going with Ali',title:'Start by finding out exactly where you are.',body:'The free 5 Stages guide takes a few minutes and tells you which stage you are standing in and the one move that grows you from here. From there, Ali helps you build the right next step for your real stage, not generic advice, so your practice finally moves on purpose.'},
+ {t:'cta',title:'Ready to build a practice that serves you, financially and energetically?',body:'Take the next step with The Massage Business Mama.',chips:['Discover your 5 Stages','Work with Ali'],disc:'Educational content for practicing and aspiring massage therapists. No income or business result is guaranteed. Results vary by therapist, practice, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function path(kind){return `<svg class="path-motif ${kind==='title'?'title-path':'corner-path'}"><use href="#path5"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    if(s.badge) h+=`<div class="stage-badge"><b>${s.badge}</b></div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Massage Business <b>Mama</b> · Ali Boehm</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.path) h+=path(s.path);
+  else if(s.t==='title') h+=path('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
