@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Input, Signal, Output · Shawn Buttner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f3ea; --panel:#efe7d6; --rule:#e4d9bf;
+    --sig:#e8c400; --acc:#8a6d10; --ink:#12203a; --body:#3c4658; --dim:#8b8776; --cream:#f7f2e6;
+  }
+  html,body{height:100%}
+  body{background:#ece3d2;font-family:'Poppins',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#ece3d2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Raleway',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.3vw;max-width:90%;font-weight:600}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Raleway',serif;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.4;font-weight:600}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--sig),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#16273f 0%,#0d1826 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:88%;color:var(--cream)}
+  .t-dark h1 b{color:var(--sig);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#16273f 0%,#0d1826 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Poppins',sans-serif;color:#dfe6ef;font-size:1.42vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--sig);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:9%;width:19vw;opacity:.95}
+  .corner-vf{right:6.5%;bottom:8%;width:10vw;opacity:.6}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(18,32,58,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--sig);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Shawn Buttner</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the signal path. a faint input node, an amplified signal node, a clear output node, joined by one thin line, drawn in signal-yellow -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 160 80">
+  <g fill="none" stroke="#e8c400" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 40 H152" opacity="0.5"/>
+    <circle cx="20" cy="40" r="5" opacity="0.55"/>
+    <circle cx="80" cy="40" r="12" opacity="0.95"/>
+    <path d="M80 20 V12 M80 68 V60 M56 40 H48 M112 40 H104" opacity="0.7"/>
+    <circle cx="140" cy="40" r="7" fill="#e8c400" stroke="none" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Input, Signal, Output',sub:'The creator system that makes your tools, your AI, and your team sound like you, so the expertise you already have finally comes through.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You have real expertise. Online, it keeps coming out sounding like everyone else.',body:'You built a track record in a real career. Now you are showing up as a creator, using AI and tools and maybe a VA to keep up, and what comes out is competent and forgettable. It reads like every other post in the feed, not like the person your clients actually trust.'},
+ {t:'dark',title:'A faster way to sound generic is still a way to sound generic.'},
+
+ {t:'section',idx:'Part One',title:'Why More Tools Made You Sound Less Like You'},
+ {t:'normal',k:'Input, Signal, Output',title:'Every tool amplifies whatever you feed it.',body:'Point any tool, an AI, a VA, or a content system, at a vague sense of who you are, and it returns vague work, faster. The tool is not the problem and the tactics are not the problem. The input is. It starts with you, and the clarity of that input scales through everything downstream.'},
+ {t:'normal',k:'The signal degradation trap',title:'When your voice is fuzzy, scale just spreads the fuzz.',body:'This is the trap most experts fall into. You hand a rough prompt to the machine, accept the passable draft, and repeat it a hundred times. Every pass strips out a little more of what made you worth listening to, until your output is indistinguishable from someone who knows a tenth of what you do.'},
+ {t:'dark',title:'You do not need another tactic. You need your signal to survive contact with your tools.'},
+
+ {t:'section',idx:'Part Two',title:'The Creator System'},
+ {t:'normal',k:'Input',title:'Get clear on who you actually are, first.',body:'You are the ultimate input. How you think, the calls you accept and the ones you refuse, the way you explain a hard thing simply. Before any funnel or posting schedule, you name that clearly, because a system can only amplify a signal it can actually read.'},
+ {t:'normal',k:'Signal, your Voiceprint',title:'Capture your voice once, so it becomes reusable.',body:'Your Voiceprint is a focused set of prompts on how you think, talk, and make decisions, turned into a reusable profile. Paste that profile into ChatGPT, Claude, or any tool you use, and what comes out reads like you wrote it. About thirty minutes, and your AI stops sounding generic and starts sounding like you.'},
+ {t:'normal',k:'Output',title:'Now the systems carry your substance, not dilute it.',body:'With a clear signal in front of them, the AI, the VA, and the content engine finally amplify the real thing. Same speed you were chasing, except the posts, emails, and videos are unmistakably yours, and the expertise you spent years earning is the part that comes through.'},
+ {t:'normal',k:'The Creator Diagnostic',title:'Start by finding the one thing in the way.',body:'You do not fix all of it at once. The Creator Diagnostic finds the single point where your signal is breaking down and the single next move that clears it. Clarity before building, so you are never optimizing a system that is amplifying the wrong thing.'},
+ {t:'dark',title:'Amplify a <b>clear</b> signal and the tools work for you. Amplify a vague one and they bury you faster.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When Your Signal Is Clear'},
+ {t:'normal',k:'The creator this builds',title:'Output that sounds like you, at the speed the tools promised.',body:'Your content reads like the person clients already came for. You stop editing generic drafts into something human, because the draft starts human. The audience that follows you is following you specifically, and the hard-won judgment behind your work is finally the thing people can feel in it.'},
+ {t:'dark',title:'The goal was never more content. It was <b>your actual voice</b>, at scale.'},
+ {t:'normal',k:'Why Shawn',title:'Fifteen years building systems, now pointed at your signal.',body:'Shawn spent fifteen years in tech as an automation engineer, including time at Walmart and Apple, before becoming a Certified High Performance Coach. He hosts the Input, Output podcast and works one on one with experts to turn hard-won substance into a signal their tools can actually amplify.'},
+
+ {t:'section',idx:'Your Next Step',title:'Make Your Tools Sound Like You'},
+ {t:'normal',k:'Keep going with Shawn',title:'Start with your Voiceprint, then go deeper.',body:'The free Voiceprint gets your profile working in about thirty minutes, so your AI stops sounding like a stranger. When you are ready to clear the whole signal, the Creator Diagnostic finds the one move that changes the most, and you build from there.'},
+ {t:'cta',title:'Ready to sound like you again?',body:'Take the next step with Shawn Buttner.',chips:['Set up your free Voiceprint','Book a Creator Diagnostic'],disc:'Educational content for experts building a creator practice. No income or result is guaranteed. Outcomes vary by person, market, and effort.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Shawn <b>Buttner</b> · The Creator System for Experts</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
