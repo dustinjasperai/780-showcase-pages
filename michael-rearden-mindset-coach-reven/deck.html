@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>See It, Reach It, Keep It | A Masterclass with Michael Rearden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f6f4ee;
+    --panel:#fffdf8;
+    --rule:#e4ddcd;
+    --ink:#0b1f3b;
+    --dim:#5b6473;
+    --accent:#c89b2c;
+    --accent2:#d4af37;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:940px;animation:fade .4s ease;}
+  .slide.on{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  .partno{font-family:'Libre Baskerville',Georgia,serif;font-size:15px;color:var(--dim);letter-spacing:.04em;margin-bottom:14px;}
+  h1{font-family:'Libre Baskerville',Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,66px);line-height:1.08;letter-spacing:-.01em;}
+  h2{font-family:'Libre Baskerville',Georgia,serif;font-weight:700;font-size:clamp(28px,4.4vw,46px);line-height:1.15;}
+  .em{color:var(--accent);}
+  .sub{font-size:clamp(17px,2.1vw,22px);color:var(--dim);line-height:1.55;margin-top:22px;max-width:780px;}
+  .lead{font-size:clamp(19px,2.4vw,26px);color:var(--ink);line-height:1.5;margin-top:20px;max-width:800px;}
+  ul{list-style:none;margin-top:30px;max-width:800px;}
+  li{position:relative;font-size:clamp(16px,2vw,21px);color:var(--ink);line-height:1.5;padding:14px 0 14px 40px;border-bottom:1px solid var(--rule);}
+  li:last-child{border-bottom:none;}
+  li::before{content:"";position:absolute;left:0;top:22px;width:16px;height:16px;border:2px solid var(--accent);border-radius:3px;}
+  li b{font-weight:600;}
+  .quote{font-family:'Libre Baskerville',Georgia,serif;font-style:italic;font-size:clamp(24px,3.6vw,40px);line-height:1.3;max-width:840px;}
+  .three{display:flex;gap:26px;margin-top:36px;flex-wrap:wrap;}
+  .three .c{flex:1;min-width:200px;background:var(--panel);border:1px solid var(--rule);border-top:3px solid var(--accent);padding:26px 24px;}
+  .three .c .n{font-family:'Libre Baskerville',Georgia,serif;font-size:22px;color:var(--ink);margin-bottom:8px;}
+  .three .c .n span{color:var(--accent);}
+  .three .c p{font-size:15px;color:var(--dim);line-height:1.5;}
+  .cred{margin-top:28px;display:flex;gap:14px 34px;flex-wrap:wrap;}
+  .cred div{font-size:15px;color:var(--dim);}
+  .cred b{display:block;font-family:'Libre Baskerville',Georgia,serif;font-size:20px;color:var(--ink);font-weight:700;}
+  .cta-box{margin-top:30px;background:var(--ink);color:var(--panel);display:inline-block;padding:16px 30px;border-radius:2px;font-weight:600;font-size:18px;letter-spacing:.01em;}
+  .cta-box .site{color:var(--accent2);}
+  .disc{margin-top:34px;font-size:13px;color:var(--dim);line-height:1.5;max-width:720px;font-style:italic;}
+  .keyline{width:64px;height:3px;background:var(--accent);margin:0 0 26px;}
+  footer{position:fixed;left:0;right:0;bottom:0;height:46px;display:flex;justify-content:space-between;align-items:center;padding:0 7vw;font-size:12px;color:var(--dim);border-top:1px solid var(--rule);letter-spacing:.02em;background:var(--bg);z-index:2;}
+  footer .brand{font-family:'Libre Baskerville',Georgia,serif;color:var(--ink);}
+  .nav{position:fixed;bottom:62px;right:7vw;display:flex;gap:8px;z-index:5;}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);width:38px;height:32px;cursor:pointer;font-size:15px;border-radius:2px;}
+  .nav button:hover{border-color:var(--accent);}
+  .count{position:fixed;bottom:70px;left:7vw;font-size:12px;color:var(--dim);z-index:5;}
+  #stage{padding-bottom:12vh;}
+  @media(max-width:640px){#stage{padding:5vh 8vw 16vh;}footer{padding:0 8vw;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span class="brand">Reven Concepts</span><span>Michael Rearden, Mindset Coach</span></footer>
+<div class="count"><span id="cur">1</span> / <span id="tot"></span></div>
+<div class="nav"><button id="prev">&#8249;</button><button id="next">&#8250;</button></div>
+<script>
+const S = [
+  {t:'title', k:'A live mindset masterclass', h:'See It. <span class="em">Reach It.</span> Keep It.', s:'How high achievers make the change last, instead of chasing the next goal to replace the one that slipped. Presented by Michael Rearden, founder of Reven Concepts.'},
+  {t:'promise', k:'What this hour gives you', h:'You will leave with a way to make change <span class="em">hold</span>.', pts:['Why the results you fought for quietly slip back','The two-pronged method that keeps a change in place','A picture of what the first weeks actually look like']},
+  {t:'who', k:'Who this is for', h:'Successful on the outside. <span class="em">Stuck</span> on the inside.', s:'You have hit real goals. The career, the numbers, the milestones. And still there is a gap between where you are and how it feels. This is for the high achiever who is tired of restarting.'},
+  {t:'trap', k:'The pattern', h:'You hit the goal. Then it starts to fade.', s:'You get motivated. You push. You reach it. Weeks later you are drifting back toward the old version of you, wondering why the change would not stay. It is the most common story in personal growth.'},
+  {t:'hook', k:'The reframe', quote:'"Willpower is not the problem. The old story running underneath it is."'},
+  {t:'part', n:'Part One', h:'Why change does not hold', s:'Before the method, the honest problem.'},
+  {t:'point', k:'The real reason', h:'The surface changed. The <span class="em">subconscious</span> did not.', s:'Most coaching works on the conscious mind, goals, plans, habits. But the subconscious keeps running the old identity. When the two disagree, the old story wins every time, because it is the one on autopilot.'},
+  {t:'point', k:'The trade everyone gets backwards', h:'Hard now, <span class="em">easy later</span>.', s:'Most people choose easy now, which quietly becomes hard later, the restart, the backslide, the same resolution next year. The durable path does the harder inner work first, so keeping the change gets easier over time instead of harder.'},
+  {t:'part', n:'Part Two', h:'The Two-Pronged Approach', s:'The method at the center of the way I coach.'},
+  {t:'point', k:'Prong one', h:'Work the goal on the surface, on purpose.', s:'You pick the focus that actually matters to you, life, career, a relationship, a standard you want to hold, and we work it directly and concretely. This is the part every coach does. On its own, it does not last.'},
+  {t:'point', k:'Prong two', h:'Plant the shift <span class="em">underneath</span> it.', s:'At the same time, we plant seeds in the subconscious, the beliefs and the self-image that have to change for the goal to feel normal. Seeds take time to grow, which is why we start them while you are already moving on the surface.'},
+  {t:'point', k:'Where it locks in', h:'Both minds agree on the new normal.', s:'When the conscious goal and the subconscious story finally point the same direction, the new behavior stops feeling like effort and starts feeling like you. That is the moment a change becomes something you keep instead of something you defend.'},
+  {t:'three', k:'The arc of the work', h:'See it. Reach it. Keep it.', cards:[['See <span>it</span>','Get honest clarity on the goal that matters and the story blocking it. Most people skip this and aim at the wrong thing.'],['Reach <span>it</span>','Do the disciplined, deliberate work on the surface while the deeper shift is planted underneath.'],['Keep <span>it</span>','Align both minds so the change holds after the motivation fades. This is the step almost no one is taught.']]},
+  {t:'point', k:'Under "Keep it"', h:'How top performers <span class="em">train</span> the mind.', pts:['Awareness, watching your own thinking under pressure','Deliberate practice of the response, not just the outcome','Embracing discomfort where comfort ends and growth begins','Treating every setback as feedback, never as a verdict']},
+  {t:'hook', k:'The idea behind Reven', quote:'"Mindset is the key to all the locked doors in your life."'},
+  {t:'part', n:'Part Three', h:'Inside a real week', s:'How this shows up when the motivation is gone.'},
+  {t:'point', k:'In practice', h:'Small, repeatable, and <span class="em">honest</span>.', s:'A short daily reflection on the decisions you made and why. One comfort zone you deliberately step past. A rehearsed response for the moment you would normally slip. Non-negotiable standards you hold even on the flat days. Nothing dramatic, everything durable.'},
+  {t:'cred', k:'Why work with me', h:'Michael Rearden', s:'I have spent my career on how people actually change, not how they get hyped for a week.', creds:[['15+ years','teaching, coaching, and human development'],['M.Ed.','a background in how people learn and change'],['Reven','"Never Turned Backwards," the idea the whole practice is built on'],['Coaching In Session','the podcast where I break the work down each week']]},
+  {t:'recap', k:'The whole thing in one line', h:'See it. Reach it. <span class="em">Keep it.</span>', s:'Get clear, do the work on two levels at once, and align both minds so the change stays. That is the difference between another restart and a result you keep.'},
+  {t:'cta', k:'If this is the work you want', h:'Let us make the next change the <span class="em">last</span> one.', s:'If you are a high achiever who is done restarting, I would like to help you make it stick. Start with a Clarity Session, or apply for private coaching, at revenconcepts.com.', cta:'Start at <span class="site">revenconcepts.com</span>', disc:'This masterclass is educational. No specific result or outcome is guaranteed, and results vary from person to person based on your own effort and circumstances. Nothing here is medical, psychological, or financial advice.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((sl,i)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(i===0?' on':'');
+    let h='';
+    if(sl.k) h+=`<div class="kicker">${sl.k}</div>`;
+    if(sl.n) h+=`<div class="partno">${sl.n}</div><div class="keyline"></div>`;
+    if(sl.quote){ h+=`<div class="quote">${sl.quote}</div>`; }
+    else if(sl.h){ h+= (sl.t==='title'||sl.t==='part'||sl.t==='recap'||sl.t==='cta') ? `<h1>${sl.h}</h1>` : `<h2>${sl.h}</h2>`; }
+    if(sl.s) h+=`<p class="${sl.t==='title'?'sub':'lead'}">${sl.s}</p>`;
+    if(sl.pts){ h+='<ul>'+sl.pts.map(p=>`<li>${p}</li>`).join('')+'</ul>'; }
+    if(sl.cards){ h+='<div class="three">'+sl.cards.map(c=>`<div class="c"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+'</div>'; }
+    if(sl.creds){ h+='<div class="cred">'+sl.creds.map(c=>`<div><b>${c[0]}</b>${c[1]}</div>`).join('')+'</div>'; }
+    if(sl.cta){ h+=`<div class="cta-box">${sl.cta}</div>`; }
+    if(sl.disc){ h+=`<div class="disc">${sl.disc}</div>`; }
+    d.innerHTML=h;
+    stage.appendChild(d);
+  });
+  document.getElementById('tot').textContent=S.length;
+}
+let cur=0;
+function show(n){
+  const s=document.querySelectorAll('.slide');
+  if(n<0||n>=s.length)return;
+  s[cur].classList.remove('on'); cur=n; s[cur].classList.add('on');
+  document.getElementById('cur').textContent=cur+1;
+}
+render();
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft')show(cur-1);
+});
+document.getElementById('stage').addEventListener('click',e=>{
+  if(e.target.closest('.nav'))return;
+  show(cur+1);
+});
+</script>
+</body>
+</html>
