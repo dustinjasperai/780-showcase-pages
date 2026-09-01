@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Content Engine for Wedding Pros — A Masterclass with Kinsey Roberts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f2ec; --panel:#efe6da; --rule:#e2d6c6;
+    --acc:#a8574a; --ink:#2b2621; --body:#4a433c; --dim:#8a7f72; --cream:#f4ece3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e7ddd0;font-family:'Jost',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:.004em}
+  .t-title h1{font-size:5.0vw;max-width:88%}
+  .t-normal h1{font-size:3.0vw;max-width:86%}
+  .t-normal .body{font-family:'Jost',sans-serif;font-size:1.34vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:80%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 140% at 20% 10%,#3a221c 0%,#22140f 100%)}
+  .t-dark h1{color:var(--cream);font-size:3.3vw;max-width:84%;font-style:italic}
+  .t-cta{background:radial-gradient(120% 140% at 20% 10%,#3a221c 0%,#22140f 100%)}
+  .t-cta h1{color:var(--cream);font-size:3.2vw;max-width:82%}
+  .t-cta .body{font-family:'Jost',sans-serif;color:#e9d6cc;font-size:1.34vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Jost',sans-serif;font-size:.82vw;color:#c9b3a7;line-height:1.5;max-width:80%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:7%;top:50%;transform:translateY(-50%);width:20vw;height:20vw;opacity:.9}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.55}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">She Creates Business</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a content-calendar tick rhythm, terracotta dots along a fine editorial hairline -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#a8574a" stroke-width="2" stroke-linecap="round">
+    <path d="M14 30 H106 M14 60 H106 M14 90 H106" opacity="0.35"/>
+    <circle cx="30" cy="30" r="4.5" fill="#a8574a" stroke="none" opacity="0.9"/>
+    <circle cx="72" cy="60" r="6" fill="#a8574a" stroke="none" opacity="0.95"/>
+    <circle cx="48" cy="90" r="4.5" fill="#a8574a" stroke="none" opacity="0.85"/>
+    <circle cx="72" cy="60" r="13" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Content Engine for Wedding Pros',sub:'How to turn your content into a steady stream of booked weddings, without posting more or shouting louder.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are great at the wedding. Getting couples to find you is the part that never feels solved.',body:'You do beautiful work and your couples love you. But the marketing side is a moving target. You post, you pause, you wonder if any of it is working, and the inquiries still feel unpredictable. That gap is not a talent problem.'},
+ {t:'dark',title:'A quiet inbox is rarely a skill problem. It is a visibility problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Wedding Pros Stay Invisible'},
+ {t:'normal',k:'The posting-more trap',title:'Posting more does not book more. It just makes you busier.',body:'When bookings dip, the instinct is to post more often. But volume without a system is just noise, and it burns you out. The couples who need you are not waiting for your tenth post this week. They are waiting to find someone they trust.'},
+ {t:'normal',k:'The sea of sameness',title:'Every wedding feed looks the same, so couples cannot tell anyone apart.',body:'Pretty photos, the same captions, the same trends. When your content blends in with every other pro in your market, price becomes the only thing left to compare on. Standing out is not about being louder. It is about being clearly, recognizably you.'},
+ {t:'dark',title:'A couple cannot choose you if they never actually notice you.'},
+
+ {t:'section',idx:'Part Two',title:'The Content Engine'},
+ {t:'normal',k:'Plan with intent',title:'Ten minutes of planning beats an hour of scrambling.',body:'The pros who stay visible are not posting more, they are planning better. A simple content plan, mapped ahead of time, means you show up with purpose instead of guessing every morning. This is the whole idea behind a real content calendar: a rhythm you can actually keep.'},
+ {t:'normal',k:'Become the known name',title:'Depth is what makes you the go-to name in your market.',body:'Sharing your point of view consistently, whether on a podcast, a blog, or your feed, is how a stranger becomes a follower and a follower becomes an inquiry. You do not need a huge audience. You need to be the trusted voice for the couples in your corner of the market.'},
+ {t:'normal',k:'Speak to one couple',title:'Marketing to everyone reaches no one.',body:'The clearer you are about exactly who you serve and the wedding you help them create, the more your content lands. When you name the specific couple and the specific dream, the right person reads it and thinks, that is us. Vague and general is what makes marketing feel like shouting into the void.'},
+ {t:'normal',k:'Turn attention into inquiries',title:'Attention only counts when you invite people to take the next step.',body:'Content that never asks is just decoration. The engine works when every piece has a job: to move someone one honest step closer, from watching to reaching out. A clear, warm invitation is the difference between a big following and a full inquiry inbox.'},
+ {t:'dark',title:'You do not need more content. You need a content engine that runs.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Engine Runs'},
+ {t:'normal',k:'The business this builds',title:'A full inquiry inbox, better-fit couples, and weddings that come to you.',body:'When your content is intentional and consistent, the right couples find you, feel like they already know you, and reach out ready to book. The panic marketing of a slow season fades, because your visibility never stopped in the first place.'},
+ {t:'dark',title:'The goal was never to become an influencer. It was to stay booked doing work you love.'},
+ {t:'normal',k:'Why Kinsey Roberts',title:'A decade teaching wedding pros to market, from inside a real wedding business.',body:'Kinsey has hosted She Creates Business, a podcast for wedding pros, since 2016, and co-owns Vista View Events as a certified wedding planner. She teaches marketing the way an owner actually lives it, not from theory. This is the method behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Content Engine for Your Wedding Business'},
+ {t:'normal',k:'Keep going with Kinsey',title:'The full method, from your message to an inbox that stays full.',body:'She Creates Business walks you through the whole engine step by step, from finding your message to a content plan you can keep and a rhythm that brings couples to you. Start with the content calendar and the podcast, and go deeper with one-on-one coaching when you are ready.'},
+ {t:'cta',title:'Ready to turn your content into booked weddings?',body:'Take the next step with Kinsey and She Creates Business.',chips:['Work with Kinsey one-on-one','Start with the She Creates Content Calendar'],disc:'Educational content for wedding professionals. No booking or income result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">She Creates <b>Business</b> · Kinsey Roberts</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
