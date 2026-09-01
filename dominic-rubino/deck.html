@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Construction Millionaire System — A Masterclass with Dominic Rubino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f5f8; --panel:#e6ecf2; --rule:#cbd5e1;
+    --acc:#082336; --spark:#2f6db0; --ink:#1c2b38; --body:#3b4753; --dim:#7c8895; --cream:#eef3f8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#dbe3ec;font-family:'Source Serif 4',Georgia,serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Archivo',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Archivo',Arial,sans-serif;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-.01em}
+  .t-title h1{font-size:4.7vw;max-width:90%}
+  .t-normal h1{font-size:2.9vw;max-width:87%}
+  .t-normal .body{font-family:'Source Serif 4',serif;font-size:1.36vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Source Serif 4',serif;font-style:italic;font-size:1.95vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.42;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Archivo',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.8vw;max-width:82%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:linear-gradient(140% 140% at 18% 12%,#0e2f47 0%,#061722 100%)}
+  .t-dark h1{color:var(--cream);font-size:3.2vw;max-width:86%;font-style:normal}
+  .t-cta{background:linear-gradient(140% 140% at 18% 12%,#0e2f47 0%,#061722 100%)}
+  .t-cta h1{color:var(--cream);font-size:3.1vw;max-width:84%}
+  .t-cta .body{font-family:'Source Serif 4',serif;color:#c9d8e6;font-size:1.36vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--spark);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Archivo',sans-serif;font-size:1.08vw;font-weight:600}
+  .brandline{font-family:'Archivo',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:800}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Source Serif 4',serif;font-size:.82vw;color:#9fb0c0;line-height:1.5;max-width:80%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:7%;top:50%;transform:translateY(-50%);width:21vw;height:21vw;opacity:.92}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Cabinet Maker Profit System</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a builder's measured rule — navy gridlines with tape-measure ticks, the shop-floor discipline applied to the business -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#082336" stroke-width="2" stroke-linecap="round">
+    <path d="M12 24 H108 M12 60 H108 M12 96 H108" opacity="0.30"/>
+    <path d="M24 18 V30 M48 18 V30 M72 18 V30 M96 18 V30" opacity="0.55"/>
+    <rect x="12" y="54" width="34" height="12" fill="#082336" stroke="none" opacity="0.9"/>
+    <rect x="46" y="52" width="20" height="16" fill="#2f6db0" stroke="none" opacity="0.95"/>
+    <path d="M12 96 H108" stroke-width="3" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Construction Millionaire System',sub:'How cabinet and contracting shop owners build a business that makes real money without them on the tools, and is worth something the day they want out.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You can build anything. Building the business around the work is the part that never got easier.',body:'You are the best craftsman in your shop, and that is exactly the problem. The estimating, the crew, the cash, the fires: it all still runs through you. The work is excellent and the business is exhausting. That gap is not a skill problem, it is a systems problem.'},
+ {t:'dark',title:'Busy and broke is not a pricing accident. It is a business that was never built to run without you.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Builders Stay Stuck'},
+ {t:'normal',k:'The owner-dependency trap',title:'If it all runs through you, you do not own a business. You own a very demanding job.',body:'When every quote, every decision, and every problem needs you, growth just means more weight on your shoulders. You cannot take a week off without the whole thing wobbling. A shop that depends on the owner has a ceiling, and the ceiling is you.'},
+ {t:'normal',k:'The margin leak',title:'Most shops are one bad estimate away from working for free.',body:'Guessing on price, eating the change orders, quoting to stay busy instead of quoting to profit. Revenue looks fine and the bank account never grows. Until you know your real numbers on every job, you are flying blind and calling it hard work.'},
+ {t:'normal',k:'Flying blind',title:'You cannot fix what you never measure.',body:'Most trade owners could not tell you their true net margin, their cost per hour, or which jobs actually made money last quarter. Without those numbers, every decision is a gut call. The shops that get rich are not luckier. They are the ones who finally started keeping score.'},
+ {t:'dark',title:'Working harder inside a broken system just gets you to burnout faster.'},
+
+ {t:'section',idx:'Part Two',title:'The Construction Millionaire System'},
+ {t:'normal',k:'Time: get off the tools',title:'The goal is not to work less. It is to become worth more off the tools than on them.',body:'The first shift is handing off the work only you can do today so tomorrow you are running the business, not the job site. That starts with simple systems a crew can follow without you standing over them: checklists, a real schedule, and a handful of numbers you check every week.'},
+ {t:'normal',k:'Team: build people who run it',title:'A real business is a crew that produces great work when you are not in the room.',body:'Hiring is not the hard part. Building people who can estimate, run a job, and hold the standard is. That is documented systems, clear roles, and training that does not live only in your head. This is how a one-person show becomes a company that can carry more than you can lift alone.'},
+ {t:'normal',k:'Money: price for profit',title:'Know your numbers, price to keep the profit, and pay yourself first.',body:'Every millionaire contractor I have met priced on purpose. They knew their overhead, their true cost per hour, and the margin each job had to clear. When the numbers run the pricing instead of the fear of losing the job, the same volume of work finally builds wealth instead of just noise.'},
+ {t:'normal',k:'Simple systems, kept',title:'Simple beats clever every time, because simple is what a busy shop will actually run.',body:'You do not need a corporate playbook. You need a few repeatable systems for sales, production, and money that fit on a page and get used on a Tuesday. The magic is not complexity. It is a rhythm the whole shop can keep long after the motivation wears off.'},
+ {t:'dark',title:'You already build things that last. The business deserves to be built the same way.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the System Runs'},
+ {t:'normal',k:'The business this builds',title:'More profit, more time off, and a company that would sell for real money.',body:'When the shop runs on systems instead of on you, margins climb, the owner gets weekends back, and the business becomes an asset instead of a trap. That is the whole point of Construction Millionaire Secrets: a company that pays you well now and is worth something the day you want to step back or hand it down.'},
+ {t:'dark',title:'The dream was never just a bigger shop. It was freedom, wealth, and something you can walk away from proud.'},
+ {t:'normal',k:'Why Dominic Rubino',title:'A real operator who built and sold a company, now coaching the trades for over 20 years.',body:'Dominic built companies across several industries, including one he grew to well over a hundred million in revenue and sold, and has spent more than two decades coaching cabinet makers, millwork shops, and contractors. He is the author of Construction Millionaire Secrets and host of the Cabinet Maker Profit System and Profit Tool Belt podcasts. This is the system behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Shop Into a Construction Millionaire Business'},
+ {t:'normal',k:'Keep going with Dominic',title:'The full system, from getting off the tools to a business worth selling.',body:'Dominic and his team walk cabinet and contracting owners through the whole system step by step: the numbers, the team, and the simple rhythms that turn a busy shop into a profitable, sellable business. Start with the book, then apply to work with him directly when you are ready.'},
+ {t:'cta',title:'Ready to build a business that runs without you?',body:'Take the next step with Dominic Rubino and the Cabinet Maker Profit System.',chips:['Apply for coaching with Dominic','Start with Construction Millionaire Secrets'],disc:'Educational content for construction and trade business owners. No income, profit, or business-sale result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Cabinet Maker <b>Profit System</b> · Dominic Rubino</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
