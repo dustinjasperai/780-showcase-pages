@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Play to Win · Michael Ceely</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f2ea; --panel:#ece4d5; --rule:#ddd2bd;
+    --sig:#c19752; --acc:#9a7433; --ink:#2b2624; --body:#55504a; --dim:#9a938a; --cream:#fbf7ef;
+  }
+  html,body{height:100%}
+  body{background:#e8e0d1;font-family:'Source Sans 3',system-ui,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e8e0d1}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4.5vw;max-width:94%}
+  .t-normal h1{font-size:3.05vw;max-width:90%;font-weight:600}
+  .t-normal .body{font-family:'Source Sans 3',sans-serif;font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Source Sans 3',sans-serif;font-style:italic;font-size:1.95vw;color:var(--acc);margin-top:3.4vh;max-width:88%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--sig),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#3a2f2a 0%,#241d19 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:90%;color:var(--cream)}
+  .t-dark h1 b{color:var(--sig);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#3a2f2a 0%,#241d19 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Source Sans 3',sans-serif;color:#efe6d5;font-size:1.5vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--sig);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Montserrat',sans-serif;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-family:'Montserrat',sans-serif;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:9%;width:20vw;opacity:.95}
+  .corner-vf{right:6.5%;bottom:8%;width:11vw;opacity:.6}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,38,36,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--sig);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Montserrat',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.8vw}.t-normal h1{font-size:5.5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.9vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Michael Ceely</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the front foot. a flat reactive baseline that steps up onto a rising line, drawn in brand gold -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 170 80">
+  <g fill="none" stroke="#c19752" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 58 H74" opacity="0.5"/>
+    <path d="M74 58 L96 34" opacity="0.9"/>
+    <path d="M96 34 L162 22" opacity="0.9"/>
+    <circle cx="162" cy="22" r="4.5" fill="#c19752" stroke="none" opacity="0.95"/>
+    <circle cx="8" cy="58" r="3.6" fill="#c19752" stroke="none" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Play to Win: The Executive’s Mental Game',sub:'How business leaders get out of reactive mode and lead on the front foot, using the mental skills that elite athletes train.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You are good at the job. The day still runs you.',body:'You run a company, a team, or a book of high-stakes decisions, and you are good at it. Yet the day arrives as a pile of things reacting to you, one meeting bleeding into the next fire, and you end it having answered everything and led almost nothing. The talent is not the problem. The way the day plays you is.'},
+ {t:'dark',title:'The problem was never the workload. It was leading from the <b>back foot</b>.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Leaders Get Stuck in Reaction'},
+ {t:'normal',k:'Reaction wears the mask of urgency',title:'Reactive mode feels like being needed. It is really just being pulled.',body:'When everything is urgent, reacting feels like leadership, because you are moving fast and things are getting handled. But speed spent on whatever shouts loudest is not the same as direction. The leader on the back foot answers the day. The leader on the front foot decides it, and that is a different mental habit, not a longer to-do list.'},
+ {t:'normal',k:'Being excellent is not a shield',title:'The better you are, the easier it is to stay busy instead of composed.',body:'High standards are why you rose. They are also why you take the pull personally, why you say yes to keep the peace, and why the quiet voice second-guessing the last call gets louder the higher the stakes. Skill hides the cost for a while. Then it shows up as a leader who is always on, never ahead.'},
+ {t:'dark',title:'You cannot out-work a mental game you were <b>never trained</b> to play.'},
+
+ {t:'section',idx:'Part Two',title:'The Athlete’s Mental Game, For Leaders'},
+ {t:'normal',k:'Move one, see the block',title:'Name the one thing quietly throttling your performance.',body:'Every athlete who plateaus has a specific block, not a vague lack of effort. Leaders are no different. Before any technique, you find the real constraint, the approval you are chasing, the decision you keep deferring, the story you tell yourself under pressure, and you name it plainly. A block you can see is one you can train against. A block running in the background just runs you.'},
+ {t:'normal',k:'Move two, reset the self-talk',title:'Change the inner voice before it hardens into a rule.',body:'At the Olympic trials the difference between two equally trained athletes is what they say to themselves in the ninety seconds before the gun. It is the same in the boardroom. You learn to catch the self-talk that turns one setback into a verdict about you, and to replace it with a truer, more useful read, so a hard moment stays a moment and never becomes your ceiling.'},
+ {t:'normal',k:'Move three, train the state',title:'Build the state you need on purpose, do not hope it shows up.',body:'Amateurs wait to feel ready. Professionals train a routine that produces the state on demand: how you manage energy across the day, how you enter the high-stakes room, how you recover between them. Composure stops being a mood you are lucky to have and becomes something you can walk yourself into, the same way an athlete does before a start.'},
+ {t:'normal',k:'Move four, lead on the front foot',title:'Set the terms of the day instead of answering them.',body:'With the block named, the self-talk reset, and the state trained, you stop absorbing the day and start directing it. You choose the few things that actually move the game, you hold the room with clarity instead of chasing agreement, and the people around you feel a leader who is ahead of the play rather than buried under it.'},
+ {t:'dark',title:'Composure is a <b>skill</b>. Skills are trained, not wished for.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Play to Win'},
+ {t:'normal',k:'The leader this builds',title:'Same pressure, a completely different relationship to it.',body:'The stakes do not shrink and the calendar does not clear. What changes is who shows up to meet them. You make the hard calls without the long tax of second-guessing, your confidence stops swinging on the last outcome, and the team gets a steady, decisive version of you on the good days and the bad ones. You are leading the game again, not surviving it.'},
+ {t:'dark',title:'The goal was never to feel calm. It was to <b>lead</b> like you trained for it.'},
+ {t:'normal',k:'Why Michael',title:'A coach who has performed at the top and studied the mind behind it.',body:'Michael Ceely is a licensed therapist and a former professional cyclist who now coaches executives and founders. He has worked with leaders at the largest companies and with athletes at the Olympic level, and he brings the same thing to both: the athlete’s trained mental game, applied to the pressure of leading a business. Not motivation, and not another productivity system. The inner game, coached.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With One Conversation'},
+ {t:'normal',k:'Keep going with Michael',title:'Bring the situation that keeps putting you on the back foot.',body:'The next step is a short strategy call. You bring the pattern that costs you most, the decision you keep circling, the pressure that pulls you into reaction, and together you look at what is really driving it and whether coaching is the right fit. If it is, the work is built around you and the moments that matter in your world. If it is not, you leave seeing the pattern more clearly than you did.'},
+ {t:'cta',title:'Ready to play to win?',body:'Apply to coach with Michael Ceely and book your strategy call.',chips:['Apply for coaching','Watch the free masterclass'],disc:'Educational content for business leaders and high performers. Coaching supports performance and leadership and is not therapy or medical, psychological, or clinical treatment. No specific result, outcome, or income is guaranteed. Results vary by person, effort, and circumstance.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Michael <b>Ceely</b> · High Performance Coaching</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
