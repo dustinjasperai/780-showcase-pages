@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Optimal Performance Formula · Adolfo Gómez Sánchez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f1ede8; --panel:#e8e2d8; --rule:#ddd5c8;
+    --accent:#fcbf41; --acc:#a87e12; --ink:#171310; --body:#4a463f; --dim:#8a8378;
+    --deep:#1c1813; --cream:#f5f1ea;
+  }
+  html,body{height:100%}
+  body{background:#e3ded5;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e3ded5}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.09;letter-spacing:.002em}
+  .t-title h1{font-size:5.7vw;max-width:95%;font-weight:600}
+  .t-normal h1{font-size:3.6vw;max-width:90%;font-weight:600}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.36vw;color:var(--body);margin-top:3.0vh;max-width:77%;line-height:1.64;font-weight:400}
+  .sub{font-family:'Newsreader',serif;font-size:2.15vw;color:var(--acc);margin-top:3.2vh;max-width:88%;line-height:1.36;font-weight:500;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#242019 0%,#14110c 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.1vw;max-width:88%;color:var(--cream)}
+  .t-dark h1 b{color:var(--accent);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#242019 0%,#14110c 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#e7e1d4;font-size:1.36vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:9%;width:20vw;opacity:.95}
+  .corner-vf{right:6.5%;bottom:8%;width:10vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(20,20,20,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9.2vw}.t-normal h1{font-size:6.0vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.3vw}.t-section h1{font-size:8.0vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Adolfo Gómez Sánchez</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the pause. a jagged pressure spike holds at a single gold vertical bar, then resolves into one clean, chosen stroke. the trained beat between trigger and response -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 180 80">
+  <g fill="none" stroke="#fcbf41" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 40 L20 40 L28 14 L38 66 L48 22 L56 40 L84 40" opacity="0.9"/>
+    <path d="M84 12 L84 68" opacity="0.85"/>
+    <path d="M84 40 H174" opacity="0.5"/>
+    <circle cx="174" cy="40" r="5" fill="#fcbf41" stroke="none" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Optimal Performance Formula',sub:'How elite performers train for pressure instead of hoping they will rise to it, so the biggest moment gets your best, on command.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You have done the work. The question is whether it shows up when it counts.',body:'You compete or lead where the outcome is public and the margin is thin, a match point, a boardroom, a decision the whole room is watching. The skill is real and the preparation is done. What decides the result at the top is whether your best is available in the exact moment the pressure spikes, because that is when preparation either arrives or disappears.'},
+ {t:'dark',title:'Under real pressure you do not rise to the occasion. You fall to the level of your training.'},
+
+ {t:'section',idx:'Part One',title:'Why Pressure Beats Preparation'},
+ {t:'normal',k:'The myth',title:'Nobody rises to the occasion. They fall to what they rehearsed.',body:'The story we are sold is that champions summon something extra when it matters. They do not. When the stakes spike, attention narrows, the body reads threat, and you default to whatever is already trained in. If the response was never rehearsed, hope is all that is left, and hope has never once held up under real pressure.'},
+ {t:'normal',k:'What it costs',title:'The gap is not in what you know. It is in the moment you have to use it.',body:'The point you tightened on. The decision you rushed because the room got loud. The presentation your body walked into carrying last week. None of it was a hole in your ability. It was your state at the one moment you needed the ability most, and that state was left to chance instead of built on purpose.'},
+ {t:'dark',title:'You cannot think your way calm once the moment has already started. That work happens <b>before</b>.'},
+
+ {t:'section',idx:'Part Two',title:'The Formula: Train the Pause'},
+ {t:'normal',k:'The Optimal Performance Formula',title:'Take performance apart, train each piece, put it back together seamlessly.',body:'Performance is not one mysterious thing you either have or lack on the day. It is a set of trainable parts. The Formula breaks it into its pieces, sharpens each one, and reassembles them so they hold together under load. Built over three decades with elite athletes and leaders, drawn from the science of performance and a lifetime in martial arts.'},
+ {t:'normal',k:'Pillar one · Power in the Pause',title:'Between the trigger and your response there is a gap. That gap is trainable.',body:'Every high-pressure moment has a beat between what happens and what you do next. Amateurs are dragged through it by adrenaline. Elite performers own it. This is where composure actually lives, not as a feeling you wait for, but as a trained beat you step into on purpose so the next action is chosen, not reflexed.'},
+ {t:'normal',k:'Pillar two · Rehearse the Response',title:'Composure is not summoned. It is rehearsed until it is automatic.',body:'A martial artist does not decide how to move when the strike comes. The response was drilled a thousand times so it runs without thought. You build the same thing for your arena: the breath, the focus cue, the first action, rehearsed until pressure triggers the trained response instead of the panic one. That is what makes the best look calm. It was practiced.'},
+ {t:'normal',k:'Pillar three · Redefine Failure',title:'Treat the miss as data, not as a verdict on who you are.',body:'The performers who last do not avoid failure, they metabolize it. A missed shot or a bad call becomes information for the next rep, not a story about their worth that pulls them out of the moment. Redefining failure is what lets you stay in the arena, adjust, and go again, which over a career is the whole difference.'},
+ {t:'dark',title:'Own the pause. Rehearse the response. Redefine the miss. <b>In that order.</b>'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When It Is Trained'},
+ {t:'normal',k:'The trained performer',title:'The same person, delivering their best when the stakes are highest.',body:'You walk into the moment and the pressure still spikes, but it no longer runs you. You step into the pause, the rehearsed response fires, and the miss, if it comes, is information instead of a spiral. Your best stops being a thing you hope shows up on the day and becomes a thing you can count on, because you built it.'},
+ {t:'dark',title:'The edge was never nerve or talent alone. It is a response you <b>trained</b> for the moment that matters.'},
+ {t:'normal',k:'Why Adolfo',title:'Three decades modeling what actually drives performance at the top.',body:'Adolfo Gómez Sánchez has spent more than thirty years studying and building elite performance, from ATP tennis professionals to global business leaders, pairing a graduate education from Yale with a lifetime in martial arts and the science of performance. The Optimal Performance Formula is that work distilled, and it reached number one in its category as a book.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Own Formula'},
+ {t:'normal',k:'Keep going with Adolfo',title:'Start with a conversation about the moments that cost you most.',body:'The place to begin is a consultation about where pressure is actually costing you, in your sport, your leadership, or your work. If it is a fit, the work goes deeper into building your own Optimal Performance Formula, so the pause, the response, and the reframe are trained for the moments that decide your outcomes.'},
+ {t:'cta',title:'Ready to train your best for the moment it matters?',body:'Start a conversation with Adolfo Gómez Sánchez.',chips:['Book a consultation','Read The Optimal Performance Formula'],disc:'Educational content for athletes, leaders, and performers working on mental performance. No income, result, or outcome is guaranteed. Individual results vary by person, situation, and effort.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Adolfo Gómez <b>Sánchez</b> · Optimal Performance</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
