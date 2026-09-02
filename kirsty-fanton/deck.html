@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Sell Like a Therapist · Kirsty Fanton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f3f4ee; --panel:#e7e9df; --rule:#d7dacb;
+    --acc:#fa7049; --ink:#292929; --body:#4b4d47; --dim:#8b8d82; --cream:#f5f6f0; --teal:#0595b0;
+  }
+  html,body{height:100%}
+  body{background:#e4e6dc;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e4e6dc}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:92%}
+  .t-normal h1{font-size:3.3vw;max-width:90%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:75%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Playfair Display',serif;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#154049 0%,#0f2a30 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#154049 0%,#0f2a30 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#dfe8e6;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .sp-motif{position:absolute;pointer-events:none}
+  .title-sp{right:7.5%;bottom:9%;width:20vw;opacity:.95}
+  .corner-sp{right:6.5%;bottom:7.5%;width:11vw;opacity:.6}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(41,41,41,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Kirsty Fanton</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- spectrum motif: a dimensional line with a marker, drawn in coral (her assessment plots you on a spectrum, not into a box) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="sp" viewBox="0 0 160 60">
+  <g fill="none" stroke="#fa7049" stroke-width="2" stroke-linecap="round">
+    <line x1="14" y1="38" x2="146" y2="38" opacity="0.55"/>
+    <line x1="24" y1="30" x2="24" y2="46" opacity="0.4"/>
+    <line x1="52" y1="30" x2="52" y2="46" opacity="0.4"/>
+    <line x1="80" y1="30" x2="80" y2="46" opacity="0.4"/>
+    <line x1="108" y1="30" x2="108" y2="46" opacity="0.4"/>
+    <line x1="136" y1="30" x2="136" y2="46" opacity="0.4"/>
+    <circle cx="98" cy="38" r="9" fill="#fa7049" stroke="none" opacity="0.92"/>
+    <circle cx="98" cy="16" r="3.2" fill="#fa7049" stroke="none" opacity="0.85"/>
+    <line x1="98" y1="21" x2="98" y2="29" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Sell Like a Therapist',sub:'How to hold sales conversations, pitches, and hard client moments so they feel like a real conversation, not a performance.',brand:true,sp:'title'},
+ {t:'normal',k:'Who this is for',title:'You are brilliant at the work. The conversation about the work is the part that gets tense.',body:'You run a business built on a real skill, and people can feel that. But the sales call, the discovery chat, the moment someone asks the price, that is where you tighten up, over-explain, or switch into a voice that is not really yours. The work is not the problem. The conversation around it is.'},
+ {t:'dark',title:'It was never a confidence problem. Nobody ever taught you the conversation itself.'},
+
+ {t:'section',idx:'Part One',title:'Why Selling Feels So Strange'},
+ {t:'normal',k:'The performance trap',title:'The moment it becomes "selling," you stop being yourself.',body:'Most of us learned that selling is a performance: a script, a persona, a set of lines to push through. So the second a conversation turns to money or the offer, you leave your natural way of talking and put on the sales voice. The other person feels the shift, and the warmth that made them trust you in the first place drains out of the room.'},
+ {t:'normal',k:'Whose discomfort',title:'Under the awkwardness, you are usually managing your own feelings, not theirs.',body:'The rush to fill a silence, the over-explaining, the discount you offer before they even push back, all of it is you soothing your own discomfort. A good conversation asks for the opposite: staying with the other person, staying with the moment, and letting them do more of the talking than you do.'},
+ {t:'dark',title:'People do not buy from the most polished person in the room. They buy from the one who made them feel understood.'},
+
+ {t:'section',idx:'Part Two',title:'The Four Foundational Skills'},
+ {t:'normal',k:'Skill one, preparing the space',title:'A good conversation is set up before it starts.',body:'Before a word about the offer, you decide what this conversation is for, who is doing what, and how to make it safe to be honest. Preparing the space means the other person knows they can say "I am not sure" or "that feels expensive" out loud, which is the only way you ever get to help with the real objection instead of the polite one.'},
+ {t:'normal',k:'Skill two, encouraging disclosures',title:'Better questions, and the room to answer them.',body:'The skill is not talking more persuasively, it is helping people tell you what is actually going on. That is asking questions that open instead of close, reading the pause and the shift in tone, and checking in before you move on. When someone feels genuinely heard, they tell you what they really want, and that is the whole game.'},
+ {t:'normal',k:'Skill three, feeling and meaning',title:'Hear the message underneath the words.',body:'"I need to think about it" is rarely about thinking. Working with feeling and meaning is learning to pinpoint what someone actually means, taking the shame out of the thing they are embarrassed to say, and naming the concern before they have to. You also learn to pinpoint the frame, the one angle that makes your offer land, so you are not explaining ten things when one would do.'},
+ {t:'normal',k:'Skill four, advanced skills',title:'Silence, honest disagreement, and using yourself well.',body:'The advanced moves are the ones that feel risky and work anyway: letting a silence sit instead of rushing it, disagreeing with a client without losing them, and "use of self," bringing your own read of the moment into the room ("can I be honest about what I am noticing?"). Then closing cleanly, so the conversation ends with a real decision rather than a vague "let me get back to you."'},
+ {t:'dark',title:'A great sales conversation is just a really good conversation, held on purpose.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Learn This'},
+ {t:'normal',k:'The shift in the room',title:'Objections stop being threats. The right people say yes faster.',body:'When you can prepare the space and hear what is underneath the words, the price question stops being an ambush and becomes a normal part of the talk. You stop performing, you stop discounting out of nerves, and the people who are a genuine fit feel it and move ahead. The ones who are not a fit leave the conversation still liking you.'},
+ {t:'normal',k:'Why Kirsty Fanton',title:'A psychotherapist who moved into business, teaching the conversation skills most of us were never taught.',body:'Kirsty spent years as a psychotherapist before becoming a launch copywriter and communication coach. She teaches the actual clinical skills, safe spaces, disclosure, working with feeling, use of self, translated for sales calls, pitches, and client work. It is the method behind her coaching and her Comms Camp mastermind.'},
+
+ {t:'section',idx:'Your Next Step',title:'Have the Conversation Differently'},
+ {t:'normal',k:'Keep going with Kirsty',title:'Find your own communication style, then practise the skills with support.',body:'Start by pinpointing where you sit on the communication spectrum with the free assessment, so you know your natural strengths and the edges to work on. When you are ready to build the skills with feedback and a small group around you, Comms Camp is the room for that.'},
+ {t:'cta',title:'Want selling to feel like a conversation again?',body:'Take the next step with Kirsty Fanton.',chips:['Take the free communication assessment','Explore Comms Camp'],disc:'Educational content for online business owners. No income or business result is guaranteed. Outcomes vary by person, offer, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function sp(kind){return `<svg class="sp-motif ${kind==='title'?'title-sp':'corner-sp'}" viewBox="0 0 160 60"><use href="#sp"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Kirsty <b>Fanton</b> · Communication Coach</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.sp) h+=sp(s.sp);
+  else if(s.t==='title') h+=sp('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
