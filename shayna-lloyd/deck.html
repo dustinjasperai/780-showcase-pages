@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Hybrid Upsell Masterclass · Shayna Lloyd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    /* traceable to ## Palette in 01-deep-research.md (extract_brand.js, site_scheme:light) */
+    --bg:#f6f3ee; --panel:#ece6dc; --rule:#d8cfc0;
+    --sage:#566c62;   /* dominant brand color (#566c62, 51 uses) */
+    --accent:#aa6e34; /* accent (#aa6e34, 10 uses) */
+    --ink:#2c2c2c;    /* from #3a3a3a */
+    --muted:#7c766c; --chip:#efe9df;
+  }
+  html,body{height:100%}
+  body{background:#e7e0d4;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#ded6c8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.16;letter-spacing:-.006em}
+  .t-title h1{font-size:5vw;max-width:92%}
+  .t-normal h1{font-size:3.35vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:#4a463f;margin-top:2.6vh;max-width:74%;line-height:1.56;font-weight:400}
+  .sub{font-size:1.85vw;color:#4a463f;margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.32vw;font-weight:600;color:var(--sage);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:88%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:var(--sage);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;font-style:italic;color:#f6f3ee}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#61786d 0%,#4a5c53 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%;color:#f6f3ee}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #e7d8bf;color:#f4ecdd;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--muted);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .strip-motif{position:absolute;pointer-events:none}
+  .title-strip{right:7%;bottom:9%;width:26vw;opacity:.95}
+  .corner-strip{right:6%;bottom:7.5%;width:12vw;opacity:.5}
+  .brandline{font-size:1.3vw;color:#4a463f;margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(86,108,98,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--muted);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Hybrid Hangout</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- five-cell clip strip: echoes the Five Clips Method -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="strip" viewBox="0 0 300 96">
+  <g fill="none" stroke="#566c62" stroke-width="2">
+    <rect x="6" y="18" width="288" height="60" rx="4"/>
+    <line x1="60" y1="18" x2="60" y2="78"/>
+    <line x1="118" y1="18" x2="118" y2="78"/>
+    <line x1="176" y1="18" x2="176" y2="78"/>
+    <line x1="234" y1="18" x2="234" y2="78"/>
+  </g>
+  <g fill="#aa6e34">
+    <rect x="20" y="8" width="10" height="6" rx="1"/><rect x="78" y="8" width="10" height="6" rx="1"/>
+    <rect x="136" y="8" width="10" height="6" rx="1"/><rect x="194" y="8" width="10" height="6" rx="1"/>
+    <rect x="252" y="8" width="10" height="6" rx="1"/>
+    <rect x="20" y="82" width="10" height="6" rx="1"/><rect x="78" y="82" width="10" height="6" rx="1"/>
+    <rect x="136" y="82" width="10" height="6" rx="1"/><rect x="194" y="82" width="10" height="6" rx="1"/>
+    <rect x="252" y="82" width="10" height="6" rx="1"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Hybrid Upsell Masterclass',sub:'How to add video to your photography business and charge more without booking a single extra client.',brand:true,strip:'title'},
+ {t:'normal',k:'Who this is for',title:'You are already fully booked with photo.',body:'Your calendar is full, your galleries are beautiful, and your clients love you. But your rates have hit a ceiling, and the only way you can see to earn more is to shoot more weekends you do not have.'},
+ {t:'dark',title:'You do not need more clients. You need more value in the bookings you already have.'},
+
+ {t:'section',idx:'Part One',title:'The Story You Tell Yourself'},
+ {t:'normal',k:'The real block',title:'Video is not a skill problem. It is an identity problem.',body:'Most photographers do not add video because they are waiting to feel ready. But confidence is not the starting point. It is the end result of doing the work, badly at first, until it becomes yours.'},
+ {t:'normal',k:'How the story becomes the ceiling',title:'You cannot become known for something you are hiding.',body:'The stories you tell yourself turn straight into the behavior that follows. Tell yourself you are just a photographer, and you keep quoting photo-only prices for work you could already be charging more for.'},
+ {t:'dark',title:'The photographer you have to become is the one who posts the messy first clip anyway.'},
+
+ {t:'section',idx:'Part Two',title:'The Five Clips Method'},
+ {t:'normal',k:'Shoot both, miss nothing',title:'Five deliberate clips, every session.',body:'You do not need a second shooter or a film-school workflow. You need five shot types, captured on purpose: the wide, the long, the close-up, the detail, and the b-roll. Toggle between them with intention and the video is already in the can.'},
+ {t:'normal',k:'What five clips gives you',title:'Eighty to a hundred usable clips from a shoot you were already doing.',body:'That is enough to cut a film your clients will pay for, built from the same day you were already on set for photo. No extra bookings. No doubling your hours. Just a second deliverable from one session.'},
+ {t:'dark',title:'Hybrid is not two jobs. It is one session, captured twice as well.'},
+
+ {t:'section',idx:'Part Three',title:'The Upsell That Pays'},
+ {t:'normal',k:'Price it in, do not bolt it on',title:'Video is a package, not an add-on.',body:'The moment video sits on your rate card as an integrated package instead of an optional extra, your average booking value climbs on the exact same number of clients. You raise the ceiling without touching your calendar.'},
+ {t:'normal',k:'Start before you feel ready',title:'Add it to the rate card while you are still learning.',body:'Priming your audience with practice reels, search-friendly blogs, and captions that connect the practice to the booking is how the first hybrid client says yes, months before you thought you were good enough.'},
+ {t:'dark',title:'The income grows without the burnout, because the work is already on your calendar.'},
+
+ {t:'section',idx:'Where this comes from',title:'From a Working Season, Not a Theory'},
+ {t:'normal',k:'Why me',title:'I teach this from my own wedding season.',body:'I run a hybrid photo and video business, and I share the real workflows and the quarterly numbers on the Hybrid Hangout podcast. The Five Clips Method is what I actually shoot, and it is what I have used to help photographers add video to businesses they had already built.'},
+
+ {t:'section',idx:'Your next step',title:'Build Your Hybrid Offer'},
+ {t:'normal',k:'How I can help',title:'Hybrid Hub is where we do it together.',body:'Inside Hybrid Hub I walk you through the Five Clips Method, the pricing integration, and the full upsell system step by step, with the community and mentorship to keep you posting until the first hybrid booking lands.'},
+ {t:'cta',title:'Ready to add video and raise your rates this season?',chips:['Book a call about Hybrid Hub','Grab the free Video Upsell Starter Kit'],disc:'Educational content for photographers and videographers. No income, revenue, or business result is guaranteed. Results vary by photographer, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function strip(kind){return `<svg class="strip-motif ${kind==='title'?'title-strip':'corner-strip'}"><use href="#strip"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Hybrid <b>Hangout</b> · Shayna Lloyd</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.strip) h+=strip(s.strip);
+  else if(s.t==='title') h+=strip('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
