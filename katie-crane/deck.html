@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Cueing to the Brain · The Pilates Professional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf6f9; --panel:#2b2733; --rule:#ecdfe9;
+    --ink:#2d3031; --accent:#d132bd; --grey:#6a6470; --dim:#a99fac;
+  }
+  html,body{height:100%}
+  body{background:#efe6ec;font-family:'Roboto',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe6ec}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Raleway',sans-serif;font-weight:800;color:var(--ink);line-height:1.12;letter-spacing:-.005em}
+  .t-title h1{font-size:3.7vw;max-width:92%}
+  .t-normal h1{font-size:2.5vw;max-width:84%}
+  .t-normal .body{font-size:1.38vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.6;font-weight:400}
+  .sub{font-size:1.5vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:3.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:var(--accent);margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:2.6vw;max-width:86%;color:#fdf7fb}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:2.9vw;max-width:82%;color:#fdf7fb}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#fdf7fb;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.15vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#c9bcc9}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none;right:6.5%;bottom:9%;width:18vw;opacity:.95}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(45,48,49,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7vw}.t-normal h1{font-size:5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:6.2vw}.t-dark h1{font-size:5vw}
+    .t-cta h1{font-size:5.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Pilates Professional · Katie Crane</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="signal" viewBox="0 0 260 120">
+  <g fill="none">
+    <circle cx="40" cy="60" r="10" fill="#d132bd"/>
+    <path d="M62,60 Q92,26 122,60 T182,60" stroke="#d132bd" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="212" cy="60" r="14" fill="none" stroke="#2d3031" stroke-width="5"/>
+    <circle cx="212" cy="60" r="4" fill="#2d3031"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Cueing to the Brain',sub:'A live masterclass for pilates instructors and studio owners on the neuroscience of how a client actually learns a movement, and why it quietly decides whether they stay.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You can see exactly what the body needs. Getting the client to feel it is the hard part.',body:'This is for the instructor who knows the correction on sight, gives the cue, and watches the client nod and do the same thing anyway. The knowledge is not the gap. The bridge from your words to their body is.'},
+ {t:'dark',title:'A cue is not an instruction. It is a signal the brain either understands or ignores.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Cues Miss'},
+ {t:'normal',k:'The words-brain gap',title:'The most repeated cue in pilates is one of the worst.',body:'"Belly button to spine" is anatomy spoken at a body that does not think in anatomy. The client grips, holds their breath, and disconnects from the exact muscles you wanted. A technically correct cue can still land nowhere.'},
+ {t:'normal',k:'The silent plateau',title:'When a client stops feeling progress, they do not complain. They just stop booking.',body:'Most people who leave a studio were never unhappy. They simply stopped sensing change in their own body, decided pilates "was not for them," and drifted. Retention is a teaching problem long before it is a marketing problem.'},
+ {t:'dark',title:'Clients do not leave because the class was too hard. They leave when their body stops understanding what you are asking.'},
+
+ {t:'section',idx:'Part Two',title:'The Neuroscience of Cueing'},
+ {t:'normal',k:'Pillar one · Tactile cueing',title:'The brain trusts touch before it trusts words.',body:'There are a handful of points on the body the nervous system responds to fastest. A hand placed at the right one gives the client instant feedback that no verbal cue can match, so the correction is felt in the moment instead of explained after it.'},
+ {t:'normal',k:'Pillar two · Work with the equipment',title:'Teach the body to work WITH the reformer, not on top of it.',body:'The spring is feedback, not just resistance. When a client learns to listen to what the carriage is telling them, the machine becomes a second teacher in the room, correcting them between your cues instead of waiting for them.'},
+ {t:'normal',k:'Pillar three · Language the body reads',title:'Swap the anatomy lecture for images the nervous system understands automatically.',body:'The right picture reaches a muscle faster than the right term. Cueing built on how the brain actually processes movement gets the response you wanted on the first try, without the client thinking their way into tension.'},
+ {t:'dark',title:'When the cue lands in the body instead of the ears, the client feels the change in the first session. That is what makes them come back.'},
+
+ {t:'section',idx:'Part Three',title:'What Better Cueing Builds'},
+ {t:'normal',k:'From feel to loyalty',title:'A client who feels the difference does not shop around.',body:'Visible, felt progress is the whole retention engine. The person who leaves a session moving better than they walked in tells their friends, rebooks without a second thought, and becomes the quiet reason a schedule stays full.'},
+ {t:'normal',k:'For studio owners',title:'A team that all cue this way is what separates a studio from a franchise-grade room.',body:'When every instructor on your floor cues to the brain, the client experience stops depending on which teacher they booked. That consistency is an asset you can grow on, hire into, and be known for.'},
+
+ {t:'section',idx:'Who Is Teaching This',title:'Why I Teach It This Way'},
+ {t:'normal',k:'Not theory',title:'I was told my spine was degenerating. Movement, taught properly, is how I rebuilt.',body:'I did not recover by following the prescription I was handed. I recovered by paying attention to how the body actually learns and responds, then rebuilt my own from there. Everything in this hour came out of that, not out of a textbook.'},
+ {t:'normal',k:'How it works',title:'This hour is the map. The mentorship is where you install it.',body:'The masterclass lays out why cues miss and the three ways to make them land. From there, the Refine Mentorship is the room where you rebuild your teaching around it, with feedback on your own cueing, alongside instructors doing the same.'},
+ {t:'cta',title:'Ready to become the instructor clients cannot stop talking about?',chips:['Join the Refine Mentorship waitlist'],disc:'Educational content for pilates instructors and studio owners. No income, revenue, retention, or business result is guaranteed. Outcomes vary by instructor, studio, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motifSvg(){return `<svg class="motif"><use href="#signal"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Pilates Professional &middot; <b>Katie Crane</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title') h+=motifSvg();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
