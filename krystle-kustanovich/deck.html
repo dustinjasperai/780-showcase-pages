@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>From Errors to Excellence · Krystle Kustanovich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf7f5; --panel:#f4edf0; --rule:#e7dbe1;
+    --sig:#ef44ab; --acc:#b81a7d; --ink:#201d1f; --body:#4a454a; --dim:#948d92; --cream:#fdf3f9;
+  }
+  html,body{height:100%}
+  body{background:#efe6ea;font-family:'Lora',Georgia,serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe6ea}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4.7vw;max-width:94%}
+  .t-normal h1{font-size:3.15vw;max-width:90%;font-weight:600}
+  .t-normal .body{font-family:'Lora',serif;font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Lora',serif;font-style:italic;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:86%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--sig),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2a1f27 0%,#181117 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--cream)}
+  .t-dark h1 b{color:var(--sig);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a1f27 0%,#181117 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Lora',serif;color:#efe0e9;font-size:1.5vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--sig);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Montserrat',sans-serif;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-family:'Montserrat',sans-serif;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:9%;width:20vw;opacity:.95}
+  .corner-vf{right:6.5%;bottom:8%;width:11vw;opacity:.6}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(32,29,31,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--sig);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Montserrat',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.0vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Krystle Kustanovich</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the reset. one line drops at the mistake, then continues clean past the break, drawn in brand magenta -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 170 80">
+  <g fill="none" stroke="#ef44ab" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 40 H70" opacity="0.55"/>
+    <path d="M70 40 L84 62" opacity="0.9"/>
+    <circle cx="84" cy="62" r="4.5" fill="#ef44ab" stroke="none" opacity="0.9"/>
+    <path d="M96 40 H162" opacity="0.9"/>
+    <circle cx="96" cy="40" r="4" fill="#ef44ab" stroke="none" opacity="0.55"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'From Errors to Excellence',sub:'How high performers stop replaying the last mistake and give their best to the very next one.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You are excellent at what you do. One mistake can still hijack the next hour of it.',body:'You operate, compete, or perform at a high level. Then something goes wrong, a slip, a miss, a call you would take back, and it does not stay in the past. It rides along into the next case, the next play, the next decision, and you tighten up at the exact moment you need to be loose.'},
+ {t:'dark',title:'The mistake is rarely what costs you. The <b>replay</b> is.'},
+
+ {t:'section',idx:'Part One',title:'Why One Error Spreads'},
+ {t:'normal',k:'The after-error spiral',title:'A mistake pulls your attention backward, right when the next rep needs it forward.',body:'The moment after an error, your mind wants to relitigate it. What happened, whose fault, what it says about you. That is attention spent behind you, and the next rep gets whatever is left over. The error was one event. The spiral quietly taxes every event after it.'},
+ {t:'normal',k:'Talent is not a shield',title:'Being excellent does not stop the loop. Sometimes it feeds it.',body:'High standards are why you are good. They are also why a small miss lands so hard, because the gap between what happened and what you expect of yourself is wide. So the better you are, the louder the self-talk after a mistake can get, and the harder it is to let the last rep go.'},
+ {t:'dark',title:'You cannot think your way out of a loop that thinking built.'},
+
+ {t:'section',idx:'Part Two',title:'The Reset'},
+ {t:'normal',k:'Pillar one, catch the replay',title:'Notice the loop the moment it starts, and name it.',body:'Recovery begins with awareness. You learn the early signal that you have started replaying, the tightening, the narrowing, the second-guessing, and you name it for what it is. A loop you can see is a loop you can step out of. A loop running in the background just runs you.'},
+ {t:'normal',k:'Pillar two, interrupt the spiral',title:'A trained reset that pulls attention back to now.',body:'Naming it is not enough on its own. You practise a physical and mental reset, a way to drop back into the present and the next action, so the interruption becomes a reflex instead of a wish. Done enough times it fires on its own, in the seconds after a mistake when you most need it.'},
+ {t:'normal',k:'Pillar three, rewrite the belief',title:'Change what the mistake means before it hardens into a story.',body:'Left alone, one error becomes evidence, and evidence becomes a belief about who you are under pressure. What you decide a mistake means shapes the very next rep. You learn to meet the error with a truer, more useful read, so it stays a single event and never becomes your identity.'},
+ {t:'normal',k:'Pillar four, return to the rep',title:'Get back to the next action fully, not halfway.',body:'Resilience is not gritting your teeth through the rest of the day at eighty percent. It is coming back to the next moment with your whole attention. You train the return so that after a setback you are fully in the next case or the next play, not still arguing with the last one.'},
+ {t:'dark',title:'Recovery is a <b>skill</b>. Skills are trained, not wished for.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Can Reset'},
+ {t:'normal',k:'The performer this builds',title:'The next rep gets your full attention, not the last one’s echo.',body:'Mistakes still happen, because they always will. What changes is how long they cost you. You recover in seconds instead of stewing for hours or days, your confidence stops swinging on your most recent outcome, and the people relying on you get the same steady version of you before and after something goes wrong.'},
+ {t:'dark',title:'The goal was never to stop making mistakes. It was to stop them from making the <b>next</b> one.'},
+ {t:'normal',k:'Why Krystle',title:'A performance coach who trains the recovery, not just the mindset.',body:'Krystle Kustanovich is an ICF Professional Certified Coach with more than 600 coaching hours and training in sport psychology and neuroscience-informed performance. She works with professional athletes and high achievers in medicine and the arts on exactly this, staying composed under pressure and bouncing back fast when it does not go to plan.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With One Conversation'},
+ {t:'normal',k:'Keep going with Krystle',title:'Bring the mistake that keeps replaying. We start right there.',body:'The first step is a Chemistry Call, a relaxed thirty minutes to look at where the spiral costs you most and whether coaching is the right fit. If it is, the work is built around you and the moments that matter in your world. If it is not, you leave with a clearer picture of the pattern.'},
+ {t:'cta',title:'Ready to reset faster?',body:'Book a Chemistry Call with Krystle Kustanovich.',chips:['Book your Chemistry Call','Explore the free guides'],disc:'Educational content for athletes and high performers. Coaching supports mental performance and is not medical, psychological, or clinical treatment. No specific result or outcome is guaranteed. Outcomes vary by person, effort, and circumstance.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Krystle <b>Kustanovich</b> · Mental Performance Coaching</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
