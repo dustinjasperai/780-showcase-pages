@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fully Booked, Still Broke — A Masterclass with Krystine Sherwood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6ee; --panel:#f3ead6; --rule:#e7dcc4;
+    --accent:#ffde59; --coral:#e74c3c; --ink:#2e1f1c; --body:#574840; --dim:#9c8b7e; --cream:#f7ecd4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#efe6d9;font-family:'Open Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Open Sans',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:-.005em}
+  .t-title h1{font-size:6.6vw;max-width:68%}
+  .t-normal h1{font-size:4.0vw;max-width:88%;line-height:1.1}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.26vw;color:var(--body);margin-top:2.9vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1.7vw;color:var(--coral);margin-top:3.0vh;max-width:82%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.05vw;font-weight:700;color:var(--coral);margin-bottom:1.8vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.6vw;max-width:84%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--coral),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 80% 10%,#241713 0%,#140c09 100%)}
+  .t-dark h1{color:var(--bg);font-size:4.7vw;max-width:88%;font-weight:500}
+  .t-dark h1 .hl{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 140% at 80% 10%,#241713 0%,#140c09 100%)}
+  .t-cta h1{color:var(--bg);font-size:4.9vw;max-width:86%}
+  .t-cta .body{font-family:'Open Sans',sans-serif;color:#e7d8c2;font-size:1.3vw;margin-top:2.6vh;max-width:72%;line-height:1.62}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid var(--accent);color:var(--bg);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.1vw;font-weight:600;font-family:'Open Sans',sans-serif}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.6vh;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--coral);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Open Sans',sans-serif;font-size:.8vw;color:#caa98f;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:21vw;height:21vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:7.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.2vw}.t-section h1{font-size:9.4vw}.t-dark h1{font-size:8.2vw}
+    .t-cta h1{font-size:9vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The BeautyPro Coach</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a hand mirror with a heart at its center, the self behind the chair -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#e74c3c" stroke-width="2.4" stroke-linecap="round">
+    <circle cx="60" cy="48" r="30" opacity="0.9"/>
+    <circle cx="60" cy="48" r="30" fill="#ffde59" stroke="none" opacity="0.12"/>
+    <path d="M60 60 c-6 -9 -18 -6 -18 3 c0 8 12 14 18 20 c6 -6 18 -12 18 -20 c0 -9 -12 -12 -18 -3 z" fill="#e74c3c" stroke="none" opacity="0.85"/>
+    <path d="M60 78 L60 104" opacity="0.9"/>
+    <path d="M48 104 L72 104" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Fully Booked, Still Broke.',sub:'The masterclass on building a profitable beauty business from the inside out, where your worth, your boundaries, and your numbers finally work together.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are gifted behind the chair. It is everything around the chair that keeps you stuck.',body:'You do beautiful work and your clients love you. Your column is full, your days are long, and yet the money never seems to match the effort. You keep telling yourself the next busy season will fix it. It never quite does. That is not a talent problem, and it is not a marketing problem.'},
+ {t:'dark',title:'A full column is not the same as a <span class="hl">full bank account</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why Talent Was Never the Thing Holding You Back'},
+ {t:'normal',k:'The busy trap',title:'Being busy is not a badge of honor. Being profitable is.',body:'Somewhere along the way the industry taught us that a packed schedule is the goal. So you say yes to every client, every extra, every squeezed-in appointment, and you wear the exhaustion like proof you are doing it right. But busy and broke can live in the same week, and usually do, because busy was never the number that pays you.'},
+ {t:'normal',k:'The people pleaser behind the chair',title:'You undercharge, over give, and call it being good to your clients.',body:'You have not raised your prices in years because you do not want to lose anyone. You give away the extra fifteen minutes, the free fringe trim, the squeezed-in favor. It feels generous. What it really is, most of the time, is a boundary you were afraid to set and a rate you were afraid to own.'},
+ {t:'dark',title:'You do not have a skills problem. You have a <span class="hl">self-worth problem</span>.'},
+
+ {t:'section',idx:'Part Two',title:'Hearts and Minds: The BeautyPro Framework'},
+ {t:'normal',k:'The whole method in one line',title:'You manage your heart and your mind first, then the business follows.',body:'Every profitable beauty business I have coached was built by working two things together, the inner game and the numbers, never one without the other. Fix the pricing without fixing what you believe you are worth and you will discount it all back. Fix the mindset without the mechanics and you stay inspired and still broke. Here is how the two lock together.'},
+ {t:'normal',k:'Pillar one, the money mindset',title:'What you believe you are worth sets your rate before your skill ever does.',body:'Your price is a mirror of your self-worth, not your skill level. Until you believe the transformation you give is worth real money, you will keep quietly capping yourself, apologizing for your prices, and rounding down. The first work is inside, because no pricing strategy survives a stylist who does not feel worthy of the number.'},
+ {t:'normal',k:'Pillar two, boundaries',title:'Boundaries are not rude. They are the price list your calendar actually enforces.',body:'The double booking, the after hours text, the client who reschedules three times, each one is a boundary waiting to be set. Boundaries protect your time, your energy, and your income at the same time. When you hold them, you stop leaking profit through a hundred tiny yeses, and your best clients respect you more, not less.'},
+ {t:'normal',k:'Pillar three, the numbers',title:'Now the mechanics, your rate, your commission, your budget, built on solid ground.',body:'This is where most coaching starts and where it should finish, not begin. Once the inner work holds, we set an hourly rate that pays you properly, a commission structure that is fair and profitable, and a simple budget so you know your numbers instead of fearing them. The same math that terrified you becomes the thing that frees you.'},
+ {t:'normal',k:'Pillar four, staying full the right way',title:'Retention beats discounting. Keep the right clients, and stop chasing the wrong ones.',body:'You do not need more discount seekers. You need loyal clients who value what you do and come back on a rhythm. Visibility, real relationships, and consistent communication keep your chair full with people who happily pay your worth, so you are never again tempted to slash a price just to fill a Tuesday.'},
+ {t:'dark',title:'You cannot out earn a self-worth gap. Fix the inside, and the <span class="hl">numbers follow</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Lead From the Inside Out'},
+ {t:'normal',k:'The business this builds',title:'Profitable, protected, and finally yours.',body:'When your worth, your boundaries, and your numbers line up, the whole business feels different. You charge what you are worth without flinching. You take the day off without guilt. The money finally matches the effort, and the work you love stops quietly costing you. That is a business you can build a life around, not just survive.'},
+ {t:'dark',title:'The goal was never busier. It was <span class="hl">your version of success</span>, in and out of the salon.'},
+ {t:'normal',k:'Why Krystine',title:'A second generation salon owner who coaches the whole beauty pro, heart and mind.',body:'Krystine Sherwood grew up in the industry and built her own salon and spa before becoming an internationally certified life coach, a certified DISC trainer, and a Maxwell Leadership executive director. She has taught more than two hundred beauty and barber pros from the main stages of Premiere Orlando and beyond. Everything here is drawn from that real, raw work behind the chair.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Business Behind the Chair'},
+ {t:'normal',k:'Keep going with Krystine',title:'From your first honest rate to a business that reflects your worth.',body:'The BeautyPro Intensive walks you through the mindset, the boundaries, and the numbers over seven live weeks, and Krystine coaches beauty pros one to one when you want a set of eyes on your own business and your own worth. Start with the free Self-Love Assessment, and build the profitable, protected business you deserve.'},
+ {t:'cta',title:'Ready to be fully booked and finally profitable?',body:'Take the next step with Krystine and The BeautyPro Coach.',chips:['Join The BeautyPro Intensive','Book a discovery call with Krystine','Start with the Self-Love Assessment'],disc:'Educational content for beauty and salon professionals. No income or business result is guaranteed. Results vary by individual, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The BeautyPro <b>Coach</b> · Krystine Sherwood</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
