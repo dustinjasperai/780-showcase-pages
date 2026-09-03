@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Escape the Chair — The Empire Growth Masterclass with Kari Jo Patterson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f2ee; --panel:#efe7e0; --rule:#e2d6cd;
+    --acc:#960f70; --acc2:#4a604a; --ink:#241c22; --body:#5a4f56; --dim:#9a8c94; --cream:#f7ede9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e7ddd4;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Libre Baskerville',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.9vw;max-width:92%;line-height:1.05}
+  .t-normal h1{font-size:3.5vw;max-width:90%;line-height:1.12}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.26vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.7;font-weight:400}
+  .sub{font-family:'Libre Baskerville',serif;font-style:italic;font-size:1.5vw;color:var(--acc);margin-top:3.0vh;max-width:82%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:1.8vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:84%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 82% 12%,#a51a80 0%,#6d0a52 60%,#560840 100%)}
+  .t-dark h1{color:var(--cream);font-size:4.3vw;max-width:88%;font-weight:700}
+  .t-dark h1 .hl{color:#f0c9e4;font-style:italic}
+  .t-cta{background:radial-gradient(120% 140% at 82% 12%,#a51a80 0%,#6d0a52 62%)}
+  .t-cta h1{color:var(--cream);font-size:4.6vw;max-width:86%}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#f3dcec;font-size:1.28vw;margin-top:2.6vh;max-width:72%;line-height:1.64}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid #e9b9d8;color:var(--cream);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.05vw;font-weight:600;font-family:'Montserrat',sans-serif}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.05vw;color:var(--body);margin-top:3.4vh;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Montserrat',sans-serif;font-size:.8vw;color:#f0d3e6;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:24vw;height:24vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8.5vw;height:8.5vw;opacity:.45}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:7.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.9vw}.t-section h1{font-size:9vw}.t-dark h1{font-size:8vw}
+    .t-cta h1{font-size:8.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Kari Jo Patterson</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: six ascending steps rising to an open doorway — the Empire Growth arc, freedom on the far side -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#960f70" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="104" x2="106" y2="104" opacity="0.5"/>
+    <rect x="16" y="92"  width="13" height="12" rx="1.5" fill="#960f70" stroke="none" opacity="0.12"/>
+    <rect x="16" y="92"  width="13" height="12" rx="1.5" opacity="0.7"/>
+    <rect x="30" y="82"  width="13" height="22" rx="1.5" fill="#960f70" stroke="none" opacity="0.12"/>
+    <rect x="30" y="82"  width="13" height="22" rx="1.5" opacity="0.78"/>
+    <rect x="44" y="72"  width="13" height="32" rx="1.5" fill="#960f70" stroke="none" opacity="0.12"/>
+    <rect x="44" y="72"  width="13" height="32" rx="1.5" opacity="0.86"/>
+    <rect x="58" y="62"  width="13" height="42" rx="1.5" fill="#960f70" stroke="none" opacity="0.12"/>
+    <rect x="58" y="62"  width="13" height="42" rx="1.5" opacity="0.92"/>
+    <path d="M78 104 L78 54 Q78 40 92 40 Q106 40 106 54 L106 104" opacity="0.95"/>
+    <line x1="92" y1="40" x2="92" y2="104" stroke="#4a604a" opacity="0.7"/>
+    <circle cx="86" cy="72" r="2.2" fill="#4a604a" stroke="none" opacity="0.85"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Escape the Chair',sub:'How to build a beauty business that runs, and could be sold, without you behind the chair.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are booked solid and you still cannot step away.',body:'Your calendar is full, your regulars love you, and the money only moves when you are the one in the treatment room. A day off is a day unpaid. A vacation is a gap in the schedule you pay for later. You did not open your own studio to build yourself the busiest job in the building, but that is quietly what happened.'},
+ {t:'dark',title:'You do not have a client problem. You built yourself <span class="hl">a job</span>, not a business.'},
+
+ {t:'section',idx:'Part One',title:'Why More Clients Will Not Set You Free'},
+ {t:'normal',k:'The lever everyone reaches for',title:'More clients just chains you tighter to the chair.',body:'When the only person who can deliver the service is you, every new client is another hour that only you can work. Booking harder does not build a business, it builds a longer shift. You can be fully booked and still have nothing that runs, sells, or grows without you standing in the room.'},
+ {t:'normal',k:'The ceiling you cannot see',title:'The real ceiling is your numbers, not your calendar.',body:'Most estheticians were trained in skin, not in business, so the levers that actually decide whether you are free stay invisible: how your services are priced, how reliably clients rebook, what payroll really costs against profit. Until you can read those numbers, you manage a full schedule and a thin bank account, and you cannot tell which change would fix it.'},
+ {t:'dark',title:'You do not need more clients. You need a business that works <span class="hl">when you are not in the room</span>.'},
+
+ {t:'section',idx:'Part Two',title:'The Empire Growth System'},
+ {t:'normal',k:'What the system is',title:'Six phases, from surviving to scaling to stepping away.',body:'The Empire Growth System treats a beauty business as a staged build, not a marketing push. Each phase has its own focus and its own trap, and you graduate to the next one by installing systems, not by adding clients. First you find exactly which phase you are actually in, then you build the one thing that lets you move up. Growth stops being a guess and becomes a sequence.'},
+ {t:'normal',k:'Phase work, first',title:'Fix the numbers before you touch anything else.',body:'The build starts with financial visibility: a pricing structure that protects your margin, a rebooking rate you actually track, and a clear read on payroll against profit. When you can see the scoreboard, you stop making decisions by feel and start making them on evidence. This is the phase most owners skip, and it is why they stay stuck.'},
+ {t:'normal',k:'Then install the systems',title:'Turn the things you decide by hand into systems that repeat.',body:'Pricing, rebooking, and hiring become repeatable processes instead of choices you remake every week under pressure. A system is what lets a second set of hands do the work to your standard. Without it, every part of the business still routes through your judgment, which means it still routes through your presence.'},
+ {t:'normal',k:'Then empower a team',title:'Hire and train people so the service is no longer only you.',body:'This is the phase that gets you off the chair: bringing on estheticians and staff, training them with real onboarding and workbooks, and empowering them to deliver without you hovering. Your job changes from doing every service to building and leading the people who do. That shift, technician to owner, is the whole point of the system.'},
+ {t:'dark',title:'The goal was never a fuller chair. It was a business you could <span class="hl">hand over</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Step Off the Chair'},
+ {t:'normal',k:'The business this builds',title:'Prices you can raise, a team that delivers, and time off that does not cost you.',body:'When the business runs on systems and a trained team, you can set prices to your worth instead of to your fear, take a week away without the revenue collapsing, and grow past the ceiling of your own two hands. You end up owning an asset with real value, the kind of business that could actually be sold, instead of a job that ends the day you stop showing up.'},
+ {t:'dark',title:'This is how a beauty business becomes something you <span class="hl">own</span>, not something that owns you.'},
+ {t:'normal',k:'Why Kari Jo',title:'She built it, sold it, and now coaches estheticians through the same path.',body:'Kari Jo Patterson spent more than twenty years in the industry and did the hard version herself, she started, grew, and sold a profitable medspa. Fearless Prosperity and the Empire Growth System are her own frameworks, drawn from that build and refined coaching estheticians through EsthéLaunch Academy. Everything in this session comes from having actually walked out from behind the chair, not from theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Empire'},
+ {t:'normal',k:'Keep going with Kari Jo',title:'Map your own phase and your real numbers with a coach.',body:'Book a free thirty-minute consultation and walk through which phase your business is actually in and what a move toward stepping away would take. From there, VIP Esthetician Coaching takes you through the whole build, week by week, with the templates, the benchmarks, and the team tools that make it hold.'},
+ {t:'cta',title:'Ready to escape the chair?',body:'Take the next step with Kari Jo and build the business your own two hands have been holding back.',chips:['Book a free 30-minute consultation','Explore VIP Esthetician Coaching','Read Fearless Prosperity'],disc:'Educational content for estheticians and beauty business owners. No revenue, profit, or income result is guaranteed. Results vary by business, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Kari Jo Patterson · <b>Empire Growth System</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
