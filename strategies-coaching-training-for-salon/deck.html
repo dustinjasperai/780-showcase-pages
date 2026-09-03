@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Team-Based Pay Salon — A Masterclass from Strategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&family=Spectral:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1411; --panel:#171d18; --rule:#2a322b;
+    --acc:#c7e14d; --acc2:#ec4899; --ink:#f3f6f0; --body:#c3ccc0; --dim:#7f8a7d; --deep:#0a0d0b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#080a09;font-family:'Lato',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Lato',sans-serif;font-size:1.0vw;font-weight:900;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.06;letter-spacing:.002em}
+  .t-title h1{font-size:6.6vw;max-width:94%}
+  .t-normal h1{font-size:4.0vw;max-width:90%;line-height:1.04}
+  .t-normal .body{font-family:'Lato',sans-serif;font-size:1.28vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Lato',sans-serif;font-style:italic;font-size:1.58vw;color:var(--acc);margin-top:3.0vh;max-width:82%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.05vw;font-weight:900;color:var(--acc);margin-bottom:1.8vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:5.6vw;max-width:84%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 82% 10%,#12331f 0%,#0a0d0b 62%)}
+  .t-dark h1{color:var(--ink);font-size:4.7vw;max-width:88%;font-weight:500}
+  .t-dark h1 .hl{color:var(--acc)}
+  .t-cta{background:radial-gradient(120% 140% at 82% 10%,#12331f 0%,#0a0d0b 62%)}
+  .t-cta h1{color:var(--ink);font-size:5.0vw;max-width:86%}
+  .t-cta .body{font-family:'Lato',sans-serif;color:#cfe0be;font-size:1.3vw;margin-top:2.6vh;max-width:72%;line-height:1.62}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.1vw;font-weight:700;font-family:'Lato',sans-serif}
+  .brandline{font-family:'Lato',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.4vh;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:900}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Lato',sans-serif;font-size:.8vw;color:#8fa08a;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(255,255,255,.05);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:23vw;height:23vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8.5vw;height:8.5vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:900}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:7.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:9.4vw}.t-dark h1{font-size:8.2vw}
+    .t-cta h1{font-size:9vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Strategies</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a ledger of pay bars rising to a shared team baseline -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#c7e14d" stroke-width="2.4" stroke-linecap="round">
+    <line x1="20" y1="96" x2="100" y2="96" opacity="0.85"/>
+    <rect x="28" y="66" width="12" height="30" rx="2" fill="#c7e14d" stroke="none" opacity="0.16"/>
+    <rect x="28" y="66" width="12" height="30" rx="2" opacity="0.8"/>
+    <rect x="50" y="52" width="12" height="44" rx="2" fill="#c7e14d" stroke="none" opacity="0.16"/>
+    <rect x="50" y="52" width="12" height="44" rx="2" opacity="0.9"/>
+    <rect x="72" y="40" width="12" height="56" rx="2" fill="#c7e14d" stroke="none" opacity="0.16"/>
+    <rect x="72" y="40" width="12" height="56" rx="2" opacity="0.95"/>
+    <path d="M28 44 L54 34 L80 24" stroke="#ec4899" opacity="0.9"/>
+    <circle cx="80" cy="24" r="3.4" fill="#ec4899" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Team-Based Pay Salon',sub:'How to build a salon where the pay structure grows the business instead of quietly capping it.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You built a busy salon. It is the way everyone gets paid that keeps it from becoming a real business.',body:'You have talented people and a full appointment book. But payroll swallows the profit, your best stylist guards their column like it is their own shop, and you cannot move anyone, raise a price, or take a week off without something breaking. That is not a talent problem and it is not a you problem.'},
+ {t:'dark',title:'A room full of commissioned stylists is not a team. It is a set of <span class="hl">rival businesses</span> under one roof.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Salons Still Feel Fragile'},
+ {t:'normal',k:'What commission actually pays for',title:'Straight commission pays people to own clients, not to build your salon.',body:'When pay is tied to a personal column, every incentive points inward. Stylists hoard regulars, resist handing a client to a newer team member, and treat a price rise as a threat to their income. You end up managing a group of solo operators who happen to share your rent, your front desk, and your brand.'},
+ {t:'normal',k:'The traps it sets',title:'It quietly caps your prices, your roster, and your own freedom.',body:'You cannot raise prices without a payroll revolt. You cannot promote a great stylist into leadership because it costs them column time. You cannot hire ahead of demand because every new chair threatens someone else. The pay model, not the market, is what decides how big and how calm your salon is allowed to get.'},
+ {t:'dark',title:'You do not have a staffing problem. You have a <span class="hl">pay-structure problem</span>.'},
+
+ {t:'section',idx:'Part Two',title:'The Team-Based Pay Model'},
+ {t:'normal',k:'What team-based pay is',title:'A structured base plus team performance, in place of a personal commission split.',body:'Team-based pay puts your people on a dependable base wage and ties the upside to the numbers the whole salon can move together, productivity, retention, rebooking, retail. People stop being paid to protect a column and start being paid to build the business they work in. Their income still grows, it just grows with the salon instead of against it.'},
+ {t:'normal',k:'Pay tied to the real numbers',title:'It only works when everyone can read the same scoreboard.',body:'The model runs on financial literacy, the 18 benchmarks a healthy employee-based salon should hit, from payroll percentage to productivity to retention. When the team can see the numbers their pay is tied to, the bonus stops being a mystery and starts being a shared goal. That transparency is what turns a pay change into a culture change.'},
+ {t:'normal',k:'The leadership it takes',title:'No-Compromise Leadership is the standard that makes the model hold.',body:'A pay structure is only as strong as the leader who protects it. No-Compromise Leadership means holding the behaviors the pay model rewards, without flinching and without cutting side deals to keep one person happy. The owners who make team-based pay stick are the ones who lead by standard instead of by avoidance.'},
+ {t:'normal',k:'The business it installs',title:'Teamwork, retention, loyalty, productivity, and predictable growth, on purpose.',body:'Team-based pay is the compensation engine inside a whole team-based business model. Once pay rewards the team outcome, the rest follows, stylists cover for each other, clients belong to the salon, productivity is a shared job, and growth stops being a lucky month and becomes something you can plan.'},
+ {t:'dark',title:'Team-based pay is not a payroll tweak. It is a <span class="hl">different kind of salon</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Team Is Paid as a Team'},
+ {t:'normal',k:'The salon this builds',title:'Prices you can set, people you can move, and an owner who can finally step back.',body:'When pay rewards the whole business, you can raise a price without a fight, promote a stylist into leadership without punishing them for it, and hire ahead of demand because a new chair helps everyone. The salon keeps running the week you are away, because it was built as a team and not as a stack of columns.'},
+ {t:'dark',title:'The goal was never a busier chair. It was a business that <span class="hl">holds</span>.'},
+ {t:'normal',k:'Why Strategies',title:'Since 1993, and the company that created team-based pay for salons.',body:'Strategies has coached and trained employee-based salons, spas, and medspas for more than three decades and has served over ten thousand beauty businesses. Team-based pay, the 18 benchmarks, and No-Compromise Leadership are our own frameworks, refined in real salons for thirty-one years. Everything in this session is drawn from that work, not from theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Team-Based Pay Salon'},
+ {t:'normal',k:'Keep going with Strategies',title:'Map your own numbers with a coach, and see the model built for your salon.',body:'A Certified Strategies Coach will sit down with you for a free strategy session and walk through your real benchmarks and what a move to team-based pay would look like in your salon. From there, the coaching membership and the Team-Based Pay Experience take you through the whole build, step by step.'},
+ {t:'cta',title:'Ready to pay your team like a team?',body:'Take the next step with Strategies and build the salon your pay structure has been holding back.',chips:['Book a free 60-minute strategy session','Explore the Coaching Membership','Come to the Team-Based Pay Experience'],disc:'Educational content for salon, spa, and medspa owners. No revenue, profit, or income result is guaranteed. Results vary by business, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Strategies · <b>Team-Based Pay</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
