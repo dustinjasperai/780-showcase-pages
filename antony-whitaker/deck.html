@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Six in Ten — A Masterclass with Antony Whitaker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f5f5f3; --rule:#e4e4df;
+    --accent:#f4c626; --ink:#111111; --body:#4a4a46; --dim:#9b9b93; --dark:#141414;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e9e9e5;font-family:'Mulish',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);margin-bottom:2.4vh}
+  .kicker::before{content:'';display:inline-block;width:2.2vw;height:3px;background:var(--accent);vertical-align:middle;margin-right:.9vw;margin-bottom:.3vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:600;color:var(--ink);line-height:1.04;letter-spacing:.002em;text-transform:uppercase}
+  .t-title h1{font-size:7.4vw;max-width:80%}
+  .t-title h1 .hl{color:var(--accent)}
+  .t-normal h1{font-size:3.7vw;max-width:90%;line-height:1.08}
+  .t-normal .body{font-family:'Mulish',sans-serif;font-size:1.28vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.66;font-weight:400;text-transform:none}
+  .t-normal .body b{color:var(--ink);font-weight:700}
+  .sub{font-family:'Mulish',sans-serif;font-style:italic;font-size:1.62vw;color:var(--body);margin-top:3.2vh;max-width:80%;line-height:1.45;font-weight:400;text-transform:none}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.1vw;font-weight:600;color:var(--ink);margin-bottom:1.8vh;letter-spacing:.28em;text-transform:uppercase}
+  .t-section .idx b{color:var(--accent)}
+  .t-section h1{font-size:5.2vw;max-width:86%}
+  .t-section .rule{width:16vw;height:6px;background:var(--accent);margin-top:3.2vh}
+  .t-dark{background:var(--dark)}
+  .t-dark h1{color:#fff;font-size:4.4vw;max-width:90%;font-weight:500}
+  .t-dark h1 .hl{color:var(--accent)}
+  .t-cta{background:var(--dark)}
+  .t-cta h1{color:#fff;font-size:4.6vw;max-width:88%}
+  .t-cta h1 .hl{color:var(--accent)}
+  .t-cta .body{font-family:'Mulish',sans-serif;color:#d9d9d4;font-size:1.32vw;margin-top:2.6vh;max-width:74%;line-height:1.62;text-transform:none}
+  .chips{display:flex;gap:1.2vw;margin-top:4.2vh;flex-wrap:wrap}
+  .chip{border:1.6px solid var(--accent);color:#fff;border-radius:100px;padding:1.3vh 1.9vw;font-size:1.05vw;font-weight:600;font-family:'Mulish',sans-serif;text-transform:none}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.15vw;color:var(--ink);margin-top:4.0vh;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  /* scoreboard motif: 10 dots, 6 lost (hollow), 4 kept (yellow) */
+  .score{display:flex;gap:.7vw;margin-top:4.4vh}
+  .score i{width:1.7vw;height:1.7vw;border-radius:50%;display:block}
+  .score i.keep{background:var(--accent)}
+  .score i.lost{background:transparent;border:2px solid var(--rule)}
+  .t-dark .score i.lost{border-color:#3a3a37}
+  .bignum{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);font-size:9vw;line-height:.92;margin-top:1.5vh}
+  .bignum small{display:block;font-family:'Mulish',sans-serif;font-weight:400;font-size:1.2vw;color:var(--body);text-transform:none;letter-spacing:0;margin-top:1.2vh;line-height:1.5;max-width:40vw}
+  .t-dark .bignum small{color:#c9c9c4}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Mulish',sans-serif;font-size:.82vw;color:#8f8f88;line-height:1.5;max-width:84%;text-transform:none}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:7%;top:50%;transform:translateY(-50%);width:20vw;height:20vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:7vw;height:7vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600;font-family:'Oswald',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Oswald',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s;font-family:'Oswald',sans-serif}
+  @media(max-width:640px){
+    .kicker{font-size:2.8vw}.t-title h1{font-size:13vw}.t-normal h1{font-size:7.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:9.4vw}.t-dark h1{font-size:8vw}
+    .t-cta h1{font-size:8.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+    .score i{width:5vw;height:5vw}.bignum{font-size:22vw}.bignum small{font-size:3vw;max-width:80vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Grow My Salon Business</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a retention gauge, four of ten kept -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round">
+    <circle cx="60" cy="60" r="46" stroke="#e4e4df" stroke-width="10"/>
+    <path d="M60 14 a46 46 0 0 1 27 83" stroke="#f4c626" stroke-width="10" fill="none"/>
+    <text x="60" y="58" text-anchor="middle" font-family="Oswald,sans-serif" font-size="30" font-weight="700" fill="#111111" stroke="none">4/10</text>
+    <text x="60" y="78" text-anchor="middle" font-family="Mulish,sans-serif" font-size="10" fill="#9b9b93" stroke="none">COME BACK</text>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Six in <span class="hl">Ten</span>.',sub:'The masterclass on new client retention: why most salons lose six of every ten first timers, and the system that turns them into regulars who rebook.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'Your column is full. So why does growth still feel stuck?',body:'You are busy. The chairs are working, the phone rings, new clients keep walking in. And yet month to month the salon does not really move forward, and you find yourself spending more and more just to keep the front door busy. That is not a talent problem and it is not a marketing budget problem. It is the quiet leak underneath all of it.'},
+ {t:'dark',title:'You are not short of new clients. You are quietly losing the ones you <span class="hl">already paid for</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why A Full Column Is Not The Same As Growth'},
+ {t:'normal',k:'The number nobody measures',title:'Most first time clients never come back. Almost no owner knows their real number.',body:'Across the industry, only about four in ten new clients return after the first visit. Six in ten are gone, and most of them you never see leave. You paid to get every one of them through the door, through referrals, reviews, and every dollar of marketing, and more than half walk out and do not return. The salon feels busy because the top of the funnel keeps refilling, not because it is holding.',score:true},
+ {t:'normal',k:'The leaking bucket',title:'When retention leaks, every marketing dollar has to work twice as hard.',body:'A salon that keeps four in ten new clients has to replace six of them next month just to stand still. So marketing gets more expensive, the team feels flat out, and profit stays thin no matter how full the diary looks. You cannot pour enough new clients into the top to outrun a leak at the bottom. The owners who grow are not the ones who spend the most on new clients. They are the ones who keep the ones they win.'},
+ {t:'dark',title:'You do not have a new client problem. You have a <span class="hl">retention</span> problem.'},
+
+ {t:'section',idx:'Part Two',title:'The System That Turns First Timers Into Regulars'},
+ {t:'normal',k:'The whole method in one line',title:'Measure the number. Then win the first visit.',body:'Retention is not luck and it is not personality. It is a system you can build, and it starts by telling yourself the truth about where you stand, then fixing the handful of moments that decide whether a new client ever books a second appointment. Everything below is drawn from four decades of watching what the best salons do differently, held together as one repeatable process.'},
+ {t:'normal',k:'Pillar one, know your numbers',title:'You cannot fix a number you refuse to look at.',body:'Start with the truth: your new client retention rate, your existing client retention, your average bill and how often your clients actually come back. Most owners have never calculated any of them. When you do, you can set a real target, aim for three of every four new clients returning, and eighty percent of your regulars staying, and you can see the money hiding in the gap. This is the numbers discipline the whole system is built on.'},
+ {t:'normal',k:'Pillar two, the first visit',title:'Retention is won or lost at the consultation, not at the chair.',body:'The first visit is the whole game. It is not the haircut that brings someone back, it is whether they felt heard, understood, and confident they are in the right hands. That comes from the consultation and the way your team communicates, the Super Stylist skills most stylists were never actually taught. Get the first visit right on purpose, every time, and the second appointment stops being a coin toss.'},
+ {t:'normal',k:'Pillar three, the client experience',title:'People do not rebook a service. They rebook how you made them feel.',body:'From the first phone call to the moment they leave, the experience is what earns the next appointment. The welcome, the attention, the small things done consistently by everyone on the team, not just by you on a good day. When the experience is designed instead of left to chance, clients come back because leaving would feel like a downgrade. This is the difference between a transaction and a relationship.'},
+ {t:'normal',k:'Pillar four, the rebook and the right clients',title:'Never let a client you fought for walk out without the next visit booked.',body:'The single highest return habit in the salon is pre booking the next appointment before the client leaves the chair, so retention is built into the visit instead of hoped for afterwards. Pair that with marketing that attracts the right clients in the first place, the ones who fit what you do and are likely to stay, and you stop filling the diary with people who were never going to come back. Right client in, next visit booked, every time.'},
+ {t:'dark',title:'You cannot out market a leaking salon. Win the first visit, and the numbers <span class="hl">compound</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When They Come Back'},
+ {t:'normal',k:'The business this builds',title:'Move from four in ten to seven in ten, and the whole business changes.',body:'The same new clients, the same team, the same marketing spend, but now more than half of them stay. Revenue compounds instead of leaking. Marketing gets cheaper because you are not forever replacing what you lost. The diary fills with loyal regulars who refer their friends, and the pressure to constantly chase strangers finally comes off. That is what growth actually looks like, and it was hiding in your retention rate the whole time.'},
+ {t:'dark',title:'The goal was never more new clients. It was clients who <span class="hl">come back</span>.'},
+ {t:'normal',k:'Why Antony',title:'Four decades in the industry, from Sassoon to salon owners in fourteen countries.',body:'Antony Whitaker spent his early career as a Sassoon stylist and creative director in London, then owned his own salons before moving into business education full time in 2012. He is the author of the best selling GROW book series, host of the Grow My Salon Business podcast, and has coached salon owners one to one across fourteen countries. Everything in this masterclass is drawn from that real work with real salons, not theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Keep The Clients You Already Have'},
+ {t:'normal',k:'Keep going with Grow My Salon Business',title:'From knowing your numbers to a salon that holds onto the clients it wins.',body:'Grow My Salon Business coaches owners through the whole system, the numbers, the first visit, the client experience and the habits that lift retention and profit together. Whether you start with the courses or work one to one with Antony, the goal is the same, a salon that grows by keeping clients, not just chasing new ones.'},
+ {t:'cta',title:'Ready to stop losing <span class="hl">six in ten</span>?',body:'Take the next step with Antony Whitaker and Grow My Salon Business.',chips:['Start with the courses','Work one to one with Antony','Read the GROW book series'],disc:'Educational content for hair and beauty salon owners. No income or business result is guaranteed. Results vary by individual, salon, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.score) h+=`<div class="score">`+Array.from({length:10},(_,i)=>`<i class="${i<4?'keep':'lost'}"></i>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Grow My Salon <b>Business</b> · Antony Whitaker</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
