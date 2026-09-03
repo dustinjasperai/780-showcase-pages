@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Truth and Training — A Masterclass with Lisa Conway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf7f0; --panel:#f6ede0; --rule:#ead9c4;
+    --accent:#e7711b; --teal:#0a8b7d; --ink:#23312e; --body:#4a5450; --dim:#9a8f80; --sand:#f1e4d2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#f0e6d6;font-family:'DM Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'DM Sans',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.08;letter-spacing:-.005em}
+  .t-title h1{font-size:6.4vw;max-width:70%}
+  .t-normal h1{font-size:3.9vw;max-width:88%;line-height:1.12}
+  .t-normal .body{font-family:'DM Sans',sans-serif;font-size:1.26vw;color:var(--body);margin-top:2.9vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:1.7vw;color:var(--accent);margin-top:3.0vh;max-width:82%;line-height:1.4;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'DM Sans',sans-serif;font-size:1.05vw;font-weight:700;color:var(--accent);margin-bottom:1.8vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:84%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 82% 12%,#2c3b37 0%,#1a2421 100%)}
+  .t-dark h1{color:var(--bg);font-size:4.6vw;max-width:88%;font-weight:400}
+  .t-dark h1 .hl{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 140% at 82% 12%,#2c3b37 0%,#1a2421 100%)}
+  .t-cta h1{color:var(--bg);font-size:4.8vw;max-width:86%}
+  .t-cta .body{font-family:'DM Sans',sans-serif;color:#dfe7e2;font-size:1.3vw;margin-top:2.6vh;max-width:72%;line-height:1.62}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid var(--accent);color:var(--bg);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.1vw;font-weight:600;font-family:'DM Sans',sans-serif}
+  .brandline{font-family:'DM Sans',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.6vh;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'DM Sans',sans-serif;font-size:.8vw;color:#b7a88f;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:22vw;height:22vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.45}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:7.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.2vw}.t-section h1{font-size:9.2vw}.t-dark h1{font-size:8.0vw}
+    .t-cta h1{font-size:8.8vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The ZING Project</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: three linked figures, a team held together by one thread -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#e7711b" stroke-width="2.4" stroke-linecap="round">
+    <path d="M18 92 c0 -34 84 -34 84 0" opacity="0.55"/>
+    <circle cx="30" cy="50" r="12" fill="#0a8b7d" stroke="#e7711b" opacity="0.9"/>
+    <circle cx="60" cy="40" r="14" fill="#e7711b" stroke="#e7711b" opacity="0.92"/>
+    <circle cx="90" cy="50" r="12" fill="#0a8b7d" stroke="#e7711b" opacity="0.9"/>
+    <path d="M42 52 L48 44 M72 44 L78 52" opacity="0.85"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Truth and Training.',sub:'The masterclass on building a salon team that runs your salon to your standard, on the days you are not standing behind the chair.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are brilliant on the floor. It is the team around you that keeps you chained to it.',body:'You built a salon people love and a chair that never sits empty. But the salon still lives and dies by you. You open, you close, you fix the roster, you hold the standard, and the day you step away something slips. That is not a talent problem, and hiring one more stylist has never once solved it.'},
+ {t:'dark',title:'A salon that only works when you are in it is a job, not a <span class="hl">business</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why Another Pair of Hands Was Never the Answer'},
+ {t:'normal',k:'The owner-dependent salon',title:'You did not build a team. You built a group of people who all report to you.',body:'Most salon owners were never taught to lead, so they manage by doing. You are the one who trains, the one who has the hard conversation, the one who catches the mistake. Everyone is busy and nobody owns anything, so every decision routes back through you. The salon is full and you are still the bottleneck in your own business.'},
+ {t:'normal',k:'The hidden cost',title:'The turnover, the flat weeks, the standard that dips when you are away, all come from the same gap.',body:'Good people leave because nobody told them the truth about where they stood or trained them to get better. New hires are thrown onto the floor by the seat of your pants and left to sink. The result is a revolving door that quietly eats your profit and your energy, and it convinces you the problem is the people. It almost never is.'},
+ {t:'dark',title:'You do not have a hiring problem. You have a <span class="hl">leadership</span> and <span class="hl">training</span> gap.'},
+
+ {t:'section',idx:'Part Two',title:'Truth and Training: The ZING Team System'},
+ {t:'normal',k:'The whole method in one line',title:'A great team comes from two things, telling people the truth and actually training them.',body:'Every salon I have coached into running without its owner was built on those two disciplines, held together, never one without the other. Truth without training is just criticism. Training without truth is busywork nobody respects. Put them together on purpose and you stop being the only person in the building who can hold the standard.'},
+ {t:'normal',k:'Pillar one, core values',title:'Your values are the heartbeat of the business, not a poster in the staff room.',body:'A team that runs without you is held together by shared values, written down, hired for, and enforced in the small moments. When everyone knows what this salon stands for and what it will not tolerate, they can make the right call without asking you first. Values are how you clone your judgment across a team, which is the only way you ever get to leave the floor.'},
+ {t:'normal',k:'Pillar two, the employee journey',title:'From the first interview to the day they lead, nothing here is left to chance.',body:'You stop hiring in a panic and start attracting the right people to a place worth working. You onboard deliberately instead of by the seat of your pants, so week one builds a professional, not a survivor. Then you keep developing them, because the journey does not end at hired. A mapped journey is what turns a job into a career your best people stay for.'},
+ {t:'normal',k:'Pillar three, the one on one',title:'The regular one on one is the single highest leverage hour in your week.',body:'Not a rushed corridor chat and not an annual review nobody remembers. A short, regular, honest sit down with each team member, where you tell them the truth about their work and coach the next step. This is where standards get held, problems get caught small, and people feel led instead of managed. Do this well and half your team drama simply never starts.'},
+ {t:'normal',k:'Pillar four, consistent behaviours',title:'Culture is not what you say once. It is the behaviours you hold every single day.',body:'A winning team culture is built on a handful of behaviours everyone performs consistently, whether you are watching or not. The greeting, the consultation, the rebook, the retail conversation, the way the salon is left at close. When the behaviours are trained and expected, the client gets the same experience from anyone in your team, and your standard finally stops depending on which day you worked.'},
+ {t:'dark',title:'You cannot out hire a leadership gap. Build the system, and the <span class="hl">team holds itself</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Team Can Run the Salon'},
+ {t:'normal',k:'The business this builds',title:'A salon that keeps its standard, and its people, when you step back.',body:'When your values are lived, your people are trained, and your behaviours are consistent, the whole business feels different. The standard holds on your day off. Good staff stay because they are growing. You stop being the emergency contact for every small thing and start working on the business instead of inside it. That is a salon you can grow, sell, or simply enjoy owning.'},
+ {t:'dark',title:'The goal was never one more good hire. It was a team that <span class="hl">no longer needs you on the floor</span>.'},
+ {t:'normal',k:'Why Lisa',title:'Thirty years on the floor, a salon of her own, and the book on salon teams.',body:'Lisa Conway spent three decades in salons, as apprentice, stylist and owner, before building The ZING Project into an industry coaching business that now serves salon owners across Australia, New Zealand and the US. She wrote Your Salon Team, the salon owner guide to finding, motivating and keeping great staff, and everything in this masterclass is drawn from that real work, not theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Team, Buy Back the Floor'},
+ {t:'normal',k:'Keep going with ZING',title:'From your first honest one on one to a team that holds the standard for you.',body:'The ZING Project coaches salon owners through the whole system, the values, the hiring, the training and the leadership habits that let you step back without the business slipping. Whether you start in Club ZING or work one to one with a ZING coach, the goal is the same, a team that runs your salon to your standard so you get your time back.'},
+ {t:'cta',title:'Ready to build a team that runs your salon without you?',body:'Take the next step with Lisa Conway and The ZING Project.',chips:['Start inside Club ZING','Work one to one with a ZING coach','Get Lisa’s book, Your Salon Team'],disc:'Educational content for hair and beauty salon owners. No income or business result is guaranteed. Results vary by individual, salon, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The ZING <b>Project</b> · Lisa Conway</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
