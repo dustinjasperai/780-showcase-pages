@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Beyond HR: The Strategic People Leader · Kristel Moedt &amp; Eveliese Luiting, People masterminds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f5fb; --panel:#ece6f6; --rule:#ddd2ee;
+    --acc:#7a63bd; --ink:#1c1533; --body:#4a4166; --dim:#8a80a2; --light:#f2eefb;
+  }
+  html,body{height:100%}
+  body{background:#e6e0f2;font-family:'Poppins',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e6e0f2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Space Grotesk',Arial,sans-serif;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-.01em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.25vw;max-width:90%;font-weight:600}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.64;font-weight:400}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.7vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.45;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2a1f47 0%,#17102a 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--light);font-weight:600}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a1f47 0%,#17102a 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--light);font-weight:700}
+  .t-cta .body{font-family:'Poppins',sans-serif;color:#d6c9ef;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--light);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .team-motif{position:absolute;pointer-events:none}
+  .title-team{right:7.2%;bottom:8%;width:16vw;opacity:.9}
+  .corner-team{right:6.5%;bottom:7.5%;width:8vw;opacity:.45}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(28,21,51,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">People masterminds</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a small cluster of connected people-nodes (an org taking shape), drawn in brand purple #7a63bd -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="team" viewBox="0 0 120 120">
+  <g fill="none" stroke="#7a63bd" stroke-width="2" opacity="0.7">
+    <path d="M60 42 L34 74 M60 42 L86 74 M34 74 L86 74 M60 42 L60 74"/>
+  </g>
+  <g fill="rgba(122,99,189,0.12)" stroke="#7a63bd" stroke-width="2">
+    <circle cx="60" cy="36" r="10"/>
+    <circle cx="30" cy="80" r="9"/>
+    <circle cx="60" cy="80" r="9"/>
+    <circle cx="90" cy="80" r="9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Beyond HR: The Strategic People Leader',sub:'Going from running the HR function to owning a People strategy the business cannot scale without.',brand:true,team:'title'},
+ {t:'normal',k:'Who this is for',title:'You are great with people. Nobody handed you a seat at the strategy table.',body:'You lead People and Culture at a company that is scaling fast. You got here because you are good with people and you get things done. But the work keeps pulling you into the operational side, the programs and the fires, while the decisions that actually shape the company get made in a room you are not always in.'},
+ {t:'dark',title:'A strong HR function keeps the company running. A strategic People leader decides whether it scales.'},
+
+ {t:'section',idx:'Part One',title:'Why Great People Leaders Get Stuck in Execution'},
+ {t:'normal',k:'The operating trap',title:'The busier you are, the more you look like support, not strategy.',body:'Scaling generates endless People work: hiring, onboarding, the culture fires, the tooling. It is easy to spend every hour keeping it running. But a People leader buried in delivery reads to the board as a function that executes, not one that decides. The busier you are, the easier you are to leave out of the strategy conversation.'},
+ {t:'normal',k:'The language gap',title:'The board runs on numbers. HR often shows up with sentiment.',body:'When People is presented as engagement scores and program updates, it lands as a cost to manage. The CFO is talking targets, runway and productivity. A People leader who cannot connect the people plan to those numbers gets a polite nod, then gets funded last. It is not that the work does not matter. It is that it is not being spoken in the language the room decides in.'},
+ {t:'dark',title:'When People is a cost to manage, you are the first line item cut. When People drives performance, you are in the room.'},
+
+ {t:'section',idx:'Part Two',title:'The Four Shifts of a Strategic People Leader'},
+ {t:'normal',k:'Shift one, strategy',title:'Tie the people plan to where the business is actually going.',body:'A strategic People leader starts from the business goals, the next funding round, the market move, the productivity target, and works backward to the people decisions that get the company there. The plan stops being a parallel HR track and becomes part of how the company hits its numbers. That is the difference between a People strategy and an HR calendar.'},
+ {t:'normal',k:'Shift two, the board language',title:'Report People in the metrics the board already watches.',body:'You do not need more dashboards. You need the few people metrics that map to the numbers the board cares about, and the ability to defend a budget in those terms. When you can show how retention, capability and culture move revenue and risk, the People function stops being overhead and starts being an investment the board wants to protect.'},
+ {t:'normal',k:'Shift three, the operating model',title:'Build a People function that scales with each stage, before it breaks.',body:'The structure that works at forty people quietly breaks at a hundred and twenty. A strategic People leader designs the operating model by growth stage, knowing when to centralize, when to embed, and what to build before the crack shows. You stop reacting to each new stage of scale and start getting ahead of it.'},
+ {t:'normal',k:'Shift four, the seat',title:'Show up as a business partner, not the person who runs HR.',body:'The final shift is how you show up. The strategic People leader is a peer to the CEO and the CFO, the guardian of the culture and a partner in the strategy, not a support function waiting for the plan to be handed down. This is the shift that earns the seat, and it is a choice you make in how you frame every conversation.'},
+ {t:'dark',title:'You do not need more HR programs. You need a People strategy the CEO cannot scale without.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When People Drives Performance'},
+ {t:'normal',k:'The leader this builds',title:'Same passion for people, far more say over where the company goes.',body:'When your people plan is tied to the business, spoken in the board language, and built on a model that scales, the role changes. You are consulted before the big decisions, not after. The budget conversation gets easier. And the culture you care about is protected, because the person guarding it finally has the standing to.'},
+ {t:'normal',k:'Why Kristel and Eveliese',title:'Built by two People leaders who did this inside real scale-ups.',body:'Kristel Moedt led People at Bynder and Tony’s Chocolonely. Eveliese Luiting spent twenty-five years leading People at companies like Backbase and Ohpen. People masterminds is where they hand that experience to the next generation of People leaders. Their stance is simple: we do not do HR, we build the people, culture and leadership foundations that make the next stage of growth inevitable.'},
+
+ {t:'section',idx:'Your Next Step',title:'Lead People as a Strategy'},
+ {t:'normal',k:'Keep going with People masterminds',title:'The full shift, and a room of People leaders making it with you.',body:'BEYOND is where Heads of People and VP People put this to work with Kristel and Eveliese, across eight in-depth modules, live masterclasses and one-to-one coaching, alongside a small group of peers building the same thing. Start with this masterclass, and join the room when you are ready to build the whole strategy.'},
+ {t:'cta',title:'Ready to lead People as a business strategy?',body:'Take the next step with Kristel, Eveliese and People masterminds.',chips:['Join the BEYOND program','Book a strategy call'],disc:'Educational content for People and Culture leaders. No income, revenue, or business result is guaranteed. Results vary by leader, company, and context.'},
+];
+
+const deck=document.getElementById('deck');
+function teammotif(kind){return `<svg class="team-motif ${kind==='title'?'title-team':'corner-team'}"><use href="#team"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">People <b>masterminds</b> · Kristel Moedt &amp; Eveliese Luiting</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.team) h+=teammotif(s.team);
+  else if(s.t==='title') h+=teammotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
