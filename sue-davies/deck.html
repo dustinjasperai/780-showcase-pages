@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Easy to Find, Easy to Choose · Sue Davies, The Salon Inspector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f5f3ee; --panel:#ece8e0; --rule:#ddd6ca;
+    --acc:#3f8f8b; --navy:#2e3a59; --ink:#2b2b2b; --body:#4a463f; --dim:#8a8377; --cream:#f5f3ee;
+  }
+  html,body{height:100%}
+  body{background:#e9e4da;font-family:'Raleway',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9e4da}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Raleway',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.25vw;max-width:90%}
+  .t-normal .body{font-family:'Raleway',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Playfair Display',serif;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.4;font-weight:500;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Raleway',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#33405f 0%,#232c44 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#33405f 0%,#232c44 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Raleway',sans-serif;color:#e7e2d9;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-cta .disc{color:#b9b3a6}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .journey{display:flex;gap:1.4vw;margin-top:4.0vh;align-items:center;font-family:'Raleway',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .journey b{color:var(--acc);font-weight:600}
+  .journey span{color:var(--rule)}
+  .brandline{font-family:'Raleway',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,43,43,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.journey{font-size:2.6vw}
+  }
+</style></head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count"></div>
+<div class="brand-foot">The Salon Inspector</div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hint" id="hint">Click or use arrow keys</div>
+<script>
+const S = [
+ {t:'title',title:'Easy to Find, Easy to Choose, Hard to Leave',sub:'The client journey that turns a salon from busy-but-fragile into consistently, calmly booked.',brand:true},
+ {t:'normal',k:'Who this is for',title:'Your work is excellent. Your books still wobble.',body:'You are a salon, nail or beauty business owner who is genuinely good at what you do, and the clients who find you love you. But new enquiries come in waves, a quiet week still catches you off guard, and too many first-time clients never come back for a second visit. The talent was never the problem.'},
+ {t:'dark',title:'A fully booked week and an empty one are usually the same salon with a different journey.'},
+
+ {t:'section',idx:'Part One',title:'The Gap You Cannot See From The Chair'},
+ {t:'normal',k:'The whole path, not the appointment',title:'A client takes a journey to reach your chair. Most of it happens without you.',body:'Long before the appointment, someone has to find you, decide you are the one, and later decide you are worth coming back to. Each of those steps is a place you can quietly lose them. When you only see the client in the chair, you only see the middle of a journey that was mostly won or lost somewhere you were not looking.'},
+ {t:'normal',k:'Why more marketing rarely fixes it',title:'Pour new clients into a leaking journey and you just spend more to lose more.',body:'When it goes quiet the instinct is to post more, discount, or chase the next tactic. But if people cannot easily find you, cannot quickly tell why you over the salon down the road, or are never given a reason to rebook, more traffic just leaks out of the same holes. It is rarely a marketing problem. It is a journey problem.'},
+ {t:'dark',title:'You cannot out-market a journey that loses people at every step.'},
+
+ {t:'section',idx:'Part Two',title:'The Client Journey, Inspected'},
+ {t:'normal',k:'Step one · Find',title:'Find: can the right client actually find you, and know it is you?',body:'This is more than being on Instagram. It is whether someone searching for what you do actually lands on you, whether the first thing they see says who you are for, and whether your best clients could describe you in one sentence. When being found depends on luck or word of mouth alone, the quiet weeks are built in from the start.'},
+ {t:'normal',k:'Step two · Choose',title:'Choose: in the ten seconds before they book, why you?',body:'A new client compares you to three other salons in about ten seconds. Choosing is what happens in that window: the clarity of what you stand for, the proof that you deliver it, and how easy you make it to say yes. Most salons are chosen by accident. The ones that grow are chosen on purpose, because they made the choice obvious.'},
+ {t:'normal',k:'Step three · Return',title:'Return: the first visit is an audition for the second.',body:'A first booking is not a client, it is a trial. Whether they come back is decided by the experience and the follow-up, not by another discount. The rebook conversation, the way you stay in their world between visits, the reason to return sooner: these are what turn a one-off into a regular, and a regular into someone who brings you three more.'},
+ {t:'dark',title:'Find, Choose, Return. You fix the journey as one system, not as three separate tactics.'},
+ {t:'normal',k:'The part underneath',title:'Most owners can feel the gaps. Something quieter stops them closing them.',body:'Nine times out of ten the owner already senses where the journey leaks. What stops the fix is rarely knowledge. It is the overwhelm of doing everything at once, the fear of raising a price or being more visible, the belief that this is simply how it is. Clearing that is part of the work, because a plan you are too stretched or too unsure to run changes nothing.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When The Journey Holds'},
+ {t:'normal',k:'The salon this builds',title:'Fewer quiet weeks, more repeat clients, and growth you can actually feel.',body:'When people can find you, choose you on purpose, and are given a real reason to return, the waves flatten out. The calendar fills with the right clients rather than whoever happened to walk past, rebookings climb, and referrals start doing the marketing for you. The business stops depending on your hustle and starts running on a system.'},
+ {t:'dark',title:'The goal was never to be busier. It was to be consistently, calmly chosen.'},
+ {t:'normal',k:'Why Sue',title:'Twenty years in the chair, in the salon, and now in the business.',body:'Sue Davies spent over twenty years in the industry, built and grew her own award-winning salon, then sold it to help other owners do the same. As The Salon Inspector she has walked the client journey of business after business and knows exactly where it leaks. This is the Client Journey Strategy she uses to help owners become easy to find, easy to choose, and impossible to leave.'},
+
+ {t:'section',idx:'Your Next Step',title:'Have Your Own Journey Inspected'},
+ {t:'cta',title:'Ready to find the gaps that are costing you clients?',body:'Take the next step with Sue: map your own client journey, see where it leaks, and leave with the first fixes to make.',chips:['Book a Clarity Call','Get Found, Chosen & Booked'],disc:'Educational content for salon, beauty and wellness business owners. No income or business result is guaranteed. Results vary by business, market and effort.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t+(i===0?' active':'');
+  let h='';
+  if(s.k) h+='<div class="kicker">'+s.k+'</div>';
+  if(s.idx) h+='<div class="idx">'+s.idx+'</div>';
+  if(s.title) h+='<h1>'+s.title+'</h1>';
+  if(s.sub) h+='<div class="sub">'+s.sub+'</div>';
+  if(s.body) h+='<div class="body">'+s.body+'</div>';
+  if(s.brand) h+='<div class="journey"><b>Find</b><span>&rarr;</span><b>Choose</b><span>&rarr;</span><b>Return</b></div>';
+  if(s.t==='section') h+='<div class="rule"></div>';
+  if(s.chips){h+='<div class="chips">';s.chips.forEach(c=>h+='<span class="chip">'+c+'</span>');h+='</div>';}
+  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const bar=document.getElementById('bar'),count=document.getElementById('count'),hint=document.getElementById('hint');
+function show(n){
+  cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/S.length*100)+'%';
+  count.textContent=(cur+1)+' / '+S.length;
+  if(cur>0)hint.style.opacity='0';
+}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(cur+1);e.preventDefault();}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){show(cur-1);e.preventDefault();}
+});
+show(0);
+</script>
+</body>
+</html>
