@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Playing to Learn — A Masterclass with Dave Simon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ea; --panel:#ece2cf; --rule:#dccdb0;
+    --accent:#f17a20; --ink:#23262c; --body:#4c4a44; --dim:#a99a80; --sand:#f1e7d5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#efe7d6;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Merriweather',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-.005em}
+  .t-title h1{font-size:5.8vw;max-width:74%}
+  .t-normal h1{font-size:3.6vw;max-width:90%;line-height:1.16}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.24vw;color:var(--body);margin-top:2.9vh;max-width:78%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Merriweather',serif;font-style:italic;font-size:1.6vw;color:var(--accent);margin-top:3.0vh;max-width:84%;line-height:1.42;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:700;color:var(--accent);margin-bottom:1.8vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:86%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 82% 12%,#2c3038 0%,#1b1e24 100%)}
+  .t-dark h1{color:var(--bg);font-size:4.4vw;max-width:90%;font-weight:700}
+  .t-dark h1 .hl{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 140% at 82% 12%,#2c3038 0%,#1b1e24 100%)}
+  .t-cta h1{color:var(--bg);font-size:4.6vw;max-width:88%}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#e2ded4;font-size:1.3vw;margin-top:2.6vh;max-width:74%;line-height:1.62}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid var(--accent);color:var(--bg);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.1vw;font-weight:600;font-family:'Montserrat',sans-serif}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.6vh;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Montserrat',sans-serif;font-size:.8vw;color:#b7a88f;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:22vw;height:22vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:7.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.0vw}.t-section h1{font-size:8.8vw}.t-dark h1{font-size:7.6vw}
+    .t-cta h1{font-size:8.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Dave Simon's Music</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: an ensemble, three note-heads beamed together (the group class) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#f17a20" stroke-width="3" stroke-linecap="round">
+    <path d="M30 40 L30 84" opacity="0.9"/>
+    <path d="M60 32 L60 78" opacity="0.9"/>
+    <path d="M90 40 L90 84" opacity="0.9"/>
+    <path d="M30 40 L90 32" stroke-width="6" opacity="0.9"/>
+    <ellipse cx="26" cy="86" rx="9" ry="7" fill="#f17a20" stroke="none"/>
+    <ellipse cx="56" cy="80" rx="9" ry="7" fill="#23262c" stroke="none"/>
+    <ellipse cx="86" cy="86" rx="9" ry="7" fill="#f17a20" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Playing to Learn.',sub:'How a group class for four to seven year olds fills your studio, and turns first-time players into students who stay for years.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are turning away the youngest customers who walk through your door.',body:'A parent calls about their five year old, and you say what you have always had to say: he is a little young for lessons, try us in a year. Meanwhile the young ones you do take often drop out in one to three months. Enrollment sits flat, and you spend more energy replacing students than growing the studio.'},
+ {t:'dark',title:'A studio that only sells private lessons is fishing in <span class="hl">half the pond</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why the Private Lesson Model Leaves Money at the Door'},
+ {t:'normal',k:'The age-of-entry problem',title:'Most four to six year olds are not ready to sit alone with an instrument.',body:'Private lessons ask a very young child to sit still, practise at home, and perform on demand. Some manage it. Most drop out inside a few months, and they leave believing music is hard and not much fun. The parent quietly gives up on the idea, and you have lost a family that could have been in your studio for the next decade.'},
+ {t:'normal',k:'The retention problem',title:'Even the students you keep have nothing to belong to.',body:'A private lesson is a solitary thing. A child practises alone, plays for no one, and drifts away the first busy season. Without a band, a stage, or friends who play too, there is no reason to stay. So retention becomes a leak you refill every single term, at the price of new marketing every time.'},
+ {t:'dark',title:'You do not have an enrollment problem. You have an <span class="hl">age-of-entry</span> and a <span class="hl">retention</span> problem.'},
+
+ {t:'section',idx:'Part Two',title:'The Ensemble First Method'},
+ {t:'normal',k:'The whole idea in one line',title:'Put a four year old in a band on day one, and let them play before they ever practise.',body:'In the 2008 recession my own school was purging students, so I tried something radical: a rock band class for four to seven year olds. I built the most insanely simple musical systems, so a four year old could walk into band practice and play along with the band, and never have to pick an instrument at home. I called it Kidzrock. It made thirty thousand dollars in its first year and saved the school.'},
+ {t:'normal',k:'Pillar one, play to learn',title:'Children this age learn by doing, the same way play based preschools and youth sports work.',body:'You modify the instruments, you write songs built for little hands, and you let them experience the thing and repeat it. They master real skills without ever knowing they are being taught. That is the whole shift in one phrase: playing to learn, not learning to play. It is why a four year old who would quit a private lesson will keep showing up to a band.'},
+ {t:'normal',k:'Pillar two, the band is the destination',title:'When the lesson is a band with their friends, showing up is the reward.',body:'Kids play alongside other kids, perform for family and friends, and gain a little confidence at every step. The fun and the belonging are what a four year old comes back for, and they are what a parent happily renews for. You are no longer selling practice and discipline to a five year old. You are selling a band they cannot wait to get to.'},
+ {t:'normal',k:'Pillar three, the retention bridge',title:'The group class is the on-ramp to a decade of private lessons.',body:'As their love of music and their ability grow, kids want to hone their craft, and that is exactly when they move into private study, by their own choice. Kidzrock feeds Jr. Rockerz, and both feed private lessons. You stop refilling a leaky bucket and start building a student who is with you for years, across program after program.'},
+ {t:'normal',k:'Pillar four, a system you can run',title:'None of this works if it lives only in your head.',body:'The curriculum, the songs, the modified instruments and the teacher training are all documented, so any instructor on your team can deliver the same class to the same standard. That is what turns a clever idea into a program your studio owns, rather than a class that only works when you are the one teaching it.'},
+ {t:'dark',title:'The room fills from the bottom, and the bottom <span class="hl">grows up inside your studio</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What the Group Class Builds'},
+ {t:'normal',k:'The business this builds',title:'A whole new age group in the door, and a pipeline into everything else you offer.',body:'Studios that added these programs have grown their enrollment and revenue by double digits, some by as much as twenty percent, simply by serving the four to eleven year olds they used to turn away and moving them into private lessons over time. It is not a bolt-on class. It is a new front door that quietly changes the shape of the whole studio behind it.'},
+ {t:'dark',title:'One class at the front door changes the <span class="hl">whole shape</span> of the studio behind it.'},
+ {t:'normal',k:'Why Dave',title:'He built it in his own school, then licensed it to studios around the world.',body:'Dave Simon founded and ran Dave Simon’s Rock School from 2003 to 2019, created Kidzrock, Jr. Rockerz and Piano Jam, and now licenses them to music studios worldwide. He hosts the Music Lessons and Marketing podcast for studio owners. Everything in this masterclass comes from programs he built, ran, and taught other owners to run, not from theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring the Program Into Your Studio'},
+ {t:'normal',k:'Keep going with Dave',title:'From your first group class to a program that fills the studio and holds students for years.',body:'Dave Simon’s Music Enterprise licenses the whole system, the curriculum, the songs, the instruments and the teacher training, and coaches studio owners on the systems and marketing to fill it. Whether you license Kidzrock and Jr. Rockerz or start with a coaching call, the goal is the same: a studio that grows from the bottom up and keeps its students.'},
+ {t:'cta',title:'Ready to add a group class program that fills your studio?',body:'Take the next step with Dave Simon and Dave Simon’s Music Enterprise.',chips:['Book a call with Dave','License Kidzrock and Jr. Rockerz','Take the music studio self-assessment'],disc:'Educational content for music studio and music school owners. No income or business result is guaranteed. Results vary by individual, studio, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Dave Simon's <b>Music</b> · Kidzrock</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
