@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Referable Practice · Amy Bradley Radford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#eef2f7; --panel:#e3e9f1; --rule:#d6dfea;
+    --acc:#0072ef; --ink:#161e2a; --body:#3d4a5f; --dim:#7a869c; --paper:#f4f7fb;
+  }
+  html,body{height:100%}
+  body{background:#dfe6ee;font-family:'Fira Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dfe6ee}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Fira Sans',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:94%;font-weight:600}
+  .t-normal h1{font-size:3.3vw;max-width:90%}
+  .t-normal .body{font-family:'Fira Sans',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Newsreader',serif;font-size:2.05vw;color:var(--acc);margin-top:3.4vh;max-width:86%;line-height:1.4;font-weight:400;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Fira Sans',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#20293f 0%,#0f1424 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:88%;color:var(--paper)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#20293f 0%,#0f1424 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--paper)}
+  .t-cta .body{font-family:'Fira Sans',sans-serif;color:#cdd7e6;font-size:1.4vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--paper);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .anc-motif{position:absolute;pointer-events:none}
+  .title-anc{right:7.5%;bottom:8%;width:15vw;opacity:.9}
+  .corner-anc{right:6.5%;bottom:7.5%;width:7vw;opacity:.45}
+  .brandline{font-family:'Fira Sans',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(22,30,42,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Massage Business Methods</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a return loop drawn as a steady line in blue - the client who comes back and refers -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="loop" viewBox="0 0 120 120">
+  <g fill="none" stroke="#0072ef" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 60 A34 34 0 1 1 60 94" opacity="0.9"/>
+    <path d="M60 94 l-13 -6 M60 94 l6 -13" opacity="0.8"/>
+    <circle cx="60" cy="60" r="6" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Referable Practice',sub:'How massage therapists fill their schedule by word of mouth, raise their rate, and build a practice clients keep coming back to, without chasing more bookings.',brand:true,anc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are fully booked. And it still feels like you are running to stand still.',body:'You are a skilled therapist and the calendar stays full. But full is the only setting you have. A week off costs income, every raise means more hours on the table, and the practice keeps asking for more of you than it gives back. Somewhere along the way the schedule stopped being yours.'},
+ {t:'dark',title:'A full schedule is not the same as a practice that pays you back.'},
+
+ {t:'section',idx:'Part One',title:'Why a Full Calendar Stops Paying You Back'},
+ {t:'normal',k:'The technician trap',title:'When you sell your work one hour at a time, the calendar becomes the boss.',body:'You own the practice, but you are still paid by the hour, so nothing moves unless your hands are moving. The only lever you have for more income is more time, and that lever has a hard ceiling: your own body. The exact tool your whole income depends on is the first thing burnout takes.'},
+ {t:'normal',k:'The leak nobody names',title:'Every happy client walks out the door, and most of them never send anyone back.',body:'You do good work and people love it. But without a system, a great treatment ends at the door and the goodwill goes nowhere. So every month you start the search for new clients again from zero, and you fill the gap the expensive way, with more marketing and more discounting, instead of the referrals you already earned.'},
+ {t:'dark',title:'Your best marketing is already lying on your table every day.'},
+
+ {t:'section',idx:'Part Two',title:'The Massage Business Methods System'},
+ {t:'normal',k:'Move one, the math',title:'Know your numbers, and know what a client is worth over years, not one visit.',body:'The math of the business comes first: your real schedule, your real budget, and the lifetime value of a client who stays. Once you can see that a retained client is worth far more than a single booking, every decision about your time, your rate, and your energy gets easier and less emotional.'},
+ {t:'normal',k:'Move two, referral systems',title:'Turn the clients you already have into the people who fill your schedule.',body:'Word of mouth is not luck, it is a system. You put the right tools in your current clients hands and give them a simple reason to refer, so the practice grows by reputation, not by paying to be seen. Done deliberately, this is how you can build real volume in as little as ninety days, from the goodwill you already earned.'},
+ {t:'normal',k:'Move three, your rate',title:'Raise your rate on the demand you built, so more income stops meaning more hours.',body:'When your calendar is full of people who found you by referral, you have the one thing that lets you charge what the work is worth: demand you created, not discounts you offered. You raise your rate while adding value, and the ceiling on your income stops being the number of hours in your week.'},
+ {t:'normal',k:'The positioning layer',title:'Specialize, and become the therapist your clients cannot replace.',body:'General relaxation work is easy to shop on price. Real results are not. When you specialize and solve a specific problem, whether that is pain, recovery, or a population you serve best, you become the therapist people describe by name when a friend asks. Specialization is what makes a practice referable in the first place.'},
+ {t:'dark',title:'Referable is a system you build, not a personality you are born with.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Practice Refers Itself'},
+ {t:'normal',k:'The practice this builds',title:'The same career you love, pointed at income, retention, and a life outside the room.',body:'When the practice is designed instead of just endured, a week off stops costing you sleep, a raise no longer means more hours, and new clients arrive already warm because someone they trust sent them. You keep the work and the clients you love, and the practice finally becomes something that pays you back instead of using you up.'},
+ {t:'dark',title:'The goal was never a fuller table. It was a practice that pays you back for building it.'},
+ {t:'normal',k:'Why Amy',title:'A working therapist and educator who has spent 30 years building practices that last.',body:'Amy Bradley Radford has been a massage therapist for 30 years and has taught therapists for 28, and she still sees clients at the table using her own pain-management methods. Through Massage Business Methods and the Massage Business Success podcast she coaches therapists on the numbers, the referrals, and the rate that build a durable practice. This is the thinking behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build a Practice That Refers Itself'},
+ {t:'normal',k:'Keep going with Amy',title:'Start with the system, then build the whole practice around it.',body:'Massage Business Methods is where the numbers, the referral systems, and the rate all come together, with the courses, the coaching, and a community of therapists doing the same work. If today gave you one move to make, this is where you go to make the rest of them.'},
+ {t:'cta',title:'Ready to build a practice that fills its own schedule?',body:'Take the next step with Amy and Massage Business Methods.',chips:['Join Massage Business Methods','Work with Amy'],disc:'Educational content for practicing massage therapists. No income or business result is guaranteed. Results vary by therapist, practice, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function anc(kind){return `<svg class="anc-motif ${kind==='title'?'title-anc':'corner-anc'}"><use href="#loop"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Massage <b>Business Methods</b> · Amy Bradley Radford</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.anc) h+=anc(s.anc);
+  else if(s.t==='title') h+=anc('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
