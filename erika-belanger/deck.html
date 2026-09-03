@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Sensitivity Reset · Erika Belanger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#17110e; --panel:#211915; --rule:#3a2c25;
+    --ink:#f2efea; --ink-soft:#d8cabf; --dim:#a08d80;
+    --accent:#c59880; --warm:#dcc4b5;
+  }
+  html,body{height:100%}
+  body{background:#120d0b;font-family:'Archivo',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#120d0b}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Archivo',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:0}
+  .t-title h1{font-size:5vw;max-width:92%;font-weight:700}
+  .t-normal h1{font-size:3.7vw;max-width:86%}
+  .t-normal .body{font-family:'Archivo',sans-serif;font-size:1.44vw;color:var(--ink-soft);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Archivo',sans-serif;font-size:1.6vw;color:var(--ink-soft);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Archivo',sans-serif;font-size:1.4vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:92%;font-weight:700}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#2c1f18 0%,#120d0b 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4vw;max-width:88%;font-style:italic;color:var(--warm);font-weight:500}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#c59880 0%,#5c4132 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:86%;font-weight:700;color:#221812}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #3a2c25;background:rgba(242,239,234,.92);color:#221812;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.22vw;font-weight:600;font-family:'Archivo',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#2e211a}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .ripple{position:absolute;pointer-events:none;opacity:.9}
+  .title-ripple{right:7%;bottom:8%;width:26vw}
+  .corner-ripple{right:6.5%;bottom:8%;width:10vw;opacity:.45}
+  .brandline{font-family:'Archivo',sans-serif;font-size:1.3vw;color:var(--ink-soft);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(242,239,234,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Sensitivity Reset</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- settling-ripples motif: concentric rings, a stone in still water, a nervous system coming back to calm -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ripple" viewBox="0 0 240 160">
+  <g fill="none" stroke-linecap="round">
+    <ellipse cx="120" cy="86" rx="102" ry="30" stroke="#c59880" stroke-width="2" opacity="0.28"/>
+    <ellipse cx="120" cy="86" rx="74" ry="21" stroke="#c59880" stroke-width="2.2" opacity="0.45"/>
+    <ellipse cx="120" cy="86" rx="46" ry="13" stroke="#dcc4b5" stroke-width="2.4" opacity="0.7"/>
+    <ellipse cx="120" cy="86" rx="20" ry="6" stroke="#dcc4b5" stroke-width="2.6" opacity="0.95"/>
+    <circle cx="120" cy="86" r="2.6" fill="#dcc4b5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Sensitivity Reset',sub:'A live masterclass for highly sensitive women, on regulating your nervous system so overwhelm stops running the day and your sensitivity becomes your strength.',brand:true,ripple:'title'},
+ {t:'normal',k:'Who this is for',title:'You feel everything, and by the end of the day it has quietly run you.',body:'You read the room before anyone speaks. You carry other people’s moods home. A full inbox, a hard conversation, a loud afternoon, and your body is already at capacity while everyone around you seems fine. You have been told to toughen up your whole life, and it has never once worked.'},
+ {t:'dark',title:'Your sensitivity was never the problem. An unregulated nervous system was.'},
+
+ {t:'section',idx:'Part One',title:'Why Toughening Up Never Worked'},
+ {t:'normal',k:'Sensitivity is a trait, not a flaw',title:'A sensitive nervous system takes in more, so it fills up faster.',body:'Being highly sensitive means your system notices more detail, more feeling, more of everything, all the time. That is not weakness and it is not something to fix. It only becomes a problem when the system has no way to discharge what it takes in, so the input just keeps stacking until you are overwhelmed.'},
+ {t:'normal',k:'The self-criticism spiral',title:'Judging yourself for feeling too much keeps the alarm switched on.',body:'The moment overwhelm hits, the inner critic starts: what is wrong with me, why can’t I just cope. That judgment is read by your body as one more threat, so the very habit meant to make you stronger keeps your nervous system on high alert. You cannot shame a system into safety.'},
+ {t:'dark',title:'You cannot think your way out of a dysregulated body. You have to work with the body itself.'},
+
+ {t:'section',idx:'Part Two',title:'The Sensitivity Reset Method'},
+ {t:'normal',k:'Meet yourself with love',title:'Start where every reset starts, by dropping the fight with yourself.',body:'Before any tool works, the war on your own sensitivity has to end. Meeting yourself where you are, with love instead of judgment, is not a nice idea, it is the first regulation. A body that is no longer being criticised is a body that can finally begin to settle.'},
+ {t:'normal',k:'Nervous system regulation',title:'Teach your body how to come back down, on purpose.',body:'This is the heart of the work. Simple, somatic, body-first practices that move you out of fight-or-flight and back to safe, so overwhelm stops spiking and passes through instead of taking over your day. You are not managing symptoms, you are training the system that creates them.'},
+ {t:'normal',k:'The day-to-day protocol',title:'A handful of daily anchors, so regulation holds between the big moments.',body:'One-off self-care does not last, because a sensitive system needs rhythm, not rescue. A small, repeatable daily protocol, woven into the morning, the thresholds, and the evening, keeps you steady on ordinary days so the hard ones no longer knock you flat.'},
+ {t:'normal',k:'Boundaries for protection and connection',title:'A boundary is not a wall. It protects you and deepens closeness at once.',body:'Sensitive people are told boundaries push people away. The opposite is true. A clear boundary protects your capacity and lets you stay close without resentment quietly building. Learn to set one from a regulated place and your relationships get warmer, not colder.'},
+ {t:'normal',k:'Leaning into your gifts',title:'The same sensitivity that overwhelmed you is your depth, empathy, and intuition.',body:'Once the system is regulated, the trait stops costing you and starts serving you. The attunement that used to drown you becomes the way you understand people, create, and lead. Sensitivity was always the gift. Regulation is what finally lets you use it.'},
+ {t:'dark',title:'Regulation is not calm on command. It is a body that knows how to find its way back to safe, again and again.'},
+
+ {t:'section',idx:'Part Three',title:'What Becomes Possible'},
+ {t:'normal',k:'The woman this builds',title:'Steady on ordinary days, and no longer afraid of the hard ones.',body:'Overwhelm still visits, but it moves through you instead of running you. You say the honest no and stay close to the people you love. You stop bracing against your own nature and start trusting it. The sensitivity you spent years apologising for becomes the thing people feel most safe around.'},
+ {t:'dark',title:'When your nervous system feels safe, your sensitivity stops being what it costs you and starts being what sets you apart.'},
+ {t:'normal',k:'Why Erika Belanger',title:'A somatic, trauma-informed teacher who lived the dysregulation first.',body:'Erika Belanger is a yoga teacher, somatic coach, and trauma-informed practitioner who came to this work through her own recovery from chronic illness, anxiety, and pain. The Sensitivity Reset is the body-first method she built and now teaches to highly sensitive women, mindset and physiology together, on her podcast On and Off Your Mat and in her programs.'},
+
+ {t:'section',idx:'Your Invitation',title:'Reset the Way Your Sensitivity Feels'},
+ {t:'normal',k:'Where to begin',title:'Find out where your sensitivity sits, then go deeper.',body:'Start with the free sensitivity quiz to see how your nervous system is carrying things right now. From there, The Sensitivity Reset walks you week by week through the same practices, from meeting yourself with love to a daily protocol that finally holds.'},
+ {t:'cta',title:'Ready to reset?',chips:['Take the free sensitivity quiz','Join the Sensitivity Reset waitlist'],disc:'Educational content for highly sensitive women. Not a substitute for medical or mental health care. No specific outcome is guaranteed. Results vary by person and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function ripple(kind){return `<svg class="ripple ${kind==='title'?'title-ripple':'corner-ripple'}"><use href="#ripple"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Erika Belanger &middot; <b>The Sensitivity Reset</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ripple) h+=ripple(s.ripple);
+  else if(s.t==='title') h+=ripple('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
