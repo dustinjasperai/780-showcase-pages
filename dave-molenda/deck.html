@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Growing on Purpose · Dave Molenda, Positive Polarity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#111417; --panel:#1a1e22; --rule:#2b3036;
+    --acc:#f39248; --acc2:#89c079; --ink:#eef1f3; --body:#b7bec5; --dim:#7d858c;
+  }
+  html,body{height:100%}
+  body{background:#0b0d0f;font-family:'Poppins',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b0d0f}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:500;color:var(--ink);line-height:1.1;letter-spacing:.005em}
+  .t-title h1{font-size:5.4vw;max-width:94%;text-transform:uppercase;letter-spacing:.02em}
+  .t-normal h1{font-size:3.35vw;max-width:90%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.8vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.45;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.15vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.28em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#20262b 0%,#0e1113 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--ink);font-weight:400}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#20262b 0%,#0e1113 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:var(--ink)}
+  .t-cta .body{font-family:'Poppins',sans-serif;color:#cfd6db;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Oswald',sans-serif;font-size:1.15vw;font-weight:500;letter-spacing:.04em}
+  .eq{font-family:'Oswald',sans-serif;margin-top:3.6vh;font-size:2.2vw;font-weight:500;letter-spacing:.03em;color:var(--dim)}
+  .eq b{color:var(--acc);font-weight:600}
+  .eq .g{color:var(--acc2);font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .pol-motif{position:absolute;pointer-events:none}
+  .title-pol{right:7%;bottom:8%;width:17vw;opacity:.95}
+  .corner-pol{right:6.5%;bottom:7.5%;width:8.5vw;opacity:.5}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.2vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.eq{font-size:4.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Positive Polarity</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- polarity motif: two poles (team + customer) resolving into one, in brand orange and green -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="pol" viewBox="0 0 140 120">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round">
+    <circle cx="42" cy="60" r="24" stroke="#f39248" opacity="0.95"/>
+    <circle cx="98" cy="60" r="24" stroke="#89c079" opacity="0.95"/>
+    <path d="M34 60 H50 M42 52 V68" stroke="#f39248" opacity="0.9"/>
+    <path d="M90 60 H106" stroke="#89c079" opacity="0.9"/>
+    <path d="M70 26 V94" stroke="#4a5158" stroke-width="1.4" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Growing on Purpose',sub:'Why profit is a byproduct. Strengthen the team, improve the customer experience, and the numbers follow.',brand:true,eq:true,pol:'title'},
+ {t:'normal',k:'Who this is for',title:'You are working harder on the business, and the profit still is not moving.',body:'You have tried the growth tactics, more marketing, longer hours, another push on sales. You are the hardest working person in your company. And the number at the bottom barely changes. It is a frustrating place to be, and it is more common than anyone admits.'},
+ {t:'dark',title:'Chasing profit directly is exactly why it keeps slipping away from you.'},
+
+ {t:'section',idx:'Part One',title:'Where Owners Actually Lose the Profit'},
+ {t:'normal',k:'Three parts, unequal attention',title:'Every business is really three things: the product, the customer, and the team.',body:'Most owners are dialed all the way in on the product or service. A little less on the customer. And least of all on the team. That order is backwards, and it is exactly where the profit quietly leaks out before it ever reaches you.'},
+ {t:'normal',k:'The busy-owner trap',title:'When the team is weak, everything routes back through you.',body:'A team that is not aligned sends every decision, every problem, and every unhappy customer straight back to the owner. You become the bottleneck. And a bottleneck cannot grow, no matter how many hours you throw at it. Working harder just lowers the ceiling.'},
+ {t:'dark',title:'Profit is not a lever you pull. It is what is left when the team and the customer are right.'},
+
+ {t:'section',idx:'Part Two',title:'The Formula: ST + ICE = P'},
+ {t:'normal',k:'The formula',title:'Strengthen the Team, plus Improve the Customer Experience, equals Profit.',body:'This is the spine of everything I coach. It is not a slogan. It is two inputs you can actually work on, in order, with profit as the output. Get the order wrong and you spend years pushing on the one thing you can never move directly.'},
+ {t:'normal',k:'ST: Strengthen the Team',title:'It starts with intentional communication, not another bonus.',body:'A strong team is built on understanding how each person is wired, then leading and communicating to that, instead of managing everyone the same way. That is where real engagement comes from. And an engaged team is what makes a great customer experience even possible.'},
+ {t:'normal',k:'The tool under ST is DISC',title:'You cannot lead a team you do not understand.',body:'I use DISC behavioral assessments, through TriMetrixEQ, so you can read each person in minutes. Who needs the detail, who needs the big picture, who needs reassurance, who just needs a target to run at. Communicate to the wiring and most of the friction simply disappears.'},
+ {t:'normal',k:'ICE: Improve the Customer Experience',title:'A strong team makes a wow experience possible. A weak one makes it impossible.',body:'When the team is aligned, the customer feels it in every single interaction. Consistent, individualized experiences are what turn a one-time buyer into a loyal one. And loyalty, not discounting, is what actually protects your margin over the long run.'},
+ {t:'dark',title:'A fully engaged team creates loyal customers. Loyal customers are where the profit lives.'},
+
+ {t:'section',idx:'Part Three',title:'When Profit Shows Up on Purpose'},
+ {t:'normal',k:'The owner this builds',title:'The business runs on the team, not on your adrenaline.',body:'Decisions get made without you in the room. Customers stay because the experience is consistent, not because you personally rescued them again. And profit stops being the thing you chase and becomes the thing that shows up, on purpose, month after month.'},
+ {t:'normal',k:'Why Dave Molenda',title:'I built a company to eight figures, sold it, and put the formula in a bestseller.',body:'I started with nothing and grew a company to eight figures in annual sales, with 22 people, before selling my stake. We grew 47% through the 2008 recession by investing in the team and the customer while everyone else was cutting. Growing on Purpose is that formula, and it is the same one I coach now.'},
+
+ {t:'section',idx:'Your Next Step',title:'Grow on Purpose'},
+ {t:'normal',k:'Keep going with Dave',title:'The formula, applied to your business, with the team assessments done for you.',body:'Coaching is where we run ST + ICE = P on your actual team and your actual customers: the DISC assessments, the communication plan, and the customer-experience work, in the right order. Start with the book, then let us build it into the business itself.'},
+ {t:'cta',title:'Ready to make profit a byproduct, on purpose?',body:'Take the next step with Positive Polarity.',chips:['Read Growing on Purpose','Book a coaching call'],disc:'Educational content for business owners and leaders. No income or financial result is guaranteed. Outcomes vary by business, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function pol(kind){return `<svg class="pol-motif ${kind==='title'?'title-pol':'corner-pol'}"><use href="#pol"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.eq) h+=`<div class="eq"><b>ST</b> + <span class="g">ICE</span> = P</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Positive <b>Polarity</b> · Dave Molenda</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.pol) h+=pol(s.pol);
+  else if(s.t==='title') h+=pol('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
