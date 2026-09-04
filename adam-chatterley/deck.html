@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Profitable Clinic · Adam Chatterley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbf6f2; --panel:#ffffff; --rule:#ecd9cd;
+    --acc:#ff784f; --idx:#c96a45; --ink:#242424; --grey:#5f5a56; --dim:#a99e97;
+    --inkbg:#241f1d;
+  }
+  html,body{height:100%}
+  body{background:#efe7e0;font-family:'Poppins',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe7e0}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.3vw;max-width:90%}
+  .t-normal h1{font-size:3.2vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.75vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh;border-radius:2px}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#33292400 0%,#241f1d 100%);background:var(--inkbg);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;font-style:italic;color:#faf3ee;font-weight:500}
+  .t-dark .accentbar{width:9vw;height:3px;background:var(--acc);margin:3vh auto 0;border-radius:2px}
+  .t-cta{align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--acc);border-radius:100px;padding:1.3vh 1.7vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .step-motif{position:absolute;right:7.5%;bottom:9%;pointer-events:none;opacity:.92}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Beauty Business Secrets</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- growth motif: three ascending nodes (Stabilise, Optimise, Freedom) joined by a rising line -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="steps" viewBox="0 0 240 150">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="132" x2="226" y2="132" stroke="#c96a45" opacity="0.3"/>
+    <path d="M28 120 L112 84 L212 34" stroke="#ff784f" opacity="0.9"/>
+    <circle cx="28" cy="120" r="6" fill="#fbf6f2" stroke="#ff784f" stroke-width="2.6"/>
+    <circle cx="112" cy="84" r="6" fill="#fbf6f2" stroke="#ff784f" stroke-width="2.6"/>
+    <circle cx="212" cy="34" r="7" fill="#ff784f" stroke="#ff784f" stroke-width="2.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Profitable Clinic',sub:'A masterclass for skin clinic and aesthetic business owners: how to move from stuck under 10k a month to a calm, structured 15k a month, without working more hours.',brand:true,steps:true},
+ {t:'normal',k:'Who this is for',title:'You are booked, busy, and still not paid what the work is worth.',body:'You run an independent skin clinic. The diary looks full, the days are long, and the money at the end of the month still does not match the effort. Most owners in this position assume they need more clients. Usually they do not.'},
+ {t:'dark',title:'A fully booked clinic that undercharges is not a growth problem. It is a pricing problem wearing a growth costume.'},
+
+ {t:'section',idx:'Part One',title:'Why Clinics Stay Stuck Under 10k'},
+ {t:'normal',k:'The discount treadmill',title:'Every offer you run to fill the diary quietly trains clients to wait for the next one.',body:'Discounts and last-minute deals feel like they solve a slow week. What they actually do is teach your best clients that your full price is optional, and pull in the exact clients who leave the moment someone cheaper opens up the road.'},
+ {t:'normal',k:'Pricing by fear',title:'Most clinic owners set prices by looking sideways, not at their own numbers.',body:'You check what the salon down the road charges and land just under it. That number has nothing to do with your costs, your skill, or the result you deliver. It is a guess dressed up as a strategy, and it is where the profit leaks out.'},
+ {t:'normal',k:'Flying blind',title:'You cannot fix a number you have never actually looked at.',body:'Very few owners know their true cost per treatment, their real profit per hour, or which services quietly lose money. Without those numbers every decision, from pricing to rota to which treatments to push, is a hopeful guess.'},
+ {t:'dark',title:'You do not have an income problem. You have a small number of hidden decisions costing you thousands a month.'},
+
+ {t:'section',idx:'Part Two',title:'The Method'},
+ {t:'normal',k:'Phase one, Stabilise',title:'Stop the bleeding before you try to grow.',body:'Get clear on your real numbers, fix the pricing that is quietly costing you, and put a floor under the business. This is The MONEY Method: know your figures, price to your worth, and close the hidden profit leaks first.'},
+ {t:'normal',k:'Phase two, Optimise',title:'Attract better clients, not just more clients.',body:'Once the pricing holds, you tighten the systems and the client experience so the right clients find you, book again, and refer. Consistent monthly income comes from a clinic that retains and rebooks, not one that starts every month from zero.'},
+ {t:'normal',k:'Phase three, Freedom by Design',title:'A clinic that hits its number and runs without the chaos.',body:'With the foundations and the systems in place, the business reaches 15k a month and beyond on purpose rather than by accident, and it stops depending on you being in every room. That is the point of the whole thing: the income and the hours back.'},
+ {t:'dark',title:'Price it right, keep the right clients, build the systems, and 15k a month stops being a spike and starts being the floor.'},
+
+ {t:'section',idx:'Part Three',title:'When The Numbers Finally Work'},
+ {t:'normal',k:'The clinic this builds',title:'Calmer weeks, better clients, and profit that finally matches the effort.',body:'An owner who prices with confidence takes on the right clients, stops discounting to fill gaps, and knows exactly which numbers to watch. The diary is not fuller. The business is simply worth more per hour, and it feels lighter to run.'},
+ {t:'dark',title:'The market does not reward the busiest clinic. It rewards the one that knows its numbers.'},
+ {t:'normal',k:'Why Adam Chatterley',title:'One vertical, understood from the inside.',body:'Adam Chatterley works only with skin clinic and aesthetic owners, hosts The Beauty Business Podcast with over two million downloads, and was twice elected Chairman of the UK Spa Association. He has helped well over a thousand clinic owners fix pricing, build systems, and grow, which is why the advice is specific to your business rather than generic.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Profitable Version of Your Clinic'},
+ {t:'normal',k:'Start with the numbers',title:'The MONEY Method fixes what is leaking first.',body:'Get clear on your figures, reset your pricing to reflect your real worth, and close the profit leaks so the clinic you already have starts paying you properly.'},
+ {t:'normal',k:'Go the whole way',title:'The FREEDOM Formulation takes you to 15k a month and beyond.',body:'Hands on coaching through Stabilise, Optimise, and Freedom by Design, with direct access to Adam, a structured path to 15k a month, and a 90 day exit clause because you should never feel locked in.'},
+ {t:'cta',title:'Ready to build a clinic that pays you what it is worth?',chips:['Explore The MONEY Method','Book a call about The FREEDOM Formulation'],disc:'Educational content for skin clinic and aesthetic business owners. No income or business result is guaranteed. Results vary by clinic, market, and the work you put in.'},
+];
+
+const deck=document.getElementById('deck');
+function steps(){return `<svg class="step-motif" width="16vw" height="10vw" style="width:16vw;height:10vw"><use href="#steps"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Beauty <b>Business Secrets</b> · Adam Chatterley</div>`;
+    if(s.t==='dark') h+=`<div class="accentbar"></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.steps) h+=steps();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
