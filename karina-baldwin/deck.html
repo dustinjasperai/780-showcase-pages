@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Lit Up, Not Burnt Out · Karina Baldwin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#12161e; --panel:#1b212d; --rule:#2c3547;
+    --acc:#7fa8dc; --ink:#eef2f8; --body:#b9c2d1; --dim:#7d8798;
+    --ridge:#8fb2df; --deep:#0c0f16;
+  }
+  html,body{height:100%}
+  body{background:var(--deep);font-family:'Jost',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--deep)}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Marcellus',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.16;letter-spacing:.006em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.2vw;max-width:90%}
+  .t-normal .body{font-family:'Jost',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Marcellus',serif;font-size:1.95vw;color:var(--acc);margin-top:3.6vh;max-width:86%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),var(--ridge) 60%,transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#1d2536 0%,#0c0f16 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:88%;color:var(--ink)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1d2536 0%,#0c0f16 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:var(--ink)}
+  .t-cta .body{font-family:'Jost',sans-serif;color:var(--body);font-size:1.42vw;margin-top:3vh;max-width:74%;line-height:1.62}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .mo{position:absolute;pointer-events:none}
+  .title-mo{right:7%;bottom:8.5%;width:22vw;opacity:.9}
+  .corner-mo{right:6.5%;bottom:8%;width:11vw;opacity:.45}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(127,168,220,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--ridge));width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">True Adventure Collective</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: an ascending ridge line to a summit marker (the climb, then the peak) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 140 90">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="10" y1="74" x2="130" y2="74" stroke="#8fb2df" stroke-width="1.6" opacity="0.4"/>
+    <path d="M12 70 L34 54 L52 62 L78 34 L100 46 L128 18" stroke="#7fa8dc" stroke-width="2.4" opacity="0.95"/>
+    <circle cx="128" cy="18" r="4" fill="#7fa8dc" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Lit Up, Not Burnt Out',sub:'How high-performing women lead under pressure and sustain peak performance, using the mental training elite athletes and soldiers rely on.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are running hard, and it is working. Doing it under pressure for years without burning out is the part no one trained you for.',body:'You are a high-performing woman who gets results and holds a lot. The drive is real and so is the weight of it. But somewhere between the full calendar and the next goal, the tank runs low, the sleep goes first, and the version of you that shows up is the tired one. Nobody handed you the mental training for the long climb.'},
+ {t:'dark',title:'A calendar that is full is not the same as a mind that can carry it.'},
+
+ {t:'section',idx:'Part One',title:'Why High Performers Burn Out'},
+ {t:'normal',k:'The grind myth',title:'Pushing harder is not a strategy. Willpower is a tank, and you are spending it faster than you refill it.',body:'The habits that got you here, out-work everyone and never let them see you tired, quietly turn into the thing that empties you. Grit without recovery is just a slower way to run out. High performers do not fail from lack of effort. They fail because effort was the only tool they were ever given.'},
+ {t:'normal',k:'Stress is not the enemy',title:'You were taught to avoid stress. The performance research says prepare for it instead.',body:'Stress itself does not break people. Facing it unprepared, alone, and believing something is wrong with you for feeling it is what breaks people. The mental skill is not staying calm by accident. It is walking into the hard thing already rehearsed for it, so your body reads the pressure as ready instead of as danger.'},
+ {t:'dark',title:'Your body will only go as far as your mind pushes it. The reverse is true too.'},
+
+ {t:'section',idx:'Part Two',title:'The Summit Method'},
+ {t:'normal',k:'Train the mind like an athlete',title:'The mental skills are trainable, the same way a sprint or a lift is.',body:'Elite athletes and soldiers do not have calmer nervous systems than you. They have reps. Regulating your self-talk, setting the pre-performance routine, and holding decision certainty inside uncertainty are skills you drill on purpose, so that under real pressure the trained response shows up instead of the panicked one.'},
+ {t:'normal',k:'Use the body as evidence',title:'Physical challenge is not a metaphor. It is proof your mind can hand back to you on a hard day.',body:'When you climb the thing you were sure you could not, your brain files evidence it cannot argue with later. That is why the work happens on a mountain and not only in a worksheet. You expand the comfort zone in the body first, and the leadership version of courage follows, because you already have receipts.'},
+ {t:'normal',k:'Recover on purpose',title:'Recovery is a skill you schedule, not a reward you earn after you collapse.',body:'The reason to slow down, breathe, move through yoga, and get into nature is not softness. It is that a recovered mind makes sharper calls and a depleted one makes expensive ones. Lit up, not burnt out, is a rhythm of load and recovery you run on purpose, the way every athlete in season does.'},
+ {t:'normal',k:'Lead the room, not just the work',title:'A regulated leader builds a team that thinks, instead of one that only waits for orders.',body:'The Culture Reset is what happens when the pressure stops living only in you. When you can name stress out loud, recover in front of your team, and hold the standard without white-knuckling it, you teach the people around you to think strategically and carry their own weight. The calm is contagious, and so was the burnout.'},
+ {t:'dark',title:'Toughness is not gritting your teeth. It is knowing you have done hard things on purpose before.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Train This'},
+ {t:'normal',k:'The leader this builds',title:'Clear under pressure, energy that lasts the year, and decisions you stop second-guessing.',body:'When the mental skills are trained and the recovery is real, the pressure stops running you. You lead the hard quarter without leaving your health on the floor, you make the call and move on, and you get to be the person your people met at the start, not the worn-down one they got used to.'},
+ {t:'dark',title:'The goal was never to do more. It was to lead like the pressure is yours to hold.'},
+ {t:'normal',k:'Why Karina Baldwin',title:'A performance psychologist who trained soldiers and athletes, now in your corner.',body:'Karina holds a Masters in Sport and Performance Psychology from Florida State, a top program in the field. She was a Division I athlete, spent three years training more than 800 US Army soldiers to perform under pressure, and is a yoga teacher and adventure guide. Through True Adventure Collective and The Summit Method she now brings that training to high-performing women. This is the method behind that work.'},
+
+ {t:'section',idx:'Your Next Step',title:'Train for the Summit'},
+ {t:'normal',k:'Keep going with Karina',title:'The full path, from the first hard rep to leading a whole season without burning out.',body:'One to one coaching builds the mental skills around your real pressure, and The Summit Method retreats put them in your body on the mountain, with the yoga and recovery that make them stick. Start with the True Adventure Podcast, and reach out when you are ready to train the whole thing.'},
+ {t:'cta',title:'Ready to lead lit up, not burnt out?',body:'Take the next step with True Adventure Collective.',chips:['Listen to the True Adventure Podcast','Explore a Summit Method retreat'],disc:'Educational content for high-performing women leaders and business owners. Not medical, psychological, or clinical advice. No specific outcome is guaranteed. Results vary by person.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Summit <b>Method</b> · Karina Baldwin</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='title') h+=mo('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
