@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Quiet Reinvention · Maria Fontana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf9f7; --panel:#ffffff; --rule:#e4e0d9;
+    --accent:#5a7189; --deep:#3f5266;
+    --ink:#1a1a1a; --ink-soft:#4a4a48; --dim:#8a877f;
+  }
+  html,body{height:100%}
+  body{background:#efece7;font-family:'Poppins',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efece7}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:0}
+  .t-title h1{font-size:6vw}
+  .t-normal h1{font-size:4.2vw;max-width:88%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.42vw;color:var(--ink-soft);margin-top:2.8vh;max-width:74%;line-height:1.6;font-weight:300}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.6vw;color:var(--ink-soft);margin-top:3.4vh;max-width:80%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:600;color:var(--deep);margin-bottom:2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.6vw;max-width:90%}
+  .t-section .rule{width:15vw;height:1.5px;background:var(--accent);opacity:.55;margin-top:3.6vh}
+  .t-dark{background:linear-gradient(155deg,#2f3d4a 0%,#232e38 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.4vw;max-width:84%;color:#f4f2ee;font-style:italic;font-weight:500}
+  .t-cta{background:linear-gradient(155deg,#2f3d4a 0%,#232e38 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.6vw;max-width:82%;color:#f4f2ee}
+  .t-cta .kicker{color:#a9bccf}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.4px solid #9db2c6;color:#e8eef4;border-radius:100px;padding:1.3vh 1.8vw;font-family:'Poppins',sans-serif;font-size:1.14vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Poppins',sans-serif;font-size:.86vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45;font-weight:300}
+  .t-cta .disc{color:#8ea0b2}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .line-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-line{right:8%;bottom:10%;width:26vw}
+  .corner-line{right:7%;bottom:8%;width:12vw;opacity:.55}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.2vw;color:var(--ink-soft);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .pillars{display:flex;gap:1.4vw;margin-top:3.6vh;flex-wrap:wrap}
+  .pillar{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:5px;padding:2vh 1.6vw;font-family:'Poppins',sans-serif;font-size:1.16vw;font-weight:500;color:var(--ink)}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(26,26,26,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Poppins',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8.4vw}.t-dark h1{font-size:7vw}
+    .t-cta h1{font-size:8vw}.chip{font-size:2.6vw}.pillar{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count"></div>
+<div class="brand-foot">Maria Fontana Advisory</div>
+<div class="hint" id="hint">Use arrow keys or click to advance</div>
+
+<!-- refinement motif: a quiet horizontal line with one point rising above it, the moment something under the surface is finally named -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="line" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="1.6" stroke-linecap="round">
+    <line x1="18" y1="112" x2="242" y2="112" stroke="#5a7189" opacity="0.5"/>
+    <path d="M18 112 C 92 112, 150 108, 212 54" stroke="#5a7189" opacity="0.75"/>
+    <circle cx="212" cy="54" r="7" fill="#5a7189" opacity="0.85" stroke="none"/>
+    <circle cx="212" cy="54" r="15" fill="none" stroke="#5a7189" opacity="0.3"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Quiet Reinvention',sub:'For the woman whose business, title, and life all look right from the outside, and who still feels like something underneath has gone quiet. This is the hour where we name it, and begin.',brand:true,line:'title'},
+
+ {t:'normal',k:'Who this is for',title:'From the outside, everything works.',body:'You built the thing. The revenue, the reputation, the calendar full of people who rely on you. And somewhere in the last few years the feeling drained out of it. You would not say it out loud, because on paper there is nothing to complain about.'},
+ {t:'dark',title:'You are not ungrateful. You have outgrown the life that once fit you.'},
+
+ {t:'section',idx:'Part One',title:'The Cost of Being the One Who Has It Together'},
+ {t:'normal',k:'Why it lands after the win',title:'The emptiness rarely shows up on the way up. It shows up after you arrive.',body:'While you are chasing it, the goal does the work of holding you together. Once it is reached, the quiet comes in, and the achievement that was supposed to fill the gap only makes it easier to hear.'},
+ {t:'normal',k:'The weight you carry alone',title:'Everyone leans on you. You lean on the momentum.',body:'You are the strong one, the fixer, the one who does not fall apart. So the part of you that is tired, or grieving, or simply done, has nowhere to be set down. It gets managed, not met.'},
+ {t:'dark',title:'You cannot think your way out of a feeling you have never let yourself feel.'},
+
+ {t:'section',idx:'Part Two',title:'The Inner Work Underneath the Success'},
+ {t:'normal',k:'Below the thinking mind',title:'The stories that run your life were written before you had a say in them.',body:'What you believe about worth, rest, and how much you are allowed to want was set long ago, and it runs quietly under every decision. My work goes below the thinking mind, through hypnosis and guided imagery, energy work, and intuitive guidance, because that is the layer where these stories actually live.'},
+ {t:'normal',k:'Heal first, strategise second',title:'Clarity is not a plan you make. It is what is left when the noise clears.',body:'Most high achievers try to strategise their way out of an inner problem, and end up with a better calendar and the same ache. We move through the emotional barriers and limiting beliefs first, so that whatever you build next is built on something true.'},
+ {t:'dark',title:'Nothing on the outside changes for long until the inside is met.'},
+
+ {t:'section',idx:'Part Three',title:'Reinvention Without Burning It Down'},
+ {t:'normal',k:'You do not have to blow it up',title:'Reinvention is not starting over. It is building from what is finally true.',body:'The fear is that the only way out of the flatness is to quit, sell, or torch the life you built. It almost never is. When the inner work is done first, the reinvention is quieter, and it keeps everything worth keeping.'},
+ {t:'normal',k:'What it opens into',title:'Purpose, joy, and freedom, on your own terms.',body:'Not a louder life. A truer one. The same drive, pointed at something that actually feeds you, with room in it for the parts of you that have been waiting a long time to be let back in.'},
+ {t:'dark',title:'You kept your promises to everyone else. This is the one you make to yourself.'},
+
+ {t:'section',idx:'Your next step',title:'The Work, and How It Runs'},
+ {t:'normal',k:'Where it begins',title:'It starts with one honest conversation, then a container for the work.',pillars:['The Private Call Session','Monthly Private Advisory','The In Person Day'],body:'We begin with a single clarifying conversation to find what is actually going on underneath. From there the work continues privately, month to month, with deeper in person days when a season calls for them.'},
+ {t:'normal',k:'Why me',title:'I have lived both sides of this, and studied the way through.',body:'I opened my first business at nineteen and reached six figures inside eighteen months, then rebuilt my whole life after divorce and reinvention. I am a certified integrative healing practitioner and a two time best selling author. I do this work because I needed it first.'},
+ {t:'cta',title:'Ready to reinvent from the inside out?',chips:['Book a Private Call Session','Step into The Unfiltered Room'],disc:'Educational content for accomplished women leaders and business owners. This is advisory and integrative healing work, not medical, psychological, or financial advice, and no personal, health, or business result is guaranteed. Outcomes vary.'},
+];
+
+const deck=document.getElementById('deck');
+function line(kind){return `<svg class="line-motif ${kind==='title'?'title-line':'corner-line'}"><use href="#line"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.pillars) h+=`<div class="pillars">`+s.pillars.map(p=>`<div class="pillar">${p}</div>`).join('')+`</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Maria Fontana <b>Advisory</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.line) h+=line(s.line);
+  else if(s.t==='title') h+=line('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
