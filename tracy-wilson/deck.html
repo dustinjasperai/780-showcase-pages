@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Podcast With Purpose | A Masterclass with Tracy Wilson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf7fb;
+    --panel:#f2e6f1;
+    --ink:#241f2b;
+    --ink-soft:#544b5c;
+    --ink-mute:#8b8393;
+    --rule:#8b1c7b;
+    --accent:#963787;
+    --accent-soft:#c98fc0;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  h1,h2,.big,.pill-h,.part-h,.name{font-family:'Playfair Display',Georgia,serif}
+  .kicker{font-size:clamp(13px,1.5vw,17px);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;display:flex;align-items:center;gap:12px}
+  .live-dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-soft);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(150,55,135,.45)}70%{box-shadow:0 0 0 14px rgba(150,55,135,0)}100%{box-shadow:0 0 0 0 rgba(150,55,135,0)}}
+  h1{font-size:clamp(38px,6.2vw,84px);font-weight:700;line-height:1.04;letter-spacing:-.015em}
+  h1 .a{color:var(--accent);font-style:italic}
+  .subt{font-size:clamp(19px,2.4vw,30px);color:var(--ink-soft);margin-top:26px;max-width:60ch;line-height:1.45}
+  h2{font-size:clamp(30px,4.6vw,58px);font-weight:700;line-height:1.1;letter-spacing:-.01em;max-width:20ch}
+  .lead{font-size:clamp(18px,2.2vw,27px);color:var(--ink-soft);margin-top:22px;max-width:56ch;line-height:1.5}
+  .big{font-size:clamp(40px,7vw,92px);font-weight:700;line-height:1.06;letter-spacing:-.02em;max-width:16ch}
+  .big .a{color:var(--accent);font-style:italic}
+  .part-tag{font-size:clamp(14px,1.6vw,18px);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  .part-h{font-size:clamp(34px,5.4vw,72px);font-weight:700;line-height:1.06;max-width:18ch}
+  ul.items{list-style:none;margin-top:34px;display:flex;flex-direction:column;gap:18px;max-width:58ch}
+  ul.items li{font-size:clamp(18px,2.1vw,26px);color:var(--ink-soft);padding-left:40px;position:relative;line-height:1.4}
+  ul.items li::before{content:'';position:absolute;left:0;top:.55em;width:16px;height:16px;border-radius:4px;border:2.5px solid var(--accent)}
+  .pill-num{font-family:'Playfair Display',serif;font-size:clamp(56px,9vw,120px);font-weight:700;color:var(--accent-soft);line-height:1}
+  .pill-name{font-size:clamp(15px,1.7vw,20px);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:18px 0 12px}
+  .pill-h{font-size:clamp(30px,4.4vw,56px);font-weight:700;line-height:1.08;max-width:22ch}
+  .panel{background:var(--panel);border-left:5px solid var(--rule);border-radius:0 16px 16px 0;padding:34px 40px;margin-top:30px;max-width:60ch}
+  .panel p{font-size:clamp(17px,2vw,24px);color:var(--ink-soft);line-height:1.5}
+  .steps{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:16px;max-width:56ch}
+  .steps li{font-size:clamp(18px,2.1vw,26px);color:var(--ink);font-weight:600;padding-left:52px;position:relative;line-height:1.4}
+  .steps li span{position:absolute;left:0;top:-2px;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Playfair Display',serif;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .disc{font-size:clamp(12px,1.3vw,15px);color:var(--ink-mute);margin-top:38px;max-width:64ch;line-height:1.5;font-style:italic}
+  .name{font-size:clamp(20px,2.4vw,28px);font-weight:700;color:var(--ink)}
+  .foot{position:fixed;left:10vw;bottom:4vh;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);z-index:5}
+  .count{position:fixed;right:10vw;bottom:4vh;font-size:13px;color:var(--ink-mute);z-index:5;font-variant-numeric:tabular-nums}
+  .waves{position:fixed;right:0;top:0;bottom:0;width:34vw;max-width:520px;pointer-events:none;opacity:.5;z-index:0}
+  .nav{position:fixed;inset:0;display:flex;z-index:4}
+  .nav .z{flex:1;cursor:pointer}
+  .dots{position:fixed;left:50%;transform:translateX(-50%);bottom:4vh;display:flex;gap:7px;z-index:5}
+  .dots i{width:7px;height:7px;border-radius:50%;background:var(--accent-soft);opacity:.4;transition:opacity .2s}
+  .dots i.on{opacity:1;background:var(--accent)}
+  @media(max-width:760px){.slide{padding:7vh 8vw}.waves{display:none}.foot,.count{font-size:11px}}
+</style>
+</head>
+<body>
+<svg class="waves" viewBox="0 0 200 600" fill="none" preserveAspectRatio="xMidYMid slice">
+  <g stroke="#963787" stroke-width="2" opacity="0.35">
+    <path d="M20 60 Q60 20 100 60 T180 60"/><path d="M20 140 Q60 100 100 140 T180 140"/>
+    <path d="M20 220 Q60 180 100 220 T180 220"/><path d="M20 300 Q60 260 100 300 T180 300"/>
+    <path d="M20 380 Q60 340 100 380 T180 380"/><path d="M20 460 Q60 420 100 460 T180 460"/>
+    <path d="M20 540 Q60 500 100 540 T180 540"/>
+  </g>
+</svg>
+<div id="stage"></div>
+<div class="foot">Podcast With Purpose &middot; Tracy Wilson</div>
+<div class="count" id="count"></div>
+<div class="dots" id="dots"></div>
+<div class="nav"><div class="z" id="prev"></div><div class="z" id="next"></div></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass', h:'Podcast With <span class="a">Purpose</span>', sub:'How to turn a live show into a real business. With Tracy Wilson.'},
+  {t:'promise', h:'What you will leave with', items:[
+    'A clear reason your show exists that your audience can feel',
+    'A simple way to go live where your people already are',
+    'The path that turns a listener into a paying client',
+    'A first move you can make this week'
+  ]},
+  {t:'whofor', h:'This is for you if', items:[
+    'You already show up and create, and it matters to you',
+    'You have a message you would share for free, and often do',
+    'You are tired of watching the audience grow while the income stays flat',
+    'You want the show to become the business, not just a hobby'
+  ]},
+  {t:'trap', h:'The trap almost every creator falls into', sub:'You publish, you promote, you do it again next week. The library grows. The calendar fills. And somehow the business underneath it stays exactly the same size.'},
+  {t:'reframe', big:'A show is not a <span class="a">business</span>. Yet.', sub:'It is the start. What it becomes depends on what you build around it.'},
+  {t:'part', tag:'Part One', h:'Why more episodes will not fix it'},
+  {t:'point', h:'Reach is not the same as revenue', sub:'Downloads and views feel like progress because they move. But attention that has nowhere to go is just applause. The number climbs and the income does not follow.'},
+  {t:'point', h:'The missing piece is a path', sub:'Most shows ask people to listen, subscribe, and share. None of those are a decision to work with you. Without a next step, even your most loyal listener has no way to become a client.'},
+  {t:'part', tag:'Part Two', h:'The Podcast With Purpose method'},
+  {t:'pillar', num:'01', name:'Purpose', h:'Preserve, share, and amplify what matters', body:'Purpose is not a tagline. It is the one thing you are here to say that your audience recognises as true. Get it clear and every episode, offer, and invitation lines up behind it.'},
+  {t:'pillar', num:'02', name:'Presence', h:'Go live where your people already are', body:'A live show on the platforms your audience already opens turns a broadcast into a room. People can see you, react, and ask. Presence is what earns the trust that a recording alone cannot.'},
+  {t:'pillar', num:'03', name:'Platform', h:'Build the business the show points to', body:'Around the show sits an offer worth paying for: your knowledge, shaped into something people can buy and use. The show is the invitation. The platform is what it invites people into.'},
+  {t:'pillar', num:'04', name:'Pathway', h:'Turn a listener into a client', body:'A simple, repeatable path takes someone from watching to a real conversation: a way to raise their hand, a way to go deeper, and a clear invitation to work with you when they are ready.'},
+  {t:'part', tag:'Part Three', h:'One purposeful week, start to finish'},
+  {t:'list', h:'One week, one loop', items:[
+    'Go live once on the topic your audience keeps asking about',
+    'Repurpose the best moment into short clips and a post',
+    'Invite viewers to raise their hand with one clear offer',
+    'Have the conversation, and invite the right people deeper'
+  ]},
+  {t:'point', h:'Small and consistent beats big and rare', sub:'You do not need a viral moment. You need the same honest loop, run every week, until showing up and inviting people become the same motion.'},
+  {t:'why', h:'Why learn this from me', items:[
+    'I host Podcast With Purpose, a long-running show broadcast live across Facebook and YouTube',
+    'I have built the show, the offers, and the path that connects them, in that order',
+    'I teach creators, coaches, and experts to do the same, in a way that fits their life'
+  ]},
+  {t:'recap', h:'The whole method, in one view', items:[
+    'Purpose: the one thing you are here to say',
+    'Presence: a live show where your people are',
+    'Platform: an offer the show points to',
+    'Pathway: the route from listener to client'
+  ]},
+  {t:'cta', h:'Your next step', sub:'If this is the year the show becomes the business, here is where to start.',
+    steps:[
+      'Take the Podcasting Potential Quiz to see where your show stands today',
+      'Book a discovery call to map your purpose, your live show, and your path',
+      'Join Podcast With Purpose when the fit is right'
+    ],
+    disc:'This masterclass is educational. No specific result or income is guaranteed. Results vary and depend on your work, your audience, your offer, and many factors outside your control.'}
+];
+
+const stage=document.getElementById('stage');
+const dotsEl=document.getElementById('dots');
+const countEl=document.getElementById('count');
+function esc(s){return s;}
+function render(sl){
+  if(sl.t==='title') return `<div class="kicker"><span class="live-dot"></span>${sl.k}</div><h1>${sl.h}</h1><div class="subt">${sl.sub}</div>`;
+  if(sl.t==='promise'||sl.t==='whofor'||sl.t==='list') return `<h2>${sl.h}</h2><ul class="items">${sl.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(sl.t==='trap'||sl.t==='point') return `<h2>${sl.h}</h2><div class="lead">${sl.sub}</div>`;
+  if(sl.t==='reframe') return `<div class="big">${sl.big}</div><div class="subt">${sl.sub}</div>`;
+  if(sl.t==='part') return `<div class="part-tag">${sl.tag}</div><div class="part-h">${sl.h}</div>`;
+  if(sl.t==='pillar') return `<div class="pill-num">${sl.num}</div><div class="pill-name">${sl.name}</div><div class="pill-h">${sl.h}</div><div class="panel"><p>${sl.body}</p></div>`;
+  if(sl.t==='why'||sl.t==='recap') return `<h2>${sl.h}</h2><ul class="items">${sl.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(sl.t==='cta') return `<h2>${sl.h}</h2><div class="lead">${sl.sub}</div><ul class="steps">${sl.steps.map((i,n)=>`<li><span>${n+1}</span>${i}</li>`).join('')}</ul><div class="disc">${sl.disc}</div>`;
+  return '';
+}
+S.forEach((sl,i)=>{const d=document.createElement('div');d.className='slide';d.dataset.i=i;d.innerHTML=render(sl);stage.appendChild(d);const dot=document.createElement('i');dotsEl.appendChild(dot);});
+const slides=[...document.querySelectorAll('.slide')];
+const dots=[...dotsEl.children];
+let cur=0;
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));dots.forEach((d,i)=>d.classList.toggle('on',i===cur));countEl.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft'||e.key==='PageUp')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
