@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Magnetic Brand — A Masterclass with Amber Lilyestrom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f2e8; --panel:#ece7d6; --rule:#ddc9b3;
+    --acc:#635d3a; --ink:#31331f; --body:#4a4733; --dim:#8f8a70; --cream:#f5f2e8; --tan:#d8bba7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e7e0cd;font-family:'Open Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Open Sans',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:90%}
+  .t-normal h1{font-size:3.0vw;max-width:86%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.3vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.68;font-weight:400}
+  .sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1.95vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:82%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 140% at 22% 12%,#3b3a24 0%,#242414 100%)}
+  .t-dark h1{color:var(--cream);font-size:3.3vw;max-width:86%;font-style:italic}
+  .t-cta{background:radial-gradient(120% 140% at 22% 12%,#3b3a24 0%,#242414 100%)}
+  .t-cta h1{color:var(--cream);font-size:3.2vw;max-width:84%}
+  .t-cta .body{font-family:'Open Sans',sans-serif;color:#e7e0cd;font-size:1.3vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--tan);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Open Sans',sans-serif;font-size:.82vw;color:#cdbfa4;line-height:1.5;max-width:80%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:7%;top:50%;transform:translateY(-50%);width:20vw;height:20vw;opacity:.85}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Amber Lilyestrom</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a rising-sun arc, fine olive and tan lines, echoing her horizon and portal imagery -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#635d3a" stroke-width="2" stroke-linecap="round">
+    <path d="M18 84 H102" opacity="0.5"/>
+    <circle cx="60" cy="84" r="20" opacity="0.55"/>
+    <circle cx="60" cy="84" r="32" opacity="0.32"/>
+    <path d="M60 40 V26 M84 50 L94 40 M36 50 L26 40 M28 72 H16 M92 72 H104" stroke="#d8bba7" opacity="0.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Magnetic Brand',sub:'How to build a brand people are drawn to, from the inside out, without louder marketing or one more funnel hack.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are not short on effort. You are short on a brand that feels unmistakably yours.',body:'You have done the work. The courses, the launches, the late nights building the thing. And yet, from the outside, your brand still sounds a lot like everyone else in your space. That gap is not a work-ethic problem, and more hustle will not close it.'},
+ {t:'dark',title:'The market is crowded with tactics. It has never been more starved for the real you.'},
+
+ {t:'section',idx:'Part One',title:'Why More Strategy Stopped Working'},
+ {t:'normal',k:'The sameness trap',title:'When everyone runs the same playbook, everyone starts to sound the same.',body:'The same templates, the same hooks, the same three-step frameworks borrowed from the same handful of gurus. When your brand blends into that feed, the only thing left for people to compare on is price. Standing out was never about being louder. It is about being clearly, recognizably you.'},
+ {t:'normal',k:'Built from the outside in',title:'A brand bolted on top of borrowed strategy never quite holds.',body:'Most people build backwards. They chase the tactic, the trend, the funnel first, then try to make themselves fit it. It feels off because it is off. A brand that lasts is built the other way, from who you are outward, so the strategy finally has something true to carry.'},
+ {t:'dark',title:'At a certain point, strategy stops being the thing that moves the needle. Who you are does.'},
+
+ {t:'section',idx:'Part Two',title:'The Brand Alchemy Method'},
+ {t:'normal',k:'Pillar one: Who you BE',title:'Your brand is an extension of your identity, not a costume you put on top of it.',body:'Who you BE informs what you DO. Before the offer, the funnel, or the feed, there is the energy you are actually building from. When your inner state and your outer brand finally match, the work stops feeling like performance and starts feeling magnetic, because it is real.'},
+ {t:'normal',k:'Pillar two: Your Money Codes',title:'The quiet internal rules that decide what you charge, what you claim, and who you ask.',body:'Long before your first launch, you learned rules about worth, safety, and success, formed in childhood and the early roles you played to feel secure. Those Money Codes still run underneath your pricing, your visibility, and your ask. Naming them, then updating them, is what unlocks the next level far more than another strategy will.'},
+ {t:'normal',k:'Pillar three: The sovereign message',title:'Say the one true thing only you can say, and the right people lean in.',body:'Your way is the only way that will ever be fully yours. A sovereign message is not built to please everyone. It is built to repel the wrong-fit people and magnetize the ones you are actually here for. Clear and unmistakably yours beats clever and generic every single time.'},
+ {t:'dark',title:'A magnetic brand is not built by being seen more. It is built by being unmistakably yourself.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When Your Brand Becomes Magnetic'},
+ {t:'normal',k:'The business this builds',title:'Aligned clients, pricing you can hold, and work that finally feels like yours.',body:'When your brand is built from identity out, the right people find you and feel like they already know you. You stop competing on price, because there is no one else to compare you to. The scramble of the next launch softens, because your brand was never borrowed in the first place.'},
+ {t:'dark',title:'The goal was never to be everywhere. It was to be the only real option for the right people.'},
+ {t:'normal',k:'Why Amber',title:'A decade marketing one of the most-loved brands in college sports, then building her own from scratch.',body:'Amber Lilyestrom spent ten years marketing the University of New Hampshire Wildcats brand before leaving in 2014 to build her own. She now hosts the Homeward podcast, has written Master Your Money Mind and Paddle Home, and mentors women entrepreneurs. She teaches brand from the inside out because she lived the reinvention herself.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build a Brand That Changes Your World'},
+ {t:'normal',k:'Keep going with Amber',title:'The full path, from your message to a brand people remember.',body:'This masterclass is the on-ramp. From here, Amber walks you deeper into the identity work, the Money Codes, and the sovereign message that make a brand magnetic, through the Homeward podcast and the ELEVATE mentorship and mastermind when you are ready to go all in.'},
+ {t:'cta',title:'Ready to build a brand people are drawn to?',body:'Take the next step with Amber Lilyestrom.',chips:['Listen to the Homeward podcast','Apply for the ELEVATE mastermind'],disc:'Educational content for entrepreneurs and business owners. No income or business result is guaranteed. Individual results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Amber <b>Lilyestrom</b> · The Homeward Podcast</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
