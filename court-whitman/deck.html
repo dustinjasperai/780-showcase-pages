@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Next Chapter · Court Whitman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#14201b; --panel:#1c2b23; --rule:#33473c;
+    --sig:#d8a552; --acc:#c08a3e; --ink:#f2ede2; --body:#c3cabf; --dim:#7f8c80; --deep:#0f1813;
+  }
+  html,body{height:100%}
+  body{background:#0f1813;font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0f1813}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--sig);margin-bottom:2.6vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:.005em;text-transform:uppercase}
+  .t-title h1{font-size:4.6vw;max-width:95%}
+  .t-normal h1{font-size:2.95vw;max-width:92%;font-weight:600;text-transform:none;letter-spacing:0}
+  .t-normal .body{font-family:'IBM Plex Sans',sans-serif;font-size:1.5vw;color:var(--body);margin-top:3.0vh;max-width:80%;line-height:1.62;font-weight:400}
+  .sub{font-family:'IBM Plex Sans',sans-serif;font-style:italic;font-size:1.9vw;color:var(--sig);margin-top:3.4vh;max-width:88%;line-height:1.42;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.15vw;font-weight:600;color:var(--sig);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--sig),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#1c2b23 0%,#0d1510 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:92%;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:600}
+  .t-dark h1 b{color:var(--sig);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1c2b23 0%,#0d1510 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:88%;color:var(--ink)}
+  .t-cta .body{font-family:'IBM Plex Sans',sans-serif;color:#e7ddca;font-size:1.5vw;margin-top:3vh;max-width:76%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--sig);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Oswald',sans-serif;font-size:1.15vw;font-weight:500;letter-spacing:.04em}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-family:'IBM Plex Sans',sans-serif;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:9%;width:22vw;opacity:.95}
+  .corner-vf{right:6.5%;bottom:8%;width:12vw;opacity:.55}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.2vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--sig);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(242,237,226,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--sig);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Oswald',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Court Whitman</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the transition arc. a flat baseline that steps down off one peak and climbs a ridge to a higher summit, drawn in brass -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 180 84">
+  <g fill="none" stroke="#d8a552" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 40 L34 26 L54 46" opacity="0.5"/>
+    <path d="M54 46 L92 60" opacity="0.7"/>
+    <path d="M92 60 L128 30 L172 12" opacity="0.95"/>
+    <circle cx="34" cy="26" r="3.4" fill="#d8a552" stroke="none" opacity="0.5"/>
+    <circle cx="172" cy="12" r="4.6" fill="#d8a552" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Next Chapter',sub:'How elite performers rebuild their identity and perform at the top again after the uniform comes off, using a proven method for high performance in transition.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You were elite at the thing that is now behind you.',body:'You spent years being excellent inside one arena, a locker room, a team room, a corner office, and it shaped who you are. Now the arena is changing. The jersey comes off, the mission ends, the title turns over, and the skills that made you elite feel like they belong to a person you used to be. You are not lost on ability. You are between identities, and nobody trained you for that part.'},
+ {t:'dark',title:'The hard part of a transition was never the resume. It was the <b>identity</b>.'},
+
+ {t:'section',idx:'Part One',title:'Why High Performers Stall In Transition'},
+ {t:'normal',k:'The arena wrote your identity',title:'What made you elite was tied to a place you are leaving.',body:'Elite performance is built by an environment: the standard, the team, the scoreboard, the chain of command. That environment does not just train your skills, it tells you who you are every single day. When you step out of it, the feedback that defined you goes quiet, and for the first time the question is not how you perform. It is who you even are without the thing you performed inside of.'},
+ {t:'normal',k:'The skills feel stranded',title:'Your best abilities do not announce that they transfer.',body:'Discipline, composure under fire, reading a room, leading people who are scared, these transfer completely. But they were learned in one language and the new arena speaks another, so they feel stranded. High performers read that gap as decline and push harder at the old game instead of translating what they already own into the new one. Effort was never the missing piece. Translation is.'},
+ {t:'dark',title:'You do not have a performance problem. You have a <b>translation</b> problem.'},
+
+ {t:'section',idx:'Part Two',title:'The Method: I See By'},
+ {t:'normal',k:'A method for the in-between',title:'Six moves that rebuild the performer for the new arena.',body:'I See By is the framework I use to take someone from the end of one chapter to the front foot of the next. It works in order, because you cannot lead in a new arena until you know who is showing up to it. Each move rebuilds one piece of the performer, from the inside out, so the person who walks into the next room is whole and not just busy.'},
+ {t:'normal',k:'Move one, Identity',title:'Decide who you are now, on purpose.',body:'Before anything else, you separate who you are from the arena you performed in. You were never only the rank, the sport, or the seat. We name the identity that survives the transition and the one you are choosing to build, so the ground you stand on is yours and not on loan from a place you already left.'},
+ {t:'normal',k:'Move two, Strengths',title:'Inventory what actually made you elite.',body:'Next you take a hard, specific inventory of the strengths that produced your results, not the job titles that contained them. Most high performers undersell themselves here because their strengths felt like water to a fish. Named plainly, they become portable, and you stop guessing at your value in the new arena and start proving it.'},
+ {t:'normal',k:'Move three, Core competencies',title:'Translate the skill, do not abandon it.',body:'Now the translation. The competencies you built under real pressure get mapped directly onto the demands of the next environment, so leading a squad becomes leading a division, and reading a defense becomes reading a market. You keep the hard-won edge and change only the arena it points at.'},
+ {t:'normal',k:'Move four, Behavior',title:'Run the daily habits that produce the result.',body:'Identity and skill mean nothing without the reps. You build the concrete daily behaviors that a person with your new identity actually does, the way you trained standards before. Performance stops depending on motivation and starts depending on a routine you can run on your worst day, which is the only kind that holds.'},
+ {t:'normal',k:'Move five, Belief',title:'Close the gap between who you are and who you trust yourself to be.',body:'Every transition opens a gap between your real capability and what you believe you can do in a room where nobody knows your record yet. We work that gap directly, replacing the borrowed doubt of a beginner with the earned confidence of someone who has already performed at the top once and knows exactly how it was built.'},
+ {t:'normal',k:'Move six, Influence',title:'Lead the new arena instead of asking permission in it.',body:'The last move turns a rebuilt performer outward. With identity settled, strengths named, skills translated, behavior running, and belief restored, you stop auditioning and start leading, setting the terms in the new environment the way you once did in the old one. This is the point of the whole method: not to fit in, but to perform at the top again.'},
+ {t:'dark',title:'Identity. Strengths. Competencies. Behavior. Belief. <b>Influence.</b>'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Rebuild On Purpose'},
+ {t:'normal',k:'The performer this builds',title:'Same standard, a new arena you actually own.',body:'The stakes do not shrink and the learning curve is real. What changes is who climbs it. You stop grieving the arena you left and start building the one in front of you, you make decisions from your own ground instead of chasing approval in a room, and the people around you feel someone who has clearly done this before, because you have. That is a transition led, not survived.'},
+ {t:'dark',title:'The goal was never to move on. It was to <b>perform at the top again.</b>'},
+ {t:'normal',k:'Why Court',title:'A coach who has made the climb, more than once.',body:'Court Whitman is a Division I football player and a retired Army Special Forces Green Beret who now coaches executives, veterans, and athletes through exactly this transition. He has spent more than 2,000 hours coaching high performers from the NFL, the NBA, Special Operations, and the C-suite, and he brings one thing to all of them: a proven method for rebuilding an elite performer when the arena that defined them changes. Not motivation, and not a resume rewrite. The performer, rebuilt.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With One Conversation'},
+ {t:'normal',k:'Keep going with Court',title:'Bring the transition that is in front of you right now.',body:'The next step is a short call. You bring the arena you are leaving or the one you are stepping into, the piece of it that feels like it does not transfer, and together you look at what is really in the way and whether coaching is the right fit. If it is, the work is built around you and the moments that matter in your world. If it is not, you leave seeing the climb ahead more clearly than you did.'},
+ {t:'cta',title:'Ready for the next chapter?',body:'Book a call with Court Whitman and start rebuilding for the arena in front of you.',chips:['Book a call','Watch the free masterclass'],disc:'Educational content for high performers, veterans, athletes, and leaders. Coaching supports performance and leadership and is not therapy or medical, psychological, or clinical treatment. No specific result, outcome, or income is guaranteed. Results vary by person, effort, and circumstance.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Court <b>Whitman</b> · Inspiring High Performance</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
