@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Exit Without Exiting · Jason Duncan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0e10; --panel:#12191c; --rule:#223034;
+    --accent:#1dbed8; --ink:#f4f6f6; --soft:#b8c2c4; --dim:#7d8a8d;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Sora',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Sora',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .t-title h1{font-size:5vw;font-weight:800}
+  .t-title h1 b{color:var(--accent);font-weight:800}
+  .t-normal h1{font-size:3.25vw;max-width:87%}
+  .t-normal h1 b{color:var(--accent);font-weight:700}
+  .t-normal .body{font-family:'IBM Plex Sans',sans-serif;font-size:1.48vw;color:var(--soft);margin-top:2.6vh;max-width:77%;line-height:1.55;font-weight:400}
+  .sub{font-family:'IBM Plex Sans',sans-serif;font-size:1.82vw;color:var(--soft);margin-top:3.2vh;max-width:80%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Sora',sans-serif;font-size:1.28vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.18em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:88%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#13202a 0%,#070a0b 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--ink)}
+  .t-dark h1 b{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#13202a 0%,#070a0b 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Sora',sans-serif;border:1.5px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.7vw;font-size:1.2vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .ladder-motif{position:absolute;pointer-events:none;opacity:.95}
+  .title-ladder{right:6.5%;bottom:8%;width:25vw}
+  .corner-ladder{right:6%;bottom:7.2%;width:11vw;opacity:.4}
+  .brandline{font-family:'Sora',sans-serif;font-size:1.3vw;color:var(--soft);margin-top:3.4vh;font-weight:600;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 23</div>
+<div class="brand-foot">Exit Without Exiting</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the owner-tier ladder. three ascending rungs, Operator to Investor, the top rung lit -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ladder" viewBox="0 0 280 160">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="142" x2="262" y2="142" stroke="#7d8a8d" opacity="0.35"/>
+    <rect x="40" y="118" width="46" height="24" rx="3" fill="#1dbed8" opacity="0.16" stroke="none"/>
+    <rect x="106" y="90" width="46" height="52" rx="3" fill="#1dbed8" opacity="0.30" stroke="none"/>
+    <rect x="172" y="52" width="46" height="90" rx="3" fill="#1dbed8" opacity="0.60" stroke="none"/>
+    <path d="M45 118 L118 90 L195 52" stroke="#1dbed8" opacity="0.95"/>
+    <circle cx="195" cy="52" r="6" fill="none" stroke="#1dbed8" stroke-width="2.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Exit Without <b>Exiting</b>',sub:'A masterclass for owners of profitable businesses. How to build a company that runs, and one day sells, without you at the center of it.',brand:true,ladder:'title'},
+ {t:'normal',k:'Who this is for',title:'The business is profitable. You still cannot leave it.',body:'Revenue is healthy, the team is busy, the numbers look like success. And yet a week away means a hundred texts and a dozen fires. If the business cannot run without you for two weeks, this hour is for you.'},
+ {t:'dark',title:'You do not have a time problem. You have an <b>ownership</b> problem.'},
+
+ {t:'section',idx:'Part One',title:'The Owner Trap'},
+ {t:'normal',k:'Why it happens',title:'You did not build a business. You built a <b>job</b>.',body:'Most owners scale by becoming the answer to every question. It works, right up until you are the bottleneck for everything. A job pays you while you show up. An asset pays you whether you show up or not. Almost nobody is taught the difference.'},
+ {t:'normal',k:'The hidden cost',title:'A business that needs you is one you cannot <b>sell</b>.',body:'Owner dependency is not just exhausting, it is expensive. A buyer will not pay a premium for a company that walks out the door when you do. The more the business relies on you, the less it is worth to anyone else, and the more trapped you are inside it.'},
+ {t:'dark',title:'A buyer is not paying for your hustle. They pay for what runs <b>without you</b>.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Owner Tiers'},
+ {t:'normal',k:'Tier one',title:'The <b>Owner-Operator</b> lives inside the work.',body:'You are the best technician in your own company. The days are full, the income is real, and the whole thing rests on your two hands. This is where the trap is tightest, because busyness feels like progress.'},
+ {t:'normal',k:'Tier two',title:'The <b>Owner-Manager</b> is the irreplaceable leader.',body:'You have hired a team and stepped up from the tools. Better. But every important decision still routes through you, so you are still the ceiling. A higher cage is still a cage.'},
+ {t:'normal',k:'Tier three',title:'The <b>Owner-Investor</b> owns an asset, not a job.',body:'The business makes decisions and money without you in the middle of them. You hold the ownership and the profit, and your time is finally your own. Most owners build a job. This is what it looks like to build an asset instead.'},
+ {t:'dark',title:'Operator, Manager, Investor. Freedom is the <b>tier</b>, not the hours.'},
+
+ {t:'section',idx:'Part Three',title:'The Path Out: The XOS Method'},
+ {t:'normal',k:'Stages one and two',title:'Get out of the delivery, then out of the <b>day-to-day</b>.',body:'Basic delegation hands off the work only you have been doing and buys back ten to twenty hours a week. Then you build a support squad so the operational load stops landing on your desk. This is the first real air you get.'},
+ {t:'normal',k:'Stages three and four',title:'Build an A-team and let the <b>systems</b> run.',body:'Your leaders start making the calls you used to make, and documented systems plus automation carry the work that used to depend on memory and heroics. Decisions stop waiting for you. The company gets more reliable as you get less involved.'},
+ {t:'normal',k:'Stages five and six',title:'A passive profits machine, and the <b>exit without exiting</b>.',body:'Recurring revenue that does not depend on you being in the transaction turns the business into something that pays whether you are there or not. That is the point where you have exited the work while keeping the ownership and the income. You are free and you never left.'},
+ {t:'normal',k:'Stage seven',title:'The Ultimate Sale becomes an <b>option</b>, not a rescue.',body:'A business that runs without you is a business a buyer will pay a premium for. So the sale, if you ever want it, happens on your timeline and your terms, from strength. And if you never sell, you own a machine that funds the life you actually want.'},
+ {t:'dark',title:'Step out of the work. Keep the ownership. Hold the option to <b>sell</b>.'},
+
+ {t:'section',idx:'Why me',title:'I Built The Trap Before I Built The Way Out'},
+ {t:'normal',k:'How I know this',title:'I had the income and none of the <b>freedom</b>.',body:'I built more than a dozen companies and grew one to about a million in EBITDA, and I still could not step away from it. Digging out of that is what became the XOS Method and The Exiter Club, and it is the same path I now walk owners through every week. This is lived, not theory.'},
+ {t:'dark',title:'Freedom is not the reward for selling. It is the result of building an <b>asset</b>.'},
+
+ {t:'section',idx:'Your next step',title:'Keep Building With Me'},
+ {t:'normal',k:'Where this goes',title:'The Exiter Club.',body:'This is where the method becomes your reality: my advisory team across finance, operations, and the eventual deal, a private community of owners building the same way, and the accountability that makes it stick. The book Exit Without Exiting gets you started. The Club is where owners actually make the climb.'},
+ {t:'cta',title:'Ready to own an asset instead of a job?',chips:['Apply to The Exiter Club','Start with Exit Without Exiting'],disc:'Educational content for business owners. No income, valuation, or exit result is guaranteed. Outcomes vary by owner, business, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function ladder(kind){return `<svg class="ladder-motif ${kind==='title'?'title-ladder':'corner-ladder'}"><use href="#ladder"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">America's Exit Coach · <b>Jason Duncan</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ladder) h+=ladder(s.ladder);
+  else if(s.t==='title') h+=ladder('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
