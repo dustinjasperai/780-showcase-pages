@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Authentic Negotiating · Corey Kupfer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1c2838; --panel:#22303f; --rule:#33465a;
+    --accent:#ca3131; --ink:#eef2f6; --soft:#aab6c4; --dim:#6f8093;
+  }
+  html,body{height:100%}
+  body{background:#131c27;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#131c27}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.06vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5vw;font-weight:600;letter-spacing:.005em}
+  .t-title h1 b{color:var(--accent);font-weight:600}
+  .t-normal h1{font-size:3.2vw;max-width:90%;font-weight:600}
+  .t-normal h1 b{color:var(--accent);font-weight:600}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.44vw;color:var(--soft);margin-top:2.6vh;max-width:80%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.68vw;color:var(--soft);margin-top:3.2vh;max-width:82%;line-height:1.54;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.25vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.4vw;max-width:92%;font-weight:600}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#26374a 0%,#101922 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:90%;color:#f4f7fa;font-weight:500}
+  .t-dark h1 b{color:var(--accent)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#26374a 0%,#101922 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:88%;color:#f4f7fa;font-weight:600}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Inter',sans-serif;border:1.6px solid var(--accent);color:#f0b7b7;border-radius:100px;padding:1.3vh 1.9vw;font-size:1.18vw;font-weight:600;letter-spacing:.02em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:#8fa0b0;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .deal-motif{position:absolute;pointer-events:none;opacity:.95}
+  .title-deal{right:6%;bottom:8%;width:27vw;opacity:.85}
+  .corner-deal{right:6%;bottom:7.4%;width:11vw;opacity:.45}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.28vw;color:var(--soft);margin-top:3.4vh;font-weight:600;letter-spacing:.03em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(202,49,49,.14);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.7vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Authentic Negotiating</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: two lines converging to one point (two parties, one deal) over a centered plumb line: clarity, detachment, equilibrium -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="deal" viewBox="0 0 280 200">
+  <g fill="none" stroke="#ca3131" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 40 L170 100" opacity="0.75"/>
+    <path d="M30 160 L170 100" opacity="0.75"/>
+    <line x1="170" y1="30" x2="170" y2="170" opacity="0.28"/>
+    <circle cx="170" cy="100" r="9" fill="#ca3131" stroke="none" opacity="0.95"/>
+    <circle cx="170" cy="100" r="20" opacity="0.5"/>
+    <path d="M210 100 L250 100" opacity="0.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Authentic <b>Negotiating</b>',sub:'A live masterclass on closing the deals that matter, from clarity, detachment, and equilibrium. No tactics. No games.',brand:true,deal:'title'},
+ {t:'normal',k:'Who this is for',title:'The deal was there. You still left with <b>less</b>.',body:'You negotiate the things that move your business: the acquisition, the partnership, the big contract, the exit, the raise. You know the numbers cold. And still, in the room, something takes over and you concede more than you meant to, or you push and blow up a deal that should have closed. If that is you, this hour is for you.'},
+ {t:'dark',title:'You do not lose deals on the numbers. You lose them on your <b>state</b>.'},
+
+ {t:'section',idx:'Part One',title:'Why Sharp Operators Negotiate Badly'},
+ {t:'normal',k:'The trap',title:'You walked in wanting it <b>too much</b>.',body:'When you fix on one outcome and need it to happen, emotion takes the wheel. Fear of losing the deal, ego about winning it, the quiet desperation of a quarter that has to close: any of them will have you giving ground you never planned to give. The other side does not even have to be good. Your own wanting does the damage.'},
+ {t:'normal',k:'The other trap',title:'So you reached for <b>tactics</b>.',body:'The anchoring trick, the fake walk-away, the script someone sold you. They feel like control. But they win the moment and cost the relationship, and they crack the second the room gets tense, because they are not you. A tactic you have to remember to run is a tactic the other side can feel you running.'},
+ {t:'dark',title:'The problem was never the strategy. It was the person <b>holding</b> it.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Keys: Clarity, Detachment, Equilibrium'},
+ {t:'normal',k:'The method',title:'Authentic negotiating is <b>inner work</b>, done before the room.',body:'This is the method from Authentic Negotiating: three keys you set before a single word is exchanged. It is not a new set of tricks layered on top of the old ones. It is a state you build on purpose, so that fear, ego and desperation never get to run the negotiation for you. Clarity, detachment, and equilibrium, in that order.'},
+ {t:'normal',k:'Key one',title:'<b>Clarity</b>: know exactly what you want, and why.',body:'Before you walk in, you get precise on the outcome you want and the real reasons behind it. That precision is what lets you communicate with confidence and advance your own position, instead of reacting to whatever the other side puts in front of you. Without it, every one of their moves moves you. With it, you set the terms of the conversation.'},
+ {t:'normal',k:'Key two',title:'<b>Detachment</b>: hold the goal, release the <b>outcome</b>.',body:'Detachment is not giving up what you want. It is emotional distance from any single result, so a hard no does not turn into panic and a fast yes does not turn into overreach. When you are not gripping one outcome, fear and ego lose their grip on you, and the deal turns from a fight you must win into a problem you can solve together.'},
+ {t:'normal',k:'Key three',title:'<b>Equilibrium</b>: stay centered when it matters most.',body:'Equilibrium is staying calm, focused and objective while the stakes climb. It is where preparation meets authenticity: clear objectives and real planning on one side, transparency, honesty and empathy on the other. Held together, it keeps you out of cold manipulation and out of unstructured over-sharing, and it is what the other side ends up trusting.'},
+ {t:'normal',k:'The line you do not cross',title:'Authentic beats <b>manipulative</b>, every time.',body:'Manipulative tactics can win a single deal and quietly lose you the next three. Authentic negotiating protects your interests and the trust that makes the follow-on deal, the referral, and the partnership possible. You do not have to choose between being effective and being someone people want to deal with again. The whole point is that they are the same thing.'},
+ {t:'dark',title:'Clarity gets you ready. Detachment keeps you free. Equilibrium keeps you <b>you</b>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Negotiate This Way'},
+ {t:'normal',k:'The shift',title:'Same table. Same numbers. A different <b>you</b>.',body:'Nothing changes about the market or the deal on the table. What changes is who shows up to it. You stop leaking value to fear and ego, you make the calls you used to freeze on, and the negotiations that matter start closing on terms you can actually live with. The edge is not a new tactic. It is that you are no longer negotiating against yourself.'},
+ {t:'normal',k:'Why me',title:'35 years at the table, on both <b>sides</b> of the deal.',body:'I am an attorney and dealmaker with over 35 years of negotiating experience, a business owner since I was 15. I host the DealQuest podcast, where I break down real deals with the people who did them, and I wrote Authentic Negotiating, an Amazon best-seller. This is not theory I read in a book. It is the method I have run and taught for decades, put in your hands.'},
+ {t:'dark',title:'The inner game of negotiating is <b>learnable</b>. That is the whole point.'},
+
+ {t:'section',idx:'Your next step',title:'Take This Into Your Next Deal'},
+ {t:'normal',k:'Where this goes',title:'Authentic Negotiating, applied to <b>your</b> deals.',body:'This masterclass is the map. Inside the DealQuest community and mastermind, we work it into your real negotiations, deal by deal, until clarity, detachment and equilibrium are simply how you show up. That is where the three keys stop being an idea from an hour online and become how you close the deals that grow your business.'},
+ {t:'cta',title:'Ready to negotiate the deals that matter?',chips:['Join the DealQuest community','Read Authentic Negotiating'],disc:'Educational content for business owners and entrepreneurs. No specific deal, financial, or business result is guaranteed. Results vary by situation, effort, and circumstance.'},
+];
+
+const deck=document.getElementById('deck');
+function deal(kind){return `<svg class="deal-motif ${kind==='title'?'title-deal':'corner-deal'}"><use href="#deal"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Corey Kupfer · <b>DealQuest</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.deal) h+=deal(s.deal);
+  else if(s.t==='title') h+=deal('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
