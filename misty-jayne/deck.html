@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Money Beyond the Chair · Misty Jayne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#eef4f4; --panel:#d8e6e6; --rule:#c3d7d7;
+    --acc:#5a7675; --ink:#263130; --body:#3f4f4c; --dim:#8a978f;
+    --gold:#bfa646; --cream:#eef4f4; --deepA:#3a4e4d; --deepB:#223130;
+  }
+  html,body{height:100%}
+  body{background:#e4eded;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e4eded}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Prata',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.14;letter-spacing:.004em}
+  .t-title h1{font-size:4.7vw;max-width:94%}
+  .t-normal h1{font-size:3.2vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Prata',serif;font-size:1.95vw;color:var(--acc);margin-top:3.6vh;max-width:84%;line-height:1.44;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),var(--gold) 60%,transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,var(--deepA) 0%,var(--deepB) 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:88%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,var(--deepA) 0%,var(--deepB) 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#dfe8e6;font-size:1.42vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--gold);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .mo{position:absolute;pointer-events:none}
+  .title-mo{right:7.5%;bottom:9%;width:20vw;opacity:.95}
+  .corner-mo{right:6.5%;bottom:8%;width:10vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(38,49,48,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--gold));width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.0vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:6.9vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Starting Messy Podcast</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a messy hand-drawn scribble on the left that settles into a steady rising line (Starting Messy resolving into steady money) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 140 90">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="10" y1="74" x2="130" y2="74" stroke="#bfa646" stroke-width="2" opacity="0.8"/>
+    <path d="M14 60 C19 42 23 70 29 52 C33 43 37 63 43 50" stroke="#5a7675" stroke-width="2.2" opacity="0.7"/>
+    <path d="M43 50 L73 44 L103 32 L126 21" stroke="#bfa646" stroke-width="2.4" opacity="0.95"/>
+    <circle cx="126" cy="21" r="4" fill="#bfa646" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Money Beyond the Chair',sub:'How a fully booked hairstylist keeps, commands, and feels calm about the money she earns, without a second job or another marketing course.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are incredible behind the chair. The money side is the part nobody taught you.',body:'You are a hairstylist whose clients adore you and whose books stay full. But the money comes in and quietly disappears, every good month still ends with the same worry, and "I make good money" and "I feel secure" have somehow never been the same sentence.'},
+ {t:'dark',title:'A full book is not the same as money you actually get to keep.'},
+
+ {t:'section',idx:'Part One',title:'Why a Full Book Still Leaves You Broke'},
+ {t:'normal',k:'The ceiling on the chair',title:'Your income is tied to your two hands, and there are only so many hours in them.',body:'Behind the chair you earn by the appointment, so your income is capped by the hours you can physically work. Raise the prices and you feel guilty, add more hours and you burn out. The busier and better you get, the more that ceiling starts to feel like a trap instead of a reward.'},
+ {t:'normal',k:'Money with no plan',title:'Money that comes in fast leaves just as fast when it has no plan.',body:'Tips and color money arrive in a blur, so it gets spent in a blur. Without a simple system for what each dollar is for, a great month and a scary month can feel exactly the same by the time the bills are due. It is not that you are bad with money. Nobody ever handed you the plan.'},
+ {t:'normal',k:'The shame tax',title:'The quiet shame around money costs you more than any slow week.',body:'Most stylists carry a low hum of money shame: avoiding the numbers, guessing at prices, feeling behind next to people who earn less. That avoidance is expensive. You cannot fix what you will not look at, and the not looking is exactly what keeps the whole cycle spinning.'},
+ {t:'dark',title:'You did not become a stylist to feel behind on the one thing that is supposed to feel like freedom.'},
+
+ {t:'section',idx:'Part Two',title:'Money Beyond the Chair'},
+ {t:'normal',k:'Start messy',title:'You do not need a perfect system. You need one honest look, this week.',body:'Starting messy means you begin before you feel ready and before it looks tidy. You open the accounts, you write down the real numbers, you take one imperfect step now. Waiting to feel confident is the trap. Confidence is what you get after you start, not the thing you need before you begin.'},
+ {t:'normal',k:'Price on your worth',title:'Your price is a decision, not an apology.',body:'Pricing beyond the chair means setting your rates on the value and the experience you actually deliver, not on the number you are least afraid to say out loud. Everything you give your clients, the care, the honesty, the high standard, you are allowed to have for yourself too. Your price is where that begins.'},
+ {t:'normal',k:'Financial Flow',title:'Give every dollar a job before it has a chance to disappear.',body:'Financial Flow is a simple rhythm for the money once it is in your hands: what comes in, what you keep, what you set aside, and what you get to enjoy, all on purpose. Not a spreadsheet you dread. A short, repeatable plan that finally turns a good month into a steady one.'},
+ {t:'normal',k:'Protect your peace',title:'Boundaries are a money skill, not only a self-care one.',body:'The stylist who says yes to every squeeze-in and every quiet discount is the one who ends up depleted and underpaid. Protecting your peace, your calendar, your rates, and your energy, is how your numbers and your nervous system finally start moving in the same direction.'},
+ {t:'dark',title:'Money beyond the chair is not about earning more. It is about keeping, directing, and feeling calm about what you already earn.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Money Has a Plan'},
+ {t:'normal',k:'The stylist this builds',title:'A full book, a calm bank account, and no more money shame.',body:'When the money finally has a plan, a full book feels like the freedom it was always supposed to be. You price without flinching, you know exactly where your money is going, and the good months start building something instead of just passing through on their way out.'},
+ {t:'dark',title:'The goal was never to hustle harder. It was to feel safe with what your talent already brings in.'},
+ {t:'normal',k:'Why Misty Jayne',title:'Twenty-three years behind the chair, now the coach for the money and the mindset under it.',body:'Misty spent 23 years as a hairstylist before training as a coach, so she has lived the full-book-empty-account cycle from the inside. Through The Starting Messy Podcast and her Money Beyond the Chair work, she helps stylists build a calm, confident relationship with their money and with themselves. This is the method behind that work.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start Messy With Your Money'},
+ {t:'cta',title:'Ready to feel calm about the money you already earn?',body:'Take the next step with Misty Jayne and The Starting Messy Podcast.',chips:['Listen to the podcast','Book a 1:1 coaching call'],disc:'Educational content for hairstylists and beauty professionals. No income or financial result is guaranteed. Results vary by stylist, market, and circumstances.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Starting Messy <b>Podcast</b> · Misty Jayne</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='title') h+=mo('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
