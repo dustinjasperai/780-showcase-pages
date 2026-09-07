@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The High-Ticket Mastermind · Chris Williams, Group Coach Nation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f8fa; --panel:#e9eef2; --rule:#d5dee5;
+    --acc:#ed7b23; --navy:#1d445f; --ink:#1d445f; --body:#46535d; --dim:#8a97a1; --cream:#eef3f7;
+  }
+  html,body{height:100%}
+  body{background:#dfe6ec;font-family:'Open Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dfe6ec}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Open Sans',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Poppins',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-0.005em}
+  .t-title h1{font-size:4.9vw;max-width:92%}
+  .t-normal h1{font-size:3.2vw;max-width:90%}
+  .t-normal .body{font-family:'Open Sans',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Poppins',serif;font-size:1.9vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#10222f 0%,#0a1720 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:86%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#10222f 0%,#0a1720 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:84%;color:var(--cream)}
+  .t-cta .body{font-family:'Open Sans',sans-serif;color:#cdd8e0;font-size:1.42vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .nodes-motif{position:absolute;pointer-events:none}
+  .title-nodes{right:6.5%;bottom:7%;width:20vw;opacity:.95}
+  .corner-nodes{right:6.5%;bottom:7.5%;width:9.5vw;opacity:.55}
+  .brandline{font-family:'Open Sans',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(29,68,95,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.5vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.9vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.9vw}
+    .t-cta h1{font-size:6.9vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Group Coach Nation</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a small cluster of member-nodes linked to one center seat (the mastermind room), navy links with an orange center -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="nodes" viewBox="0 0 120 120">
+  <g stroke="#1d445f" stroke-width="1.6" opacity="0.55">
+    <line x1="60" y1="60" x2="60" y2="18"/>
+    <line x1="60" y1="60" x2="97" y2="40"/>
+    <line x1="60" y1="60" x2="97" y2="82"/>
+    <line x1="60" y1="60" x2="60" y2="102"/>
+    <line x1="60" y1="60" x2="23" y2="82"/>
+    <line x1="60" y1="60" x2="23" y2="40"/>
+  </g>
+  <g fill="#1d445f">
+    <circle cx="60" cy="18" r="6"/>
+    <circle cx="97" cy="40" r="6"/>
+    <circle cx="97" cy="82" r="6"/>
+    <circle cx="60" cy="102" r="6"/>
+    <circle cx="23" cy="82" r="6"/>
+    <circle cx="23" cy="40" r="6"/>
+  </g>
+  <circle cx="60" cy="60" r="10" fill="#ed7b23"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The High-Ticket Mastermind',sub:'How an expert turns what they already know into a group that pays before it is built.',brand:true,nodes:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the expert. The problem is that your calendar is the whole business.',body:'You are a coach, consultant, author, or subject-matter expert who is genuinely good at what you do. One-on-one and done-for-you work pays, but every dollar is tied to another hour, and you have quietly run out of hours to sell.'},
+ {t:'dark',title:'You do not have an audience problem. You have a leverage problem. A room does not have a ceiling the way a calendar does.'},
+
+ {t:'section',idx:'Part One',title:'Why Experts Stay Stuck'},
+ {t:'normal',k:'The one-to-one ceiling',title:'Trading hours for money has a hard ceiling, and you are close to it.',body:'The better you get, the more people want you, and the less of you there is to go around. Raising your rate buys a little room, but it does not change the math. You are still selling a finite thing, your time, one seat at a time.'},
+ {t:'normal',k:'The build-first trap',title:'Most experts build the thing first and go looking for buyers second.',body:'I spent five years and six figures making courses and info products before a mastermind in Boise told me I had it backwards. You do not spend a year building and then hope. You sell the room first, and let the people who paid tell you what to build.'},
+ {t:'normal',k:'The alone problem',title:'The quiet reason most group launches stall is that the expert tries to do it alone.',body:'Marketing alone, selling alone, second-guessing the offer alone. A high-ticket group is not a solo launch. It is built with the people it is for, in the open, which is exactly what makes it work when a private launch would not.'},
+ {t:'dark',title:'Nobody buys a $10,000 seat from a brochure. They buy a room they can already feel themselves in.'},
+
+ {t:'section',idx:'Part Two',title:'The Group Coach Nation Method'},
+ {t:'normal',k:'One, the offer',title:'Design an offer worth ten thousand dollars before you price it at ten thousand dollars.',body:'Start with what your people actually want and need, then sort what you should and should not include if you want it to scale. The offer is not a list of calls. It is a clear, valuable outcome the right buyer would pay a premium to be inside of.'},
+ {t:'normal',k:'Two, never alone',title:'Never market alone. Build it in a community, out loud.',body:'The fastest validation is other people. Test the promise where your audience can react to it, sharpen it against real questions, and let early believers shape it. A group offer created with a community lands harder than one written in a document by yourself.'},
+ {t:'normal',k:'Three, get paid first',title:'Only build when you get paid. Prove it organically before you automate anything.',body:'Sell the seats before the curriculum exists. Enrollment is the proof, not the guess. Once real buyers are in and the promise holds up organically, then and only then is it worth pouring time and money into scaling it.'},
+ {t:'normal',k:'Four, fill the room',title:'Filling a high-ticket group is selling, and selling is a skill you can run on purpose.',body:'A simple, repeatable way to enroll, plus lead generation that does not depend on you being clever every day. The aim is a room of the right people, selected on purpose, who fit each other as much as they fit the promise.'},
+ {t:'normal',k:'Five, run and renew',title:'A room that is run well is the best marketing for the next one.',body:'Facilitation is the craft that turns a group of buyers into members who stay. Handle the room generously, deliver the outcome, and renewal becomes something you build all year rather than beg for at the end. That is where a group turns into leverage.'},
+ {t:'dark',title:'When the room is right, it fills itself. Members do not renew a curriculum. They renew a place they cannot get anywhere else.'},
+
+ {t:'section',idx:'Part Three',title:'What Leverage Actually Looks Like'},
+ {t:'normal',k:'The business this builds',title:'One room, the right people, an outcome you can deliver again without adding hours.',body:'Instead of a calendar full of one-to-one calls, you serve many at once, at a premium, in a format that gets better as it grows. Income steadies because your best members stay, and your time stops being the thing you sell.'},
+ {t:'normal',k:'Why Chris',title:'I built my first mastermind with seven members. It changed their businesses, and mine.',body:'After the failed info-product years, I built a group of seven paying members and watched it change seven lives, and my own model along with it. Group Coach Nation exists to hand experts the same step by step, so you do not have to spend five years learning it the hard way.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Room, Not Another Course'},
+ {t:'cta',title:'Ready to turn your expertise into a high-ticket group?',body:'Take the next step with Chris and the Group Coach Nation community.',chips:['Learn the full method','Start your mastermind'],disc:'Educational content for coaches, consultants, authors, and experts. No income or business result is guaranteed. Outcomes vary by expert, offer, effort, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function nodes(kind){return `<svg class="nodes-motif ${kind==='title'?'title-nodes':'corner-nodes'}"><use href="#nodes"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Group Coach <b>Nation</b> · Chris Williams</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.nodes) h+=nodes(s.nodes);
+  else if(s.t==='title') h+=nodes('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
