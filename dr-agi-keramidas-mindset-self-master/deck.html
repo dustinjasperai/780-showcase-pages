@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Clarity Turn · A masterclass with Agi Keramidas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Bitter:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4ec;      /* warm ivory ground (his light scheme) */
+    --panel:#fbf7ef;   /* lifted paper */
+    --rule:#e6ddcb;    /* warm hairline */
+    --ink:#1f1b17;     /* warm near-black */
+    --dim:#6b6357;     /* muted secondary */
+    --accent:#fe6500;  /* his signature orange (#fe6500, 107 uses) */
+    --deep:#240540;    /* his deep indigo (footer color) */
+  }
+  html,body{height:100%}
+  body{background:#e9e3d6;font-family:'Bitter',Georgia,serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #deck{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 11vw;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:52px;line-height:1.12;
+    letter-spacing:-.015em;color:var(--ink);max-width:20ch}
+  h1 .a{color:var(--accent)}
+  .sub{font-family:'Bitter',serif;font-size:25px;line-height:1.5;color:var(--dim);margin-top:26px;max-width:32ch}
+  .body{font-family:'Bitter',serif;font-size:22px;line-height:1.6;color:var(--ink);margin-top:26px;max-width:36ch}
+  .body b{color:var(--accent);font-weight:500}
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;max-width:40ch}
+  .chip{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:var(--ink);
+    background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:10px 18px}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:15px;color:var(--dim);margin-top:40px;letter-spacing:.01em}
+  .brandline b{color:var(--ink);font-weight:600}
+  .disc{font-family:'Montserrat',sans-serif;font-size:13px;line-height:1.5;color:var(--dim);
+    margin-top:32px;max-width:46ch}
+  /* section dividers */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;
+    letter-spacing:.2em;color:var(--accent)}
+  .t-section h1{margin-top:14px;font-size:60px}
+  .t-section .rule{width:90px;height:5px;background:var(--accent);margin-top:30px;border-radius:3px}
+  /* dark reframe slides use his deep indigo */
+  .t-dark{background:var(--deep);color:#f3eee7}
+  .t-dark h1{color:#fff}
+  .t-dark h1 .a{color:var(--accent)}
+  .t-dark .sub{color:#cdbfe0}
+  .t-dark .kicker{color:var(--accent)}
+  /* title */
+  .t-title h1{font-size:66px;max-width:18ch}
+  .t-title .sub{font-size:24px}
+  /* cta */
+  .t-cta{background:var(--deep);color:#f3eee7;align-items:flex-start}
+  .t-cta h1{color:#fff;font-size:56px}
+  .t-cta .sub{color:#cdbfe0}
+  .t-cta .disc{color:#a394bd}
+  .ctabtn{font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#fff;
+    background:var(--accent);border-radius:100px;padding:16px 34px;margin-top:34px;display:inline-block}
+  /* turn motif */
+  .motif{margin-top:44px}
+  /* chrome */
+  #chrome{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;
+    gap:18px;padding:16px 26px;font-family:'Montserrat',sans-serif}
+  #track{flex:1;height:3px;background:var(--rule);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--accent);transition:width .35s ease}
+  #count{font-size:13px;color:var(--dim);letter-spacing:.05em;font-variant-numeric:tabular-nums}
+  .nav{position:fixed;top:0;bottom:0;width:16vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:44px;z-index:20;font-family:'Montserrat',sans-serif;
+    font-size:13px;color:var(--dim);transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:34px}.t-title h1,.t-section h1,.t-dark h1,.t-cta h1{font-size:36px}
+    .sub{font-size:19px}.body{font-size:18px}.slide{padding:8vh 8vw}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="chrome"><div id="track"><div id="bar"></div></div><div id="count">01 / 21</div></div>
+<div id="hint">Use arrow keys &rarr;</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="turn" viewBox="0 0 280 120">
+    <path d="M14 104 H96 V70 H176 V40 H250" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="250" cy="40" r="8" fill="none" stroke="currentColor" stroke-width="4.5"/>
+  </symbol>
+</defs></svg>
+
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Agi Keramidas',
+   title:`The Clarity <span class="a">Turn</span>`,
+   sub:`How accomplished professionals find their next move in midlife, without burning down what they have already built.`,
+   motif:true},
+
+  {t:'normal', k:'Who this is for',
+   title:`You have done well. And you still feel stuck.`,
+   body:`You have the title, the income, the track record. On paper it is a good life. And yet a quiet question keeps returning: <b>is this really it?</b> This hour is for you.`},
+
+  {t:'normal', k:'The honest picture',
+   title:`Restless, not broken.`,
+   sub:`The people in this room are not in crisis. They are successful, capable, and privately unsure what the next chapter is meant to be.`,
+   chips:['Achieved the goals','Lost the thread','Wants a next move','Afraid to waste the years left']},
+
+  {t:'normal', k:'The trap',
+   title:`So you do what smart people do. You <span class="a">consume more.</span>`,
+   body:`Another book. Another podcast. Another framework saved for later. It feels like progress. But a year passes and the decision is still not made. More input, same crossroads.`},
+
+  {t:'dark', k:'The reframe',
+   title:`Information is not your problem.`,
+   sub:`After 500 conversations with authors, founders and teachers, the pattern is clear: the people who move forward are not better informed. They decided. My whole aim is not to inform you, but to influence you into action.`},
+
+  {t:'section', idx:'PART ONE', title:`Why more input keeps you stuck`},
+
+  {t:'normal', k:'The consumption loop',
+   title:`Learning can be a very sophisticated way of waiting.`,
+   body:`Every new idea gives you a hit of movement without the risk of a choice. It is comfortable. It is also how ten years disappear. Clarity does not arrive from the next piece of content.`},
+
+  {t:'normal', k:'The real mechanism',
+   title:`Clarity is a <span class="a">decision</span>, not a discovery.`,
+   body:`You will not think your way to certainty in advance. Certainty is what you feel afterwards, on the other side of a committed step. First the move, then the clarity.`},
+
+  {t:'dark', k:'The cost',
+   title:`The most expensive thing is a decision you keep not making.`,
+   sub:`Not the wrong move. The postponed one. Another year at the crossroads is itself a choice, just an invisible one.`},
+
+  {t:'section', idx:'PART TWO', title:`The Clarity Turn`},
+
+  {t:'normal', k:'The method, in four turns',
+   title:`Four turns from noise to a next step.`,
+   chips:['1. What you actually want now','2. A move that fits who you are now','3. Confidence follows the action','4. One step, this week']},
+
+  {t:'normal', k:'Turn one',
+   title:`Get honest about what you want <span class="a">now.</span>`,
+   body:`Most midlife stuckness is chasing goals you set at 25 for a person who no longer exists. We separate the values that are still yours from the ambitions you have simply outgrown.`},
+
+  {t:'normal', k:'Turn two',
+   title:`Choose a move that fits who you are now.`,
+   body:`Not a reinvention, not blowing up the good parts. A next step that is congruent with your real values today, so it holds up when the initial motivation fades.`},
+
+  {t:'normal', k:'Turn three',
+   title:`Confidence follows the <span class="a">action.</span>`,
+   body:`You are waiting to feel ready. It works the other way around. Confidence is built by taking a bold action slightly outside the comfort zone, then letting the evidence catch up. Feeling follows behaviour.`},
+
+  {t:'normal', k:'Turn four',
+   title:`One confident step. This week.`,
+   body:`We turn the insight into a single specific action with a date on it. Small enough to actually do, real enough to change the story you tell yourself about what is possible.`},
+
+  {t:'dark', k:'The turn',
+   title:`From more input, to one clear move.`,
+   sub:`That is the whole turn. Not more certainty before you act, but a step that fits who you are now and the confidence that only shows up once you take it.`},
+
+  {t:'section', idx:'PART THREE', title:`After the turn`},
+
+  {t:'normal', k:'The first ninety days',
+   title:`Quieter noise. Clearer direction.`,
+   body:`The saved-for-later pile stops growing. The recurring 3am question gets an answer you can live with. And there is a concrete next step underway, chosen on purpose rather than defaulted into.`},
+
+  {t:'normal', k:'Why me',
+   title:`I made this turn myself.`,
+   body:`I spent years as a dentist before I admitted it was no longer mine. I rebuilt around personal development, and built <b>Personal Development Mastery</b> to 500 episodes and the book <b>88 Actionable Insights For Life</b>. I do not teach this from theory.`,
+   brandline:true},
+
+  {t:'normal', k:'What you walk away with',
+   title:`Not inspiration. A next move.`,
+   chips:['Your real values, named','A move that fits who you are now','The confidence sequence','One dated first step']},
+
+  {t:'cta', k:'Your next step',
+   title:`Book your clarity conversation.`,
+   sub:`If the turn resonated and you want help making it in your own life, the next step is a short conversation to map where you are and what the move could be.`,
+   cta:'Book your clarity conversation',
+   disc:`This masterclass is educational. It shares principles and a way of thinking, not advice for your specific situation. No particular income, career, or life outcome is guaranteed. Results vary and depend on you.`}
+];
+
+const deck=document.getElementById('deck');
+function turn(){return `<svg class="motif" width="240" height="100" viewBox="0 0 280 120" style="color:var(--accent)"><use href="#turn"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else{
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.cta) h+=`<div class="ctabtn">${s.cta}</div>`;
+    if(s.brandline) h+=`<div class="brandline">Personal Development Mastery &middot; <b>Agi Keramidas</b></div>`;
+    if(s.motif) h+=turn();
+  }
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
