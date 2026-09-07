@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Ripple Effect — A Masterclass with Steve Harper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f8f2; --panel:#e9eede; --rule:#cbd6bd;
+    --acc:#2f7f9c; --ink:#33322d; --body:#55534c; --dim:#8f8d82; --cream:#f2f4ec; --ripple:#6aadc8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e8ebe0;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5.0vw;max-width:90%}
+  .t-normal h1{font-size:3.0vw;max-width:86%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.3vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.68;font-weight:400}
+  .sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1.95vw;color:var(--acc);margin-top:3.4vh;max-width:82%;line-height:1.42;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:82%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 140% at 22% 12%,#1b3d49 0%,#0f242c 100%)}
+  .t-dark h1{color:var(--cream);font-size:3.3vw;max-width:86%;font-style:italic}
+  .t-cta{background:radial-gradient(120% 140% at 22% 12%,#1b3d49 0%,#0f242c 100%)}
+  .t-cta h1{color:var(--cream);font-size:3.2vw;max-width:84%}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#dfe7e6;font-size:1.3vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--ripple);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Montserrat',sans-serif;font-size:.82vw;color:#9db8bd;line-height:1.5;max-width:80%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:7%;top:50%;transform:translateY(-50%);width:22vw;height:22vw;opacity:.8}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Steve Harper</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: concentric ripple rings expanding from a single dot, fine ripple-blue lines - literally The Ripple Effect -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#2f7f9c" stroke-width="2" stroke-linecap="round">
+    <circle cx="60" cy="60" r="7" fill="#2f7f9c" stroke="none" opacity="0.9"/>
+    <circle cx="60" cy="60" r="19" opacity="0.6"/>
+    <circle cx="60" cy="60" r="33" opacity="0.4"/>
+    <circle cx="60" cy="60" r="47" opacity="0.22"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Ripple Effect',sub:'How the relationships you already have become your most reliable source of growth, without cold pitching or one more marketing tactic.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You are good at the work. The part that wears you down is being told to go sell yourself.',body:'You did not get into this to become a full-time self-promoter. You built real skill, real results, and real trust with the people you have served. And yet every growth playbook points you back to louder ads, colder outreach, and one more funnel. That is not a you problem, and more hustle will not fix it.'},
+ {t:'dark',title:'The feed is crowded with tactics. It has never been more starved for a real connection.'},
+
+ {t:'section',idx:'Part One',title:'Why the Hustle Runs Out'},
+ {t:'normal',k:'Everyone sounds the same',title:'When everyone runs the same playbook, everyone starts to sound the same.',body:'The same hooks, the same three-step frameworks, the same borrowed scripts. When your voice blends into that feed, the only thing left for people to compare on is price. Standing out was never about shouting louder. It was about being someone worth remembering.'},
+ {t:'normal',k:'Transactions vs relationships',title:'People do not buy from the loudest voice. They buy from the person they actually trust.',body:'Most networking treats people like a means to an end, so it feels like a means to an end, and it rarely converts. A single genuine relationship does the opposite. It keeps paying you back for years, in referrals, repeat work, and introductions you never had to ask for.'},
+ {t:'dark',title:'At a certain point, more tactics stop moving the needle. Who you are to people does.'},
+
+ {t:'section',idx:'Part Two',title:'The Ripple Difference'},
+ {t:'normal',k:'Principle one: Be Genuine',title:'Show up with openness, honesty, and a little courage, and people feel it immediately.',body:'Being genuine is not a technique. It is dropping the pitch and being honestly interested in the person in front of you. Ask the question you are actually curious about. Say the true thing. People can tell the difference in seconds, and it is the difference they remember.'},
+ {t:'normal',k:'Principle two: Be Generous',title:'Help first, with no conditions attached, and the ripple starts before you ever ask for a thing.',body:'Generosity is the engine of the whole effect. Make the introduction, share the resource, send the note that helps someone with no scoreboard running. Given freely and often enough, it comes back to you from directions you could never have predicted. That is the ripple.'},
+ {t:'normal',k:'Principle three: Be Different',title:'A memorable, personal experience beats a polished, forgettable one every single time.',body:'Being different does not mean gimmicks. It means the small, personal, human touches that turn a routine interaction into one people actually retell. In a feed full of automated sameness, being genuinely and specifically you is the most valuable thing you can be.'},
+ {t:'normal',k:'The practice: RippleTag',title:'Real connection is a skill you can practice, not a personality you are born with.',body:'This is where the 8 Minute Ripple and the Ripple Connection Questions come in: a simple, repeatable way to move a conversation past small talk and into something that actually connects. Do it on purpose, do it often, and a room full of strangers becomes a network that works for you.'},
+ {t:'dark',title:'A network is not built by meeting more people. It is built by connecting with a few of them for real.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Lead With Relationships'},
+ {t:'normal',k:'The business this builds',title:'Referrals, repeat clients, and a network that quietly sells for you.',body:'When you lead with genuine connection, the right people arrive already pre-sold, because someone they trust vouched for you first. You stop chasing cold leads and start fielding warm introductions. The scramble of the next launch softens, because your pipeline is built from relationships, not cold leads alone.'},
+ {t:'dark',title:'The goal was never more contacts. It was fewer, deeper relationships that compound over time.'},
+ {t:'normal',k:'Why Steve',title:'The one who spent 25 years proving that relationships, not tactics, are the real strategy.',body:'Steve Harper is the author of The Ripple Effect and host of The Ripple Effect Podcast. He has keynoted and trained relationship strategy for IBM, Microsoft, Dell, the University of Texas, and dozens of other organizations, and built the 8 Minute Ripple and the Ripple Mastermind around one idea he has tested for decades: connection is the growth engine.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start Your Own Ripple'},
+ {t:'normal',k:'Keep going with Steve',title:'The full path, from a single genuine connection to a network that grows your business.',body:'This masterclass is the on-ramp. From here, Steve takes you deeper into The Ripple Difference and the practices behind it, through The Ripple Effect Podcast, the Pond community, and the Ripple Mastermind when you are ready to go all in.'},
+ {t:'cta',title:'Ready to start your ripple?',body:'Take the next step with Steve Harper.',chips:['Listen to The Ripple Effect Podcast','Book a discovery call for the Ripple Mastermind'],disc:'Educational content for business owners and professionals. No income or business result is guaranteed. Individual results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Steve <b>Harper</b> · The Ripple Effect Podcast</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
