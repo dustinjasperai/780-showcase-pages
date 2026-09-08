@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Get Visible, Known &amp; Booked · Grace Costa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAF3F1; --panel:#EFE1DF; --rule:#D8BFC0;
+    --acc:#6E1E29; --ink:#2B2B2B; --body:#4A4442; --dim:#9A8F8D; --cream:#FBF4F2;
+  }
+  html,body{height:100%}
+  body{background:#E6D7D4;font-family:'Lato',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#E6D7D4}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Lato',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:-.004em}
+  .t-title h1{font-size:6.2vw;max-width:94%;font-weight:700}
+  .t-normal h1{font-size:4.0vw;max-width:92%}
+  .t-normal .body{font-family:'Lato',sans-serif;font-size:1.36vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Cormorant Garamond',serif;font-size:2.5vw;color:var(--acc);margin-top:3.2vh;max-width:86%;line-height:1.3;font-weight:600;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Lato',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:94%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:var(--acc);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.3vw;max-width:90%;color:var(--cream)}
+  .t-cta{background:var(--acc);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:88%;color:var(--cream)}
+  .t-cta .body{font-family:'Lato',sans-serif;color:#F0DCDA;font-size:1.36vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--cream);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:700;font-family:'Lato',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-cta .disc{color:#E7C9C6}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .cl-motif{position:absolute;pointer-events:none}
+  .title-cl{right:7.5%;bottom:8%;width:15vw;opacity:.9}
+  .corner-cl{right:6.5%;bottom:7.5%;width:7.5vw;opacity:.42}
+  .brandline{font-family:'Lato',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:400;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,43,43,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:6.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.6vw}.t-section h1{font-size:8.4vw}.t-dark h1{font-size:6.8vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">The Photo Diaries</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- aperture motif: a camera iris, drawn in oxblood -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ap" viewBox="0 0 120 120">
+  <g fill="none" stroke="#6E1E29" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="60" cy="60" r="46" opacity="0.9"/>
+    <polygon points="60,24 91,43 91,77 60,96 29,77 29,43" opacity="0.95"/>
+    <path d="M60 24 L60 60 M91 43 L60 60 M91 77 L60 60 M60 96 L60 60 M29 77 L60 60 M29 43 L60 60" opacity="0.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Get Visible, Known &amp; Booked',sub:'How photographers get seen, trusted, and booked at premium prices, without racing to the bottom.',brand:true,cl:'title'},
+ {t:'normal',k:'Who this is for',title:'A brilliant photographer with a quiet calendar. The problem was never the photography.',body:'You have spent years getting good behind the camera, and it shows in the work. Yet the enquiries come in waves, you undercharge to stay booked, and photographers with half your skill somehow stay full. The gap is not talent. It is that the market cannot find you, or does not yet know why to choose you.'},
+ {t:'dark',title:'Great photos got you here. Being seen and trusted is what fills the calendar.'},
+
+ {t:'section',idx:'Part One',title:'Why the Best Photographer in the Room Stays the Quietest'},
+ {t:'normal',k:'The real bottleneck',title:'In a crowded feed, the booked photographer is the known one, not the best one.',body:'A client cannot judge who is most skilled, so they choose who they have seen the most, trusted the soonest, and understood the fastest. Skill is the price of entry. Visibility and trust are what actually win the booking, and when you are invisible even your best work sits waiting on the shelf.'},
+ {t:'normal',k:'The race to the bottom',title:'When no one knows you, price is the only thing left to compete on.',body:'An unknown photographer gives the client one lever to compare: the number. So you discount, over-deliver, and quietly resent it. A known photographer is chosen for fit, not for being cheapest, and that is the difference between a full calendar you dread and one you are proud of.'},
+ {t:'dark',title:'You do not need to be cheaper. You need to be the one they already know.'},
+
+ {t:'section',idx:'Part Two',title:'The Client Magnet Method'},
+ {t:'normal',k:'Shift one: mindset to receive',title:'Charge what the work is worth, and let yourself actually receive it.',body:'Undercharging is a self-worth problem before it is a pricing problem. Before any marketing works, you have to believe your photography is worth a premium and be able to sit with the higher number without flinching or over-explaining. Everything downstream depends on this, because you will only ever market a price you believe in.'},
+ {t:'normal',k:'Shift two: elevate the brand experience',title:'Build a visible brand that earns trust before the enquiry ever lands.',body:'Being known is not luck, it is a consistent, elevated presence that tells one clear story about who you are and who you serve. From your imagery to the way an enquiry is answered, every touch either builds trust or leaks it. When your brand feels considered, a client decides you are the obvious, safe choice long before they ask your price.'},
+ {t:'normal',k:'Shift three: marketing that suits you',title:'Market in a way you will actually keep doing, not a treadmill you will quit.',body:'The generic advice to post three times a day and run more ads works right up until you burn out and stop. Sustainable visibility is built on the few channels that fit your strengths and your life, done consistently. Marketing that suits you is the version you still show up for in month six, and that is the only version that compounds.'},
+ {t:'normal',k:'Shift four: sales systems to scale',title:'Turn enquiries into booked, well-priced clients on purpose, not by luck.',body:'Most photographers lose good clients in the gap between enquiry and booking: slow replies, unclear pricing, no follow-up. A simple sales system, the way you respond, present, and guide someone to yes, makes booking repeatable instead of a coin toss, so a fuller calendar stops depending on a good mood or a quiet week.'},
+ {t:'dark',title:'Visible, known, and booked is not a gift you are born with. It is these four shifts, practised.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Become a Client Magnet'},
+ {t:'normal',k:'The photographer this builds',title:'A calendar of premium clients who arrive already sold.',body:'When you are visible and trusted, enquiries come in warm, price stops being the conversation, and you choose the work you want instead of taking whatever comes. Growth toward steadier, higher-income months stops feeling like hustle and starts feeling like a brand doing its job. That is the difference between chasing clients and attracting them.'},
+ {t:'dark',title:'The goal was never more shoots. It was the right clients, at the right price, coming to you.'},
+ {t:'normal',k:'Why Grace Costa',title:'Two decades behind the camera, and years teaching photographers to be seen.',body:'I have photographed for national institutions and the Department of Defence, been a finalist in the National Photographic Portrait Prize, instructed a masterclass at the National Portrait Gallery, and spoken at TEDxCanberra. I am also a personal-branding photographer, so building visible brands is what I do for a living. Everything here is what I teach photographers on The Photo Diaries and in my own practice.'},
+
+ {t:'section',idx:'Your Next Step',title:'Become the Photographer Clients Come Looking For'},
+ {t:'cta',title:'Ready to get visible, known, and booked?',body:'Take the next step with Grace Costa.',chips:['Book a discovery call','Join the Client Magnet Masterclass'],disc:'Educational content for photographers and business owners. No income or business result is guaranteed. Results vary by photographer, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function cl(kind){return `<svg class="cl-motif ${kind==='title'?'title-cl':'corner-cl'}"><use href="#ap"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Photo <b>Diaries</b> · Grace Costa</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.cl) h+=cl(s.cl);
+  else if(s.t==='title') h+=cl('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(hint&&cur>0){hint.style.opacity=0;}
+}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(cur+1);
+  else if(e.key==='ArrowLeft')go(cur-1);
+});
+go(0);
+</script>
+</body>
+</html>
