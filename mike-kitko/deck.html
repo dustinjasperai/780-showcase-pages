@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Inner Wealth Method · Mike Kitko</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0d0d0d; --panel:#16181a; --rule:#2b2d2f;
+    --accent:#bf2334; --ink:#f4f2ee; --soft:#b8b4ad; --dim:#6f6b64;
+  }
+  html,body{height:100%}
+  body{background:#050505;font-family:'Epilogue',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050505}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Epilogue',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Anton',Impact,sans-serif;font-weight:400;color:var(--ink);line-height:1.04;letter-spacing:.01em;text-transform:uppercase}
+  .t-title h1{font-size:6.4vw;letter-spacing:.012em}
+  .t-title h1 b{color:var(--accent);font-weight:400}
+  .t-normal h1{font-size:3.7vw;max-width:92%}
+  .t-normal h1 b{color:var(--accent);font-weight:400}
+  .t-normal .body{font-family:'Epilogue',sans-serif;font-size:1.42vw;color:var(--soft);margin-top:2.8vh;max-width:80%;line-height:1.62;font-weight:400;text-transform:none}
+  .sub{font-family:'Epilogue',sans-serif;font-size:1.62vw;color:var(--soft);margin-top:3.4vh;max-width:84%;line-height:1.5;font-weight:400;text-transform:none}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Epilogue',sans-serif;font-size:1.16vw;font-weight:700;color:var(--accent);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:5.0vw;max-width:94%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#1a1c1e 0%,#050505 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.0vw;max-width:92%;color:var(--ink)}
+  .t-dark h1 b{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#241012 0%,#050505 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:90%;color:var(--ink)}
+  .chips{display:flex;gap:1vw;margin-top:4.4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Epilogue',sans-serif;border:1.6px solid var(--accent);color:var(--accent);border-radius:2px;padding:1.3vh 1.9vw;font-size:1.14vw;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.42}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .axis-motif{position:absolute;pointer-events:none}
+  .title-axis{right:8%;top:50%;transform:translateY(-50%);height:74%}
+  .corner-axis{right:6.4%;bottom:7%;height:26%;opacity:.6}
+  .brandline{font-family:'Epilogue',sans-serif;font-size:1.24vw;color:var(--soft);margin-top:3.6vh;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(191,35,52,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.7vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">The Inner Wealth Method</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a single vertical alignment axis, three nodes soul/mind/body coming into line, his world -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="axis" viewBox="0 0 80 300">
+  <line x1="40" y1="18" x2="40" y2="282" stroke="#2b2d2f" stroke-width="2"/>
+  <line x1="40" y1="40" x2="40" y2="260" stroke="#bf2334" stroke-width="3" stroke-linecap="round" opacity="0.92"/>
+  <g fill="#bf2334">
+    <circle cx="40" cy="52"  r="9"/>
+    <circle cx="40" cy="150" r="9"/>
+    <circle cx="40" cy="248" r="9"/>
+  </g>
+  <g fill="#0d0d0d">
+    <circle cx="40" cy="52"  r="3.4"/>
+    <circle cx="40" cy="150" r="3.4"/>
+    <circle cx="40" cy="248" r="3.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Inner <b>Wealth</b> Method',sub:'A live masterclass on why aligning your soul, mind and body is what lets an already successful owner keep growing without losing themselves.',brand:true,axis:'title'},
+ {t:'normal',k:'Who this is for',title:'You have the success. It stopped <b>feeling</b> like it.',body:'You crossed every milestone you set. The money is there and from the outside it is clearly working. But the fulfillment you assumed would arrive never did, some part of you is braced for the day they find you out, and the drive that built all of it now runs on pressure. If that is your business, this hour is for you.'},
+ {t:'dark',title:'You do not have a success problem. You have an <b>alignment</b> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why More Success Stopped Making You Feel Better'},
+ {t:'normal',k:'The trap',title:'You are running a whole life on <b>survival</b> mode.',body:'The same fear and drive that built the company, prove yourself, never stop, protect what you have got, is a survival response. It works and it costs. You win on the outside and brace on the inside, because the engine that got you here runs on pressure, not peace, and pressure does not switch off just because the numbers got bigger.'},
+ {t:'normal',k:'The imposter',title:'The higher you climb, the louder the <b>imposter</b> gets.',body:'The title, the track record, the people who would kill to have your results, none of it quiets the voice that says you are not enough and one day everyone will see it. So you achieve harder to outrun the feeling. Achievement was never built to fix a feeling. That is why the next win lands for a day and then goes quiet.'},
+ {t:'dark',title:'Outer success cannot fix an <b>inner</b> problem.'},
+
+ {t:'section',idx:'Part Two',title:'The Soul, Mind And Body Alignment'},
+ {t:'normal',k:'The method',title:'Wealth flows when soul, mind and body point the <b>same way</b>.',body:'Inner Wealth is the alignment of three things most owners run in conflict. The soul carries the vision, the mind creates it, the body receives it. When they pull against each other you sabotage yourself in quiet, expensive ways. When they line up, opportunity and wealth stop feeling like something you have to force.'},
+ {t:'normal',k:'Soul',title:'Your <b>soul</b> carries the vision.',body:'Underneath the targets your business was built to hit is a life your soul actually wants. Most owners never separate the two, so they chase goals that were never really theirs and wonder why arriving feels hollow. The work starts by naming the life you are genuinely here to live, before you optimize one more thing that does not matter.'},
+ {t:'normal',k:'Mind',title:'Your <b>mind</b> creates it.',body:'The mind is the builder. Left in survival it defends. Aimed at the vision it creates. This is the move from reacting to whatever the day throws at you to consciously creating what you already decided the day is for. It is the same mind you have always had, finally pointed on purpose instead of on threat.'},
+ {t:'normal',k:'Body',title:'Your <b>body</b> receives it.',body:'You cannot hold a bigger life in a nervous system braced for attack. Energy, health and emotional regulation are not the reward you get at the end once everything is handled. They are the container. A steady body is what lets the wealth and the peace you are building actually land in you and stay there.'},
+ {t:'normal',k:'The shift',title:'The move is from <b>defense</b> to creation.',body:'Playing defense is protecting what you have. Creating is building what you want. Most successful owners never actually left defense, they just have more to guard now. Inner Wealth moves the whole system into creation mode, where the next level of growth stops costing you your peace to get it.'},
+ {t:'normal',k:'The promise',title:'Growth without the <b>grind</b>.',body:'You already proved you can out-work a room. The next level is not more of that. Pressureless Productivity is expansion that comes from alignment instead of force, so the business gets bigger and your life gets lighter at the same time. That combination, more out there and less weight in here, is the whole point of the work.'},
+ {t:'dark',title:'Inner wealth first. Outer wealth <b>follows</b>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Align'},
+ {t:'normal',k:'The shift',title:'The success stays. The <b>weight</b> comes off.',body:'Nothing changes in the market. What changes is you, and how much it costs you to carry it. The vision is yours again, the mind builds instead of braces, the body can actually hold it, and the achievement finally feels the way you always assumed it would. You stop performing a life that looks good and start living one that is.'},
+ {t:'normal',k:'Why me',title:'I had the title, the MBA, and a <b>mask</b>.',body:'Marine, MBA, Fortune 500 executive running a 65 million dollar plant, and privately an imposter who drank to cope and hurt the people I loved most. I rebuilt from nothing with a coach, one piece of soul, mind and body at a time, and put the whole thing on paper in The Imposter In Charge. This is the method I lived through, not a theory I read.'},
+ {t:'dark',title:'Inner Wealth is <b>learnable</b>. That is the whole point.'},
+
+ {t:'section',idx:'Your next step',title:'Build Your Inner Wealth With Me'},
+ {t:'normal',k:'Where this goes',title:'The Inner Wealth Method, applied to <b>your</b> life and business.',body:'This masterclass is the map. Inside the Inner Wealth Mastermind and private coaching is where we align it in your world, your vision, your mind, your body, until growth stops costing you yourself. That is where the shift stops being an idea you agreed with for an hour and becomes the way your life actually runs.'},
+ {t:'cta',title:'Ready to build your inner wealth?',chips:['Join the Inner Wealth Mastermind','Start with the free guides'],disc:'Educational content for business owners and leaders. No specific income, wealth, or personal result is guaranteed. Results vary by person, effort, and circumstance.'},
+];
+
+const deck=document.getElementById('deck');
+function axis(kind){return `<svg class="axis-motif ${kind==='title'?'title-axis':'corner-axis'}" viewBox="0 0 80 300" preserveAspectRatio="xMidYMid meet"><use href="#axis"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Mike Kitko &middot; <b>Inner Wealth Global</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.axis) h+=axis(s.axis);
+  else if(s.t==='title') h+=axis('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
