@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Art of the Close · Glenda Beagle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f8f2de; --panel:#ffffff; --rule:#e6dcc4;
+    --acc:#d81da3; --idx:#155ae5; --ink:#0a2d8f; --muted:#5a6180; --dim:#9a9788;
+  }
+  html,body{height:100%}
+  body{background:#efe7cf;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe7cf}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Libre Franklin',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Libre Franklin',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .t-title h1{font-size:4.3vw;max-width:90%}
+  .t-normal h1{font-size:3.2vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--muted);margin-top:2.6vh;max-width:76%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.75vw;color:var(--muted);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Libre Franklin',sans-serif;font-size:1.4vw;font-weight:700;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:90%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh;border-radius:3px}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#123a9e 0%,#0a2d8f 60%,#071f66 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#fbf5e6}
+  .t-dark .accentword{color:#ff86d8}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#123a9e 0%,#0a2d8f 60%,#071f66 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:84%;color:#fbf5e6}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:#ffd9f1;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.22vw;font-weight:600;background:rgba(216,29,163,.18)}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:rgba(251,245,230,.72);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .route-motif{position:absolute;pointer-events:none;opacity:.95}
+  .title-route{right:7%;bottom:8%;width:24vw}
+  .corner-route{right:6%;bottom:7.5%;width:11vw;opacity:.5}
+  .brandline{font-family:'Libre Franklin',sans-serif;font-size:1.32vw;color:var(--muted);margin-top:3.4vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(10,45,143,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Art of Selling Travel</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- route motif: two pins joined by a rising dashed flight path -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="route" viewBox="0 0 270 150">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 126 Q135 20 230 126" stroke="#d81da3" stroke-dasharray="3 10" opacity="0.95"/>
+    <path d="M20 132 H250" stroke="#155ae5" opacity="0.28"/>
+    <path d="M40 126 c-7 0 -12 -5 -12 -12 c0 -9 12 -20 12 -20 c0 0 12 11 12 20 c0 7 -5 12 -12 12 z" fill="#155ae5" stroke="none" opacity="0.9"/>
+    <circle cx="40" cy="112" r="3.4" fill="#f8f2de"/>
+    <path d="M230 126 c-7 0 -12 -5 -12 -12 c0 -9 12 -20 12 -20 c0 0 12 11 12 20 c0 7 -5 12 -12 12 z" fill="#d81da3" stroke="none" opacity="0.95"/>
+    <circle cx="230" cy="112" r="3.4" fill="#f8f2de"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Art of the Close',sub:'How to turn "just getting prices" into booked, fee-paying trips. A live masterclass for travel advisors.',brand:true,route:'title'},
+ {t:'normal',k:'Who this is for',title:'You are an advisor, not a search engine.',body:'You plan beautiful trips and you know your suppliers cold. Yet too many conversations start with a stranger asking for a price and end with silence. The planning was never the problem. The first reply was.'},
+ {t:'dark',title:'Most trips are not lost on price. They are lost in the <span class="accentword">first ten minutes</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why Inquiries Go Cold'},
+ {t:'normal',k:'The quote trap',title:'A price sent too early ends the conversation.',body:'When you answer "how much for a week in Italy" with a number, you have agreed to be compared on price alone. The traveller shops it, and the trip you could have designed never gets discussed.'},
+ {t:'normal',k:'The cost of free',title:'Free quotes are paid for with your time.',body:'Every hour spent pricing a trip for someone who was only browsing is an hour taken from the clients ready to book. Give the work away and you train your best prospects to treat you like a vending machine.'},
+ {t:'dark',title:'A quote answers a question the traveller <span class="accentword">did not really ask</span>.'},
+
+ {t:'section',idx:'Part Two',title:'Master The Close'},
+ {t:'normal',k:'Lead with the trip',title:'Ask the question that changes the room.',body:'Before any numbers, ask what the trip has to mean. The 25th anniversary, the first family trip in years, the bucket-list birthday. Once you know what they cannot get wrong, you are the person to trust with it, not the cheapest quote in their inbox.'},
+ {t:'normal',k:'Charge like a professional',title:'A fee is a signal, not an apology.',body:'Your planning fee tells the traveller this is expertise, not order-taking. Said plainly and without flinching, it filters out the browsers and keeps the people who value getting it right.'},
+ {t:'normal',k:'Speed is the close',title:'The fast, warm reply wins the booking.',body:'A ready traveller is deciding now. A same-day reply that leads with a question and a next step beats a perfect proposal that arrives three days later, every single time.'},
+ {t:'normal',k:'The follow-up that books',title:'The sale is usually in the second message.',body:'Most advisors send one reply and wait. A short, specific follow-up, a plan and a way to say yes, is what turns an interested traveller into a paid deposit instead of a ghost.'},
+ {t:'dark',title:'The close is not a pitch. It is the <span class="accentword">confidence to lead</span>.'},
+
+ {t:'section',idx:'Part Three',title:'The Advisor This Builds'},
+ {t:'normal',k:'What changes',title:'Fewer tire-kickers, higher fees, booked trips.',body:'You stop competing on price, you talk to travellers who are ready, and you charge what your work is worth. The same inquiries that used to go quiet start turning into deposits.'},
+ {t:'normal',k:'The whole system',title:'Attract, close, and run it without burning out.',body:'Closing is the middle of a bigger loop: Ignite Client Desire to draw in ideal clients, Master The Close to book them, and Optimize Business Operations so the business runs on systems, not adrenaline.'},
+ {t:'dark',title:'The one asset you truly own is your <span class="accentword">list</span>. Everything else is rented.'},
+ {t:'normal',k:'Why Glenda',title:'Twenty years in the trenches, taught in the open.',body:'Glenda Beagle went from receptionist to travel advisor to owning the agency and opening her own in a new city, with millions in sales along the way. She teaches the whole method on The Art of Selling Travel Podcast and inside her programs.'},
+
+ {t:'section',idx:'Your Next Step',title:'Keep Going With Glenda'},
+ {t:'normal',k:'Where to learn it all',title:'Bring the method into your everyday.',body:'The Travel Advisor Success Studio gives you weekly live coaching, monthly group calls, and quarterly masterclasses on sales, marketing, and operations. Curious to Booked goes deep on closing when you are ready to focus there.'},
+ {t:'cta',title:'Ready to sell like the authority you already are?',chips:['Join the Travel Advisor Success Studio','Work 1-to-1 with Glenda'],disc:'Educational content for travel advisors. No specific income, booking, or business result is guaranteed. Results vary by advisor, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function route(kind){return `<svg class="route-motif ${kind==='title'?'title-route':'corner-route'}"><use href="#route"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Art of Selling <b>Travel</b> · Glenda Beagle</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.route) h+=route(s.route);
+  else if(s.t==='title') h+=route('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
