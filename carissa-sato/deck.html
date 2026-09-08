@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Get the Heck Yes · Carissa Woo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf1e6; --panel:#f2e6d4; --rule:#cdbca8;
+    --acc:#da827b; --sec:#455238; --ink:#38231c; --grey:#6b5348; --dim:#a7917f; --cream:#faf1e6;
+  }
+  html,body{height:100%}
+  body{background:#241611;font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#241611}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:.005em}
+  .t-title h1{font-size:5.4vw;max-width:94%;font-weight:600}
+  .t-normal h1{font-size:3.6vw;max-width:88%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:80%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.1vw;color:var(--grey);margin-top:3.0vh;max-width:84%;line-height:1.42;font-weight:400;font-style:italic}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.2vw;font-weight:700;color:var(--sec);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:92%;font-weight:600}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(125% 125% at 50% 0%,#4a2a22 0%,#241611 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:90%;font-weight:500;color:var(--cream);letter-spacing:.005em}
+  .t-cta{background:radial-gradient(125% 125% at 50% 100%,#4a2a22 0%,#241611 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:88%;font-weight:600;color:var(--cream)}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #c98f88;color:#f6ded9;border-radius:100px;padding:1.3vh 1.8vw;font-size:1.2vw;font-weight:600;font-family:'Montserrat',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#caa79a}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .path{position:absolute;pointer-events:none;opacity:.92}
+  .title-path{right:7.5%;bottom:9%;width:24vw}
+  .corner-path{right:6.5%;bottom:7.5%;width:10vw;opacity:.6}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.2vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.03em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(218,130,123,.16);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Get the Heck Yes</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: an inquiry rising through three warm points to a filled coral "yes", the booking journey from hello to heck yes -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="path" viewBox="0 0 240 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="26" y1="128" x2="214" y2="128" stroke="#da827b" opacity="0.22"/>
+    <path d="M30 122 L88 122 L88 90 L150 90 L150 54 L212 54 L212 28" stroke="#da827b" opacity="0.9"/>
+    <circle cx="88" cy="90" r="5.5" fill="#455238" opacity="0.85"/>
+    <circle cx="150" cy="54" r="5.5" fill="#455238" opacity="0.85"/>
+    <circle cx="212" cy="28" r="7" fill="#da827b" opacity="0.98"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Get the Heck Yes',sub:'A live masterclass for wedding photographers who want to turn more inquiries into booked couples, at the price they actually want to charge.',brand:true,path:'title'},
+ {t:'normal',k:'Who this is for',title:'You take beautiful photos. The booking still feels like luck.',body:'The inquiries come in. You send your pricing. Then it goes quiet, or the only couples who say yes are the ones asking you to come down on price. The work behind the camera is dialed in. The conversation that turns a stranger into a booked couple was never something anyone taught you.'},
+ {t:'dark',title:'You are not losing couples because of your photos. You are losing them in the space between the inquiry and the yes.'},
+
+ {t:'section',idx:'Part One',title:'The Booking Gap'},
+ {t:'normal',k:'The leak nobody sees',title:'Inquiries are not the problem. What happens next is.',body:'Most photographers obsess over getting more inquiries. But the leak is further down: inquiries that never turn into a real conversation, and conversations that end in maybe. You can pour more leads into a funnel that loses them, or you can fix the part where couples decide. One of those actually changes your income.'},
+ {t:'normal',k:'The discount trap',title:'Cutting your price is not a booking strategy.',body:'When the yes feels uncertain, the easy move is to drop the number. It works once, and it teaches you to compete on being the cheapest in a market where couples are not shopping for cheap. They are shopping for certain. Discounting trades your best asset, the trust in the room, for the one thing you cannot get back.'},
+ {t:'dark',title:'A couple does not book the best photographer. They book the one who made them feel certain.'},
+
+ {t:'section',idx:'Part Two',title:'The Heck Yes Method'},
+ {t:'normal',k:'Pillar one, your message',title:'Attract the couples who are already half sold.',body:'The yes starts long before the call. When your brand and your words speak directly to the couple you want, the right people arrive warm and the wrong ones filter themselves out. Magnetic messaging is not louder marketing. It is being unmistakably for someone, so the inquiry that lands is one you can actually close.'},
+ {t:'normal',k:'Pillar two, your referral engine',title:'Build a lead source that runs without you posting daily.',body:'Venues and planners send couples to the photographers they trust, again and again. Pitching yourself to venues and building real vendor relationships turns a one time referral into a channel that feeds you bookings on repeat. It is the most reliable lead source in this industry, and almost nobody works it on purpose.'},
+ {t:'normal',k:'Pillar three, the sales call',title:'Confidently sell a 4,000 dollar package and close within a day.',body:'This is the heart of it. Walk into the consultation certain, lead the conversation, frame the value instead of defending a number, and ask for the yes. Done right, a couple can go from first call to booked within 24 hours, at packages of 4,000 dollars and up, without a single discount. The call is a skill, and a skill can be taught.'},
+ {t:'normal',k:'Pillar four, the experience',title:'Turn every couple into your next three referrals.',body:'The booking is the start, not the finish. An experience that makes a couple feel cared for at every step turns clients into superfans who send their engaged friends straight to you. This is what makes the whole system compound: each heck yes quietly plants the next one.'},
+ {t:'normal',k:'The through line',title:'One system, from first hello to heck yes.',body:'Message, referrals, the call, and the experience are not four separate tactics. They are one path a couple travels: found by the right message, sent by a venue that trusts you, closed on a confident call, and turned into a referral by the experience. That is the difference between a busy photographer and a booked one.'},
+ {t:'dark',title:'Talent gets you the inquiry. A system gets you the booking, and the next one, and the one after that.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes'},
+ {t:'normal',k:'The photographer this builds',title:'Booked out, at your price, on referrals you can count on.',body:'You stop guessing where the next couple comes from. The inquiries that land are the right ones, the calls end in yes more often than not, and your best clients become the reason strangers reach out. The business stops feeling like luck and starts feeling like something you actually run.'},
+ {t:'dark',title:'You already have the talent. What changes is that you finally get paid what it is worth.'},
+ {t:'normal',k:'Why Carissa Woo',title:'350 weddings, 200 plus five star reviews, and the close to match.',body:'Carissa Woo has photographed more than 350 weddings, holds 200 plus five star reviews across The Knot, WeddingWire, and Yelp, and was named Best Wedding Photographer by California Wedding Day two years running. She is the author of Woo Them to Heck Yes and host of the Get a Heck Yes podcast, where she teaches wedding photographers the exact booking system above.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start Getting the Heck Yes'},
+ {t:'normal',k:'Where to begin',title:'Learn the method, then let Carissa walk you through it.',body:'Woo Them to Heck Yes lays out the booking system in her own words. The Get a Heck Yes podcast goes deeper every week. And when you are ready to install the whole thing in your own business, Carissa coaches wedding photographers through it directly.'},
+ {t:'cta',title:'Ready to turn more inquiries into a heck yes?',chips:['Read Woo Them to Heck Yes','Work with Carissa'],disc:'Educational content for wedding photographers and creative business owners. No income or business result is guaranteed. Results vary by person, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="path ${kind==='title'?'title-path':'corner-path'}"><use href="#path"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Carissa Woo · <b>Get a Heck Yes</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.path) h+=motif(s.path);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
