@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Build a Business, Not a Job · Mike Gore-Hickman, Painter Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4ec; --panel:#002a47; --rule:#e4dcc9;
+    --acc:#c2a11e; --ink:#12212c; --body:#44515b; --dim:#8f8974; --cream:#f7f4ec;
+  }
+  html,body{height:100%}
+  body{background:#eae5d8;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eae5d8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Figtree',sans-serif;font-weight:800;color:var(--ink);line-height:1.06;letter-spacing:-.01em}
+  .t-title h1{font-size:5.6vw;max-width:96%}
+  .t-normal h1{font-size:3.7vw;max-width:94%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.42vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.55vw;color:var(--body);margin-top:3.0vh;max-width:84%;line-height:1.55;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:92%;color:var(--cream)}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh;border-radius:3px}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.1vw;max-width:90%;color:var(--cream);font-weight:700}
+  .t-dark .accentword{color:var(--acc)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:88%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#cdd6de;font-size:1.42vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:600;font-family:'Inter',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:#8fa1af;text-align:center;line-height:1.45;font-family:'Inter',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .pillar{display:inline-block;font-family:'Figtree',sans-serif;font-weight:700;font-size:1.0vw;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);border:1.5px solid var(--acc);border-radius:6px;padding:.7vh 1.1vw;margin-bottom:2.2vh}
+  .stroke-motif{position:absolute;pointer-events:none;right:7%;bottom:8%;width:26vw;opacity:.9}
+  .corner-stroke{position:absolute;pointer-events:none;right:6%;bottom:8%;width:13vw;opacity:.55}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.03em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,42,71,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9.4vw}.t-normal h1{font-size:6.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.pillar{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Painter Growth</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: one deliberate brush/roller stroke in the brand gold, one clean coat -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="stroke" viewBox="0 0 200 90">
+  <path d="M8 58 C40 30, 78 30, 108 46 C138 62, 168 58, 192 34"
+        fill="none" stroke="#c2a11e" stroke-width="15" stroke-linecap="round"/>
+  <path d="M8 58 C40 30, 78 30, 108 46 C138 62, 168 58, 192 34"
+        fill="none" stroke="#c2a11e" stroke-width="3" stroke-linecap="round" opacity="0.4"
+        transform="translate(0,13)"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Build a Business, Not a Job',sub:'How painting-company owners turn a business that depends on them into one that runs, profits, and grows without them on every site.',brand:true,stroke:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the best painter in your company. That is exactly why you are stuck.',body:'Every estimate, every problem crew, every angry customer, every invoice question routes back to you. Revenue is up and you are more exhausted than when you swung a brush for a living. The company cannot grow past what your own two hands and one head can hold.'},
+ {t:'dark',title:'Right now you do not own a painting business. You own a <span class="accentword">job</span> that owns you.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Painters Stay Stuck'},
+ {t:'normal',k:'The hustle ceiling',title:'More jobs did not fix it. More jobs multiplied the chaos.',body:'The instinct when things get tight is to sell more work. But every new job you win without a system behind it adds another fire to fight, another crew to chase, another customer who only trusts you. You do not have a growth problem, you have a system problem, and selling harder makes it worse.'},
+ {t:'normal',k:'The owner-as-glue trap',title:'If it only works when you are there, it is not a business yet.',body:'When you are the estimator, the sales rep, the project manager, the HR department and the bookkeeper, the company literally cannot function without you in the middle of it. That is why you cannot take a week off, and why a buyer would never pay real money for it. The value is trapped inside your own head.'},
+ {t:'dark',title:'A business is a set of <span class="accentword">systems</span> that produce a result without the owner in the room.'},
+
+ {t:'section',idx:'Part Two',title:'The Painter Growth Blueprint'},
+ {t:'normal',k:'The operating system',title:'Five systems that run the company, in the order that actually fixes it.',body:'A painting business is not one big problem, it is five that most owners try to solve in the wrong order. Leads, Sales, Production, Profit and Leadership. Fix them in sequence and each one makes the next one easier. Skip one and you scale the leak. This is the operating system the rest of the session is built on.'},
+ {t:'normal',pill:'Pillar 1',title:'Leads: a calendar that fills on purpose, not on luck.',body:'A repeatable way to book estimates so the work comes in steadily instead of in feast-and-famine waves. When your calendar fills predictably, you stop taking every job that calls and start choosing the right ones. Marketing becomes a switch you can turn up, not a panic every slow month.'},
+ {t:'normal',pill:'Pillar 2',title:'Sales: win the right jobs at the right price, without racing to the bottom.',body:'A real estimating and closing process, so you stop being the cheapest name on the list to win the work. You qualify the customer, present the value, and hold your price. The goal is not more quotes, it is a higher close rate on the jobs that are actually worth doing.'},
+ {t:'normal',pill:'Pillar 3',title:'Production: crews that deliver to a standard without you babysitting.',body:'The systems that get a job done right, on time, and to the same quality whether you are on site or on vacation. Checklists, roles, and a way to run the work that lives in the company instead of in your memory. This is the pillar that finally lets you get out of the truck.'},
+ {t:'normal',pill:'Pillar 4',title:'Profit: know your numbers and price so the business actually keeps money.',body:'Plenty of painting companies do a million dollars and keep almost none of it. This pillar is the financial layer, knowing your real job costs, pricing for margin, and reading the numbers so growth means more money in your pocket, not just more revenue you never see.'},
+ {t:'normal',pill:'Pillar 5',title:'Leadership: build a team so the company can grow past your two hands.',body:'Hiring, training and leading crew leads and managers who can run the work without you. This is what turns an owner-operator into an actual owner. The company gets its capacity from the team you build, not from how many hours you personally can stay awake.'},
+ {t:'dark',title:'Five systems, one operating system. Built in order, they compound. <span class="accentword">Out of order, you scale the chaos.</span>'},
+
+ {t:'section',idx:'Part Three',title:'When the Blueprint Runs the Company'},
+ {t:'normal',k:'You step out of production',title:'The company keeps painting when you are not on the job.',body:'Estimates get booked without you. Crews run the work to a standard. The manager handles the problem before it ever reaches your phone. For the first time the business produces a result that does not depend on you being everywhere, and you get your week back.'},
+ {t:'normal',k:'Profit becomes predictable',title:'Growth that shows up in the bank, not just on the invoices.',body:'When the numbers are clear and the price is right, a bigger top line finally means a bigger bottom line. You know your margin before you take a job, not after. The business stops being a stressful guess and starts being something you can plan around and actually enjoy owning.'},
+ {t:'dark',title:'The goal was never to work more. It was to build something that <span class="accentword">works without you</span>.'},
+
+ {t:'normal',k:'Why Mike Gore-Hickman',title:'A painter who learned to build companies like software.',body:'Mike ran his own painting business, hit the same wall, then spent years helping scale a software company before building Painter Growth. That is the difference behind the Blueprint, trades experience plus real systems thinking. Through Painter Growth and the Painter Growth Podcast he has coached over 1,500 painting contractors on the operating system this session is built from.'},
+
+ {t:'section',idx:'Your Next Step',title:'Put the Blueprint to Work in Your Company'},
+ {t:'cta',title:'Ready to build a business instead of a bigger job?',body:'Take the next step with Mike Gore-Hickman and Painter Growth.',chips:['Take the 90-second Growth Assessment','Talk to the Painter Growth team'],disc:'Educational content for painting-business owners. No income, revenue, or growth result is guaranteed. Outcomes vary by owner, market, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function stroke(kind){return `<svg class="${kind==='title'?'stroke-motif':'corner-stroke'}"><use href="#stroke"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.pill) h+=`<div class="pillar">${s.pill}</div>`;
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Painter <b>Growth</b> · Mike Gore-Hickman</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.stroke) h+=stroke(s.stroke);
+  else if(s.t==='title') h+=stroke('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
