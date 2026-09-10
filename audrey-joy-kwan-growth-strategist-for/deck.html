@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Small But Mighty Agency · Audrey Joy Kwan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Georama:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#122c3d; --panel:#17364a; --rule:#2c4a5e;
+    --acc:#ed6648; --acc2:#00999e; --ink:#f3f6f8; --body:#b9c6d0; --dim:#7c8b96; --cream:#f3f6f8;
+  }
+  html,body{height:100%}
+  body{background:#0d2231;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0d2231}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Georama',sans-serif;font-weight:700;color:var(--ink);line-height:1.08;letter-spacing:-.005em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.3vw;max-width:92%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.6vw;color:var(--acc);margin-top:3.2vh;max-width:84%;line-height:1.5;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#17364a 0%,#0b1c28 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:90%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#17364a 0%,#0b1c28 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:88%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#d7dee6;font-size:1.42vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .pillars{display:flex;gap:1.0vw;margin-top:4.0vh;flex-wrap:wrap;max-width:88%}
+  .pill{border:1.5px solid var(--acc2);color:var(--cream);border-radius:8px;padding:1.3vh 1.6vw;font-size:1.12vw;font-weight:500;background:rgba(0,153,158,.08)}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .pod-motif{position:absolute;pointer-events:none}
+  .title-pod{right:6.5%;bottom:7%;width:22vw;opacity:.9}
+  .corner-pod{right:6%;bottom:7%;width:11vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(243,246,248,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.8vw}.pill{font-size:2.6vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Small But Mighty Agency</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the pod motif: a lean unit of specialists orbiting a center, working as one, drawn in the brand coral -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="pod" viewBox="0 0 120 120">
+  <g fill="none" stroke="#ed6648" stroke-width="1.5">
+    <circle cx="60" cy="60" r="46" opacity="0.22"/>
+    <circle cx="60" cy="60" r="30" opacity="0.34"/>
+  </g>
+  <g fill="#ed6648">
+    <circle cx="60" cy="60" r="7" opacity="0.95"/>
+    <circle cx="60" cy="14" r="4.5" opacity="0.85"/>
+    <circle cx="99.8" cy="37" r="4.5" opacity="0.8"/>
+    <circle cx="99.8" cy="83" r="4.5" opacity="0.7"/>
+    <circle cx="60" cy="106" r="4.5" opacity="0.6"/>
+    <circle cx="20.2" cy="83" r="4.5" opacity="0.7"/>
+    <circle cx="20.2" cy="37" r="4.5" opacity="0.8"/>
+  </g>
+  <g stroke="#00999e" stroke-width="1.1" opacity="0.5">
+    <line x1="60" y1="60" x2="60" y2="14"/>
+    <line x1="60" y1="60" x2="99.8" y2="37"/>
+    <line x1="60" y1="60" x2="99.8" y2="83"/>
+    <line x1="60" y1="60" x2="60" y2="106"/>
+    <line x1="60" y1="60" x2="20.2" y2="83"/>
+    <line x1="60" y1="60" x2="20.2" y2="37"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Small But Mighty Agency',sub:'How to scale past six figures without adding hours you do not have, or building an agency that falls apart the week you step away.',brand:true,pod:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the best strategist in your agency. That is exactly why it cannot grow.',body:'The work is good and the referrals keep coming. But every project still runs through you: the pitch, the strategy, the client saves, the last-minute fires. Growing just means more of you, until there is none of you left.'},
+ {t:'dark',title:'A booked calendar is not the same as a business that runs without you.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Agencies Get Stuck at the Owner'},
+ {t:'normal',k:'Custom everything',title:'Bespoke feels like great service. It is actually your ceiling.',body:'When every engagement is built from scratch, nothing is repeatable, nothing is teachable, and nobody but you can deliver it at your standard. You did not build an agency. You built a very demanding job with your name on the door.'},
+ {t:'normal',k:'The owner trap',title:'If it only works when you do it, you are the product.',body:'The strategy lives in your head, so the team cannot move without you, you cannot step back without quality slipping, and scaling looks like cloning yourself. That is the wall most small agencies never get past.'},
+ {t:'dark',title:'You cannot hire your way out of a business that was never written down.'},
+
+ {t:'section',idx:'Part Two',title:'The Small But Mighty Way: Productize, Then Pod'},
+ {t:'normal',k:'Step one, productize',title:'Get the service out of your head and into a container.',body:'Productizing turns your best work into one defined offer sold the same way every time, instead of a hundred custom projects. It runs on five pillars, and each one moves a piece of the business off you.',pillars:['Niche','Promise','Intellectual property','Container','Process']},
+ {t:'normal',k:'What a container is',title:'One thing, sold the same way, delivered the same way.',body:'Pin the niche and the promise. Pull the method that lives in your head into documented intellectual property. Put it in a fixed container, a productized package rather than a blank page each time, and write down the process so someone other than you can run it end to end.'},
+ {t:'normal',k:'Step two, the pod',title:'Build the pod: a lean team that delivers without you.',body:'A pod is a small unit of strategists and specialists who own delivery as one team, working from the documented process instead of from your inbox. Capacity goes up. Your hours do not. You stop being the bottleneck the whole business waits on.'},
+ {t:'normal',k:'Replicate',title:'Once one pod runs clean, you copy it. That is how a small agency scales.',body:'You are no longer the constraint. Add a pod, add capacity, hold the quality, and grow the top line without growing your calendar. Small in headcount, mighty in output. That is the whole idea.'},
+ {t:'dark',title:'Increase your capacity without increasing your stress.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Agency Runs Without You'},
+ {t:'normal',k:'The business this builds',title:'Steadier revenue, a team that owns the work, and a week off that does not cost you clients.',body:'When the offer is productized and a pod delivers it, the agency stops depending on you being in every meeting. Revenue gets more predictable, the team takes real ownership, and you get to work on the business instead of inside every project.'},
+ {t:'dark',title:'The goal was never a bigger agency. It was one worth owning.'},
+ {t:'normal',k:'Why Audrey Joy Kwan',title:'150+ agency owners coached, behind multiple seven figure agencies.',body:'Audrey Joy Kwan is a growth strategist for agency owners and host of the Small But Mighty Agency podcast. She has coached more than 150 owners and worked behind the scenes of several seven figure agencies. This is the productize and pod system she teaches in full.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Small But Mighty Agency'},
+ {t:'normal',k:'Keep going with Audrey',title:'From a productized offer to a pod that runs it, step by step.',body:'This masterclass is the start. The Mighty Pod Model is the six month coaching program that walks you through productizing your service and building the pod, with a custom roadmap, monthly coaching, and the templates and frameworks that make it real.'},
+ {t:'cta',title:'Ready to build an agency that runs without you?',body:'Take the next step with Audrey Joy Kwan and the Mighty Pod Model.',chips:['Apply for the Mighty Pod Model','Book a consultation with Audrey'],disc:'Educational content for agency owners. No income or business result is guaranteed. Results vary by owner, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function pod(kind){return `<svg class="pod-motif ${kind==='title'?'title-pod':'corner-pod'}"><use href="#pod"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.pillars) h+=`<div class="pillars">`+s.pillars.map(p=>`<div class="pill">${p}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Small But <b>Mighty</b> Agency · Audrey Joy Kwan</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.pod) h+=pod(s.pod);
+  else if(s.t==='title') h+=pod('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
