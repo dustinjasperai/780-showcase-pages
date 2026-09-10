@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Escape the MindField · Jody Martins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Darker+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#ffffff; --panel:#f5f5f4; --rule:#e6e7ea;
+    --sig:#ff4833; --acc:#ff2a13; --ink:#001224; --body:#33404a; --dim:#8b93a0; --cream:#fff5f3;
+  }
+  html,body{height:100%}
+  body{background:#eceef1;font-family:'Darker Grotesque',system-ui,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eceef1}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Darker Grotesque',sans-serif;font-size:1.25vw;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Anton',sans-serif;color:var(--ink);line-height:1.02;letter-spacing:.004em;text-transform:uppercase;font-weight:400}
+  .t-title h1{font-size:6.4vw;max-width:96%}
+  .t-normal h1{font-family:'Darker Grotesque',sans-serif;font-size:3.7vw;max-width:92%;font-weight:700;line-height:1.04;letter-spacing:-.01em;text-transform:none}
+  .t-normal .body{font-family:'Darker Grotesque',sans-serif;font-size:1.72vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.34;font-weight:500}
+  .sub{font-family:'Darker Grotesque',sans-serif;font-size:2.15vw;color:var(--acc);margin-top:3.2vh;max-width:88%;line-height:1.2;font-weight:600}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Darker Grotesque',sans-serif;font-size:1.3vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:6.2vw;max-width:94%}
+  .t-section .rule{width:17vw;height:4px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(135% 135% at 50% 8%,#03203b 0%,#001122 62%,#000a15 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Darker Grotesque',sans-serif;font-weight:700;font-size:4.0vw;max-width:90%;color:#f4f7fb;text-transform:none;line-height:1.06;letter-spacing:-.01em}
+  .t-dark h1 b{color:var(--sig);font-weight:700}
+  .t-cta{background:radial-gradient(135% 135% at 50% 100%,#03203b 0%,#001122 62%,#000a15 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:5.0vw;max-width:92%;color:#fff5f3}
+  .t-cta .body{font-family:'Darker Grotesque',sans-serif;color:#d6e2ef;font-size:1.72vw;margin-top:2.8vh;max-width:74%;line-height:1.3;font-weight:500}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:2px solid var(--sig);color:#fff5f3;border-radius:100px;padding:1.3vh 2.0vw;font-family:'Darker Grotesque',sans-serif;font-size:1.35vw;font-weight:600;letter-spacing:.02em}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-family:'Darker Grotesque',sans-serif;font-size:1.02vw;color:var(--dim);text-align:center;line-height:1.3;font-weight:500}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7%;bottom:8%;width:26vw;opacity:1}
+  .corner-vf{right:6%;bottom:7.5%;width:13vw;opacity:.7}
+  .brandline{font-family:'Darker Grotesque',sans-serif;font-size:1.35vw;color:var(--body);margin-top:3.4vh;font-weight:600;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,18,36,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Darker Grotesque',sans-serif;font-size:14px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Darker Grotesque',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Darker Grotesque',sans-serif;font-size:13px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s;font-weight:600}
+  @media(max-width:640px){
+    .kicker{font-size:3vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:6.6vw}.t-normal .body{font-size:3.4vw}
+    .sub{font-size:4.4vw}.t-section h1{font-size:10vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:8vw}.chip{font-size:3.2vw}.t-cta .body{font-size:3.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Jody Martins</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the MindField. scattered noise marks on the left clear into one straight forward line, drawn in the brand signal red -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 190 90">
+  <g stroke="#ff2a13" stroke-width="2.6" stroke-linecap="round" fill="none">
+    <line x1="10" y1="20" x2="22" y2="12" opacity="0.5"/>
+    <line x1="16" y1="46" x2="30" y2="40" opacity="0.5"/>
+    <line x1="12" y1="70" x2="26" y2="76" opacity="0.45"/>
+    <line x1="40" y1="30" x2="52" y2="22" opacity="0.6"/>
+    <line x1="44" y1="62" x2="58" y2="68" opacity="0.55"/>
+    <line x1="70" y1="18" x2="82" y2="26" opacity="0.65"/>
+    <line x1="74" y1="52" x2="86" y2="46" opacity="0.7"/>
+    <circle cx="30" cy="26" r="2.4" fill="#ff2a13" stroke="none" opacity="0.5"/>
+    <circle cx="60" cy="44" r="2.4" fill="#ff2a13" stroke="none" opacity="0.6"/>
+    <path d="M96 45 H182" stroke-width="3.4" opacity="0.95"/>
+    <path d="M172 37 L182 45 L172 53" stroke-width="3.4" opacity="0.95"/>
+    <circle cx="96" cy="45" r="4" fill="#ff2a13" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Escape the MindField',sub:'Why your best performance was never a matter of wanting it more, and the simple formula that lets it show up on demand.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You train hard, you care deeply, and your head still gets in the way at the worst moment.',body:'You are an athlete, a coach, or a high performer who has put in the work. The talent is there and the preparation is there. Then the moment arrives, and the noise arrives with it: the doubt, the overthinking, the voice running commentary while you are trying to perform. You do not have a skill problem. You have a mind that will not get out of its own way.'},
+ {t:'dark',title:'You have been told to want it more. The truth is <b>simpler</b>, and almost nobody teaches it.'},
+
+ {t:'section',idx:'Part One',title:'The MindField'},
+ {t:'normal',k:'Where performance leaks',title:'The MindField is the clutter between you and your best: doubt, overthinking, the running commentary.',body:'Your ability is not the bottleneck. The clutter is. In the seconds that decide the outcome, your attention gets pulled into a field of noise, second-guessing the last ball, rehearsing the next mistake, managing what other people think. Every bit of attention spent there is attention the moment does not get.'},
+ {t:'normal',k:'Effort is not the lever',title:'Trying harder inside the noise just makes the noise louder.',body:'When it starts slipping, the instinct is to grip tighter, push more, care more. But effort poured into a cluttered mind does not clear it, it feeds it. The harder you strain against the doubt, the more room the doubt takes up. This is why more desire and more pressure so rarely fix a performance that is coming apart.'},
+ {t:'dark',title:'You cannot out-work a mind that is working <b>against</b> you.'},
+
+ {t:'section',idx:'Part Two',title:'The Performance Formula'},
+ {t:'normal',k:'The reframe',title:'Performance is not willed into being. It follows a formula, once you clear the field.',body:'Great performance is quieter than it looks. Underneath it is a repeatable formula: a clear focus, a calm and controlled inner state, and energy pointed at the one thing that matters now. The noise is what divides that formula down. Escape the MindField and the same formula multiplies instead. The masterclass walks through it one piece at a time.'},
+ {t:'normal',k:'Pillar one, clear the field',title:'Name the noise the moment it shows up.',body:'You cannot quiet what you have not noticed. The first move is awareness: catching the doubt, the overthinking, the commentary the instant it starts, and naming it for what it is. A cluttered mind you can see is a mind you can step out of. A cluttered mind running in the background just runs you.'},
+ {t:'normal',k:'Pillar two, reprogram your focus',title:'Point your attention at the one thing that matters right now.',body:'Focus is not concentrating harder on everything. It is choosing the single cue that this moment needs and letting the other nine go. You learn to reprogram where your attention lands by default, so under pressure it settles on the next action instead of the last mistake or the imagined outcome.'},
+ {t:'normal',k:'Pillar three, find the quiet power',title:'A calm, controlled state you can return to under pressure.',body:'Beneath the noise there is a quieter gear, steady, clear, in control, and it is trainable. Using tools like seeing success before it happens, you build a state you can drop back into on purpose, so the pressure of the moment stops deciding how you feel and you decide instead.'},
+ {t:'normal',k:'Pillar four, ignite the energy',title:'Channel the freed-up energy into the very next action.',body:'When the clutter clears, the energy that was feeding the doubt is suddenly yours to spend. The last piece is aiming it: committing fully to the next ball, the next rep, the next decision, with nothing held back in reserve for worrying. That is where the formula turns into a performance you can feel.'},
+ {t:'dark',title:'The noise divides your performance. The formula <b>multiplies</b> it.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Field Clears'},
+ {t:'normal',k:'The performer this builds',title:'The moment gets your whole attention, not the argument in your head.',body:'Pressure still comes, because it always will. What changes is what it does to you. You get quiet when it matters, you recover in seconds instead of stewing for the rest of the session, and your performance stops swinging on your mood or your last result. The people counting on you get the same steady version of you, before and after something goes wrong.'},
+ {t:'dark',title:'Your best was never missing. It was <b>buried</b> under the noise.'},
+ {t:'normal',k:'Why Jody',title:'A coach who trains the formula, not just talks about mindset.',body:'Jody Martins is a mental performance strategist with more than thirty years in cricket coaching, a Level 1 qualification from Cricket South Africa, and NLP and neuro-semantics training. He has coached cricketers from youth through First Class level, and now works with athletes, coaches, and high performers on exactly this: escaping the MindField and running their own performance formula when it counts.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With One Conversation'},
+ {t:'normal',k:'Keep going with Jody',title:'Bring the moment where your head keeps getting in the way. We start right there.',body:'The next step is a Discovery Call, a relaxed conversation to look at where the noise costs you most and whether coaching is the right fit. If it is, the work is built around you and the moments that matter in your world. If it is not, you leave seeing your own pattern more clearly than you did.'},
+ {t:'cta',title:'Ready to clear the field?',body:'Book a Discovery Call with Jody Martins.',chips:['Book a Discovery Call','Explore the courses'],disc:'Educational content for athletes, coaches, and high performers. Coaching supports mental performance and is not medical, psychological, or clinical treatment. No specific result or outcome is guaranteed. Outcomes vary by person, effort, and circumstance.'}
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Jody <b>Martins</b> · Performance Formula</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
