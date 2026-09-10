@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Owner-Independent Business · Stag Business Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f2ee; --panel:#ffffff; --panel2:#ece3d7; --rule:#d9cfc0;
+    --acc:#6799ad; --acc2:#0b4c6f; --ink:#0b3041; --body:#3d4c54; --dim:#8b938f;
+  }
+  html,body{height:100%}
+  body{background:#e7ded2;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7ded2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin-bottom:2.6vh}
+  h1{font-family:'Playfair Display',serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:.002em}
+  .t-title h1{font-size:5.6vw;max-width:96%}
+  .t-normal h1{font-size:3.7vw;max-width:94%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.4vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Montserrat',sans-serif;font-size:1.55vw;color:var(--acc2);margin-top:3.0vh;max-width:86%;line-height:1.5;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel2)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc2);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:92%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#123246 0%,#0b3041 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.1vw;max-width:92%;color:#f6f2ee}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#123246 0%,#0b3041 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:90%;color:#f6f2ee}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#d7e2e8;font-size:1.4vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:#f6f2ee;border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:600;font-family:'Montserrat',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45;font-family:'Montserrat',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .sys-motif{position:absolute;pointer-events:none}
+  .title-sys{right:6.5%;bottom:7%;width:22vw;opacity:.85}
+  .corner-sys{right:6%;bottom:7%;width:11vw;opacity:.42}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc2);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(11,48,65,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9.5vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Stag Business Coaching</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- systems motif: connected operating-blueprint nodes, drawn in the brand steel blue -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="sys" viewBox="0 0 120 120">
+  <g fill="none" stroke="#6799ad" stroke-width="1.5" stroke-linecap="round">
+    <line x1="60" y1="24" x2="30" y2="58" opacity="0.5"/>
+    <line x1="60" y1="24" x2="90" y2="58" opacity="0.5"/>
+    <line x1="30" y1="58" x2="60" y2="92" opacity="0.5"/>
+    <line x1="90" y1="58" x2="60" y2="92" opacity="0.5"/>
+    <line x1="30" y1="58" x2="90" y2="58" opacity="0.35"/>
+  </g>
+  <g fill="#6799ad">
+    <circle cx="60" cy="24" r="6.5"/>
+    <circle cx="30" cy="58" r="5.5" opacity="0.85"/>
+    <circle cx="90" cy="58" r="5.5" opacity="0.85"/>
+    <circle cx="60" cy="92" r="6.5" opacity="0.95"/>
+  </g>
+  <circle cx="60" cy="24" r="11" fill="none" stroke="#0b4c6f" stroke-width="1" opacity="0.5"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Owner-Independent Business',sub:'How to build the operating systems that let your business run smoother, make more money, and one day sell, without needing you in every room.',brand:true,sys:'title'},
+ {t:'normal',k:'Who this is for',title:'You built the business. Now the business cannot move without you.',body:'You are the owner, but you are also the salesperson, the operations manager, the fire department, and the final answer on every question. Revenue grew and somehow the work only got heavier. Every decision still routes through you, and a week away feels impossible.'},
+ {t:'dark',title:'If the business cannot run a week without you, you do not own a business yet. You own a very demanding job.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Made You the Bottleneck'},
+ {t:'normal',k:'The hero-owner trap',title:'The habits that got you here are the ones capping you now.',body:'Early on, being in everything was the advantage. You cared more, moved faster, and held the whole plan in your head. But the thing that built the business is now the ceiling on it. When you are the system, the business can only ever be as big as your calendar.'},
+ {t:'normal',k:'It lives in your head',title:'A business that runs on memory cannot be handed off, scaled, or sold.',body:'When the process for how things get done lives only in your head, every new hire needs you to train them, every mistake comes back to you, and nothing improves while you are out. Undocumented know-how feels like control. It is actually the reason you can never step back.'},
+ {t:'dark',title:'The bottleneck is almost never the market. It is the ten decisions only you are allowed to make.'},
+
+ {t:'section',idx:'Part Two',title:'The Stag Operating System'},
+ {t:'normal',k:'Vision and clarity',title:'First, decide what the business is supposed to do for your life.',body:'Before any system, you need a clear picture of where the business is going and what role you actually want in it. A custom blueprint turns that into a plan the whole team can follow, so growth serves the life you wanted instead of quietly eating it.'},
+ {t:'normal',k:'Systems and workflow',title:'Turn the way you do things into a repeatable process anyone can run.',body:'We map the core workflows, write them down, and build the checklists and handoffs so the work happens the same way whether or not you are watching. Documentation is not bureaucracy. It is how a decision you make once keeps paying off without you making it again.'},
+ {t:'normal',k:'Numbers you can see',title:'Run the business on a scoreboard, not on a gut feeling.',body:'A simple set of KPI scorecards shows you what is working and what is leaking, in numbers, every week. When the team can see the score, they start managing it themselves, and you stop being the only person who knows whether the month is on track.'},
+ {t:'normal',k:'The 3-Action Breakthrough',title:'Every session ends with three concrete next steps, never a pile of theory.',body:'Insight that never gets implemented is entertainment. So every working session closes on exactly three actions to take before the next one. Momentum comes from small, finished moves stacked in a row, not from one big plan that sits in a drawer.'},
+ {t:'dark',title:'A system is just a decision you only have to make once.'},
+
+ {t:'section',idx:'Part Three',title:'The Business That Could Sell Without You'},
+ {t:'normal',k:'See it as a buyer would',title:'The systems that free you are the same ones that make you sellable.',body:'A buyer is not paying for how hard you work. They are paying for a business that keeps running after you leave. Looking at your company the way a buyer would, with fresh eyes on risk, clarity, and transferability, shows you exactly where the value is stuck to you personally.'},
+ {t:'normal',k:'Clarity and transfer',title:'Clean numbers and transferable operations turn effort into an asset.',body:'Buyer-ready financials and operations that run without the founder are what separate a business that can be handed over from a job that ends when you stop. The same clarity that makes an owner free is what makes the business worth buying, whether you ever sell or not.'},
+ {t:'normal',k:'What it feels like',title:'Runs smoother, makes more money, and gives you your time back.',body:'This is the whole point. A business that operates on systems runs smoother, protects its margin, and finally lets you spend more time doing the things you love. You move from working in the business every hour to actually owning it.'},
+ {t:'dark',title:'You do not build the systems to sell the business. You build them so you finally get to choose.'},
+
+ {t:'normal',k:'Why Stag',title:'Two operators who build businesses that run on systems, not on their owner.',body:'Stag Business Coaching was built by Kellen Ketchersid, a strategist and systems thinker, and Albert Gillispie, a serial entrepreneur who has founded and run multiple businesses. As Business Made Simple coaches, they step in beside owners with clear direction, real operating help, and tools that actually get used.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the Operating System Behind Your Business'},
+ {t:'normal',k:'Keep going with Stag',title:'From this masterclass to a business that finally runs without you.',body:'This session is the starting point. The Business Builders Mastermind and one-on-one Leadership Mastery take you from being the bottleneck to running your company on vision, systems, a real scoreboard, and a clear plan for the day you want to step back.'},
+ {t:'cta',title:'Ready to build a business that runs without you?',body:'Take the next step with Kellen, Albert, and the team at Stag Business Coaching.',chips:['Book your free consultation','Start with the Business Builders Mastermind'],disc:'Educational content for business owners. No income, revenue, or sale-price result is guaranteed. Outcomes vary by business, owner, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function sysMotif(kind){return `<svg class="sys-motif ${kind==='title'?'title-sys':'corner-sys'}"><use href="#sys"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Stag Business <b>Coaching</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.sys) h+=sysMotif(s.sys);
+  else if(s.t==='title') h+=sysMotif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
