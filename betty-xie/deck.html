@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Make Your Art and Make Happier Money · Betty Xie, Everyday Talent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f0e8; --panel:#efe4d8; --rule:#e0cfbe;
+    --acc:#b71a1d; --gold:#f2ab43; --ink:#343531; --body:#5b564f; --dim:#a39a8d; --cream:#f7f0e8;
+  }
+  html,body{height:100%}
+  body{background:#e7dccd;font-family:'Montserrat',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7dccd}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:4.9vw;max-width:95%}
+  .t-normal h1{font-size:3.25vw;max-width:90%}
+  .t-normal .body{font-family:'Montserrat',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:2.0vw;color:var(--acc);margin-top:3.4vh;max-width:86%;line-height:1.42;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:#b71a1d;align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:88%;color:#fbeee2}
+  .t-cta{background:#343531;align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:#f7f0e8}
+  .t-cta .body{font-family:'Montserrat',sans-serif;color:#e4dccf;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.64}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--gold);color:#f7f0e8;border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .t-cta .disc{color:#a99f90}
+  .mast{position:absolute;pointer-events:none}
+  .title-mast{right:8.6%;bottom:9%;width:21vw;opacity:.95}
+  .corner-mast{right:8.2%;bottom:8%;width:12vw;opacity:.55}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(52,53,49,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.9vw}.t-section h1{font-size:7.3vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Everyday Talent</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- lane motif: three lane-tracks (slow / medium / fast) with a marker, drawn in accent + gold -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mast" viewBox="0 0 200 60">
+  <g fill="none" stroke-linecap="round">
+    <path d="M6 18 H150" stroke="#b71a1d" stroke-width="2.4" opacity="0.9"/>
+    <path d="M6 30 H190" stroke="#f2ab43" stroke-width="2.4" opacity="0.9"/>
+    <path d="M6 42 H108" stroke="#b71a1d" stroke-width="2.4" opacity="0.5"/>
+    <circle cx="176" cy="30" r="6" fill="#f2ab43" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Make Your Art and Make Happier Money',sub:'How a working creative builds a practice where the art and the money grow together, instead of trading one for the other.',brand:true,mast:'title'},
+ {t:'normal',k:'Who this is for',title:'You can make the work. Getting paid what it is worth is the part no one taught you.',body:'You are good at what you make. People feel it. But the rates stay low, the calendar is either empty or overflowing, and every month you wonder whether a creative life is supposed to cost this much. The talent was never the problem.'},
+ {t:'dark',title:'Talent does not pay the rent. A practice you designed on purpose does.'},
+
+ {t:'section',idx:'Part One',title:'Why Talent Alone Keeps You Broke'},
+ {t:'normal',k:'The pricing trap',title:'You price from fear, so the number stays small.',body:'When you set rates from the fear of losing the client instead of the value of the work, you undercharge, and undercharging drains your time, energy, and confidence. Worse, it quietly confirms the story that this is just what a creative career pays.'},
+ {t:'normal',k:'The hustle trap',title:'More hustle and more followers, same bank balance.',body:'Posting more and saying yes to everything feels like momentum, but exposure is not income and a full inbox is not a full bank account. Without a way to price and a way to design your capacity, all the effort makes you busier, not freer.'},
+ {t:'dark',title:'You do not need to work more hours. You need to charge right and design your lanes.'},
+
+ {t:'section',idx:'Part Two',title:'The Practice That Pays'},
+ {t:'normal',k:'Move one, charge your worth',title:'Charge what the work is worth, and hold the number.',body:'This is the Worth More work: the mindset shifts that unstick the price, and a way to set rates off the outcome you create instead of the fear in your stomach. You learn to name the new number out loud and hold it when someone pushes back.'},
+ {t:'normal',k:'Move two, design your lanes',title:'Build capacity across slow, medium, and fast lanes.',body:'Free the Freelancers treats a many-sided practice as a design problem. Slow lane for the deep creative work, medium lane for anchored client projects, fast lane for paid quick wins. You position and price each one so the practice holds together instead of pulling you apart.'},
+ {t:'normal',k:'Move three, act with pragmatic ambition',title:'Clarify what you need, then take pragmatically ambitious action.',body:'The Mindful Reinvention is the map for the pivot: clarify your real criteria, untangle the limiting beliefs holding you back, chart the paths in front of you, and move. Ambitious about the art, pragmatic about the money and the next step.'},
+ {t:'dark',title:'Price to your worth. Design your lanes. Act with pragmatic ambition.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Practice Pays'},
+ {t:'normal',k:'The creative this builds',title:'The art intact, a calendar that holds, happier money.',body:'When you price to your worth and design your capacity on purpose, the work you are proud of stops being the thing you can never afford to do. The rates hold, the week has room in it, and the money finally supports the art instead of competing with it.'},
+ {t:'dark',title:'The goal was never to hustle harder. It was to make your art and make happier money.'},
+ {t:'normal',k:'Why Betty Xie',title:'I priced from fear before I ever fixed it.',body:'I am a coach, a fundraiser, and a filmmaker, and I kept my own rates too low for years because raising them felt unsafe. Fixing that in my own practice is where these frameworks came from, and on the Everyday Talent podcast I have spent years in the real details of a creative career. This is the path I walked, not theory.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build a Practice That Pays'},
+ {t:'normal',k:'Keep going with Betty',title:'From one masterclass to a practice you designed on purpose.',body:'The masterclass is the map. Working together in the Mindful Reinvention or Free the Freelancers, we set your prices, design your lanes, and build the plan, so the practice keeps paying you long after this hour ends.'},
+ {t:'cta',title:'Ready to make your art and make happier money?',body:'Take the next step with Betty Xie and build a creative practice that pays.',chips:['Watch the masterclass','Book a consultation with Betty'],disc:'Educational content for working creatives. No income or business result is guaranteed. Results vary by person, practice, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mast(kind){return `<svg class="mast ${kind==='title'?'title-mast':'corner-mast'}"><use href="#mast"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Everyday <b>Talent</b> · Betty Xie</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mast) h+=mast(s.mast);
+  else if(s.t==='title') h+=mast('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
