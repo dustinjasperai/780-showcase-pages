@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Conversation Launch · Robbie Samuels, Biz Book Pub Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbf8f4; --panel:#f2ece2; --rule:#e7ddce;
+    --acc:#ff5d00; --ink:#241d18; --body:#4c443c; --dim:#938779; --cream:#f7efe6;
+  }
+  html,body{height:100%}
+  body{background:#efe7dc;font-family:'Roboto',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe7dc}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Bebas Neue',sans-serif;font-size:1.5vw;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:7.4vw;max-width:94%;line-height:1.0;letter-spacing:.01em}
+  .t-normal h1{font-family:'Roboto',sans-serif;font-weight:700;font-size:3.2vw;max-width:90%;letter-spacing:-.01em}
+  .t-normal .body{font-family:'Roboto',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Roboto',sans-serif;font-size:1.7vw;color:var(--body);margin-top:3.2vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-title .sub{color:var(--body)}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Bebas Neue',sans-serif;font-size:1.7vw;font-weight:400;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:6.6vw;max-width:94%;line-height:1.02}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2b2119 0%,#1a130d 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Roboto',sans-serif;font-weight:700;font-size:3.6vw;max-width:88%;color:var(--cream);letter-spacing:-.01em}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2b2119 0%,#1a130d 100%);align-items:center;text-align:center}
+  .t-cta h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:5.6vw;max-width:88%;color:var(--cream);line-height:1.02}
+  .t-cta .body{font-family:'Roboto',sans-serif;color:#e7ddce;font-size:1.42vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Bebas Neue',sans-serif;font-size:1.5vw;letter-spacing:.08em;font-weight:400}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .conv-motif{position:absolute;pointer-events:none}
+  .title-conv{right:7.2%;bottom:8%;width:17vw;opacity:.92}
+  .corner-conv{right:6.5%;bottom:7.5%;width:8.5vw;opacity:.5}
+  .brandline{font-family:'Bebas Neue',sans-serif;font-size:1.6vw;color:var(--body);margin-top:3.8vh;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:400}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(36,29,24,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:3.4vw}.t-title h1{font-size:12vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:10vw}.t-section .idx{font-size:3.4vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:9vw}.chip{font-size:3.4vw}.t-cta .body{font-size:3vw}.brandline{font-size:3.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Biz Book Pub Hub</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- conversation motif: two overlapping speech bubbles, drawn in the brand orange -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="conv" viewBox="0 0 120 120">
+  <g fill="none" stroke="#ff5d00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 30 H74 A8 8 0 0 1 82 38 V64 A8 8 0 0 1 74 72 H40 L26 84 V72 H22 A8 8 0 0 1 14 64 Z" opacity="0.92"/>
+    <path d="M50 52 H92 A8 8 0 0 1 100 60 V80 A8 8 0 0 1 92 88 H74 L64 98 V88 H58" opacity="0.55"/>
+    <circle cx="34" cy="51" r="2.4" fill="#ff5d00" stroke="none"/>
+    <circle cx="46" cy="51" r="2.4" fill="#ff5d00" stroke="none"/>
+    <circle cx="58" cy="51" r="2.4" fill="#ff5d00" stroke="none"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Conversation Launch',sub:'How a book becomes clients, referral partners, and podcast invitations, not just a stack of copies you sold once.',brand:true,conv:'title'},
+ {t:'normal',k:'Who this is for',title:'You wrote the book. Turning it into business is the part no one taught you.',body:'You are an entrepreneur who wrote a real book, and the launch week even went well. But once the rank faded, so did the momentum, and the book quietly became a nice thing on the shelf instead of a reason clients call you.'},
+ {t:'dark',title:'A number-one launch that goes silent by Friday did not grow your business. It sold some copies.'},
+
+ {t:'section',idx:'Part One',title:'Why "Sell More Copies" Is the Wrong Goal'},
+ {t:'normal',k:'The vanity metric',title:'Copies sold is a number that never turns into a client on its own.',body:'A stack of sales feels like proof, but nobody who bought a copy is on a call with you because of it. Copies measure a transaction. They do not measure a single conversation, and conversations are what actually turn into clients.'},
+ {t:'normal',k:'The one-week spike',title:'A launch built for rank goes quiet the moment the rank does.',body:'When the whole plan is a big launch day, everything peaks in a week and then nothing. You are left refreshing a chart instead of talking to the people the book was supposed to bring you, and the asset you worked hardest on stops working almost immediately.'},
+ {t:'dark',title:'You did not write a book to top a list for a week. You wrote it to grow a business.'},
+
+ {t:'section',idx:'Part Two',title:'The Conversation Launch Method'},
+ {t:'normal',k:'Reviews that start conversations',title:'Aim the launch at 50-plus reviews from the people who could actually hire you.',body:'The goal of the launch is not a rank, it is reviews from likely prospects and referral partners. Every review is a real person who read your work, and a reason to follow up. Fifty of those is fifty warm conversations, and conversations are what drive revenue, media, and clients.'},
+ {t:'normal',k:'Croissants, not bagels',title:'Run the launch like open, inclusive networking, not a broadcast.',body:'A bagel is a closed circle. A croissant is open, with room for one more. Invite people into the launch the same way: personal asks, room for a yes or a no, and a relationship that continues after the review. That is how a launch team becomes a referral network.'},
+ {t:'normal',k:'A small list is enough',title:'You do not need a big audience. You need the right conversations.',body:'A successful launch does not depend on the size of your email list. A focused group of the right readers, asked well, outperforms a huge list you never really talk to. The launch is a reason to reconnect with the people already in your world, one conversation at a time.'},
+ {t:'dark',title:'Every review is a person. Every person is a conversation you can continue.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Launch for Conversations'},
+ {t:'normal',k:'The author this builds',title:'Fewer copies chased, more calls booked, and a book that keeps working.',body:'When the launch is built around conversations, the book keeps introducing you long after launch week. Reviews become referrals, referrals become calls, and a reader you never met becomes a client. The book stops being a memory and starts being a steady front door to the business.'},
+ {t:'dark',title:'The goal was never the bestseller badge. It was the client who found you through the book.'},
+ {t:'normal',k:'Why Robbie Samuels',title:'900-plus Amazon reviews, number one in 37 categories, on a method built on relationships.',body:'Robbie is a book launch strategist and networking speaker recognized by Harvard Business Review, Forbes, and Inc. His own books earned 900-plus Amazon reviews and reached number one in 37 categories, using the exact relationship-first approach this masterclass teaches. This is the method behind all of it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Turn Your Book Into Conversations'},
+ {t:'normal',k:'Keep going with Robbie',title:'From your next launch to a book that fills your calendar with the right calls.',body:'Start with a free Book Launch Brainstorm to map your launch around conversations instead of copies, and lean on the Biz Book Pub Hub for the people and resources at every stage. When you want a partner for the whole thing, that is what the coaching is for.'},
+ {t:'cta',title:'Ready To Turn Your Book Into Conversations?',body:'Take the next step with Robbie Samuels and the Biz Book Pub Hub.',chips:['Book a free Book Launch Brainstorm','Explore the Biz Book Pub Hub'],disc:'Educational content for entrepreneurial authors. No income, sales, or review result is guaranteed. Results vary by author, book, network, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function conv(kind){return `<svg class="conv-motif ${kind==='title'?'title-conv':'corner-conv'}"><use href="#conv"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Biz Book Pub Hub · <b>Robbie Samuels</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.conv) h+=conv(s.conv);
+  else if(s.t==='title') h+=conv('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
