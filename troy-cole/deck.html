@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Non-Salesy Consult · Troy Cole, LogiCole Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0a; --panel:#17121f; --rule:#2a2440;
+    --acc:#6f42c1; --acc2:#8a63d6; --ink:#f5f3ef; --body:#c4bed0; --dim:#736c82; --cream:#faf8f5;
+  }
+  html,body{height:100%}
+  body{background:#050506;font-family:'DM Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050506}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'DM Sans',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Bebas Neue',sans-serif;font-weight:400;color:var(--ink);line-height:1.02;letter-spacing:.012em;text-transform:uppercase}
+  .t-title h1{font-size:6.6vw;max-width:96%}
+  .t-normal h1{font-size:4.4vw;max-width:94%}
+  .t-normal .body{font-family:'DM Sans',sans-serif;font-size:1.42vw;color:var(--body);margin-top:2.8vh;max-width:76%;line-height:1.62;font-weight:400;text-transform:none}
+  .sub{font-family:'DM Sans',sans-serif;font-size:1.6vw;color:var(--acc2);margin-top:3.0vh;max-width:84%;line-height:1.5;font-weight:500;text-transform:none}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'DM Sans',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:6.2vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#1c1430 0%,#08080b 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.8vw;max-width:90%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1c1430 0%,#08080b 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:5.0vw;max-width:88%;color:var(--cream)}
+  .t-cta .body{font-family:'DM Sans',sans-serif;color:#e2dcea;font-size:1.42vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500;font-family:'DM Sans',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45;font-family:'DM Sans',sans-serif}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .lens-motif{position:absolute;pointer-events:none}
+  .title-lens{right:7%;bottom:7%;width:20vw;opacity:.9}
+  .corner-lens{right:6%;bottom:7%;width:10vw;opacity:.5}
+  .brandline{font-family:'DM Sans',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em;text-transform:none}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(245,243,239,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:11vw}.t-normal h1{font-size:7.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:9vw}.t-dark h1{font-size:7.4vw}
+    .t-cta h1{font-size:8vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">LogiCole Consulting</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- lens motif: concentric refractive rings around a bright center, drawn in the brand purple -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="lens" viewBox="0 0 120 120">
+  <g fill="none" stroke="#6f42c1" stroke-width="1.6" stroke-linecap="round">
+    <circle cx="60" cy="60" r="10" opacity="0.95"/>
+    <circle cx="60" cy="60" r="21" opacity="0.78"/>
+    <circle cx="60" cy="60" r="33" opacity="0.58"/>
+    <circle cx="60" cy="60" r="46" opacity="0.4"/>
+    <circle cx="60" cy="60" r="57" opacity="0.24"/>
+  </g>
+  <circle cx="60" cy="60" r="4.5" fill="#8a63d6" opacity="0.95"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Non-Salesy Consult',sub:'How elective surgery teams turn more of the consults they already have into booked procedures, without pressure and without discounting.',brand:true,lens:'title'},
+ {t:'normal',k:'Who this is for',title:'Your surgeons are excellent. The consult is where the revenue quietly leaks.',body:'The clinical outcomes are outstanding and the schedule is full. But too many consults still end in "let me think about it," premium options get talked down to the covered one, and the team blames price for a decision that was lost much earlier in the conversation.'},
+ {t:'dark',title:'Price is never the problem. It is the story the team told before price ever came up.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Practices Lose the Consult'},
+ {t:'normal',k:'The discount reflex',title:'Discounting does not win the patient. It teaches them to doubt the value.',body:'The moment the team drops the price to save the booking, the patient hears that the number was never real. Now every option looks negotiable, the premium procedure looks optional, and the practice trained the patient to wait for a better deal.'},
+ {t:'normal',k:'The pressure trap',title:'Pressure closes one patient and costs you the next three referrals.',body:'A hard close can force a yes in the room, but elective patients talk. The pushy consult becomes the review, the warning to a friend, the reason a family member books somewhere else. What felt like a win quietly shrinks the pipeline.'},
+ {t:'dark',title:'Apple has salespeople. BMW has salespeople. Ritz-Carlton has salespeople. Selling well is not the opposite of caring.'},
+
+ {t:'section',idx:'Part Two',title:'The E3 Conversion System'},
+ {t:'normal',k:'Toolset',title:'Toolset: the words and flows for the moments that decide the booking.',body:'The consult has a handful of make-or-break moments, and each one has a better way to be handled. Objection-handling flows, discovery questions that surface the real goal, and follow-up that re-engages the patient who left undecided. The team stops improvising and starts running a proven track.'},
+ {t:'normal',k:'Skillset',title:'Skillset: read the person in front of you and adapt in real time.',body:'The same script lands four different ways. Some patients want the data, some want reassurance, some want to feel in control, some just want it handled. The team learns to recognise the style in the first minutes of the consult and adjust the conversation to the human, not the checklist.'},
+ {t:'normal',k:'Mindset',title:'Mindset: a team that genuinely believes converts, and the patient can feel it.',body:'This is the real differentiator. When the counselor believes the premium option is genuinely the better choice, it shows in the calm, the eye contact, the lack of a flinch at the number. Belief is not a slogan on the wall, it is the thing the patient reads before they hear a single word.'},
+ {t:'dark',title:'Belief is the foundation. Everything else is technique stacked on top of it.'},
+
+ {t:'section',idx:'Part Three',title:'What a Converting Consult Sounds Like'},
+ {t:'normal',k:'Vision first',title:'Lead with the outcome the patient came for, not the insurance form.',body:'Vision first, insurance second. When the conversation starts with the life the patient wants after the procedure, price becomes a detail inside a decision they already want to make. Start with the coverage and you have framed the whole consult around cost.'},
+ {t:'normal',k:'The real why',title:'Uncover why they actually walked in, and the plan makes itself.',body:'Every patient has a reason underneath the reason. Surface it, reflect it back, and then build a clear plan around it together. A patient who feels understood does not need to be pushed, they need a path, and the team that gives them one earns the booking honestly.'},
+ {t:'normal',k:'The result',title:'More booked procedures, far less discounting, a team that enjoys the room again.',body:'When the consult is run on belief and structure instead of pressure and price cuts, the numbers move and so does the mood. The team stops dreading the money conversation, the patient stops feeling sold to, and the practice keeps the margin it was giving away.'},
+ {t:'dark',title:'The goal was never a harder close. It was a consult the patient actually trusts.'},
+
+ {t:'normal',k:'Why Troy Cole',title:'20 years in elective surgery sales. Hundreds of practices. One method.',body:'Troy Cole has spent two decades inside refractive and cataract practices, coaching the teams who sit across from the patient. Through LogiCole Consulting and the Practice Growth Machine podcast, he teaches the E3 Conversion System that this masterclass is built from.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring the E3 Conversion System to Your Team'},
+ {t:'normal',k:'Keep going with Troy',title:'From this masterclass to your team standing taller in every consult.',body:'This session is the start. The E3 Conversion System bootcamp, DISC for Doctors and Teams, and the Cataract Conversion Masterclass take your counselors and front desk from talking about price to guiding the patient to the right decision with confidence.'},
+ {t:'cta',title:'Ready to convert more of the consults you already have?',body:'Take the next step with Troy Cole and LogiCole Consulting.',chips:['Explore the E3 Conversion System','Book a call with Troy'],disc:'Educational content for elective surgery practice owners and their teams. No income, conversion, or revenue result is guaranteed. Outcomes vary by practice, team, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function lens(kind){return `<svg class="lens-motif ${kind==='title'?'title-lens':'corner-lens'}"><use href="#lens"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">LogiCole · Troy <b>Cole</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.lens) h+=lens(s.lens);
+  else if(s.t==='title') h+=lens('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
