@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Grow What Sells — a masterclass with Liza Goetz, Wildly Native Flower Farm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f8f2e3; --panel:#ecdfc6; --rule:#dccbaa;
+    --ink:#2f382c; --accent:#bf6a4a; --green:#4f5d3f;
+    --dim:#8a8577; --chalk:#f7f3ea;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Nunito Sans',-apple-system,sans-serif;overflow:hidden}
+  .stage{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:9vh 10vw}
+  .slide.active{opacity:1;visibility:visible}
+  .k{font-size:14px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(38px,7vw,86px);line-height:1.04;letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(30px,4.6vw,56px);line-height:1.1;color:var(--ink);max-width:20ch}
+  .sub{font-family:'Nunito Sans',sans-serif;font-size:clamp(17px,2vw,24px);font-weight:400;color:var(--ink);opacity:.82;margin-top:26px;max-width:46ch;line-height:1.5}
+  .body{font-size:clamp(16px,1.9vw,22px);line-height:1.6;color:var(--ink);opacity:.86;margin-top:24px;max-width:44ch}
+  .sprig{width:64px;height:2px;background:var(--accent);margin-bottom:30px;position:relative}
+  .sprig::before,.sprig::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);top:-3.5px}
+  .sprig::before{left:0}.sprig::after{left:24px;background:var(--green)}
+  /* dark reframe slides */
+  .slide.t-dark{background:var(--ink)}
+  .slide.t-dark h2{color:var(--chalk);max-width:24ch}
+  .slide.t-dark .accentbar{width:74px;height:3px;background:var(--accent);margin-bottom:34px;border-radius:2px}
+  /* section dividers */
+  .slide.t-section{background:var(--panel)}
+  .slide.t-section .idx{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.4vw,30px);color:var(--accent);margin-bottom:14px}
+  .slide.t-section .fieldrows{display:flex;gap:8px;margin-top:40px}
+  .slide.t-section .fieldrows i{display:block;width:46px;height:8px;border-radius:4px;background:var(--green);opacity:.32}
+  .slide.t-section .fieldrows i:nth-child(1){opacity:.9;background:var(--accent)}
+  /* title */
+  .slide.t-title{background:linear-gradient(160deg,var(--bg) 0%,var(--panel) 100%)}
+  .slide.t-title .foot{margin-top:40px;font-size:15px;letter-spacing:.06em;color:var(--dim)}
+  .slide.t-title .foot b{color:var(--ink);font-weight:700}
+  /* cta */
+  .slide.t-cta{background:var(--ink)}
+  .slide.t-cta h2{color:var(--chalk);max-width:22ch}
+  .chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .chip{font-size:16px;font-weight:600;color:var(--chalk);border:1.5px solid var(--accent);border-radius:100px;padding:13px 24px}
+  .chip.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+  .disc{margin-top:40px;font-size:12.5px;line-height:1.5;color:var(--dim);max-width:52ch}
+  .listrow{display:flex;gap:14px;align-items:flex-start;margin-top:16px;max-width:46ch}
+  .listrow .d{flex-shrink:0;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:9px}
+  .listrow p{font-size:clamp(15px,1.7vw,19px);line-height:1.5;color:var(--ink);opacity:.86}
+  /* nav */
+  .nav{position:fixed;bottom:22px;right:28px;display:flex;align-items:center;gap:16px;font-size:13px;color:var(--dim);z-index:10}
+  .nav button{background:none;border:1.5px solid var(--rule);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.2s}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{font-variant-numeric:tabular-nums;letter-spacing:.08em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .35s ease;z-index:10}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <span class="count" id="count">01 / 21</span>
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
+<script>
+const S = [
+ {t:'title',title:'Grow What Sells',sub:'How to turn a cut-flower operation into a business that actually pays, one planned field at a time.',foot:'A masterclass with <b>Liza Goetz</b> &middot; Wildly Native Flower Farm'},
+ {t:'normal',k:'Who this is for',title:'You can grow anything. The money is the hard part.',body:'You have the beds, the blooms, and a wall of seed packets. What keeps you up is whether the season actually pays, or whether you are just working very hard to break even.'},
+ {t:'dark',title:'You do not have a growing problem. You have a selling problem.'},
+ {t:'section',idx:'Part One',title:'The Grow-More Trap'},
+ {t:'normal',k:'The cycle',title:'More flowers is not more money.',body:'The instinct is to plant more, grow more, sell more. It turns into an exhausting grow-grow-grow, sell-sell-sell loop where the work climbs and the margin does not. Volume magnifies the weak spots instead of fixing them.'},
+ {t:'normal',k:'The moment it clicks',title:'A full field, and still not enough to sell.',body:'You can stand in a field of beautiful flowers and realize none of it is planned around a sale. Different flowers behave differently, single-stem, cut-and-come-again, one-hit wonders, so a field that looks full can still come up short on what buyers actually want.'},
+ {t:'dark',title:'Grow for the seed catalog and the field fills up. Grow for the sale and the bank account does.'},
+ {t:'section',idx:'Part Two',title:'Seed to Centerpiece'},
+ {t:'normal',k:'Pillar one',title:'Demand over variety.',body:'Fifty varieties grown a little is harder and less profitable than a handful grown well that people are already asking for. The most profitable flowers are the ones with real demand and margin, not the prettiest page in the catalog.'},
+ {t:'normal',k:'Pillar two',title:'Do the bouquet math first.',body:'Plan backward from the sale. Decide how many bouquets, arrangements, or weddings you want to sell, then work back to the stems, the beds, and the succession plantings that actually produce them. Inventory should match sales capacity, not the other way around.'},
+ {t:'normal',k:'Pillar three',title:'Price like it was grown here.',body:'A locally grown stem carries costs a wholesale price never sees. Set tiered price points and hold them, instead of quietly deciding your own flowers are not worth what they cost you to grow.'},
+ {t:'normal',k:'Pillar four',title:'Sell the centerpiece, not the stem.',body:'The same flowers are worth far more designed than cut. A bunch at market, an arrangement, a wedding, a subscription: each step you take toward the finished thing captures margin you already grew and were giving away.'},
+ {t:'dark',title:'Seed to Centerpiece: grow what sells, price it true, and sell the finished thing.'},
+ {t:'section',idx:'Part Three',title:'What a Profitable Season Looks Like'},
+ {t:'normal',k:'The plan on paper',title:'A field designed around profit.',body:'When the crop plan starts from the sales you want, the season stops being a guess. You grow fewer things, grow them deliberately, and know before you sow which beds are paying for the water and which are there for love.'},
+ {t:'normal',k:'More than one door',title:'Several streams from one field.',body:'Weddings and events, farmers market, wholesale, a subscription, even a value-added line: the same planned field can feed several income streams so one slow channel never sinks the season.'},
+ {t:'normal',k:'Why listen to me',title:'This is how Wildly Native runs.',body:'I came to flowers from teaching agriculture, then built a working farm and floral business on the same principles I teach here. None of this is theory; it is the plan I run my own seasons on and talk through every week on the Flower Files podcast.'},
+ {t:'dark',title:'A flower farm can be beautiful and profitable. Most just never plan for the second part.'},
+ {t:'section',idx:'Your next step',title:'Grow With Wildly Native'},
+ {t:'normal',k:'How I can help',title:'A path for wherever you are.',body:'The seed-to-centerpiece courses walk you through growing, pricing, and selling step by step. Rooted is the community growing alongside you with seasonal guidance and real answers. And for growers ready to build the business, there is one-on-one coaching to plan your season with me.'},
+ {t:'cta',title:'Ready to grow the flowers that actually sell?',chips:['Explore the seed-to-centerpiece courses','Join the Rooted community'],disc:'Educational content for flower growers and floral designers. No income, revenue, or business result is guaranteed. Results vary by grower, farm, climate, and market.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(x){return x}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  if(s.t==='title'){
+    d.innerHTML=`<div class="sprig"></div><h1>${s.title}</h1><div class="sub">${s.sub}</div><div class="foot">${s.foot}</div>`;
+  }else if(s.t==='dark'){
+    d.innerHTML=`<div class="accentbar"></div><h2>${s.title}</h2>`;
+  }else if(s.t==='section'){
+    d.innerHTML=`<div class="idx">${s.idx}</div><h2>${s.title}</h2><div class="fieldrows"><i></i><i></i><i></i><i></i><i></i></div>`;
+  }else if(s.t==='cta'){
+    const chips=(s.chips||[]).map((c,i)=>`<div class="chip ${i===0?'solid':''}">${c}</div>`).join('');
+    d.innerHTML=`<div class="accentbar" style="width:74px;height:3px;background:var(--accent);margin-bottom:34px;border-radius:2px"></div><h2>${s.title}</h2><div class="chips">${chips}</div><div class="disc">${s.disc}</div>`;
+  }else{
+    d.innerHTML=`${s.k?`<div class="k">${s.k}</div>`:''}<h2>${s.title}</h2>${s.body?`<div class="body">${s.body}</div>`:''}`;
+  }
+  stage.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  document.getElementById('count').textContent=pad(cur+1)+' / '+pad(slides.length);
+  document.getElementById('prog').style.width=((cur+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+stage.addEventListener('click',e=>{
+  const x=e.clientX/window.innerWidth;
+  go(x<0.32?cur-1:cur+1);
+});
+go(0);
+</script>
+</body>
+</html>
