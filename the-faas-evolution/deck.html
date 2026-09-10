@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Finance-as-a-Service Playbook · Dan Gertrudes, GrowthLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f7f6; --panel:#ecefec; --rule:#d6dbd7;
+    --acc:#407b9d; --acc2:#2c5c74; --ink:#20302f; --body:#48524f; --dim:#8a938f; --cream:#ffffff;
+    --teal-ink:#eaf3f5;
+  }
+  html,body{height:100%}
+  body{background:#e6e9e6;font-family:'Source Sans 3',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e6e9e6}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Source Sans 3',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:800;color:var(--ink);line-height:1.06;letter-spacing:-.01em}
+  .t-title h1{font-size:5.0vw;max-width:94%}
+  .t-normal h1{font-size:3.5vw;max-width:92%;font-weight:700}
+  .t-normal .body{font-family:'Source Sans 3',sans-serif;font-size:1.42vw;color:var(--body);margin-top:2.8vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Source Sans 3',sans-serif;font-size:1.55vw;color:var(--acc2);margin-top:3.0vh;max-width:82%;line-height:1.5;font-weight:600}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Source Sans 3',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:92%;font-weight:800}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh;border-radius:2px}
+  .t-dark{background:radial-gradient(135% 135% at 50% 10%,#164049 0%,#0e2a33 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:var(--teal-ink);font-weight:700;line-height:1.2}
+  .t-cta{background:radial-gradient(135% 135% at 50% 100%,#164049 0%,#0e2a33 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.0vw;max-width:86%;color:var(--teal-ink);font-weight:800}
+  .t-cta .body{font-family:'Source Sans 3',sans-serif;color:#cfe5ea;font-size:1.42vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.6px solid #6fa9c4;color:var(--teal-ink);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:600;font-family:'Source Sans 3',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45;font-family:'Source Sans 3',sans-serif}
+  .t-cta .disc{color:#8fb6c0}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-family:'Source Sans 3',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .motif{position:absolute;pointer-events:none}
+  .title-motif{right:7.5%;bottom:8%;width:20vw;opacity:.85}
+  .corner-motif{right:6.5%;bottom:8%;width:11vw;opacity:.6}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(32,48,47,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">GrowthLab · Finance-as-a-Service</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a ledger grid (the 13-week cash-flow columns) with a rising cash line, in the brand teal -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="grid" viewBox="0 0 140 120">
+  <g fill="none" stroke="#407b9d" stroke-width="1.4">
+    <rect x="6"  y="30" width="26" height="24" rx="4" opacity="0.85"/>
+    <rect x="38" y="30" width="26" height="24" rx="4" opacity="0.6"/>
+    <rect x="70" y="30" width="26" height="24" rx="4" opacity="0.4"/>
+    <rect x="102" y="30" width="26" height="24" rx="4" opacity="0.28"/>
+    <rect x="6"  y="62" width="26" height="24" rx="4" opacity="0.6"/>
+    <rect x="38" y="62" width="26" height="24" rx="4" opacity="0.4"/>
+    <rect x="70" y="62" width="26" height="24" rx="4" opacity="0.28"/>
+    <rect x="102" y="62" width="26" height="24" rx="4" opacity="0.2"/>
+  </g>
+  <polyline points="12,50 44,44 76,34 108,20 132,14" fill="none" stroke="#2c5c74" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="132" cy="14" r="3.6" fill="#407b9d"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Finance-as-a-Service Playbook',sub:'How growing companies get CFO-level clarity and a 13-week cash flow they can see coming, without building an in-house finance team.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You have outgrown a bookkeeper. You are not ready to hire a finance team.',body:'Revenue is climbing and the business is more complex than the spreadsheet that got you here. But you are still flying on a monthly P&L that lands weeks late, cash still surprises you, and tax season is a scramble instead of a plan. You do not need another report. You need to know what to do next.'},
+ {t:'dark',title:'Your P&L tells you what already happened. It never tells you whether you can make payroll in week nine.'},
+
+ {t:'section',idx:'Part One',title:'Why Growing Companies Fly Blind on Cash'},
+ {t:'normal',k:'The monthly lag',title:'Monthly books answer last month’s question a month too late.',body:'By the time the books close, the decision has already passed. You find out you were tight in a week that is already gone, and you plan the next quarter on numbers that describe the last one. Growth makes the lag more dangerous, because the gap between the money going out and the money coming in gets wider exactly when you can least afford a surprise.'},
+ {t:'normal',k:'The four blind spots',title:'Four questions your numbers should answer, and usually do not.',body:'Do you have real insight into your cash flow. Do you know exactly where you are making and losing money. Is your marketing spend earning a profit or just buying activity. Is what you pay tied to performance. Most growing companies cannot answer all four with confidence, and every unanswered one is a place money quietly leaks.'},
+ {t:'dark',title:'Cash is not just how much. It is when. Miss the timing and a profitable company still misses payroll.'},
+
+ {t:'section',idx:'Part Two',title:'The Finance-as-a-Service Model'},
+ {t:'normal',k:'One roof',title:'Four finance functions, working as one team, on a subscription.',body:'Finance-as-a-Service brings accounting, CFO strategy, planning and analysis, and tax under one roof, operating cohesively like internal teams that talk to each other. You get the capability of a full finance department without recruiting, managing, or affording one, on a recurring fixed fee instead of a surprise invoice.'},
+ {t:'normal',k:'Accounting and CFO',title:'Clean books underneath, a strategist on top.',body:'Bookkeeping and controllership are the foundation: accurate, timely, reconciled numbers you can trust. On top of that sits the CFO layer, the person who turns those numbers into decisions about pricing, hiring, and where the next dollar should go. One without the other is either data with no direction, or opinions with no ground under them.'},
+ {t:'normal',k:'FP&A and Tax',title:'A forward plan, and no April surprises.',body:'Financial planning and analysis is the forward view: a budget, a forecast, and a monthly check of plan against reality so the plan actually adapts. Tax handled the same way means planning across the whole year, not a scramble in April, so the bill is understood long before it is due and nothing you did in Q2 becomes a shock in Q1.'},
+ {t:'normal',k:'The 13-week cash flow',title:'The 10-step, 13-week cash flow: your quarter, one week at a time.',body:'The centerpiece is a rolling weekly forecast covering the next quarter. Start with a cash balance updated every week, layer in your real invoicing timing, anticipate demand from seasonality and your pipeline, bucket receivables by when customers actually pay, and reconcile the forecast against reality every Sunday. The result is a cash picture that looks forward, not backward.'},
+ {t:'dark',title:'A rolling weekly forecast turns "can we make payroll?" from a monthly panic into a Sunday routine.'},
+
+ {t:'section',idx:'Part Three',title:'What CFO-Level Clarity Looks Like'},
+ {t:'normal',k:'On the business',title:'An accounting calendar that lets you work on the business, not in it.',body:'When reporting runs on a set cadence, close, review, forecast, reforecast, finance stops being the thing you dread and becomes the rhythm you run on. The strategic business cycle gives every month a job, so you spend your time deciding what to do with the numbers instead of chasing them down.'},
+ {t:'normal',k:'Marketing for profit',title:'Know which spend earns its keep, before you scale it.',body:'Once the numbers are clean and forward-looking, you can see which channels and offers actually return a profit and which just create motion. That is what makes it safe to scale: you are not pouring more money into activity, you are putting it behind the spend that is already paying you back, and you can tie what you pay to what performs.'},
+ {t:'normal',k:'The result',title:'Decisions made on next quarter’s numbers, not last quarter’s.',body:'Clarity is not more dashboards. It is walking into every decision, a hire, a price change, a big purchase, already knowing what it does to cash over the next thirteen weeks. Fewer surprises, calmer conversations, and the confidence to grow on purpose instead of hoping the math works out.'},
+ {t:'dark',title:'The goal was never more reports. It was knowing what to do next.'},
+
+ {t:'normal',k:'Why GrowthLab',title:'400+ growing companies run on this model.',body:'GrowthLab is a Finance-as-a-Service firm that supports more than 400 scaling businesses across their entire finance value stream. Founder Dan Gertrudes spent about 15 years inside Fortune 500 and mid-sized companies before building it, and hosts The FaaS Evolution podcast on how modern finance actually runs. This masterclass is built from the model his team uses every day.'},
+
+ {t:'section',idx:'Your Next Step',title:'Bring Finance-as-a-Service to Your Company'},
+ {t:'normal',k:'Keep going with GrowthLab',title:'From this masterclass to a finance team that runs alongside you.',body:'This session is the map. Working with GrowthLab is the team: accounting, CFO guidance, planning and analysis, and tax, delivered together on a fixed monthly fee, with your own 13-week cash flow kept current so you always know where you stand and where you are headed.'},
+ {t:'cta',title:'Ready to see your next 13 weeks of cash before they happen?',body:'Take the next step with Dan Gertrudes and GrowthLab Finance-as-a-Service.',chips:['Explore Finance-as-a-Service','Talk to GrowthLab'],disc:'Educational content for founders and business owners. No income, revenue, or financial result is guaranteed. Every business is different and outcomes vary by company, market, and effort. Nothing here is individualized tax, accounting, or investment advice.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#grid"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">GrowthLab · Dan <b>Gertrudes</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
