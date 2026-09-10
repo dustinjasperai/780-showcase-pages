@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Pivot to Premium · Sarah Murphy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4f2; --panel:#efe7dd; --rule:#e3d9cb;
+    --accent:#b18e2f; --accent-2:#62674a; --ink:#152238; --ink-soft:#4a4a4a;
+  }
+  html,body{height:100%}
+  body{background:#e8e2da;font-family:'Inter',system-ui,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e8e2da}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.08;letter-spacing:0}
+  .t-title h1{font-size:5.6vw;font-weight:700;letter-spacing:-.005em}
+  .t-title h1 b{color:var(--accent);font-weight:700;font-style:italic}
+  .t-normal h1{font-size:3.7vw;max-width:92%;font-weight:600}
+  .t-normal h1 b{color:var(--accent);font-weight:600;font-style:italic}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--ink-soft);margin-top:2.6vh;max-width:80%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--ink-soft);margin-top:3.2vh;max-width:80%;line-height:1.55;font-weight:400}
+  .t-section{align-items:flex-start;background:linear-gradient(120deg,#f7f4f2 0%,#efe7dd 100%)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.16vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%;font-weight:700}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#1d2c47 0%,#101a2c 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4vw;max-width:92%;color:#f7f4f2;font-weight:600}
+  .t-dark h1 b{color:var(--accent);font-style:italic}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1d2c47 0%,#101a2c 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.3vw;max-width:90%;font-weight:700;color:#f7f4f2}
+  .t-cta h1 b{color:var(--accent);font-style:italic}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Inter',sans-serif;border:1.6px solid var(--accent);color:#f7f4f2;border-radius:100px;padding:1.3vh 1.9vw;font-size:1.12vw;font-weight:600;letter-spacing:.04em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-family:'Inter',sans-serif;font-size:.86vw;color:#c9bfa6;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--ink-soft)}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.2vw;color:var(--ink-soft);margin-top:3.4vh;font-weight:600;letter-spacing:.04em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none}
+  .title-motif{right:7%;bottom:8%;width:22vw;opacity:.95}
+  .corner-motif{right:6.5%;bottom:7.5%;width:9vw;opacity:.55}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(21,34,56,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;color:#a99a78;z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a99a78;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:11px;color:#a99a78;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.7vw}.t-title h1{font-size:9.4vw}.t-normal h1{font-size:6.2vw}.t-normal .body{font-size:3.2vw}
+    .sub{font-size:3.5vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Pivot to Premium</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a coupe glass on a rising line. the premium pour lifting above the crowd, price rising with worth -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mark" viewBox="0 0 260 200">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="130" cy="96" r="80" stroke="#b18e2f" opacity="0.16"/>
+    <circle cx="130" cy="96" r="54" stroke="#b18e2f" opacity="0.34"/>
+    <path d="M96 74 L164 74 L130 112 Z" stroke="#b18e2f" opacity="0.85"/>
+    <path d="M130 112 L130 150" stroke="#b18e2f" opacity="0.9"/>
+    <path d="M108 150 L152 150" stroke="#b18e2f" opacity="0.9"/>
+    <path d="M112 66 L130 48 L148 66" stroke="#b18e2f" opacity="0.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Pivot to <b>Premium</b>',sub:'A live masterclass on how to stop competing on price and build a mobile bar that books $2,000 and up events on repeat.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You pour a beautiful bar. You still get asked, <b>what is your cheapest package?</b>',body:'The events are gorgeous. The clients are thrilled. But the inquiries keep haggling, the calendar fills with small jobs, and a busy season somehow ends with not much left over. If you are working every weekend and still not paying yourself like the pro you are, this hour is for you.'},
+ {t:'dark',title:'You do not have a booking problem. You have a <b>positioning</b> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Bars Get Booked At Budget Prices'},
+ {t:'normal',k:'The race to the bottom',title:'The cheapest bar in the inbox always <b>looks</b> the same.',body:'When your website, your packages, and your quote read like every other mobile bar in town, the only lever the buyer has left is price. So they ask for the cheapest option, and a business built on real craft ends up competing in the one place craft does not show: the number at the bottom of the email.'},
+ {t:'normal',k:'The hidden cost',title:'A budget yes does not stay small. It <b>compounds</b>.',body:'Every under-priced event is not one thin invoice, it is a lower anchor you carry into the next quote, the next season, the next referral who was told what you charge. The discount becomes the habit, the habit becomes the brand, and the calendar fills with exactly the work that pays the least.'},
+ {t:'dark',title:'Premium is not a price. It is a <b>decision</b> the buyer makes before they ask what it costs.'},
+
+ {t:'section',idx:'Part Two',title:'The Pivot to Premium Method'},
+ {t:'normal',k:'The system',title:'Four moves that turn a nice bar into a <b>premium</b> booking.',body:'Pivot to Premium is how I take an owner from defending a cheap quote to naming a $2,000 and up number without flinching. It runs in four moves: build the Premium Offer, create the Premium Touch, run a Powerful Follow-Up, and hold it with real systems. Hustle fills a weekend. A method fills a season.'},
+ {t:'normal',k:'Move one · Offer',title:'Build a <b>premium offer</b>, not an hourly bar.',body:'Most under-charging starts with a fuzzy package, because a blurry promise can only ask for a timid price. The Premium Offer is a signature experience with a clear result the couple or the company can picture, priced for what it is worth to them, so the number has something real to stand on instead of an hourly rate.'},
+ {t:'normal',k:'Move two · Touch',title:'Create the <b>premium touch</b> the buyer feels first.',body:'The premium decision is made before anyone reads your price. The Premium Touch is the brand, the website, and the way you show up in the first reply, the details that quietly signal high end, so that by the time a quote lands the buyer already expects it to cost more, and is glad it does.'},
+ {t:'normal',k:'Move three · Follow-Up',title:'Run a <b>powerful follow-up</b> that closes the event.',body:'Most high-dollar events are lost in the silence after the first quote, not at the quote itself. Powerful Follow-Up is the deliberate rhythm that keeps you in the conversation, answers the real hesitation, and turns an inquiry into a signed contract, instead of hoping the lead comes back on their own.'},
+ {t:'normal',k:'Move four · Systems',title:'Hold it with <b>systems</b>, so premium repeats.',body:'A premium price you cannot deliver on twice is a fluke. This move builds the packages, the pricing, and the operating rhythm that take you from chaos to clarity, so a $2,000 and up event becomes your normal booking rather than the one great weekend you talk about all year.'},
+ {t:'dark',title:'Offer, touch, follow-up, <b>systems</b>. That is how a booking on repeat is built.'},
+
+ {t:'section',idx:'Part Three',title:'What A Premium Calendar Looks Like'},
+ {t:'normal',k:'The shift',title:'Fewer events. <b>Bigger</b> ones. A season you can actually breathe in.',body:'Nothing about your craft changes, it was always worth it. What changes is who says yes: buyers who chose you before they asked the price, events at $2,000, $4,000 and up, and weekends that finally pay like the work they take. That is the difference between a busy mobile bar and a profitable one.'},
+ {t:'normal',k:'Why me',title:'I built a mobile bar to premium <b>before</b> I ever coached it.',body:'Fifteen years in hospitality, a masters in hospitality management from Cornell, and a mobile bar business I built and priced up myself. Since then more than 1,700 owners have come through Mobile Bev Pros to do the same. This is lived, not theory, and it is the exact path I walk owners down every day.'},
+ {t:'dark',title:'You do not need more information. You need the <b>right</b> information, in the right order.'},
+
+ {t:'section',idx:'Your next step',title:'Pivot Your Own Bar To Premium'},
+ {t:'normal',k:'Where this goes',title:'The Mobile Bar Academy.',body:'This masterclass is the map. Inside the Mobile Bar Academy and Accelerator coaching we walk the four moves through your own offer, your own brand, and your own pipeline, with the courses, the coaching, and a room of 1,700 plus owners doing the same work, until booking $2,000 and up events stops being a goal and becomes how your calendar runs.'},
+ {t:'cta',title:'Ready to book events that pay what your bar is <b>worth</b>?',chips:['Join the Mobile Bar Academy','Apply for Accelerator coaching'],disc:'Educational content for mobile bar and beverage business owners. No specific income or result is guaranteed. Results vary by person, offer, effort, and circumstance.'},
+];
+
+const deck=document.getElementById('deck');
+function mark(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#mark"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Sarah Murphy · <b>Mobile Bev Pros</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=mark(s.motif);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
