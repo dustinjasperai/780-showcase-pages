@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Modernized Laundromat Masterclass · Dave Menz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#061841; --panel:#0d2350; --rule:#24407a;
+    --gold:#ffc96c; --wine:#7898eb; --chalk:#f5f2e9; --grey:#c3cde4; --dim:#7f8db0;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Open Sans',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Josefin Sans',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh}
+  h1{font-family:'Josefin Sans',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.12;letter-spacing:-.005em}
+  .t-title h1{font-size:5vw}
+  .t-normal h1{font-size:3.3vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Josefin Sans',sans-serif;font-size:1.4vw;font-weight:600;color:var(--wine);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#123066 0%,#03102e 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#fdf8ec}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#123066 0%,#03102e 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--gold);color:var(--tint,#f4e3b8);border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:600;font-family:'Josefin Sans',sans-serif}
+  .list{margin-top:3vh;max-width:80%}
+  .list .li{font-size:1.44vw;color:var(--grey);line-height:1.4;padding:1.3vh 0;border-top:1px solid var(--rule);font-weight:300}
+  .list .li:first-child{border-top:none}
+  .list .li b{color:var(--chalk);font-weight:600}
+  .stat{display:flex;gap:4vw;margin-top:3.6vh}
+  .stat .s{}
+  .stat .n{font-family:'Josefin Sans',sans-serif;font-size:3vw;font-weight:700;color:var(--gold);line-height:1}
+  .stat .l{font-size:1.02vw;color:var(--grey);margin-top:1vh;font-weight:300;letter-spacing:.02em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .drum-motif{position:absolute;pointer-events:none}
+  .title-drum{right:7%;bottom:9%;width:20vw;opacity:.95}
+  .corner-drum{right:6%;bottom:7.5%;width:8.5vw;opacity:.5}
+  .brandline{font-family:'Josefin Sans',sans-serif;font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--gold);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600;font-family:'Josefin Sans',sans-serif}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700;font-family:'Josefin Sans',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.list .li{font-size:3vw}.stat .n{font-size:6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Laundromat Millionaire</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- washer drum modernizing: dim ring waking to a bright gold ring -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="drum" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#24407a" stroke-width="6"/>
+  <circle cx="100" cy="100" r="58" fill="none" stroke="#7898eb" stroke-width="3" opacity="0.5"/>
+  <g stroke="#ffc96c" stroke-width="6" stroke-linecap="round">
+    <path d="M100 14 A86 86 0 0 1 186 100" fill="none"/>
+    <path d="M100 42 A58 58 0 0 1 158 100" fill="none" opacity="0.8"/>
+  </g>
+  <circle cx="100" cy="100" r="16" fill="none" stroke="#ffc96c" stroke-width="5"/>
+  <circle cx="100" cy="100" r="4" fill="#ffc96c"/>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Modernized Laundromat',sub:'How to turn a tired, break-even corner store into a modern, multi-revenue cash machine.',brand:true,drum:'title'},
+ {t:'normal',k:'Who this is for',title:'You bought the store. Now it just sits there.',body:'It covers its bills and not much more. The machines are old, half the income walks in as quarters, and every month looks about the same. You know there is more in it, you just cannot see where.'},
+ {t:'dark',title:'You do not have a bad location. You have an un-modernized one.'},
+
+ {t:'section',idx:'Part One',title:'Why the Tired Store Stays Tired'},
+ {t:'normal',k:'The break-even trap',title:'A coin-only store hides its own numbers from you.',body:'When everything runs on quarters, you cannot see which machines earn, which hours matter, or where the money leaks. You are running a business half-blind, so it drifts along at break-even and calls that normal.'},
+ {t:'normal',k:'The real cost',title:'Every month you wait, the store earns a fraction of what it could.',body:'The demand is already walking through the door. Old equipment, a bad floor plan, and one revenue stream cap what any of it can turn into. The ceiling is not the neighborhood. It is the setup.'},
+ {t:'dark',title:'Most tired stores are cash machines waiting for someone to wake them up.'},
+
+ {t:'section',idx:'Part Two',title:'The Golden Keys to a Modernized Laundromat'},
+ {t:'normal',k:'Key one, payments',title:'Get off quarters and you can finally see the store.',body:'Card and app payment does two things at once. It lifts what people spend per visit, and it turns every wash into data, so you finally know what earns and what to fix. This is where a modern store begins.'},
+ {t:'normal',k:'Key two, revenue streams',title:'One store, three ways to make money.',body:'Self-serve is only the floor. Layer wash-dry-fold and pickup and delivery on top and a single location does the revenue of two or three. Most owners leave this on the table for years.'},
+ {t:'normal',k:'Key three, the floor plan',title:'Lay the store out for throughput, not habit.',body:'Machine mix, traffic flow, and turns per day are a design choice, not luck. The right layout moves more laundry through the same four walls, which is the cheapest revenue you will ever add.'},
+ {t:'normal',k:'Key four, staffing',title:'Build it to run when you are not standing in it.',body:'A modernized store is set up to run semi-absentee, on systems and the right hours of help, so it stops depending on you being there. That is the difference between owning a store and owning a job.'},
+ {t:'dark',title:'Payments, revenue streams, layout, staffing. Four keys that turn a store around.'},
+
+ {t:'section',idx:'Part Three',title:'Buy It Right, Then Wake It Up'},
+ {t:'normal',k:'Read the meters, not the pitch',title:'The water and gas bills tell you the truth a seller will not.',body:'Utility usage reveals the real turns and volume of a store, no matter what the owner claims it makes. Read the meters and you buy undervalued stores others overpay for, then modernize them into the number they should have been.'},
+
+ {t:'section',idx:'From my own stores',title:'From One $85,000 Store to Four'},
+ {t:'normal',k:'Why listen to me on this',title:'I did this with a store I bought off Craigslist.',body:'I bought a run-down laundromat for eighty-five thousand dollars, modernized it, and kept going. Today my wife Carla and I run Queen City Laundry, four stores on the east side of Cincinnati, built on exactly the keys in this session.',stat:[['4','Stores'],['~250','Machines'],['$1.8M','A year']]},
+ {t:'dark',title:'None of this is theory. It is the same playbook, store after store.'},
+
+ {t:'section',idx:'Your next step',title:'Modernize Your Store With Me'},
+ {t:'normal',k:'How I can help',title:'The full method, in your corner.',body:'My New Owner\'s Course walks you through the whole modernized-laundromat system step by step, and one-on-one coaching puts me in your business to work through your store, your numbers, and your next move with you.'},
+ {t:'cta',title:'Ready to turn your store into a cash machine?',chips:['Start the New Owner\'s Course','Book one-on-one coaching'],disc:'Educational content for laundromat owners and buyers. No income, revenue, or business result is guaranteed. Results vary by owner, store, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function drum(kind){return `<svg class="drum-motif ${kind==='title'?'title-drum':'corner-drum'}"><use href="#drum"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.stat) h+=`<div class="stat">`+s.stat.map(x=>`<div class="s"><div class="n">${x[0]}</div><div class="l">${x[1]}</div></div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Laundromat <b>Millionaire</b> · Dave Menz</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.drum) h+=drum(s.drum);
+  else if(s.t==='title') h+=drum('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
