@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Fabric-Formed Sink — A Concrete Design School Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#1a1a1a;
+    --panel:#222020;
+    --rule:#4a4a4a;
+    --ink:#f4f2ee;
+    --accent:#8a8175;
+    --dim:#9a948c;
+  }
+  html,body{ height:100%; }
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Archivo', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  #stage{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .slide{
+    display:none; width:100%; height:100%;
+    padding:8vh 9vw; flex-direction:column; justify-content:center;
+    position:relative;
+  }
+  .slide.on{ display:flex; animation:fade .5s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .kicker{ font-size:13px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent); margin-bottom:26px; font-weight:600; }
+  h1{ font-family:'Cormorant Garamond', Georgia, serif; font-weight:500; font-size:clamp(38px,7vw,86px); line-height:1.02; letter-spacing:-.01em; }
+  h2{ font-family:'Cormorant Garamond', Georgia, serif; font-weight:500; font-size:clamp(30px,4.6vw,54px); line-height:1.08; margin-bottom:22px; }
+  .lead{ font-size:clamp(17px,2vw,22px); color:var(--dim); max-width:60ch; line-height:1.55; }
+  .lead.big{ color:var(--ink); font-size:clamp(19px,2.3vw,26px); }
+  ul{ list-style:none; max-width:64ch; }
+  li{ font-size:clamp(16px,1.7vw,21px); color:var(--ink); line-height:1.4; padding:15px 0 15px 30px; border-bottom:1px solid var(--rule); position:relative; }
+  li:last-child{ border-bottom:none; }
+  li::before{ content:''; position:absolute; left:0; top:24px; width:12px; height:2px; background:var(--accent); }
+  li b{ font-weight:600; }
+  li span{ display:block; color:var(--dim); font-size:.82em; margin-top:5px; }
+  .partno{ font-family:'Cormorant Garamond',serif; font-size:clamp(90px,18vw,200px); line-height:.8; color:var(--panel); -webkit-text-stroke:1px var(--rule); }
+  .part-label{ font-family:'Cormorant Garamond',serif; font-size:clamp(30px,5vw,60px); color:var(--ink); margin-top:-4vh; }
+  .pull{ font-family:'Cormorant Garamond',serif; font-size:clamp(28px,4.4vw,52px); line-height:1.14; max-width:20ch; }
+  .pull em{ font-style:italic; color:var(--accent); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:30px 46px; max-width:70ch; margin-top:8px; }
+  .grid h3{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(20px,2.3vw,27px); margin-bottom:8px; }
+  .grid p{ color:var(--dim); font-size:clamp(14px,1.5vw,17px); line-height:1.5; }
+  .step{ display:flex; gap:22px; align-items:baseline; padding:13px 0; border-bottom:1px solid var(--rule); max-width:66ch; }
+  .step:last-child{ border-bottom:none; }
+  .step .n{ font-family:'Cormorant Garamond',serif; font-size:26px; color:var(--accent); min-width:34px; }
+  .step .b{ font-size:clamp(15px,1.6vw,20px); }
+  .step .b span{ display:block; color:var(--dim); font-size:.82em; margin-top:4px; }
+  .foot{ position:absolute; left:9vw; bottom:5vh; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--rule); }
+  .cta-line{ font-size:clamp(18px,2vw,24px); color:var(--ink); margin:8px 0 22px; max-width:52ch; line-height:1.5; }
+  .cta-do{ display:inline-block; font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3vw,34px); color:var(--accent); border:1px solid var(--accent); padding:14px 30px; margin-top:4px; }
+  .disc{ margin-top:30px; font-size:12.5px; color:var(--dim); max-width:60ch; line-height:1.5; }
+  #nav{ position:fixed; bottom:22px; right:26px; display:flex; gap:8px; align-items:center; z-index:10; font-size:12px; color:var(--dim); }
+  #nav button{ background:var(--panel); color:var(--ink); border:1px solid var(--rule); width:34px; height:34px; cursor:pointer; font-size:15px; }
+  #nav button:hover{ border-color:var(--accent); color:var(--accent); }
+  #bar{ position:fixed; top:0; left:0; height:2px; background:var(--accent); transition:width .3s; z-index:10; }
+  @media (max-width:640px){ .slide{ padding:7vh 7vw; } .grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<div id="nav"><button id="prev">&larr;</button><span id="count"></span><button id="next">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title', k:'A Concrete Design School Masterclass',
+   h:'The Fabric-Formed Sink',
+   lead:'How to cast a one-of-one concrete piece the price-cutters down the road can never copy.'},
+
+  {t:'whofor', k:'Who this is for',
+   h:'The maker who is done racing to the bottom',
+   list:[
+     ['You already pour solid work.','Countertops, vanities, slabs. The craft is there.'],
+     ['You are quoting against three shops who will always go lower.','Price is the only thing the customer can compare, so price is what they cut.'],
+     ['You want the work only you can make.','The piece that gets photographed, shared, and asked for by name.']
+   ]},
+
+  {t:'trap', k:'The trap',
+   pull:'When every shop pours the same rectangle, the only lever left is <em>price</em>.'},
+
+  {t:'reframe', k:'The reframe',
+   h:'The money was never in the slab',
+   lead:'A flat countertop is a commodity, and commodities compete on cost. A form nobody else in your market can produce is not a commodity. It is the reason a client drives past four other shops to reach yours. This class is about making that form.'},
+
+  {t:'part', no:'01', label:'Why most concrete looks the same'},
+
+  {t:'content', k:'Part One',
+   h:'The mold is the ceiling',
+   lead:'Most shops build rigid melamine forms. Rigid forms make rigid shapes: the square, the waterfall edge, the same drainboard everyone else casts. The shape of the mold is the ceiling on what you can charge, because a shape anyone can build is a shape anyone can quote.'},
+
+  {t:'content', k:'Part One',
+   h:'What a premium buyer is actually paying for',
+   list:[
+     ['Not the material.','A bag of mix costs the same in every shop in town.'],
+     ['The form.','Curves, folds and basins that read as sculpture, not plumbing.'],
+     ['The story.','"My maker cast this by hand, and there is not another one like it."']
+   ]},
+
+  {t:'part', no:'02', label:'The method'},
+
+  {t:'framework', k:'Part Two - the method',
+   h:'GFRC: strength without the slab',
+   grid:[
+     ['Glass fiber, not rebar','Glass-fiber-reinforced concrete carries its load through fiber, so the piece goes thin and light instead of thick and heavy.'],
+     ['Why it matters','A fabric-formed basin needs a mix that can be sprayed into a curve and still hold an edge. GFRC is what makes the shape possible.'],
+     ['Where it started','The first workshop on GFRC sinks and countertops was taught in 2005. This is the foundation everything else sits on.'],
+     ['What you build on it','Once the mix is right, the mold stops being a box and starts being a canvas.']
+   ]},
+
+  {t:'framework', k:'Part Two - the method',
+   h:'Fabric-forming: let the material find its shape',
+   grid:[
+     ['Fabric instead of melamine','Tensioned fabric and fabric hardeners become the mold. The concrete pulls into folds and hollows a flat form can never make.'],
+     ['Repeatable, not random','Hardened correctly, one fabric form casts many times over, so a signature shape becomes a product line.'],
+     ['The organic edge','This is where a basin stops looking manufactured and starts looking found in nature.'],
+     ['Taught since 2008','The first fabric-forming class in the world was taught in 2008; the method has been refined every year since.']
+   ]},
+
+  {t:'framework', k:'Part Two - the method',
+   h:'FLOW: designing the drape',
+   grid:[
+     ['Control the fall','FLOW fabric-forming is about placing the tension on purpose so the drape lands where you want it, not where gravity dumps it.'],
+     ['From accident to intent','The difference between a happy accident and a piece you can sell twice is knowing why the fold formed.'],
+     ['Free-flowing, on demand','This is how you promise a client an organic one-of-one and still deliver on a date.'],
+     ['Your signature','The drape you design becomes the thing your market knows you for.']
+   ]},
+
+  {t:'content', k:'Part Two - the method',
+   h:'The surface is what sells the photo',
+   lead:'A perfect form with a chalky, blotchy surface still reads cheap. Fiber loading, hand tooling and a proper sealing system are what make the piece photograph like stone and survive daily use. The finish is not the last 10 percent. It is the part the buyer actually touches.'},
+
+  {t:'walk', k:'Part Two - the method',
+   h:'Casting a fabric-formed sink, start to finish',
+   steps:[
+     ['1','Design the drape.','Decide where the fabric folds and where the basin falls before a drop of mix is made.'],
+     ['2','Build and tension the fabric form.','Hardened fabric, set to hold the shape under load.'],
+     ['3','Spray the GFRC face coat.','A tight, fiber-rich layer captures every fold in detail.'],
+     ['4','Back-fill, cure, demold.','Strength builds in; then the shape is revealed.'],
+     ['5','Tool, hone and seal.','The surface that turns a casting into a piece someone photographs.']
+   ]},
+
+  {t:'part', no:'03', label:'In your shop, next month'},
+
+  {t:'content', k:'Part Three',
+   h:'Pricing a one-of-one',
+   lead:'A commodity countertop is priced against the shop down the road. A hand-cast, fabric-formed piece has no comparison to be quoted against, so it is priced on what it is worth to the person who wants that exact thing and can get it nowhere else. That is the whole point of learning the form.'},
+
+  {t:'content', k:'Part Three',
+   h:'Every piece markets the next one',
+   list:[
+     ['The work is the ad.','A fabric-formed basin stops the scroll on its own; no stock photo competes with it.'],
+     ['One-of-one invites sharing.','Clients show off the thing nobody else has, and each share reaches the next buyer.'],
+     ['Your portfolio compounds.','Ten signature pieces are ten reasons to be found for the work only you make.']
+   ]},
+
+  {t:'why', k:'Why learn it here',
+   h:'Taught by the person who taught it first',
+   list:[
+     ['The first GFRC sink and countertop class in the world, 2005.','Learned directly from the people who pioneered the material.'],
+     ['The first fabric-forming class in the world, 2008.','The method here is the source, not a copy of it.'],
+     ['More than 1,100 artisans trained since 2005.','A generation of makers learned the form in this room.'],
+     ['The Erosion Sink and a body of signature work.','Not theory - pieces that have sold and been asked for by name.']
+   ]},
+
+  {t:'recap', k:'The three moves',
+   h:'What today comes down to',
+   steps:[
+     ['1','Stop selling the slab.','The flat rectangle is where price wins and margin dies.'],
+     ['2','Learn the form.','GFRC plus fabric-forming is the shape nobody in your market can quote against.'],
+     ['3','Let the work sell itself.','One-of-one pieces photograph, get shared and bring the next buyer.']
+   ]},
+
+  {t:'cta', k:'Your next step',
+   h:'Come cast one with your own hands',
+   ctaline:'This masterclass shows the method. A hands-on workshop is where you build a fabric-formed piece start to finish, alongside people doing the same.',
+   cta:'Join a workshop at Concrete Design School',
+   disc:'Educational content only. No specific business result, income or sales outcome is guaranteed. Results vary based on your market, materials, effort and execution.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').toString();}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='slide'+(i===cur?' on':'');
+    let html='';
+    if(s.k) html+=`<div class="kicker">${esc(s.k)}</div>`;
+    if(s.t==='title'){ html+=`<h1>${esc(s.h)}</h1><p class="lead big" style="margin-top:26px">${esc(s.lead)}</p>`; }
+    else if(s.t==='trap'){ html+=`<p class="pull">${s.pull}</p>`; }
+    else if(s.t==='reframe'||s.t==='content'&&s.lead){ html+=`<h2>${esc(s.h)}</h2><p class="lead big">${esc(s.lead)}</p>`; }
+    else if(s.t==='part'){ html+=`<div class="partno">${esc(s.no)}</div><div class="part-label">${esc(s.label)}</div>`; }
+    else if(s.list){ html+=`<h2>${esc(s.h)}</h2><ul>`+s.list.map(x=>`<li><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join('')+`</ul>`; }
+    else if(s.grid){ html+=`<h2>${esc(s.h)}</h2><div class="grid">`+s.grid.map(x=>`<div><h3>${esc(x[0])}</h3><p>${esc(x[1])}</p></div>`).join('')+`</div>`; }
+    else if(s.steps){ html+=`<h2>${esc(s.h)}</h2>`+s.steps.map(x=>`<div class="step"><div class="n">${esc(x[0])}</div><div class="b"><b>${esc(x[1])}</b><span>${esc(x[2])}</span></div></div>`).join(''); }
+    else if(s.t==='cta'){ html+=`<h2>${esc(s.h)}</h2><p class="cta-line">${esc(s.ctaline)}</p><div class="cta-do">${esc(s.cta)}</div><p class="disc">${esc(s.disc)}</p>`; }
+    if(s.h&&!html.includes('<h2')&&!html.includes('<h1')&&s.t!=='part'){ html=`<h2>${esc(s.h)}</h2>`+html; }
+    d.innerHTML=html;
+    if(s.t!=='title'&&s.t!=='cta'){ const f=document.createElement('div'); f.className='foot'; f.textContent='Concrete Design School'; d.appendChild(f); }
+    stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(cur+1)+' / '+S.length;
+  document.getElementById('bar').style.width=((cur+1)/S.length*100)+'%';
+}
+let cur=0;
+function go(n){ cur=Math.max(0,Math.min(S.length-1,n)); render(); }
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(cur+1); if(e.key==='ArrowLeft')go(cur-1); });
+stage.addEventListener('click',e=>{ if(e.target.closest('#nav'))return; go(cur+1); });
+render();
+</script>
+</body>
+</html>
