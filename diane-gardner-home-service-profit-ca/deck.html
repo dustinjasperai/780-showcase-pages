@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Hidden Profit Audit · Diane Gardner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f1e7; --panel:#fffdf6; --rule:#e7ddcb;
+    --ink:#25274d; --accent:#592b5e; --gold:#d6b56a; --green:#135b1c; --grey:#5b5b5b;
+  }
+  html,body{height:100%}
+  body{background:#d9d2c4;font-family:'Open Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#d9d2c4}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.14;letter-spacing:-.005em}
+  .t-title h1{font-size:4.4vw;max-width:90%}
+  .t-title h1 em{font-style:italic;color:var(--accent);font-weight:600}
+  .t-normal h1{font-size:3.25vw;max-width:86%}
+  .t-normal h1 b{color:var(--accent);font-weight:600}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.58;font-weight:400}
+  .sub{font-size:1.75vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:1.3vw;font-weight:700;color:var(--gold);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh;border-radius:2px}
+  .t-feature{background:var(--ink);align-items:center;text-align:center}
+  .t-feature h1{font-size:3.7vw;max-width:88%;font-style:italic;color:#f6f1e8;font-weight:400}
+  .t-feature .kicker{color:var(--gold)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 0%,#33254f 0%,#25274d 60%,#1c1836 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%;color:#f6f1e8}
+  .accounts{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;max-width:82%}
+  .acct{border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:1.4vh 1.5vw;font-size:1.2vw;font-weight:600;background:rgba(89,43,94,.04)}
+  .acct.g{border-color:var(--green);color:var(--green);background:rgba(19,91,28,.05)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--gold);color:#f4e9cf;border-radius:100px;padding:1.4vh 1.8vw;font-size:1.24vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.9vw;color:rgba(246,241,232,.62);font-style:italic;text-align:center;line-height:1.42}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--grey)}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.6vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-motif{right:7%;bottom:8%;width:20vw}
+  .corner-motif{right:6%;bottom:7.5%;width:9vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--grey);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--grey);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.2vw}.t-feature h1{font-size:5.8vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.acct{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Profitable Home Services</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a ledger baseline with three account envelopes, the last one kept (filled) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ledger" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="130" x2="246" y2="130" stroke="#5b5b5b" opacity="0.35"/>
+    <rect x="34" y="86" width="44" height="34" rx="6" stroke="#592b5e" opacity="0.85"/>
+    <rect x="108" y="70" width="44" height="50" rx="6" stroke="#592b5e" opacity="0.85"/>
+    <rect x="182" y="46" width="44" height="74" rx="6" fill="#135b1c" fill-opacity="0.12" stroke="#135b1c"/>
+    <path d="M192 82 l9 10 l16 -20" stroke="#135b1c" stroke-width="3"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Hidden <em>Profit</em> Audit',sub:'Where the money quietly leaks out of a $1M to $25M home service business, and how to keep more of it.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You run the trucks. You still wonder where the profit went.',body:'You own a home service business doing $1M to $25M a year. Revenue keeps climbing, the phone keeps ringing, and somehow the bank balance never reflects how hard the whole team is working.'},
+ {t:'feature',title:'You do not have a revenue problem. You have a keeping problem.'},
+ {t:'normal',k:'The real question',title:'More profit almost never comes from more jobs.',body:'It comes from the money already moving through the business that you never got to keep. There are two places it leaks, and both are quiet, so most owners never see them until someone counts.'},
+
+ {t:'section',idx:'Part One',title:'The Two Silent Leaks'},
+ {t:'normal',k:'Leak one, pricing',title:'Most trade work is priced to <b>win the job</b>, not to keep the profit.',body:'When a price is set to beat the shop down the road, overhead and owner pay get squeezed out of the margin quietly. You can run flat out all season and still finish the year thin.'},
+ {t:'normal',k:'Your real number',title:'Almost no owner can name their true break-even.',body:'Not revenue, the real number: what every truck, tech, and overhead dollar costs before a job earns a cent. Without it, every quote is a guess, and some of those guesses lose money you never notice.'},
+ {t:'normal',k:'Leak two, tax',title:'The biggest bill most owners never plan for shows up every April.',body:'Tax is treated as something that happens to you once a year, handled by whoever files the return. Handled that way, it is almost always more than it needed to be.'},
+ {t:'feature',title:'Tax you did not plan for is tax you overpaid.'},
+
+ {t:'section',idx:'Part Two',title:'Proactive Tax, Not April'},
+ {t:'normal',k:'A plan, not a panic',title:'Your tax bill is the sum of choices you make all year.',body:'Entity structure, how you pay yourself, when you buy equipment, what you defer and what you accelerate. Decided on purpose across the year, the April number stops being a surprise and starts being a plan.'},
+ {t:'normal',k:'The moves owners miss',title:'Entity, wages, equipment, timing.',body:'A home service business has real levers most owners never pull: the right entity for how you actually earn, reasonable owner wages, planned equipment purchases, and timing income and expenses on purpose. Each one is legal, and each one is money kept.'},
+ {t:'feature',title:'Every dollar you legally keep from the IRS is margin you already earned.'},
+
+ {t:'section',idx:'Part Three',title:'The Profit First Cash System'},
+ {t:'normal',k:'Profit is a habit',title:'Take profit first, then run the business on what is left.',body:'Most owners keep whatever happens to be left at the end, which is usually nothing. Flip it. Set profit and owner pay aside the day the money lands, and the business learns to run on the rest.'},
+ {t:'normal',k:'Give every dollar a job',title:'Five accounts, so the money cannot quietly disappear.',body:'Revenue is split the moment it arrives, so the tax is always funded, the owner is always paid, and profit is no longer an accident.'},
+ {t:'normal',k:'The accounts',title:'One home for each purpose.',accounts:[['Profit',0],['Owner’s Pay',0],['Tax',1],['Operating',0],['Growth',0]]},
+ {t:'feature',title:'When the tax account is always funded, April stops being a threat.'},
+
+ {t:'section',idx:'Part Four',title:'What Changes'},
+ {t:'normal',k:'The first 90 days',title:'Priced right, tax planned, cash divided.',body:'You know your true break-even and quote from it. The tax account fills every week instead of ambushing you in spring. Profit comes out first. None of it needs more jobs, it needs the money you already earn handled on purpose.'},
+ {t:'normal',k:'Why Diane Gardner',title:'A tax strategist who coaches profit, built for the trades.',body:'Diane Gardner is a certified Profit First professional and tax strategist who works only with home service businesses. She is a best-selling author, a Quilly Award recipient, and the host of the Profitable Home Services Podcast, and she coaches owners doing $1M to $25M a year to keep more of what they build.'},
+
+ {t:'cta',title:'Ready to find the profit already in your business?',chips:['Book a Profit Impact Call','Explore the Profit Amplifier Program'],disc:'Educational content for home service business owners. No income, tax, or financial result is guaranteed. Results vary by business, market, and the choices each owner makes.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#ledger"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.accounts) h+=`<div class="accounts">`+s.accounts.map(a=>`<div class="acct${a[1]?' g':''}">${a[0]}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Profitable <b>Home Services</b> · Diane Gardner</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
