@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Build a Business That Runs Without You · Alex Snider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4f3ee; --panel:#fbfbf8; --rule:#dddedf;
+    --acc:#5a6044; --ink:#1a1a1a; --grey:#5b5b53; --dim:#a6a49a; --chalk:#f4f3ee;
+  }
+  html,body{height:100%}
+  body{background:#e7e6df;font-family:'Jost',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7e6df}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.1;letter-spacing:0}
+  .t-title h1{font-size:5vw;max-width:90%}
+  .t-normal h1{font-size:3.7vw;max-width:86%}
+  .t-normal .body{font-size:1.48vw;color:var(--grey);margin-top:2.8vh;max-width:74%;line-height:1.6;font-weight:300}
+  .sub{font-size:1.72vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.28vw;font-weight:600;color:var(--acc);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:90%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#242419 0%,#141410 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4vw;max-width:86%;font-style:italic;color:#f4f3ee;font-weight:400}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a2c22 0%,#141410 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:84%;color:#f4f3ee}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #6f7658;color:#dfe2d3;border-radius:100px;padding:1.3vh 1.8vw;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:#b9bcae;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .brandline{font-size:1.28vw;color:var(--grey);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .cog{position:absolute;pointer-events:none}
+  .title-cog{right:7%;bottom:8%;width:20vw;opacity:.85}
+  .corner-cog{right:5.5%;bottom:7%;width:8.5vw;opacity:.32}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:11px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.6vw}.t-section .idx{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Alex Snider Advisory</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- the well-oiled machine: one clean cog, a single moving part -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="cog" viewBox="0 0 120 120">
+  <g fill="none" stroke="#5a6044" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="60" r="26"/>
+    <circle cx="60" cy="60" r="8"/>
+    <g>
+      <line x1="60" y1="18" x2="60" y2="30"/>
+      <line x1="60" y1="90" x2="60" y2="102"/>
+      <line x1="18" y1="60" x2="30" y2="60"/>
+      <line x1="90" y1="60" x2="102" y2="60"/>
+      <line x1="30" y1="30" x2="39" y2="39"/>
+      <line x1="81" y1="81" x2="90" y2="90"/>
+      <line x1="30" y1="90" x2="39" y2="81"/>
+      <line x1="81" y1="39" x2="90" y2="30"/>
+    </g>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Build a Business That Runs Without You',sub:'A live masterclass for founders who are ready to lead the company instead of carrying it.',brand:true,cog:'title'},
+ {t:'normal',k:'Who this is for',title:'You are the reason it works. That is the problem.',body:'You have grown a real company past the early years. But the important decisions still route through you, the best clients still want you, and the team still waits for your answer. Growth has quietly made you the bottleneck.'},
+ {t:'dark',title:'Most founders do not have a growth problem. They have a dependency problem.'},
+
+ {t:'section',idx:'Part One',title:'Why the Business Still Needs You This Much'},
+ {t:'normal',k:'The bottleneck',title:'Every path in the company leads back to your desk.',body:'When the answers live in your head, the team cannot move without you. That felt like control in year one. At your size it is the ceiling. The company can only grow as fast as you can personally touch every part of it.'},
+ {t:'normal',k:'The real cost',title:'A company that cannot run without you is not an asset yet.',body:'You cannot take a real week off, you cannot raise your own rate, and you cannot sell or step up, because the value is still you rather than the business. The hours go up and the freedom goes down.'},
+ {t:'dark',title:'A business that cannot run without you is a job you are not allowed to quit.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Pillars of a Well-Oiled Machine'},
+ {t:'normal',k:'Pillar One',title:'People and Management.',body:'Clearly defined current and future roles, reporting structures, and a culture that supports ownership and retention. When people know exactly what they own, they stop bringing every question to you and start bringing you results.'},
+ {t:'normal',k:'Pillar Two',title:'Process and Governance.',body:'The critical processes and governance that let a growing team deliver autonomously and reliably, without the burden of defining and documenting everything resting on senior leadership. The work becomes repeatable instead of heroic.'},
+ {t:'normal',k:'Pillar Three',title:'Leadership Identity. This is the one nobody teaches.',body:'You grow and evolve alongside the company by moving into your zone of genius and delegating optimally, embodying a clear culture and addressing the behaviours that quietly restrict growth. The systems only hold if the founder changes too.'},
+ {t:'dark',title:'The system carries the work. You carry the vision.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Build It'},
+ {t:'normal',k:'Where, then how',title:'First we define exactly where the business is going.',body:'A Strategic Planning Workshop sets the destination in plain language, and then we get down to how you get there in concrete, manageable steps. Direction first, machinery second, so the pillars are built toward something real.'},
+ {t:'normal',k:'The day to day',title:'The team owns delivery. You own the few things only you can do.',body:'Decisions have owners. Standards are written down. The founder spends the week on strategy, key relationships, and the next stage of growth, instead of being pulled into work the company should already handle on its own.'},
+ {t:'dark',title:'Freedom is not stepping away. It is finally doing the work only you can do.'},
+ {t:'normal',k:'Why Alex Snider',title:'Strategy and operations, taught from the inside.',body:'Alex Snider works with founders and executive teams across corporate strategy, mergers and acquisitions, and startup growth, and hosts the BUILDERS podcast. Founders describe stepping more comfortably into the CEO role and lifting their own forecasts as the business learns to run itself.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Well-Oiled Machine'},
+ {t:'normal',k:'Start with direction',title:'The Strategic Planning Workshop.',body:'Define where you want the business to go, then leave with the concrete first steps and the three pillars mapped to your company. It is the fastest way to see what running without you would actually look like.'},
+ {t:'cta',title:'Ready to build a business that runs without you?',chips:['Book the Strategic Planning Workshop','Apply to work with Alex'],disc:'Educational content for founders and business owners. No income, revenue, or business result is guaranteed. Outcomes vary by company, market, team, and execution.'},
+];
+
+const deck=document.getElementById('deck');
+function cog(kind){return `<svg class="cog ${kind==='title'?'title-cog':'corner-cog'}" viewBox="0 0 120 120"><use href="#cog"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Alex <b>Snider</b> Advisory</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.cog) h+=cog(s.cog);
+  else if(s.t==='title') h+=cog('title');
+  else if(s.t==='normal') h+=cog('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
