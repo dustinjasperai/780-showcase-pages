@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refinish Your Future | MelDidItHerself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4eee1;
+    --panel:#ebe2d0;
+    --stage:#29211a;
+    --accent:#5e7d57;
+    --accent-lite:#a6c29a;
+    --ink:#2a2017;
+    --ink-soft:#5c4b39;
+    --muted:#9c8a72;
+    --rule:#dacdb6;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Figtree',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Figtree',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:4.4vw;line-height:1.07;
+    letter-spacing:-.008em;color:var(--ink);max-width:20ch}
+  .sub{font-family:'Figtree',sans-serif;font-weight:400;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:34ch}
+  .body{font-family:'Figtree',sans-serif;font-weight:400;font-size:1.55vw;line-height:1.62;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:41ch}
+  .brandline{font-family:'Newsreader',serif;font-size:1.25vw;font-weight:600;letter-spacing:.01em;
+    color:var(--accent);margin-top:5vh}
+  .brandline b{font-weight:600}
+  /* section slides */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Figtree',sans-serif;font-size:1.15vw;font-weight:600;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  .t-section h1{font-size:5.1vw}
+  .t-section .rule{width:8.5vw;height:5px;background:var(--accent);border-radius:3px;margin-top:4vh}
+  /* dark reframe slides */
+  .t-dark{background:var(--stage)}
+  .t-dark h1{color:#f3ecdd;font-weight:500;font-size:3.9vw;max-width:25ch}
+  .t-dark .kicker{color:var(--accent-lite)}
+  /* cta */
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Figtree',sans-serif;font-weight:600;font-size:1.3vw;color:#fff;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Figtree',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:56ch}
+  /* brushstroke swatch motif */
+  .swatch{position:absolute;right:7vw;bottom:8.5vh;width:16vw;height:8vw;opacity:.96}
+  .t-title .swatch{right:8vw;bottom:11vh;width:21vw;height:10.5vw;opacity:1}
+  .t-dark .swatch .s1{fill:#3a3026}.t-dark .swatch .s2{fill:var(--accent)}.t-dark .swatch .s3{fill:var(--accent-lite)}
+  /* chrome */
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(42,32,23,.14);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--accent);transition:width .5s ease}
+  #count{font-family:'Figtree',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Figtree',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.4vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:8.6vw}.chip{font-size:3vw}.disc{font-size:2.4vw}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="swatch" viewBox="0 0 260 130">
+  <rect class="s1" x="6" y="30" width="74" height="86" rx="8" fill="#e0d4bd"/>
+  <rect class="s2" x="92" y="18" width="74" height="98" rx="8" fill="#5e7d57"/>
+  <rect class="s3" x="178" y="34" width="74" height="82" rx="8" fill="#a6c29a"/>
+  <path d="M18 22 C70 6, 150 6, 244 16" stroke="#5e7d57" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'Refinish Your Future',sub:'How to turn furniture flipping from a weekend hobby into a real, profitable business, without quitting your whole life to do it.',brand:true,swatch:true},
+ {t:'normal',k:'Who this is for',title:'You love flipping furniture. It just is not paying you yet.',body:'You have redone pieces that turned out beautiful. Friends tell you to sell them. But the money is small and unpredictable, and it still feels like an expensive hobby instead of something that could actually replace an income.'},
+ {t:'normal',k:'The real cost',title:'Another how-to-paint video will not fix this.',body:'The internet is full of tutorials on distressing a dresser. Almost none of them teach the part that decides whether you make money: what to buy, what to charge, and how to keep the work coming. That gap is why talented flippers stay broke.'},
+ {t:'dark',title:'Furniture flipping is not a craft problem. For most people it is a business problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Talented Flippers Stay Broke'},
+ {t:'normal',k:'The hobby ceiling',title:'A hobby waits for inspiration. A business does not.',body:'When flipping is a hobby, you work on the pieces you feel like, price them by guessing, and sell when someone happens to ask. That is fine for fun. It will never pay a bill on purpose, because nothing about it is built to repeat.'},
+ {t:'normal',k:'The two quiet leaks',title:'You are probably losing money in the same two places.',body:'Most flippers buy the wrong pieces, the ones they love instead of the ones that sell, and then charge too little because they are afraid to ask. Fix those two habits and the exact same hours start producing real profit.'},
+ {t:'dark',title:'You do not need more talent. You need to treat the thing you already do like it matters.'},
+
+ {t:'section',idx:'Part Two',title:'The Two-Week Path to Profit'},
+ {t:'normal',k:'Go official',title:'Step one is deciding you are actually a business.',body:'Before the money gets real, the hobby has to become an official business, named, set up, and legitimate. It sounds boring and it is the switch that changes everything, because now you charge like a professional instead of apologizing for a price.'},
+ {t:'normal',k:'Source for profit',title:'Buy the pieces that sell, not the pieces you love.',body:'There is a difference between a piece that excites you and a piece a buyer is already looking for. Learn to spot the shapes, the woods, and the price points that move fast, and your inventory stops being a gamble.'},
+ {t:'normal',k:'Finish it so it sells',title:'A no BS finish, done right the first time.',body:'The finish is where flippers cut corners and lose the sale. Real prep, the right products, and skipping the beginner mistakes like paintwashing are what make a piece look worth its price instead of looking homemade.'},
+ {t:'normal',k:'Price and sell',title:'Charge for the value, then keep the sales coming.',body:'Pricing is not a guess and a slow week is not a verdict. When you know your numbers and you have a simple way to keep buyers finding you, you can steady the income instead of riding every high and low.'},
+ {t:'dark',title:'Two weeks is not the finish line. It is proof that this can actually pay you.'},
+
+ {t:'section',idx:'Part Three',title:'When The Flip Pays The Bills'},
+ {t:'normal',k:'Built around your life',title:'A side hustle should fit the life you already have.',body:'You do not need a warehouse or forty free hours a week. The point is to build something that runs in the time you actually have, so it grows with you instead of burning you out in the first month.'},
+ {t:'normal',k:'When it gets quiet',title:'Slow weeks are part of the plan, not a failure.',body:'Every furniture business has quiet stretches. The difference is having something to do when sales slow down, so a slow week becomes a sourcing week or a content week instead of a reason to quit.'},
+ {t:'normal',k:'Why learn this from me',title:'I left a stable career and built this myself.',body:'I went from social service worker to full-time furniture painter and refinisher, and I have shared the whole messy journey across more than a hundred podcast episodes. I teach the business side because it is the part nobody handed me, and it is the part that keeps furniture out of the landfill and money in your pocket.'},
+ {t:'dark',title:'You can keep old furniture out of the landfill and get paid well for doing it. Both are true.'},
+
+ {t:'section',idx:'Your next step',title:'Refinish Your Future'},
+ {t:'normal',k:'How the program helps',title:'A two-week path, with me walking beside you.',body:'Refinish Your Future takes you from a hobby to a profitable furniture flipping side hustle in two weeks, going official, sourcing, finishing, and pricing, so you stop guessing and start earning from the work you already love.'},
+ {t:'cta',title:'Ready to get paid for what you already love doing?',chips:['Join the Refinish Your Future waitlist','Grab the free starter guide and checklist'],disc:'Educational content for people building a furniture refinishing business. No income or business result is guaranteed. Results vary by person, effort, market, and starting point.'},
+];
+
+const deck=document.getElementById('deck');
+function swatch(){return '<svg class="swatch"><use href="#swatch"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Mel<b>DidItHerself</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.swatch||s.t==='title') h+=swatch();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
