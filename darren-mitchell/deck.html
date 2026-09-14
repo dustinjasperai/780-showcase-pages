@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Exceptional Sales Leader Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f5ef;
+    --paper:#fbfaf5;
+    --panel:#212161;
+    --ink:#1d1d33;
+    --ink-soft:#4c4c66;
+    --accent:#e9a633;
+    --rule:#e4dfd0;
+  }
+  html,body{height:100%}
+  body{background:var(--panel);font-family:'Figtree',-apple-system,sans-serif;color:var(--ink);overflow:hidden}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 11vw;background:var(--bg)}
+  .slide.on{display:flex}
+  .kicker{font-family:'Figtree',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:2.2rem;display:flex;align-items:center;gap:.9rem}
+  .kicker::before{content:"";width:2.4rem;height:3px;background:var(--accent);display:inline-block}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);
+    font-size:clamp(2.1rem,5.4vw,4.1rem);line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:'Newsreader',Georgia,serif;font-weight:500;color:var(--ink);
+    font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.14;letter-spacing:-.01em}
+  .body{font-family:'Figtree',sans-serif;font-size:clamp(1.05rem,1.8vw,1.5rem);line-height:1.55;
+    color:var(--ink-soft);margin-top:1.8rem;max-width:46ch}
+  .sub{font-family:'Figtree',sans-serif;font-size:clamp(1.1rem,2vw,1.6rem);line-height:1.45;
+    color:var(--ink-soft);margin-top:1.6rem;max-width:40ch}
+  .a{color:var(--panel);background:linear-gradient(transparent 62%,rgba(233,166,51,.42) 0);padding:0 .05em}
+  /* title */
+  .slide.title{background:var(--paper)}
+  .slide.title .brandbar{position:absolute;top:8vh;left:11vw;display:flex;align-items:center;gap:.8rem;
+    font-family:'Figtree',sans-serif;font-weight:700;letter-spacing:.02em;color:var(--panel);font-size:1.05rem}
+  .slide.title .dot{width:.7rem;height:.7rem;background:var(--accent);border-radius:50%}
+  .slide.title h1{font-size:clamp(2.4rem,6vw,4.8rem);font-weight:600}
+  /* dark statement */
+  .slide.dark{background:var(--panel)}
+  .slide.dark h2{color:var(--paper);font-weight:400;max-width:20ch}
+  .slide.dark .kicker{color:var(--accent)}
+  /* section divider */
+  .slide.section{background:var(--panel)}
+  .slide.section .idx{font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:1.6rem}
+  .slide.section h1{color:var(--paper);font-weight:500}
+  .slide.section .pillars{display:flex;gap:.5rem;margin-top:2.6rem}
+  .slide.section .pillars i{height:6px;width:3.2rem;background:var(--accent);opacity:.35;border-radius:3px}
+  .slide.section .pillars i:first-child{opacity:1}
+  /* cta */
+  .slide.cta{background:var(--paper)}
+  .chips{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.6rem}
+  .chip{font-family:'Figtree',sans-serif;font-weight:600;font-size:1.05rem;padding:.85rem 1.5rem;
+    border:1.5px solid var(--panel);border-radius:999px;color:var(--panel)}
+  .chip:first-child{background:var(--panel);color:var(--paper)}
+  .disc{font-family:'Figtree',sans-serif;font-size:.9rem;color:var(--ink-soft);margin-top:3rem;max-width:52ch;line-height:1.5}
+  .foot{position:absolute;bottom:6vh;left:11vw;font-family:'Figtree',sans-serif;font-size:.85rem;
+    letter-spacing:.04em;color:var(--ink-soft)}
+  .slide.dark .foot,.slide.section .foot{color:rgba(251,250,245,.5)}
+  .prog{position:fixed;bottom:0;left:0;height:4px;background:var(--accent);transition:width .3s;z-index:20}
+  .nav{position:fixed;top:0;bottom:0;width:30%;z-index:15;cursor:pointer}
+  .nav.prev{left:0;width:22%}.nav.next{right:0}
+  .count{position:fixed;bottom:5vh;right:11vw;font-family:'Figtree',sans-serif;font-size:.8rem;
+    letter-spacing:.1em;color:var(--ink-soft);z-index:16}
+  .slide.dark~.count,.slide.section~.count{color:rgba(251,250,245,.5)}
+  @media(max-width:640px){.slide{padding:9vh 8vw}.body,.sub{max-width:none}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="prog" id="prog"></div>
+<div class="count" id="count"></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<script>
+const S = [
+ {t:'title',title:'The Exceptional Sales Leader Masterclass',sub:'How to build a sales team that hits the number without you closing every deal.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You are still the best closer on your own team.',body:'The big deals route to you. The forecast lives in your head. When a rep wobbles, you step in and save it. The team is good, but it leans on you, and that lean has quietly become the ceiling.'},
+ {t:'dark',title:'You do not have a talent problem. You have a leadership gap.'},
+
+ {t:'section',idx:'Part One',title:'The Leader’s Trap'},
+ {t:'normal',k:'Why pushing harder stops working',title:'More pressure buys a good month, not a good team.',body:'Targets, ride-alongs and pep talks lift the number for a quarter. Then it settles back, because nothing underneath it changed. You cannot out-hustle a system that was never built.'},
+ {t:'normal',k:'The real cost',title:'A team that only fires when you push is fragile.',body:'If performance depends on your energy, your best people plateau and your average people churn. You are not leading a team so much as renting its results, one month at a time.'},
+ {t:'dark',title:'If the number only moves when you are in the room, you have a job, not a team.'},
+
+ {t:'section',idx:'Part Two',title:'Attract, Develop, Deliver'},
+ {t:'normal',k:'Attract',title:'Bring in people who fit a winning culture.',body:'Exceptional teams start before the hire. When you are clear on the standard and the culture, you attract sales professionals who already want to be held to it, instead of hoping to fix fit later.'},
+ {t:'normal',k:'Develop',title:'Coach and mentor them to own the outcome.',body:'Development is the leader’s real job: focused coaching, honest mentoring, and the strategy that turns activity into productivity. You are building operators who solve their own problems, not tasks you re-check.'},
+ {t:'normal',k:'Deliver',title:'Turn effort into results that repeat.',body:'Sustainable results come from world-class pitching and steady performance management, so a strong month becomes a strong system. The team delivers because the way they win is now repeatable, not lucky.'},
+ {t:'dark',title:'Attract, Develop, Deliver. The blueprint a team can run on without you in every deal.'},
+
+ {t:'section',idx:'Part Three',title:'Lead With Influence'},
+ {t:'normal',k:'Mindset first',title:'Mindset, not technique, separates exceptional salespeople.',body:'The best salespeople are not the ones with the most tactics. They think differently about rejection, ownership and the customer. A leader who shapes that mindset changes the whole team’s ceiling.'},
+ {t:'normal',k:'Emotional intelligence',title:'Read the room before you reach for the script.',body:'Emotional intelligence is the difference between reacting and leading. When you use it consciously, you coach the person in front of you, defuse tension, and build the trust that makes people follow.'},
+ {t:'normal',k:'People reading',title:'Adjust how you lead to the person, not the playbook.',body:'Your team is not one type of person, and neither are their buyers. Reading people, and flexing your style to match, is how you build trust fast, with your reps and with the customers they serve.'},
+ {t:'normal',k:'Persuasion with integrity',title:'Selling is problem solving, done honestly.',body:'Influence is not pressure. When your team sells as ethical service, solving a real problem rather than pushing a close, they win deals they keep, and they carry themselves like leaders in the room.'},
+ {t:'dark',title:'Leadership is not about you. It is about the team you build.'},
+
+ {t:'section',idx:'Your next step',title:'Lead With Influence'},
+ {t:'normal',k:'How I can help',title:'The same system I coach sales leaders through every week.',body:'This is the work I do in one-on-one coaching and mentoring, in-house workshops, and across 900-plus episodes of The Exceptional Sales Leader Podcast. Drawn from leading real sales teams, not theory. Start with the Lead With Influence guide, then let us talk about your team.'},
+ {t:'cta',title:'Ready to lead a team that sells without you?',chips:['Download the Lead With Influence guide','Book a call with Darren'],disc:'Educational content for sales leaders and their teams. No income, revenue, or sales result is guaranteed. Results vary by leader, team, and market.'}
+];
+
+const stage=document.getElementById('stage'),prog=document.getElementById('prog'),count=document.getElementById('count');
+let i=0;
+function esc(x){return x;}
+function render(){
+  const s=S[i];
+  let cls='slide '+(s.t==='normal'?'normal':s.t);
+  let h='';
+  if(s.t==='title'){
+    h+=`<div class="brandbar"><span class="dot"></span>Darren Mitchell &middot; The Exceptional Sales Leader</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub)h+=`<div class="sub">${s.sub}</div>`;
+  }else if(s.t==='section'){
+    h+=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="pillars"><i></i><i></i><i></i></div>`;
+    h+=`<div class="foot">The Exceptional Sales Leader Masterclass</div>`;
+  }else if(s.t==='dark'){
+    h+=`<h2>${s.title}</h2>`;
+    h+=`<div class="foot">The Exceptional Sales Leader Masterclass</div>`;
+  }else if(s.t==='cta'){
+    h+=`<div class="kicker">Your next step</div><h1>${s.title}</h1>`;
+    h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    h+=`<div class="disc">${s.disc}</div>`;
+  }else{
+    if(s.k)h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h2>${s.title}</h2>`;
+    if(s.body)h+=`<div class="body">${s.body}</div>`;
+    h+=`<div class="foot">The Exceptional Sales Leader Masterclass</div>`;
+  }
+  stage.innerHTML=`<div class="${cls} on">${h}</div>`;
+  prog.style.width=((i)/(S.length-1)*100)+'%';
+  count.textContent=(i+1)+' / '+S.length;
+  count.style.color=(s.t==='dark'||s.t==='section')?'rgba(251,250,245,.5)':'var(--ink-soft)';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(i+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);
+});
+render();
+</script>
+</body>
+</html>
