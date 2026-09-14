@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>From Resume to Reputation · Brandon Birkmeyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#ffffff; --panel:#eef3ff; --rule:#dbe3f2;
+    --ink:#14171c; --accent:#1769ff; --grey:#4a5160; --dim:#8b93a3;
+  }
+  html,body{height:100%}
+  body{background:#0b0f18;font-family:'Poppins',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b0f18}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:-.012em}
+  .t-title h1{font-size:4.2vw;max-width:90%}
+  .t-normal h1{font-size:3.15vw;max-width:86%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:76%;line-height:1.6;font-weight:300}
+  .sub{font-family:'Poppins',sans-serif;font-size:1.72vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.32vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:90%}
+  .t-section .rule{width:15vw;height:3px;background:var(--accent);margin-top:3.4vh;border-radius:3px}
+  .t-dark{background:#14171c;align-items:flex-start}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#ffffff;font-weight:500}
+  .t-dark .accentbar{width:9vw;height:4px;background:var(--accent);border-radius:3px;margin-bottom:3.4vh}
+  .t-cta{background:radial-gradient(120% 130% at 15% 0%,#eef3ff 0%,#ffffff 60%);align-items:flex-start}
+  .t-cta h1{font-size:3.7vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.7vw;font-family:'Montserrat',sans-serif;font-size:1.16vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:var(--dim);font-style:italic;line-height:1.4;max-width:82%}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.6vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .mark{position:absolute;right:8%;bottom:8%;width:16vw;height:3px;background:linear-gradient(90deg,transparent,var(--accent));opacity:.5}
+  .t-title .mark{width:22vw}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.10);z-index:20}
+  .hud>i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.14em;color:#7c8598;z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7c8598;z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#7c8598;z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Brands On Brands</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<script>
+const S = [
+ {t:'title',title:'From Resume to Reputation',sub:'A live masterclass on the brand strategy that makes you the obvious choice, for coaches, consultants, creators, and executives building a personal brand.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You are excellent at what you do. The market cannot tell yet.',body:'You have the track record, the results, the expertise. But in a crowded feed the most qualified person is not the one who gets picked. The best known is.'},
+ {t:'dark',title:'The best known beats the best. Almost every time.'},
+
+ {t:'section',idx:'Part One',title:'Why Talent Gets Overlooked'},
+ {t:'normal',k:'The middle of the pack',title:'Being good is now the price of entry, not the difference maker.',body:'Everyone in your niche is competent. When skill is table stakes, buyers cannot choose on skill, so they choose on who they know, trust, and remember. Stay in the middle of the pack and you stay invisible.'},
+ {t:'normal',k:'The sea of sameness',title:'Everyone is saying the same things in the same voice.',body:'The same tips, the same posts, the same promises. When every message blends together, the audience tunes all of it out. Sounding like everyone else is the fastest way to be forgotten.'},
+ {t:'dark',title:'A resume lists what you did. A reputation decides what happens next.'},
+
+ {t:'section',idx:'Part Two',title:'The Brand Strategy Behind Standing Out'},
+ {t:'normal',k:'Borrowed from the biggest brands',title:'The world’s biggest brands do not win on features. They win on meaning.',body:'Coca-Cola and Apple do not out-spec anyone. They own a clear idea in your head. That same discipline of positioning, narrative, and consistency is exactly what turns a person into a brand people choose.'},
+ {t:'normal',k:'Craft your authentic narrative',title:'Own one thing only you can say.',body:'Your positioning is the single idea you want to be known for, told through a story that is unmistakably yours. Get this right and everything else, the content, the offers, the referrals, has something true to point back to.'},
+ {t:'normal',k:'The Personal Branding Framework',title:'Nine steps from overlooked to obvious.',body:'A step by step system, each step with its own activity, that takes you from defining your position to reaching an audience to making a real impact. Not a burst of motivation, a process you can actually work.'},
+ {t:'normal',k:'Content that compounds',title:'Create content that builds authority, not just impressions.',body:'Most content chases attention and forgets the point. The aim is a body of work that proves your expertise and stacks over time, so each piece makes the next one land harder.'},
+ {t:'normal',k:'Community and influence',title:'Reach is rented. Relationships are owned.',body:'Building community through networking, speaking, and a show of your own turns a passive audience into people who advocate for you. This is how a personal brand keeps growing when you step away from the feed.'},
+ {t:'normal',k:'The Confidence Code',title:'A brand you do not believe is a brand you will not carry.',body:'Standing out means being visible, and visibility takes nerve. Cultivating self belief and presence is what lets you show up fully instead of shrinking back into the pack.'},
+ {t:'normal',k:'The Four Laws',title:'Know what to do first, and do it every day.',body:'What to prioritize, how to take action daily, and how to keep moving when momentum dips. The laws are what keep a personal brand getting built instead of endlessly planned.'},
+ {t:'dark',title:'You do not need to be everywhere. You need to be unmistakable where it counts.'},
+
+ {t:'section',idx:'Part Three',title:'When You Become the Obvious Choice'},
+ {t:'normal',k:'The person this builds',title:'Opportunity starts coming to you.',body:'When your reputation does the work, the right people arrive already convinced. Better clients, better rooms, better invitations, and a stream of interest you did not have to chase.'},
+ {t:'normal',k:'Why Brandon Birkmeyer',title:'Two decades advising the world’s biggest brands, now taught in the open.',body:'Brandon spent more than 20 years at Madison Avenue agencies advising Fortune 100 brands including Coca-Cola and Apple, then left to build his own name. He hosts the top ranked Brands On Brands podcast and wrote Front and Center Leadership, and he teaches the same brand strategy to individuals.'},
+ {t:'cta',title:'Ready to become the obvious choice in your niche?',chips:['Work with Brandon one on one','Join Brands On Brands Pro','Read Front and Center Leadership'],disc:'Educational content for professionals building a personal brand. No income, business, or career result is guaranteed. Results vary by person, effort, and market.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='dark'){ h=`<div class="accentbar"></div><h1>${s.title}</h1>`; }
+  else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Brands On <b>Brands</b> · Brandon Birkmeyer</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.t==='title'||s.t==='normal') h+=`<div class="mark"></div>`;
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
