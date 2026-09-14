@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Mind-Wrench Shift · Rick Selover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f1e6; --panel:#ede3d1; --rule:#ddd0b8;
+    --acc:#a82c2a; --ember:#ffa300; --ink:#221c17; --body:#463f36; --dim:#8a8072; --cream:#f7f1e6;
+  }
+  html,body{height:100%}
+  body{background:#e7ddca;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7ddca}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Poppins',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:4.6vw;max-width:94%;font-weight:700}
+  .t-normal h1{font-size:3.0vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.7vw;color:var(--acc);margin-top:3.6vh;max-width:84%;line-height:1.5;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:4.6vw;max-width:92%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--ember),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2a201a 0%,#160f0a 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.4vw;max-width:88%;color:var(--cream);font-weight:600}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a201a 0%,#160f0a 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.6vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#e6d8c2;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--ember);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.1vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .gr-motif{position:absolute;pointer-events:none}
+  .title-gr{right:7.0%;bottom:8.5%;width:19vw;opacity:.95}
+  .corner-gr{right:6.5%;bottom:7.5%;width:8.5vw;opacity:.5}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(34,28,23,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Mind-Wrench Shift</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a wrench arc torquing a bolt head, drawn in brand red with an amber turn-arrow. the "Mind Wrench" tightening what is loose in the owner's head. not a stock gear, not a car. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gr" viewBox="0 0 120 120">
+  <g fill="none" stroke="#a82c2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 60 m-15 0 a15 15 0 1 1 30 0 a15 15 0 1 1 -30 0" opacity="0.35"/>
+    <path d="M60 45 v-9 M60 84 v-9 M45 60 h-9 M84 60 h-9" opacity="0.5"/>
+    <path d="M28 92 l40 -40" stroke-width="7" opacity="0.95"/>
+    <path d="M62 46 a10 10 0 0 1 14 0 l-7 7 -7 -7 z" fill="#a82c2a" stroke="none" opacity="0.95"/>
+    <path d="M86 34 a26 26 0 0 1 6 20" stroke="#ffa300" stroke-width="3" opacity="0.9"/>
+    <path d="M92 54 l4 -8 l-9 2" fill="none" stroke="#ffa300" stroke-width="3" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Mind-Wrench Shift',sub:'Why the collision shops that thrive are won in the owner’s head first, and how an independent stops competing on price and starts leading.',brand:true,gr:'title'},
+ {t:'normal',k:'Who this is for',title:'You run a good shop. Lately it feels like the deck is stacked against you.',body:'You fix cars right and your customers trust you. But the big consolidators keep buying up the block, the insurers keep squeezing the rates, good techs are hard to find and harder to keep, and it feels like no matter how hard you work, the ground keeps shifting under an independent shop.'},
+ {t:'dark',title:'The shops that make it through this are not the biggest or the cheapest. The difference shows up in the owner first.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Shops Get Stuck'},
+ {t:'normal',k:'The "I can’t compete" story',title:'The most expensive belief in this industry is that the big guys have already won.',body:'Once an owner decides they cannot compete with the MSOs and the DRP volume, every decision gets smaller. They cut price to stay busy, stop investing in the shop, and quietly accept less. The belief becomes the ceiling long before the market does, and it is the one thing no estimating tool can fix.'},
+ {t:'normal',k:'Survival mode',title:'When you are the estimator, the manager, the closer and the bank, the business only moves when you do.',body:'Most owners are stuck reacting all day, putting out fires and holding the whole shop together in their own head. There is no time to work on the business because you are too busy being every seat in it. Survival mode feels like effort, but it keeps you exactly where you are.'},
+ {t:'dark',title:'You cannot fix on the estimate what is actually broken in the mindset and the leadership.'},
+
+ {t:'section',idx:'Part Two',title:'The Mind-Wrench Shift'},
+ {t:'normal',k:'Move one, rewrite the story',title:'Stop competing on the ground the big shops own, and start competing on the ground only you own.',body:'An independent will never win on volume or on being the cheapest, and chasing that fight is why so many burn out. The shift is to compete on the things a consolidator cannot fake: the trust, the craftsmanship, the relationship, the owner who actually knows your name. That is a fight you can win, and it starts by refusing the "I can’t compete" story.'},
+ {t:'normal',k:'Move two, lead yourself first',title:'The shop is a mirror of the owner. Change what happens in your head, and the shop changes with it.',body:'Mindset, attitude and leadership are the root system everything else grows out of. Before the numbers, the schedule or the CSI scores, the owner has to get out of survival mode and lead on purpose, working on the business instead of being buried in it. Fix the owner and the production, the culture and the profit start to follow.'},
+ {t:'normal',k:'Move three, build a team that stays',title:'Great techs do not stay for pay alone. They stay for a leader and a place worth staying at.',body:'The shops that keep their best people are led, not just staffed. When an owner builds a culture people want to be part of, a clear standard, real respect, room to grow, the hiring problem starts to solve itself and the shop stops living or dying on whether the owner is on the floor that day.'},
+ {t:'dark',title:'A collision shop rises or falls to the level of its owner. Raise the owner and you raise the shop.'},
+
+ {t:'section',idx:'Part Three',title:'What The Shift Looks Like'},
+ {t:'normal',k:'The owner this builds',title:'A shop that runs to a standard, a team that stays, and an owner who finally has a life outside the shop.',body:'You stop trading every waking hour for the shop’s survival. The work runs to a standard because your people are led and know it, your best techs stay because the place is worth staying at, and you compete on trust and craftsmanship instead of racing the consolidators to the bottom on price.'},
+ {t:'dark',title:'The goal was never to be the busiest shop in town. It was to own a shop that does not own you.'},
+ {t:'normal',k:'Why Rick Selover',title:'Four decades in this industry, focused on the one thing most collision coaching skips: the owner.',body:'Rick Selover spent 40-plus years in the collision world, 28 of them as a sales leader who advised hundreds of shops, and now coaches owners on the mindset, attitude and leadership that decide whether a shop thrives. He hosts The Mind-Wrench Podcast every week and works with owners one on one, all of it aimed at the inner game the rest of the industry ignores.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start The Shift'},
+ {t:'normal',k:'Where to begin with Rick',title:'See where your own head and leadership are holding the shop back, then map the shift with Rick.',body:'Start with The Mind-Wrench Podcast to hear how owners are beating the "I can’t compete" trap, then book a discovery call with Rick to look honestly at what is really capping your shop and where the leverage is. From there his coaching puts the mindset, the leadership and the team culture in place, step by step.'},
+ {t:'cta',title:'Ready to win the fight in your own head first?',body:'Take the next step with Rick Selover and The Mind-Wrench Shift.',chips:['Listen to The Mind-Wrench Podcast','Book a discovery call with Rick'],disc:'Educational content for collision and auto-body shop owners growing a business. No income, profit or result is guaranteed. Results vary by owner, shop and market.'},
+];
+
+const deck=document.getElementById('deck');
+function gr(kind){return `<svg class="gr-motif ${kind==='title'?'title-gr':'corner-gr'}"><use href="#gr"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Mind-Wrench Shift · <b>Rick Selover</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.gr) h+=gr(s.gr);
+  else if(s.t==='title') h+=gr('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
