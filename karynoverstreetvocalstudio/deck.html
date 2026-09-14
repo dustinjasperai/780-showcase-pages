@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Song That Gets You Cast &middot; Karyn Overstreet Vocal Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f2ef;      /* her site cream ground */
+    --panel:#e7e1d3;   /* deeper sand from the cream family */
+    --ink:#201d1b;     /* her near-black text */
+    --rule:#d8cfbd;    /* hairline */
+    --dim:#6b6459;     /* muted caption */
+    --accent:#7a1f2b;  /* stage-curtain garnet */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Lora",Georgia,serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{
+    position:relative;width:100%;max-width:960px;aspect-ratio:16/9;
+    background:var(--bg);overflow:hidden;
+    box-shadow:0 1px 0 var(--rule);
+  }
+  .slide{
+    position:absolute;inset:0;padding:8% 9%;
+    display:none;flex-direction:column;justify-content:center;
+  }
+  .slide.on{display:flex}
+  .kick{
+    font-family:"Josefin Slab",serif;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;font-size:clamp(11px,1.5vw,15px);
+    color:var(--accent);margin-bottom:.9em;
+  }
+  h1{font-family:"Josefin Slab",serif;font-weight:700;line-height:1.02;
+    font-size:clamp(30px,6.4vw,66px);letter-spacing:-.01em}
+  h2{font-family:"Josefin Slab",serif;font-weight:600;line-height:1.08;
+    font-size:clamp(24px,4.6vw,44px)}
+  .lede{font-size:clamp(16px,2.2vw,23px);line-height:1.5;max-width:38ch;margin-top:.7em;color:var(--ink)}
+  .dim{color:var(--dim)}
+  .rule{width:64px;height:3px;background:var(--accent);margin:1.1em 0}
+  ul{list-style:none;margin-top:1em;max-width:44ch}
+  li{position:relative;padding-left:1.5em;margin:.55em 0;font-size:clamp(15px,2vw,20px);line-height:1.42}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;background:var(--accent)}
+  .big{font-family:"Josefin Slab",serif;font-weight:700;font-size:clamp(40px,9vw,104px);color:var(--accent);line-height:.95}
+  .step{display:flex;gap:.7em;align-items:baseline;margin:.5em 0;max-width:46ch}
+  .step .n{font-family:"Josefin Slab",serif;font-weight:700;color:var(--accent);font-size:clamp(18px,2.4vw,26px);min-width:1.6em}
+  .step .t{font-size:clamp(15px,2vw,20px);line-height:1.4}
+  .card{background:var(--panel);padding:5% 6%;border-left:5px solid var(--accent)}
+  .cap{font-family:"Josefin Slab",serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--dim);margin-top:1.4em}
+  .foot{position:absolute;left:9%;bottom:5.5%;font-family:"Josefin Slab",serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--dim)}
+  .disc{font-size:13px;line-height:1.5;color:var(--dim);max-width:52ch;margin-top:1.3em}
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;
+    font-family:"Josefin Slab",serif;font-size:13px;color:var(--dim)}
+  #nav button{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    width:30px;height:30px;cursor:pointer}
+  #nav button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #count{min-width:52px;text-align:center;letter-spacing:.12em}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .2s}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="stage" aria-live="polite"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button>
+<span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S=[
+ {t:'title', kick:'A free live masterclass with Karyn Overstreet',
+  h:'The Song That Gets You Cast',
+  lede:'How to choose audition material that a college panel remembers, in the first eight bars.'},
+
+ {t:'point', kick:'Who this hour is for',
+  h:'You, if an audition is coming',
+  list:['A junior or senior auditioning for a BFA, BA, or BM in musical theatre, acting, or voice',
+        'A parent trying to help without guessing',
+        'A working performer refreshing a book that has gone stale'],
+  foot:'Karyn Overstreet Vocal Studio'},
+
+ {t:'point', kick:'The trap',
+  h:'Everyone works on the voice. Almost no one works on the song.',
+  lede:'Months of lessons go into how you sing. A few rushed days go into what you sing. The panel hears the song first.',
+  foot:'Karyn Overstreet Vocal Studio'},
+
+ {t:'reframe', kick:'The uncomfortable truth',
+  big:'8 bars',
+  lede:'A panel forms an opinion in about eight bars. The wrong song spends those bars apologizing for itself. The right one buys you the whole room.'},
+
+ {t:'point', kick:'Part one: the real problem',
+  h:'A great voice in the wrong song still gets cut',
+  list:['The song sits outside your real range and the strain shows',
+        'It is the same cut the panel already heard four times today',
+        'It shows off a skill instead of showing us a person'],
+  foot:'The core problem'},
+
+ {t:'card', kick:'What that costs',
+  h:'You get cut before the second phrase',
+  lede:'Not because you cannot sing it. Because the choice told them who you are before you did, and it was not you.'},
+
+ {t:'section', kick:'Part two',
+  h:'How I choose a song',
+  lede:'Not by what is popular this year. By fit. Four kinds of fit, in this order.'},
+
+ {t:'framework', kick:'Fit one',
+  h:'Your unique artist sound',
+  lede:'Before repertoire, we name the thing only you do, the special sauce a panel remembers. The song has to put that in the first line, not the bridge.'},
+
+ {t:'framework', kick:'Fit two',
+  h:'The panel and the program',
+  lede:'Different schools want different things, and I have sat on those panels. We match the material to what a given program is actually listening for.'},
+
+ {t:'framework', kick:'Fit three',
+  h:'The cut',
+  lede:'A 16 or 32 bar edit is its own craft. Where you start, where you breathe, where you land. A great song with a lazy cut plays like a weak song.'},
+
+ {t:'framework', kick:'Fit four',
+  h:'The wild card',
+  lede:'One piece of contrast that proves range without shouting it, so you are not the singer who only has one color.'},
+
+ {t:'list', kick:'Put together',
+  h:'A book that works as a set',
+  list:['A ballad that shows the voice and the heart',
+        'An uptempo that shows life and timing',
+        'A contrast piece that shows range',
+        'A cut of each that lands inside the time limit'],
+  foot:'Song selection'},
+
+ {t:'section', kick:'Part three',
+  h:'What a prepared season looks like',
+  lede:'Choosing the song is step two of four. Here is the whole run.'},
+
+ {t:'steps', kick:'The College Audition Prep season',
+  steps:[['1','Consultation. Parent and student map the timeline, starting around February of junior year.'],
+         ['2','Coaching and selection. Refine technique, choose the songs, build the artist.'],
+         ['3','Prescreen filming. Record with a videographer and a coach, inside each university guideline.'],
+         ['4','Live auditions. Add material, sharpen the voice, and prep the interview.']],
+  foot:'The four steps'},
+
+ {t:'card', kick:'On the prescreen',
+  h:'The film is an audition too',
+  lede:'A prescreen has its own rules for framing, length, and slate. We shoot it to guideline so a strong singer is never cut on a technicality.'},
+
+ {t:'point', kick:'The interview',
+  h:'They admit a person, not a playlist',
+  list:['Why this program, in your own words',
+        'How you take a note and change on the spot',
+        'What you are like to sit in a room with for four years'],
+  foot:'Live audition day'},
+
+ {t:'credibility', kick:'Why listen to me',
+  h:'I have been on both sides of the table',
+  list:['Broadway in Les Miserables, national tours, and Off-Broadway',
+        'Member of the National Association of Teachers of Singing, and an audition panelist at Unifieds and university auditions',
+        'Students who have earned acceptances, two YoungArts national wins, and credits on Broadway, American Idol, and The Voice'],
+  foot:'Karyn Overstreet'},
+
+ {t:'point', kick:'What to take from this hour',
+  h:'The choice is the coaching',
+  list:['The panel hears the song before it hears the voice',
+        'Fit beats trend, every season',
+        'A season is planned in the spring, not the fall'],
+  foot:'Recap'},
+
+ {t:'cta', kick:'Your next step',
+  h:'Let us pick your song',
+  lede:'Book a consultation for College Audition Prep. We will map your timeline and start building the book that gets you cast.',
+  disc:'This masterclass is for education. No acceptance, booking, or specific result is guaranteed. Results vary with each singer, program, and season.',
+  foot:'karynoverstreet.com'}
+];
+
+const stage=document.getElementById('stage');
+const countEl=document.getElementById('count');
+const progEl=document.getElementById('prog');
+let i=0;
+
+function esc(s){return s;}
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const el=document.createElement('div');
+  el.className='slide on';
+  let h='';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='reframe'){
+    h+='<div class="big">'+s.big+'</div>';
+    if(s.lede) h+='<p class="lede" style="margin-top:.6em">'+s.lede+'</p>';
+  } else if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h+'</h2><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  } else {
+    if(s.h) h+='<h2>'+s.h+'</h2>';
+    if(s.t==='section'||s.t==='card') h+='<div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.list){h+='<ul>';s.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+    if(s.steps){s.steps.forEach(x=>h+='<div class="step"><span class="n">'+x[0]+'</span><span class="t">'+x[1]+'</span></div>');}
+  }
+  if(s.foot) h+='<div class="foot">'+s.foot+'</div>';
+  el.innerHTML=h;
+  if(s.t==='card') el.classList.add('cardwrap');
+  stage.appendChild(el);
+  countEl.textContent=(i+1)+' / '+S.length;
+  progEl.style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();
+  if(e.clientX-r.left>r.width*0.5)go(i+1);else go(i-1);});
+render();
+</script>
+</body>
+</html>
