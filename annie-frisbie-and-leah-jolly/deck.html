@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Paperless Private Practice Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6fbfc;
+    --panel:#e9f5f8;
+    --rule:#cddfe4;
+    --accent:#2c5a72;
+    --accent2:#72d1dd;
+    --ink:#2a2f33;
+    --muted:#5b6b72;
+    --dark:#17323f;
+  }
+  html,body{height:100%}
+  body{background:var(--dark);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  #deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 9vw;background:var(--bg);opacity:0;transition:opacity .35s ease}
+  .slide.active{display:flex;opacity:1}
+  h1{font-family:'Merriweather',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .slide h1{font-size:clamp(30px,5.2vw,60px);max-width:20ch}
+  .kicker{font-family:'Open Sans',sans-serif;font-size:clamp(13px,1.5vw,17px);font-weight:700;
+    text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:26px}
+  .sub{font-size:clamp(18px,2.4vw,27px);color:var(--muted);margin-top:26px;max-width:30ch;line-height:1.45}
+  .body{font-size:clamp(16px,1.9vw,22px);color:var(--muted);margin-top:26px;max-width:44ch;line-height:1.6}
+  .brandline{margin-top:40px;font-size:clamp(14px,1.6vw,18px);font-weight:600;color:var(--accent);letter-spacing:.02em}
+  .brandline b{color:var(--ink)}
+  /* title slide */
+  .t-title{background:linear-gradient(160deg,#eef8fa 0%,#dff0f4 100%)}
+  .t-title h1{font-size:clamp(38px,7vw,84px);max-width:16ch}
+  .t-title::before{content:"";position:absolute;left:9vw;top:8vh;width:64px;height:6px;background:var(--accent2);border-radius:4px}
+  /* section divider */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Open Sans',sans-serif;font-size:clamp(13px,1.5vw,16px);font-weight:700;
+    text-transform:uppercase;letter-spacing:.24em;color:var(--accent);margin-bottom:18px}
+  .t-section h1{font-size:clamp(34px,6vw,68px)}
+  .t-section .rule{width:88px;height:6px;background:var(--accent2);border-radius:4px;margin-top:30px}
+  /* dark statement */
+  .t-dark{background:var(--dark)}
+  .t-dark h1{color:#eaf4f6;font-size:clamp(28px,4.6vw,52px);max-width:24ch}
+  .t-dark .kicker{color:var(--accent2)}
+  /* checklist / normal panel accents */
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:30px 34px;margin-top:30px;max-width:52ch}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:16px}
+  .card li{position:relative;padding-left:40px;font-size:clamp(15px,1.7vw,20px);color:var(--ink);line-height:1.45}
+  .card li::before{content:"";position:absolute;left:0;top:2px;width:24px;height:24px;border-radius:7px;
+    border:2px solid var(--accent2);background:
+      linear-gradient(45deg,transparent 46%,var(--accent) 46% 54%,transparent 54%) 6px 4px/14px 14px no-repeat,
+      linear-gradient(-45deg,transparent 46%,var(--accent) 46% 54%,transparent 54%) 2px 6px/14px 14px no-repeat}
+  /* cta */
+  .t-cta{background:linear-gradient(160deg,#eef8fa 0%,#dff0f4 100%)}
+  .chips{display:flex;flex-wrap:wrap;gap:16px;margin-top:34px}
+  .chip{background:var(--accent);color:#fff;font-weight:600;font-size:clamp(15px,1.8vw,20px);
+    padding:15px 26px;border-radius:100px}
+  .chip:last-child{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .disc{position:absolute;left:9vw;right:9vw;bottom:5vh;font-size:clamp(11px,1.2vw,14px);
+    color:var(--muted);line-height:1.5;max-width:70ch}
+  /* chrome */
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--accent2);width:0;transition:width .35s ease;z-index:5}
+  #count{position:fixed;bottom:22px;right:26px;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.08em;z-index:5}
+  .nav{position:fixed;bottom:18px;left:26px;display:flex;gap:10px;z-index:5}
+  .nav button{width:44px;height:44px;border:1px solid var(--rule);background:#fff;border-radius:10px;
+    font-size:18px;color:var(--accent);cursor:pointer;line-height:1}
+  .nav button:hover{background:var(--panel)}
+  #hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--muted);z-index:5;transition:opacity .4s}
+  @media (max-width:640px){.slide{padding:7vh 7vw}.nav{display:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="deck"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8249;</button><button id="next" aria-label="Next">&#8250;</button></div>
+<div id="count">01 / 20</div>
+<div id="hint">Use arrow keys to navigate</div>
+<script>
+const S = [
+ {t:'title',title:'The Paperless Private Practice',sub:'How to build a lactation practice that runs on systems, not on late nights of paperwork.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You are brilliant with families. The business is the hard part.',body:'You know how to help a struggling dyad. What no one trained you for is the intake forms, the notes, the consent, and the quiet worry about whether you are even set up correctly.'},
+ {t:'dark',title:'You do not have a clients problem. You have a systems problem.'},
+
+ {t:'section',idx:'Part One',title:'The Paperwork Trap'},
+ {t:'normal',k:'The hidden load',title:'Every new client adds more paper, not more freedom.',body:'When the practice runs on sticky notes, PDFs, and your memory, each family you add multiplies the admin only you can do. The work you love gets buried under the work you dread.'},
+ {t:'normal',k:'The real risk',title:'A practice held together by memory and paper is fragile.',body:'If your records live in a drawer and your policies live in your head, there is nothing protecting you, nothing you can hand off, and no way to step back without it all stopping.'},
+ {t:'dark',title:'The families are ready. The system underneath you is what is missing.'},
+
+ {t:'section',idx:'Part Two',title:'The Paperless System'},
+ {t:'normal',k:'Pillar one, paperless charting',title:'One compliant platform, not a drawer of paper.',body:'Choose and set up a single HIPAA-compliant charting platform, IntakeQ, Practice Better, Jane, or ChARM, with secure messaging and digital intake and consent, so records handle themselves instead of chasing you.'},
+ {t:'normal',k:'Pillar two, start to strong',title:'The business bones, set up once.',body:'Your entity, your policies and procedures, a website that actually books, and pricing you do not apologize for. The foundation that makes everything after it easier.'},
+ {t:'normal',k:'Pillar three, the legal backbone',title:'The documents most consultants never build.',body:'Consent for Care, website terms, a social media and photo-release policy, and subcontractor agreements, all attorney reviewed. This is the protection that turns a side effort into a real practice.'},
+ {t:'normal',k:'Pillar four, nurture with boundaries',title:'A practice that expands the circle of care without burning you out.',body:'Sustainable hours, clear scope, and living-wage pricing, so the practice can grow and keep caring for families for years, not until you run out of energy.'},
+ {t:'dark',title:'Paperless charting, strong foundations, real legal protection, sustainable boundaries. That is the whole system.'},
+
+ {t:'section',idx:'Part Three',title:'Inside a Paperless Practice'},
+ {t:'normal',k:'A visit on the system',title:'Intake, consent, notes, and follow-up, handled before the visit ends.',body:'The client books and completes intake online, consent is signed digitally, your note templates do the heavy lifting, and the superbill and follow-up go out without a second evening of catch-up.'},
+ {t:'normal',k:'Why this method',title:'Built in a working practice, then taught to consultants everywhere.',body:'This is drawn from a private practice run in Queens since 2011, the book on paperless lactation practice, a USLCA President’s Award, and years of the Lactation Business Coaching podcast and Deeper Dives sessions with Annie and Leah. Real practice, not theory.',card:['A real practice, not a template','Attorney-reviewed, clinician-built','Taught by working IBCLCs']},
+ {t:'dark',title:'A practice you could protect, hand off, or grow. Because it runs on systems, not on you.'},
+
+ {t:'section',idx:'Your next step',title:'Build It With Paperless Lactation'},
+ {t:'normal',k:'How we can help',title:'The Essential Toolkit and Deeper Dives.',body:'The Toolkit and Course give you the charting setup, the attorney-reviewed documents, and the Start to Strong workbooks. Deeper Dives gives you monthly live sessions with Annie and Leah and a community of consultants building the same way.'},
+ {t:'cta',title:'Ready to build the practice that runs without the paperwork?',chips:['Get the Essential Toolkit','Join a Deeper Dives session'],disc:'Educational content for lactation consultants. No income, revenue, or business result is guaranteed. Results vary by practitioner, practice, and market.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`;
+  }else{
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.card) h+=`<div class="card"><ul>`+s.card.map(c=>`<li>${c}</li>`).join('')+`</ul></div>`;
+    if(s.brand) h+=`<div class="brandline">Paperless <b>Lactation</b> · Annie Frisbie &amp; Leah Jolly</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const bar=document.getElementById('bar');
+const count=document.getElementById('count');
+const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;
+}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0);
+  if(e.key==='End')go(slides.length-1);
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.nav')&&!e.target.closest('.chip'))go(cur+1)});
+go(0);
+</script>
+</body>
+</html>
