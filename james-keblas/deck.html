@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Get Booked Solid · James Keblas, Keblas BizDev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#17120b; --panel:#231a0f; --rule:#3c2e1a;
+    --acc:#d69a4a; --ink:#f4ecdd; --body:#cdbfa6; --dim:#8a7a60; --cream:#f7efe1;
+  }
+  html,body{height:100%}
+  body{background:#0e0b06;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0e0b06}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Manrope',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Manrope',sans-serif;font-weight:700;color:var(--ink);line-height:1.13;letter-spacing:-.01em}
+  .t-title h1{font-size:5.0vw;max-width:94%;font-weight:800}
+  .t-normal h1{font-size:3.0vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.35vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.64;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-style:italic;font-size:1.8vw;color:var(--acc);margin-top:3.6vh;max-width:86%;line-height:1.45;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Manrope',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2a1f11 0%,#120d07 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.3vw;max-width:88%;color:var(--cream);font-weight:600}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a1f11 0%,#120d07 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#e6d9c2;font-size:1.35vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.1vw;font-weight:600;font-family:'Manrope',sans-serif}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .gr-motif{position:absolute;pointer-events:none}
+  .title-gr{right:7.0%;bottom:8.5%;width:18vw;opacity:.92}
+  .corner-gr{right:6.5%;bottom:7.5%;width:8.5vw;opacity:.5}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.8vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Keblas BizDev</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: three ascending stages feeding one node, drawn in the accent. his world (the business development engine, work compounding into a pipeline), one focal point per slide -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gr" viewBox="0 0 120 120">
+  <g fill="none" stroke="#d69a4a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="18" y="74" width="16" height="26" rx="2" opacity="0.9"/>
+    <rect x="42" y="58" width="16" height="42" rx="2" opacity="0.9"/>
+    <rect x="66" y="40" width="16" height="60" rx="2" opacity="0.9"/>
+    <path d="M26 66 L50 50 L74 32 L98 22" opacity="0.85"/>
+    <circle cx="98" cy="22" r="4.6" fill="#d69a4a" stroke="none"/>
+    <circle cx="98" cy="22" r="12" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Get Booked Solid',sub:'How production company owners build a business development engine that brings better clients to them, so the pipeline no longer depends on referrals and the people you already know.',brand:true,gr:'title'},
+ {t:'normal',k:'Who this is for',title:'You make excellent work. The pipeline still lives on referrals and the people you already know.',body:'You run a real production company. The reels are strong, the clients are happy, and the next job usually comes from someone you have already worked with. That feels fine until a quarter goes quiet, or the one client who sends you work moves on. When the phone slows down, there is no system underneath it to turn the wheel again.'},
+ {t:'dark',title:'Talent was never the problem. The best shop in town, with no business development, still waits by the phone.'},
+
+ {t:'section',idx:'Part One',title:'Why Great Shops Stay Stuck on Referrals'},
+ {t:'normal',k:'The order-taker trap',title:'When you sell what you make, buyers hear what every other shop says, so they treat you like a vendor and sort on price.',body:'If your pitch is your gear, your crew, and your storytelling, you have described what every other production company also says. With nothing else to weigh, the buyer treats the work as interchangeable and falls back on the day rate. You get priced down and treated like an order-taker, far below what your talent and contribution deserve.'},
+ {t:'normal',k:'Referrals are a ceiling',title:'Referrals are a wonderful result. They are a terrible strategy to depend on.',body:'Word of mouth means the work is good, and that matters. But you cannot forecast it, you cannot turn it up when you need it, and you cannot scale it. A business that only grows when someone else decides to mention you is a business running on luck, with feast and famine baked in.'},
+ {t:'dark',title:'You cannot out-shoot a business development gap. Better footage will not fill a pipeline that has no system behind it.'},
+
+ {t:'section',idx:'Part Two',title:'The Get Booked Solid Engine'},
+ {t:'normal',k:'Think like an agency',title:'Stop asking what are we making. Start asking what are we saying.',body:'Agencies win because they lead with a point of view, not a price. The shift starts with clarity about who you are, who you serve, and what makes you different. When you can answer that in one clean sentence, you stop competing on rate and start attracting the clients who want exactly what you do. That clarity is the foundation the whole engine sits on.'},
+ {t:'normal',k:'Marketing and Engagement',title:'Turn the work you have already delivered into marketing that attracts, then put it in front of the right people.',body:'Your best marketing asset is the work already on your drives. Productize it into content built around the outcomes your ideal clients care about, then run a deliberate process to get that in front of qualified prospects instead of hoping they stumble on you. Pick one lead offer and lead with it, so the market knows exactly what you are the answer to.'},
+ {t:'normal',k:'Development and Sales',title:'Turn conversations into strategy, then win the work without discounting it.',body:'Not every lead is ready today, so score and nurture them instead of chasing or forgetting them. When a real conversation opens, come in as the expert who understands their business, ask sharper questions than anyone else on the list, and get honest about budget early. You win the deal on fit and value, and the rate holds because you were never the same as the others.'},
+ {t:'normal',k:'Delivery',title:'Treat every project as the start of the next one, not the end of this one.',body:'Delivery is where growth is won or lost. Anticipate what the client needs, sweat the small things, and make the whole experience feel effortless. A project delivered that way expands the relationship, brings the client back, and produces the referrals you never had to beg for. Delivery is not the finish line, it is the top of the engine feeding itself.'},
+ {t:'dark',title:'Attract with your work, convert like an agency, deliver so it compounds. That is a pipeline, not a run of good luck.'},
+
+ {t:'section',idx:'Part Three',title:'What Booked Solid Looks Like'},
+ {t:'normal',k:'The shop this builds',title:'A predictable pipeline, better-fit clients, and rates set to the value you deliver.',body:'When the engine runs, the leads reaching you already want you, not three competing quotes. You set the rate to the outcome you create instead of the market floor. And because delivery is dialled in, the best clients stay, expand, and send you more like them. The quiet quarter stops being a threat because the system keeps turning whether or not the phone rings.'},
+ {t:'dark',title:'The goal was never more work at any price. It was the right work, from clients who chose you on purpose.'},
+ {t:'normal',k:'Why James Keblas',title:'Two decades on both sides of the table, from the production floor to the city film office.',body:'James co-founded The Vera Project, ran business development inside production and agency teams, led growth at the film marketplace ShareGrid, and served as Seattle Film Commissioner building the city as a place to make commercial work. Keblas BizDev is that experience turned into one system for production company owners, shared week to week on his Let\'s Talk It Out podcast.'},
+
+ {t:'section',idx:'Your Next Step',title:'Get Booked Solid'},
+ {t:'normal',k:'Keep going with James',title:'Build the engine with James beside you, or start on your own with the video series.',body:'Get Booked Solid is where James designs and installs the whole engine inside your company and trains your team to run it, from your positioning to your marketing, your pipeline, and your delivery. If you want to begin on your own first, the video series walks you through the same system step by step. Either way you leave with a business development machine you own.'},
+ {t:'cta',title:'Ready to stop chasing and start attracting?',body:'Take the next step with James Keblas and Keblas BizDev.',chips:['Book a Get Booked Solid consult','Start with the video series'],disc:'Educational content for production company owners. No specific income, client, or revenue result is guaranteed. Results vary by business, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function gr(kind){return `<svg class="gr-motif ${kind==='title'?'title-gr':'corner-gr'}"><use href="#gr"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Keblas <b>BizDev</b> · James Keblas</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.gr) h+=gr(s.gr);
+  else if(s.t==='title') h+=gr('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
