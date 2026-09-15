@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Signature Talk — A Masterclass with Nick Demos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141019; --panel:#1e1826; --rule:#3a2f47;
+    --acc:#d9a441; --ink:#f5efe4; --body:#d6ccc0; --dim:#8d8195; --cream:#f5efe4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0c0910;font-family:'Josefin Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;
+    background:radial-gradient(130% 120% at 22% 8%,#1c1524 0%,var(--bg) 62%)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Josefin Sans',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:.004em}
+  .t-title h1{font-size:5.2vw;max-width:90%}
+  .t-normal h1{font-size:3.0vw;max-width:86%}
+  .t-normal .body{font-family:'Josefin Sans',sans-serif;font-size:1.28vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.68;font-weight:300}
+  .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.05vw;color:var(--acc);margin-top:3.6vh;max-width:82%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:linear-gradient(120deg,#221a2c 0%,#171120 100%)}
+  .t-section .idx{font-family:'Josefin Sans',sans-serif;font-size:1.05vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.28em;text-transform:uppercase}
+  .t-section h1{font-size:3.9vw;max-width:82%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(120% 150% at 50% 0%,#2a1f14 0%,#0f0b14 70%)}
+  .t-dark h1{color:var(--cream);font-size:3.3vw;max-width:86%;font-style:italic}
+  .t-cta{background:radial-gradient(120% 150% at 50% 0%,#2a1f14 0%,#0f0b14 72%)}
+  .t-cta h1{color:var(--cream);font-size:3.2vw;max-width:84%}
+  .t-cta .body{font-family:'Josefin Sans',sans-serif;color:#efe0cf;font-size:1.3vw;margin-top:3vh;max-width:70%;line-height:1.6;font-weight:300}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:500;letter-spacing:.02em}
+  .brandline{font-family:'Josefin Sans',sans-serif;font-size:1.12vw;color:var(--body);margin-top:4.2vh;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.2vh;font-family:'Josefin Sans',sans-serif;font-size:.82vw;color:#9b8fa6;line-height:1.5;max-width:80%;font-weight:300}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(255,255,255,.05);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6%;top:50%;transform:translateY(-50%);width:23vw;height:23vw;opacity:.9}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.1vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Creative Soulpreneur</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a stage spotlight, a warm pool of light thrown across a dark house -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#d9a441">
+    <path d="M52 6 L34 108 H86 L68 6 Z" fill="#d9a441" opacity="0.08" stroke="none"/>
+    <path d="M52 6 L34 108 H86 L68 6 Z" stroke-width="1.4" opacity="0.4"/>
+    <ellipse cx="60" cy="104" rx="30" ry="7" fill="#d9a441" opacity="0.22" stroke="none"/>
+    <circle cx="60" cy="14" r="7" fill="#d9a441" opacity="0.85" stroke="none"/>
+    <circle cx="60" cy="14" r="12" stroke-width="1.2" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Signature Talk',sub:'How to turn the story you have been hiding into a talk that moves a room, and moves your business.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You have the expertise. The talk that makes a room lean in is the part that still feels out of reach.',body:'You know your subject cold, and one-to-one you are compelling. But on a stage the talk goes flat, or safe, or forgettable, and you walk off knowing it did not land the way it should have. That gap is not a knowledge problem.'},
+ {t:'dark',title:'A forgettable talk is rarely a knowledge problem. It is a story problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Smart People Give Forgettable Talks'},
+ {t:'normal',k:'The achievement trap',title:'We lead with our achievements. Achievements inform. They rarely move anyone.',body:'The instinct on stage is to prove we belong, so we list the credentials and the wins. But a résumé keeps you safe and keeps the room at a distance. The achievements become hiding places for the real story underneath, which is the one people actually came to hear.'},
+ {t:'normal',k:'The information reflex',title:'More slides and more facts do not fix a talk that never made anyone feel anything.',body:'When a talk is not landing, the reflex is to add: another point, another slide, another data set. But nobody was ever moved by a denser deck. An audience forgets almost every fact you give them, and remembers exactly how you made them feel.'},
+ {t:'normal',k:'Reciting, not living',title:'Most speakers recite a talk. Almost no one truly inhabits one.',body:'Under pressure the breath goes shallow, the body locks, and you perform from the neck up while the rest of you waits to sit back down. The words may be right, but the audience can feel that you are not really there inside them. Presence, not polish, is what has gone missing.'},
+ {t:'dark',title:'People do not remember your information. They remember the story that made them feel something.'},
+
+ {t:'section',idx:'Part Two',title:'The Method: From Buried Story to Standing Ovation'},
+ {t:'normal',k:'One / Story Excavation',title:'The story you are avoiding is usually the one that connects.',body:'Before structure or delivery, we find the true, specific story hiding under the highlight reel. Not the polished origin story everyone tells, but the honest turning point you would rather skip. That is the material an audience leans toward, because it is the part that is unmistakably yours.'},
+ {t:'normal',k:'Two / Theatrical Structure',title:'A talk should be built like a piece of theater, not a slide deck.',body:'Once we have the raw story, we shape it with real dramatic structure: a promise, rising tension, a genuine turn, and a resolution that pays off. This is the Broadway craft applied to your message, so a talk plays like a scene an audience cannot look away from instead of a list they sit through.'},
+ {t:'normal',k:'Three / Authentic Embodiment',title:'Breath first. A grounded body is what lets the real story land.',body:'This is the piece almost no speaking coach owns. Using breath work and presence practice, we settle the nervous system so you can actually inhabit the story on stage rather than race through it. When the body is grounded, the room relaxes with you, and the message finally has somewhere to land.'},
+ {t:'normal',k:'Four / Grand Performance',title:'Delivery is a craft: voice, timing, stillness, and the courage to be seen.',body:'Now we rehearse it like a performance, because it is one. We work the voice, the pauses, the eye contact, and the moments that ask you to be vulnerable in front of people. Real practice with honest feedback is what turns a good script into a talk that holds a room from the first line.'},
+ {t:'normal',k:'Five / Engagement and Conversion',title:'A talk that moves people should also move them to act.',body:'A standing ovation is not the finish line. We design the close so the connection you built becomes a clear, natural next step, whether that is a conversation, a booking, or a decision. Done right, the talk that touches the room is the same talk that grows the business behind it.'},
+ {t:'dark',title:'This is not public-speaking tips. It is a story, staged.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Talk Lands'},
+ {t:'normal',k:'What this builds',title:'One signature talk you can give anywhere, that opens doors instead of just filling time.',body:'When the story is true, the structure is sound, and the delivery is grounded, the room leans in, remembers you, and reaches out. One talk becomes the asset behind the invitations, the introductions, and the clients, because the right people finally understand who you are and what you stand for.'},
+ {t:'normal',k:'Why Nick Demos',title:'A Tony and Olivier winning Broadway producer, and a breath teacher, in one coach.',body:'Nick has spent thirty years in the theatre and fifteen teaching breath and presence, and served as president of the National Speakers Association in Southern California. That rare pairing, the producer who builds the story and the teacher who grounds the body, is the whole reason the method works.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Signature Talk with Nick'},
+ {t:'cta',title:'Ready to build the talk that only you can give?',body:'Take the next step with Nick and craft the signature talk that moves your rooms and your business.',chips:['Book a Story Consultation with Nick','Apply for the BTL Mastermind'],disc:'Educational content for speakers, founders, and thought leaders. No speaking outcome, booking, or income result is guaranteed. Results vary by individual, message, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Creative <b>Soulpreneur</b> &middot; Nick Demos</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
