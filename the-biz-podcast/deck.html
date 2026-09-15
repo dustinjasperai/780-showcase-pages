@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Build a Business That Fits How You Work · Lara Wellman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf9f2; --panel:#f1efe2; --rule:#e3e0cf;
+    --acc:#74770a; --idx:#8a8d3a; --ink:#211f16; --grey:#4c4a3c; --dim:#908d7c;
+  }
+  html,body{height:100%}
+  body{background:#e8e6d8;font-family:'Montserrat',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#d9d7c7}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'EB Garamond',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.15;letter-spacing:-.005em}
+  .t-title h1{font-size:4.6vw;max-width:90%}
+  .t-normal h1{font-size:3.4vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:5vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#33321f 0%,#20200f 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.9vw;max-width:86%;font-style:italic;color:#f4f2df;font-weight:500}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#33321f 0%,#20200f 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:82%;color:#f6f4e6}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #c7ca6a;color:#eef0cf;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:#c9c7ac;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .leaf{position:absolute;pointer-events:none;opacity:.85}
+  .title-leaf{right:7.5%;bottom:8%;width:20vw}
+  .corner-leaf{right:6%;bottom:7.5%;width:8vw;opacity:.45}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Biz Studio</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- growth-without-force motif: a stem with two opening leaves rising from a single point -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="leaf" viewBox="0 0 200 170">
+  <g fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 156 C100 116 100 92 100 60" stroke="#8a8d3a" opacity="0.55"/>
+    <path d="M100 104 C70 100 50 82 46 52 C82 54 102 74 100 104 Z" stroke="#74770a" fill="#74770a" fill-opacity="0.10" opacity="0.85"/>
+    <path d="M100 88 C130 84 150 66 154 36 C118 38 98 58 100 88 Z" stroke="#8a8d3a" fill="#8a8d3a" fill-opacity="0.08" opacity="0.7"/>
+    <circle cx="100" cy="156" r="4" fill="#74770a" stroke="none" opacity="0.7"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Build a Business That Fits How You Work',sub:'A live masterclass for small business owners who are done being told the answer is to hustle harder.',brand:true,leaf:'title'},
+ {t:'normal',k:'Who this is for',title:'You are doing everything right and still feel behind.',body:'You care about your business. You show up for your clients. And yet the to-do list never ends, the guilt never quite lifts, and somewhere along the way you started to wonder if the problem is just you.'},
+ {t:'dark',title:'What if the problem was never you? It was the playbook you were handed.'},
+
+ {t:'section',idx:'Part One',title:'Why "Try Harder" Keeps Failing'},
+ {t:'normal',k:'The hustle rule',title:'Most business advice has one setting: do more.',body:'Wake earlier, push harder, add another funnel, another platform, another launch. It works for a while, then it costs you the sleep, the weekends, and the reason you started in the first place.'},
+ {t:'normal',k:'The self-judgment tax',title:'When more effort stops working, we blame our character.',body:'We call ourselves lazy, undisciplined, not cut out for it. That story is expensive: it drains the energy you need to actually run the business, and it keeps you reaching for a harder version of the thing that already is not fitting.'},
+ {t:'dark',title:'You cannot out-hustle a system that was never built for the way you work.'},
+
+ {t:'section',idx:'Part Two',title:'The You’re Not Lazy Method'},
+ {t:'normal',k:'Pillar one',title:'You are not lazy. You are misaligned.',body:'What looks like laziness is almost always a mismatch between how you are wired and how you were told to work. Name the mismatch and the shame loses its grip, which is the first honest step toward a business that runs on your terms.'},
+ {t:'normal',k:'Pillar two',title:'Invite ease instead of forcing output.',body:'Ease is not doing less or caring less. It is building the day around your real energy and rhythms so the work you are best at gets your best hours, and the rest stops running your calendar.'},
+ {t:'normal',k:'Pillar three',title:'Move on the next best step, not the big overhaul.',body:'You do not need to burn the business down and start over. You need the single next decision that fits where you actually are. Small, intentional steps compound, and they are the only kind most of us will actually take.'},
+ {t:'normal',k:'Putting it together',title:'Design the business around how your brain actually runs.',body:'When the structure fits the person running it, the guilt fades, the output steadies, and growth stops depending on a burst of willpower you cannot renew. That is the whole shift, and it is learnable.'},
+ {t:'dark',title:'Ease is not the opposite of ambition. It is what makes ambition sustainable.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When It Fits'},
+ {t:'normal',k:'The owner this builds',title:'More money, work you love, and a life you actually get to enjoy.',body:'An owner who works with their own wiring makes clearer decisions, drops the tasks that were only ever draining them, and grows the business without trading away the life it was supposed to give them.'},
+ {t:'dark',title:'The goal was never a busier you. It was a business that fits.'},
+ {t:'normal',k:'Why Lara Wellman',title:'Fifteen years of coaching, and a reframe she lived first.',body:'Lara Wellman is a Certified Business Coach, host of The Biz Podcast, and author of You’re Not Lazy. After forty years of believing she was lazy and not built for success, she rebuilt how she works to fit her brain and has since helped thousands of owners take their next best step.'},
+
+ {t:'section',idx:'Your Next Step',title:'Keep Going With Support'},
+ {t:'normal',k:'The Biz Studio',title:'Coaching built on the same idea, for real momentum.',body:'When you are ready to apply this to your own business, The Biz Studio offers private coaching and the group Biz Studio Accelerator, so you have a coach and a room of owners moving with you instead of a stack of advice that does not fit.'},
+ {t:'cta',title:'Ready to build a business that fits how you work?',chips:['Explore private coaching','Join the Biz Studio Accelerator'],disc:'Educational content for small business owners. No income or business result is guaranteed. Results vary by owner, market, and circumstances.'},
+];
+
+const deck=document.getElementById('deck');
+function leaf(kind){return `<svg class="leaf ${kind==='title'?'title-leaf':'corner-leaf'}"><use href="#leaf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Biz <b>Studio</b> · Lara Wellman</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.leaf) h+=leaf(s.leaf);
+  else if(s.t==='title') h+=leaf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
