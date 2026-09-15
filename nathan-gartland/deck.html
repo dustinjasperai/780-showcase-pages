@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>PharmD to MD · Nathan Gartland, The Physician Pharmacist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0c1428; --panel:#132038; --rule:#22304f;
+    --acc:#57c8f2; --ink:#eef3fb; --body:#c3cfe2; --dim:#93a5c4; --cream:#eef3fb;
+  }
+  html,body{height:100%}
+  body{background:#070b16;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#070b16}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'IBM Plex Sans',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'STIX Two Text',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:-.008em}
+  .t-title h1{font-size:5.0vw;max-width:92%}
+  .t-normal h1{font-size:3.35vw;max-width:90%}
+  .t-normal .body{font-family:'IBM Plex Sans',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:75%;line-height:1.62;font-weight:400}
+  .sub{font-family:'STIX Two Text',serif;font-size:2.05vw;color:var(--acc);margin-top:3.4vh;max-width:84%;line-height:1.34;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'IBM Plex Sans',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#132038 0%,#070b16 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:88%;color:var(--cream)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#132038 0%,#070b16 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.95vw;max-width:86%;color:var(--cream)}
+  .t-cta .body{font-family:'IBM Plex Sans',sans-serif;color:#d7e1ee;font-size:1.42vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .cl-motif{position:absolute;pointer-events:none}
+  .title-cl{right:7.2%;bottom:8%;width:16vw;opacity:.92}
+  .corner-cl{right:6.5%;bottom:7.5%;width:7.8vw;opacity:.5}
+  .brandline{font-family:'IBM Plex Sans',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.7vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">The Physician Pharmacist</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a stepped clinical path climbing from a baseline up to a peak node, drawn in cyan -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="path" viewBox="0 0 120 120">
+  <g fill="none" stroke="#57c8f2" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 104 H30 V80 H54 V56 H78 V32 H102" opacity="0.9"/>
+    <circle cx="14" cy="104" r="3.2" fill="#57c8f2" stroke="none" opacity="0.7"/>
+    <circle cx="102" cy="32" r="4.6" fill="#57c8f2" stroke="none"/>
+    <path d="M96 22 L102 12 L108 22" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'PharmD to MD',sub:'The pharmacist’s blueprint to a medical school acceptance.',brand:true,cl:'title'},
+ {t:'normal',k:'Who this is for',title:'You already know medicine is the goal. The application was built for someone who is not you.',body:'You are a pharmacist, or finishing your PharmD, and you have decided you want to be a physician. The problem is that the whole admissions process assumes a 21-year-old traditional pre-med. Your license, your years of patient care, your late start on some prerequisites: the system has no obvious box for any of it. So most pharmacist applicants either downplay the very thing that makes them strong, or apply like everyone else and blend in.'},
+ {t:'dark',title:'Your pharmacy background is not the detour the process treats it as. Used right, it is the edge.'},
+
+ {t:'section',idx:'Part One',title:'Why Pharmacists Get Judged by the Wrong Rubric'},
+ {t:'normal',k:'The non-traditional trap',title:'The default playbook is written for a student who has never held a real clinical job.',body:'Standard pre-med advice tells you to rack up shadowing hours and a research line and a clean four-year timeline. You are past a lot of that, and you have something those applicants do not: you have already dosed real patients, caught real errors, and counseled real families. Follow the default playbook and you spend the application apologizing for your path instead of showing what it gave you.'},
+ {t:'normal',k:'The question behind every file',title:'Every reader is quietly asking one thing: why leave a career you already trained years for?',body:'A pharmacist walking into medicine raises the one question a traditional applicant never has to answer. Left unaddressed, it reads as restlessness or a lack of direction, and it is the fastest way to a thin interview. Answered with a clear, specific reason, it becomes the most memorable story in the pile.'},
+ {t:'dark',title:'Answered wrong, it reads as indecision. Answered right, it is the strongest story in the room.'},
+
+ {t:'section',idx:'Part Two',title:'The Blueprint'},
+ {t:'normal',k:'The Blueprint',title:'Start from your PharmD, not from a generic timeline.',body:'The first move is to map the whole application around the position you are actually in: what your pharmacy coursework already satisfies, where the real gaps are, and how a licensed clinician should be spending the next twelve months. A traditional applicant and a pharmacist should not run the same plan, and almost every avoidable rejection starts with a plan borrowed from the wrong applicant.'},
+ {t:'normal',k:'The Schedule',title:'Sequence the MCAT and prerequisites around your pharmacy life, not on top of it.',body:'You are likely working, licensed, or finishing a demanding PharmD curriculum. The schedule step is about fitting the MCAT, any remaining prerequisites, and the application windows into a life that already has clinical hours in it, so nothing collides and nothing gets rushed at the end.'},
+ {t:'normal',k:'The MCAT',title:'The one exam that scares pharmacists most, planned like a project.',body:'The MCAT is where a lot of strong pharmacist candidates stall, because it rewards a specific kind of preparation that pharmacy school did not train. We treat it as a planned block of work with a realistic study runway and a test strategy, rather than an open-ended fear you keep pushing to next cycle.'},
+ {t:'normal',k:'The Application',title:'Turn dispensing counters and counseling into the strongest activities on the page.',body:'Your work and activities section and your personal statement are where the pharmacy background either becomes an asset or a liability. The application step is about telling that story in the language admissions committees actually reward: patient outcomes you touched, judgment you exercised, and a specific reason the next step is medicine.'},
+ {t:'normal',k:'The Interview',title:'Have a clean, honest answer to "why medicine now" before you ever sit down.',body:'By the interview, traditional and MMI, the whole file comes down to whether your reason for switching holds up in person. Preparing that answer, and the handful of pharmacist-specific follow-ups that always come with it, is the difference between an interview that confirms the story and one that unravels it.'},
+ {t:'dark',title:'Every step a traditional applicant treats as generic, you can turn into evidence you are ready.'},
+
+ {t:'section',idx:'Part Three',title:'What the Pharmacists Who Get In Do Differently'},
+ {t:'normal',k:'The pharmacist who gets in',title:'Not the one who hid the pharmacy years. The one who built the case on them.',body:'The applicants who make this jump cleanly are rarely the ones with the flashiest stats. They are the ones who stopped treating pharmacy as something to explain away, sequenced the work so nothing got crammed, and walked into interviews with one clear reason for the move. The background stops being a question mark and starts being the answer.'},
+ {t:'normal',k:'Why Nathan Gartland',title:'I made this exact move, then wrote the guide I wish I had.',body:'I am a licensed pharmacist who went on to medical school and am now a physician in anesthesiology training. I wrote PharmD to MD, the complete guide to getting into medical school for people on this path, and I host the Physician Pharmacist Podcast. This blueprint is the one I used and the one I now walk applicants through directly.'},
+
+ {t:'section',idx:'Your Next Step',title:'Map Your Path From PharmD to MD'},
+ {t:'cta',title:'Ready to build your application around the pharmacist you already are?',body:'Take the next step with The Physician Pharmacist.',chips:['Check your competitiveness for free','Book a Strategy Call'],disc:'Educational content for prospective medical school applicants. Admission is never guaranteed and outcomes vary by applicant, program, and cycle.'},
+];
+
+const deck=document.getElementById('deck');
+function cl(kind){return `<svg class="cl-motif ${kind==='title'?'title-cl':'corner-cl'}"><use href="#path"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Physician <b>Pharmacist</b> · Nathan Gartland</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.cl) h+=cl(s.cl);
+  else if(s.t==='title') h+=cl('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
