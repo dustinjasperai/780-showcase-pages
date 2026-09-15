@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pass by Diagnosis, Not by Grinding | Bar Exam Toolbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4f4f2;
+    --panel:#ffffff;
+    --stage:#10281c;
+    --accent:#1a8c4a;
+    --accent-soft:#d7ecdd;
+    --ink:#2d3031;
+    --ink-soft:#4a4d4c;
+    --muted:#87908a;
+    --rule:#d9dbd7;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Source Sans 3',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Jost',sans-serif;font-weight:600;font-size:4.2vw;line-height:1.1;
+    letter-spacing:-.008em;color:var(--ink);max-width:21ch}
+  .sub{font-family:'Source Sans 3',sans-serif;font-weight:500;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:35ch}
+  .body{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:1.55vw;line-height:1.62;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:42ch}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.15vw;font-weight:600;letter-spacing:.04em;
+    color:var(--accent);margin-top:5vh}
+  .brandline b{font-weight:700}
+  /* section slides */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.15vw;font-weight:700;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  .t-section h1{font-size:5vw}
+  .t-section .rule{width:8.5vw;height:4px;background:var(--accent);border-radius:3px;margin-top:4vh}
+  /* dark reframe slides */
+  .t-dark{background:var(--stage)}
+  .t-dark h1{color:#eef6f0;font-weight:600;font-size:3.9vw;max-width:26ch}
+  .t-dark .kicker{color:#7fce9c}
+  /* cta */
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Jost',sans-serif;font-weight:600;font-size:1.3vw;color:#fff;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Source Sans 3',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:56ch}
+  /* issue-spot highlight motif */
+  .spot{position:absolute;right:7vw;bottom:8.5vh;width:17vw;height:8.4vw;opacity:.96}
+  .t-title .spot{right:8vw;bottom:11vh;width:22vw;height:10.8vw;opacity:1}
+  .t-dark .spot .card{fill:#173a28}
+  .t-dark .spot .line{fill:#2b5a3f}
+  .t-dark .spot .hl{fill:#7fce9c}
+  .t-dark .spot .word{fill:#10281c}
+  /* chrome */
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(45,48,49,.12);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--accent);transition:width .5s ease}
+  #count{font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Source Sans 3',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.4vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:8.6vw}.chip{font-size:3vw}.disc{font-size:2.4vw}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="spot" viewBox="0 0 260 128">
+  <rect class="card" x="6" y="10" width="248" height="108" rx="12" fill="#ffffff" stroke="#d9dbd7" stroke-width="1.5"/>
+  <rect class="line" x="24" y="30" width="150" height="8" rx="4" fill="#c9cec9"/>
+  <rect class="hl" x="24" y="58" width="120" height="16" rx="4" fill="#1a8c4a"/>
+  <text class="word" x="30" y="71" font-family="Jost, sans-serif" font-size="12" font-weight="700" fill="#ffffff">ISSUE</text>
+  <rect class="line" x="24" y="92" width="196" height="8" rx="4" fill="#c9cec9"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'Pass by Diagnosis, Not by Grinding',sub:'How bar takers clear the exam by fixing the one thing costing them points, instead of re-reading everything one more time.',brand:true,spot:true},
+ {t:'normal',k:'Who this is for',title:'You are putting in the hours and the score still will not move.',body:'You have outlined the subjects, watched the lectures, and done the practice sets. Yet the essays come back with the same notes and the MBE percentage sits just under passing, and nobody has told you exactly why.'},
+ {t:'normal',k:'The real cost',title:'The problem is almost never how much you know.',body:'Most people who stall are not short on law. They are losing points in one specific place, essay structure, issue-spotting, MBE reasoning, or timing, and pouring more hours into everything at once never finds it.'},
+ {t:'dark',title:'The bar is not a memory test. It is a spot-the-issue-and-write-it test, and those are skills you can drill.'},
+
+ {t:'section',idx:'Part One',title:'Why More Hours Betray You'},
+ {t:'normal',k:'The trap',title:'The big-box course teaches everyone the same way.',body:'A pre-recorded lecture cannot see your essays or your wrong answers. It hands you hundreds of hours of the same content every taker gets, and leaves you to guess which of your habits is the one actually failing the exam.'},
+ {t:'normal',k:'Why grinding backfires',title:'A thousand more questions rehearse the same mistake.',body:'When you do not know why an answer was wrong, another practice set just teaches you to be wrong faster. A plateau is not a signal to study more. It is a signal that something specific is broken and needs to be named.'},
+ {t:'dark',title:'You cannot fix a score you have not diagnosed. First find where the points are leaking.'},
+
+ {t:'section',idx:'Part Two',title:'Diagnose, Then Drill'},
+ {t:'normal',k:'The core shift',title:'Name the one skill that is costing you the exam.',body:'Before any more studying, we separate the four places points leak: knowing the law, spotting the issues, writing the analysis, and managing the clock. Almost everyone is strong in some and quietly bleeding in one. That one is the whole game.'},
+ {t:'normal',k:'Writing of the Week',title:'Turn essay practice into graded reps, not guesswork.',body:'The Writing of the Week workshop walks you through a real essay, pausing so you write your own answer, then compares it to a strong one. You stop hoping your essays are good enough and start seeing exactly where the analysis thins out.'},
+ {t:'normal',k:'Practice of the Week',title:'Attack the MBE by the call, not by the gut.',body:'The MBE workshop shows you how a strong test-taker reads a question: find the call, spot the tested issue, eliminate the traps written to look right. Done weekly, that reading becomes a reflex instead of a coin flip.'},
+ {t:'normal',k:'Drill what is tested',title:'Practice the patterns the exam actually repeats.',body:'The Brainy Bar Bank sorts real essays and performance tests by subject and how often they show up, and the Smart Bar Prep outlines cut the law down to what is tested. You spend your hours on the questions that pay, not on trivia.'},
+ {t:'dark',title:'Once you know your weak skill and drill it directly, the same study hours start moving the score.'},
+
+ {t:'section',idx:'Part Three',title:'What the Last Weeks Look Like'},
+ {t:'normal',k:'A plan for the clock',title:'Decide the order and the pace before exam day.',body:'Which sections you take first, how long you let one question hold you, and when you move on are choices you make in advance, not in a panic on the day. A calm, rehearsed sequence is worth points on its own.'},
+ {t:'normal',k:'Built around you',title:'One plan, shaped to your weeks and your gaps.',body:'A schedule that fits a full-time studier is wrong for someone working a job, and a plan that drills essays is wrong for someone whose essays are already strong. The plan bends to your starting point, your calendar, and the skill you need most.'},
+ {t:'normal',k:'Why learn this way',title:'We built this to demystify the exam, not to bury you in it.',body:'Bar Exam Toolbox has been helping bar takers since 2009 and running this method since 2012, through the podcast, the workshops, and one-on-one tutoring. Every piece exists to find the real problem and fix it, because that is what changes the result.'},
+ {t:'dark',title:'Repeat takers do not need more content. They need someone to find the leak and close it.'},
+
+ {t:'section',idx:'Your next step',title:'Find Your Leak, Then Close It'},
+ {t:'normal',k:'How we help',title:'A diagnosis, the right tools, and a coach beside you.',body:'The Self-Study Program gives you the workshops, the bank, and the outlines with a plan around them, and private tutoring adds a tutor who reads your work and calls out exactly what to fix. Start with a free conversation about where you are stuck.'},
+ {t:'cta',title:'Ready to pass on strategy instead of luck?',chips:['Book a free tutoring consult','Explore the Self-Study Program'],disc:'Educational content for bar exam candidates. No exam result or bar passage is guaranteed. Results vary by candidate, jurisdiction, starting point, and preparation.'},
+];
+
+const deck=document.getElementById('deck');
+function spot(){return '<svg class="spot"><use href="#spot"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Bar Exam <b>Toolbox</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.spot||s.t==='title') h+=spot();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
