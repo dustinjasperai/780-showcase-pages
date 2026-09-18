@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fully Become the Character, Safely &middot; StandBy Method Acting Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f9fafa;      /* their light site ground */
+    --panel:#ffffff;   /* their white cards */
+    --ink:#1b1f29;     /* their near-black text */
+    --rule:#e2e4e8;    /* hairline from the slate family */
+    --dim:#4c5262;     /* their slate caption */
+    --accent:#f4136b;  /* their #1-ranked brand magenta, the spotlight */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Open Sans",-apple-system,Segoe UI,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{
+    position:relative;width:100%;max-width:960px;aspect-ratio:16/9;
+    background:var(--bg);overflow:hidden;box-shadow:0 1px 0 var(--rule);
+  }
+  .slide{position:absolute;inset:0;padding:8% 9%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:"Open Sans",sans-serif;font-weight:600;letter-spacing:.2em;
+    text-transform:uppercase;font-size:clamp(11px,1.5vw,14px);color:var(--accent);margin-bottom:1em}
+  h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;line-height:1.04;
+    font-size:clamp(30px,6vw,62px);letter-spacing:-.01em}
+  h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;line-height:1.1;
+    font-size:clamp(24px,4.4vw,44px)}
+  .lede{font-size:clamp(16px,2.1vw,22px);line-height:1.55;max-width:40ch;margin-top:.8em;color:var(--ink)}
+  .dim{color:var(--dim)}
+  .rule{width:60px;height:3px;background:var(--accent);margin:1.1em 0}
+  ul{list-style:none;margin-top:1em;max-width:46ch}
+  li{position:relative;padding-left:1.5em;margin:.55em 0;font-size:clamp(15px,1.9vw,20px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;background:var(--accent);border-radius:50%}
+  .big{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(44px,10vw,120px);color:var(--accent);line-height:.92}
+  .step{display:flex;gap:.8em;align-items:baseline;margin:.5em 0;max-width:48ch}
+  .step .n{font-family:"DM Serif Display",Georgia,serif;color:var(--accent);font-size:clamp(20px,2.6vw,30px);min-width:1.5em}
+  .step .t{font-size:clamp(15px,1.9vw,20px);line-height:1.42}
+  .card{background:var(--panel);padding:5% 6%;border-left:5px solid var(--accent)}
+  .foot{position:absolute;left:9%;bottom:5.5%;font-family:"Open Sans",sans-serif;
+    font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--dim)}
+  .disc{font-size:13px;line-height:1.55;color:var(--dim);max-width:54ch;margin-top:1.3em}
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;
+    font-family:"Open Sans",sans-serif;font-size:13px;color:var(--dim)}
+  #nav button{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    width:30px;height:30px;cursor:pointer}
+  #nav button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #count{min-width:52px;text-align:center;letter-spacing:.12em}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .2s}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="stage" aria-live="polite"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button>
+<span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S=[
+ {t:'title', kick:'A free live masterclass with Louise O’Leary',
+  h:'Fully Become the Character, Safely',
+  lede:'How to disappear all the way into a role, and come cleanly back out, so the camera reads real emotion instead of acting.'},
+
+ {t:'point', kick:'Who this hour is for',
+  h:'You, if the feeling never quite lands',
+  list:['An actor whose takes look technically right but read cold on camera',
+        'A performer who was told to "feel it more" and has no idea how',
+        'Anyone who has heard method acting is dangerous and wants a safer way in'],
+  foot:'StandBy Method Acting Studio'},
+
+ {t:'point', kick:'The trap',
+  h:'You were taught to show the emotion',
+  lede:'Furrow the brow for sad. Raise the voice for angry. Indicating, we call it. The camera catches it every time, and casting feels the effort before they feel the character.'},
+
+ {t:'reframe', kick:'The uncomfortable truth',
+  big:'It is not acting',
+  lede:'True acting is not acting at all. It is the conveying of real emotion. The moment you are performing the feeling instead of living it, the audience is watching you work.'},
+
+ {t:'section', kick:'Part one', h:'Why "trying harder" makes it worse',
+  lede:'The strain to manufacture a feeling is the exact thing that reads as fake. The fix is not more effort. It is a different door in.'},
+
+ {t:'point', kick:'The core problem',
+  h:'You cannot force an emotion. You can summon one.',
+  list:['Forced emotion tenses the body and the voice, and the lie shows',
+        'A remembered emotion arrives with its own truth, unbidden',
+        'The skill is not feeling on command. It is reaching the memory that already carries the feeling'],
+  foot:'The core problem'},
+
+ {t:'card', kick:'What that costs',
+  h:'Cut in the first ten seconds of the tape',
+  lede:'Not because you cannot act. Because the effort told them who you are before the scene did, and it was an actor working, not a person living.'},
+
+ {t:'section', kick:'Part two', h:'The StandBy Method, four ways in',
+  lede:'Real emotion is reachable on cue. These are the tools I teach for reaching it, in the order they build.'},
+
+ {t:'framework', kick:'Tool one', h:'Sense memory',
+  lede:'You rebuild a moment through the senses first. The cold of the room, the smell, the light. The body believes the senses, and the feeling follows the body in on its own.'},
+
+ {t:'framework', kick:'Tool two', h:'Affective memory',
+  lede:'You draw on a real emotional experience of your own and let it live inside the character’s circumstance. The feeling is yours and true, which is why it never looks like acting.'},
+
+ {t:'framework', kick:'Tool three', h:'The animal exercise',
+  lede:'You build the character’s body from an animal study, its rhythm, weight and instinct. The transformation becomes physical, not just vocal, so a whole person walks into frame.'},
+
+ {t:'framework', kick:'Tool four', h:'Anchoring',
+  lede:'You learn to reach an emotional state and hold it through take after take, on demand, so the truth is there on the shot they actually print, not only on the first magic run.'},
+
+ {t:'reframe', kick:'The part nobody teaches', big:'A way out',
+  lede:'Method acting has a reputation for actors who lose themselves in a role. Total immersion is the goal. A clean way back out is the discipline that makes it safe to go all the way in.'},
+
+ {t:'list', kick:'Put together', h:'One safe immersion loop',
+  list:['Reach the feeling through the senses, not by force',
+        'Anchor it so it holds through the whole scene',
+        'Let the animal work carry it into the body',
+        'Step back out of the character deliberately when the take ends'],
+  foot:'Safe immersion'},
+
+ {t:'section', kick:'Part three', h:'From first read to the take',
+  lede:'This is not theory you nod along to. Here is how the work actually runs on the day.'},
+
+ {t:'steps', kick:'From script to shot',
+  steps:[['1','Break the scene down: the need, the motivation, the action. What the character wants and how they go after it.'],
+         ['2','Choose the door in: which sense memory or affective memory reaches this feeling for you.'],
+         ['3','Build the body: animal work and physical instinct, so the character is worn, not described.'],
+         ['4','Immerse, hold, and release: live it fully through the take, then step cleanly back out.']],
+  foot:'The four steps'},
+
+ {t:'card', kick:'On camera',
+  h:'The camera stops noticing the actor',
+  lede:'When the feeling is real and anchored, there is nothing to catch you doing. Casting stops watching the technique and starts watching the person, which is the whole game.'},
+
+ {t:'credibility', kick:'Why listen to me',
+  h:'I built StandBy on this, and I still act',
+  list:['Founded StandBy Method Acting Studio in Sheffield in 2010, now teaching actors online worldwide',
+        'A working professional actress, not only a coach, so the tools are tested on set, not just in a classroom',
+        'Stephen Graham on the studio: "StandBy gets my vote as the best place to start."'],
+  foot:'Louise O’Leary'},
+
+ {t:'point', kick:'What to take from this hour',
+  h:'Truth is a technique, not a talent',
+  list:['Indicating a feeling reads as fake, every time',
+        'Real emotion is reachable on cue through the senses and memory',
+        'Going all the way in is only safe when you have a way back out'],
+  foot:'Recap'},
+
+ {t:'cta', kick:'Your next step', h:'Come train with us',
+  lede:'Book an audition and start the 10-Week Method Acting Programme, where we build these tools scene by scene until real emotion on cue is yours to reach.',
+  disc:'This masterclass is for education. No role, booking, or specific result is guaranteed. Results vary with each actor, and every immersion exercise is taught with the safe release that gets you cleanly back out of character.',
+  foot:'standbymethod.com'}
+];
+
+const stage=document.getElementById('stage');
+const countEl=document.getElementById('count');
+const progEl=document.getElementById('prog');
+let i=0;
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const el=document.createElement('div');
+  el.className='slide on';
+  let h='';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='reframe'){
+    h+='<div class="big">'+s.big+'</div>';
+    if(s.lede) h+='<p class="lede" style="margin-top:.7em">'+s.lede+'</p>';
+  } else if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h+'</h2><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  } else {
+    if(s.h) h+='<h2>'+s.h+'</h2>';
+    if(s.t==='section'||s.t==='card') h+='<div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.list){h+='<ul>';s.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+    if(s.steps){s.steps.forEach(x=>h+='<div class="step"><span class="n">'+x[0]+'</span><span class="t">'+x[1]+'</span></div>');}
+  }
+  if(s.foot) h+='<div class="foot">'+s.foot+'</div>';
+  el.innerHTML=h;
+  stage.appendChild(el);
+  countEl.textContent=(i+1)+' / '+S.length;
+  progEl.style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();
+  if(e.clientX-r.left>r.width*0.5)go(i+1);else go(i-1);});
+render();
+</script>
+</body>
+</html>
