@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Edit the Film Before You Shoot It · Jason Dam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0F1113; --panel:#191B1E; --rule:#2C2F33;
+    --gold:#C9A24B; --steel:#8A8F98; --chalk:#F4EFE7; --grey:#B9B4A9; --dim:#6C6A63;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Archivo',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh}
+  h1{font-family:'Archivo',sans-serif;font-weight:700;color:var(--chalk);line-height:1.08;letter-spacing:-.015em}
+  .t-title h1{font-size:5.1vw;font-weight:800}
+  .t-normal h1{font-size:3.35vw;max-width:86%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:75%;line-height:1.55;font-weight:300}
+  .sub{font-family:'Inter',sans-serif;font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:76%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Archivo',sans-serif;font-size:1.35vw;font-weight:600;color:var(--steel);margin-bottom:2vh;letter-spacing:.18em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:88%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#1C1F22 0%,#08090A 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.75vw;max-width:88%;font-weight:600;color:#F6F2EA}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1C1F22 0%,#08090A 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.1vw;max-width:82%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--gold);color:#EAD3A0;border-radius:100px;padding:1.3vh 1.7vw;font-family:'Archivo',sans-serif;font-size:1.2vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Inter',sans-serif;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .frame-motif{position:absolute;pointer-events:none}
+  .title-frame{right:7%;bottom:7.5%;width:23vw;opacity:.85}
+  .corner-frame{right:6%;bottom:7%;width:9vw;opacity:.35}
+  .brandline{font-family:'Archivo',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.6vh;font-weight:400;letter-spacing:.04em}
+  .brandline b{color:var(--gold);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Tenfold Filmmaker</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- viewfinder frame: camera-monitor corner brackets, the "see it before you shoot it" motif -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="frame" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 40 V18 H44" stroke="#C9A24B" opacity="0.9"/>
+    <path d="M246 40 V18 H216" stroke="#C9A24B" opacity="0.9"/>
+    <path d="M14 110 V132 H44" stroke="#C9A24B" opacity="0.9"/>
+    <path d="M246 110 V132 H216" stroke="#C9A24B" opacity="0.9"/>
+    <circle cx="130" cy="75" r="4.2" fill="none" stroke="#C9A24B" stroke-width="2.4" opacity="0.7"/>
+    <line x1="118" y1="75" x2="122" y2="75" stroke="#F4EFE7" opacity="0.5"/>
+    <line x1="138" y1="75" x2="142" y2="75" stroke="#F4EFE7" opacity="0.5"/>
+    <line x1="130" y1="63" x2="130" y2="67" stroke="#F4EFE7" opacity="0.5"/>
+    <line x1="130" y1="83" x2="130" y2="87" stroke="#F4EFE7" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Edit the Film Before You Shoot It',sub:'How working filmmakers build the one spec that books paid brand work.',brand:true,frame:'title'},
+ {t:'normal',k:'Who this is for',title:'You can shoot anything. It still is not booking the work you want.',body:'You can light it, move the camera, and cut it clean. But the jobs landing in your inbox are more of the same work you are trying to leave, and the brand projects you actually want keep going to someone else.'},
+ {t:'dark',title:'You do not have a talent problem. You have a proof problem.'},
+
+ {t:'section',idx:'Part One',title:'Why the Reel Is Not Booking You'},
+ {t:'normal',k:'The hired-gun trap',title:'Executing everyone else’s vision keeps you invisible.',body:'When every clip on your reel is someone else’s brief, it proves you can follow a plan. It never proves you can lead one. Brands hiring a director are looking for the second thing, and it is not on your reel.'},
+ {t:'normal',k:'The real cost',title:'A reel of client work is a resume, not an argument.',body:'A resume lists what you were allowed to do. An argument shows what you would do with the budget and the freedom. Until a brand can see your argument, you stay in the quote-three-people pile.'},
+ {t:'dark',title:'Brands do not hire the best shooter. They hire the one who already proved the vision.'},
+
+ {t:'section',idx:'Part Two',title:'The Pre-Edit Method'},
+ {t:'normal',k:'The core idea',title:'Edit the film before the camera comes out.',body:'Lock the whole story on paper first: every beat, every shot, the cut in your head validated in advance. You are directing the film before you ever roll, so nothing on the day is left to luck.'},
+ {t:'normal',k:'Taste',title:'Make work that looks big-budget on a small budget.',body:'Taste is the skill that closes the gap between what you can afford and what it looks like on screen. It is trainable, and it is the first thing a brand reads in a frame.'},
+ {t:'normal',k:'Proof',title:'One marketable spec, built before the opportunity comes.',body:'You do not wait for a brand to hand you the job that proves you can do the job. You build the piece that proves it first, on purpose, aimed at the exact work you want next.'},
+ {t:'normal',k:'Systems',title:'Pricing, pitching, and a workflow you can repeat.',body:'Talent gets you the first yes. Systems get you the second, the third, and the rate that goes up each time. The business runs on repeatable steps, not on how you felt that week.'},
+ {t:'normal',k:'Positioning',title:'Specialize, and stop competing on price.',body:'When you are one of many who can do everything, price is the only lever left. When you are the obvious choice for one kind of work, the conversation stops being about the cheapest bid.'},
+ {t:'dark',title:'The spec is the asset. The gear is just the gear.'},
+
+ {t:'section',idx:'Part Three',title:'On Set, With the Film Already Decided'},
+ {t:'normal',k:'Reference to locked plan',title:'Study references the way directors do, then lock the edit on paper.',body:'Pull the frames that already work, break down why, and build your shot list from that read. By the time you pick up a camera the film is decided, not discovered.'},
+ {t:'normal',k:'The test run',title:'Shoot day becomes execution, not a scramble.',body:'When the edit is locked in advance you run the shoot once in your head, catch the gaps, and walk on set to capture exactly what the cut needs. Less waste, more control, a better film.'},
+ {t:'normal',k:'Why me',title:'From barbershop videos to Nike, Shell, and DJI.',body:'I started shooting local videos for a few hundred dollars and taught myself off the internet, not film school. The turn came from building specs on purpose. Tenfold has since directed for Nike, Shell, Shopify, and DJI, and taken 160-plus filmmakers down the same road.'},
+ {t:'dark',title:'The difference was never better gear. It was a spec built on purpose.'},
+
+ {t:'section',idx:'Your next step',title:'Build Your Spec'},
+ {t:'normal',k:'How I can help',title:'The 8-week path inside Cinematic Portfolio Mastery.',body:'We go from niche and positioning, to reference analysis, to a fully pre-edited plan, to production, to the final edit and grade, and out with a 90-day launch calendar. You leave with one brand-ready spec and the system to keep making more.'},
+ {t:'cta',title:'Ready to build the spec that books the work?',chips:['Watch the full masterclass','Apply to Cinematic Portfolio Mastery'],disc:'Educational content for filmmakers. No income, booking, or business result is guaranteed. Results vary by filmmaker, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function frame(kind){return `<svg class="frame-motif ${kind==='title'?'title-frame':'corner-frame'}"><use href="#frame"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Tenfold <b>Filmmaker</b> · Jason Dam</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.frame) h+=frame(s.frame);
+  else if(s.t==='title') h+=frame('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
