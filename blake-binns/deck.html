@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The 1,000 Raving Fans Playbook · Blake Binns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f3ec; --panel:#ece5d6; --rule:#ddd4c0;
+    --acc:#b4552d; --idx:#c56a3e; --ink:#221f1a; --grey:#4a4438; --dim:#9a8f7f;
+  }
+  html,body{height:100%}
+  body{background:#e5e0d4;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#d7d1c2}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Bitter',Georgia,serif;font-weight:500;color:var(--ink);line-height:1.16;letter-spacing:-.005em}
+  .t-title h1{font-size:4.5vw;max-width:92%}
+  .t-normal h1{font-size:3.3vw;max-width:85%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:75%;line-height:1.55;font-weight:400}
+  .sub{font-size:1.75vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.46;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.14em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:88%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#3a2820 0%,#251813 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.8vw;max-width:86%;font-style:italic;color:#f3e7de;font-weight:500}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#3a2820 0%,#251813 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:84%;color:#f6ece4}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid #d98a63;color:#f4ddd0;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:#d3b9ab;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .fan{position:absolute;pointer-events:none}
+  .title-fan{right:7%;bottom:7%;width:24vw;opacity:.9}
+  .corner-fan{right:5.5%;bottom:7%;width:9vw;opacity:.5}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.3vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:6.8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Good Advice</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- raving-fans motif: concentric arcs radiating outward from a single point -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="fan" viewBox="0 0 200 160">
+  <g fill="none" stroke="#b4552d" stroke-linecap="round">
+    <path d="M20 150 A130 130 0 0 1 180 150" stroke-width="3" opacity="0.85"/>
+    <path d="M45 150 A100 100 0 0 1 155 150" stroke-width="3" opacity="0.6"/>
+    <path d="M70 150 A70 70 0 0 1 130 150" stroke-width="3" opacity="0.42"/>
+    <path d="M92 150 A38 38 0 0 1 108 150" stroke-width="3" opacity="0.3"/>
+    <circle cx="100" cy="150" r="4.5" fill="#b4552d" stroke="none" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The 1,000 Raving Fans Playbook',sub:'A live masterclass for established owners who hit a ceiling and were told the answer is more leads. It never was.',brand:true,fan:'title'},
+ {t:'normal',k:'Who this is for',title:'You crossed half a million in revenue, and growth quietly stalled.',body:'The business works. Your customers are happy. But every month seems to start near zero again, the attention you buy keeps slipping away, and the growth that used to feel automatic now takes everything you have.'},
+ {t:'dark',title:'The ceiling was never a traffic problem. It is a loyalty problem.'},
+
+ {t:'section',idx:'Part One',title:'Why More Leads Stopped Working'},
+ {t:'normal',k:'The leaky bucket',title:'You are pouring new customers into a bucket that leaks out the bottom.',body:'Chase enough strangers and you can hide the leak for a while. But when the cost of attention keeps climbing and the customers you already won quietly drift away, you are running harder just to stay level.'},
+ {t:'normal',k:'The cash reality',title:'Growth that does not repeat is just expensive motion.',body:'Revenue that resets to zero every month never compounds, and it keeps most owners one slow stretch away from a cash crunch. More one-time buyers does not fix that. Buyers who come back and bring others do.'},
+ {t:'dark',title:'You do not need more strangers. You need more fans.'},
+
+ {t:'section',idx:'Part Two',title:'Building Your 1,000 Raving Fans'},
+ {t:'normal',k:'Pillar one',title:'A raving fan is not a happy customer. It is a customer who brings you the next one.',body:'Happy is quiet. A raving fan buys again, refers the people they know, and defends you when you are not in the room. That behavior, not a five-star review, is the asset you are actually building.'},
+ {t:'normal',k:'Pillar two',title:'Your team become raving fans first, or your customers never will.',body:'The experience that creates loyalty is delivered by people. When the people running your business believe in it, customers feel it in every interaction. Culture is not a soft extra here, it is the engine that produces the fans.'},
+ {t:'normal',k:'Pillar three',title:'Loyalty compounds where advertising resets.',body:'Every ad you turn off stops working the day you stop paying. A base of raving fans does the opposite. It grows on its own through repeat business and referral, so each month starts ahead of the last instead of back at the start.'},
+ {t:'normal',k:'The math of a thousand',title:'You do not need a hundred thousand strangers. You need a thousand who stay.',body:'Put a real number on the lifetime value of a loyal customer, add the customers each one refers, and the arithmetic changes. A thousand people who keep buying and keep sending others is what carries you through the ceiling.'},
+ {t:'dark',title:'A thousand true fans will out-earn a hundred thousand one-time buyers.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When It Compounds'},
+ {t:'normal',k:'The business this builds',title:'Revenue you can predict, less dependence on the feed, and your life back.',body:'When loyalty is doing the heavy lifting, you stop white-knuckling the acquisition number every month. Growth becomes something the business produces on its own, and running it stops costing you the reason you started.'},
+ {t:'dark',title:'The goal was never a busier owner. It was a business that grows without you feeding it strangers.'},
+ {t:'normal',k:'Why Blake Binns',title:'Three businesses, five hundred episodes, and a method I run myself.',body:'I am a three-time owner and the host of the Good Advice Podcast, where I have spent years pulling apart what actually grows a business. Good Advice coaches owners to break their next revenue ceiling on loyalty and a real plan, not on louder spending.'},
+
+ {t:'section',idx:'Your Next Step',title:'Keep Building With Good Advice'},
+ {t:'normal',k:'Good Advice coaching',title:'When you are ready to build your own thousand, we map the year.',body:'Good Advice works with owners on a twelve-month strategic plan, the same kind of plan the big companies use, so the raving-fans engine has a real system behind it instead of another burst of effort you cannot renew.'},
+ {t:'cta',title:'Ready to grow on raving fans instead of chasing strangers?',chips:['Book a Good Advice strategy call','Explore the twelve-month plan'],disc:'Educational content for business owners. No income or business result is guaranteed. Results vary by owner, market, and circumstances.'},
+];
+
+const deck=document.getElementById('deck');
+function fan(kind){return `<svg class="fan ${kind==='title'?'title-fan':'corner-fan'}"><use href="#fan"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Good <b>Advice</b> · Blake Binns</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.fan) h+=fan(s.fan);
+  else if(s.t==='title') h+=fan('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
