@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Hidden Ledger · Jarvis T. Gray · The Quality Coaching Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f2f4fb; --panel:#fbfcff; --rule:#e2e5ef;
+    --acc:#620d10; --brass:#b8860b; --ink:#343c4d; --grey:#555c6a; --dim:#9098a6;
+  }
+  html,body{height:100%}
+  body{background:#e9ebf3;font-family:'Source Serif 4',Georgia,serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9ebf3}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Poppins',sans-serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .t-title h1{font-size:4.1vw;max-width:90%}
+  .t-normal h1{font-size:3.05vw;max-width:86%}
+  .t-normal .body{font-family:'Source Serif 4',Georgia,serif;font-size:1.52vw;color:var(--grey);margin-top:2.7vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-family:'Source Serif 4',Georgia,serif;font-size:1.78vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.48;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.3vw;font-weight:600;color:var(--brass);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:90%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#4a0b0d 0%,#2b0708 100%);align-items:center;text-align:center}
+  .t-dark h1{font-family:'Source Serif 4',Georgia,serif;font-weight:400;font-style:italic;font-size:3.5vw;max-width:88%;color:#f7f0ea}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#ffffff 0%,#eef0f7 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Poppins',sans-serif;border:1.5px solid var(--acc);color:var(--acc);border-radius:100px;padding:1.3vh 1.7vw;font-size:1.2vw;font-weight:500}
+  .chip.solid{background:var(--acc);color:#fff}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-family:'Poppins',sans-serif;font-size:.9vw;color:var(--dim);text-align:center;line-height:1.42}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .stat-row{display:flex;gap:3.4vw;margin-top:4vh}
+  .stat .n{font-family:'Poppins',sans-serif;font-size:3.1vw;font-weight:700;color:var(--acc);line-height:1}
+  .stat .l{font-family:'Poppins',sans-serif;font-size:1.04vw;color:var(--grey);margin-top:1vh;letter-spacing:.02em}
+  .chart-motif{position:absolute;pointer-events:none;right:7%;bottom:8.5%;width:23vw;opacity:.92}
+  .corner-chart{position:absolute;pointer-events:none;right:6%;bottom:7.5%;width:10vw;opacity:.5}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.28vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.01em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(52,60,77,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Poppins',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.2vw}.t-normal h1{font-size:5.2vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}.stat .n{font-size:6vw}.stat .l{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">The Quality Coaching Co.</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- control-chart motif: a jagged, out-of-control line dropping to a flat, controlled result line -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="chart" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="14" y1="128" x2="246" y2="128" stroke="#9098a6" opacity="0.35"/>
+    <line x1="14" y1="60" x2="246" y2="60" stroke="#b8860b" opacity="0.5" stroke-dasharray="5 7"/>
+    <path d="M20 40 L44 96 L68 30 L92 104 L116 54 L140 88 L164 66" stroke="#9098a6" opacity="0.55"/>
+    <path d="M164 66 L188 62 L214 61 L242 61" stroke="#620d10" opacity="0.95"/>
+    <circle cx="164" cy="66" r="5" fill="none" stroke="#620d10" stroke-width="2.6"/>
+    <circle cx="242" cy="61" r="5" fill="#620d10"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Hidden Ledger',sub:'Where the margin your system is missing has been sitting all along. A live masterclass for healthcare leaders.',brand:true,chart:true},
+ {t:'normal',k:'Who this is for',title:'Your system is busier than ever and thinner than ever.',body:'You lead a hospital, a clinic group, or a department where the volume keeps climbing and the staff, the budget, and the hours do not. You are asked to do more with the same, and the pressure lands on you.'},
+ {t:'dark',title:'The margin you are missing was almost never a revenue problem. It was waste you could not see.'},
+
+ {t:'section',idx:'Part One',title:'The Problem You Cannot See'},
+ {t:'normal',k:'Busy is not the same as efficient',title:'A busy department can still leak every single day.',body:'Rework, waiting, handoffs that drop, steps that exist only because they always have. None of it shows up as a line on a budget, so it never gets cut. It just quietly spends your people and your money.'},
+ {t:'normal',k:'The eight wastes',title:'Waste hides in plain sight because nobody maps it.',body:'In a clinical setting the wastes are motion, waiting, defects, overproduction, over processing, inventory, transport, and unused talent. Once a team can name them, they start seeing them everywhere.'},
+ {t:'dark',title:'A process nobody mapped is a cost nobody owns.'},
+
+ {t:'section',idx:'Part Two',title:'The Three Pathway Model'},
+ {t:'normal',k:'Pathway one · Leadership',title:'Leaders set whether improvement is safe or punished.',body:'Leadership Excellence builds the skillset, toolset, and mindset a leader needs so their team surfaces problems instead of hiding them. We use CliftonStrengths so each leader improves from how they are actually wired.'},
+ {t:'normal',k:'Pathway two · Strategy',title:'Effort only counts when it points at one goal.',body:'Strategy Excellence aligns the work to a small number of measurable outcomes and tracks them on a balanced scorecard, so a team can tell at a glance whether the needle is moving or only moving around.'},
+ {t:'normal',k:'Pathway three · Operations',title:'This is where the waste becomes a number.',body:'Operational Excellence is Lean Six Sigma applied to care. We train your people at the Yellow, Green, and Black Belt levels to map a process, find the waste, remove it, and hold the gain so it does not creep back.'},
+ {t:'dark',title:'The three pathways move together, or they do not move.'},
+
+ {t:'section',idx:'Part Three',title:'What Measurable Looks Like'},
+ {t:'normal',k:'From invisible to a result',title:'You cannot manage what you have never made visible.',body:'When leadership, strategy, and operations line up, the hidden waste becomes a mapped, measured number, and a measured number is one you can move. That is the whole point of the word excellence.'},
+ {t:'normal',k:'Why Jarvis T. Gray',title:'A Lean Six Sigma Black Belt instructor who teaches this for a living.',body:'Jarvis is the Managing Director of The Quality Coaching Co. and a Lean Six Sigma Green and Black Belt instructor. He has spent his career on healthcare quality across systems including Piedmont, Emory, Duke, and HCA.',stats:[['$50M+','in cost savings identified'],['2,000+','healthcare leaders coached'],['50,000+','coaching hours delivered']]},
+ {t:'dark',title:'Excellence is not a slogan. It is a number that moved.'},
+
+ {t:'section',idx:'Your Next Step',title:'Start With Your Readiness'},
+ {t:'normal',k:'The readiness assessment',title:'See where your organization stands before you change a thing.',body:'The Healthcare Excellence Readiness Assessment shows you which of the three pathways is your constraint right now, so the first improvement you run is the one that matters most.'},
+ {t:'normal',k:'The Accelerator',title:'Then run it with a structured program behind you.',body:'The Healthcare Excellence Accelerator Program walks your team through all three pathways on a schedule, so the wins are real, measured, and they hold. This masterclass is the first hour of that path.'},
+ {t:'cta',title:'Ready to find the margin already inside your building?',chips:['Take the Healthcare Excellence Assessment','Schedule a consultation with the QCC'],disc:'Educational content for healthcare leaders and organizations. No financial, clinical, or cost saving result is guaranteed. Outcomes vary by organization, team, and starting conditions.'},
+];
+
+const deck=document.getElementById('deck');
+function chart(){return `<svg class="chart-motif"><use href="#chart"/></svg>`}
+function cornerChart(){return `<svg class="corner-chart"><use href="#chart"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.stats) h+=`<div class="stat-row">`+s.stats.map(st=>`<div class="stat"><div class="n">${st[0]}</div><div class="l">${st[1]}</div></div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">The Quality <b>Coaching Co.</b> · Jarvis T. Gray</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map((c,ci)=>`<div class="chip ${ci===0?'solid':''}">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.chart) h+=chart();
+  else if(s.t==='title') h+=chart();
+  else if(s.t==='normal') h+=cornerChart();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
