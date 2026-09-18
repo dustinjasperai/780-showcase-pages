@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Get In On Your Story · Dr. Ryan Gray</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f5f2; --panel:#ffffff; --rule:#e3e1da;
+    --ink:#17150f; --muted:#57534a; --acc:#0f8f8a; --acc-deep:#0b6b67; --idx:#9a968b;
+  }
+  html,body{height:100%}
+  body{background:#e7e5df;font-family:'Manrope',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7e5df}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .slide::before{content:"";position:absolute;top:7.2%;bottom:7.2%;left:5.4%;width:2px;background:var(--rule)}
+  .t-dark::before,.t-title::before,.t-cta::before{display:none}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc-deep);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:400;color:var(--ink);line-height:1.14;letter-spacing:-.006em}
+  .t-title h1{font-size:4.6vw;max-width:92%}
+  .t-title h1 em{font-style:italic;color:var(--acc-deep)}
+  .t-normal h1{font-size:3.15vw;max-width:88%}
+  .t-normal .body{font-size:1.48vw;color:var(--muted);margin-top:2.6vh;max-width:78%;line-height:1.6;font-weight:400}
+  .t-normal .body b{color:var(--ink);font-weight:600}
+  .sub{font-size:1.7vw;color:var(--muted);margin-top:3vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section::before{display:none}
+  .t-section .idx{font-family:'Newsreader',serif;font-size:6.2vw;font-weight:400;color:var(--rule);margin-bottom:.4vh;line-height:.9}
+  .t-section .lbl{font-size:1.1vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc-deep);margin-bottom:1.4vh}
+  .t-section h1{font-size:4.3vw;max-width:86%}
+  .t-section .rule{width:14vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.2vh}
+  .t-dark{background:#13201e;align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:82%;font-style:italic;color:#eef3f1}
+  .t-dark h1 span{color:#4fb3ad;font-style:normal}
+  .t-cta{background:linear-gradient(180deg,#ffffff 0%,#eef4f3 100%);align-items:flex-start}
+  .t-cta h1{font-size:3.7vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1px solid var(--acc);color:var(--acc-deep);border-radius:100px;padding:1.2vh 1.5vw;font-size:1.15vw;font-weight:600;background:rgba(15,143,138,.05)}
+  .steps{display:flex;gap:.7vw;margin-top:4.4vh;flex-wrap:wrap;align-items:center}
+  .step{border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;padding:1.4vh 1.5vw;font-size:1.16vw;font-weight:600;box-shadow:0 4px 14px rgba(23,21,15,.04)}
+  .step b{color:var(--acc-deep);font-weight:700}
+  .arrow{color:var(--idx);font-size:1.3vw}
+  .stat{display:flex;gap:3.4vw;margin-top:4.4vh;flex-wrap:wrap}
+  .stat .n{font-family:'Newsreader',serif;font-size:3.4vw;color:var(--acc-deep);line-height:1}
+  .stat .l{font-size:1.02vw;color:var(--muted);margin-top:1vh;max-width:15vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4vh;font-size:.88vw;color:var(--idx);font-style:italic;text-align:left;line-height:1.4;max-width:80%}
+  .brandline{font-size:1.28vw;color:var(--muted);margin-top:3.4vh;font-weight:500;letter-spacing:.01em}
+  .brandline b{color:var(--acc-deep);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(23,21,15,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--idx);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--idx);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--idx);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-section .idx{font-size:14vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.step{font-size:2.6vw}.stat .n{font-size:8vw}.stat .l{font-size:2.6vw;max-width:40vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="deck" id="deck"></div>
+</div>
+<div class="hud"><i id="bar"></i></div>
+<div class="brand-foot">Medical School HQ</div>
+<div class="count" id="count"></div>
+<div class="hint" id="hint">Use arrow keys or click to advance</div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+
+<script>
+const S = [
+  {t:'title', kicker:'A Medical School HQ Masterclass', h:'Get In On <em>Your Story</em>',
+    sub:'How admissions committees actually read your application, and how to give them a reason to say yes that your GPA and MCAT never will.',
+    brand:'with <b>Dr. Ryan Gray</b> · Medical School Headquarters' },
+
+  {t:'normal', kicker:'Who this is for', h:'You have done everything they told you to. You are still not sure you will get in.',
+    body:'The grades, the retake, the hours logged in the library, the shadowing, the research. And underneath it a quiet worry that will not go away: that after all of it, none of it quite adds up to a yes. This session is for the pre-med who has the numbers and still lies awake wondering if they are enough.' },
+
+  {t:'normal', kicker:'The trap', h:'Every piece of advice points at one number.',
+    body:'Raise the MCAT. Lift the GPA. Take the prep class. Retake the test. So you pour everything you have into the score, and the part of your application that actually decides, your story, your essays, your interview, gets whatever time and energy is left over. Which is usually none.' },
+
+  {t:'dark', h:'"Your MCAT gets your file opened. It has never once, by itself, gotten anyone <span>in</span>."' },
+
+  {t:'section', idx:'01', lbl:'Part One', h:'What the number can and cannot do' },
+
+  {t:'normal', kicker:'The real problem', h:'On the other side of the desk is a human being.',
+    body:'A real person on an admissions committee reads thousands of files. Your score tells them one thing: that you can handle the work. It says nothing about who you are, why medicine, or whether they want you sitting in their class for the next four years. That decision gets made somewhere a number cannot reach.' },
+
+  {t:'normal', kicker:'The cost', h:'Strong applicants get rejected every single cycle.',
+    body:'Not because their numbers failed them, but because their application never gave the committee a <b>reason to choose them</b>. And every year, students with lower numbers get in on a story told well. The score opens the door. It does not walk you through it.' },
+
+  {t:'normal', kicker:'The myth', h:'You do not need a higher score. You need to be understood.',
+    body:'The prep companies sell more points because points are easy to sell. But past the threshold your schools care about, a few more points changes almost nothing. What changes everything is an application a human being on the committee actually connects with.' },
+
+  {t:'section', idx:'02', lbl:'Part Two', h:'The Premed Playbook' },
+
+  {t:'normal', kicker:'Know your story first', h:'It starts with knowing your one story, honestly.',
+    body:'The personal statement is not a highlight reel or a list of achievements. Its real job is to make a stranger understand why you, specifically, are meant to do this. That takes introspection before it takes writing: your strengths, your weaknesses, and the moments that actually moved you.',
+    chips:['Know yourself first','One story, told well','Written for a human'] },
+
+  {t:'normal', kicker:'Show, do not list', h:'Your experiences have to show what a list can only claim.',
+    body:'Anyone can type compassionate, or hardworking, or resilient. A committee believes it only when a scene shows it. Turning a page of activities into real evidence of who you are is a craft, and it is most of what separates an interview invite from a polite rejection.' },
+
+  {t:'normal', kicker:'The interview', h:'The interview is a conversation, not an interrogation.',
+    body:'Traditional, panel, or MMI, the format changes but the question underneath never does: can we see you as our colleague? Preparing for that is not memorizing answers. It is learning to be genuinely yourself when the stakes are highest.',
+    steps:['Personal statement','Experiences','Secondaries','Interview'] },
+
+  {t:'dark', h:'"Never let a number on a transcript decide who you are allowed to <span>become</span>."' },
+
+  {t:'section', idx:'03', lbl:'Part Three', h:'The file that earns a yes' },
+
+  {t:'normal', kicker:'The insider read', h:'Imagine your file read by the people who used to decide.',
+    body:'The fastest way to write an application a committee says yes to is to learn how a committee actually reads one. Our advisors are former medical school Directors of Admissions. They have sat in the room, made the call, and know exactly what a file needs to earn the interview.' },
+
+  {t:'normal', kicker:'Why listen to me', h:'I was rejected the first time I applied. Then I figured out why.',
+    body:'I did not get in on my first try. What changed the second time was not my score. It was finally understanding what the application was really for. I have spent more than a decade since teaching pre-meds that same thing, through The Premed Years, the Premed Playbook books, and one-on-one advising.',
+    stat:[['2012','building Medical School HQ, since'],['4','Premed Playbook books'],['10+ yrs','guiding applicants in']] },
+
+  {t:'normal', kicker:'What getting in looks like', h:'One application, built to be chosen.',
+    body:'Primary, secondaries, and interview, each one telling the same true story from a different angle. That is what an application that gets in actually looks like. Not a louder number. A clearer, more honest, more human you.' },
+
+  {t:'cta', kicker:'Your next step', h:'Ready to build an application that gets you in?',
+    sub:'Work one-on-one with an MSHQ advisor, a former admissions director, and build the application, the story, and the interview that earn your seat.',
+    brand:'<b>Dr. Ryan Gray</b> · medicalschoolhq.net',
+    disc:'Educational content only. Individual results vary and depend on your own circumstances, application, and effort. No specific score, interview, admission, or outcome is guaranteed.' }
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('div');
+  el.className = 'slide t-' + s.t + (i === 0 ? ' active' : '');
+  let h = '';
+  if (s.kicker) h += `<div class="kicker">${s.kicker}</div>`;
+  if (s.idx) h += `<div class="idx">${s.idx}</div>`;
+  if (s.lbl) h += `<div class="lbl">${s.lbl}</div>`;
+  if (s.h) h += `<h1>${s.h}</h1>`;
+  if (s.t === 'section') h += `<div class="rule"></div>`;
+  if (s.body) h += `<div class="body">${s.body}</div>`;
+  if (s.sub) h += `<div class="sub">${s.sub}</div>`;
+  if (s.chips) h += `<div class="chips">${s.chips.map(c => `<div class="chip">${c}</div>`).join('')}</div>`;
+  if (s.steps) h += `<div class="steps">${s.steps.map((c, j) => `<div class="step">${c}</div>${j < s.steps.length-1 ? '<div class="arrow">&rsaquo;</div>' : ''}`).join('')}</div>`;
+  if (s.stat) h += `<div class="stat">${s.stat.map(x => `<div><div class="n">${x[0]}</div><div class="l">${x[1]}</div></div>`).join('')}</div>`;
+  if (s.brand) h += `<div class="brandline">${s.brand}</div>`;
+  if (s.disc) h += `<div class="disc">${s.disc}</div>`;
+  el.innerHTML = h;
+  deck.appendChild(el);
+});
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const bar = document.getElementById('bar');
+const count = document.getElementById('count');
+const hint = document.getElementById('hint');
+function show(n) {
+  cur = Math.max(0, Math.min(S.length - 1, n));
+  slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+  bar.style.width = ((cur + 1) / S.length * 100) + '%';
+  count.textContent = (cur + 1) + ' / ' + S.length;
+  if (cur > 0) hint.style.opacity = '0';
+}
+document.getElementById('next').onclick = () => show(cur + 1);
+document.getElementById('prev').onclick = () => show(cur - 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') show(cur + 1);
+  if (e.key === 'ArrowLeft') show(cur - 1);
+});
+show(0);
+</script>
+</body>
+</html>
