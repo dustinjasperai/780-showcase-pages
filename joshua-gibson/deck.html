@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Program Isn't the Problem | Philosophical Weightlifting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4ee;
+    --panel:#efe9df;
+    --stage:#17181a;
+    --accent:#cd2d40;
+    --ink:#17181a;
+    --ink-soft:#43423f;
+    --muted:#8a857a;
+    --rule:#e2dccf;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Nunito Sans',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Nunito Sans',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Oswald',Impact,sans-serif;font-weight:700;font-size:4.4vw;line-height:1.06;
+    letter-spacing:.005em;color:var(--ink);max-width:22ch;text-transform:uppercase}
+  .sub{font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:34ch}
+  .body{font-family:'Nunito Sans',sans-serif;font-weight:400;font-size:1.5vw;line-height:1.64;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:44ch}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.25vw;font-weight:600;letter-spacing:.14em;
+    color:var(--accent);margin-top:5vh;text-transform:uppercase}
+  .brandline b{font-weight:700}
+  /* section slides */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Nunito Sans',sans-serif;font-size:1.15vw;font-weight:700;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  .t-section h1{font-size:5.2vw}
+  .t-section .rule{width:8.5vw;height:5px;background:var(--accent);border-radius:3px;margin-top:4vh}
+  /* dark reframe slides */
+  .t-dark{background:var(--stage)}
+  .t-dark h1{color:#fbf9f5;font-weight:700;font-size:4vw;max-width:26ch}
+  .t-dark .kicker{color:var(--accent)}
+  .t-dark .em{color:var(--accent);font-style:italic}
+  /* cta */
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:1.3vw;color:#fbf9f5;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Nunito Sans',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:60ch}
+  h1 .a{color:var(--accent);font-style:italic}
+  /* barbell motif */
+  .mc{position:absolute;right:7vw;bottom:8.5vh;width:19vw;height:6vw;opacity:.95}
+  .t-title .mc{right:8vw;bottom:12vh;width:26vw;height:8vw;opacity:1}
+  /* chrome */
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(205,45,64,.18);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--accent);transition:width .5s ease}
+  #count{font-family:'Nunito Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Nunito Sans',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.6vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:9vw}.chip{font-size:3vw}.disc{font-size:2.4vw}.mc{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="barmotif" viewBox="0 0 300 90">
+  <line x1="30" y1="45" x2="270" y2="45" stroke="#cd2d40" stroke-width="4" stroke-linecap="round"/>
+  <rect x="44" y="20" width="12" height="50" rx="3" fill="none" stroke="#17181a" stroke-width="3"/>
+  <rect x="62" y="10" width="16" height="70" rx="3" fill="#cd2d40"/>
+  <rect x="222" y="10" width="16" height="70" rx="3" fill="#cd2d40"/>
+  <rect x="244" y="20" width="12" height="50" rx="3" fill="none" stroke="#17181a" stroke-width="3"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'Why Your Program Isn’t the Problem',sub:'The individualized method: why serious lifters stall on cookie-cutter plans, and how coaching built around you turns effort into real strength again.',brand:true,mc:true},
+ {t:'normal',k:'Who this is for',title:'You train hard. The bar just stopped moving.',body:'You show up, you push, you follow the plan to the letter. And for months now your numbers have not moved. You are not lazy and you are not soft. You have done everything the program told you to do. If you are working as hard as ever and progressing slower than ever, this is for you.'},
+ {t:'normal',k:'The plateau trap',title:'You’ve run every popular program. The needle still won’t budge.',body:'You bought the templates. You ran the famous linear plans, the percentage blocks, the high-frequency peaking cycles. Each one worked for a while, then flattened. So you assume the answer is the next program, the harder program, the one your friend swears by. That search is exactly what keeps you stuck.'},
+ {t:'dark',title:'The program was never the lever. The <span class="em">plan built for you</span> is.'},
+
+ {t:'section',idx:'Part One',title:'Why Cookie-Cutter Programs Stall'},
+ {t:'normal',k:'Individual response',title:'A program is an average. You are not average.',body:'A written program is designed for a made-up middle lifter: a certain recovery, a certain training age, a certain response to volume and intensity. Real lifters scatter around that middle. Some need more volume, some far less. Some peak in three weeks, some in eight. Run the average long enough and it stops fitting you, because it was never measured on you in the first place.'},
+ {t:'normal',k:'The missing feedback loop',title:'A PDF can’t see your bar speed, your recovery, or your technique.',body:'The thing a template cannot do is watch. It cannot see the rep that slowed down, the week you slept four hours a night, the small technical fault that caps every heavy single. Progress past the beginner stage is a series of small, individual adjustments, and a fixed sheet of paper makes exactly none of them. It runs the same whether you are thriving or breaking down.'},
+ {t:'dark',title:'Working harder on the wrong plan just gets you <span class="em">tired</span>, not strong.'},
+
+ {t:'section',idx:'Part Two',title:'The 3+1Cs: How Coaching Actually Drives Adaptation'},
+ {t:'normal',k:'Closeness and commitment',title:'The relationship is the mechanism, not the extra.',body:'Adaptation is not just sets and reps. It runs on Closeness, the mutual trust and respect that makes you tell your coach the truth about your sleep, your stress, and the lift that scared you. And on Commitment, a long-term orientation that holds the plan steady through the hard weeks instead of chasing a new program every time a session goes badly. Those two decide whether the training even gets a chance to work.'},
+ {t:'normal',k:'Complementarity and co-orientation',title:'You and your coach, pulling the same direction.',body:'Complementarity is the cooperative back-and-forth: you report honestly, the coach adjusts precisely, and the plan bends to the week you actually had. Co-orientation is the shared picture, both of you seeing the same goal and the same reason behind every choice in the program. Together they turn coaching from someone handing you a sheet into a system that reads you and responds.'},
+ {t:'dark',title:'Adaptation isn’t bought with a spreadsheet. It’s built in a <span class="em">relationship</span>.'},
+
+ {t:'section',idx:'Part Three',title:'The Individualized Method in Practice'},
+ {t:'normal',k:'Theory, then your barbell',title:'Bridging theory with practice, on your training, not in the abstract.',body:'The method starts by understanding the why: how periodization, fatigue, and individual response actually work. Then it translates that theory into practice for your body and your situation. We assess where you are, build a plan around your real recovery and schedule, and adjust it against the evidence your training gives back week to week. The science is only useful when it lands on your bar.'},
+ {t:'normal',k:'Effort into achievement',title:'Effort is the multiplier. Aim it correctly and it compounds.',body:'Achievement is not talent alone. It is the product of skill and effort, and effort counts twice, because it builds the skill and it drives the result. Most lifters are not short on effort. They are spending it on a plan that cannot use it. Point the same effort at a plan built around you, with real feedback, and it stops leaking into fatigue and starts turning into numbers on the bar.'},
+ {t:'normal',k:'Why learn this from me',title:'I coach the whole athlete, and I do it in the open.',body:'I am Josh, and I run Philosophical Weightlifting. I coach weightlifters and powerlifters one to one, I teach other coaches, and I have spent hundreds of podcast episodes and long-form articles working out loud on programming, technique, and the psychology of the sport. Everything here is what I actually do with the lifters I coach: individualized plans, a real coaching relationship, and theory that has to earn its place on the platform.'},
+ {t:'dark',title:'Strong isn’t a template you follow. It’s a plan built <span class="em">around you</span>.'},
+
+ {t:'section',idx:'Your next step',title:'Train With a Plan Built Around You'},
+ {t:'normal',k:'How the coaching works',title:'Start with a conversation, not a template.',body:'We begin with a consultation: your history, your goals, what has stalled, and what your week actually allows. From there, individualized 1:1 remote coaching builds the plan around you and adjusts it as your training talks back. Same effort you are already spending, aimed at a plan that can finally use it.'},
+ {t:'cta',title:'Ready to train like an individual?',chips:['Book a consultation','Start 1:1 remote coaching'],disc:'Educational content on strength training and coaching for weightlifters and powerlifters. No specific strength, performance, or body-composition result is guaranteed. Results vary by individual, history, effort, and consistency. Train within your ability and consult a qualified medical or health professional before starting any new training program.'},
+];
+
+const deck=document.getElementById('deck');
+function mc(){return '<svg class="mc"><use href="#barmotif"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Philosophical <b>Weightlifting</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mc||s.t==='title') h+=mc();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
