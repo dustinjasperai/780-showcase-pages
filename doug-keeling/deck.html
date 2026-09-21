@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your First Hire | Doug the Dog Guy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#122b32;
+    --panel:#0e2229;
+    --stage:#0a1a1f;
+    --accent:#96c7ba;
+    --sage:#96c7ba;
+    --ink:#f2f5f3;
+    --ink-soft:#c4d3ce;
+    --muted:#7f938d;
+    --rule:#163c30;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Roboto',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Roboto',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Zilla Slab',Georgia,serif;font-weight:700;font-size:4.1vw;line-height:1.1;
+    letter-spacing:-.01em;color:var(--ink);max-width:21ch}
+  .sub{font-family:'Roboto',sans-serif;font-weight:500;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:34ch}
+  .body{font-family:'Roboto',sans-serif;font-weight:400;font-size:1.5vw;line-height:1.64;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:42ch}
+  .brandline{font-family:'Zilla Slab',serif;font-size:1.25vw;font-weight:700;letter-spacing:.02em;
+    color:var(--accent);margin-top:5vh;text-transform:uppercase}
+  .brandline b{font-weight:700}
+  /* section slides */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Roboto',sans-serif;font-size:1.15vw;font-weight:700;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--sage);margin-bottom:2.6vh}
+  .t-section h1{font-size:4.9vw}
+  .t-section .rule{width:8.5vw;height:4px;background:var(--sage);border-radius:3px;margin-top:4vh}
+  /* dark reframe slides */
+  .t-dark{background:var(--stage)}
+  .t-dark h1{color:#fff;font-weight:700;font-size:3.7vw;max-width:26ch}
+  .t-dark .kicker{color:var(--sage)}
+  .t-dark .em{color:var(--sage);font-style:italic}
+  /* cta */
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Roboto',sans-serif;font-weight:700;font-size:1.3vw;color:#0a1a1f;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Roboto',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:56ch}
+  h1 .a{color:var(--accent);font-style:italic}
+  /* solo-to-team motif */
+  .mc{position:absolute;right:7vw;bottom:8.5vh;width:18vw;height:9vw;opacity:.95}
+  .t-title .mc{right:8vw;bottom:11vh;width:23vw;height:12vw;opacity:1}
+  /* chrome */
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(150,199,186,.16);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--sage);transition:width .5s ease}
+  #count{font-family:'Roboto',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Roboto',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.2vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:8.4vw}.chip{font-size:3vw}.disc{font-size:2.4vw}.mc{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="teammotif" viewBox="0 0 260 140">
+  <path d="M40 70 L150 34 M40 70 L150 70 M40 70 L150 106" fill="none" stroke="#163c30" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="40" cy="70" r="12" fill="#96c7ba"/>
+  <circle cx="162" cy="34" r="8" fill="none" stroke="#96c7ba" stroke-width="3"/>
+  <circle cx="162" cy="70" r="8" fill="none" stroke="#96c7ba" stroke-width="3"/>
+  <circle cx="162" cy="106" r="8" fill="none" stroke="#96c7ba" stroke-width="3"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'Your First Hire',sub:'How a solo pet sitter builds a team that runs the visits without them, so the business finally supports a life instead of swallowing it whole.',brand:true,mc:true},
+ {t:'normal',k:'Who this is for',title:'You are fully booked. You still cannot take a day off.',body:'The phone rings, the calendar is packed, the reviews are glowing. And you are still doing every single visit yourself, seven days a week, because you are the only one clients trust and the only one who knows how you do it. If you are busier than you have ever been and more tired than you have ever been, this is for you.'},
+ {t:'normal',k:'The real ceiling',title:'More clients will not fix this. You are the ceiling.',body:'When you are the only one who does the work, every new client is another visit you personally have to cover. You cannot get sick, you cannot take a vacation, and you have to turn away the growth you worked so hard to earn. The thing capping your business is not demand. It is that there is only one of you.'},
+ {t:'dark',title:'You did not build a business. You built a <span class="em">job</span> that owns you.'},
+
+ {t:'section',idx:'Part One',title:'Why Solo Pet Sitters Stay Solo'},
+ {t:'normal',k:'The trust trap',title:'The thing that grew you is now the thing holding you back.',body:'Clients booked you because it is you at the door. That personal trust built the business, and it is also the story you tell yourself about why no one else could ever do it. But the clients do not actually need you specifically. They need someone reliable, trained, and accountable. That is a person you can hire, once you know how.'},
+ {t:'normal',k:'Why hiring scares you',title:'You tried before. They flaked, they quit, and you swore off it.',body:'Most pet sitters who get burned by hiring were never taught a process. They posted a vague ad, hired the first warm body who liked dogs, handed over the keys with no training, and watched it fall apart. That is not proof you cannot build a team. It is proof that hiring by instinct does not work. Hiring by system does.'},
+ {t:'dark',title:'Hiring is not the risk. Staying <span class="em">solo</span> is.'},
+
+ {t:'section',idx:'Part Two',title:'The Pawsitive Hiring System'},
+ {t:'normal',k:'Step one: get ready',title:'Before you post an ad, get the business ready to hold a person.',body:'A hire falls apart when the business behind them is held together with sticky notes. So we start with the foundation: how you are set up, the labor basics and payroll you cannot skip, and a schedule and pay structure that actually works when someone else is on the routes. Get this right and the person you hire has something solid to stand on.'},
+ {t:'normal',k:'Step two: hire on purpose',title:'A real, multi-step process, not the first person who likes dogs.',body:'The right hire comes from a process you run the same way every time: a job ad that attracts the right kind of person, an application that filters before you ever spend an hour interviewing, an interview that tells you who they actually are, and a clear list of what to watch for. You stop gambling on gut feel and start choosing on evidence.'},
+ {t:'normal',k:'Step three: keep them',title:'Hiring is the easy half. Keeping good people is the business.',body:'Anyone can make an offer. The owners who scale are the ones who lead: they set expectations before day one, they train instead of hoping, they give good people a reason to stay and room to grow, and when it is time to part ways they do it cleanly. This is the part almost no one teaches, and it is the part that decides whether you ever get your time back.'},
+ {t:'dark',title:'You are not hiring a helper. You are building a <span class="em">team</span> that can run the routes without you.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Have a Team'},
+ {t:'normal',k:'Your week, different',title:'What the very next month can look like.',body:'The visits still happen, the standard still holds, the clients are still happy, but now some of those visits are covered by someone you trained to your standard. You get a morning back. You get a weekend back. You take on the clients you used to turn away, because you are no longer the only pair of hands the business has.'},
+ {t:'normal',k:'Why learn this from me',title:'I still run the company. This is exactly how we built it.',body:'I am Doug Keeling, Doug the Dog Guy. I started Bad to the Bone Pet Care in 2013, and over the last decade my team has completed more than one hundred thousand pet care services for over a thousand families. We were named Pet Sitter of the Year. Everything here is the hiring and team system we actually use, not theory from someone who never held the leash.'},
+ {t:'dark',title:'A day off is not a reward for scaling. It is the <span class="em">proof</span> that you did.'},
+
+ {t:'section',idx:'Your next step',title:'Build Your Team With Me'},
+ {t:'normal',k:'How the coaching helps',title:'The system, plus someone to walk you through your hire.',body:'On the live class we map the whole system to where you are right now: what to fix before you post the ad, how to write it, who to interview, and how to keep the person once they say yes. From there you can go deeper with the course and the community, where you get the templates, the ongoing calls, and a room full of pet sitters and dog walkers doing the exact same thing.'},
+ {t:'cta',title:'Ready to hire your first team?',chips:['Join the Pawsitive Pet Business Community','Start with the Pawsitive Hiring Course'],disc:'Educational content on hiring, managing, and running a pet care business, for pet business owners. No specific revenue, profit, hiring, or business result is guaranteed. Results vary by owner, market, team, and effort. Follow the labor and employment laws in your own state and locality.'},
+];
+
+const deck=document.getElementById('deck');
+function mc(){return '<svg class="mc"><use href="#teammotif"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Doug the <b>Dog Guy</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mc||s.t==='title') h+=mc();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
