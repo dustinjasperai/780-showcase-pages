@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Breakout Actor &middot; Acting Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d0e;      /* their near-black site ground */
+    --panel:#131819;   /* raised panel, same near-black family */
+    --ink:#f4f6f6;     /* their white type */
+    --rule:#26302f;    /* hairline, cool dark */
+    --dim:#8b9797;     /* muted caption */
+    --accent:#04c3c9;  /* their site button cyan */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Inter",-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{
+    position:relative;width:100%;max-width:960px;aspect-ratio:16/9;
+    background:
+      radial-gradient(120% 90% at 82% 8%, rgba(4,195,201,.10), transparent 60%),
+      var(--bg);
+    overflow:hidden;box-shadow:0 0 0 1px var(--rule);
+  }
+  .slide{
+    position:absolute;inset:0;padding:8% 9%;
+    display:none;flex-direction:column;justify-content:center;
+  }
+  .slide.on{display:flex}
+  .kick{
+    font-family:"Jost",sans-serif;font-weight:600;letter-spacing:.24em;
+    text-transform:uppercase;font-size:clamp(11px,1.5vw,15px);
+    color:var(--accent);margin-bottom:1em;
+  }
+  h1{font-family:"Jost",sans-serif;font-weight:700;line-height:1.0;
+    font-size:clamp(32px,6.8vw,72px);letter-spacing:-.01em}
+  h2{font-family:"Jost",sans-serif;font-weight:600;line-height:1.06;
+    font-size:clamp(25px,4.8vw,46px);letter-spacing:-.005em}
+  .lede{font-size:clamp(16px,2.2vw,23px);line-height:1.5;max-width:40ch;margin-top:.8em;color:#cfd6d6}
+  .dim{color:var(--dim)}
+  .rule{width:70px;height:3px;background:var(--accent);margin:1.1em 0}
+  ul{list-style:none;margin-top:1.1em;max-width:46ch}
+  li{position:relative;padding-left:1.6em;margin:.6em 0;font-size:clamp(15px,2vw,20px);line-height:1.42;color:#cfd6d6}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;background:var(--accent);border-radius:2px}
+  .big{font-family:"Jost",sans-serif;font-weight:700;font-size:clamp(44px,10vw,116px);color:var(--accent);line-height:.92;letter-spacing:-.02em}
+  .step{display:flex;gap:.8em;align-items:baseline;margin:.55em 0;max-width:48ch}
+  .step .n{font-family:"Jost",sans-serif;font-weight:700;color:var(--accent);font-size:clamp(18px,2.4vw,28px);min-width:1.6em}
+  .step .t{font-size:clamp(15px,2vw,20px);line-height:1.4;color:#cfd6d6}
+  .card{background:var(--panel);padding:5% 6%;border-left:5px solid var(--accent)}
+  .cap{font-family:"Jost",sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--dim);margin-top:1.4em}
+  .foot{position:absolute;left:9%;bottom:5.5%;font-family:"Jost",sans-serif;
+    letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:var(--dim)}
+  .disc{font-size:13px;line-height:1.5;color:var(--dim);max-width:54ch;margin-top:1.3em}
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;
+    font-family:"Jost",sans-serif;font-size:13px;color:var(--dim)}
+  #nav button{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    width:30px;height:30px;cursor:pointer}
+  #nav button:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  #count{min-width:52px;text-align:center;letter-spacing:.12em}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .2s}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="stage" aria-live="polite"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button>
+<span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S=[
+ {t:'title', kick:'A free live masterclass with Ben Mathews',
+  h:'The Breakout Actor',
+  lede:'How working actors build a paid career, when talent was never the thing holding them back.'},
+
+ {t:'point', kick:'Who this hour is for',
+  h:'You, if you are serious about the work',
+  list:['An actor who trains hard and still books inconsistently',
+        'A performer tired of waiting to be picked',
+        'Someone with real talent and no plan for the career itself'],
+  foot:'Acting Mastery'},
+
+ {t:'point', kick:'The trap',
+  h:'Everyone drills the craft. Almost no one builds the career.',
+  lede:'Years go into how you act. Almost nothing goes into how you actually get cast and paid. Those are not the same skill.',
+  foot:'Acting Mastery'},
+
+ {t:'reframe', kick:'The uncomfortable truth',
+  big:'Not talent',
+  lede:'Most actors are not stuck because they lack talent. They are stuck because no one ever showed them how to build a career. That is a process, and it can be taught.'},
+
+ {t:'point', kick:'Part one: the real problem',
+  h:'A great actor with no system still waits by the phone',
+  list:['The craft is sharp but the career has no plan',
+        'Opportunity gets treated as luck, not something you make',
+        'One no lands like a verdict instead of a single step'],
+  foot:'The core problem'},
+
+ {t:'card', kick:'What that costs',
+  h:'You blame the talent and quit the wrong thing',
+  lede:'Not because you cannot act. Because nobody built you the other two thirds of the job, and the silence started to feel like an answer.'},
+
+ {t:'section', kick:'Part two',
+  h:'The Breakout Framework',
+  lede:'A career runs on three things, held in balance. We build all three, in this order.'},
+
+ {t:'framework', kick:'Pillar one',
+  h:'Craft that books',
+  lede:'Truthful work that reads on camera, not only on a stage. Built in the lineage I came up in, the Atlantic Theater Company under Mamet and Macy, and pressure-tested on award-winning sets.'},
+
+ {t:'framework', kick:'Pillar two',
+  h:'Mindset that lasts',
+  lede:'The inner game of a working actor. How to take a no as a step, walk into a room without leaking desperation, and stay in long enough to break out.'},
+
+ {t:'framework', kick:'Pillar three',
+  h:'Opportunity you make',
+  lede:'The part almost no class teaches. How to create rooms, build real relationships with casting, and generate work instead of waiting to be chosen.'},
+
+ {t:'list', kick:'Put together',
+  h:'The three become one career',
+  list:['Craft that a casting room believes',
+        'A mindset that outlasts the rejection',
+        'Opportunity you generate on purpose',
+        'A 12-month plan so nothing is left to luck'],
+  foot:'The Breakout Framework'},
+
+ {t:'section', kick:'Part three',
+  h:'What a built career looks like',
+  lede:'The framework is not theory. Here is the run, over a year.'},
+
+ {t:'steps', kick:'The 12-month build',
+  steps:[['1','Craft. Sharpen the on-camera work and the self-tape until it books.'],
+         ['2','Mindset. Build the inner game that survives the audition room.'],
+         ['3','Materials and opportunity. Reel, story, and the relationships that open casting rooms.'],
+         ['4','Paid work. Turn auditions into bookings, and bookings into a career.']],
+  foot:'The four stages'},
+
+ {t:'card', kick:'On the self-tape',
+  h:'The self-tape is the audition now',
+  lede:'Most roles are cast off a tape before you ever meet a soul. We shoot it and cut it so a strong actor is never lost to bad framing or a flat first read.'},
+
+ {t:'point', kick:'The room',
+  h:'They cast a person, not a showreel',
+  list:['Who you are in the first ten seconds',
+        'How you take a direction and change on the spot',
+        'Whether they want you on set for a six-week shoot'],
+  foot:'The audition'},
+
+ {t:'credibility', kick:'Why listen to me',
+  h:'I have been on both sides of the camera',
+  list:['More than 25 international awards, films at Cannes and Tropfest, and the only Australian ever nominated for a Student Academy Award',
+        'Trained in New York at the Atlantic Theater Company under David Mamet and William H. Macy',
+        'Built Acting Mastery into a training platform for actors around the world'],
+  foot:'Ben Mathews'},
+
+ {t:'point', kick:'What to take from this hour',
+  h:'The career is the missing two thirds',
+  list:['Talent was never the thing stopping you',
+        'A career runs on craft, mindset, and opportunity together',
+        'It is a build, not a wait'],
+  foot:'Recap'},
+
+ {t:'cta', kick:'Your next step',
+  h:'Let us build your breakout',
+  lede:'Book a call for The Breakout Actor. We will map where your craft, mindset, and opportunity stand today, and the 12-month plan to get you to paid work.',
+  disc:'This masterclass is for education. No role, booking, representation, or specific result is guaranteed. Results vary with each actor and season.',
+  foot:'actingmastery.com.au'}
+];
+
+const stage=document.getElementById('stage');
+const countEl=document.getElementById('count');
+const progEl=document.getElementById('prog');
+let i=0;
+
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const el=document.createElement('div');
+  el.className='slide on';
+  let h='';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='reframe'){
+    h+='<div class="big">'+s.big+'</div>';
+    if(s.lede) h+='<p class="lede" style="margin-top:.6em">'+s.lede+'</p>';
+  } else if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h+'</h2><div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  } else {
+    if(s.h) h+='<h2>'+s.h+'</h2>';
+    if(s.t==='section'||s.t==='card') h+='<div class="rule"></div>';
+    if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+    if(s.list){h+='<ul>';s.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+    if(s.steps){s.steps.forEach(x=>h+='<div class="step"><span class="n">'+x[0]+'</span><span class="t">'+x[1]+'</span></div>');}
+  }
+  if(s.foot) h+='<div class="foot">'+s.foot+'</div>';
+  el.innerHTML=h;
+  if(s.t==='card') el.classList.add('cardwrap');
+  stage.appendChild(el);
+  countEl.textContent=(i+1)+' / '+S.length;
+  progEl.style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();
+  if(e.clientX-r.left>r.width*0.5)go(i+1);else go(i-1);});
+render();
+</script>
+</body>
+</html>
