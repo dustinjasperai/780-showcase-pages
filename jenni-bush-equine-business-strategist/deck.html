@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Stable Business: a masterclass with Jenni Bush</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1526;
+    --panel:#14233b;
+    --rule:#2b3d5c;
+    --accent:#ff498c;
+    --ink:#f4f6fb;
+    --dim:#9fb0c9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{position:relative;width:100%;max-width:960px;aspect-ratio:16/9;
+    background:radial-gradient(120% 120% at 100% 0%, #16294a 0%, var(--bg) 60%);
+    border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:58px 66px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-size:14px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:56px;line-height:1.05;letter-spacing:-.01em}
+  h1 .a{color:var(--accent)}
+  h2{font-family:'Montserrat',sans-serif;font-weight:700;font-size:40px;line-height:1.1}
+  h2 .a{color:var(--accent)}
+  .sub{font-size:22px;line-height:1.5;color:var(--dim);margin-top:22px;max-width:80%}
+  .big{font-family:'Montserrat',sans-serif;font-weight:800;font-size:60px;line-height:1.04;letter-spacing:-.015em}
+  .big .a{color:var(--accent)}
+  .partno{font-family:'Montserrat',sans-serif;font-weight:800;font-size:120px;line-height:1;color:var(--panel);
+    -webkit-text-stroke:2px var(--accent);color:transparent}
+  ul{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:16px;max-width:88%}
+  li{display:flex;gap:16px;align-items:flex-start;font-size:22px;line-height:1.4}
+  li .dot{flex-shrink:0;width:12px;height:12px;border-radius:3px;background:var(--accent);margin-top:9px;transform:rotate(45deg)}
+  .pill{display:inline-block;font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--bg);
+    background:var(--accent);border-radius:100px;padding:9px 18px;margin-bottom:26px;width:fit-content}
+  .cta-box{margin-top:26px;display:flex;flex-direction:column;gap:14px;max-width:82%}
+  .cta-row{display:flex;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--rule);
+    border-radius:12px;padding:18px 22px;font-size:20px}
+  .cta-row b{color:var(--accent);font-family:'Montserrat',sans-serif}
+  .disc{margin-top:24px;font-size:13.5px;color:var(--dim);max-width:82%;line-height:1.5}
+  .whorow{display:flex;gap:22px;margin-top:26px;flex-wrap:wrap}
+  .who{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;font-size:18px;color:var(--ink)}
+  .foot{position:absolute;left:66px;right:66px;bottom:26px;display:flex;justify-content:space-between;
+    align-items:center;font-size:13px;color:var(--dim);letter-spacing:.04em}
+  .foot .brand{font-weight:600;color:var(--ink)}
+  #nav{position:absolute;right:26px;bottom:22px;display:flex;gap:10px;z-index:5}
+  #nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:9px;
+    width:42px;height:38px;font-size:18px;cursor:pointer}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .prog{position:absolute;left:0;top:0;height:4px;background:var(--accent);transition:width .25s ease;z-index:5}
+  @media (max-width:720px){
+    h1{font-size:38px}.big{font-size:40px}h2{font-size:30px}.sub{font-size:18px;max-width:100%}
+    .slide{padding:40px 34px}.foot{left:34px;right:34px}.partno{font-size:84px}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="prog" id="prog"></div>
+  <div id="slides"></div>
+  <div class="foot"><span class="brand">The Equine Business Mentor · Jenni Bush</span><span id="pageno"></span></div>
+  <div id="nav"><button id="prev" aria-label="Previous">‹</button><button id="next" aria-label="Next">›</button></div>
+</div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass for equine business owners',
+   h:'The Stable Business',
+   s:'How to build an equine business that runs on <span class="a">structure</span>, not willpower. Live with Jenni Bush.'},
+
+  {t:'who', kick:'Who this is for',
+   h:'You built a real business. It still runs you.',
+   who:['Riding schools & yards','Equine vets & physios','Tack shops & retailers','Coaches & course creators'],
+   s:'You work hard and care deeply. The week still unravels the moment a horse, the weather, or life gets in the way.'},
+
+  {t:'trap', kick:'The trap',
+   h:'So you did what everyone says.',
+   s:'You said yes to everything, worked harder, and pushed through. And it got more chaotic, not less. That is where I started too, right before I burned out.'},
+
+  {t:'reframe', kick:'The reframe',
+   big:'The chaos isn\'t a you problem.<br>It\'s a <span class="a">structure</span> problem.',
+   s:'Once you see that, the fix stops being "try harder" and starts being "build the thing that holds."'},
+
+  {t:'part', n:'01', kick:'Part one', h:'Why hard work makes it worse'},
+
+  {t:'point', kick:'Motivation is not a system',
+   h:'Willpower is the first thing to go.',
+   s:'When the week gets derailed by an injury, a bad forecast, or a family emergency, anything that depends on you being at full power quietly collapses. Most equine businesses are held together by the owner\'s energy. That is the fragile part.'},
+
+  {t:'point', kick:'The real cost',
+   h:'What it actually costs you.',
+   list:['Prices you quietly resent but never change','Boundaries you meant to keep and didn\'t','A business that only works on your best weeks','The feeling that stepping back means it all stops']},
+
+  {t:'part', n:'02', kick:'Part two', h:'Stable Foundations: the structure layer'},
+
+  {t:'pillar', kick:'Pillar one',
+   h:'Pricing that holds.',
+   s:'Set it once, on purpose, with the numbers in front of you, and stop renegotiating with yourself every time a client hesitates.'},
+
+  {t:'pillar', kick:'Pillar two',
+   h:'Boundaries you actually keep.',
+   s:'Written down, not hoped for. Hours, scope, and terms that are decided in advance so you are not making the hard call in the moment, again.'},
+
+  {t:'pillar', kick:'Pillar three',
+   h:'A week that runs without you.',
+   s:'Decisions made once instead of daily. The handful of systems that let the yard, the diary, and the money keep moving when you cannot be everywhere.'},
+
+  {t:'pillar', kick:'Pillar four',
+   h:'Systems that survive real life.',
+   s:'Built for horses, weather, injuries and life chaos, not for ideal conditions. I rebuilt my own business this way while becoming a full-time carer. Real life is the test, not the exception.'},
+
+  {t:'part', n:'03', kick:'Part three', h:'Raising your prices without losing your clients'},
+
+  {t:'point', kick:'Why it feels terrifying',
+   h:'It feels risky. It usually isn\'t.',
+   s:'Pricing fear in the horse world is rarely about your worth. It is about not having the structure to stand behind the number. Fix the structure and the number stops feeling like a gamble.'},
+
+  {t:'point', kick:'How to do it safely',
+   h:'Raise prices without the drama.',
+   list:['Decide the new number from your real costs, not a feeling','Tell clients simply and early, with no apology','Let your written boundaries carry the change','Protect the relationship by being consistent, not cheap']},
+
+  {t:'looks', kick:'The payoff',
+   h:'A business you can breathe in.',
+   list:['A calmer, more predictable week','Prices you are not embarrassed to say out loud','A business that holds through a bad month','Room to step back without everything stopping']},
+
+  {t:'why', kick:'Why listen to me',
+   h:'I have lived every part of this.',
+   s:'Over 25 years in the equestrian world, mentoring equine business owners since 2018, and founder of the Equine Business Support Network. I rebuilt my own business on structure after burnout, and again while caring for my husband full time. This is the method that held.'},
+
+  {t:'recap', kick:'The three moves',
+   h:'Where the calm comes from.',
+   list:['Name the structure gap that is really causing the chaos','Build your Stable Foundations: pricing, boundaries, systems','Price it and protect it, so it holds through real life']},
+
+  {t:'cta', kick:'Your next step',
+   h:'Start building your Stable Foundations.',
+   cta:[['Take the free Equine Business Health Check','see exactly where your structure is leaking'],
+        ['Join The Equine Business Collective','build Stable Foundations with mentoring, planning and live calls']],
+   disc:'This masterclass is educational. No specific result, revenue or income is guaranteed. Results vary and depend on your own business, market and effort.'}
+];
+
+const slidesEl = document.getElementById('slides');
+function esc(x){return x||''}
+function render(sl){
+  let inner = '';
+  if(sl.kick) inner += `<div class="kick">${sl.kick}</div>`;
+  if(sl.t==='part'){
+    inner = `<div class="partno">${esc(sl.n)}</div><div class="kick" style="margin-top:18px">${esc(sl.kick)}</div><h2>${esc(sl.h)}</h2>`;
+    return inner;
+  }
+  if(sl.t==='reframe'){
+    inner += `<div class="big">${esc(sl.big)}</div>`;
+    if(sl.s) inner += `<div class="sub">${sl.s}</div>`;
+    return inner;
+  }
+  if(sl.t==='title'){
+    inner += `<h1>${esc(sl.h)}</h1>`;
+    if(sl.s) inner += `<div class="sub" style="max-width:78%">${sl.s}</div>`;
+    return inner;
+  }
+  if(sl.h) inner += (sl.t==='who'?`<h2>${esc(sl.h)}</h2>`:`<h2>${esc(sl.h)}</h2>`);
+  if(sl.who){ inner += '<div class="whorow">'+sl.who.map(w=>`<div class="who">${w}</div>`).join('')+'</div>'; }
+  if(sl.list){ inner += '<ul>'+sl.list.map(li=>`<li><span class="dot"></span><span>${li}</span></li>`).join('')+'</ul>'; }
+  if(sl.cta){ inner += '<div class="cta-box">'+sl.cta.map(c=>`<div class="cta-row"><b>${c[0]}</b><span style="color:var(--dim)">${c[1]}</span></div>`).join('')+'</div>'; }
+  if(sl.s) inner += `<div class="sub">${sl.s}</div>`;
+  if(sl.disc) inner += `<div class="disc">${sl.disc}</div>`;
+  return inner;
+}
+S.forEach((sl,i)=>{
+  const d = document.createElement('div');
+  d.className = 'slide'+(i===0?' on':'');
+  d.innerHTML = render(sl);
+  slidesEl.appendChild(d);
+});
+let cur = 0;
+const els = [...document.querySelectorAll('.slide')];
+const prog = document.getElementById('prog');
+const pageno = document.getElementById('pageno');
+function show(i){
+  cur = Math.max(0, Math.min(S.length-1, i));
+  els.forEach((e,idx)=>e.classList.toggle('on', idx===cur));
+  prog.style.width = ((cur+1)/S.length*100)+'%';
+  pageno.textContent = (cur+1)+' / '+S.length;
+}
+document.getElementById('next').onclick = ()=>show(cur+1);
+document.getElementById('prev').onclick = ()=>show(cur-1);
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+show(0);
+</script>
+</body>
+</html>
