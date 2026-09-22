@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Mixing With Your Ears · Jan 'Yarn' Muths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0d0d0d; --panel:#18181b; --rule:rgba(255,255,255,.14);
+    --accent:#ffdd00; --ink:#f4f4f2; --muted:#a7a7a2;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .42s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.01em}
+  .t-title h1{font-size:4.6vw;max-width:90%}
+  .t-title h1 b{color:var(--accent);font-weight:800}
+  .t-normal h1{font-size:3.2vw;max-width:86%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--muted);margin-top:2.6vh;max-width:74%;line-height:1.58;font-weight:300}
+  .sub{font-family:'Inter',sans-serif;font-size:1.7vw;color:var(--muted);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.3vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:5vw;max-width:90%}
+  .t-section .rule{width:15vw;height:3px;background:var(--accent);margin-top:3.6vh}
+  .t-dark{background:linear-gradient(160deg,#151515 0%,#050505 100%);align-items:flex-start;justify-content:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#fff}
+  .t-dark h1 b{color:var(--accent);font-weight:800}
+  .t-cta{background:linear-gradient(160deg,#1a1a12 0%,#060600 100%);align-items:flex-start}
+  .t-cta h1{font-size:4.1vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.7vw;font-family:'Montserrat',sans-serif;font-size:1.2vw;font-weight:600}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Inter',sans-serif;font-size:.9vw;color:var(--muted);font-style:italic;line-height:1.45}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.3vw;color:var(--muted);margin-top:3.6vh;font-weight:500;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .fader-motif{position:absolute;pointer-events:none}
+  .title-fader{right:7%;bottom:8%;width:24vw;opacity:.95}
+  .corner-fader{right:6%;bottom:7%;width:11vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--muted);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Mix Artist Academy</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- fader / signal-path motif: a baseline, a rising level line, a cap node at the peak -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="fader" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="16" y1="130" x2="244" y2="130" stroke="#a7a7a2" opacity="0.3"/>
+    <path d="M28 130 L96 130 L96 86 L164 86 L164 42 L232 42" stroke="#ffdd00" opacity="0.95"/>
+    <circle cx="232" cy="42" r="6" fill="none" stroke="#ffdd00" stroke-width="3"/>
+    <line x1="96" y1="130" x2="96" y2="118" stroke="#f4f4f2" opacity="0.5"/>
+    <line x1="164" y1="86" x2="164" y2="74" stroke="#f4f4f2" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Mixing With <b>Your Ears</b>',sub:'A live masterclass for self-producing musicians who want mixes that sound professional without buying more plugins.',brand:true,fader:'title'},
+ {t:'normal',k:'Who this is for',title:'You can write the song. The mix is where it falls apart.',body:'You record and produce your own music. But the mix never quite matches what you hear in your head, so you buy another plugin, watch another tutorial, and it still sounds small.'},
+ {t:'dark',title:'The problem was never your gear. It is the <b>decisions</b>.'},
+
+ {t:'section',idx:'Part One',title:'Why More Plugins Never Fixed It'},
+ {t:'normal',k:'The gear trap',title:'A bigger plugin folder does not make a better mix.',body:'Every new compressor and imager promises the sound you think you are missing. But a plugin cannot decide what a song needs. Only a trained ear can, and no purchase shortcuts that.'},
+ {t:'normal',k:'The preset habit',title:'A preset makes someone else\'s decision on your song.',body:'That preset was built for a different track, a different singer, a different room. Lean on it and your mix ends up sounding like everyone else\'s, instead of like the song in front of you.'},
+ {t:'dark',title:'Great mixes do not come from buying more. They come from <b>listening better</b>.'},
+
+ {t:'section',idx:'Part Two',title:'The Ear-Led Method'},
+ {t:'normal',k:'Start with prep',title:'The first thirty minutes decide the whole mix.',body:'Before a single plugin, the session gets prepared: edited, gain staged, labelled, routed. Good prep removes friction so you stay in the creative zone and the mix develops with clarity instead of stalling.'},
+ {t:'normal',k:'Decide by ear',title:'Make the move because you heard it, not because a meter told you to.',body:'Ear-led mixing trains you to hear what a song is asking for and act on it with confidence. Taste, built on purpose, is the skill that separates a professional mix from a busy one.'},
+ {t:'normal',k:'Width that survives',title:'A wide mix is worthless if it collapses in mono.',body:'Most width tricks fall apart the moment a phone, a club system, or a mono speaker sums your channels. The tricks that betray you, and the ones that hold, are learnable, and you can hear the difference at once.'},
+ {t:'normal',k:'Mix for the feeling',title:'The job is to translate the feeling of the song into sound.',body:'A technically clean mix that moves nobody has failed. Every decision serves the emotion the song is reaching for, so the listener feels what you felt when you wrote it.'},
+ {t:'dark',title:'Train the ear, prep the session, protect the feeling. The rest is <b>practice</b>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Mix This Way'},
+ {t:'normal',k:'The mixer this builds',title:'You stop guessing and start deciding.',body:'You sit down to a mix and you know where to go. It sounds wide on every system, it holds together in mono, and it carries the feeling of the song, without a single new plugin.'},
+ {t:'dark',title:'You already own everything you need. The <b>skill</b> is the upgrade.'},
+ {t:'normal',k:'Why Yarn',title:'Twenty-five years in the studio, taught in plain language.',body:'Jan \'Yarn\' Muths has recorded and mixed for twenty-five years, including Emily Lubitz\'s number-one album Two White Horses. He lectures sound production at SAE University College and Southern Cross University and is an Avid Certified Pro Tools Instructor, and he teaches without empty theory or hype.'},
+
+ {t:'section',idx:'Keep Going',title:'Learn the Whole Method'},
+ {t:'normal',k:'Mix Artist Academy',title:'Go from this session to the full ear-led method.',body:'The Academy courses walk you through ear-led mixing step by step, from session prep to width to final decisions, with the Mix Sessions library and the Inner Circle to keep your ears sharp between projects.'},
+ {t:'cta',title:'Ready to mix with your ears?',chips:['Explore the Academy courses','Join the Inner Circle'],disc:'Educational content for musicians and mix engineers. No specific result or career outcome is guaranteed. Results vary by musician, practice, and project.'},
+];
+
+const deck=document.getElementById('deck');
+function fader(kind){return `<svg class="fader-motif ${kind==='title'?'title-fader':'corner-fader'}"><use href="#fader"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Mix Artist <b>Academy</b> · Jan 'Yarn' Muths</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.fader) h+=fader(s.fader);
+  else if(s.t==='title') h+=fader('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
