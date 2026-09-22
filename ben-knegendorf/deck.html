@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The High-Ticket Store | Dropship Breakthru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,700;8..144,800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#111110;
+    --panel:#17171b;
+    --stage:#0a0a08;
+    --accent:#bcb9ff;
+    --gold:#bcb9ff;
+    --ink:#f2efe8;
+    --ink-soft:#c7c5cf;
+    --muted:#86838f;
+    --rule:#2e2e28;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Roboto',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Roboto',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Roboto Flex',system-ui,sans-serif;font-weight:800;font-size:4.1vw;line-height:1.08;
+    letter-spacing:-.016em;color:var(--ink);max-width:21ch}
+  .sub{font-family:'Roboto',sans-serif;font-weight:500;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:34ch}
+  .body{font-family:'Roboto',sans-serif;font-weight:400;font-size:1.5vw;line-height:1.64;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:42ch}
+  .brandline{font-family:'Roboto Flex',sans-serif;font-size:1.2vw;font-weight:700;letter-spacing:.05em;
+    color:var(--accent);margin-top:5vh;text-transform:uppercase}
+  .brandline b{font-weight:800}
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Roboto',sans-serif;font-size:1.15vw;font-weight:700;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:2.6vh}
+  .t-section h1{font-size:4.9vw}
+  .t-section .rule{width:8.5vw;height:4px;background:var(--gold);border-radius:3px;margin-top:4vh}
+  .t-dark{background:var(--stage)}
+  .t-dark h1{color:#fff;font-weight:800;font-size:3.7vw;max-width:26ch}
+  .t-dark .kicker{color:var(--gold)}
+  .t-dark .em{color:var(--gold);font-style:italic}
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Roboto',sans-serif;font-weight:700;font-size:1.3vw;color:#141312;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Roboto',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:56ch}
+  h1 .a{color:var(--accent);font-style:italic}
+  .mc{position:absolute;right:7vw;bottom:8.5vh;width:18vw;height:9vw;opacity:.95}
+  .t-title .mc{right:8vw;bottom:11vh;width:23vw;height:12vw;opacity:1}
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(188,185,255,.16);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--gold);transition:width .5s ease}
+  #count{font-family:'Roboto',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Roboto',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.2vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:8.4vw}.chip{font-size:3vw}.disc{font-size:2.4vw}.mc{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="tickmotif" viewBox="0 0 260 140">
+  <rect x="14" y="18" width="150" height="104" rx="7" fill="none" stroke="#bcb9ff" stroke-width="4"/>
+  <rect x="180" y="18" width="30" height="30" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <rect x="220" y="18" width="30" height="30" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <rect x="180" y="58" width="30" height="30" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <rect x="220" y="58" width="30" height="30" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <rect x="180" y="98" width="30" height="24" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <rect x="220" y="98" width="30" height="24" rx="4" fill="none" stroke="#2e2e28" stroke-width="3"/>
+  <circle cx="89" cy="70" r="6" fill="#bcb9ff"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'The High-Ticket Store',sub:'How to build a real online business around a few expensive products, instead of chasing a thousand cheap ones and hoping the ads keep paying.',brand:true,mc:true},
+ {t:'normal',k:'Who this is for',title:'You want a store. You do not want a warehouse of cheap junk.',body:'You have watched the dropshipping videos. Find a five dollar gadget, run ads, pray it goes viral. Maybe you tried it and the margins vanished the second the ad costs moved. If you want an online store that behaves like a real business and not a scratch ticket, this is for you.'},
+ {t:'normal',k:'The trap',title:'A cheap product store is a thousand tiny ways to lose money.',body:'Every one dollar of margin has to survive the ad click, the refund, the chargeback, and the competitor who just listed the same thing for less. You are not building an asset, you are renting attention and handing most of it back. Volume does not fix a broken margin, it multiplies it.'},
+ {t:'dark',title:'One two thousand dollar sale changes the math that a hundred <span class="em">twelve dollar</span> ones never will.'},
+
+ {t:'section',idx:'Part One',title:'Why the Cheap Store Fails'},
+ {t:'normal',k:'The margin problem',title:'You do not have a traffic problem. You have a margin problem.',body:'When the product costs five dollars, there is nothing left to pay for the customer. So the only lever is more ads, cheaper ads, more volume, and the whole thing lives or dies on the ad account. The moment traffic gets expensive, and it always does, the store is underwater. The fix is not more traffic. It is a product that can actually carry a customer.'},
+ {t:'normal',k:'Racing to zero',title:'On a cheap product, your only edge is price. That is a race you lose.',body:'Sell the same impulse item as ten thousand other stores and the only thing left to compete on is being cheaper, which means being poorer. Amazon wins that race by default. A high-ticket store does not enter it, because the buyer of a two thousand dollar item is not hunting for the lowest price. They are hunting for the right seller.'},
+ {t:'dark',title:'Cheap products compete on <span class="em">price</span>. Expensive ones compete on <span class="em">trust</span>. You can build trust.'},
+
+ {t:'section',idx:'Part Two',title:'The High-Ticket Store'},
+ {t:'normal',k:'Fewer, bigger',title:'Sell a few expensive things well, not a thousand cheap things badly.',body:'One sofa, one sauna, one commercial-grade something at eighteen hundred dollars, sold three times a week, is a real income on real margin. You carry a small, deliberate catalog you actually understand, and every sale is worth enough to pay for the customer and still leave you a business. Fewer products, more focus, better math.'},
+ {t:'normal',k:'Real brands, real suppliers',title:'You sell real brand-name products, from real US suppliers.',body:'This is the part most people skip: getting approved as an authorized dealer for genuine brands. There is a way to find these suppliers, reach out, and get the yes, and it is a repeatable process, not luck. Once you are approved, you are selling products people already trust, which is exactly why they buy something expensive from a store they just met.'},
+ {t:'normal',k:'No inventory',title:'You never touch, store, or ship the product.',body:'The supplier holds the inventory and ships it direct when you make a sale. You are not renting a warehouse or packing boxes. You run the storefront, the marketing, and the customer relationship. That is what makes a high-ticket store possible from a laptop, and what makes it a business you can actually start without capital tied up in stock.'},
+ {t:'normal',k:'Free traffic that intends to buy',title:'The buyers are already searching. You just have to be there.',body:'Somebody about to spend two thousand dollars does not impulse-click an ad, they open Google and research for a week. Rank for what they type and you get in front of them at the exact moment they are ready, for free, over and over. That is why the high-ticket store leans on search and content first, and treats paid ads as an accelerator, not the whole engine.'},
+ {t:'dark',title:'You do not need a bigger ad budget. You need a product worth <span class="em">searching for</span>.'},
+
+ {t:'section',idx:'Part Three',title:'Build It, Then Grow It'},
+ {t:'normal',k:'The Build phase',title:'Get a real store live in about thirty days.',body:'Pick the niche, build the store, and secure your first approved suppliers. This is the launch sequence: the decisions in order, so you are not staring at a blank Shopify account wondering what a real high-ticket store is even supposed to look like. The goal of the first month is simple, a live store selling real products you are approved to sell.'},
+ {t:'normal',k:'The Grow phase',title:'Then you compound it: search, content, and the systems behind it.',body:'Once the store is live, growth is a system, not a guess. Content and search bring the free traffic, email brings the buyers back, and the conversion work turns browsers into orders. It is the boring, compounding side of the business, the part that turns a store that makes a sale into a store that makes a living.'},
+ {t:'normal',k:'Why learn this from me',title:'I did this from a forklift. I am not teaching theory.',body:'I ran a forklift at Walmart before any of this. I built and sold a business, then built high-ticket stores, and I teach the exact system I use, not something I read about. I host The Dropship Podcast and I have walked a lot of people through their first high-ticket store. This is the version that works when you do not have money to burn.'},
+ {t:'dark',title:'A store is a real business. If you build it like one, it pays you like <span class="em">one</span>.'},
+
+ {t:'section',idx:'Your next step',title:'Build Your High-Ticket Store With Me'},
+ {t:'normal',k:'How the program helps',title:'The full Build and Grow system, with people who have done it.',body:'Inside Dropship Breakthru you get the step-by-step Build phase, the Grow phase for scaling, and the supplier, store, and traffic playbooks in order, plus a community and coaching so you are not doing it alone. You leave the guesswork behind and follow the same path the students ahead of you followed.'},
+ {t:'cta',title:'Ready to build a store that actually pays?',chips:['Register for the live masterclass','Explore Dropship Breakthru'],disc:'Educational content on building and running a high-ticket e-commerce business. No specific revenue, profit, or income result is promised or guaranteed. Results vary by person, niche, market, effort, and many factors outside anyone's control. Dropshipping involves risk, including the risk of loss.'},
+];
+
+const deck=document.getElementById('deck');
+function mc(){return '<svg class="mc"><use href="#tickmotif"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Dropship <b>Breakthru</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mc||s.t==='title') h+=mc();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
