@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A New, Brave Way of Leading &middot; Laugh, Think, Play &middot; with Em Stroud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf6ec;      /* warm cream paper (light scheme, playful ground) */
+    --panel:#f6e4cf;   /* soft apricot panel */
+    --ink:#241a12;     /* warm near-black type */
+    --ink-soft:#4a3d30;/* body copy on warm paper */
+    --rule:rgba(36,26,18,.14);
+    --dim:#9a8b78;     /* muted caption */
+    --accent:#e8482d;  /* clown vermilion, the loud playful mark */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Inter",-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{
+    position:relative;width:100%;max-width:960px;aspect-ratio:16/9;
+    background:
+      radial-gradient(120% 90% at 82% 8%, rgba(232,72,45,.14), transparent 56%),
+      var(--bg);
+    overflow:hidden;box-shadow:0 0 0 1px var(--rule);
+  }
+  .slide{position:absolute;inset:0;padding:8% 9%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;font-size:clamp(12px,1.6vw,16px);color:var(--accent);margin-bottom:1em}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;line-height:1.0;
+    font-size:clamp(36px,7.2vw,76px);letter-spacing:-.01em}
+  h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.05;
+    font-size:clamp(26px,5vw,50px);letter-spacing:-.005em}
+  .lede{font-size:clamp(16px,2.2vw,23px);line-height:1.5;max-width:44ch;margin-top:.9em;color:var(--ink-soft)}
+  .rule{width:74px;height:5px;background:var(--accent);margin:1.05em 0;border-radius:3px}
+  ul{list-style:none;margin-top:1.1em;max-width:50ch}
+  li{position:relative;padding-left:1.7em;margin:.62em 0;font-size:clamp(15px,2vw,21px);line-height:1.4;color:var(--ink-soft)}
+  li::before{content:"";position:absolute;left:0;top:.5em;width:11px;height:11px;background:var(--accent);border-radius:50%}
+  .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(60px,14vw,150px);color:var(--accent);line-height:.92;letter-spacing:-.02em}
+  .step{display:flex;gap:.85em;align-items:baseline;margin:.55em 0;max-width:52ch}
+  .step .n{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;color:var(--accent);
+    font-size:clamp(20px,3vw,34px);min-width:2.2em;letter-spacing:.02em}
+  .step .t{font-size:clamp(15px,2vw,21px);line-height:1.38;color:var(--ink-soft)}
+  .step .t b{color:var(--ink);font-weight:600}
+  .cardwrap .inner{background:var(--panel);padding:5.5% 6.5%;border-left:6px solid var(--accent);border-radius:5px}
+  .foot{position:absolute;left:9%;bottom:5.5%;font-family:"Bricolage Grotesque",sans-serif;
+    letter-spacing:.13em;text-transform:uppercase;font-size:13px;color:var(--dim)}
+  .disc{font-size:13px;line-height:1.55;color:var(--dim);max-width:58ch;margin-top:1.3em}
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;
+    font-family:"Bricolage Grotesque",sans-serif;font-size:14px;color:var(--dim)}
+  #nav button{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:6px;padding:5px 11px;cursor:pointer}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S=[
+ {t:'title',kick:'A masterclass with Em Stroud, The Comic Coach',h:'A New, Brave Way of Leading',lede:'Laugh. Think. Play. Why the leaders people actually follow are the ones brave enough to be human.'},
+ {t:'promise',h:'What you will leave with',ul:['A simple model, Laugh, Think and Play, for leading people without armour','Language for the conversations you have been avoiding','A way to protect your own energy so you lead well on a Tuesday, not just on your best day']},
+ {t:'who',kick:'Who this is for',h:'The room has gone quiet',lede:'You lead capable people who have quietly stopped bringing their whole self to work. Heads down, cameras off, ideas kept safe. Nobody is failing. Nobody is really alive either.'},
+ {t:'hook',kick:'The reframe',h:'Being serious is not the same as being taken seriously',lede:'Most leaders add more seriousness when things get hard. More pressure, more control, more grip. It reads as strength. It quietly kills the exact creativity and honesty you need most.'},
+ {t:'part',kick:'Part one',h:'The problem: fear is running the room'},
+ {t:'content',h:'What fear costs you',ul:['People tell you what is safe, not what is true','Good ideas die in someone\'s head because the room does not feel safe enough to say them','Your best people perform being fine instead of doing their best work']},
+ {t:'content',h:'Why gripping harder backfires',lede:'Under threat, humans shrink. A team that is bracing cannot be curious, cannot be candid, and cannot be creative. You cannot pressure people into the courage you are asking them for.'},
+ {t:'part',kick:'Part two',h:'The method: Laugh, Think, Play'},
+ {t:'card',kick:'One',h:'Laugh',lede:'Shared laughter is the fastest way to make a room safe. It is not about being funny. It is about being human first, so people drop the armour and tell you the truth.'},
+ {t:'card',kick:'Two',h:'Think',lede:'Mindset Matters. How you show up sets the weather for everyone else. Change what you believe is possible in the room and you change what the room is willing to try.'},
+ {t:'card',kick:'Three',h:'Play',lede:'Play is where courage and creativity live. Give people permission to experiment, to be wrong out loud, to try the odd idea, and the good ones finally surface.'},
+ {t:'content',kick:'The everyday tool',h:'Conversations Count',ul:['The health of your team is the sum of its real conversations','Most leaders swerve the honest one and manage the symptoms for months','A brave, kind, direct conversation is the highest-leverage thing you do all week']},
+ {t:'content',kick:'The part leaders skip',h:'Time for You',lede:'You cannot pour warmth, attention and courage into a team from an empty cup. Protecting your own headspace and energy is not indulgence. It is the maintenance that makes the rest possible.'},
+ {t:'part',kick:'Part three',h:'Monday morning, led the brave way'},
+ {t:'content',h:'The shift you feel first',ul:['Meetings where people actually say the thing','A team that laughs together and then does braver work because of it','You leading like yourself, not like the tense version of a leader you think you are supposed to be']},
+ {t:'why',kick:'Why listen to me on this',h:'Twenty years, two worlds',lede:'I have spent two decades in business and in professional comedy, and I now bring both to leaders and teams at organisations like Bloomberg, Airbus and Barclays. I wrote the number-one bestseller Lessons from a Clown and I have given two TEDx talks on this, once dressed as a banana. I take fun very seriously.'},
+ {t:'recap',h:'The whole idea in three words',ul:['Laugh, so the room is safe enough for the truth','Think, so you set the weather on purpose','Play, so courage and creativity have somewhere to go']},
+ {t:'cta',kick:'Your next step',h:'Lead the brave way, on purpose',lede:'If you want this for you and your team, the Leadership Impact School is where we build it, session by session, into how you actually lead.',disc:'This masterclass is educational. No specific result or outcome is guaranteed. Results vary and depend on you, your team and your organisation.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+  let h='';
+  if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='part'){h+='<div class="big">'+(i)+'</div><h2 style="margin-top:.2em">'+s.h+'</h2>';}
+  else if(s.t==='title'){h+='<h1>'+s.h+'</h1><div class="rule"></div>'+(s.lede?'<div class="lede">'+s.lede+'</div>':'');}
+  else if(s.t==='card'){h+='<div class="cardwrap"><div class="inner"><h2>'+s.h+'</h2>'+(s.lede?'<div class="lede">'+s.lede+'</div>':'')+'</div></div>';}
+  else{h+='<h2>'+s.h+'</h2><div class="rule"></div>';if(s.lede)h+='<div class="lede">'+s.lede+'</div>';}
+  if(s.ul){h+='<ul>'+s.ul.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  if(s.disc)h+='<div class="disc">'+s.disc+'</div>';
+  h+='<div class="foot">Em Stroud &middot; The Comic Coach</div>';
+  d.innerHTML=h;stage.appendChild(d);
+});
+let cur=0;const slides=[...stage.children];const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(e.clientX> stage.getBoundingClientRect().left+stage.clientWidth/2)show(cur+1);else show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
