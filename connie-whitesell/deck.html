@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Streamlined Business | Scattered to Streamlined</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4efe2;
+    --panel:#e9e1cf;
+    --stage:#e2d7bf;
+    --accent:#1f4a63;
+    --ink:#282b31;
+    --ink-soft:#565a63;
+    --muted:#8c8a80;
+    --rule:#cdc1a6;
+  }
+  html,body{height:100%}
+  body{background:var(--stage);font-family:'Public Sans',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:8.5vh 9vw;opacity:0;transition:opacity .5s ease;pointer-events:none;background:var(--bg)}
+  .slide.active{opacity:1;pointer-events:auto}
+  .kicker{font-family:'Public Sans',sans-serif;font-size:1.05vw;font-weight:700;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:3.2vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:4.2vw;line-height:1.08;
+    letter-spacing:-.005em;color:var(--ink);max-width:21ch}
+  .sub{font-family:'Public Sans',sans-serif;font-weight:500;font-size:1.7vw;line-height:1.5;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:34ch}
+  .body{font-family:'Public Sans',sans-serif;font-weight:400;font-size:1.5vw;line-height:1.64;
+    color:var(--ink-soft);margin-top:3.4vh;max-width:42ch}
+  .brandline{font-family:'Newsreader',serif;font-size:1.3vw;font-weight:700;letter-spacing:.04em;
+    color:var(--accent);margin-top:5vh;text-transform:uppercase}
+  .brandline b{font-weight:700}
+  /* section slides */
+  .t-section{background:var(--panel)}
+  .t-section .idx{font-family:'Public Sans',sans-serif;font-size:1.15vw;font-weight:700;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  .t-section h1{font-size:5vw}
+  .t-section .rule{width:8.5vw;height:4px;background:var(--accent);border-radius:3px;margin-top:4vh}
+  /* dark reframe slides */
+  .t-dark{background:#20333f}
+  .t-dark h1{color:#f6f1e6;font-weight:600;font-size:3.8vw;max-width:26ch}
+  .t-dark .kicker{color:#cdb06a}
+  .t-dark .em{color:#cdb06a;font-style:italic}
+  /* cta */
+  .t-cta{background:var(--panel)}
+  .chips{display:flex;gap:1.4vw;margin-top:4.6vh;flex-wrap:wrap}
+  .chip{font-family:'Public Sans',sans-serif;font-weight:700;font-size:1.3vw;color:#f6f1e6;background:var(--accent);
+    border-radius:100px;padding:1.5vh 2.2vw}
+  .disc{font-family:'Public Sans',sans-serif;font-size:.95vw;line-height:1.5;color:var(--muted);
+    margin-top:6vh;max-width:56ch}
+  h1 .a{color:var(--accent);font-style:italic}
+  /* scattered-to-streamlined motif */
+  .mc{position:absolute;right:7vw;bottom:8.5vh;width:20vw;height:9vw;opacity:.95}
+  .t-title .mc{right:8vw;bottom:11vh;width:25vw;height:12vw;opacity:1}
+  /* chrome */
+  #hud{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:18px;
+    padding:16px 26px;z-index:20;pointer-events:none}
+  #track{flex:1;height:3px;background:rgba(31,74,99,.16);border-radius:3px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--accent);transition:width .5s ease}
+  #count{font-family:'Public Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+  .nav{position:fixed;top:0;height:100vh;width:14vw;z-index:15;cursor:pointer;background:transparent;border:0}
+  #prev{left:0}#next{right:0}
+  #hint{position:fixed;right:26px;bottom:34px;font-family:'Public Sans',sans-serif;font-size:12px;
+    letter-spacing:.08em;color:var(--muted);z-index:20;transition:opacity .4s}
+  @media(max-width:760px){h1{font-size:7.4vw}.sub,.body{font-size:3.4vw}.kicker{font-size:2.6vw}
+    .t-section h1{font-size:8.6vw}.chip{font-size:3vw}.disc{font-size:2.4vw}.mc{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="streammotif" viewBox="0 0 300 140">
+  <rect x="14" y="18" width="20" height="20" rx="4" transform="rotate(-16 24 28)" fill="none" stroke="#1f4a63" stroke-width="2.4"/>
+  <rect x="30" y="74" width="18" height="18" rx="4" transform="rotate(12 39 83)" fill="none" stroke="#1f4a63" stroke-width="2.4"/>
+  <rect x="8" y="104" width="16" height="16" rx="4" transform="rotate(-8 16 112)" fill="none" stroke="#1f4a63" stroke-width="2.4"/>
+  <rect x="62" y="46" width="18" height="18" rx="4" transform="rotate(20 71 55)" fill="none" stroke="#1f4a63" stroke-width="2.4"/>
+  <path d="M104 70 L150 70" stroke="#cdc1a6" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="168" y="34" width="118" height="20" rx="6" fill="#1f4a63"/>
+  <rect x="168" y="60" width="118" height="20" rx="6" fill="none" stroke="#1f4a63" stroke-width="2.6"/>
+  <rect x="168" y="86" width="118" height="20" rx="6" fill="none" stroke="#1f4a63" stroke-width="2.6"/>
+</symbol></svg>
+
+<div id="deck"></div>
+<div id="hud"><div id="track"><div id="bar"></div></div><div id="count">01 / 01</div></div>
+<button id="prev" class="nav" aria-label="Previous"></button>
+<button id="next" class="nav" aria-label="Next"></button>
+<div id="hint">Use arrow keys &rarr;</div>
+<script>
+const S = [
+ {t:'title',title:'The Streamlined Business',sub:'How an overwhelmed solo owner gets more done by doing less, so the business finally moves forward instead of just staying busy.',brand:true,mc:true},
+ {t:'normal',k:'Who this is for',title:'You are busier than ever. The business still feels stuck.',body:'You are brilliant at what you do, the ideas keep coming, and your days are full from the first coffee to the last email. And yet a year later the business is in roughly the same place. If you are working harder than you ever have and still feel like you are treading water, this is for you.'},
+ {t:'normal',k:'The real ceiling',title:'More hours will not fix this. Your attention is the bottleneck.',body:'When everything feels important, you spread yourself across ten half-finished priorities and nothing gets the focus it needs to actually pay off. The problem is not that you are not working hard enough. It is that scattered effort, no matter how much of it there is, never compounds into real momentum.'},
+ {t:'dark',title:'You do not have a time problem. You have a <span class="em">focus</span> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Brilliant Owners Stay Scattered'},
+ {t:'normal',k:'The shiny-object trap',title:'Every new idea feels like the one that changes everything.',body:'Being creative is your gift, and it is also the trap. A new offer, a new platform, a new tactic you heard on a podcast, each one pulls a little more of your energy away from the few things that would actually grow the business. You end up with a dozen things started and almost nothing finished.'},
+ {t:'normal',k:'Why willpower is not the answer',title:'You keep trying to out-work the chaos. It keeps winning.',body:'The reflex when things feel messy is to push harder, add another late night, cram more into the calendar. But you cannot out-hustle a lack of direction. Without a plan telling you what matters this quarter, every hour just feeds the busywork, and the important work keeps getting pushed to someday.'},
+ {t:'dark',title:'Scattered is not a personality. It is the absence of a <span class="em">system</span>.'},
+
+ {t:'section',idx:'Part Two',title:'Plans, Systems, Habits'},
+ {t:'normal',k:'Part one: the Plan',title:'One year of direction, narrowed to one focused quarter.',body:'We start by turning your scattered ideas into a single clear plan: where the business is going this year, and the few right priorities to move in the next ninety days. Not a forty-page document that dies in a drawer, a short plan that tells you what to say yes to and, just as importantly, what to leave alone for now.'},
+ {t:'normal',k:'Part two: the Systems',title:'The handful of systems that carry the business, not you.',body:'Then we streamline the business itself across the levers that matter: simplify how you operate, refine your offer so it is easy to buy, strengthen the marketing and sales that bring people in, and tighten the money so you can see what is working. Systems are what let the plan run without you holding every piece in your head.'},
+ {t:'normal',k:'Part three: the Habits',title:'The weekly rhythm that keeps the plan alive.',body:'A plan and systems still need a heartbeat. So we build the weekly rhythm that turns intention into progress: a standing time to work on the business, a regular check on the numbers, and a quarterly reset to choose the next priorities. Small and consistent beats big and sporadic every single time.'},
+ {t:'dark',title:'You already have the brilliance. What you need is a <span class="em">structure</span> to hold it.'},
+
+ {t:'section',idx:'Part Three',title:'What a Streamlined Quarter Looks Like'},
+ {t:'normal',k:'Your quarter, different',title:'The same you, pointed at the few things that count.',body:'Picture the next ninety days with a plan you actually follow: you know your three priorities on Monday morning, the systems handle the repeat work, and the weekly rhythm keeps you honest. You are doing less, and more is happening, because your effort is finally landing on the things that move the business instead of scattering across everything.'},
+ {t:'normal',k:'Why learn this from me',title:'I have spent my career turning scattered into streamlined.',body:'I am Connie Whitesell. I hold an MBA in human resources, I ran a consulting firm for fourteen years, and since 2011 I have coached solo, service-based owners through Scattered to Streamlined. This is not theory. It is the same plan, systems, and habits method I use with clients to help them reach their goals in far less time than they expected.'},
+ {t:'dark',title:'Focus is not doing more. It is having the <span class="em">courage</span> to do less, on purpose.'},
+
+ {t:'section',idx:'Your next step',title:'From Scattered to Streamlined'},
+ {t:'normal',k:'How the coaching helps',title:'The method, plus someone to build the plan with you.',body:'On the live class we map the method to where you are right now: what your one focused quarter should hold, which systems to build first, and the weekly rhythm to keep it running. From there you can go deeper one-on-one, where we build your plan together and I keep you accountable to it, quarter after quarter.'},
+ {t:'cta',title:'Ready to streamline your business?',chips:['Work with Connie one-on-one','Join a quarterly planning intensive'],disc:'Educational content on planning, systems, and running a small business, for business owners. No specific revenue, profit, or business result is guaranteed. Results vary by owner, market, offer, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mc(){return '<svg class="mc"><use href="#streammotif"/></svg>'}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Scattered to <b>Streamlined</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mc||s.t==='title') h+=mc();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
