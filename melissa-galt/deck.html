@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Prosper by Design · Melissa Galt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1c1712; --panel:#26201a; --rule:#3a3128;
+    --acc:#c9a24b; --idx:#c9bfa8; --chalk:#f7f3ea; --grey:#d8cfbf; --dim:#8a8070;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Jost',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--chalk);line-height:1.1;letter-spacing:0}
+  .t-title h1{font-size:5.6vw;max-width:90%}
+  .t-normal h1{font-size:4.2vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.85vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.18em;text-transform:uppercase}
+  .t-section h1{font-size:6vw;max-width:90%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#2f2417 0%,#0f0b07 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.8vw;max-width:88%;font-style:italic;color:#f5efe2}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#2f2417 0%,#0f0b07 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:5vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#eaddba;border-radius:100px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .arc-motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-arc{right:7%;bottom:9%;width:20vw}
+  .corner-arc{right:6%;bottom:7.5%;width:9vw;opacity:.4}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:9vw}.t-normal h1{font-size:6.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8.4vw}.t-dark h1{font-size:7vw}
+    .t-cta h1{font-size:8vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Design Business Freedom</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- threshold motif: an open doorway that steps up to a node, the door to design business freedom -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="arc" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="132" x2="242" y2="132" stroke="#c9bfa8" opacity="0.3"/>
+    <path d="M84 130 L84 58" stroke="#c9a24b" opacity="0.9"/>
+    <path d="M176 130 L176 58" stroke="#c9a24b" opacity="0.9"/>
+    <path d="M84 58 Q130 22 176 58" stroke="#c9a24b" opacity="0.9"/>
+    <path d="M84 130 L120 112" stroke="#f7f3ea" opacity="0.16"/>
+    <rect x="123" y="30" width="12" height="12" transform="rotate(45 129 36)" fill="none" stroke="#c9a24b" stroke-width="2.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Prosper by Design',sub:'A masterclass for practicing interior designers who want a business that pays them well and runs without them.',brand:true,arc:'title'},
+ {t:'normal',k:'Who this is for',title:'You are fully booked. You are still not paid.',body:'You run a real design firm. The projects keep coming, the clients love the work, and the profit never matches the effort. You are busier than ever, and the bank account does not show it.'},
+ {t:'dark',title:'A full calendar is not the same as a profitable business.'},
+
+ {t:'section',idx:'Part One',title:'Why Talented Designers Stay Broke'},
+ {t:'normal',k:'The pricing trap',title:'You are charging for your time, not your value.',body:'When you bill hours or mark up product, your income is capped by how much you can personally do. The better and faster you get, the less that skill actually earns you.'},
+ {t:'normal',k:'The busy trap',title:'Every project runs through you, so nothing runs without you.',body:'No systems, no team leverage, no repeatable process. You are the bottleneck, and a bottleneck cannot scale, take a real vacation, or command a premium fee.'},
+ {t:'dark',title:'You do not have a talent problem. You have a business model problem.'},
+
+ {t:'section',idx:'Part Two',title:'The Prosper by Design Method'},
+ {t:'normal',k:'Price for profit',title:'Charge for the transformation, not the timesheet.',body:'Flat fee and value based pricing, built so a single project pays what a month of hourly used to. This is the first shift, and it changes everything downstream.'},
+ {t:'normal',k:'Market to attract',title:'Stop chasing clients. Start attracting them.',body:'Clear positioning and a simple, steady marketing rhythm bring ideal, budget right clients to you, so you win the projects you actually want at the fees you actually deserve.'},
+ {t:'normal',k:'Systematize the firm',title:'Build the business to work when you are not in the room.',body:'Documented process, the right software, and a team that holds your standards. Systems turn a talented designer into a design firm that keeps its value.'},
+ {t:'normal',k:'Lead like the CEO',title:'Your firm needs an owner, not just its best designer.',body:'Know your numbers, protect your margins, and make decisions from the balcony instead of the weeds. When the role changes, the income changes with it.'},
+ {t:'dark',title:'Price it right, market it well, systematize the rest, and the work finally pays what it is worth.'},
+
+ {t:'section',idx:'Part Three',title:'What It Looks Like'},
+ {t:'normal',k:'The designer this builds',title:'Higher fees, fewer clients, more profit, more life.',body:'A firm that takes fewer and better projects at premium fees, runs on systems instead of adrenaline, and leaves room for the life you started the business to have.'},
+ {t:'dark',title:'Your success should enrich your life as much as your bank account.'},
+ {t:'normal',k:'Why Melissa Galt',title:'Twenty five years in design. A lifetime around it.',body:'Melissa Galt spent 25 plus years as a practicing interior designer and is the great granddaughter of Frank Lloyd Wright. She has coached thousands of designers, hosts the Design Business Freedom podcast, and teaches the exact pricing, profit, and systems method above. Tough love, no fluff.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Design Business Freedom'},
+ {t:'normal',k:'The Inner Circle Accelerator',title:'The room where design firm owners do this work together.',body:'The Design Business Freedom Inner Circle Accelerator is group coaching for firms ready to price, market, and systematize their way to real profit. Ongoing coaching, the method, and a peer group of serious owners.'},
+ {t:'normal',k:'Or go deep, fast',title:'A VIP Intensive, one on one with Melissa.',body:'A half day or full day built entirely around your firm, your numbers, and your next twelve months. You leave with the pricing, the plan, and the priorities, done together.'},
+ {t:'cta',title:'Ready to prosper by design?',chips:['Join the Inner Circle Accelerator','Book a VIP Intensive'],disc:'Educational content for practicing interior designers and design firm owners. No income, revenue, or business result is guaranteed. Results vary by designer, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function arc(kind){return `<svg class="arc-motif ${kind==='title'?'title-arc':'corner-arc'}"><use href="#arc"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Design <b>Business Freedom</b> · Melissa Galt</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.arc) h+=arc(s.arc);
+  else if(s.t==='title') h+=arc('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
