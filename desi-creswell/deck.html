@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Designer CEO · Desi Creswell, Designed to Thrive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#faf8f4; --panel:#f1ede5; --rule:#e4dccf;
+    --acc:#9d897b; --ink:#262626; --body:#696969; --dim:#96a2a4; --slate:#637278;
+  }
+  html,body{height:100%}
+  body{background:#efe9df;font-family:'Poppins',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#efe9df}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Poppins',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'EB Garamond',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:.002em}
+  .t-title h1{font-size:6.4vw;max-width:94%}
+  .t-normal h1{font-size:3.9vw;max-width:90%}
+  .t-normal .body{font-family:'Poppins',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:74%;line-height:1.66;font-weight:400}
+  .sub{font-family:'EB Garamond',serif;font-style:italic;font-size:2.3vw;color:var(--slate);margin-top:3.4vh;max-width:82%;line-height:1.36;font-weight:600}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Poppins',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#2b2622 0%,#1a1613 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.2vw;max-width:88%;color:#f6f1ea;font-weight:600}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2b2622 0%,#1a1613 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:86%;color:#f6f1ea;font-weight:600}
+  .t-cta .body{font-family:'Poppins',sans-serif;color:#e7ded2;font-size:1.4vw;margin-top:3vh;max-width:70%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:#f6f1ea;border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:8.5%;width:17vw;opacity:.85}
+  .corner-vf{right:6.5%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-family:'Poppins',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(38,38,38,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:7.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Designed to Thrive</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: an open room / frame with a single point of light, drawn in taupe -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 120 120">
+  <g fill="none" stroke="#9d897b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="20" y="20" width="80" height="80" rx="4" opacity="0.8"/>
+    <path d="M20 84 L60 52 L100 84" opacity="0.55"/>
+    <circle cx="60" cy="40" r="7" opacity="0.85"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Designer CEO',sub:'How an established interior designer runs a thriving business without running herself into the ground.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'The work is good and the business is real. So why does it still feel like too much?',body:'You are an established designer. The projects come, the clients are happy, the numbers hold. And still you run on more and faster, stretched thin, quietly wondering why hitting every marker you were supposed to hit does not feel the way you thought it would.'},
+ {t:'dark',title:'A fuller calendar was never the same thing as a business that feels good to run.'},
+
+ {t:'section',idx:'Part One',title:'Why More and Faster Stops Working'},
+ {t:'normal',k:'The engine you built the business on',title:'More and faster got you here. It cannot get you where you want to go.',body:'Most successful design businesses are built on one setting: do more, do it faster, say yes again. It works, right up until it becomes the thing capping you. You cannot out-hustle a ceiling that hustle built, and adding hours to a full week only raises the cost of the next busy season.'},
+ {t:'normal',k:'The technician trap',title:'You became the owner. You never got to step into the CEO seat.',body:'When you are the best designer in the room, the business quietly organizes itself around your hands being on everything. That is the technician seat, not the CEO seat. The firm keeps needing more of you, and the harder you work the more permanently indispensable, and stuck, you become.'},
+ {t:'dark',title:'The stress felt like the price of success. Most of it was optional.'},
+
+ {t:'section',idx:'Part Two',title:'The Designed to Thrive Method'},
+ {t:'normal',k:'Mind',title:'The business runs on the beliefs you hold about yourself.',body:'The first shift is internal. The story you carry about what you are worth, what you are allowed to want, and what will happen if you slow down is running the business underneath every decision. Mind is the work of naming those beliefs and rewriting the ones keeping you small, so the CEO version of you can actually take the seat.'},
+ {t:'normal',k:'Body',title:'Steadiness under real pressure is a skill, not a personality trait.',body:'Design is an emotional profession, and pressure lives in the body long before it reaches the calendar. Body is the practice of meditation and intuition that lets you stay regulated when a project goes sideways or a client pushes, so you respond from clarity instead of reacting from panic. A steady nervous system is a business asset.'},
+ {t:'normal',k:'Strategy',title:'A plan built to your real capacity, not a template built for someone else.',body:'Only after Mind and Body does strategy work, and it is deliberately less formulaic than the standard business advice. Strategy is a plan shaped to your actual capacity and the life you want, so growth stops meaning more of everything and starts meaning the right things, at a pace you can sustain.'},
+ {t:'normal',k:'Brain management',title:'The overwhelming project is a set of next steps your brain is stacking into one.',body:'Overwhelm is often the mind holding the whole mountain at once and rehearsing the worst case. Brain management is the discipline of breaking the mountain into the single next step and deliberately shifting from the worst outcome to the best possible one. It is the daily antidote to the more and faster reflex.'},
+ {t:'dark',title:'You do not need more hours. You need a different relationship with the ones you have.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Lead as the CEO'},
+ {t:'normal',k:'The designer this builds',title:'The same business, run by someone who is no longer drowning in it.',body:'When the inner work comes first, the outer business finally has room to breathe. You make decisions as the CEO of the firm instead of its hardest-working employee, a slow week stops feeling like a threat, and success starts to mean what you decide it means rather than the next external marker you are chasing.'},
+ {t:'dark',title:'Success gets to be defined on your terms. That is the whole point.'},
+ {t:'normal',k:'Why Desi Creswell',title:'A Master Certified coach who has actually run the design business she teaches.',body:'Desi is a Master Certified Life and Business Coach and Inner Voice Facilitator with a real design background, NCIDQ certified, LEED AP, formerly in commercial design at Perkins and Will before running her own residential business. She hosts the Interior Design Business CEO podcast and built the Designed to Thrive method from the inside of this exact work.'},
+
+ {t:'section',idx:'Your Next Step',title:'Where You Go From Here'},
+ {t:'normal',k:'Keep going with Desi',title:'The method, applied to your business, with support.',body:'The masterclass is the overview. Working together is where the Mind, Body, and Strategy shifts get made in the specifics of your firm and your life. Start with the free Monday Mindset note each week, and apply for private coaching when you are ready to step into the CEO seat for good.'},
+ {t:'cta',title:'Ready to run your design business as the Designer CEO?',body:'Take the next step with Desi Creswell and Designed to Thrive.',chips:['Join the Monday Mindset list','Apply for private coaching'],disc:'Educational content for established interior designers. No income or business result is guaranteed. Results vary by designer, market, and season.'},
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Designed to <b>Thrive</b> · Desi Creswell</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
