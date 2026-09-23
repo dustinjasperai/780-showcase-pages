@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Scale With Soul · Samantha Riley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1a1a1a; --panel:#0a0a0a; --rule:#4a5565;
+    --acc:#d8aa49; --idx:#c9a961; --chalk:#f5f4ee; --grey:#cdc7ba; --dim:#7d766a;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Montserrat',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:400;color:var(--chalk);line-height:1.15;letter-spacing:-.005em}
+  .t-title h1{font-size:4.6vw;max-width:90%}
+  .t-normal h1{font-size:3.25vw;max-width:84%}
+  .t-normal .body{font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:75%;line-height:1.55;font-weight:300}
+  .sub{font-size:1.72vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.4vw;font-weight:600;color:var(--idx);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:90%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#2a2a2a 0%,#080808 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;font-style:italic;color:#f7f5ef}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#2a2620 0%,#080808 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1px solid var(--acc);color:#eBD9AE;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.22vw;font-weight:500}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .ladder-motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-ladder{right:7%;bottom:8.5%;width:24vw}
+  .corner-ladder{right:6%;bottom:7.5%;width:11vw;opacity:.42}
+  .stages{display:flex;gap:2.4vw;margin-top:4.6vh}
+  .stage-step{display:flex;flex-direction:column;gap:.8vh}
+  .stage-step .amt{font-family:'Playfair Display',serif;font-size:2.3vw;color:var(--acc);font-weight:500}
+  .stage-step .lab{font-size:1.02vw;color:var(--grey);font-weight:300;letter-spacing:.02em;max-width:12vw;line-height:1.4}
+  .brandline{font-size:1.32vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.6vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.stage-step .amt{font-size:4.6vw}.stage-step .lab{font-size:2.4vw;max-width:24vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Samantha Riley</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- aligned ascent motif: a baseline, a rising line, three gold stage-gates at 10k / 30k / 1M -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ladder" viewBox="0 0 280 160">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="16" y1="138" x2="264" y2="138" stroke="#4a5565" opacity="0.5"/>
+    <path d="M30 128 L140 84 L250 30" stroke="#d8aa49" opacity="0.92"/>
+    <path d="M30 132 L140 92 L250 44" stroke="#f5f4ee" opacity="0.10"/>
+    <rect x="24" y="122" width="12" height="12" transform="rotate(45 30 128)" fill="none" stroke="#d8aa49" stroke-width="2.4"/>
+    <rect x="134" y="78" width="12" height="12" transform="rotate(45 140 84)" fill="none" stroke="#d8aa49" stroke-width="2.4"/>
+    <rect x="244" y="24" width="12" height="12" transform="rotate(45 250 30)" fill="#d8aa49" fill-opacity="0.25" stroke="#d8aa49" stroke-width="2.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Scale With Soul',sub:'A live masterclass for coaches, consultants and service business owners scaling from steady months toward a million dollar year, without burning out to get there.',brand:true,ladder:'title'},
+ {t:'normal',k:'Who this is for',title:'You have clients and a reputation. Now the business runs you.',body:'You are past the early grind, booking consistent months and known for good work. But the growth you want seems to cost more of you every time, and most of the machine still runs through your own two hands.'},
+ {t:'dark',title:'More hustle is not the next stage. It is the ceiling you are about to hit.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Starts To Cost You'},
+ {t:'normal',k:'The bottleneck is you',title:'Every result in the business still routes through one person.',body:'The delivery, the sales, the decisions, the standard. When you are the constraint, the only lever left is more of your hours, and you have already spent most of those.'},
+ {t:'normal',k:'The hustle tax',title:'What carried you to here will not carry you to seven figures.',body:'Scaling by adding effort works right up until it does not. The habits that built consistent months quietly become the thing capping them, because a business built on your output can only grow as far as your output does.'},
+ {t:'normal',k:'Alignment is a strategy',title:'Misalignment is not a mood. It is a leak in the numbers.',body:'When the offer, the message and the way you sell are out of step with who you actually are, the wrong clients come in, the right ones hesitate, and the effort you pour in leaks out the sides. The soul part is not soft. It is where the revenue is.'},
+ {t:'dark',title:'You cannot out work a business that is built to depend on you.'},
+
+ {t:'section',idx:'Part Two',title:'The Aligned Scale System'},
+ {t:'stages',k:'A staged roadmap',title:'Each stage has its own constraint and its own build.',stages:[{amt:'$10k',lab:'Steady months, still owner led'},{amt:'$30k',lab:'Systems and team carry the load'},{amt:'$1M',lab:'An aligned, scalable business'}]},
+ {t:'normal',k:'Constraint stage to scale stage',title:'The move is a sequence, not a pile of tactics.',body:'Getting out of the constraint stage, where you are the bottleneck, and into the scale stage takes four things in order: the systems, the team, the mindset shift, and the sequence that makes it stick. Do them out of order and the growth does not hold.'},
+ {t:'normal',k:'The Bottleneck Audit',title:'Find the one thing throttling growth, and fix that first.',body:'Before adding more marketing or more people, name the single constraint capping the business right now. Most owners add volume on top of a bottleneck and wonder why it does not move. Clear the real constraint and the whole system speeds up.'},
+ {t:'normal',k:'Authority that compounds',title:'Positioning so the right clients arrive already sold.',body:'When you are known for a clear point of view, the market comes to you warmer and readier to buy. Authority is not vanity. It is the quietest, most durable way to lower what every new client costs you to win.'},
+ {t:'dark',title:'Scale is a sequence. Do the right thing in the right order and it holds.'},
+
+ {t:'section',idx:'Part Three',title:'The Business On The Other Side'},
+ {t:'normal',k:'The business this builds',title:'Seven figures, with your life still in your hands.',body:'A business where systems and a team carry the delivery, where you work on the parts only you can do, and where growth no longer means signing away another evening. The reputation you built finally becomes freedom instead of a heavier load.'},
+ {t:'dark',title:'You built the reputation. The system is what turns it into freedom.'},
+ {t:'normal',k:'Why Samantha Riley',title:'Thirty years of building businesses, taught in the open.',body:'Samantha Riley has spent more than 30 years building businesses and now helps service business owners scale with soul. She hosts the Business Growth Lab podcast, teaches the Aligned Scale System, and is on a mission to help 1000 owners build a million dollar business.'},
+
+ {t:'section',idx:'Your Next Step',title:'Scale With Soul'},
+ {t:'cta',title:'Ready to scale with soul, not hustle?',chips:['Apply to work with us','Get your Personalised Scale Plan'],disc:'Educational content for coaches, consultants and service business owners. No income or business result is guaranteed. Results vary by owner, offer, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function ladder(kind){return `<svg class="ladder-motif ${kind==='title'?'title-ladder':'corner-ladder'}"><use href="#ladder"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+(s.t==='stages'?'normal':s.t);
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.stages) h+=`<div class="stages">`+s.stages.map(st=>`<div class="stage-step"><div class="amt">${st.amt}</div><div class="lab">${st.lab}</div></div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Samantha <b>Riley</b> · The Aligned Scale System</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ladder) h+=ladder(s.ladder);
+  else if(s.t==='title') h+=ladder('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
