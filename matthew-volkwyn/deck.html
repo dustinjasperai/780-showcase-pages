@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Systems Shift · Matthew Volkwyn, Copy Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0b0b0d; --panel:#16161a; --rule:#2a2a30;
+    --accent:#bc9139; --chalk:#ffffff; --grey:#999999; --blue:#5693ff;
+  }
+  html,body{height:100%}
+  body{background:#050506;font-family:'Inter',-apple-system,sans-serif;color:rgba(255,255,255,.82);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050506}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Space Grotesk',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.6vh}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--chalk);line-height:1.12;letter-spacing:-.008em}
+  .t-title h1{font-size:4.9vw;max-width:95%}
+  .t-normal h1{font-size:2.9vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.4vw;color:rgba(255,255,255,.74);margin-top:3.0vh;max-width:80%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.65vw;color:rgba(255,255,255,.78);margin-top:3.6vh;max-width:84%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Space Grotesk',sans-serif;font-size:1.1vw;font-weight:600;color:var(--accent);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.6vh}
+  .t-dark{background:#050506;align-items:center;text-align:center}
+  .t-dark h1{font-size:3.4vw;max-width:88%;color:var(--chalk);font-weight:600}
+  .t-dark::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34vw;height:34vw;border-radius:50%;background:radial-gradient(circle,rgba(188,145,57,.10),transparent 62%);pointer-events:none}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.5vw;max-width:86%;color:var(--chalk)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:rgba(255,255,255,.72);font-size:1.4vw;margin-top:3vh;max-width:74%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.1vw;font-weight:600;font-family:'Space Grotesk',sans-serif}
+  .chip:first-child{background:var(--accent);color:#0b0b0d}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.2vh;font-size:.84vw;color:var(--grey);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .gr-motif{position:absolute;pointer-events:none}
+  .title-gr{right:7.4%;bottom:8.5%;width:15vw;opacity:.95}
+  .corner-gr{right:6.5%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-family:'Space Grotesk',sans-serif;font-size:1.1vw;color:rgba(255,255,255,.7);margin-top:3.8vh;font-weight:500;letter-spacing:.04em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--grey);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--grey);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.1vw}.t-normal h1{font-size:5.3vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:6.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Copy Systems</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: stacked "system cards" with a checklist mark, drawn from Copy Systems' productized 15-minute-lesson library. not a rocket, not a gradient orb. -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gr" viewBox="0 0 120 120">
+  <g fill="none" stroke="#bc9139" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="30" y="16" width="62" height="40" rx="9" opacity="0.30"/>
+    <rect x="22" y="36" width="62" height="40" rx="9" opacity="0.60"/>
+    <rect x="14" y="56" width="62" height="40" rx="9" fill="#bc9139" fill-opacity="0.10"/>
+    <line x1="24" y1="72" x2="54" y2="72" stroke-width="3.2"/>
+    <line x1="24" y1="82" x2="46" y2="82" stroke-width="3.2" opacity="0.7"/>
+    <path d="M60 82 l6 6 l12 -14" stroke-width="3.4"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Systems Shift',sub:'How working copywriters make more while working less, by turning the craft into a library of repeatable systems and stepping up into the creative strategist seat.',brand:true,gr:'title'},
+ {t:'normal',k:'Who this is for',title:'You got good at the craft. Your income still moves with the hours you can write.',body:'You can write. Clients are happy, referrals come in, the work is real. And yet the ceiling is always the same, because every dollar is tied to another hour at the keyboard. Getting better at writing does not move that ceiling. It just fills your calendar faster.'},
+ {t:'dark',title:'The best paid copywriters are not better writers. They run systems.'},
+
+ {t:'section',idx:'Part One',title:'The Ceiling Every Good Copywriter Hits'},
+ {t:'normal',k:'The trade you never agreed to',title:'Selling words by the hour or the project quietly caps what you can earn.',body:'When the product is your time, growth means less sleep, not more money. Take on more clients and the quality slips, or you burn out. The skill that got you here, writing on demand, is the exact thing keeping your income tied to your hours.'},
+ {t:'normal',k:'Why more clients is not the fix',title:'Feast or famine is not a pricing problem. It is a systems problem.',body:'Most copywriters answer the ceiling by hunting for more clients or nudging their rates up. Both still trade hours for dollars. What changes the math is owning repeatable systems and outcomes a brand will pay a premium for, so you are paid for results, not for time.'},
+ {t:'dark',title:'You cannot out-write a business model that trades your hours for words.'},
+
+ {t:'section',idx:'Part Two',title:'The Copy Systems Method'},
+ {t:'normal',k:'Systems over inspiration',title:'A system is a repeatable play you can run again and again, not a burst of inspiration.',body:'Over six years I built a library of more than 120 systems, each one a short, specific play for a real job: attention, offers, story, proven selling structures, email, high performing creative. Each lands in about fifteen minutes. You stop starting from a blank page, because the play already exists.'},
+ {t:'normal',k:'Media Buyer Fluency',title:'When you understand the account, your copy stops guessing and starts performing.',body:'Most copywriters hand over words and hope. The ones who earn the most can read what is actually happening in the account, so their creative is built to move the number that matters. That fluency is what turns a writer into someone a brand cannot easily replace.'},
+ {t:'normal',k:'The creative strategist upgrade',title:'The jump in pay is not from writing more. It is from owning the strategy behind the creative.',body:'A copywriter is handed a brief. A creative strategist decides what to make and why, then directs the copy and the concepts against it. That is the role DTC brands pay a premium for, and it is a learnable step, not a talent you are born with.'},
+ {t:'normal',k:'Finding and closing better clients',title:'The last system puts higher paying clients in front of you and helps you close them.',body:'None of this matters if you are still competing on price in a crowded inbox. The client systems cover where premium clients actually come from, how to run the conversation, and how to close retainer and strategy work with confidence instead of discounting to win.'},
+ {t:'dark',title:'A system is something you can hand to someone else, and it still works.'},
+
+ {t:'section',idx:'Part Three',title:'What the Shift Looks Like'},
+ {t:'normal',k:'The copywriter this builds',title:'Income that no longer rises and falls with your hours, and a seat at the strategy table.',body:'You run proven plays instead of starting cold. You speak the language of the account, so brands trust you with the strategy, not just the words. The work gets lighter and the pay gets heavier, because you are finally selling outcomes and systems, not time.'},
+ {t:'normal',k:'Why Matthew Volkwyn',title:'The systems come from six years of doing the work, not from theory.',body:'I run Copywriting.org and built Copy Systems into a community of hundreds of working copywriters and creative strategists. I have coached more than 1,125 copywriters, and Copy Systems is trusted by some of the highest paid copywriters in the world. Every play in the library was proven in real accounts before it went in.'},
+
+ {t:'section',idx:'Your Next Step',title:'Make the Shift'},
+ {t:'normal',k:'Two ways in',title:'Two ways to keep going, depending on where you are.',body:'Start inside Copy Systems, the community and full library where copywriters and creative strategists make more while working less. When you want a smaller room and closer guidance, apply to the Copy Dojo. Both run on the same systems you just saw.'},
+ {t:'cta',title:'Ready to stop selling hours and start running systems?',body:'Keep going with Matthew Volkwyn and Copy Systems.',chips:['Join Copy Systems','Apply to the Copy Dojo'],disc:'Educational content for working copywriters and creative strategists. No income or earnings result is guaranteed. Outcomes vary by person, skill, effort, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function gr(kind){return `<svg class="gr-motif ${kind==='title'?'title-gr':'corner-gr'}"><use href="#gr"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Copywriting.org · Copy <b>Systems</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.gr) h+=gr(s.gr);
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
