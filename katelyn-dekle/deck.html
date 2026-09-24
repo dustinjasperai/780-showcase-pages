@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Do-Less Studio · Katelyn Dekle, Launch the Damn Thing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4eee5; --panel:#efe4d2; --rule:#e0cdb0;
+    --acc:#8a3324; --warm:#c2704f; --gold:#eecd96; --plum:#591e34;
+    --ink:#2b1a14; --grey:#5a4a40; --dim:#a08d7c; --cream:#f7f1e8;
+  }
+  html,body{height:100%}
+  body{background:#e6ddcd;font-family:'Inter',system-ui,sans-serif;color:var(--grey);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e6ddcd}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Anton',Impact,sans-serif;font-weight:400;color:var(--ink);line-height:1.04;letter-spacing:.005em}
+  .t-title h1{font-size:6.2vw;max-width:96%;color:var(--ink);text-transform:uppercase}
+  .t-title h1 .a{color:var(--acc)}
+  .t-normal h1{font-size:3.35vw;max-width:92%;text-transform:none}
+  .t-normal h1 .a{color:var(--acc)}
+  .t-normal .body{font-family:'Inter',serif;font-size:1.4vw;color:var(--grey);margin-top:3.0vh;max-width:80%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.72vw;color:var(--warm);margin-top:3.4vh;max-width:88%;line-height:1.4;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.02vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.22em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:94%;text-transform:uppercase}
+  .t-section .rule{width:15vw;height:4px;background:linear-gradient(90deg,var(--acc) 55%,var(--warm));margin-top:3.6vh;border-radius:2px}
+  .t-dark{background:radial-gradient(135% 135% at 50% 6%,#6e2740 0%,#3c1626 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:90%;color:var(--cream);text-transform:none}
+  .t-dark h1 .a{color:var(--gold)}
+  .t-cta{background:radial-gradient(135% 135% at 50% 100%,#6e2740 0%,#3c1626 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:90%;color:var(--cream);text-transform:uppercase}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#ecd9c6;font-size:1.36vw;margin-top:3vh;max-width:76%;line-height:1.56}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--gold);color:var(--cream);border-radius:100px;padding:1.4vh 1.9vw;font-family:'Inter',sans-serif;font-size:1.08vw;font-weight:600;letter-spacing:.01em}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-family:'Inter',sans-serif;font-size:.82vw;color:#d3b7a0;text-align:center;line-height:1.5}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .mark{position:absolute;pointer-events:none}
+  .title-mark{right:7%;bottom:9%;width:19vw;opacity:.92}
+  .corner-mark{right:6.6%;bottom:7.4%;width:7.4vw;opacity:.4}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.06vw;color:var(--grey);margin-top:3.8vh;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(43,26,20,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.9vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:5.8vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Launch the Damn Thing</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: one framed home that every loose thread routes into (her client-portal system), drawn in terracotta on cream -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mark" viewBox="0 0 200 120">
+  <g fill="none" stroke="#c2704f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 26 H64" opacity="0.85"/>
+    <path d="M8 46 H52" opacity="0.7"/>
+    <path d="M8 74 H52" opacity="0.7"/>
+    <path d="M8 94 H64" opacity="0.85"/>
+    <path d="M64 26 C90 26 90 56 112 56" opacity="0.6"/>
+    <path d="M52 46 C86 46 86 58 112 58" opacity="0.6"/>
+    <path d="M52 74 C86 74 86 62 112 62" opacity="0.6"/>
+    <path d="M64 94 C90 94 90 64 112 64" opacity="0.6"/>
+    <rect x="112" y="34" width="80" height="52" rx="12" stroke="#8a3324" stroke-width="3.4"/>
+    <circle cx="152" cy="60" r="7" fill="#eecd96" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The <span class="a">Do-Less</span> Studio',sub:'For web designers who are great at the design and drowning in everything around it. How to run calmer, more profitable Squarespace projects on one simple system.',brand:true,mark:'title'},
+ {t:'normal',k:'Who this is for',title:'You are a great designer. The rest of the business is what is burning you out.',body:'The design is the part you love and the part you are good at. It is everything around it that wears you down. The client who goes quiet for three weeks then wants it all by Friday. The content that never arrives. The scope that creeps. The inbox you are afraid to open. None of that is a design problem, and none of it gets fixed by working more hours.'},
+ {t:'dark',title:'Most designers do not stall because the work is weak. They stall because every project runs a different way, so every project is <span class="a">exhausting</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why Talented Designers Stay Overworked and Underpaid'},
+ {t:'normal',k:'The trap',title:'Custom everything, every time, is why you never get your evenings back.',body:'When every project starts from a blank page, you rebuild the same onboarding, the same emails, the same content requests, over and over. It feels like craft, but a lot of it is just friction you have not systemized yet. The more clients you take on to earn more, the deeper the hole gets, because each one runs its own messy way.'},
+ {t:'normal',k:'The cost',title:'When the process is chaos, you undercharge just to get it over with.',body:'A project that drags is a project you quietly resent, and a number you quietly discount. You price low because you are bracing for the back and forth, you throw in extra rounds to end the tension, and you finish proud of the design but underpaid for the work. The chaos is not free. It shows up in your rate.'},
+ {t:'dark',title:'Doing less on purpose is not doing worse. It is the only way the good work becomes <span class="a">repeatable</span>.'},
+
+ {t:'section',idx:'Part Two',title:'The System: One Portal, One Process, Priced for Value'},
+ {t:'normal',k:'Piece one, the client portal',title:'Give every client one home instead of ten scattered inboxes.',body:'Every project runs through a single client portal. Onboarding, the content you need, every message, every file, the feedback, the final handoff, all in one place the client actually understands. You stop chasing people across email and DMs, the client always knows the next step, and you look organized because you are. This is the backbone of the whole studio.'},
+ {t:'normal',k:'Piece two, the 2-week project',title:'A start-to-finish process you run the same way every single time.',body:'The build is not a mystery you improvise. It is a repeatable two-week path: strategic direction first, then the design, then the training that hands the site back to the client with confidence. Same rails every time means you can promise a timeline and keep it, and you stop losing weekends to projects that quietly sprawl into months.'},
+ {t:'normal',k:'Piece three, collecting content',title:'The step that always drags becomes a simple, guided ask.',body:'Content is where most projects die. When you make it a clear, guided step inside the portal, with exactly what you need and when, clients deliver instead of disappearing. You are not nagging, you are running a process, and the whole timeline holds together because the slowest part finally moves.'},
+ {t:'normal',k:'Piece four, pricing for value',title:'Price the outcome, not the hours, and stop apologizing for the number.',body:'When you charge by the hour you cap your income and invite a negotiation about your time. When you price the result, a strategic site that earns for the client, the same work is worth far more, and it is easier to say out loud once the process behind it is this clean. Doing less is exactly what lets you charge more.'},
+ {t:'dark',title:'When every project runs on the same rails, you can raise the price and shorten the timeline at <span class="a">the same time</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When the Studio Runs Itself'},
+ {t:'normal',k:'The shift',title:'Fewer fires, shorter projects, and room to build things that pay you again.',body:'Once the delivery runs on a system, the day stops being one long scramble. You take on the right number of projects instead of all of them, you finish on time, and you finally have room to build the things that earn without a new client every month: templates, a course, a membership. The studio stops depending on your next frantic week.'},
+ {t:'normal',k:'On your terms',title:'A studio that fits your life, not one that quietly eats it.',body:'The goal was never to do more of everything. It was to do your best work for the clients who are a real fit, get paid properly for it, and keep your evenings. Do less, on purpose. Better, and unapologetically you. That is what a studio built on a system actually buys you.'},
+ {t:'normal',k:'Why learn this from Katelyn Dekle',title:'A designer who rebuilt her own studio to do less and earn more.',body:'Katelyn has been designing for twenty years and building on Squarespace since 2017. She coaches inside one of the best known Squarespace training programs, has taught more than four hundred designers, and built the Ultimate Client Portal System that now runs hundreds of designers studios, plus The Club, her community for designers. She rebuilt her own studio around this system first, then taught it.'},
+ {t:'dark',title:'You do not need more clients. You need a studio that runs on a <span class="a">system</span>.'},
+
+ {t:'section',idx:'Your Next Step',title:'Go Further Inside The Club and the Portal System'},
+ {t:'cta',title:'Ready to run a calmer, more profitable studio?',body:'Join The Club and set up the Ultimate Client Portal System, then run your next project the do-less way, with Katelyn and a room of designers building the same kind of studio alongside you.',chips:['Join The Club','Get the Client Portal System'],disc:'Educational content for web designers running their own studios. No income or business result is guaranteed. Results vary by person, effort, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function mark(kind){return `<svg class="mark ${kind==='title'?'title-mark':'corner-mark'}"><use href="#mark"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='cta'){
+    h+=`<h1>${s.title}</h1>`;
+    if(s.body) h+=`<div class="body" style="color:#ecd9c6;text-align:center;max-width:76%">${s.body}</div>`;
+    if(s.chips) h+=`<div class="chips">${s.chips.map(c=>`<div class="chip">${c}</div>`).join('')}</div>`;
+    if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  } else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Launch the Damn Thing &nbsp;&middot;&nbsp; <b>Katelyn Dekle</b></div>`;
+  }
+  if(s.mark) h+=mark(s.mark);
+  else if(s.t!=='dark'&&s.t!=='section'&&s.t!=='cta'&&i>0) h+=mark('corner');
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const bar=document.getElementById('bar'),count=document.getElementById('count'),hint=document.getElementById('hint');
+function show(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=String(cur+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  if(cur>0&&hint) hint.style.opacity='0';
+}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+show(0);
+</script>
+</body>
+</html>
