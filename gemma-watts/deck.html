@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making Instagram Simple, a masterclass with Gemma Watts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4ece1;
+    --panel:#fdf8f1;
+    --rule:#e4d8c6;
+    --ink:#3a2a1e;
+    --muted:#7a6656;
+    --accent:#5380a0;
+    --accent2:#d5ab9f;
+    --head:'Newsreader',Georgia,serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:
+    radial-gradient(circle at 12% 12%, #f8f1e7 0%, var(--bg) 60%);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative}
+  .slide{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--rule);border-radius:26px;
+    padding:60px 70px;min-height:66vh;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 20px 50px rgba(58,42,30,.10);position:relative;overflow:hidden}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* garden motif: a soft sprig of dots growing from the top-left corner */
+  .slide::before{content:'';position:absolute;top:26px;left:0;height:70px;width:6px;
+    background:linear-gradient(180deg,var(--accent2),var(--accent));border-radius:0 6px 6px 0}
+  .slide::after{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,#efe0cf 0%,transparent 70%);opacity:.7}
+  .inner{position:relative;z-index:1}
+  .kick{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:600;font-size:62px;line-height:1.03;margin:0 0 18px;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:44px;line-height:1.07;margin:0 0 20px;letter-spacing:-.01em}
+  p{font-size:23px;line-height:1.5;color:var(--muted);margin:0 0 14px;max-width:45ch}
+  .lead{font-size:27px;color:var(--ink)}
+  .em{color:var(--accent);font-style:italic}
+  ul{margin:16px 0 0;padding:0;list-style:none}
+  li{font-size:22px;line-height:1.4;color:var(--ink);padding:16px 0 16px 42px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:4px;top:23px;width:15px;height:15px;border-radius:50% 50% 50% 0;
+    background:var(--accent);transform:rotate(-45deg)}
+  li b{font-weight:600}
+  li span{display:block;color:var(--muted);font-size:18px;margin-top:4px;font-weight:400}
+  .big{font-family:var(--head);font-size:118px;line-height:.98;font-weight:600;letter-spacing:-.02em}
+  .strike{color:transparent;-webkit-text-stroke:1.5px #3a2a1e66;position:relative}
+  .strike::after{content:'';position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--accent2);transform:rotate(-2deg)}
+  .row{display:flex;gap:20px;margin-top:22px;flex-wrap:wrap}
+  .cell{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--rule);border-radius:18px;padding:24px 26px}
+  .cell .n{font-family:var(--head);color:var(--accent);font-size:27px;font-weight:600;margin-bottom:8px}
+  .cell p{font-size:17px;margin:0}
+  .steps{counter-reset:s;margin-top:18px}
+  .steps li{padding-left:60px}
+  .steps li::before{counter-increment:s;content:counter(s);border:none;background:var(--accent);color:#fff;
+    width:34px;height:34px;border-radius:50% 50% 50% 6px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--body);font-weight:700;font-size:16px;top:14px;left:4px;transform:none}
+  .who{font-size:19px;color:var(--muted);margin-top:26px;border-left:3px solid var(--accent2);padding-left:16px}
+  .who b{color:var(--ink)}
+  .disc{font-size:15px;color:var(--muted);margin-top:26px;max-width:62ch;line-height:1.45}
+  .ctaline{font-size:24px;color:var(--ink);margin-top:10px;padding-left:16px;border-left:3px solid var(--accent)}
+  .ctaline b{color:var(--accent)}
+  .pres{font-size:19px;color:var(--muted);margin-top:28px}
+  .pres b{color:var(--ink);font-weight:600}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--muted);letter-spacing:.08em;
+    font-weight:600;background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:8px 16px}
+  #dots{position:fixed;bottom:22px;left:26px;display:flex;gap:7px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent);width:20px;border-radius:4px}
+  .hint{position:fixed;top:18px;left:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  @media(max-width:640px){.slide{padding:40px 30px}h1{font-size:40px}h2{font-size:30px}.big{font-size:70px}p,li{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="hint">This Social Cottage · masterclass sample · use arrow keys</div>
+<div id="stage"><div id="slide" class="slide on"></div></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass',h:'Making Instagram Simple',p:'How to post in under 20 minutes and still sell your offers, without chasing the algorithm.',pres:'With <b>Gemma Watts</b>, This Social Cottage'},
+ {t:'promise',kick:'What you will leave with',h:'Three things, in one live hour.',li:[['Why no one is seeing your stuff','It is almost never reach. It is the message.'],['A way to post in 20 minutes','A repeatable content week, not more hustle.'],['The first change you can make today','One caption, said the way you would text a friend.']]},
+ {t:'audience',kick:'Who this is for',h:'You have real expertise. It is just not landing.',p:'Coaches, course creators and service providers who know their stuff, post often, and still feel invisible while quieter accounts get booked out.',who:'<b>The trap:</b> you decide the answer is to post more, so you make more content nobody remembers, and it feels even more pointless.'},
+ {t:'reframe',kick:'The reframe',big1:'Reach.',big2:'The <span class="em">message</span>.',p:'When a post flops, the reflex is to blame the algorithm and post more. Almost always the reach is fine. The words just are not making anyone feel spoken to.'},
+ {t:'part',kick:'Part one',h:'Why no one sees your stuff.'},
+ {t:'point',kick:'The core problem',h:'You are posting more, not clearer.',p:'More reels and more captions do not fix a message that is fuzzy. They just spread the fuzz wider, burn your evenings, and quietly convince you the platform is broken.'},
+ {t:'point',kick:'The core problem',h:'You overthink content you would never overthink in a text.',p:'You do not agonise over the advice you fire off to a best friend on WhatsApp. Open the caption box and suddenly every word gets polished until the human is gone and nobody replies.'},
+ {t:'framework',kick:'The core problem',h:'Post more, or say it plain.',row:[['Post more','Volume as the strategy. Hope reach fixes a message that never landed.'],['Say it plain','Fewer posts, each one clear enough that the right person feels it is about them.']],p:'The move from the first to the second is the whole game.'},
+ {t:'part',kick:'Part two',h:'How to make it simple.'},
+ {t:'lenses',kick:'The method',h:'Three moves, and none of them is viral.',li:[['Say it plain','Write like you talk. The WhatsApp test for every caption.'],['Post in 20 minutes','A repeatable content week you can actually keep up.'],['Sell daily','Turn a bio and a story into quiet, steady enrolments.']]},
+ {t:'point',kick:'Move one',h:'Say it plain.',p:'Read the caption out loud. If you would never say it to a friend over coffee, cut it back until you would. Plain beats clever, because plain is what people actually respond to.',who:'<b>The test:</b> would this sound normal as a voice note? If not, it is not ready.'},
+ {t:'point',kick:'Move two',h:'Post in 20 minutes.',p:'A week of content does not need a studio day. With a set of prompts fitted to your niche and a simple hook, you plan and write in one short sitting, then get back to the life you actually want to live.',who:'<b>The shift:</b> from "what do I post" every morning to a plan you top up once a week.'},
+ {t:'point',kick:'Move three',h:'Fix the bio and the stories first.',p:'Before more followers, make the ones you have understand what you sell and why it is for them. A clear bio and a few honest stories do more selling than a viral reel that reaches the wrong room.',who:'<b>Booked From Your Bio:</b> most content does not convert because the messaging, not the algorithm, is off.'},
+ {t:'steps',kick:'The content week',h:'What the 20 minutes looks like.',steps:['Pick the one thing you want people to understand this week','Write the hook the way you would open a message to a friend','Say it plain, one idea per post, no polishing the human out','Post it, then use stories to make it personal','Point the ready ones to your next step'],p:'Five steps, one short sitting. Repeatable is what makes it stick.'},
+ {t:'framework',kick:'Selling',h:'Go viral, or sell daily.',row:[['Go viral','A spike of the wrong people, then silence, then starting again from zero.'],['Sell daily','Small, steady, on purpose. Selling in the content instead of hoping for a wave.']],p:'You do not need a viral moment. You need the same clear offer, made daily, to the right people.'},
+ {t:'part',kick:'Part three',h:'What a simple content week feels like.'},
+ {t:'looks',kick:'The outcome',h:'Less time on Instagram. More of the right people.',li:[['You know what to post','A plan you top up in one sitting, not a blank box every day.'],['The right people feel spoken to','Clear beats clever, so the ones who fit actually reply.'],['Selling is quiet and constant','Enrolments come from clear content, not a viral gamble.']]},
+ {t:'whyme',kick:'Why Gemma',h:'An ex-teacher who made this simple for herself first.',li:[['Grew to 90,000 followers organically','While raising two children under two, with limited childcare.'],['Taught over 6,000 people to earn from content','And landed brand partnerships with under 3,000 followers.'],['Host of the This Social Cottage podcast','No-fluff Instagram strategy for people who want their life back.']]},
+ {t:'cta',kick:'Your next step',h:'Ready to make Instagram simple?',ctas:['<b>Join The Plotting Shed</b> and post in 20 minutes with content that actually sells.','<b>Apply for a 1:1 Intensive</b> and we will fix your messaging together.'],disc:'This masterclass is educational. It shares content and messaging approaches; it is not advice for your specific business and not a guarantee of any particular result. Outcomes vary by person and effort.'}
+];
+
+const stage=document.getElementById('slide');
+const dots=document.getElementById('dots');
+const nav=document.getElementById('nav');
+let i=0;
+S.forEach(()=>{const d=document.createElement('i');dots.appendChild(d)});
+function render(){
+ const s=S[i];let h='<div class="inner">';
+ if(s.kick)h+=`<div class="kick">${s.kick}</div>`;
+ if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="lead">${s.p}</p><div class="pres">${s.pres}</div>`}
+ else if(s.t==='reframe'){h+=`<div class="big"><span class="strike">${s.big1}</span></div><div class="big">${s.big2}</div><p style="margin-top:24px">${s.p}</p>`}
+ else if(s.t==='part'){h+=`<h1>${s.h}</h1>`}
+ else if(s.row){h+=`<h2>${s.h}</h2><div class="row">`+s.row.map(c=>`<div class="cell"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+`</div>`+(s.p?`<p style="margin-top:22px">${s.p}</p>`:'')}
+ else if(s.steps){h+=`<h2>${s.h}</h2><ul class="steps">`+s.steps.map(x=>`<li>${x}</li>`).join('')+`</ul>`+(s.p?`<p style="margin-top:20px">${s.p}</p>`:'')}
+ else if(s.li){h+=`<h2>${s.h}</h2><ul>`+s.li.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')+`</ul>`+(s.who?`<div class="who">${s.who}</div>`:'')}
+ else if(s.t==='cta'){h+=`<h2>${s.h}</h2>`+s.ctas.map(c=>`<div class="ctaline">${c}</div>`).join('')+`<div class="disc">${s.disc}</div>`}
+ else{h+=`<h2>${s.h}</h2>`+(s.p?`<p class="lead" style="color:var(--muted)">${s.p}</p>`:'')+(s.who?`<div class="who">${s.who}</div>`:'')}
+ h+='</div>';
+ stage.innerHTML=h;
+ [...dots.children].forEach((d,k)=>d.className=k===i?'on':'');
+ nav.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));stage.classList.remove('on');void stage.offsetWidth;stage.classList.add('on');render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)go(i+1);else go(i-1)});
+render();
+</script>
+</body>
+</html>
