@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Content-to-Client System · Jack Gaisford · The Content Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#1a1c21; --panel:#121419; --rule:#2c2f36;
+    --acc:#fef301; --chalk:#f4f4f2; --grey:#a8adb6; --dim:#6a6f78;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Space Grotesk',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.4vh}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--chalk);line-height:1.1;letter-spacing:-.015em}
+  .t-title h1{font-size:5.1vw;max-width:92%;font-weight:700}
+  .t-title .sub{font-size:1.75vw}
+  .t-normal h1{font-size:3.1vw;max-width:87%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.8vh;max-width:77%;line-height:1.55;font-weight:300}
+  .sub{font-family:'Inter',sans-serif;font-size:1.7vw;color:var(--grey);margin-top:3.2vh;max-width:80%;line-height:1.46;font-weight:300}
+  .bar{width:8vw;height:5px;background:var(--acc);border-radius:2px;margin-bottom:3vh}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Space Grotesk',sans-serif;font-size:1.3vw;font-weight:600;color:var(--acc);margin-bottom:1.6vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:90%}
+  .t-section .rule{width:12vw;height:5px;background:var(--acc);border-radius:2px;margin-top:3.4vh}
+  .t-dark{background:var(--panel);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:87%;font-weight:500;color:#fff;letter-spacing:-.008em}
+  .t-dark .a{color:var(--acc)}
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:85%}
+  .chips{display:flex;gap:1.1vw;margin-top:4.4vh;flex-wrap:wrap}
+  .chip{border:1px solid var(--acc);color:var(--chalk);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.2vw;font-weight:500;letter-spacing:.01em}
+  .chip b{color:var(--acc);font-weight:600}
+  .t-cta .chips{justify-content:center}
+  .stack{display:flex;flex-direction:column;gap:2.2vh;margin-top:4vh;max-width:82%}
+  .step{display:flex;gap:1.5vw;align-items:baseline}
+  .step .n{font-family:'Space Grotesk',sans-serif;font-size:1.6vw;font-weight:700;color:var(--acc);min-width:2.2vw}
+  .step .st{font-family:'Inter',sans-serif;font-size:1.48vw;color:var(--grey);font-weight:300;line-height:1.5}
+  .step .st b{color:var(--chalk);font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-family:'Inter',sans-serif;font-size:.92vw;color:var(--dim);text-align:center;line-height:1.45}
+  .brandline{font-family:'Space Grotesk',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.8vh;font-weight:400;letter-spacing:.06em;text-transform:uppercase}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.7vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}.t-cta h1{font-size:7vw}
+    .chip{font-size:2.7vw}.brandline{font-size:2.7vw}.step .n,.step .st{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">The Content Club</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<script>
+const S = [
+ {t:'title',title:'The Content-to-Client System',sub:'How established service founders turn content into qualified leads and paying clients, instead of likes that go nowhere.',brand:true},
+
+ {t:'normal',k:'Who this is for',title:'You post regularly. It earns attention. It rarely earns clients.',body:'You run a service business, you have paying clients, and you genuinely know your stuff. You show up and share value. The likes come in. The new business does not. If that is you, this hour is built for you.'},
+ {t:'normal',k:'The advice you were given',title:'You were told to just show up and post',body:'So you did. You stayed consistent, you built a following, you gave away real value. It earned comments and saves and the occasional viral week. What it almost never earned was a booked call, and nobody could tell you why.'},
+ {t:'dark',title:'Most content does not fail because it is <span class="a">bad</span>. It fails because it never had a <span class="a">job</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Content Still Does Not Sell'},
+ {t:'normal',k:'The education trap',title:'Pure value, quietly going nowhere',body:'Most founders only ever make the helpful, teach-something post. It feels productive and it builds goodwill. But it only ever speaks to the people already in the middle of deciding, and it never actually asks anyone to take a step. Endless value, no invitation.'},
+ {t:'normal',k:'50% science, 50% art',title:'Everyone works the art. Almost nobody works the science.',body:'The art is the look, the edit, the hook, and most founders pour everything into it. The science is the unsexy half: the purpose of each piece, the exact person it is for, and the one number that tells you whether it did its job. The unsexy half is the half that pays.'},
+ {t:'dark',title:'A post with no purpose is a guess. A feed full of guesses is a <span class="a">hobby</span>, not a pipeline.'},
+
+ {t:'section',idx:'Part Two',title:'The System: Refine, Market, Grow'},
+ {t:'normal',k:'Refine',title:'Sharpen the business before you make anything',body:'Content can only ever be as clear as the offer behind it. Refine is where you get sharp on who you serve, the outcome you sell, and the one message worth repeating. Fuzzy business, fuzzy content. This is why it comes first.'},
+ {t:'normal',k:'Market',title:'Cover all three jobs, not just one',body:'Marketing is not more posting. It is making sure your content does all three of its jobs, so a stranger can find you, come to trust you, and choose you, without you ever having to chase them.'},
+ {t:'normal',k:'The three jobs',title:'Every piece has one of three jobs',chips:['<b>Awareness</b> &nbsp;be found','<b>Middle</b> &nbsp;be trusted','<b>Bottom</b> &nbsp;be chosen'],body:'Most founders live entirely in the middle, then wonder why it is quiet at the top and empty at the bottom. Balance across all three is the whole game.'},
+ {t:'normal',k:'Grow',title:'The bottom of the funnel almost everyone skips',body:'Grow is the content that actually asks for the business, plus the simple next step that turns a quiet follower into a booked call. It feels uncomfortable the first few times. It is also where the revenue has been hiding the whole time.'},
+ {t:'normal',k:'Measure the job',title:'Judge the number that matches the job',body:'Because each piece has a purpose, each piece has a number that actually matters. Awareness content is judged on reach, bottom content on replies and calls booked. Vanity views tell you nothing on their own. The right metric tells you what to make next.'},
+
+ {t:'section',idx:'Part Three',title:'From Posting To Pipeline'},
+ {t:'normal',k:'A repeatable week',title:'A system you can keep, not a scramble',steps:[['1','<b>What to make.</b> A short, fixed set of formats, each with a clear job across the three stages.'],['2','<b>Where it goes.</b> The one or two platforms your buyers actually use, done properly.'],['3','<b>How often.</b> A cadence you can sustain, so it compounds instead of burning you out.']]},
+ {t:'normal',k:'Why listen to me',title:'I built a video agency, then I closed it',body:'Six years making beautiful content for other people taught me the hard lesson: great production is not the same as new business. The half everyone skips is the system that turns content into revenue. That system is what I teach now, and what we build together inside The Content Club.'},
+ {t:'dark',title:'You do not need more content. You need content with a <span class="a">job</span>, and a system that does the <span class="a">asking</span>.'},
+
+ {t:'cta',title:'Want this system built with you? Apply to join The Content Club.',brandcta:true,disc:'This masterclass is educational. It shares a method, not a promise of results. No income, client, or business result is guaranteed. Results vary by founder, offer, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    else if(s.t==='normal') h+=`<div class="bar"></div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+    if(s.steps) h+=`<div class="stack">`+s.steps.map(st=>`<div class="step"><div class="n">${st[0]}</div><div class="st">${st[1]}</div></div>`).join('')+`</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Content Club &middot; with <b>Jack Gaisford</b></div>`;
+    if(s.brandcta) h+=`<div class="brandline">the-content-club.co.uk &middot; <b>Apply to join</b></div>`;
+  }
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
