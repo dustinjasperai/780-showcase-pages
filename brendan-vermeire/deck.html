@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Mental M.A.P · Brendan Vermeire · Metabolic Solutions Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f2f8f9; --panel:#e9f3f4; --rule:#cfe0e2;
+    --ink:#12324a; --accent:#1f66ab; --accent2:#6ea63c; --cyan:#2f9fd4;
+    --dim:#5a7080; --chalk:#eaf3f4;
+  }
+  html,body{height:100%}
+  body{background:#dbe9eb;font-family:'Roboto',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#dbe9eb}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.02vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Jost',sans-serif;font-weight:600;color:var(--ink);line-height:1.09;letter-spacing:-.01em}
+  .t-title h1{font-size:5.0vw;max-width:94%;font-weight:700}
+  .t-title h1 .g{color:var(--accent2)}
+  .t-normal h1{font-size:3.2vw;max-width:86%}
+  .t-normal .body{font-family:'Roboto',sans-serif;font-size:1.5vw;color:var(--dim);margin-top:2.6vh;max-width:76%;line-height:1.56;font-weight:400}
+  .sub{font-family:'Roboto',sans-serif;font-size:1.62vw;color:var(--dim);margin-top:3.2vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.25vw;font-weight:600;color:var(--accent2);margin-bottom:2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:90%;font-weight:700}
+  .t-section .rule{width:15vw;height:6px;background:linear-gradient(90deg,var(--accent),var(--cyan) 55%,var(--accent2));margin-top:3.4vh;border-radius:3px}
+  .t-dark{background:var(--ink);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.6vw;max-width:88%;font-weight:500;color:var(--chalk);letter-spacing:-.005em}
+  .t-dark h1 .a{color:var(--cyan)}
+  .t-cta{background:var(--ink);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.8vw;max-width:86%;color:var(--chalk)}
+  .chips{display:flex;gap:1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--cyan);color:var(--chalk);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.2vw;font-weight:500;letter-spacing:.01em}
+  .chip.solid{background:var(--accent2);border-color:var(--accent2);color:#0c2233}
+  .markers{display:flex;gap:.8vw;margin-top:4vh;flex-wrap:wrap}
+  .mk{font-family:'Jost',sans-serif;background:var(--panel);border:1px solid var(--rule);color:var(--accent);border-radius:8px;padding:1vh 1.4vw;font-size:1.05vw;font-weight:500;letter-spacing:.02em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-family:'Roboto',sans-serif;font-size:.9vw;color:var(--dim);font-style:normal;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .t-cta .disc{color:#9fb3bd}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.24vw;color:var(--dim);margin-top:3.6vh;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .helix{position:absolute;pointer-events:none}
+  .title-helix{right:5.5%;top:50%;transform:translateY(-50%);width:20vw;opacity:.92}
+  .corner-helix{right:5.5%;bottom:6%;width:8.5vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(31,102,171,.12);z-index:20}
+  .hud > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--accent2));width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Roboto',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}.brandline{font-size:2.6vw}.mk{font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">METABOLIC SOLUTIONS INSTITUTE</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the DNA double helix from his logo, drawn as two strands with base-pair rungs -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="helix" viewBox="0 0 120 300">
+  <g fill="none" stroke-width="4" stroke-linecap="round">
+    <path d="M35 6 C95 55 95 95 35 144 C-25 193 -25 233 35 282" stroke="#6ea63c"/>
+    <path d="M85 6 C25 55 25 95 85 144 C145 193 145 233 85 282" stroke="#2f9fd4"/>
+  </g>
+  <g stroke="#1f66ab" stroke-width="3" stroke-linecap="round" opacity=".75">
+    <line x1="42" y1="26" x2="78" y2="26"/><line x1="30" y1="52" x2="90" y2="52"/>
+    <line x1="30" y1="96" x2="90" y2="96"/><line x1="42" y1="122" x2="78" y2="122"/>
+    <line x1="42" y1="164" x2="78" y2="164"/><line x1="30" y1="190" x2="90" y2="190"/>
+    <line x1="30" y1="234" x2="90" y2="234"/><line x1="42" y1="260" x2="78" y2="260"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Mental <span class="g">M.A.P</span>',sub:'Why mental health is a metabolic and neuroinflammation problem, and the lab picture that proves it. A live masterclass for functional health and fitness practitioners.',brand:true,helix:'title'},
+ {t:'normal',k:'Who this is for',title:'Your client is anxious, wired, and foggy. Every lab you run comes back "normal".',body:'You see mood, sleep, and focus fall apart in the people you work with every week. But the standard picture never explains it, so the only options left are refer out, or guess. There is a third option, and it is measurable.'},
+ {t:'dark',title:'You cannot coach your way out of a brain that is quietly <span class="a">on fire</span>.'},
+
+ {t:'section',idx:'Part One',title:'The Missing Organ in Mental Health'},
+ {t:'normal',k:'How we got here',title:'Mental health was handed to two rooms, and neither one looks at the body.',body:'Talk therapy works on the mind. Medication works on a handful of neurotransmitters. Between them sits an entire physiology that almost nobody is testing: the immune system, metabolism, the gut, and inflammation.'},
+ {t:'normal',k:'The brain has an immune system',title:'Microglia are the brain’s immune cells. When they stay switched on, mood goes with them.',body:'Microglial activation is the brain running a low, constant inflammatory response. It shows up as depression, anxiety, brain fog, and burnout long before it shows up as anything a routine panel flags.'},
+ {t:'dark',title:'Often it is not a chemical imbalance. It is an <span class="a">inflammation</span> problem wearing a psychiatric label.'},
+
+ {t:'section',idx:'Part Two',title:'The Mental M.A.P'},
+ {t:'normal',k:'The thesis',title:'Mental health is immune, metabolic, gut, and inflammatory before it is ever "mental".',body:'This is Mental Metabolic Health. Symptoms in the mind are downstream of systems in the body. Read the systems, and the person’s mental state stops being a mystery you manage and becomes a picture you can move.'},
+ {t:'normal',k:'The Microglial Activation Profile',title:'One panel, read across many systems at once.',body:'The Mental M.A.P estimates the likelihood of microglial activation and neuroinflammation from markers that are usually read in isolation and never connected. Together they tell you where the fire is coming from.',markers:['Blood','Urine','Stool','Methylation','Nutrient status']},
+ {t:'normal',k:'Pillar 1 · Methylation',title:'Methylation is the switchboard behind neurotransmitters, detox, and repair.',body:'When methylation runs poorly, the raw materials for a steady mood and a clear head never get made or cleared properly. It is one of the first systems the FMHP method teaches you to read and support.'},
+ {t:'normal',k:'Pillar 2 · Nervous system',title:'The nervous system, and the vagus nerve, are the body’s off-switch for inflammation.',body:'A dysregulated nervous system keeps the brain’s immune response stuck on. Restoring vagal tone is not a relaxation add-on, it is a direct lever on the neuroinflammation driving the symptoms.'},
+ {t:'normal',k:'Pillar 3 · Gut health',title:'The gut talks to the brain all day. The Mental M.A.P reads the conversation.',body:'A leaking, inflamed, or dysbiotic gut sends inflammatory signals straight to the brain. This is why so much mental-health work quietly stalls until the gut is addressed at the root.'},
+ {t:'normal',k:'From picture to protocol',title:'A map is only useful if it points somewhere.',body:'Once the picture is clear, the NeuroLongevity Index and targeted NeuroCeuticals turn it into a protocol. You stop stacking generic supplements and start correcting the specific systems the panel flagged.'},
+ {t:'dark',title:'Stop guessing at the brain. <span class="a">Measure it</span>, then move it.'},
+
+ {t:'section',idx:'Part Three',title:'What This Makes Possible'},
+ {t:'normal',k:'The practice this builds',title:'You become the practitioner who finds the root cause everyone else refers away.',body:'Clients who were told everything was normal finally get an answer, and a protocol that matches it. That is the work that fills a practice through word of mouth, because results like that do not stay quiet.'},
+ {t:'normal',k:'Why Brendan, why Metabolic Solutions',title:'Taught by the researcher who built the method.',body:'Brendan Vermeire is a Mental and Metabolic Health Researcher, a Board-Certified Holistic Health Practitioner and Master Nutrition Coach, founder of the Metabolic Solutions Institute and its nonprofit research foundation, and host of the Holistic Savage podcast.'},
+ {t:'dark',title:'The next era of mental-health care will be <span class="a">functional</span>. Be the practitioner who leads it.'},
+
+ {t:'section',idx:'Your Next Step',title:'Become a Functional Mental Health Practitioner'},
+ {t:'normal',k:'Inside the FMHP Certificate Program',title:'The full method, built to run in your own practice.',body:'Over 100 hours of coursework with live case studies: how to run and interpret the Mental M.A.P, methylation, the nervous system and vagus nerve, and gut health. Taken as a full certificate or as individual modules, because different practices have different needs.'},
+ {t:'cta',title:'Ready to work mental health at the root?',chips:['Explore the FMHP Certificate Program','Start with the Mental M.A.P'],disc:'Educational content for health and fitness practitioners. Nothing here is medical advice, and no clinical or patient result is guaranteed. Outcomes vary by client, case, and how the method is applied.'},
+];
+
+const deck=document.getElementById('deck');
+function helix(kind){return `<svg class="helix ${kind==='title'?'title-helix':'corner-helix'}" viewBox="0 0 120 300"><use href="#helix"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.markers) h+=`<div class="markers">`+s.markers.map(m=>`<div class="mk">${m}</div>`).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">METABOLIC SOLUTIONS INSTITUTE &middot; <b>Brendan Vermeire</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map((c,ci)=>`<div class="chip${ci===0?' solid':''}">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.helix) h+=helix(s.helix);
+  else if(s.t==='title') h+=helix('title');
+  else if(s.t==='normal') h+=helix('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
