@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relationship Arbitrage, a masterclass with Dustin Riechmann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05283a;
+    --panel:#0b3a52;
+    --rule:#1c5673;
+    --ink:#eef4f7;
+    --muted:#a7c0cd;
+    --accent:#ffa000;
+    --accent2:#ff8000;
+    --head:'Sora',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative}
+  .slide{width:100%;max-width:960px;background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:64px 72px;min-height:66vh;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.32);position:relative;overflow:hidden}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* leap motif: a rising accent arc top-left */
+  .slide::before{content:'';position:absolute;top:0;left:0;height:5px;width:46%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:0 0 6px 0}
+  .kick{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:700;font-size:60px;line-height:1.04;margin:0 0 18px}
+  h2{font-family:var(--head);font-weight:600;font-size:42px;line-height:1.08;margin:0 0 20px}
+  h3{font-family:var(--head);font-weight:600;font-size:30px;line-height:1.15;margin:0 0 12px}
+  p{font-size:23px;line-height:1.5;color:var(--muted);margin:0 0 14px;max-width:44ch}
+  .lead{font-size:27px;color:var(--ink)}
+  .em{color:var(--accent);font-style:italic}
+  ul{margin:14px 0 0;padding:0;list-style:none}
+  li{font-size:22px;line-height:1.4;color:var(--ink);padding:16px 0 16px 40px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:0;top:24px;width:16px;height:16px;border-radius:50%;
+    border:3px solid var(--accent)}
+  li b{font-weight:600}
+  li span{display:block;color:var(--muted);font-size:18px;margin-top:4px}
+  .big{font-family:var(--head);font-size:120px;line-height:.98;font-weight:700}
+  .strike{color:transparent;-webkit-text-stroke:2px #eef4f755;position:relative}
+  .strike::after{content:'';position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--accent);transform:rotate(-2deg)}
+  .row{display:flex;gap:20px;margin-top:20px;flex-wrap:wrap}
+  .cell{flex:1;min-width:210px;background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:22px 24px}
+  .cell .n{font-family:var(--head);color:var(--accent);font-size:26px;font-weight:700;margin-bottom:8px}
+  .cell p{font-size:17px;margin:0}
+  .steps{counter-reset:s;margin-top:18px}
+  .steps li{padding-left:56px}
+  .steps li::before{counter-increment:s;content:counter(s);border:none;background:var(--accent);color:#05283a;
+    width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:var(--body);font-weight:700;font-size:16px;top:16px;left:6px}
+  .who{font-size:19px;color:var(--muted);margin-top:auto}
+  .who b{color:var(--ink)}
+  .disc{font-size:15px;color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.45}
+  .ctaline{font-size:24px;color:var(--ink);margin-top:8px}
+  .ctaline b{color:var(--accent)}
+  .pres{font-size:19px;color:var(--muted);margin-top:26px}
+  .pres b{color:var(--ink);font-weight:600}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--muted);letter-spacing:.08em;
+    font-weight:600;background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:8px 16px}
+  #dots{position:fixed;bottom:22px;left:26px;display:flex;gap:7px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent);width:20px;border-radius:4px}
+  .hint{position:fixed;top:18px;left:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  @media(max-width:640px){.slide{padding:40px 30px}h1{font-size:40px}h2{font-size:30px}.big{font-size:74px}p,li{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="hint">7-Figure Leap · masterclass sample · use arrow keys</div>
+<div id="stage"><div id="slide" class="slide on"></div></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass',h:'Relationship Arbitrage',p:'How to grow past seven figures by borrowing other people’s audiences, one podcast guest spot at a time.',pres:'A live session from <b>7-Figure Leap</b>, hosted by its founder'},
+ {t:'promise',kick:'What you will leave with',h:'Three things, in one live hour.',li:[['Where your next 100 buyers already gather','Not a new platform to build. Rooms that already have your audience in them.'],['A pitch that gets you booked','The difference between the guests hosts chase and the ones they ignore.'],['How to turn one episode into revenue','The step almost every guest skips, and why it is the only one that pays.']]},
+ {t:'audience',kick:'Who this is for',h:'You are great at the work. Not enough people know it.',p:'Coaches, consultants and service based founders with a real offer and real results, who have hit the ceiling of the audience they can reach on their own.',who:'<b>The trap:</b> you post more, you launch more, you chase the algorithm harder, and reach still costs more every quarter.'},
+ {t:'reframe',kick:'The reframe',big1:'Audience.',big2:'Or <span class="em">borrowed</span> audience.',p:'Building your own audience is slow and you pay for every inch of it. Borrowing one that already trusts the host is fast, warm, and the host thanks you for showing up. That gap is the arbitrage.'},
+ {t:'part',kick:'Part one',h:'Why growth stalls at the ceiling.'},
+ {t:'point',kick:'The core problem',h:'You are renting attention by the click.',p:'Cold ads and cold content start every conversation from zero trust. Costs climb, and the moment you stop paying or posting, the reach stops with it. You never own the relationship.'},
+ {t:'point',kick:'The core problem',h:'The one channel a machine cannot copy.',p:'AI can write the post, clone the voice and flood every feed with more of the same. What it cannot do is sit in a real conversation on someone else’s show and earn that host’s trust in front of their audience. Human to human is the moat.'},
+ {t:'framework',kick:'The core problem',h:'Buying attention vs. borrowing trust.',row:[['Buying','You pay per click for strangers who owe you nothing. Reach ends when the budget does.'],['Borrowing','You are introduced by a host the audience already trusts. The trust transfers to you.']],p:'Guesting is the only channel where someone else’s credibility does the warming up for you.'},
+ {t:'part',kick:'Part two',h:'The Five P’s.'},
+ {t:'cycle',kick:'The method',h:'The Five P’s of a profitable guest spot.',steps:['Purpose: pick the one outcome this appearance is for','Plan: build the short list of shows your buyers already hear','Pitch: give the host an easy, obvious yes','Perform: teach one thing so well they want more','Profit: send every listener to a clear next step and track it'],p:'Most guests do the first four and quietly skip the fifth. That is the whole difference between exposure and revenue.'},
+ {t:'point',kick:'The step everyone skips',h:'Profit is not luck. It is a plan.',p:'A guest spot without a clear call to action is a nice chat. The Profit step gives every listener one place to go, and a way to measure what came back, so a single episode becomes a number you can point to instead of a vanity mention.'},
+ {t:'point',kick:'Pitch',h:'Be the guest hosts chase.',p:'Hosts do not want a resume. They want a guest who will make their show better and make them look good to their listeners. Lead with the value to the room, not the favor to you, and the yes gets easy.'},
+ {t:'framework',kick:'The bigger picture',h:'Where guest spots fit your offers.',row:[['Wide','Books, talks and guest spots that create new customers at the top.'],['Deep','Coaching and consulting that turn a few of them into real cash.'],['Long','A mastermind or membership that keeps them for years.']],p:'Guesting feeds the wide layer. You only need those three offer types to reach seven figures.'},
+ {t:'part',kick:'Part three',h:'What a booked-out quarter looks like.'},
+ {t:'looks',kick:'The outcome',h:'A pipeline you can see.',li:[['A short list that keeps producing','A handful of the right shows, pitched on repeat, not one lucky feature.'],['Warm leads instead of cold clicks','People arrive already sold on you because a host they trust vouched for you.'],['Revenue you can trace to an episode','The Profit step means you know which appearance paid, and you do more of it.']]},
+ {t:'whyme',kick:'Why 7-Figure Leap',h:'Built the hard way, then turned into a system.',li:[['From engineer to seven figures','Seventeen years in traffic engineering, then a leap into building businesses.'],['Co-founded a snack brand into Walmart','FireCreek Snacks, grown on borrowed audiences and later exited.'],['Host of the 7-Figure Leap podcast','Rich relationships and smart strategies, taught every week.']]},
+ {t:'cta',kick:'Your next step',h:'Want to find your rooms?',ctas:['<b>Book a free strategy call</b> and we will map the shows your buyers already listen to.','<b>Grab the Podcast Guest Scorecard</b> to see how bookable you are right now.'],disc:'This masterclass is educational. It shares frameworks and approaches for growing a business through podcast guesting; it is not advice for your specific situation and not a guarantee of any particular result. Outcomes vary by business.'}
+];
+
+const stage=document.getElementById('slide');
+const dots=document.getElementById('dots');
+const nav=document.getElementById('nav');
+let i=0;
+S.forEach(()=>{const d=document.createElement('i');dots.appendChild(d)});
+function esc(x){return x}
+function render(){
+ const s=S[i];let h='';
+ if(s.kick)h+=`<div class="kick">${s.kick}</div>`;
+ if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="lead">${s.p}</p><div class="pres">${s.pres}</div>`}
+ else if(s.t==='reframe'){h+=`<div class="big"><span class="strike">${s.big1}</span></div><div class="big">${s.big2}</div><p style="margin-top:24px">${s.p}</p>`}
+ else if(s.t==='part'){h+=`<h1>${s.h}</h1>`}
+ else if(s.row){h+=`<h2>${s.h}</h2><div class="row">`+s.row.map(c=>`<div class="cell"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+`</div>`+(s.p?`<p style="margin-top:22px">${s.p}</p>`:'')}
+ else if(s.steps){h+=`<h2>${s.h}</h2><ul class="steps">`+s.steps.map(x=>`<li>${x}</li>`).join('')+`</ul>`+(s.p?`<p style="margin-top:20px">${s.p}</p>`:'')}
+ else if(s.li){h+=`<h2>${s.h}</h2><ul>`+s.li.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')+`</ul>`}
+ else if(s.t==='cta'){h+=`<h2>${s.h}</h2>`+s.ctas.map(c=>`<div class="ctaline">${c}</div>`).join('')+`<div class="disc">${s.disc}</div>`}
+ else{h+=`<h2>${s.h}</h2>`+(s.p?`<p class="lead" style="color:var(--muted)">${s.p}</p>`:'')+(s.who?`<div class="who">${s.who}</div>`:'')}
+ stage.innerHTML=h;
+ [...dots.children].forEach((d,k)=>d.className=k===i?'on':'');
+ nav.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));stage.classList.remove('on');void stage.offsetWidth;stage.classList.add('on');render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)go(i+1);else go(i-1)});
+render();
+</script>
+</body>
+</html>
