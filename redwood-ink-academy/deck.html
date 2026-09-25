@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make the Reader's Job Easy, a masterclass with Crystal Herron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F2EC;
+    --panel:#FCFBF8;
+    --rule:#E5E0D6;
+    --ink:#16233D;
+    --muted:#5C6579;
+    --accent:#00147F;
+    --head:'Manrope',system-ui,sans-serif;
+    --body:'Poppins',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative}
+  .slide{width:100%;max-width:980px;background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+    padding:68px 80px;min-height:66vh;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 20px 50px rgba(22,35,61,.09);position:relative;overflow:hidden}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* editor's mark: a short navy underline that sits under the kicker like a copyedit stroke */
+  .kick{font-family:var(--body);font-size:13px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:26px;position:relative;padding-bottom:14px;display:inline-block}
+  .kick::after{content:'';position:absolute;left:0;bottom:0;width:52px;height:3px;background:var(--accent);border-radius:2px}
+  h1{font-family:var(--head);font-weight:800;font-size:58px;line-height:1.06;margin:0 0 20px;letter-spacing:-.02em;color:var(--ink)}
+  h2{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.12;margin:0 0 20px;letter-spacing:-.01em;color:var(--ink)}
+  p{font-size:22px;line-height:1.55;color:var(--muted);margin:0 0 14px;max-width:50ch}
+  .lead{font-size:26px;color:var(--ink);font-weight:400}
+  .em{color:var(--accent);font-weight:700}
+  ul{margin:20px 0 0;padding:0;list-style:none}
+  li{font-size:21px;line-height:1.4;color:var(--ink);padding:18px 0 18px 44px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:0;top:24px;width:22px;height:3px;border-radius:2px;background:var(--accent)}
+  li b{font-weight:700}
+  li span{display:block;color:var(--muted);font-size:17px;margin-top:6px;font-weight:400}
+  .big{font-family:var(--head);font-size:62px;line-height:1.07;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+  .strike{color:var(--muted);position:relative;opacity:.85;font-weight:700}
+  .strike::after{content:'';position:absolute;left:-1%;right:-1%;top:52%;height:5px;background:var(--accent);transform:rotate(-1.2deg);border-radius:3px}
+  .row{display:flex;gap:18px;margin-top:24px;flex-wrap:wrap}
+  .cell{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:24px 26px}
+  .cell .n{font-family:var(--head);color:var(--accent);font-size:20px;font-weight:700;margin-bottom:10px}
+  .cell p{font-size:17px;margin:0;color:var(--muted)}
+  .who{font-size:19px;color:var(--muted);margin-top:auto;padding-top:26px}
+  .who b{color:var(--ink)}
+  .disc{font-size:15px;color:var(--muted);margin-top:28px;max-width:68ch;line-height:1.45}
+  .ctaline{font-size:23px;color:var(--ink);margin-top:12px;padding-left:20px;position:relative}
+  .ctaline::before{content:'';position:absolute;left:0;top:14px;width:10px;height:3px;background:var(--accent);border-radius:2px}
+  .ctaline b{color:var(--accent);font-weight:700}
+  .pres{font-size:18px;color:var(--muted);margin-top:28px}
+  .pres b{color:var(--ink);font-weight:700}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--muted);letter-spacing:.08em;
+    font-weight:600;background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:8px 16px}
+  #dots{position:fixed;bottom:22px;left:26px;display:flex;gap:7px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent);width:20px;border-radius:4px}
+  .hint{position:fixed;top:18px;left:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  @media(max-width:640px){.slide{padding:40px 28px}h1{font-size:38px}h2{font-size:28px}.big{font-size:40px}p,li{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="hint">Redwood Ink · masterclass sample · use arrow keys</div>
+<div id="stage"><div id="slide" class="slide on"></div></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass',h:'Make the Reader\'s Job Easy',p:'How to write your research as a story people actually read, understand, and cite.',pres:'With <b>Crystal Herron, PhD, ELS(D), CMPP</b>, founder of Redwood Ink, biomedical scientist turned scientific editor'},
+ {t:'promise',kick:'What you will leave with',h:'Three shifts, in one live hour.',li:[['Why clear beats clever','The reason simple writing gets read while dense writing gets skimmed.'],['A structure reviewers can follow','How to frame a paper so the main finding lands in one line.'],['Moves you can use this week','Small, repeatable edits that make any draft easier to read.']]},
+ {t:'audience',kick:'Who this is for',h:'Your science is strong. The reading of it is a fight.',p:'Researchers, clinicians, and medical writers with a manuscript, a grant, or a thesis, who are tired of reviewers saying it is hard to follow when the work itself is sound.',who:'<b>The trap:</b> you were trained to sound like the papers you read, so you write to prove rigor, and the reader has to work to find what you actually found.'},
+ {t:'reframe',kick:'The reframe',big1:'Write to sound impressive.',big2:'Make the reader\'s job <span class="em">easy</span>.',p:'Complex language gives the illusion of impressing a reader. It does the opposite. Simple is not simplistic. Simple is smart, because a reader who follows you effortlessly is a reader who believes you and remembers your work.'},
+ {t:'stakes',kick:'The stakes',h:'A paper no one can follow is a paper no one uses.',p:'Solid results that a reader cannot parse get skimmed, misread, or set aside. The finding you worked years for competes with attention, and clarity is the only thing that wins it.'},
+ {t:'part',kick:'Part one',h:'Why good science goes unread.'},
+ {t:'point',kick:'The core problem',h:'You are writing to store the work, not to be understood.',p:'Most drafts read like a record of everything that was done, in the order it happened. A reader does not want the archive. They want the story: what question, what you found, and why it matters, in that order.'},
+ {t:'point',kick:'The core problem',h:'Jargon feels safe. It is the risk.',p:'Long words and passive constructions feel careful and credible, so we reach for them. But every extra clause is another place a reader can get lost, and a lost reader is a reader who stops trusting the argument.'},
+ {t:'signs',kick:'The core problem',h:'The signs the reader is doing your work for you.',li:[['Reviewers ask what the main point is','The finding is in there, but never stated plainly in one line.'],['Sentences run three clauses deep','The idea is sound; the reader has to hold too much at once.'],['You edit for grammar, never for story','The words get polished while the structure stays hard to follow.']]},
+ {t:'part',kick:'Part two',h:'The system: write it as a story.'},
+ {t:'framework',kick:'The model',h:'Four moves that carry a reader through.',row:[['Frame the story','Decide the one message before you draft, and build the paper around it.'],['Develop and order it','Sequence the sections and paragraphs so each idea sets up the next.'],['Structure the sentences','Write lines a reader parses once, with the subject and action up front.'],['Cut the clutter','Remove the jargon and the filler until only the meaning is left.']],p:'This is the spine of Scientific Writing Simplified: frame, develop, structure, cut, so clarity is a process you repeat, not a talent you wait for.'},
+ {t:'point',kick:'Move one',h:'Frame the story before you write.',p:'Name the single message of the paper in one sentence, the way you would tell a colleague at the bench. Every section then has a job: to earn, support, or extend that one line. The framing is the writing.'},
+ {t:'point',kick:'Move two',h:'Build sentences a reader parses once.',p:'Put the subject and the action at the front. Choose active or passive on purpose, not by habit. When each sentence carries one clear idea, the reader moves forward instead of rereading.'},
+ {t:'point',kick:'Move three',h:'Cut until only the meaning is left.',p:'Clarity is mostly subtraction. Remove the throat-clearing, the nominalizations, and the words that hedge, and the finding stands out on its own. Shorter is not dumber. Shorter is respectful of the reader.'},
+ {t:'part',kick:'Part three',h:'What changes when the reader can follow.'},
+ {t:'looks',kick:'The outcome',h:'The same science, finally landing.',li:[['Reviewers get it on the first read','The main finding is obvious, so feedback is about the work, not the writing.'],['Your papers get read and cited','A reader who follows you easily is a reader who uses and shares your work.'],['You draft faster and doubt less','With a frame and a process, the blank page stops being a wall.']]},
+ {t:'whyme',kick:'Why Crystal',h:'A bench scientist who became your editor.',li:[['PhD in biomedical science','I did the research, so I know how the work is really done and written.'],['ELS(D) and CMPP certified','The highest editorial credential in the life sciences, plus medical publication ethics.'],['15+ years editing, 25 years teaching','I have edited thousands of manuscripts and taught researchers at the institutions you know.']]},
+ {t:'cta',kick:'Your next step',h:'Ready to make your reader\'s job easy?',ctas:['<b>Join Scientific Writing Simplified</b>, the complete system that walks you from narrative structure to sentence-level clarity.','<b>Book a consulting session</b> if you want personal help with a specific manuscript, grant, or writing process.'],disc:'This masterclass is educational. It shares frameworks and approaches for scientific and medical writing; it is not advice for your specific manuscript and not a guarantee of publication, acceptance, citations, income, or any particular result. Outcomes vary.'}
+];
+
+const stage=document.getElementById('slide');
+const dots=document.getElementById('dots');
+const nav=document.getElementById('nav');
+let i=0;
+S.forEach(()=>{const d=document.createElement('i');dots.appendChild(d)});
+function render(){
+ const s=S[i];let h='<div class="inner">';
+ if(s.kick)h+=`<div class="kick">${s.kick}</div>`;
+ if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="lead">${s.p}</p><div class="pres">${s.pres}</div>`}
+ else if(s.t==='reframe'){h+=`<div class="big"><span class="strike">${s.big1}</span></div><div class="big">${s.big2}</div><p style="margin-top:24px">${s.p}</p>`}
+ else if(s.t==='part'){h+=`<h1>${s.h}</h1>`}
+ else if(s.row){h+=`<h2>${s.h}</h2><div class="row">`+s.row.map(c=>`<div class="cell"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+`</div>`+(s.p?`<p style="margin-top:22px">${s.p}</p>`:'')}
+ else if(s.li){h+=`<h2>${s.h}</h2><ul>`+s.li.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')+`</ul>`}
+ else if(s.t==='cta'){h+=`<h2>${s.h}</h2>`+s.ctas.map(c=>`<div class="ctaline">${c}</div>`).join('')+`<div class="disc">${s.disc}</div>`}
+ else{h+=`<h2>${s.h}</h2>`+(s.p?`<p class="lead" style="color:var(--muted)">${s.p}</p>`:'')+(s.who?`<div class="who">${s.who}</div>`:'')}
+ h+='</div>';
+ stage.innerHTML=h;
+ [...dots.children].forEach((d,k)=>d.className=k===i?'on':'');
+ nav.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));stage.classList.remove('on');void stage.offsetWidth;stage.classList.add('on');render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)go(i+1);else go(i-1)});
+render();
+</script>
+</body>
+</html>
