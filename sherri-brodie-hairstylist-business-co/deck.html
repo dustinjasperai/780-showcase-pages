@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cutting with Confidence — A Masterclass with Sherri Brodie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6efe6; --panel:#ece1d3; --rule:#e0d2bf;
+    --accent:#9c2f4a; --ink:#241c1a; --body:#4a403c; --dim:#a1907f; --sand:#efe4d4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#eadfce;font-family:'Manrope',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1}
+  .kicker{font-family:'Manrope',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Bodoni Moda',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.06;letter-spacing:-.003em}
+  .t-title h1{font-size:7.0vw;max-width:74%}
+  .t-normal h1{font-size:4.2vw;max-width:88%;line-height:1.1}
+  .t-normal .body{font-family:'Manrope',sans-serif;font-size:1.24vw;color:var(--body);margin-top:2.9vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.9vw;color:var(--accent);margin-top:3.0vh;max-width:82%;line-height:1.36;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Manrope',sans-serif;font-size:1.05vw;font-weight:600;color:var(--accent);margin-bottom:1.8vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.8vw;max-width:84%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.0vh}
+  .t-dark{background:radial-gradient(120% 140% at 82% 12%,#3a2930 0%,#241c1a 100%)}
+  .t-dark h1{color:var(--bg);font-size:4.9vw;max-width:88%;font-weight:500}
+  .t-dark h1 .hl{color:#e5849b}
+  .t-cta{background:radial-gradient(120% 140% at 82% 12%,#3a2930 0%,#241c1a 100%)}
+  .t-cta h1{color:var(--bg);font-size:5.0vw;max-width:86%}
+  .t-cta .body{font-family:'Manrope',sans-serif;color:#e7dbcb;font-size:1.3vw;margin-top:2.6vh;max-width:72%;line-height:1.62}
+  .chips{display:flex;gap:1.2vw;margin-top:4.0vh;flex-wrap:wrap}
+  .chip{border:1.6px solid #e5849b;color:var(--bg);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.1vw;font-weight:500;font-family:'Manrope',sans-serif}
+  .brandline{font-family:'Manrope',sans-serif;font-size:1.1vw;color:var(--body);margin-top:3.6vh;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:5.0vh;font-family:'Manrope',sans-serif;font-size:.8vw;color:#c3b29c;line-height:1.5;max-width:84%}
+  .hud{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(0,0,0,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .mo-motif{position:absolute;pointer-events:none}
+  .title-mo{right:6.5%;top:50%;transform:translateY(-50%);width:22vw;height:22vw;opacity:.95}
+  .corner-mo{right:6%;bottom:8%;width:8vw;height:8vw;opacity:.5}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:12vw}.t-normal h1{font-size:8.0vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.6vw}.t-section h1{font-size:9.6vw}.t-dark h1{font-size:8.2vw}
+    .t-cta h1{font-size:9.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}.disc{font-size:2vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">On Point Hair by Sherri</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: the precise line, a single confident section stroke, the cut as craft -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mo" viewBox="0 0 120 120">
+  <g fill="none" stroke="#9c2f4a" stroke-width="2.4" stroke-linecap="round">
+    <path d="M20 96 C40 40 70 34 100 24" opacity="0.85"/>
+    <circle cx="34" cy="40" r="9" fill="none" stroke="#9c2f4a" opacity="0.9"/>
+    <circle cx="52" cy="40" r="9" fill="none" stroke="#9c2f4a" opacity="0.9"/>
+    <path d="M40 46 L86 78 M52 34 L92 60" stroke-width="2.0" opacity="0.75"/>
+    <circle cx="100" cy="24" r="4.5" fill="#9c2f4a" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Cutting with Confidence.',sub:'The masterclass on how mastering the cut, not more marketing, is what fills your chair and keeps the right clients coming back.',brand:true,mo:'title'},
+ {t:'normal',k:'Who this is for',title:'You can do the work. What you cannot shake is the second-guessing.',body:'You are talented and you care, but somewhere in the consultation you start to doubt, so you over-check the cut, soften the price, and hope they rebook. Some do. Plenty quietly do not, and you tell yourself you just need more new clients. You are busy most days and still not booked the way you want to be. That is not a talent problem, and one more marketing tip has never once fixed it.'},
+ {t:'dark',title:'A booked out chair was never about being busy. It is about being <span class="hl">trusted</span>.'},
+
+ {t:'section',idx:'Part One',title:'Why "Just Get More Clients" Never Filled Your Chair'},
+ {t:'normal',k:'The real leak',title:'Clients rarely leave over price. They leave when the result is not something they can count on.',body:'When a cut is a little different every time, a client cannot picture herself in your chair next month, so she keeps her options open. You feel it, so you discount to hold onto people and explain more than you should. Meanwhile you pour your energy into finding new clients while the back door stays open. Chasing new faces to replace the ones you lost is the most expensive way to run a chair.'},
+ {t:'normal',k:'The confidence gap',title:'Guessing at the cut is upstream of every money problem you have.',body:'If you are not fully sure how you got a result, you cannot repeat it on purpose, and if you cannot repeat it you cannot charge for it with a straight face. So the price stays low, the rebook stays soft, and the chair never quite fills. It looks like a marketing problem from the outside. It almost never is. It starts with the cut.'},
+ {t:'dark',title:'You do not have a marketing problem. You have a <span class="hl">confidence-at-the-chair</span> problem.'},
+
+ {t:'section',idx:'Part Two',title:'Cutting with Confidence: Clarity and Repetition'},
+ {t:'normal',k:'The whole method in one line',title:'Confidence comes from clarity and repetition, not from talent you either have or you do not.',body:'Every stylist I have watched go from busy to genuinely booked was built on those two things. Clarity, so you can see the cut before you ever pick up the shears, and repetition, so the same result lands every single time. Put them together on purpose and the doubt goes quiet, because you finally understand exactly what your hands are doing and why.'},
+ {t:'normal',k:'Pillar one, clarity',title:'See the cut before you make it.',body:'Confidence starts in the consultation, not the first section. When you can read the head, the hair and what the client actually wants, and decide the shape before the scissors move, you stop discovering the haircut halfway through. Clarity is the difference between hoping it works out and knowing where you are going, and a client can feel which one she is sitting in front of.'},
+ {t:'normal',k:'Pillar two, repetition',title:'Master the foundation you can trust every time.',body:'A handful of core techniques, drilled until they are automatic, are what make a cut repeatable. When the foundation lives in your hands you are not reinventing the wheel on every client, so you work faster, cleaner and calmer. This is what clarity and repetition were always for, turning a good day behind the chair into your normal one.'},
+ {t:'normal',k:'Pillar three, the confident consult',title:'Price it and rebook it without apology.',body:'A stylist who trusts her cut does two things differently. She quotes her price as a fact instead of a question, and she books the next visit before the client leaves the chair, because she already knows the result will hold. Nothing pushy, nothing salesy. Just the natural confidence of someone who knows her work is worth it and does not need the client to reassure her.'},
+ {t:'normal',k:'Pillar four, fill your chair',title:'Turn first timers into regulars who do not shop around.',body:'When the cut is repeatable and the experience is consistent, retention stops being luck. The first time guest becomes a standing appointment, the standing appointment refers her friends, and the chair fills from the inside out. A loyal clientele is not something you chase with offers. It is what a trustworthy result quietly builds for you, week after week.'},
+ {t:'dark',title:'Master the cut, and the chair fills itself, because a client who trusts your hands <span class="hl">does not shop around</span>.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes When You Cut with Confidence'},
+ {t:'normal',k:'The business this builds',title:'A full, loyal book, proper prices, and income you can actually count on.',body:'When you trust your cut, the whole business steadies. The rebook rate climbs, the discounting stops, and the price finally matches the work. You stop white knuckling every slow week because the chair is full of people who come back on their own. That is what makes the money consistent, and consistent money is what turns a job you love into a life you can build on.'},
+ {t:'dark',title:'The goal was never a busier chair. It was a <span class="hl">booked one you actually enjoy</span> standing behind.'},
+ {t:'normal',k:'Why Sherri',title:'Forty years behind the chair, and two decades teaching the ones who teach.',body:'Sherri Brodie has spent more than forty years cutting hair and rebuilt her own business four times. For about twenty of those years she was a platform educator for Sebastian, Wella and Aquage, teaching thousands of stylists the fundamentals of a confident cut. Everything in this masterclass comes from that real work at the chair and on the stage, taught, in her words, with humility and heart.'},
+
+ {t:'section',idx:'Your Next Step',title:'Keep Cutting with Confidence'},
+ {t:'cta',title:'Ready to trust your cut and fill your chair?',body:'Take the next step with Sherri Brodie and On Point Hair.',chips:['Learn the Cutting with Confidence method','Book a Fill Your Chair strategy call','Join the On Point Pro Community'],disc:'Educational content for hairstylists and salon professionals. No income or business result is guaranteed. Results vary by individual, skill, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function mo(kind){return `<svg class="mo-motif ${kind==='title'?'title-mo':'corner-mo'}"><use href="#mo"/></svg>`}
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">On Point Hair <b>by Sherri</b> · Sherri Brodie</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.mo) h+=mo(s.mo);
+  else if(s.t==='corner') h+=mo('corner');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
