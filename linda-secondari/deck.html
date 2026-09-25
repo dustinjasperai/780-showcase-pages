@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Like a Publisher, a masterclass with Linda Secondari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sanchez&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F3EA;
+    --panel:#FFFFFF;
+    --rule:#E5DDCB;
+    --ink:#022452;
+    --muted:#57648A;
+    --accent:#C41230;
+    --head:'Sanchez',Georgia,serif;
+    --body:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative}
+  .slide{width:100%;max-width:960px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;
+    padding:64px 76px;min-height:66vh;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 22px 54px rgba(2,36,82,.10);position:relative;overflow:hidden}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* editor's red mark: a thin crimson margin rule down the left edge of the page */
+  .slide::before{content:'';position:absolute;top:56px;bottom:56px;left:40px;width:3px;
+    background:var(--accent);border-radius:2px;opacity:.9}
+  .inner{padding-left:34px}
+  .kick{font-family:var(--body);font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:400;font-size:56px;line-height:1.08;margin:0 0 20px;letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:var(--head);font-weight:400;font-size:40px;line-height:1.12;margin:0 0 20px;color:var(--ink)}
+  h3{font-family:var(--head);font-weight:400;font-size:28px;line-height:1.15;margin:0 0 12px}
+  p{font-size:22px;line-height:1.5;color:var(--muted);margin:0 0 14px;max-width:48ch}
+  .lead{font-size:26px;color:var(--ink)}
+  .em{color:var(--accent);font-style:italic}
+  ul{margin:16px 0 0;padding:0;list-style:none}
+  li{font-size:21px;line-height:1.4;color:var(--ink);padding:16px 0 16px 40px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:2px;top:22px;width:16px;height:3px;border-radius:2px;background:var(--accent)}
+  li b{font-weight:800}
+  li span{display:block;color:var(--muted);font-size:17px;margin-top:5px;font-weight:400}
+  .big{font-family:var(--head);font-size:64px;line-height:1.08;font-weight:400;letter-spacing:-.01em;color:var(--ink)}
+  .strike{color:var(--muted);position:relative;opacity:.85}
+  .strike::after{content:'';position:absolute;left:-1%;right:-1%;top:52%;height:5px;background:var(--accent);transform:rotate(-1.5deg);border-radius:3px}
+  .row{display:flex;gap:18px;margin-top:22px;flex-wrap:wrap}
+  .cell{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:22px 24px}
+  .cell .n{font-family:var(--head);color:var(--accent);font-size:22px;font-weight:400;margin-bottom:8px}
+  .cell p{font-size:17px;margin:0;color:var(--muted)}
+  .who{font-size:19px;color:var(--muted);margin-top:auto;padding-top:24px}
+  .who b{color:var(--ink)}
+  .disc{font-size:15px;color:var(--muted);margin-top:26px;max-width:66ch;line-height:1.45}
+  .ctaline{font-size:23px;color:var(--ink);margin-top:10px}
+  .ctaline b{color:var(--accent);font-weight:800}
+  .pres{font-size:18px;color:var(--muted);margin-top:26px}
+  .pres b{color:var(--ink);font-weight:700}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--muted);letter-spacing:.08em;
+    font-weight:700;background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:8px 16px}
+  #dots{position:fixed;bottom:22px;left:26px;display:flex;gap:7px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent);width:20px;border-radius:4px}
+  .hint{position:fixed;top:18px;left:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  @media(max-width:640px){.slide{padding:40px 28px}.inner{padding-left:20px}h1{font-size:38px}h2{font-size:28px}.big{font-size:40px}p,li{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="hint">Studiolo Secondari · masterclass sample · use arrow keys</div>
+<div id="stage"><div id="slide" class="slide on"></div></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass',h:'Think Like a Publisher',p:'How to position your book to sell before you write a single chapter.',pres:'With <b>Linda Secondari</b>, founder of Studiolo Secondari, 25 years and 20,000 titles in publishing'},
+ {t:'promise',kick:'What you will leave with',h:'Three things, in one live hour.',li:[['The one decision that sells a book','Why position, not prose, is what a publisher bets on.'],['How to see your book like a publisher','The three questions an editor asks before saying yes.'],['A roadmap you can act on this week','Where your book belongs, and how to write toward it.']]},
+ {t:'audience',kick:'Who this is for',h:'You have a book in you. You are not sure who it is for.',p:'First-time and emerging authors with an idea, a half-draft, or a finished manuscript, who want the book to land with real readers instead of disappearing into the pile.',who:'<b>The trap:</b> you keep polishing the writing, while the decisions that actually sell a book, who it is for and why they would pick it, get made last, or never.'},
+ {t:'reframe',kick:'The reframe',big1:'Write it, then find the readers.',big2:'Position it like a <span class="em">publisher</span> first.',p:'A publisher decides who a book is for and why it will sell before they ever acquire it. Authors usually do it in the reverse order, or not at all. Make the strategic call first and every later choice, the writing, the cover, the pitch, gets easier and sharper.'},
+ {t:'stakes',kick:'The stakes',h:'A book with no position is invisible.',p:'Beautiful writing that a reader cannot place does not get bought. When your book could be for anyone, it is compelling to no one, and the market quietly passes it to whoever made the choice on purpose.'},
+ {t:'part',kick:'Part one',h:'Why good books get passed over.'},
+ {t:'point',kick:'The core problem',h:'You are writing before you have decided who it is for.',p:'Most authors start with the pages and hope the audience appears later. Without a deliberate reader in mind, the manuscript drifts, and no cover, blurb or pitch can rescue a book that was never aimed at anyone.'},
+ {t:'point',kick:'The core problem',h:'Write from the heart is not a strategy.',p:'The default advice is to just tell your story and keep writing. It helps you finish, but it never answers the question every gatekeeper and every reader asks first, which is why this book, for me, right now.'},
+ {t:'signs',kick:'The core problem',h:'The signs you are leading with the wrong thing.',li:[['You cannot say who it is for in one line','You describe the plot or the topic, never the reader.'],['Your comps are all bestsellers','No honest sense of the shelf your book actually sits on.'],['Every next step feels like a guess','Self, hybrid or traditional, and no reason behind the pick.']]},
+ {t:'part',kick:'Part two',h:'Think like a publisher: the three questions.'},
+ {t:'framework',kick:'The model',h:'What a publisher asks before yes.',row:[['Who is it for','The real reader, not everyone, defined clearly enough to reach.'],['Why choose it','The one line and the honest comps that make it an easy pick.'],['Where it belongs','The market, the shelf, and the place it holds in a reader\'s life.']],p:'Answer these three before you write, and the book, the cover and the pitch all start pulling in the same direction.'},
+ {t:'point',kick:'Question one',h:'Who is this book really for.',p:'Trade vague for specific. Build a real picture of the reader, the shelf they already browse and the channels where they discover books, so you are writing to someone instead of to no one.'},
+ {t:'point',kick:'Question two',h:'Why would they choose it.',p:'Build the comparables the way an editor or agent does, then earn the one sharp line that says what your book is and who it beats. A clear comps set and a clean one-liner are what turn a maybe into a yes.'},
+ {t:'point',kick:'Question three',h:'Where does it belong.',p:'Category, shelf and discoverability are decisions, not afterthoughts. Metadata, keywords and the right category are engineered into a book that means to be found, and they shape how you write and package it.'},
+ {t:'part',kick:'Part three',h:'What changes when position leads.'},
+ {t:'looks',kick:'The outcome',h:'The same book, finally aimed.',li:[['You can pitch it in one line','A reader, an agent or a bookseller gets it in a sentence.'],['You know your publishing path','Self, hybrid or traditional, chosen for a reason, not by default.'],['You write toward a waiting reader','The manuscript, cover and launch all point the same way.']]},
+ {t:'whyme',kick:'Why Linda',h:'A publisher on your side of the desk.',li:[['25 years, 20,000 titles','A publishing creative director who has shaped books from idea to shelf.'],['Former Global Creative Director, Oxford University Press','I have made the acquire and position calls from inside the house.'],['Strategy first, then craft','I treat a book as a decision to get right early, not a draft to fix late.']]},
+ {t:'cta',kick:'Your next step',h:'Ready to position your book like a publisher?',ctas:['<b>Apply to The Strategic Author</b>, the small-group program where we position, pitch and map your book together.','<b>Book a discovery call</b> to find the one decision your book needs first.'],disc:'This masterclass is educational. It shares frameworks and approaches for positioning and publishing a book; it is not advice for your specific situation and not a guarantee of sales, deals, income or any particular result. Outcomes vary.'}
+];
+
+const stage=document.getElementById('slide');
+const dots=document.getElementById('dots');
+const nav=document.getElementById('nav');
+let i=0;
+S.forEach(()=>{const d=document.createElement('i');dots.appendChild(d)});
+function render(){
+ const s=S[i];let h='<div class="inner">';
+ if(s.kick)h+=`<div class="kick">${s.kick}</div>`;
+ if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="lead">${s.p}</p><div class="pres">${s.pres}</div>`}
+ else if(s.t==='reframe'){h+=`<div class="big"><span class="strike">${s.big1}</span></div><div class="big">${s.big2}</div><p style="margin-top:24px">${s.p}</p>`}
+ else if(s.t==='part'){h+=`<h1>${s.h}</h1>`}
+ else if(s.row){h+=`<h2>${s.h}</h2><div class="row">`+s.row.map(c=>`<div class="cell"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+`</div>`+(s.p?`<p style="margin-top:22px">${s.p}</p>`:'')}
+ else if(s.li){h+=`<h2>${s.h}</h2><ul>`+s.li.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')+`</ul>`}
+ else if(s.t==='cta'){h+=`<h2>${s.h}</h2>`+s.ctas.map(c=>`<div class="ctaline">${c}</div>`).join('')+`<div class="disc">${s.disc}</div>`}
+ else{h+=`<h2>${s.h}</h2>`+(s.p?`<p class="lead" style="color:var(--muted)">${s.p}</p>`:'')+(s.who?`<div class="who">${s.who}</div>`:'')}
+ h+='</div>';
+ stage.innerHTML=h;
+ [...dots.children].forEach((d,k)=>d.className=k===i?'on':'');
+ nav.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));stage.classList.remove('on');void stage.offsetWidth;stage.classList.add('on');render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)go(i+1);else go(i-1)});
+render();
+</script>
+</body>
+</html>
