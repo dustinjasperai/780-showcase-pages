@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Life by Design · Nicoa Dunne · Coffee With Nicoa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbf7f0; --panel:#f5ebdd; --rule:#e8ddca;
+    --ink:#2f2a24; --accent:#f08c4a; --accent-deep:#c96a22; --muted:#6b6157;
+    --espresso:#33251a;
+  }
+  html,body{height:100%}
+  body{background:#e7ddcc;font-family:'Source Sans Pro',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e7ddcc}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.02vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-deep);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',Helvetica,sans-serif;font-weight:600;color:var(--ink);line-height:1.16;letter-spacing:-.006em}
+  .t-title h1{font-size:4.6vw;max-width:92%;font-weight:700}
+  .t-normal h1{font-size:3.15vw;max-width:86%}
+  .t-normal .body{font-size:1.5vw;color:var(--muted);margin-top:2.6vh;max-width:77%;line-height:1.58;font-weight:400}
+  .sub{font-size:1.66vw;color:var(--muted);margin-top:3.2vh;max-width:80%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.28vw;font-weight:700;color:var(--accent-deep);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.7vw;max-width:92%;font-weight:700}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh;border-radius:3px}
+  .t-dark{background:var(--espresso);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:88%;font-style:italic;font-weight:500;color:#f6ede0}
+  .t-cta{background:radial-gradient(130% 130% at 50% 0%,#4a3423 0%,#2a1d13 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:86%;color:#faf3e8;font-weight:700}
+  .t-cta .sub{color:#e8d8c3}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#f7dcc2;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.22vw;font-weight:600}
+  .steps{display:flex;gap:0;margin-top:3.6vh;flex-wrap:wrap;max-width:94%}
+  .step{display:flex;align-items:center;font-size:1.12vw;font-weight:600;color:var(--ink)}
+  .step .n{display:inline-flex;align-items:center;justify-content:center;width:2.2vw;height:2.2vw;border-radius:50%;background:var(--accent);color:#fff;font-size:1.02vw;margin-right:.7vw}
+  .step .arw{color:var(--accent-deep);margin:0 .9vw;font-weight:700}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:#a89b88;font-style:italic;text-align:center;line-height:1.4}
+  .t-cta .disc{color:#c9b9a4}
+  .motif{position:absolute;pointer-events:none;opacity:.95}
+  .title-motif{right:7.5%;bottom:9%;width:19vw}
+  .corner-motif{right:6.2%;bottom:7.6%;width:8.4vw;opacity:.55}
+  .brandline{font-size:1.28vw;color:var(--muted);margin-top:3.4vh;font-weight:400;letter-spacing:.01em}
+  .brandline b{color:var(--accent-deep);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(47,42,36,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--muted);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.8vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.6vw}.step{font-size:2.6vw}.step .n{width:5vw;height:5vw;font-size:2.4vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Coffee With Nicoa</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a compass needle finding true north, over a horizon line -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="tn" viewBox="0 0 240 160">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="132" x2="222" y2="132" stroke="#c96a22" opacity="0.28"/>
+    <circle cx="120" cy="86" r="44" stroke="#6b6157" opacity="0.35"/>
+    <path d="M120 44 L134 86 L120 128 L106 86 Z" fill="#f08c4a" stroke="#f08c4a" opacity="0.95"/>
+    <path d="M120 44 L134 86 L120 86 Z" fill="#c96a22" stroke="#c96a22"/>
+    <circle cx="120" cy="86" r="4.5" fill="#2f2a24" stroke="#2f2a24"/>
+    <path d="M120 20 l3.5 9 9 3.5 -9 3.5 -3.5 9 -3.5 -9 -9 -3.5 9 -3.5 z" fill="#f08c4a" stroke="#f08c4a" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Life by Design',sub:'A live masterclass for high achievers who did everything right and still feel like something is missing: how to stop living a checklist someone else wrote, and design a life that is actually yours.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You hit every goal on the list. So why does it still feel empty?',body:'The title, the income, the house, the family photo that looks right. You built the life you were told to want, and somewhere along the way a quiet question showed up that a bigger goal will not silence.'},
+ {t:'dark',title:'The checklist worked. That was never the problem. The problem is whose checklist it was.'},
+
+ {t:'section',idx:'Part One',title:'The Borrowed Life'},
+ {t:'normal',k:'Where the list came from',title:'You inherited a definition of success and called it your own.',body:'Parents, school, a first boss, a culture that keeps score. Most of us never chose our idea of a good life. We absorbed it, achieved against it, and never stopped to ask if it was pointed anywhere we actually wanted to go.'},
+ {t:'normal',k:'The achievement trap',title:'Achievement quiets the question. It does not answer it.',body:'Every win buys a few weeks of relief, then the restlessness returns and the answer always seems to be more. More is a wonderful engine and a terrible destination. You can climb your whole life and never once check whether the ladder is against the right wall.'},
+ {t:'normal',k:'What the body knew first',title:'Burnout is rarely a scheduling problem. It is usually a direction problem.',body:'The exhaustion that no vacation fixes is not about hours. It is what happens when your days are spent building someone else’s life. The fix is not doing less of the wrong thing. It is getting honest about what the right thing even is.'},
+ {t:'dark',title:'You cannot out-achieve a life that is pointed at the wrong thing.'},
+
+ {t:'section',idx:'Part Two',title:'Life by Design'},
+ {t:'normal',k:'The shift',title:'Living by design means you choose the blueprint before you build.',body:'By default, life gets designed for you, by your calendar, your inbox, and everyone else’s expectations. By design, you decide the shape first and let the days serve it. This is the whole difference between a life that happens to you and one you author on purpose.'},
+ {t:'normal',k:'The first question',title:'Start with one honest question: is this checklist mine, or someone else’s?',body:'Go item by item through what you are chasing and sort it. Some of it is genuinely yours and worth keeping. A surprising amount belongs to someone whose approval you stopped needing years ago. You cannot design a life you have never actually questioned.'},
+ {t:'normal',k:'True North',title:'Define success by your own values, then let that become your compass.',body:'Your True North is the version of a good life that is true for you, named in your own words. Once it is clear, decisions get simple. The things that move you toward it get a yes. The impressive things that do not finally get a no.'},
+ {t:'normal',k:'The blueprint',title:'From there, Life by Design is a repeatable path you can run for any season.',body:'The same five moves, whenever life feels off course, so a hard year is just the method applied to new terrain.',steps:['Name what is yours','Release what drains you','Loosen the past’s grip','Design the days','Aim at your True North']},
+ {t:'normal',k:'The inner work',title:'A steady mind is built, not born.',body:'Designing the life is half of it. Holding your nerve while it changes is the other half. A practiced, positive mindset is what keeps you choosing your own North when the old checklist gets loud again, and it is a skill, which means anyone can learn it.'},
+ {t:'dark',title:'A life you designed is one you actually want to be awake for.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes'},
+ {t:'normal',k:'The person this builds',title:'Clear about what you want, and unbothered by what you are supposed to want.',body:'You stop auditioning for approval you no longer need. Your yes and your no get faster because they run through your own North, not the room’s. The relief people describe is not that life got easier. It is that it finally became theirs.'},
+ {t:'normal',k:'Why Nicoa',title:'I chased the checklist to the top before I learned to design my own.',body:'Twenty years as an HR executive inside Fortune 100 companies, the title and the homes and the American dream fully checked off, and a breakdown that told me the truth my calendar would not. I trained as a coach through the Newfield Network and iPEC, and I have spent the years since helping high achievers design a life that is actually theirs.'},
+
+ {t:'section',idx:'Your Next Step',title:'Design Yours on Purpose'},
+ {t:'cta',title:'Ready to design a life that is actually yours?',sub:'Start Life by Design coaching with me, or begin on your own with the Your Life By Design self-care journal and the Coffee With Nicoa podcast.',chips:['Start coaching with Nicoa','Get the Life by Design journal'],disc:'Educational content for personal development. No specific outcome or result is guaranteed. Results vary by person, effort, and circumstances.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#tn"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.steps) h+=`<div class="steps">`+s.steps.map((c,j)=>`<div class="step"><span class="n">${j+1}</span>${c}</div>`+(j<s.steps.length-1?`<span class="arw">&rarr;</span>`:``)).join('')+`</div>`;
+    if(s.brand) h+=`<div class="brandline">Coffee With Nicoa · <b>Nicoa Dunne</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
