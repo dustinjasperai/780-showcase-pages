@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escaping the Messy Middle, a masterclass with Tim Campsall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF5EC;
+    --panel:#FFFFFF;
+    --rule:#E7DCCB;
+    --ink:#1B1610;
+    --muted:#6C6052;
+    --accent:#D62828;
+    --head:'Archivo',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative}
+  .slide{width:100%;max-width:960px;background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:64px 72px;min-height:66vh;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 24px 60px rgba(27,22,16,.10);position:relative;overflow:hidden}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* messy-middle motif: a short red band resolving into a straight rule, top-left */
+  .slide::before{content:'';position:absolute;top:0;left:0;height:5px;width:42%;
+    background:var(--accent);border-radius:0 0 6px 0}
+  .slide::after{content:'';position:absolute;top:0;left:42%;height:2px;width:34%;
+    background:var(--rule)}
+  .kick{font-family:var(--head);font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:800;font-size:60px;line-height:1.03;margin:0 0 18px;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:42px;line-height:1.08;margin:0 0 20px;letter-spacing:-.01em}
+  h3{font-family:var(--head);font-weight:600;font-size:30px;line-height:1.15;margin:0 0 12px}
+  p{font-size:23px;line-height:1.5;color:var(--muted);margin:0 0 14px;max-width:46ch}
+  .lead{font-size:27px;color:var(--ink)}
+  .em{color:var(--accent);font-style:italic}
+  ul{margin:14px 0 0;padding:0;list-style:none}
+  li{font-size:22px;line-height:1.4;color:var(--ink);padding:16px 0 16px 40px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:0;top:24px;width:15px;height:15px;border-radius:3px;
+    border:3px solid var(--accent)}
+  li b{font-weight:700}
+  li span{display:block;color:var(--muted);font-size:18px;margin-top:4px;font-weight:400}
+  .big{font-family:var(--head);font-size:118px;line-height:.98;font-weight:800;letter-spacing:-.02em}
+  .strike{color:transparent;-webkit-text-stroke:2px #1B161055;position:relative}
+  .strike::after{content:'';position:absolute;left:-2%;right:-2%;top:52%;height:6px;background:var(--accent);transform:rotate(-2deg)}
+  .row{display:flex;gap:20px;margin-top:20px;flex-wrap:wrap}
+  .cell{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:22px 24px}
+  .cell .n{font-family:var(--head);color:var(--accent);font-size:24px;font-weight:700;margin-bottom:8px}
+  .cell p{font-size:17px;margin:0}
+  .steps{counter-reset:s;margin-top:18px}
+  .steps li{padding-left:56px}
+  .steps li::before{counter-increment:s;content:counter(s);border:none;background:var(--accent);color:#fff;
+    width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:var(--head);font-weight:700;font-size:16px;top:16px;left:6px}
+  .who{font-size:19px;color:var(--muted);margin-top:auto;padding-top:22px}
+  .who b{color:var(--ink)}
+  .disc{font-size:15px;color:var(--muted);margin-top:26px;max-width:62ch;line-height:1.45}
+  .ctaline{font-size:24px;color:var(--ink);margin-top:8px}
+  .ctaline b{color:var(--accent)}
+  .pres{font-size:19px;color:var(--muted);margin-top:26px}
+  .pres b{color:var(--ink);font-weight:600}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--muted);letter-spacing:.08em;
+    font-weight:600;background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:8px 16px}
+  #dots{position:fixed;bottom:22px;left:26px;display:flex;gap:7px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent);width:20px;border-radius:4px}
+  .hint{position:fixed;top:18px;left:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  @media(max-width:640px){.slide{padding:40px 30px}h1{font-size:40px}h2{font-size:30px}.big{font-size:72px}p,li{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="hint">TBC ActionCOACH · masterclass sample · use arrow keys</div>
+<div id="stage"><div id="slide" class="slide on"></div></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass',h:'Escaping the Messy Middle',p:'How established owners get the business off their back and finally scale on systems.',pres:'With <b>Tim Campsall</b>, TBC ActionCOACH · host of Self Made Is a Myth'},
+ {t:'promise',kick:'What you will leave with',h:'Three things, in one live hour.',li:[['Where you actually got stuck','The Messy Middle, named, so you can finally see it.'],['Why more hustle makes it worse','The effort that got you here will not get you out.'],['The first system to build on Monday','One recurring job, off your plate, this week.']]},
+ {t:'audience',kick:'Who this is for',h:'You built something real. And it still runs through you.',p:'Established, owner-led businesses that have outgrown hustle and intuition but are not yet running on systems. Successful on paper, still dependent on you for nearly every decision.',who:'<b>The trap:</b> the work that got you to where you are is the same work that is now capping you.'},
+ {t:'reframe',kick:'The reframe',big1:'Self-made.',big2:'It is a <span class="em">myth</span>.',p:'Nobody scales alone. Past a point, effort stops being the lever. What got you here was you. What gets you out is a business that no longer needs all of you.'},
+ {t:'stakes',kick:'The stakes',h:'The middle is not a plateau. It is a squeeze.',p:'Costs climb with size, but an owner-run business caps out at one person\'s capacity. Stay in the squeeze too long and you either burn out or quietly shrink back to what you alone can hold.'},
+ {t:'part',kick:'Part one',h:'Why growth stalls in the middle.'},
+ {t:'point',kick:'The core problem',h:'Somewhere along the way, you became the bottleneck.',p:'Every decision, every fire, every quote still runs through you. Growth slows because work that should move across a team is still moving through one person, one hour at a time.'},
+ {t:'point',kick:'The core problem',h:'This is the Messy Middle.',p:'Revenue is up, responsibility is heavier, and the business depends on you more than ever. What worked to get here has quietly stopped working, and hustling harder no longer moves the number.'},
+ {t:'signs',kick:'The core problem',h:'The signs you are in it.',li:[['Growth feels heavier, not lighter','More revenue, more chaos, thinner margins.'],['You are plan B for everything','Little of importance happens without you in the room.'],['Good people keep bringing you the problems','Because the business has no system to answer them.']]},
+ {t:'framework',kick:'The core problem',h:'Hustle vs. systems.',row:[['Hustle','Owner-powered. It scales with your hours, and your hours are already gone.'],['Systems','Business-powered. It scales with structure, so growth stops costing you your life.']],p:'The whole shift is moving the business out of the first column and into the second.'},
+ {t:'part',kick:'Part two',h:'How to get out of the middle.'},
+ {t:'levers',kick:'The operating model',h:'Three levers, pulled in order.',li:[['Time','Win your calendar back first. Systemize and hand off the work only you do today.'],['Team','Build people who own outcomes, so decisions stop waiting on you.'],['Money','Then turn the freed capacity into leads, conversion and margin.']]},
+ {t:'point',kick:'Lever one: Time',h:'Win your time back before anything else.',p:'You cannot build a system while you are the system. The first move is pulling the recurring, owner-only work off your plate and turning it into a documented process someone else can run.'},
+ {t:'point',kick:'Lever two: Team',h:'A team that owns outcomes, not tasks.',p:'Owner-dependence ends when people are trusted with results and held to them. That is culture and cadence, not one more hire you have to babysit.'},
+ {t:'point',kick:'Lever three: Money',h:'Now growth compounds without you.',p:'With time and team in place, marketing and sales become a machine you tune instead of a fire you fight. This is where the hours you freed turn back into revenue.'},
+ {t:'part',kick:'Part three',h:'What the other side looks like.'},
+ {t:'looks',kick:'The outcome',h:'A business that no longer needs you in every seat.',li:[['You work on it, not in it','Your week goes to direction and strategy, not firefighting.'],['Decisions happen without you','The team runs the day; you set where it is headed.'],['Scale stops costing your life','Growth adds profit, not more hours on your calendar.']]},
+ {t:'whyme',kick:'Why Tim',h:'A coach who has been in the middle too.',li:[['TBC ActionCOACH · Top 100 Coach','Recognized inside the world\'s largest business coaching firm.'],['700+ owners coached','Across Indiana and Ohio, from stuck to scaling.'],['Host, Self Made Is a Myth · author','A working thesis on why owners get stuck, and how they get free.']]},
+ {t:'cta',kick:'Your next step',h:'Ready to get out of the Messy Middle?',ctas:['<b>Book a call with Tim</b> and map the one system to build first.','<b>Join the next GrowthCLUB</b> and leave with a 90-day plan you can run.'],disc:'This masterclass is educational. It shares frameworks and approaches for reducing owner-dependence and scaling a business; it is not advice for your specific situation and not a guarantee of any particular result. Outcomes vary by business.'}
+];
+
+const stage=document.getElementById('slide');
+const dots=document.getElementById('dots');
+const nav=document.getElementById('nav');
+let i=0;
+S.forEach(()=>{const d=document.createElement('i');dots.appendChild(d)});
+function render(){
+ const s=S[i];let h='';
+ if(s.kick)h+=`<div class="kick">${s.kick}</div>`;
+ if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="lead">${s.p}</p><div class="pres">${s.pres}</div>`}
+ else if(s.t==='reframe'){h+=`<div class="big"><span class="strike">${s.big1}</span></div><div class="big">${s.big2}</div><p style="margin-top:24px">${s.p}</p>`}
+ else if(s.t==='part'){h+=`<h1>${s.h}</h1>`}
+ else if(s.row){h+=`<h2>${s.h}</h2><div class="row">`+s.row.map(c=>`<div class="cell"><div class="n">${c[0]}</div><p>${c[1]}</p></div>`).join('')+`</div>`+(s.p?`<p style="margin-top:22px">${s.p}</p>`:'')}
+ else if(s.steps){h+=`<h2>${s.h}</h2><ul class="steps">`+s.steps.map(x=>`<li>${x}</li>`).join('')+`</ul>`+(s.p?`<p style="margin-top:20px">${s.p}</p>`:'')}
+ else if(s.li){h+=`<h2>${s.h}</h2><ul>`+s.li.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')+`</ul>`}
+ else if(s.t==='cta'){h+=`<h2>${s.h}</h2>`+s.ctas.map(c=>`<div class="ctaline">${c}</div>`).join('')+`<div class="disc">${s.disc}</div>`}
+ else{h+=`<h2>${s.h}</h2>`+(s.p?`<p class="lead" style="color:var(--muted)">${s.p}</p>`:'')+(s.who?`<div class="who">${s.who}</div>`:'')}
+ stage.innerHTML=h;
+ [...dots.children].forEach((d,k)=>d.className=k===i?'on':'');
+ nav.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));stage.classList.remove('on');void stage.offsetWidth;stage.classList.add('on');render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)go(i+1);else go(i-1)});
+render();
+</script>
+</body>
+</html>
