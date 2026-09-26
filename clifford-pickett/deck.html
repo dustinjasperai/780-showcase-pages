@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Chaos to Flow: Clifford Pickett</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0f0f; --panel:#191919; --rule:rgba(230,247,255,.14);
+    --ink:#e6f7ff; --muted:#9aa7b0; --accent:#339cff; --warm:#ff9061;
+    --head:'Playfair Display',Georgia,serif; --body:'Raleway',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#050505;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:1000px;margin:0 auto;padding:40px 20px 80px}
+  .slide{position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:16px;
+    aspect-ratio:16/9;margin:0 0 28px;padding:64px 72px;display:flex;flex-direction:column;
+    justify-content:center;overflow:hidden}
+  .slide::after{content:'';position:absolute;inset:0;background:
+    radial-gradient(120% 90% at 88% 8%, rgba(51,156,255,.12), transparent 55%);pointer-events:none}
+  .kick{font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px;position:relative;z-index:1}
+  h1{font-family:var(--head);font-weight:700;font-size:60px;line-height:1.04;letter-spacing:-.01em;position:relative;z-index:1}
+  h2{font-family:var(--head);font-weight:700;font-size:44px;line-height:1.08;position:relative;z-index:1}
+  .sub{font-size:24px;line-height:1.5;color:var(--muted);margin-top:22px;max-width:82%;position:relative;z-index:1}
+  .lede{font-size:30px;line-height:1.4;font-weight:500;max-width:88%;position:relative;z-index:1}
+  .lede .a{color:var(--accent)}
+  .big{font-family:var(--head);font-weight:700;font-size:70px;line-height:1.02;position:relative;z-index:1}
+  .big .a{color:var(--accent);font-style:italic}
+  ul{list-style:none;margin-top:30px;position:relative;z-index:1}
+  li{font-size:24px;line-height:1.5;padding-left:38px;position:relative;margin-bottom:18px;color:#d9e6ef}
+  li::before{content:'';position:absolute;left:0;top:12px;width:16px;height:16px;border-radius:4px;
+    border:2px solid var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px;position:relative;z-index:1}
+  .card{border:1px solid var(--rule);border-radius:12px;padding:26px 24px;background:var(--panel)}
+  .card .n{font-family:var(--head);color:var(--accent);font-size:22px;font-weight:700}
+  .card .t{font-size:19px;margin-top:10px;color:#d9e6ef;line-height:1.4}
+  .milestones{display:flex;gap:14px;margin-top:36px;position:relative;z-index:1;flex-wrap:wrap}
+  .m{flex:1;min-width:150px;border-top:2px solid var(--accent);padding-top:16px}
+  .m .mi{font-family:var(--head);font-size:26px;font-weight:700}
+  .m .md{font-size:16px;color:var(--muted);margin-top:8px;line-height:1.4}
+  .presenter{margin-top:44px;font-size:20px;color:#d9e6ef;position:relative;z-index:1}
+  .presenter b{color:var(--ink);font-weight:700}
+  .creds{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;position:relative;z-index:1}
+  .creds span{border:1px solid var(--rule);border-radius:100px;padding:10px 18px;font-size:16px;color:#d9e6ef}
+  .cta-wrap{align-items:flex-start}
+  .btn{display:inline-block;margin-top:34px;background:var(--accent);color:#04121f;font-weight:700;
+    font-size:22px;padding:18px 34px;border-radius:100px;position:relative;z-index:1}
+  .disclaimer{margin-top:30px;font-size:14px;color:#6f7c85;max-width:78%;position:relative;z-index:1;line-height:1.5}
+  .num{position:absolute;bottom:26px;right:34px;font-size:14px;color:#4a5560;z-index:1}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass', h:'From Chaos to Flow',
+    sub:'The Ultimate Lightroom Workflow: turn a scattered photo library into one automated system that runs itself.',
+    presenter:'with <b>Clifford Pickett</b>, travel &amp; commercial photographer and NYU photography faculty' },
+
+  {t:'lede', kick:'Who this is for',
+    lede:'You are a photographer with tens of thousands of images, more coming off every shoot, and no reliable way to find, finish, or protect the ones that matter.' },
+
+  {t:'lede', kick:'The trap',
+    lede:'You bought the camera to make <span class="a">art</span>. You spend your evenings renaming folders, hunting for a file you know you shot, and praying a drive does not die.' },
+
+  {t:'big', kick:'The reframe',
+    big:'Your library is not messy because you are disorganized. It is messy because <span class="a">no one ever built you a system.</span>' },
+
+  {t:'section', kick:'Part One', h2:'The Chaos' },
+
+  {t:'bullets', kick:'The DAM problem', h2:'Where photographers get stuck',
+    items:['Images scattered across drives, cards, phones and two half-merged catalogs',
+           'Duplicates everywhere, and no single source of truth',
+           'Culling by hand until every keeper starts to look the same',
+           'Backups that only exist in theory, until the day they do not'] },
+
+  {t:'lede', kick:'The real cost',
+    lede:'Every hour lost to file management is an hour not spent shooting, editing, or getting paid. The chaos does not just cost time. It costs the work you never get around to finishing.' },
+
+  {t:'section', kick:'Part Two', h2:'The Ultimate Lightroom Workflow' },
+
+  {t:'bullets', kick:'FLOW', h2:'An intelligent, automated ecosystem',
+    items:['Lightroom set up so the software does the busywork, not you',
+           'Files move, sort and surface themselves the moment they land',
+           'You stay on the art. The system handles the admin.'] },
+
+  {t:'cards', kick:'Automagic', h2:'The four moves the system makes for you',
+    cards:[['Sort','Every import lands where it belongs, automatically'],
+           ['Sync','One catalog, consistent across every device and drive'],
+           ['Share','Deliver and publish without rebuilding exports each time'],
+           ['Show','Your best work is always one search away']] },
+
+  {t:'bullets', kick:'Natural Selection', h2:'Find the keepers without the fatigue',
+    items:['A repeatable rating and keyword pass that ends decision paralysis',
+           'Surface your strongest frames in minutes, not evenings',
+           'Keyword once, find forever'] },
+
+  {t:'lede', kick:'The Art of the Edit',
+    lede:'One consistent, repeatable edit so your body of work looks like <span class="a">one photographer</span>, not one hundred different afternoons.' },
+
+  {t:'bullets', kick:'Bulletproof Backup', h2:'Never lose an image again',
+    items:['Automated, redundant backups that happen whether you remember or not',
+           'A recovery plan that already exists before the drive fails',
+           'Peace of mind as a default setting'] },
+
+  {t:'lede', kick:'Creating Gravity',
+    lede:'The Gathering and the Power of One: everything you have ever shot, pulled into a single authoritative catalog with its own gravity, so nothing drifts off again.' },
+
+  {t:'section', kick:'Part Three', h2:'The Photographer You Become' },
+
+  {t:'milestones', kick:'Your Journey', h2:'Five milestones on the other side of the system',
+    ms:[['Clarity','You know where everything is'],
+        ['Vision','You see your work as a whole'],
+        ['Craft','Your edits are consistent'],
+        ['Voice','Your style becomes unmistakable'],
+        ['Perspective','You are back to making art']] },
+
+  {t:'lede', kick:'Shoshin',
+    lede:'A new mind. When the system carries the chaos, you get to see every subject as if for the <span class="a">first time</span> again.' },
+
+  {t:'creds', kick:'Why learn this from me', h2:'Clifford Pickett',
+    body:'Travel, humanitarian and commercial photographer, videographer and educator. I have spent years turning my own chaos into a workflow I now teach.',
+    creds:['NYU photography faculty','National Geographic','Adobe','Apple','iPhone Photography School','FAA Certified Drone Pilot'] },
+
+  {t:'cta', kick:'Your next step', h:'Build the workflow with me, live',
+    sub:'The Lightroom Bootcamp &amp; Academy is a live, hands-on intensive where we set up your Ultimate Lightroom Workflow together, then keep going with weekly live coaching inside the Academy.',
+    btn:'Join the Lightroom Bootcamp &amp; Academy',
+    disclaimer:'This masterclass is for educational purposes only. It teaches a photography workflow method. Results vary by individual effort and circumstance, and no specific outcome is guaranteed.' },
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('div');
+  el.className = 'slide' + (s.t==='cta' ? ' cta-wrap' : '');
+  let h = '';
+  if (s.kick) h += `<div class="kick">${s.kick}</div>`;
+  if (s.t==='title'){ h += `<h1>${s.h}</h1>`; if(s.sub) h+=`<div class="sub">${s.sub}</div>`; if(s.presenter) h+=`<div class="presenter">${s.presenter}</div>`; }
+  else if (s.t==='section'){ h += `<h2>${s.h2}</h2>`; }
+  else if (s.t==='lede'){ h += `<div class="lede">${s.lede}</div>`; }
+  else if (s.t==='big'){ h += `<div class="big">${s.big}</div>`; }
+  else if (s.t==='bullets'){ if(s.h2)h+=`<h2>${s.h2}</h2>`; h+=`<ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`; }
+  else if (s.t==='cards'){ if(s.h2)h+=`<h2>${s.h2}</h2>`; h+=`<div class="grid">${s.cards.map(c=>`<div class="card"><div class="n">${c[0]}</div><div class="t">${c[1]}</div></div>`).join('')}</div>`; }
+  else if (s.t==='milestones'){ if(s.h2)h+=`<h2>${s.h2}</h2>`; h+=`<div class="milestones">${s.ms.map(m=>`<div class="m"><div class="mi">${m[0]}</div><div class="md">${m[1]}</div></div>`).join('')}</div>`; }
+  else if (s.t==='creds'){ h += `<h2>${s.h2}</h2>`; if(s.body)h+=`<div class="sub">${s.body}</div>`; h+=`<div class="creds">${s.creds.map(c=>`<span>${c}</span>`).join('')}</div>`; }
+  else if (s.t==='cta'){ h += `<h1>${s.h}</h1>`; if(s.sub)h+=`<div class="sub">${s.sub}</div>`; h+=`<div class="btn">${s.btn}</div>`; if(s.disclaimer)h+=`<div class="disclaimer">${s.disclaimer}</div>`; }
+  h += `<div class="num">${i+1} / ${S.length}</div>`;
+  el.innerHTML = h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
