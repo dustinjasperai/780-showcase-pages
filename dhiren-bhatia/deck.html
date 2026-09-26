@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Part-Time CEO Method | Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;         /* brand.json site_scheme: light */
+    --panel:#eff4ff;      /* brand tint, uses 6 */
+    --ink:#171717;        /* brand ink, uses 12 */
+    --muted:#6b7280;      /* brand muted gray, uses 12 */
+    --rule:#dbe4f5;
+    --accent:#0040c1;     /* brand blue, uses 4 */
+    --head:'Poppins',system-ui,sans-serif;
+    --body:'Instrument Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#eef1f6;color:var(--ink);font-family:var(--body);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--bg);border-radius:14px;box-shadow:0 20px 60px rgba(23,23,23,.14);position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:72px 76px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.02em;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-.015em;margin-bottom:16px}
+  p{font-size:21px;line-height:1.5;color:#33373f;max-width:44ch}
+  p.lead{font-size:24px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  .big{font-size:30px;line-height:1.35;font-family:var(--head);font-weight:600;max-width:40ch}
+  ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:14px}
+  li{font-size:21px;line-height:1.4;padding-left:26px;position:relative;color:#33373f;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .loop{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap}
+  .node{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;min-width:180px}
+  .node .n{font-family:var(--head);font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.08em}
+  .node .t{font-family:var(--head);font-weight:600;font-size:20px;margin-top:6px}
+  .node .d{font-size:15px;color:var(--muted);margin-top:6px;line-height:1.35}
+  .ladder{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+  .rung{display:flex;align-items:center;gap:16px}
+  .rung .lab{font-family:var(--head);font-weight:600;font-size:22px;width:150px}
+  .rung .bar{height:14px;border-radius:8px;background:var(--panel);flex:1;position:relative;overflow:hidden}
+  .rung .bar span{position:absolute;left:0;top:0;bottom:0;background:var(--accent);opacity:.85}
+  .three{display:flex;gap:16px;margin-top:24px}
+  .cell{flex:1;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:22px}
+  .cell h3{font-family:var(--head);font-weight:600;font-size:22px;margin-bottom:8px}
+  .cell p{font-size:16px;color:var(--muted)}
+  .week{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:24px}
+  .day{background:var(--panel);border:1px solid var(--rule);border-radius:10px;min-height:120px;padding:12px;font-size:13px;color:var(--muted);font-family:var(--head);font-weight:600}
+  .day .block{margin-top:10px;height:26px;border-radius:6px;background:var(--accent);opacity:.85}
+  .day .ghost{margin-top:8px;height:14px;border-radius:5px;background:#e4e9f2}
+  .foot{position:absolute;left:76px;right:76px;bottom:30px;display:flex;justify-content:space-between;font-family:var(--head);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .disclaimer{font-size:14px;color:var(--muted);margin-top:22px;max-width:56ch;line-height:1.45}
+  .cta-line{font-family:var(--head);font-weight:600;font-size:26px;color:var(--accent);margin-top:14px}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;font-family:var(--head);font-size:13px;color:#5b6270}
+  #nav button{border:1px solid #c8cfdb;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:var(--head);font-weight:600;color:var(--ink)}
+  #count{min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'A Live Masterclass with Dhiren Bhatia',h:'The Part-Time CEO Method',p:'How to run your service business in half the time, without it falling apart.'},
+  {t:'who',kicker:'Who this is for',h:'You built it. Now it needs you for everything.',p:'For founders of service businesses, consultants, coaches, agencies, creatives, who are still the answer to every question, the last approval on every deliverable, and the reason a real week off feels impossible.'},
+  {t:'trap',kicker:'The trap',h:'So you work more hours.',p:'And the more you carry, the more the business learns to depend on you. Hustle looks like the fix. It is quietly the cause.'},
+  {t:'reframe',kicker:'The reframe',big:'You do not have a time problem. You have a dependency problem. The calendar is just the symptom.'},
+  {t:'part',kicker:'Part One',h:'The real bottleneck is you.',p:'Not your effort. Your position. Everything routes through you because nothing else was built to hold it. That is fixable, and it is the whole job.'},
+  {t:'ladder',kicker:'CEO Reality',h:'Founder, Manager, or CEO?',sub:'Where did your day actually sit today?',rungs:[['Founder',92],['Manager',60],['CEO',24]],note:'Most stuck founders spend the day as the Founder-operator. The goal is to move the weight up the ladder.'},
+  {t:'three',kicker:'The Clarity Check',h:'Find the one thing that is breaking.',cells:[['Delivery','The work only holds when you personally touch it.'],['Decisions','Everything waits on your yes.'],['Systems','It lives in your head, not on paper.']],note:'You cannot fix all three at once. Name the one that is costing you the most first.'},
+  {t:'part',kicker:'Part Two',h:'The Freedom Loop',p:'Four moves that progressively take you out of the loop. Each one makes the next one possible.'},
+  {t:'loop',kicker:'The Freedom Loop',h:'The map.',nodes:[['01','Stronger Offers','A sharper offer attracts better-fit buyers, so delivery gets simpler.'],['02','Better Clients','Right-fit clients need less rescue, which frees your calendar.'],['03','Smarter Team','A team held to a standard makes the decisions you used to make.'],['04','More Profit','Lower founder-load plus better margin funds the next step.']]},
+  {t:'step',kicker:'Freedom Loop, Move 1',h:'Stronger Offers',p:'When the offer is specific and the outcome is clear, you attract people you can actually help, and you stop bending delivery to fit whoever said yes.'},
+  {t:'step',kicker:'Freedom Loop, Move 2',h:'Better Clients',p:'Better-fit clients ask less of you personally. They are the difference between a business that drains you and one that compounds.'},
+  {t:'step',kicker:'Freedom Loop, Move 3',h:'Smarter Team',p:'The shift from doing the work to holding the standard. When the standard lives in the system, the team can make the call without you in the thread.'},
+  {t:'step',kicker:'Freedom Loop, Move 4',h:'More Profit',p:'Less founder-dependency and healthier margin is what pays for the next hire and the next system. Freedom and profit are the same loop, not a trade.'},
+  {t:'hire',kicker:'The Hiring Framework',h:'Your next hire is a type, not a person.',sub:'T, E, A, or M, pick the one that buys back the most of your time.',cells:[['Type T','the technician who takes the doing off your plate'],['Type E','the executor who runs the process you designed'],['Type A','the admin who clears the small decisions'],['Type M','the manager who owns the standard']]},
+  {t:'part',kicker:'Part Three',h:'What it looks like on the other side.',p:'Not an empty calendar. A deliberate one.'},
+  {t:'week',kicker:'A Part-Time CEO week',h:'Two blocks of real CEO work.',note:'The rest is held by the offer, the clients, the team, and the system. This is the point of the loop.'},
+  {t:'why',kicker:'Why me',h:'I built this because I needed it.',p:'I spent years as the founder who could not step away. The Part-Time CEO method is the set of moves that let me run the business in half the time and lead without burning out. It is what I now build with founders inside The Council.'},
+  {t:'recap',kicker:'The recap',h:'The whole method, in one line.',cells:[['Audit','CEO Reality plus the Clarity Check'],['Rebuild','The Freedom Loop, one move at a time'],['Staff','The right next hire, by type']],note:'Dependency down, freedom up, profit funding the next step.'},
+  {t:'cta',kicker:'Your next move',h:'Build your Part-Time CEO year with me.',ctaline:'Apply to join The Council',p:'The Council is a private implementation circle where we install these systems together, biweekly, with a small room of founders building freedom-first businesses.',disc:'Educational only. This masterclass shares a method and a framework. It makes no promise or guarantee of income or results. Outcomes depend on your business, your effort, and factors outside anyone’s control.'}
+];
+const stage=document.getElementById('stage');
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function render(s){
+  const d=el('div','slide on');
+  if(s.kicker)d.appendChild(el('div','kicker',s.kicker));
+  if(s.h)d.appendChild(el('h1',null,s.h));
+  if(s.big)d.appendChild(el('div','big',s.big));
+  if(s.sub)d.appendChild(el('p','lead',s.sub));
+  if(s.p)d.appendChild(el('p',s.h?null:'lead',s.p));
+  if(s.rungs){const w=el('div','ladder');s.rungs.forEach(r=>{const row=el('div','rung');row.appendChild(el('div','lab',r[0]));const bar=el('div','bar');const sp=el('span');sp.style.width=r[1]+'%';bar.appendChild(sp);row.appendChild(bar);w.appendChild(row);});d.appendChild(w);}
+  if(s.nodes){const w=el('div','loop');s.nodes.forEach(n=>{const c=el('div','node');c.appendChild(el('div','n',n[0]));c.appendChild(el('div','t',n[1]));c.appendChild(el('div','d',n[2]));w.appendChild(c);});d.appendChild(w);}
+  if(s.cells){const w=el('div','three');s.cells.forEach(c=>{const cell=el('div','cell');cell.appendChild(el('h3',null,c[0]));cell.appendChild(el('p',null,c[1]));w.appendChild(cell);});d.appendChild(w);}
+  if(s.t==='week'){const w=el('div','week');const days=['Mon','Tue','Wed','Thu','Fri'];const blocks={0:true,2:true};for(let i=0;i<5;i++){const dd=el('div','day',days[i]);if(blocks[i]){dd.appendChild(el('div','block'));}dd.appendChild(el('div','ghost'));dd.appendChild(el('div','ghost'));w.appendChild(dd);}d.appendChild(w);}
+  if(s.ctaline)d.appendChild(el('div','cta-line',s.ctaline));
+  if(s.note)d.appendChild(el('p','muted',s.note));
+  if(s.disc)d.appendChild(el('div','disclaimer',s.disc));
+  const f=el('div','foot');f.appendChild(el('span',null,'The Part-Time CEO Method'));f.appendChild(el('span',null,'Dhiren Bhatia'));d.appendChild(f);
+  return d;
+}
+let i=0;
+function show(){stage.innerHTML='';stage.appendChild(render(S[i]));document.getElementById('count').textContent=(i+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>{i=Math.min(S.length-1,i+1);show();};
+document.getElementById('prev').onclick=()=>{i=Math.max(0,i-1);show();};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();});
+show();
+</script>
+</body>
+</html>
