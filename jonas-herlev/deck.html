@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fra Kaos til Kontrol — The Boardroom masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Palette derived from topix.dk (brand.json, site_scheme: dark) — see 01-deep-research.md ## Palette
+     --bg #13342f (their dominant forest green), --panel #22423b, --rule #7f9a90 (from their sage #b9c6c2),
+     --accent #a7d7c4 (their exact mint button fill). Type: Parkinsans display + Manrope body. */
+  :root{
+    --bg:#13342f;
+    --panel:#22423b;
+    --rule:#7f9a90;
+    --accent:#a7d7c4;
+    --ink:#ffffff;
+    --muted:#c7d6d0;
+    --display:'Parkinsans',system-ui,sans-serif;
+    --body:'Manrope',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:48px 20px}
+  .slide{
+    background:var(--panel);
+    border:1px solid rgba(127,154,144,.35);
+    border-radius:18px;
+    padding:56px 52px;
+    margin:0 0 26px;
+    min-height:440px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+  }
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:20px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.04;margin-bottom:22px}
+  h2{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.12;margin-bottom:18px}
+  h3{font-family:var(--display);font-weight:600;font-size:22px;margin-bottom:12px;color:var(--accent)}
+  p{font-size:19px;line-height:1.55;color:var(--muted);margin-bottom:14px;max-width:64ch}
+  p.lead{font-size:22px;color:var(--ink)}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:19px;line-height:1.5;color:var(--muted);padding:10px 0 10px 30px;position:relative;
+    border-bottom:1px solid rgba(127,154,144,.18)}
+  li:before{content:"";position:absolute;left:0;top:20px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  li.plain:before{background:transparent;border:1px solid var(--rule)}
+  .big{font-family:var(--display);font-weight:700;font-size:120px;line-height:.92;color:var(--accent)}
+  .small-top{font-family:var(--body);font-size:22px;color:var(--rule);margin-bottom:8px}
+  .q-num{font-family:var(--display);font-weight:700;font-size:64px;color:rgba(167,215,196,.35);position:absolute;top:34px;right:44px}
+  .foot{position:absolute;bottom:22px;left:52px;font-size:13px;color:var(--rule);font-family:var(--display);letter-spacing:.08em}
+  .disc{font-size:14px;color:var(--rule);margin-top:22px;max-width:70ch;line-height:1.45}
+  .cta-btn{display:inline-block;margin-top:14px;background:var(--accent);color:var(--bg);
+    font-family:var(--display);font-weight:600;font-size:19px;padding:15px 30px;border-radius:12px}
+  .pagercount{text-align:center;color:var(--rule);font-size:13px;font-family:var(--display);letter-spacing:.1em;padding-bottom:30px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A masterclass for Danish owner-managers',
+   h:'Fra Kaos til Kontrol',
+   p:'The five questions every investor asks before they back a business. And how to answer all five about your own.',
+   foot:'The Boardroom · Morten Larsen & Jonas Herlev'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You are past the first two million.',
+   list:['You run a real business, not a side project, and the revenue is there.',
+         'You are still the person every decision runs through.',
+         'Growth has not made things calmer. It has added moving parts.',
+         'You have advisors on paper, but no one who sees your numbers every month.'],
+   p:'If that is you, this hour is built for you.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'More growth, less control.',
+   p:'Every owner-manager is told the goal is to grow. So you add people, add offers, add customers. And the business gets harder to hold in your head, not easier.',
+   p2:'You are working more hours than the year you started, and you still cannot say, on any given day, exactly where the business stands.'},
+
+  {t:'reframe', kicker:'The reframe',
+   h:'You do not have a growth problem. You have a control problem.',
+   p:'Investors do not buy potential. They buy control. A business they can see clearly, that runs on more than the founder, that answers five questions without a pause.',
+   p2:'Get control, and growth stops being chaos. It becomes a decision you make on purpose.'},
+
+  {t:'part', kicker:'Part one', h:'Running blind between the numbers.'},
+
+  {t:'content', kicker:'The core problem',
+   h:'Most owners see their business once a quarter.',
+   p:'The accounts arrive weeks after the month has closed. By the time you read them, the decisions they should have shaped are already made, on gut.',
+   list:['You hire before you can see if the cash supports it.',
+         'You discount to win a customer who was never going to pay.',
+         'You find out cash is tight the week it is already tight.'],
+   p2:'Nothing here is a talent problem. It is a visibility problem.'},
+
+  {t:'part', kicker:'Part two', h:'The foundation, then the five questions.'},
+
+  {t:'content', kicker:'Fundamentet',
+   h:'Seven pieces every business stands on.',
+   p:'Before any clever growth move, the base has to be solid. We call it Fundamentet. When one piece is weak, everything you build on top wobbles.',
+   list:['Sales', 'Marketing', 'Economy and bookkeeping', 'Customer service', 'Administration', 'Your target audience', 'Strategy'],
+   p2:'Most owners are quietly missing one of these seven. The hour starts by finding yours.'},
+
+  {t:'bridge', kicker:'The shift',
+   h:'Control is not more work. It is the right five questions, answered every month.',
+   p:'When Morten looks at a business he might invest in, he does not read a fifty-page plan. He asks five questions. If the owner can answer all five with real numbers, the business is in control. If not, it is not ready, no matter how good the revenue looks.',
+   p2:'Here are the five.'},
+
+  {t:'q', num:'1', kicker:'Fra kaos til kontrol',
+   h:'Do you know your numbers this month, not last quarter?',
+   p:'Revenue, profit, and cash position, current to this month. If your answer is an estimate or a shrug, every decision after it is a guess.'},
+
+  {t:'q', num:'2', kicker:'Fra kaos til kontrol',
+   h:'Do you know which customers make you money?',
+   p:'Not total revenue. Which customers and which offers actually carry margin, and which quietly cost you more than they pay. Most owners are subsidising someone and do not know who.'},
+
+  {t:'q', num:'3', kicker:'Fra kaos til kontrol',
+   h:'Can the business run a week without you?',
+   p:'If the answer is no, you do not own a business. You own a job that owns you. This is the question that decides whether the thing is ever sellable.'},
+
+  {t:'q', num:'4', kicker:'Fra kaos til kontrol',
+   h:'Do you know your next constraint before you hit it?',
+   p:'Every business has one bottleneck at a time. Owners in control name theirs in advance and fix it early. Owners in chaos discover it when it breaks.'},
+
+  {t:'q', num:'5', kicker:'Fra kaos til kontrol',
+   h:'Could someone buy this and run it?',
+   p:'You may never sell. But a business built so it could be sold is a business in control, whether you sell it or hand it on or simply take a real holiday.'},
+
+  {t:'part', kicker:'Part three', h:'What control looks like in practice.'},
+
+  {t:'content', kicker:'The rhythm',
+   h:'One hour a month, on your live numbers.',
+   p:'Control does not come from a two-day seminar you forget by Friday. It comes from a rhythm. Each month your financials go up, and you sit down with people who already have them in front of them.',
+   list:['Your revenue, profit, and cash, uploaded monthly.',
+         'One live session a month to make the real decisions.',
+         'Answers on the day you need them, not a quarter later.'],
+   p2:'Small inputs, compounded. That is how chaos turns into control.'},
+
+  {t:'why', kicker:'Why listen to us',
+   h:'We made the mistakes so you can skip them.',
+   p:'Morten Larsen built and sold Hungry, backed nineteen companies, and sits on the other side of the table on Løvens Hule. He judges businesses for a living, using the exact five questions above.',
+   p2:'Jonas Herlev built and exited Din Camp and now builds the systems that free owners from the day to day. Between us we have made most of the expensive mistakes already.'},
+
+  {t:'content', kicker:'The room',
+   h:'A board, not a mailing list.',
+   p:'This is not a networking evening or another newsletter. It is a small advisory forum: the same two people, all the way through, alongside owner-managers at your level. One member per sector, so you can speak freely.',
+   p2:'More than two thousand owners have already watched the free session this is built from.'},
+
+  {t:'recap', kicker:'The whole thing in one line',
+   h:'Five questions stand between chaos and control.',
+   p:'Know your numbers now. Know who makes you money. Run without you. See the next constraint. Be buyable. Answer those five every month, and you stop reacting and start deciding.'},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Start with the free hour.',
+   p:'Watch the free 60-minute session, answer the five questions about your own business, and see where you actually stand. If it is a fit, The Boardroom is the room where you keep the rhythm going.',
+   btn:'Watch the free session',
+   disc:'Educational content only. Nothing here is financial, legal, or investment advice, and no specific result, revenue, or outcome is promised or guaranteed. Every business is different and results vary.',
+   foot:'The Boardroom · topix.dk'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x?x.replace(/&/g,'&amp;').replace(/</g,'&lt;'):''}
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let html = '';
+  if(s.kicker) html += `<div class="kicker">${esc(s.kicker)}</div>`;
+  if(s.num) html += `<div class="q-num">${esc(s.num)}</div>`;
+  if(s.t==='title'){ html = `<div class="kicker">${esc(s.kicker)}</div><h1>${esc(s.h)}</h1><p class="lead">${esc(s.p)}</p>`; }
+  else if(s.t==='part'){ html += `<h2>${esc(s.h)}</h2>`; }
+  else {
+    html += `<h2>${esc(s.h)}</h2>`;
+    if(s.p) html += `<p class="lead">${esc(s.p)}</p>`;
+    if(s.list){ html += '<ul>'+s.list.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'; }
+    if(s.p2) html += `<p>${esc(s.p2)}</p>`;
+    if(s.btn) html += `<div><span class="cta-btn">${esc(s.btn)}</span></div>`;
+    if(s.disc) html += `<div class="disc">${esc(s.disc)}</div>`;
+  }
+  if(s.foot) html += `<div class="foot">${esc(s.foot)}</div>`;
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+const c = document.createElement('div');
+c.className='pagercount';
+c.textContent = S.length + ' slides';
+deck.appendChild(c);
+</script>
+</body>
+</html>
