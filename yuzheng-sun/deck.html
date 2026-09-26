@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Work in the Age of AI — Superlinear Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --panel:#f4f4f5;
+    --rule:#e4e4e7;
+    --ink:#17151d;
+    --accent:#007a3a;
+    --grey:#a1a1aa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Geist",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 8vw}
+  .slide{display:none;width:100%;max-width:1000px}
+  .slide.on{display:block;animation:f .35s ease}
+  @keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .kicker{font-family:"Geist Mono",monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-size:clamp(34px,5.2vw,62px);line-height:1.04;font-weight:700;letter-spacing:-.02em}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:600;letter-spacing:-.015em}
+  .lead{font-size:clamp(18px,2vw,23px);line-height:1.5;color:#3f3d47;margin-top:22px;max-width:40ch}
+  .big{font-size:clamp(30px,4.4vw,52px);line-height:1.14;font-weight:600;letter-spacing:-.015em}
+  .big .hl{color:var(--accent)}
+  ul{list-style:none;margin-top:26px}
+  li{font-size:clamp(18px,2vw,22px);line-height:1.5;padding:14px 0;border-top:1px solid var(--rule);display:flex;gap:16px}
+  li:last-child{border-bottom:1px solid var(--rule)}
+  li .n{font-family:"Geist Mono",monospace;color:var(--accent);font-size:15px;padding-top:4px;min-width:2ch}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:34px 38px;margin-top:26px}
+  .card h3{font-size:clamp(22px,2.6vw,30px);font-weight:600;letter-spacing:-.01em}
+  .card p{font-size:clamp(16px,1.8vw,20px);line-height:1.5;color:#3f3d47;margin-top:12px;max-width:52ch}
+  .mono{font-family:"Geist Mono",monospace;font-size:14px;color:var(--grey);letter-spacing:.04em}
+  .quote{font-size:clamp(24px,3.4vw,40px);line-height:1.18;font-weight:500;letter-spacing:-.01em}
+  .quote .hl{color:var(--accent)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .two .card{margin-top:0}
+  .disc{font-family:"Geist Mono",monospace;font-size:12.5px;line-height:1.55;color:var(--grey);margin-top:30px;max-width:64ch}
+  .cta-row{margin-top:30px;font-size:clamp(18px,2vw,22px)}
+  .cta-row b{color:var(--accent)}
+  footer{position:fixed;left:8vw;bottom:4vh;font-family:"Geist Mono",monospace;font-size:12px;color:var(--grey);letter-spacing:.08em}
+  .nav{position:fixed;right:8vw;bottom:4vh;font-family:"Geist Mono",monospace;font-size:12px;color:var(--grey)}
+  .nav b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>SUPERLINEAR ACADEMY</footer>
+<div class="nav"><b id="cur">1</b> / <span id="tot">1</span></div>
+<script>
+const S=[
+ {t:'title',h:`Real Work in the Age of AI`,k:`A live masterclass with Yuzheng Sun`,lead:`How to build tools that actually change your output, and outgrow the tutorials for good.`},
+
+ {t:'point',k:`Who this is for`,h:`You already use AI every day.`,lead:`You prompt, you paste, you ship faster than you used to. And still, a quiet question sits underneath it: is any of this the work that lasts?`},
+
+ {t:'big',k:`The trap`,big:`AI made it easy to look productive.<br>It did not make it easy to <span class="hl">do work that matters.</span>`},
+
+ {t:'quote',k:`The reframe`,q:`AI can amplify fake work <span class="hl">a hundredfold.</span> The skill that matters now is telling the two apart.`},
+
+ {t:'section',k:`Part one`,h:`The core problem: fake work, at scale.`,lead:`Most AI output looks finished and moves nothing. More decks, more drafts, more dashboards, and the same result on the other side.`},
+
+ {t:'card',k:`The test`,h:`One question separates the two`,card:{h:`What changed after the work was done?`,p:`Real work moves something measurable in the outside world. Fake work only rearranges the inside of your own screen. Ask it about everything AI helps you produce.`}},
+
+ {t:'section',k:`Part two`,h:`The method: three lenses I teach.`,lead:`Not fifty tools. Three ways of judging your own work so AI compounds it instead of inflating it.`},
+
+ {t:'card',k:`Lens one`,h:`Real Capability`,card:{h:`Real Capability`,p:`The skills that hold their value no matter the credential, the title, or which model is winning this month. What you can actually do. AI raises the ceiling on real capability and exposes the absence of it.`}},
+
+ {t:'card',k:`Lens two`,h:`Real Work`,card:{h:`Real Work`,p:`Output that creates measurable external value, not performative activity that only signals effort. When you can name what changed, you were doing real work. When you cannot, you were busy.`}},
+
+ {t:'card',k:`Lens three`,h:`The Horizon`,card:{h:`The Horizon`,p:`Does the work keep paying off after you ship it? A maker judges by the horizon, not by the applause on launch day. Build the thing that is still working for you six months later.`}},
+
+ {t:'big',k:`Putting it together`,big:`Real Capability builds it.<br>Real Work proves it.<br><span class="hl">The Horizon</span> decides if it lasts.`},
+
+ {t:'section',k:`Part three`,h:`One week in, the shift is visible.`,lead:`The shift is not more AI. It is pointing the AI you already use at work that changes something.`},
+
+ {t:'twocard',k:`Before and after`,a:{h:`The tutorial loop`,p:`Watch a demo, copy the prompt, produce a clever artifact, feel productive, and change nothing you could point to on Monday.`},b:{h:`The builder loop`,p:`Pick a real friction, build a small tool against it, measure what moved, keep the ones that stay useful. Capability compounds.`}},
+
+ {t:'list',k:`The five moves`,h:`How builders actually get ahead`,items:[
+   `Automate the work you already repeat, before you automate anything clever.`,
+   `Learn enough internals to trust and correct the output, not just accept it.`,
+   `Bridge the gap between a GUI and an API so your tools do real jobs.`,
+   `Manage AI like a capable teammate: brief it, review it, hold a standard.`,
+   `Choose projects by their horizon, so today's build still earns in a year.`
+ ]},
+
+ {t:'card',k:`The capstone`,h:`From learner to AI Architect`,card:{h:`Build one thing that is unmistakably yours`,p:`Not a toy from a tutorial. A tool that solves a problem someone actually has, that you can show and defend. That artifact is the proof of real capability, and it is the point of the whole path.`}},
+
+ {t:'point',k:`Why me`,h:`I have measured value for a living.`,lead:`Cornell economics PhD, then economist at Amazon, data scientist at Meta, Data and AI director at Tencent, and principal at Statsig before OpenAI acquired the team. My whole career has been separating what moved the number from what only looked like it did.`},
+
+ {t:'point',k:`Why now`,h:`20,000 builders are already doing this.`,lead:`Superlinear Academy is a community of people who post real projects, not screenshots of prompts. 700+ projects and 8,000+ comments in, one pattern holds: the people who build things that last outgrow the ones who chase the newest trick.`},
+
+ {t:'quote',k:`The point`,q:`The goal was never to use AI more.<br>It was to <span class="hl">make what lasts.</span>`},
+
+ {t:'cta',k:`Your next step`,h:`Come build something real.`,lead:`If you want to stop collecting tutorials and start building tools that change your output, join the next live cohort of AI Builders with me and Yan.`,cta:`Join the next live cohort at <b>maven.com/superlinear/aibuilders</b>, or start free inside the Superlinear community.`,disc:`This masterclass is educational. No specific income, career, or business result is guaranteed. Results vary and depend on your own effort, situation, and follow-through.`}
+];
+
+const stage=document.getElementById('stage');
+function esc(x){return x}
+function render(s){
+ if(s.t==='title') return `<div class="kicker">${s.k}</div><h1>${s.h}</h1><div class="lead">${s.lead}</div>`;
+ if(s.t==='point') return `<div class="kicker">${s.k}</div><h2>${s.h}</h2><div class="lead">${s.lead}</div>`;
+ if(s.t==='section') return `<div class="kicker">${s.k}</div><h1>${s.h}</h1><div class="lead">${s.lead}</div>`;
+ if(s.t==='big') return `<div class="kicker">${s.k}</div><div class="big">${s.big}</div>`;
+ if(s.t==='quote') return `<div class="kicker">${s.k}</div><div class="quote">${s.q}</div>`;
+ if(s.t==='card') return `<div class="kicker">${s.k}</div><h2>${s.h}</h2><div class="card"><h3>${s.card.h}</h3><p>${s.card.p}</p></div>`;
+ if(s.t==='twocard') return `<div class="kicker">${s.k}</div><div class="two"><div class="card"><h3>${s.a.h}</h3><p>${s.a.p}</p></div><div class="card"><h3>${s.b.h}</h3><p>${s.b.p}</p></div></div>`;
+ if(s.t==='list') return `<div class="kicker">${s.k}</div><h2>${s.h}</h2><ul>${s.items.map((x,i)=>`<li><span class="n">0${i+1}</span><span>${x}</span></li>`).join('')}</ul>`;
+ if(s.t==='cta') return `<div class="kicker">${s.k}</div><h1>${s.h}</h1><div class="lead">${s.lead}</div><div class="cta-row">${s.cta}</div><div class="disc">${s.disc}</div>`;
+ return '';
+}
+let i=0;
+document.getElementById('tot').textContent=S.length;
+function show(n){
+ i=Math.max(0,Math.min(S.length-1,n));
+ stage.innerHTML=`<div class="slide on">${render(S[i])}</div>`;
+ document.getElementById('cur').textContent=i+1;
+}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+ if(e.key==='ArrowLeft')show(i-1);
+});
+stage.addEventListener('click',()=>show(i+1));
+show(0);
+</script>
+</body>
+</html>
