@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turn Your Notes Into Original Work | Linking Your Thinking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f8ff;      /* their near-white ground */
+    --panel:#ffffff;
+    --rule:#cdd7e8;    /* their pale rule */
+    --ink:#121826;     /* their dominant ink */
+    --muted:#687589;   /* their muted slate */
+    --accent:#6d50e8;  /* their signature violet */
+    --serif:'Newsreader',Georgia,serif;
+    --sans:'Space Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .deck{max-width:1120px;margin:0 auto;padding:40px 22px 80px}
+  .slide{
+    position:relative;background:var(--panel);border:1px solid var(--rule);
+    border-radius:18px;padding:64px 60px;margin:26px 0;min-height:520px;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+    box-shadow:0 1px 0 rgba(18,24,38,.02);
+  }
+  /* node-link motif: sparse connected dots echoing a graph view / Maps of Content */
+  .slide svg.motif{position:absolute;top:0;right:0;width:230px;height:230px;opacity:.5;pointer-events:none}
+  .kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:20px}
+  h1{font-family:var(--serif);font-weight:500;font-size:56px;line-height:1.04;letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1.1;letter-spacing:-.01em;margin-bottom:20px}
+  .lead{font-size:22px;line-height:1.5;color:var(--ink);max-width:44ch}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);max-width:52ch;margin-top:14px}
+  ul{list-style:none;margin-top:18px;max-width:56ch}
+  li{position:relative;font-size:20px;line-height:1.5;padding:10px 0 10px 30px;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:2px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .arc{display:flex;gap:16px;margin-top:26px;flex-wrap:wrap}
+  .arc .cell{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:24px}
+  .arc .cell .letter{font-family:var(--serif);font-size:44px;color:var(--accent);line-height:1}
+  .arc .cell h3{font-family:var(--sans);font-size:18px;margin:10px 0 8px}
+  .arc .cell p{font-size:16px;color:var(--muted);line-height:1.45}
+  .big{font-family:var(--serif);font-weight:500;font-size:60px;line-height:1.05;letter-spacing:-.015em;max-width:20ch}
+  .em{color:var(--accent)}
+  .stat{display:flex;gap:40px;margin-top:26px;flex-wrap:wrap}
+  .stat .n{font-family:var(--serif);font-size:52px;color:var(--accent);line-height:1}
+  .stat .n span{display:block;font-family:var(--sans);font-size:15px;color:var(--muted);margin-top:6px}
+  .pagenum{position:absolute;bottom:22px;right:28px;font-size:13px;color:var(--muted)}
+  .brandline{position:absolute;bottom:22px;left:60px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.5}
+  .ctabtn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;font-weight:600;
+    font-size:18px;padding:16px 30px;border-radius:12px;text-decoration:none}
+  .cover{background:linear-gradient(180deg,#ffffff 0%,#f5f8ff 100%)}
+  .cover h1{font-size:64px}
+  @media(max-width:640px){.slide{padding:40px 26px}h1,.cover h1{font-size:38px}.big{font-size:38px}h2{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const MOTIF = `<svg class="motif" viewBox="0 0 200 200" fill="none" stroke="#6d50e8" stroke-width="1.4">
+  <line x1="40" y1="50" x2="120" y2="30"/><line x1="120" y1="30" x2="160" y2="90"/>
+  <line x1="40" y1="50" x2="70" y2="130"/><line x1="70" y1="130" x2="160" y2="90"/>
+  <line x1="70" y1="130" x2="120" y2="30"/>
+  <circle cx="40" cy="50" r="6" fill="#6d50e8" stroke="none"/>
+  <circle cx="120" cy="30" r="8" fill="#6d50e8" stroke="none"/>
+  <circle cx="160" cy="90" r="5" fill="#6d50e8" stroke="none"/>
+  <circle cx="70" cy="130" r="7" fill="#6d50e8" stroke="none"/>
+</svg>`;
+
+const S = [
+  {t:'cover', kicker:'A Live Masterclass', h1:'Turn Your Notes Into Original Work',
+   sub:'The A.R.C. Method for Linking Your Thinking, with Nick Milo.'},
+
+  {t:'promise', kicker:'The Promise',
+   lead:'By the end of the hour you will have the exact motion that turns a pile of captured notes into finished, original thinking.',
+   sub:'Not another app. Not more highlights. A repeatable way to actually make something out of what you know.'},
+
+  {t:'bullets', kicker:'Who This Is For', h2:'If you capture a lot and create too little',
+   items:['Writers, researchers and students with notes everywhere and nothing shipping',
+          'Knowledge workers whose best ideas get buried the moment they save them',
+          'Anyone who has tried Obsidian, Notion or a dozen apps and still feels stuck']},
+
+  {t:'lead', kicker:'The Trap', h2:'You did everything right',
+   lead:'You capture everything. Highlights, clippings, quotes, screenshots.',
+   sub:'And still, when it is time to create, the page is blank and the notes just sit there.'},
+
+  {t:'big', kicker:'The Reframe',
+   big:['You do not have a note-taking problem.','You have a ', 'note-making', ' problem.']},
+
+  {t:'lead', kicker:'Part One, The Core Problem', h2:'The Add trap',
+   lead:'Almost every productivity tip is about capturing better. Faster clipping, more apps, prettier vaults.',
+   sub:'Add is the easy part. The bottleneck is everything that happens after you save the note.'},
+
+  {t:'bullets', kicker:'Part One', h2:'The squished middle',
+   items:['Add: huge. We collect far more than we could ever use',
+          'Relate: tiny. We rarely connect one idea to another',
+          'Communicate: rare. So almost nothing becomes original work']},
+
+  {t:'section', kicker:'Part Two, The Method', h1:'The A.R.C. Framework',
+   sub:'Add. Relate. Communicate. The three moves that turn information into your own thinking.'},
+
+  {t:'arc', kicker:'Part Two', h2:'Three moves, in order',
+   cells:[['A','Add','Capture with intent. Bring ideas in, in your own words, so they are ready to work with later.'],
+          ['R','Relate','Link, cluster and collide notes against each other. This is where thinking actually happens.'],
+          ['C','Communicate','Transform those links into output. A post, an essay, a talk, a decision. The point of it all.']]},
+
+  {t:'lead', kicker:'Part Two', h2:'Maps of Content',
+   lead:'A Map of Content is one note that links every related note on a topic into a single place you can think from.',
+   sub:'Unlike a folder, a single note can live in many maps at once, and the links stay two-way automatically.'},
+
+  {t:'bullets', kicker:'Part Two', h2:'How a Map of Content grows',
+   items:['Collect: gather the notes that belong to a question',
+          'Cluster: group them by what they have in common',
+          'Collide: push clusters against each other until a new idea appears']},
+
+  {t:'lead', kicker:'Part Two', h2:'The HOME note',
+   lead:'One note becomes the front door to your whole system, a living dashboard of the maps that matter right now.',
+   sub:'You always know where you are and what to work on next, even when the vault gets large.'},
+
+  {t:'stat', kicker:'Part Two', h2:'Start inside a working system',
+   lead:'The Ideaverse is a starter system so you never face a blank vault again.',
+   stats:[['300+','notes to start from'],['1,000+','links already in place']]},
+
+  {t:'bullets', kicker:'Part Two', h2:'Architects and Gardeners',
+   items:['Architect mode: build structure when you know where you are going',
+          'Gardener mode: wander and connect when you do not',
+          'Getting unstuck is usually just switching modes on purpose']},
+
+  {t:'lead', kicker:'Part Two', h2:'Idea Emergence',
+   lead:'Ideas organize themselves in patterns that repeat. Work with those patterns and the system grows with you.',
+   sub:'A vault built this way keeps paying you back over a lifetime instead of collapsing under its own weight.'},
+
+  {t:'bullets', kicker:'Part Three, What It Looks Like', h2:'A week in the A.R.C. motion',
+   items:['You add fewer notes, but in your own words',
+          'You spend real time relating them inside a Map of Content',
+          'You communicate one finished thing you are proud of, every single week']},
+
+  {t:'lead', kicker:'Part Three, Why Me', h2:'Nick Milo, Linking Your Thinking',
+   lead:'I am the person who popularized Maps of Content and the HOME note for the note-making world.',
+   sub:'Linking Your Thinking is used by people at Harvard, Google, MIT, Stanford and Microsoft to think and create with their notes.'},
+
+  {t:'cta', kicker:'Start With Your Ideaverse', h1:'Build the system for life',
+   lead:'Ready to turn your notes into original work? Join the Knowledge Accelerator and build your Ideaverse with me.',
+   btn:'Join the Knowledge Accelerator',
+   disc:'This masterclass is educational. It shares a method for note-making and idea development. Individual results vary and are not guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(s.t==='cover'?' cover':'');
+  let h='';
+  if(s.t!=='cover') h+=MOTIF;
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h1) h+=`<h1>${s.h1}</h1>`;
+  if(s.h2) h+=`<h2>${s.h2}</h2>`;
+  if(s.big){h+=`<div class="big">${s.big[0]}<br>${s.big[1]}<span class="em">${s.big[2]}</span>${s.big[3]}</div>`;}
+  if(s.lead) h+=`<p class="lead">${s.lead}</p>`;
+  if(s.items){h+='<ul>'+s.items.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+  if(s.cells){h+='<div class="arc">'+s.cells.map(c=>`<div class="cell"><div class="letter">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('')+'</div>';}
+  if(s.stats){h+='<div class="stat">'+s.stats.map(n=>`<div class="n">${n[0]}<span>${n[1]}</span></div>`).join('')+'</div>';}
+  if(s.sub) h+=`<p class="sub">${s.sub}</p>`;
+  if(s.btn) h+=`<a class="ctabtn" href="#">${s.btn}</a>`;
+  if(s.disc) h+=`<p class="disc">${s.disc}</p>`;
+  h+=`<div class="brandline">Linking Your Thinking</div>`;
+  h+=`<div class="pagenum">${i+1} / ${S.length}</div>`;
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
+</content>
