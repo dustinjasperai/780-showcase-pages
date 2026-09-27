@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Being the Creator | A masterclass with Sarita Walsh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --paper:#f5efe6;
+    --ink:#221f1a;
+    --ink-soft:#4a463f;
+    --muted:#8a8377;
+    --rule:#e7ddcd;
+    --accent:#b0674a;
+  }
+  html,body{ height:100%; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Public Sans',-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    width:min(1040px,94vw);
+    aspect-ratio:16/9;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 12px 48px rgba(34,31,26,0.08);
+  }
+  .slide{
+    position:absolute; inset:0;
+    padding:8% 9%;
+    display:none;
+    flex-direction:column; justify-content:center;
+  }
+  .slide.on{ display:flex; }
+  .kicker{
+    font-size:0.72rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:1.1rem;
+  }
+  h1{ font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-size:4.2rem; line-height:1.02; letter-spacing:-0.01em; }
+  h2{ font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-size:3rem; line-height:1.08; margin-bottom:1.2rem; }
+  .sub{ font-family:'Cormorant Garamond',Georgia,serif; font-style:italic; font-size:1.7rem; color:var(--ink-soft); margin-top:1.4rem; }
+  .lede{ font-size:1.25rem; line-height:1.6; color:var(--ink-soft); max-width:44ch; }
+  .lede + .lede{ margin-top:1rem; }
+  .big{ font-family:'Cormorant Garamond',Georgia,serif; font-size:3.4rem; line-height:1.12; max-width:20ch; }
+  .big .hl{ color:var(--accent); }
+  .meta{ margin-top:2.4rem; font-size:0.95rem; color:var(--muted); letter-spacing:0.02em; }
+  .part-num{ font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--accent); letter-spacing:0.1em; margin-bottom:0.6rem; }
+  ul{ list-style:none; margin-top:0.6rem; }
+  li{ font-size:1.25rem; color:var(--ink-soft); padding:0.55rem 0 0.55rem 1.6rem; position:relative; border-bottom:1px solid var(--rule); max-width:46ch; }
+  li:last-child{ border-bottom:none; }
+  li::before{ content:''; position:absolute; left:0; top:1.15rem; width:0.5rem; height:0.5rem; background:var(--accent); border-radius:50%; }
+  li b{ color:var(--ink); font-weight:600; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:2.2rem; align-items:center; }
+  .card{ border:1px solid var(--rule); padding:1.6rem 1.8rem; background:rgba(255,255,255,0.35); }
+  .card h3{ font-family:'Cormorant Garamond',serif; font-size:1.7rem; margin-bottom:0.5rem; }
+  .card p{ font-size:1.05rem; color:var(--ink-soft); line-height:1.5; }
+  .steps{ display:flex; gap:1.4rem; margin-top:1.6rem; flex-wrap:wrap; }
+  .step{ flex:1; min-width:180px; border-top:2px solid var(--accent); padding-top:0.9rem; }
+  .step .n{ font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--accent); }
+  .step h3{ font-family:'Cormorant Garamond',serif; font-size:1.7rem; margin:0.2rem 0 0.4rem; }
+  .step p{ font-size:1rem; color:var(--ink-soft); line-height:1.45; }
+  .cta-line{ font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--ink); margin:1.4rem 0; }
+  .disclaimer{ margin-top:2rem; font-size:0.8rem; color:var(--muted); line-height:1.5; max-width:60ch; }
+  .brandline{ position:absolute; left:9%; bottom:5.5%; font-size:0.8rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
+  #nav{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:14px; align-items:center; font-family:'Public Sans',sans-serif; font-size:0.85rem; color:var(--muted); }
+  #nav button{ font:inherit; color:var(--ink); background:none; border:1px solid var(--rule); border-radius:999px; width:34px; height:34px; cursor:pointer; }
+  #nav button:hover{ border-color:var(--accent); color:var(--accent); }
+  @media (max-width:640px){
+    h1{ font-size:2.6rem; } h2{ font-size:2rem; } .big{ font-size:2.1rem; } .cta-line{ font-size:1.4rem; }
+    .slide{ padding:9% 8%; } .two,.steps{ grid-template-columns:1fr; flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button><span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker">A live masterclass</div>
+    <h1>Being the<br>Creator</h1>
+    <div class="sub">How high-achieving people get unstuck without pushing harder</div>
+    <div class="meta">With Sarita Walsh &middot; The Art of Being&deg;</div>`},
+
+  {t:'who', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>Successful, and still stuck</h2>
+    <p class="lede">You are smart, accomplished, and rising. From the outside it looks handled.</p>
+    <p class="lede">Inside, there is a quieter story: overthinking every move, waiting to feel ready, and a low hum of "not good enough" that no achievement seems to switch off.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">The trap</div>
+    <h2>You already tried the obvious fix</h2>
+    <p class="lede">Do more. Plan harder. Optimize the calendar one more time.</p>
+    <p class="lede">It buys a few days of relief, and then the loop comes back, because effort was never the thing that was missing.</p>`},
+
+  {t:'reframe', html:`
+    <div class="kicker">The reframe</div>
+    <p class="big">You don't have a doing problem.<br>You have a <span class="hl">being</span> problem.</p>`},
+
+  {t:'part', html:`
+    <div class="part-num">Part One</div>
+    <h2>The fear loop</h2>
+    <p class="lede">What overthinking actually is, and why more thinking never ends it.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">Fear in disguise</div>
+    <h2>Overthinking is fear wearing a productive costume</h2>
+    <p class="lede">Hesitating. Re-reading. Waiting for certainty. It feels responsible, so it hides in plain sight.</p>
+    <p class="lede">The cost is time. We have about 4,000 weeks, and fear quietly spends them for us.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">Facts vs Stories</div>
+    <h2>Most of what keeps you stuck is a story you mistook for a fact</h2>
+    <ul>
+      <li><b>Fact:</b> the email is unanswered.</li>
+      <li><b>Story:</b> "if I get it wrong, they will see I do not belong here."</li>
+      <li>You cannot act clearly until you can tell the two apart.</li>
+    </ul>`},
+
+  {t:'content', html:`
+    <div class="kicker">Creative vs Reactive</div>
+    <div class="two">
+      <div class="card"><h3>Reactive</h3><p>Fear narrows what you can see. Two options, both bad, decide fast to make the discomfort stop.</p></div>
+      <div class="card"><h3>Creative</h3><p>Presence widens what you can choose. More range, more options, a decision you can actually stand behind.</p></div>
+    </div>`},
+
+  {t:'part', html:`
+    <div class="part-num">Part Two</div>
+    <h2>The Art of Being</h2>
+    <p class="lede">A practice, not a pep talk. This is the core move I teach.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">The ACT model</div>
+    <h2>Awareness, Choice, Transformation</h2>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Awareness</h3><p>Meet what you have been running from, without flinching or fixing.</p></div>
+      <div class="step"><div class="n">02</div><h3>Choice</h3><p>In the space presence opens, a real choice becomes visible, not the fear default.</p></div>
+      <div class="step"><div class="n">03</div><h3>Transformation</h3><p>A chosen action, repeated, becomes a new way of being.</p></div>
+    </div>`},
+
+  {t:'content', html:`
+    <div class="kicker">The move under the model</div>
+    <p class="big">Fear narrows.<br><span class="hl">Presence</span> widens.</p>
+    <p class="lede" style="margin-top:1.6rem">Your future is directly correlated to the quality of your presence right now. That is the whole practice, said in one line.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">The 3 Being Principles</div>
+    <h2>How you carry it into a real week</h2>
+    <ul>
+      <li><b>Be you.</b> Stop shrinking to fit an idea of how you should be.</li>
+      <li><b>Be alive.</b> Stay connected to what is happening in you and around you.</li>
+      <li><b>Be unreasonable.</b> Let go of the inherited limits on what is possible.</li>
+    </ul>`},
+
+  {t:'content', html:`
+    <div class="kicker">Being vs Doing</div>
+    <h2>The shift that changes everything downstream</h2>
+    <p class="lede">When who you are being is steady, the doing gets simpler, faster, and far less loud.</p>
+    <p class="lede">You stop managing the fear and start creating from something quieter.</p>`},
+
+  {t:'part', html:`
+    <div class="part-num">Part Three</div>
+    <h2>When presence leads</h2>
+    <p class="lede">And why I am the one teaching it.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">From stuck to movement</div>
+    <h2>What changes when presence leads</h2>
+    <ul>
+      <li>Decisions come cleaner, with less second-guessing after.</li>
+      <li>The "not good enough" hum gets quieter and stops running the show.</li>
+      <li>Action holds, because it is chosen, not forced.</li>
+    </ul>`},
+
+  {t:'whyme', html:`
+    <div class="kicker">Why me</div>
+    <h2>Sarita Walsh</h2>
+    <p class="lede">A psychology and research background tied to Harvard Medical School, a former Senior VP of Leadership Development at a Fortune 500 company, and years of meditation practice.</p>
+    <p class="lede">I have coached senior leaders through exactly this gap between outward success and inner stuckness. Being the Creator is that work, made into a path you can walk.</p>`},
+
+  {t:'content', html:`
+    <div class="kicker">The container</div>
+    <h2>Being the Creator</h2>
+    <p class="lede">An eight-week cohort where you practice the ACT model and the Being Principles on your own real decisions, with a small group and me alongside you.</p>
+    <p class="lede">Not more information. A different way of meeting your life.</p>`},
+
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Come practice this with me</h2>
+    <p class="cta-line">Join the next Being the Creator cohort.</p>
+    <p class="lede">Applications for the next cohort open at <b>saritawalsh.com</b>. If you want to talk it through first, reach out there and we will find the right starting point for you.</p>
+    <p class="disclaimer">This masterclass is for educational purposes only. It is personal-development coaching, not therapy, medical, or financial advice, and it offers no guarantee of any specific outcome. Results vary and depend on your own participation.</p>`}
+];
+
+const stage = document.getElementById('stage');
+stage.innerHTML = S.map((s,i)=>`<section class="slide${i===0?' on':''}" data-i="${i}">${s.html}<div class="brandline">The Art of Being&deg;</div></section>`).join('');
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const count = document.getElementById('count');
+function show(n){
+  cur = Math.max(0, Math.min(S.length-1, n));
+  slides.forEach((el,i)=>el.classList.toggle('on', i===cur));
+  count.textContent = (cur+1)+' / '+S.length;
+}
+document.getElementById('next').onclick = ()=>show(cur+1);
+document.getElementById('prev').onclick = ()=>show(cur-1);
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+stage.addEventListener('click', e=>{ if(!e.target.closest('#nav')) show(cur+1); });
+show(0);
+</script>
+</body>
+</html>
