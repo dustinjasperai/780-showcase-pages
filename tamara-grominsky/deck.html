@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Executor to Strategist — a PMM Camp masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12291F;      /* pine ground (camp) */
+    --panel:#1B3A2C;   /* raised panel */
+    --rule:#2E5A44;    /* hairline */
+    --accent:#E4A548;  /* ember accent (single focal color) */
+    --ink:#F3F0E7;     /* canvas text */
+    --muted:#A9C1B2;   /* muted sage */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .slide{background:linear-gradient(180deg,var(--panel),#16311F);border:1px solid var(--rule);
+    border-radius:14px;padding:52px 54px;margin:20px 0;min-height:440px;display:flex;flex-direction:column;justify-content:center}
+  .kicker{font-family:"Space Grotesk",sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:44px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:30px;line-height:1.14;letter-spacing:-.01em}
+  .lede{font-size:20px;color:var(--muted);margin-top:16px;max-width:44ch}
+  .big{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:38px;line-height:1.12}
+  .big .hl{color:var(--accent)}
+  ul{margin-top:22px;list-style:none;display:grid;gap:14px}
+  li{font-size:19px;padding-left:26px;position:relative}
+  li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .card{background:#12291F;border:1px solid var(--rule);border-radius:10px;padding:20px 22px}
+  .card b{font-family:"Space Grotesk",sans-serif;color:var(--accent);display:block;margin-bottom:6px;font-size:17px}
+  .card span{font-size:16px;color:var(--muted)}
+  .num{font-family:"Space Grotesk",sans-serif;color:var(--accent);font-size:15px;font-weight:700;margin-bottom:10px}
+  .foot{margin-top:auto;padding-top:26px;color:var(--muted);font-size:14px;font-family:"Space Grotesk",sans-serif;letter-spacing:.04em}
+  .cta-btn{display:inline-block;margin-top:24px;background:var(--accent);color:#12291F;font-family:"Space Grotesk",sans-serif;
+    font-weight:700;font-size:18px;padding:15px 30px;border-radius:9px;text-decoration:none}
+  .disclaimer{margin-top:22px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .pageno{position:absolute;right:22px;bottom:16px;font-size:12px;color:var(--rule);font-family:"Space Grotesk",sans-serif}
+  .slide{position:relative}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+ {t:'title', kicker:'A PMM Camp Masterclass', h:'From Executor to Strategist',
+   lede:'How senior product marketers earn the strategy seat, instead of staying the team that just ships the launch.',
+   foot:'Led live by Tamara Grominsky, founder of PMM Camp'},
+ {t:'list', kicker:'Who this is for', h:'You run the launches. You want to run the decisions.',
+   bullets:'You are a senior product marketer or a PMM lead.||You are trusted with execution, but pulled into strategy too late.||You want the range, and the seat, that comes with it.'},
+ {t:'list', kicker:'The trap', h:'Somewhere along the way, product marketing became the launch team.',
+   bullets:'You get the brief after the decisions are already made.||Your best thinking arrives as a deck nobody reads twice.||The org measures you on launch volume, not on the calls you shaped.'},
+ {t:'big', kicker:'The reframe', big:'Product marketing isn\'t marketing.', hl:'It\'s strategy.',
+   lede:'The strongest PMMs sit outside both product and marketing as an unbiased voice, shaping the decision from discovery all the way through the sale.'},
+ {t:'part', num:'Part One', h:'Why product marketers get stuck'},
+ {t:'lede', kicker:'The core problem', h:'Execution is visible. Strategy is invisible until you claim it.',
+   lede:'When your job is defined as "make the launch happen," every incentive keeps you downstream. Nobody hands you the strategy seat. You have to show the work that earns it.'},
+ {t:'list', kicker:'What strategy means for PM', h:'Not more campaigns. Better decisions, earlier.',
+   bullets:'Which segments we serve, and which we walk away from.||How we position, price, and package before a line of copy exists.||Where the market is moving, told straight to the people making the call.'},
+ {t:'part', num:'Part Two', h:'The range that changes it'},
+ {t:'cards', kicker:'The range', h:'Four roles a product marketer has to move between.',
+   cards:'Strategist::Frames the bet before anyone commits to it.||Communicator::Turns the position into a narrative the market repeats.||Collaborator::Aligns product, sales, and marketing around one story.||Analyst::Proves it moved revenue, not just impressions.'},
+ {t:'lede', kicker:'Role one, the hard one', h:'The strategist role is the one you have to take, not wait for.',
+   lede:'It starts by showing up to the decision with a point of view: the segment, the position, the trade-off, in language the room can act on. Do that a few times and the invitation stops being optional.'},
+ {t:'list', kicker:'System one', h:'Positioning, then Messaging, then Alignment.',
+   bullets:'Positioning. Where the product actually wins, and for whom.||Messaging. That position translated into a narrative that resonates.||Alignment. The whole org and the market coherent on it before you ship.'},
+ {t:'cards', kicker:'System two', h:'Tier every launch before you run it.',
+   cards:'Tier 1::Company-wide moment. Full go-to-market weight.||Tier 2::Meaningful, targeted. A focused motion, not the whole company.||Tier 3::Ship it, note it, move on. Protect the team\'s attention.||Why it matters::Not every release deserves the whole org. Tiering makes that a decision, not a reflex.'},
+ {t:'lede', kicker:'The companion', h:'An accountability matrix ends the "who owns this" scramble.',
+   lede:'For every launch, one clear owner per decision and per deliverable. It is the quiet difference between a PMM who coordinates chaos and one who directs a plan.'},
+ {t:'list', kicker:'Proving it', h:'Trade top-of-funnel vanity for down-funnel truth.',
+   bullets:'Sell-through, not just sign-ups.||Customer lifetime value, not launch-week traffic.||The metrics that let you argue product marketing is a revenue function.'},
+ {t:'part', num:'Part Three', h:'What leading actually looks like'},
+ {t:'lede', kicker:'Where this leads', h:'The seat isn\'t a title. It\'s being in the room when the bet is made.',
+   lede:'Product marketers who build the range don\'t top out at CMO. The path opens toward Chief Product Officer and Chief Strategy Officer, because the work was strategy all along.'},
+ {t:'lede', kicker:'Why learn this here', h:'Tamara Grominsky',
+   lede:'A decade leading product marketing and strategy at Unbounce, FreshBooks, and Kajabi, from individual contributor to the executive table. Now the founder of PMM Camp, the home for product marketing leaders, teaching the range full time.'},
+ {t:'list', kicker:'Where you go from here', h:'You build the range on purpose, not by accident.',
+   bullets:['Take the strategist seat on one decision this quarter.','Tier your next three launches before a single asset gets made.','Bring one down-funnel number to the leadership conversation.']},
+ {t:'cta', kicker:'Your next step', h:'Learn the range alongside senior PMMs who are doing it.',
+   lede:'PMM Camp is the application-only home for product marketing leaders, built to take you from executor to strategist.',
+   cta:'Apply to join PMM Camp', href:'https://www.pmmcamp.com/',
+   disclaimer:'Educational session only. No specific career, revenue, or business result is guaranteed. Results vary and depend on your own context, effort, and circumstances.'}
+];
+
+function bullets(s){return '<ul>'+s.split('||').map(b=>`<li>${b}</li>`).join('')+'</ul>';}
+function cards(s){return '<div class="grid">'+s.split('||').map(c=>{const x=c.split('::');return `<div class="card"><b>${x[0]}</b><span>${x[1]}</span></div>`;}).join('')+'</div>';}
+
+function slide(s, i){
+  const p = `<div class="pageno">${i+1} / ${S.length}</div>`;
+  const k = s.kicker ? `<div class="kicker">${s.kicker}</div>` : '';
+  switch(s.t){
+   case 'title': return `<section class="slide">${k}<h1>${s.h}</h1><p class="lede">${s.lede}</p><div class="foot">${s.foot}</div>${p}</section>`;
+   case 'part': return `<section class="slide"><div class="num">${s.num}</div><h1>${s.h}</h1>${p}</section>`;
+   case 'big': return `<section class="slide">${k}<p class="big">${s.big}<br><span class="hl">${s.hl}</span></p><p class="lede">${s.lede}</p>${p}</section>`;
+   case 'lede': return `<section class="slide">${k}<h2>${s.h}</h2><p class="lede">${s.lede}</p>${p}</section>`;
+   case 'list': return `<section class="slide">${k}<h2>${s.h}</h2>${bullets(s.bullets)}${p}</section>`;
+   case 'cards': return `<section class="slide">${k}<h2>${s.h}</h2>${cards(s.cards)}${p}</section>`;
+   case 'cta': return `<section class="slide">${k}<h2>${s.h}</h2><p class="lede">${s.lede}</p><a class="cta-btn" href="${s.href}">${s.cta}</a><p class="disclaimer">${s.disclaimer}</p>${p}</section>`;
+  }
+  return '';
+}
+document.getElementById('deck').innerHTML = S.map(slide).join('');
+</script>
+</body>
+</html>
