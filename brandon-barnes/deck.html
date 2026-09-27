@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Send More Offers · Brandon Barnes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#000321; --panel:#0a0e26; --rule:#28324e;
+    --acc:#e93d3d; --ink:#eef3f7; --body:#c9d8e0; --dim:#6a7690; --slate:#8aa0b4;
+  }
+  html,body{height:100%}
+  body{background:#05061a;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#05061a}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:.002em}
+  .t-title h1{font-size:6.2vw;max-width:94%}
+  .t-normal h1{font-size:3.8vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.7vw;color:var(--slate);margin-top:3.4vh;max-width:82%;line-height:1.4;font-weight:400}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.1vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.2vw;max-width:92%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#0b1030 0%,#000210 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.0vw;max-width:88%;color:var(--ink);font-weight:700}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#0b1030 0%,#000210 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:86%;color:var(--ink);font-weight:700}
+  .t-cta .body{font-family:'Inter',sans-serif;color:var(--body);font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.5%;bottom:8.5%;width:18vw;opacity:.9}
+  .corner-vf{right:6.5%;bottom:7.5%;width:8vw;opacity:.5}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(201,216,224,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">Send More Offers</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: stacked offers going out, one highlighted, drawn in the brand red -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 120 120">
+  <g fill="none" stroke="#e93d3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="18" y="40" width="66" height="46" rx="4" opacity="0.35"/>
+    <rect x="28" y="30" width="66" height="46" rx="4" opacity="0.6"/>
+    <rect x="38" y="20" width="66" height="46" rx="4" opacity="0.95"/>
+    <path d="M38 24 L71 47 L104 24" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Send More Offers',sub:'How to close more wholesale deals, priced right, from anywhere.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'You want to wholesale real estate. So why are the deals not coming?',body:'You are learning the business and putting in the work. You are pulling lists, spending on marketing, and talking to sellers. And still the closed deals are rare, the pipeline feels thin, and it is hard to tell whether you are one step away or doing the whole thing wrong.'},
+ {t:'dark',title:'More leads was never the thing standing between you and a deal.'},
+
+ {t:'section',idx:'Part One',title:'It Is Not a Lead Problem'},
+ {t:'normal',k:'The chase',title:'Almost everyone starting out is chasing more leads. That is the wrong lever.',body:'When deals are not closing, the instinct is to get more leads: more lists, more marketing, more spend. But most new wholesalers are sitting on plenty of leads they never turned into real offers. The bottleneck is not how many sellers you find. It is how many offers you actually send, and whether those offers are priced to get a yes.'},
+ {t:'normal',k:'The two real levers',title:'This is a numbers game, and the numbers are offers and price.',body:'Two things move the needle. First, volume: the more offers you make, the more deals you close, because this is a contact sport. Second, price: an offer only works if the number is right for the deal. Get those two working together and deals start to show up on a schedule instead of by luck.'},
+ {t:'dark',title:'You do not need more leads. You need more offers, priced right.'},
+
+ {t:'section',idx:'Part Two',title:'The Offer Volume Method'},
+ {t:'normal',k:'Send more offers',title:'Volume is the habit the whole business is built on.',body:'The first shift is to stop treating an offer as a big, careful event and start treating it as the everyday unit of the business. Set a weekly offer goal and hit it. Do not burn a lead because it said no once: sort the not-interested into a group and call them back every quarter, and add a referral ask for the ones who never bite. Volume, sustained, is what makes the rest of the method pay off.'},
+ {t:'normal',k:'MyMAO',title:'Price the deal right before you ever make the offer.',body:'Volume without pricing is just noise. MyMAO is how you run the numbers on a deal so you know your maximum allowable offer before you pick up the phone. When you trust your number, you can make offers fast and often without the fear of overpaying, and you can hold your price with confidence when a seller pushes back.'},
+ {t:'normal',k:'Reverse wholesaling',title:'Line up the buyer first, then go find the deal to match.',body:'The usual order is find a deal, then scramble for a buyer. Reverse wholesaling flips it: build the cash-buyer demand first, learn exactly what those buyers want, and then source deals that fit. It is how you do bigger deals with larger spreads and far less risk of being stuck holding a contract nobody wants.'},
+ {t:'normal',k:'Remote by design',title:'None of this requires you to be in the room, or even in the market.',body:'Once offers, pricing, and buyers are systemized, the work is a process, not a place. You can run acquisitions over the phone, price deals from a laptop, and work markets you would never drive to. Point blank: you can do deals virtually. That is what turns wholesaling from a local hustle into a business you can run from anywhere.'},
+ {t:'dark',title:'A repeatable way to price and send offers beats talent every single week.'},
+
+ {t:'section',idx:'Part Three',title:'How An Operator Runs The Week'},
+ {t:'normal',k:'A week on the method',title:'The same effort, pointed at the levers that actually close deals.',body:'Instead of a scattered week of chasing shiny leads, you work a simple loop: pull the deals worth pricing, run each through MyMAO, and send the offers, every day, to a number. Follow up the maybes, feed your buyers list, and let volume do its job. The week is calmer and the results are more predictable, because the plan matches how the business really works.'},
+ {t:'dark',title:'Consistency is the edge. Most people quit right before the volume pays off.'},
+ {t:'normal',k:'Why Brandon Barnes',title:'An operator who does this every day, not just teaches it.',body:'Brandon founded Mighty Estates in Atlanta in 2016 and has done 200-plus deals and 2.7 million dollars in assignment fees using the exact approach in this masterclass. He hosts the Send More Offers show and has walked hundreds of students through the same method. This is the playbook from his own business, not theory from a slide.'},
+
+ {t:'section',idx:'Your Next Step',title:'Where You Go From Here'},
+ {t:'normal',k:'Keep going with Brandon',title:'The method, applied to your deals, with a room of people doing it too.',body:'This masterclass is the overview. The next step is to put it to work on your own market with support and feedback. Start free in the Send More Offers community, use the tools, ask questions, and when you are ready to go faster, apply to work with Brandon directly.'},
+ {t:'cta',title:'Ready to send more offers and close more deals?',body:'Take the next step with Brandon Barnes and Send More Offers.',chips:['Join the free Send More Offers community','Apply to work with Brandon'],disc:'Educational content for aspiring real estate investors. No income or business result is guaranteed. Real estate involves risk, and results vary by person, market, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Send More <b>Offers</b> · Brandon Barnes</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
