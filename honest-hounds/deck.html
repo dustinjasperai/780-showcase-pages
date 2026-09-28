@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Science of Partnership — Honest Hounds Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f6;        /* light warm paper — site_scheme: light */
+    --panel:#ffffff;
+    --rule:#e7e4dd;
+    --ink:#1d1d1b;       /* body ink (from brand.json) */
+    --head:#050505;      /* near-black heading (dominant hex) */
+    --muted:#6b6b66;
+    --accent:#62b8af;    /* measured brand teal (brand.json, 41 uses) */
+    --accent-deep:#3f8b83;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Montserrat',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--panel);
+    border:1px solid var(--rule);border-radius:18px;
+    box-shadow:0 24px 60px -30px rgba(5,5,5,.28);
+    position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-deep);font-weight:700;margin-bottom:20px}
+  h1{font-family:'Anton',sans-serif;font-weight:400;color:var(--head);line-height:1.02;letter-spacing:.01em;font-size:clamp(38px,6.4vw,72px);text-transform:uppercase}
+  h2{font-family:'Anton',sans-serif;font-weight:400;color:var(--head);line-height:1.06;font-size:clamp(30px,4.6vw,50px);text-transform:uppercase;letter-spacing:.01em}
+  .lead{font-size:clamp(17px,2.1vw,22px);line-height:1.5;color:var(--ink);max-width:40ch;margin-top:18px}
+  .sub{font-size:clamp(15px,1.7vw,18px);color:var(--muted);margin-top:14px;max-width:44ch;line-height:1.5}
+  ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:14px;max-width:46ch}
+  li{position:relative;padding-left:30px;font-size:clamp(15px,1.8vw,19px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .big{font-family:'Anton',sans-serif;font-size:clamp(30px,5vw,58px);color:var(--head);line-height:1.05;text-transform:uppercase;max-width:18ch}
+  .pillar-num{font-family:'Anton',sans-serif;color:var(--accent);font-size:clamp(30px,4vw,44px);margin-bottom:6px}
+  .foot{position:absolute;left:72px;bottom:34px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .pageno{position:absolute;right:40px;bottom:34px;font-size:12px;color:var(--muted)}
+  .accentbar{width:64px;height:6px;background:var(--accent);border-radius:3px;margin:22px 0 4px}
+  .disc{font-size:12.5px;color:var(--muted);line-height:1.5;max-width:52ch;margin-top:20px;border-top:1px solid var(--rule);padding-top:14px}
+  .cta-line{font-size:clamp(18px,2.3vw,24px);color:var(--ink);margin-top:14px;line-height:1.5;max-width:42ch}
+  .brand{font-family:'Anton',sans-serif;letter-spacing:.06em;color:var(--head);text-transform:uppercase}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+  .nav button{font:inherit;font-size:13px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+  .count{font-size:12px;color:var(--muted);min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span class="count" id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S=[
+ {t:'title',k:"A live masterclass",h:"The Science of Partnership",lead:"Why the dog in front of you needs a partner, not a boss.",foot:"Honest Hounds"},
+ {t:'who',k:"In the next hour",h:"What you'll walk away with",items:["Why “more obedience” keeps failing the dog you actually have","The four pillars that change what your dog can cope with","A simple first week you can start the moment this ends"],sub:"No jargon, no dominance, no quick-fix promises."},
+ {t:'who',k:"Who this is for",h:"You've tried firmer. It didn't hold.",items:["Your dog barks, lunges or shuts down and “won't listen”","You've been told to be more dominant, drill more commands, correct harder","It works for a day, then you're back where you started"],sub:"If that's the loop you're in, this hour is for you."},
+ {t:'big',k:"The reframe",big:"Obedience is a symptom, not the goal.",sub:"A dog that obeys but can't cope is still a dog in trouble. We're going to fix the coping, and the behaviour follows."},
+ {t:'who',k:"Part one · the real problem",h:"Behaviour is communication",items:["Every bark, lunge and freeze is information, not defiance","We look at the whole picture: body, environment, nervous system","This is the detective approach, not a one-size recipe"],sub:"No two dogs are the same, so no single method is ever enough."},
+ {t:'big',k:"Why recipes fail",big:"The internet sells you a method. Your dog needs a read.",sub:"The same “sit-stay-heel” drill lands completely differently on a fearful dog and a frustrated one."},
+ {t:'h2',k:"Part two · the framework",h:"Four ways in, one partnership",lead:"The Science of Partnership is built from four working pillars. Each one changes what your dog can handle."},
+ {t:'pillar',k:"Pillar one",num:"01",h:"Body Language & Ethology",lead:"Learn to read what your dog is actually saying, seconds before the reaction. Most “sudden” behaviour was signalled long in advance."},
+ {t:'pillar',k:"Pillar two",num:"02",h:"Self Selection",lead:"Let the dog make safe choices instead of being managed through everything. Choice is where confidence is built, and confidence is what reactivity is missing."},
+ {t:'pillar',k:"Pillar three",num:"03",h:"Conditioned Relaxation",lead:"Calm is a skill you can teach, not a mood you wait for. Relaxation protocols and simple bodywork give your dog an off-switch they can find on their own."},
+ {t:'pillar',k:"Pillar four",num:"04",h:"The Predator Within",lead:"Channel the instinct instead of fighting it. The same drive that pulls a dog toward everything becomes the game that earns real off-lead freedom."},
+ {t:'big',k:"The half everyone skips",big:"Your dog reads you first.",sub:"Dogs co-regulate with the human on the other end of the lead. A tense guardian teaches a tense dog, no matter how good the technique is."},
+ {t:'pillar',k:"Part two · the human pillar",num:"05",h:"Regulate & Relate",lead:"A short daily practice for you, the guardian: settle your own nervous system so your dog can borrow that steadiness. This is the piece that makes the other four stick."},
+ {t:'who',k:"Part three · what changes",h:"What partnership looks like",items:["A walk where your dog can notice a trigger and choose to move on","Off-lead time you actually trust, built on a game not a command","A dog that can settle at home instead of patrolling"],sub:"The aim is a dog that copes, not a dog that performs."},
+ {t:'who',k:"Myths we retire today",h:"What we stop doing",items:["“He knows he's being naughty”: he's overwhelmed, not scheming","“Show them who's boss”: dominance training raises the stress that drives the behaviour","“Just socialise more”: flooding a worried dog makes it worse"],sub:"Better questions get better results."},
+ {t:'who',k:"Your first week",h:"Start here, tonight",items:["Pick one daily two-minute settle, same time, same spot","Watch for one early signal on your next walk and give space before the reaction","Swap one command drill for one choice-based game"],sub:"Small, repeatable, and built on the dog in front of you."},
+ {t:'who',k:"Why Honest Hounds",h:"Who's teaching this",items:["Qualified trainers plus herbalism and canine bodywork under one roof","An in-house mental-health resource for the humans, not just the dogs","A community of 1,700 guardians learning this together"],sub:"Science, ethics and lived experience, in one holistic approach."},
+ {t:'big',k:"The shift",big:"Stop training the behaviour. Start building the partner.",sub:"When the relationship is steady, the “problems” have far less to hold onto."},
+ {t:'cta',k:"Your next step",h:"Come and do this properly",cta:"Start your 7-day free trial and join the Honest Hounds membership. Bring the dog you have today, not the one you think you should have.",brand:"Honest Hounds",disc:"Educational content only. No specific behaviour result is guaranteed and results vary from dog to dog. Nothing here replaces veterinary or professional in-person advice. If your dog's behaviour poses a safety risk, please seek qualified hands-on support."}
+];
+const stage=document.getElementById('stage');let i=0;
+function render(){
+ stage.innerHTML='';
+ const s=S[i];const d=document.createElement('div');d.className='slide on';
+ let html='<div class="kicker">'+(s.k||'')+'</div>';
+ if(s.t==='title'){html+='<h1>'+s.h+'</h1><div class="accentbar"></div>'+(s.lead?'<div class="lead">'+s.lead+'</div>':'');}
+ else if(s.t==='h2'){html+='<h2>'+s.h+'</h2>'+(s.lead?'<div class="lead">'+s.lead+'</div>':'');}
+ else if(s.t==='who'){html+='<h2>'+s.h+'</h2>'+(s.items?'<ul>'+s.items.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'')+(s.sub?'<div class="sub">'+s.sub+'</div>':'');}
+ else if(s.t==='big'){html+='<div class="big">'+s.big+'</div>'+(s.sub?'<div class="sub">'+s.sub+'</div>':'');}
+ else if(s.t==='pillar'){html+='<div class="pillar-num">'+s.num+'</div><h2>'+s.h+'</h2>'+(s.lead?'<div class="lead">'+s.lead+'</div>':'');}
+ else if(s.t==='cta'){html+='<h2>'+s.h+'</h2><div class="accentbar"></div><div class="cta-line">'+s.cta+'</div><div class="disc">'+s.disc+'</div>';}
+ html+='<div class="foot">'+(s.foot||s.brand||'Honest Hounds')+'</div><div class="pageno">'+(i+1)+' / '+S.length+'</div>';
+ d.innerHTML=html;stage.appendChild(d);
+ document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
