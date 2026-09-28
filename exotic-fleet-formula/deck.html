@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Build the Fleet Without Buying the Fleet · Exotic Fleet Formula, Connor Gill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0B0C0D; --panel:#15171A; --deep:#08090A; --rule:#2A2D31;
+    --acc:#DCE0E3; --ink:#F4F5F6; --body:#C9CCCF; --dim:#7E8489;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Unbounded',sans-serif;font-weight:800;color:var(--ink);line-height:1.12;letter-spacing:-.005em}
+  .t-title h1{font-size:4.9vw;max-width:94%}
+  .t-normal h1{font-size:3.1vw;max-width:90%;font-weight:700}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.42vw;color:var(--body);margin-top:3.0vh;max-width:78%;line-height:1.62;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.75vw;color:var(--acc);margin-top:3.4vh;max-width:86%;line-height:1.42;font-weight:600}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.05vw;font-weight:700;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.28em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:92%}
+  .t-section .rule{width:14vw;height:2px;background:var(--acc);margin-top:3.6vh;opacity:.85}
+  .t-dark{background:var(--deep);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.5vw;max-width:88%;color:var(--ink);font-weight:700}
+  .t-cta{background:var(--deep);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.6vw;max-width:86%;color:var(--ink)}
+  .t-cta .body{font-family:'Inter',sans-serif;color:var(--body);font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:var(--ink);border-radius:100px;padding:1.4vh 1.9vw;font-size:1.12vw;font-weight:600}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.84vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .trim-motif{position:absolute;pointer-events:none}
+  .title-trim{right:8%;bottom:9%;width:22vw;opacity:.9}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.12vw;color:var(--body);margin-top:3.8vh;font-weight:600;letter-spacing:.06em}
+  .brandline b{color:var(--acc);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.07);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.8vw}.t-section h1{font-size:7.4vw}.t-dark h1{font-size:6.0vw}
+    .t-cta h1{font-size:7.0vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Exotic Fleet Formula</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a chrome trim hairline with a keyline notch, drawn in the brand platinum (the trim line of an exotic body panel) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="trim" viewBox="0 0 240 40">
+  <g fill="none" stroke="#DCE0E3" stroke-width="1.6" stroke-linecap="round">
+    <path d="M4 28 H150 l18 -16 H236" opacity="0.9"/>
+    <circle cx="150" cy="28" r="3.2" fill="#DCE0E3" stroke="none" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Build the Fleet Without Buying the Fleet',sub:'How to launch an exotic car rental business using other people’s cars, capital, and resources, and grow it into a fleet that books itself.',brand:true,trim:'title'},
+ {t:'normal',k:'Who this is for',title:'You love the cars. The part no one explains is how to fund the fleet.',body:'You want to rent out exotics. Maybe you already run one on an app, or you have watched people do it and thought there has to be a real business here. The cars are the easy part to picture. Paying for a garage full of them is where almost everyone stops.'},
+ {t:'dark',title:'Owning exotic cars is not the business. Booking them out, again and again, is.'},
+
+ {t:'section',idx:'Part One',title:'Why Most People Never Get Past One Car'},
+ {t:'normal',k:'The capital wall',title:'If every car has to come out of your pocket, the math ends fast.',body:'A single exotic can cost more than a house deposit. Buy it yourself and you are one car deep, fully exposed, and out of runway before you have a fleet. This is the wall that keeps most people renting on an app instead of building a company.'},
+ {t:'normal',k:'The app ceiling',title:'A side hustle on someone else’s platform is not a fleet.',body:'Listing a car on a rental app is a fine way to earn on the weekend. It is a poor way to build something that scales. You do not own the customer, you do not control the terms, and your upside is capped by how many cars you personally can afford to carry.'},
+ {t:'dark',title:'You do not need a garage full of your own cars. You need a system other people want to fund.'},
+
+ {t:'section',idx:'Part Two',title:'The Exotic Fleet Formula'},
+ {t:'normal',k:'Phase 1 · Foundation',title:'Set the business up so it can hold high-value cars.',body:'Before a single vehicle, the structure has to be right: the entity, the operating agreements, and insurance built for exotic values rather than economy rentals. Get this wrong and one incident ends the business. Get it right and the fleet has somewhere safe to grow.'},
+ {t:'normal',k:'Phase 2 · Other people’s cars and capital',title:'Fund the fleet with capital that is not yours.',body:'This is the heart of the model. Instead of buying inventory, you place other people’s vehicles and other people’s money into a fleet you operate. Owners get a return on a car that would otherwise sit idle, and you build scale without the capital wall that stops everyone else.'},
+ {t:'normal',k:'Phase 3 · Operations',title:'Protect six-figure cars with real systems.',body:'A fleet lives or dies on operations: how you vet a renter, the agreement they sign, how you handle deposits, mileage, damage, and returns. These are the guardrails that let you hand a stranger the keys to an expensive car and sleep at night.'},
+ {t:'normal',k:'Phase 4 · Bookings',title:'Fill the calendar without depending on one app.',body:'Marketing and booking is where the money actually shows up. You learn how these cars get found, how they are priced by season and demand, and how to build a booking flow that keeps the fleet moving instead of parked.'},
+ {t:'normal',k:'Phase 5 · Investor growth',title:'Turn one deal into a repeatable partnership.',body:'Once the first placements work, growth is about structure: how you package the opportunity, split the returns, and bring in the next owner or investor cleanly. This is the engine that takes you from a handful of cars to a genuine fleet.'},
+ {t:'normal',k:'Phase 6 · Scale and automate',title:'Build it so it does not need you in every booking.',body:'The last phase is systemizing: the team, the tools, and the standard operating procedures that let the fleet run without you personally touching every rental. This is the difference between owning a job and owning a business.'},
+ {t:'dark',title:'A fleet you did not pay for, booked by clients you did not have to chase.'},
+
+ {t:'section',idx:'Part Three',title:'From First Car to Full Fleet'},
+ {t:'normal',k:'The operator this builds',title:'A real company, not a weekend listing.',body:'When the structure, the funding model, and the operations all hold, you stop being a person with a car for rent and start being an operator with a fleet. The cars are working, the owners are paid, and the business has room to add the next vehicle without risking everything.'},
+ {t:'normal',k:'Why Connor Gill',title:'Built the model on his own fleet first.',body:'Connor Gill and his partner built Murci Luxury into one of the fastest-growing exotic rental fleets in the country: more than forty company-owned cars and over one hundred placed investor vehicles, grown without outside funding or personal capital. The Exotic Fleet Formula is the exact playbook they used, taught step by step.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build Your Own Fleet'},
+ {t:'normal',k:'Inside Exotic Fleet Formula',title:'The full build, the templates, and a room full of operators.',body:'The program walks through every phase on video, hands you the contracts, agreements, and broker and funding connections, and drops you into a community of operators building the same way, with live sessions every week. You do not have to figure out the funding model alone.'},
+ {t:'cta',title:'Ready to build your exotic fleet?',body:'Take the next step with Exotic Fleet Formula and learn the model that builds a fleet on other people’s cars and capital.',chips:['Join Exotic Fleet Formula','Talk to the team'],disc:'Educational content for people building an exotic car rental business. No income or business result is guaranteed. Results vary by individual, market, capital access, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function trim(kind){return `<svg class="trim-motif ${kind==='title'?'title-trim':''}" viewBox="0 0 240 40"><use href="#trim"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Exotic Fleet <b>Formula</b> · Connor Gill</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.trim) h+=trim(s.trim);
+  else if(s.t==='title') h+=trim('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
