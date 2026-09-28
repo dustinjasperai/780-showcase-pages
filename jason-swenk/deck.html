@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operator to Owner | A Masterclass with Jason Swenk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f5f5f0;
+    --panel:#ffffff;
+    --navy:#0b2e4f;
+    --ink:#111111;
+    --ink-soft:#3a3f45;
+    --muted:#6b7178;
+    --rule:#e2e0d8;
+    --accent:#00b3a4;
+  }
+  html,body{height:100%}
+  body{
+    font-family:'Raleway',-apple-system,sans-serif;
+    background:var(--navy);
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    width:min(960px,94vw);
+    aspect-ratio:16/9;
+    background:var(--bg);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.45);
+  }
+  .slide{
+    position:absolute;inset:0;
+    padding:64px 72px;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .slide.on{display:flex}
+  h1{font-family:'Poppins',sans-serif;font-weight:700;font-size:52px;line-height:1.08;color:var(--navy);letter-spacing:-.01em}
+  h2{font-family:'Poppins',sans-serif;font-weight:600;font-size:34px;line-height:1.15;color:var(--navy);margin-bottom:22px;letter-spacing:-.005em}
+  .kicker{font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);margin-bottom:20px}
+  .sub{font-size:23px;color:var(--ink-soft);line-height:1.5;margin-top:22px;max-width:42ch}
+  p{font-size:21px;color:var(--ink-soft);line-height:1.55;margin-bottom:14px;max-width:52ch}
+  .big{font-size:40px;font-family:'Poppins',sans-serif;font-weight:600;color:var(--navy);line-height:1.18;max-width:26ch}
+  ul{list-style:none;margin-top:8px}
+  li{font-size:20px;color:var(--ink-soft);line-height:1.4;padding:11px 0 11px 34px;position:relative;border-bottom:1px solid var(--rule);max-width:56ch}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:0;top:19px;width:14px;height:14px;background:var(--accent);border-radius:3px}
+  li b{color:var(--ink);font-weight:600}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--navy);color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:17px;border-radius:8px;margin-bottom:18px}
+  .ladder{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .rung{font-family:'Poppins',sans-serif;font-weight:600;font-size:18px;padding:12px 18px;border-radius:9px;background:var(--panel);border:1px solid var(--rule);color:var(--muted)}
+  .rung.last{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .arrow{align-self:center;color:var(--accent);font-weight:700;font-size:20px}
+  .quote{font-family:'Poppins',sans-serif;font-weight:600;font-size:34px;line-height:1.25;color:var(--navy);max-width:24ch}
+  .accent{color:var(--accent)}
+  .disclaimer{font-size:13px;color:var(--muted);line-height:1.5;margin-top:26px;max-width:60ch;font-style:italic}
+  .cta-btn{display:inline-block;margin-top:24px;font-family:'Poppins',sans-serif;font-weight:600;font-size:19px;color:#fff;background:var(--accent);padding:15px 30px;border-radius:10px}
+  .credit{display:flex;align-items:baseline;gap:12px;margin-top:26px}
+  .credit .who{font-family:'Poppins',sans-serif;font-weight:600;font-size:19px;color:var(--navy)}
+  .credit .role{font-size:15px;color:var(--muted)}
+  footer{position:absolute;bottom:22px;left:72px;right:72px;display:flex;justify-content:space-between;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  .nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;color:#cfd8e2;font-family:'Poppins',sans-serif;font-size:13px}
+  .nav button{background:rgba(255,255,255,.12);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}
+  .nav button:hover{background:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">&#8249;</button><span id="count"></span><button id="next">&#8250;</button></div>
+<script>
+const S=[
+  {t:'title',
+   kicker:'A live masterclass for agency owners',
+   h1:'Operator to Owner',
+   sub:'How to build a marketing agency that runs, and sells, without you. Taught from the 8-System Agency Playbook.'},
+
+  {t:'content',
+   kicker:'The next hour',
+   h2:'What you will walk away with',
+   list:['<b>A clear diagnosis</b> of why your agency still runs through you',
+         '<b>The 8 systems</b> that let it run on structure instead',
+         '<b>The founder shift</b> that has to happen underneath them',
+         '<b>A first step</b> you can take this week, whatever stage you are in']},
+
+  {t:'content',
+   kicker:'Who this is for',
+   h2:'You crossed $1M. So why does it still all run through you?',
+   body:['You built a real agency. Good clients, a team, a reputation. And somewhere along the way you became the one thing it cannot run without.',
+         'If you stepped away for a month, would delivery hold? Would sales? For most owners at this stage, the honest answer is no. This hour is about fixing that.']},
+
+  {t:'content',
+   kicker:'The trap, from the inside',
+   h2:'Three signs the agency runs on you, not on systems',
+   list:['<b>Every real decision</b> waits for your approval before it moves',
+         '<b>Your best clients</b> were sold by you, and only trust you',
+         '<b>A two-week holiday</b> feels reckless, so you never really take one']},
+
+  {t:'quote',
+   kicker:'The hard truth',
+   quote:'Right now you do not own an agency. You own a high-paying job you are not allowed to quit.'},
+
+  {t:'content',
+   kicker:'Part one, the real problem',
+   h2:'Growth built around you has a ceiling',
+   body:['Every new client makes the machine more dependent on you, not less. More decisions, more approvals, more fires only you can put out.',
+         'So the reward for winning more work is a busier owner, not a bigger business. That is the ceiling, and hustle cannot break through it.']},
+
+  {t:'content',
+   kicker:'Part one, the real problem',
+   h2:'And it quietly costs you three things',
+   list:['<b>Scale</b> you cannot grow past your own hours in the day',
+         '<b>Freedom</b> you cannot step away without the numbers dipping',
+         '<b>The exit</b> nobody buys an agency that stops working the day you leave']},
+
+  {t:'content',
+   kicker:'Part two, the system',
+   h2:'The 8-System Agency Playbook',
+   body:['This is the same framework I used to grow my own agency to eight figures and sell it. Eight systems, each built so the agency depends on the system, not on you.'],
+   list:['<b>1. Clarity</b> a clear vision and the path to get there',
+         '<b>2. Positioning</b> become The Choice, not a choice',
+         '<b>3. Offering</b> the right services, priced to actually profit',
+         '<b>4. Prospecting</b> a predictable flow of ideal leads']},
+
+  {t:'content',
+   kicker:'Part two, the system',
+   h2:'The 8-System Agency Playbook',
+   list:['<b>5. Sales</b> a repeatable process that converts without you in the room',
+         '<b>6. Delivery</b> profitable delivery with no scope creep',
+         '<b>7. Operations</b> cash flow, team and an org chart built to scale',
+         '<b>8. Leadership</b> owner to CEO, and an agency positioned to sell']},
+
+  {t:'content',
+   kicker:'System two in focus',
+   h2:'Positioning: stop being a choice, become The Choice',
+   body:['Generalist agencies compete on price and chase every lead. The fix is not more marketing, it is a position so specific the right client feels you were built for them.',
+         'When you own a position, you attract the ideal accounts and stop wasting time on the small ones that eat your calendar.']},
+
+  {t:'content',
+   kicker:'Systems four and five in focus',
+   h2:'Prospecting and Sales that do not need you',
+   body:['Prospecting is knowing exactly where your next ideal client comes from, on purpose, not by referral luck. Low-hanging fruit first, then outbound, inbound and the right partnerships.',
+         'Sales is turning that into a process your team can run, so deals close whether or not you are the one in the room.']},
+
+  {t:'content',
+   kicker:'Systems three and six in focus',
+   h2:'Profit is designed, not hoped for',
+   body:['Most agencies price on gut feel and lose the margin in delivery. Offering fixes what you sell and what you charge. Delivery fixes how the work actually gets done.',
+         'Together they are the difference between an agency that is merely busy and one that is genuinely worth buying.']},
+
+  {t:'content',
+   kicker:'System seven in focus',
+   h2:'Operations: the machine room',
+   body:['Cash flow, how you hire and when, how you reward the team without giving away equity, and the org chart that lets the agency grow past your own desk.',
+         'This is the unglamorous system that decides whether everything above it can actually hold weight.']},
+
+  {t:'content',
+   kicker:'System eight in focus',
+   h2:'Leadership: the part that makes it sellable',
+   body:['An acquirer is not buying your talent. They are buying a business that keeps performing after you walk out the door.',
+         'That means a culture that attracts top people, a real leadership layer, and numbers a buyer can trust. This is where valuation is actually built.']},
+
+  {t:'ladder',
+   kicker:'The founder shift underneath it all',
+   h2:'Founder’s Evolution',
+   body:['Every system above asks you to let go of one more thing. That is the real work, moving through five stages until the business no longer needs you in the seat.']},
+
+  {t:'content',
+   kicker:'Part three, the payoff',
+   h2:'An ordinary Tuesday, once it runs on systems',
+   body:['The team makes the calls you used to make. Sales close without you on every one. Delivery holds when you are gone for two weeks.',
+         'You spend your time on the few decisions only an owner should make, and the machine handles the rest.']},
+
+  {t:'content',
+   kicker:'Part three, the payoff',
+   h2:'And the day you decide to sell',
+   body:['You have something a buyer actually wants: an agency that runs on systems, not on you. That is what turns years of work into a real number.',
+         'Whether you sell in two years or twenty, building it this way means you own an asset, not a job.']},
+
+  {t:'credit',
+   kicker:'Why listen to me on this',
+   h2:'I did this myself',
+   body:['I launched a digital agency in 2000 and ran it for twelve years, growing it to eight figures with clients like AT&T, Hitachi and Lotus Cars, then sold it in 2012.',
+         'Since then I have spent over a decade helping agency owners do the same through Agency Mastery.']},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h2:'See where you are on the path',
+   body:['Take the free Founder’s Evolution Scorecard to find out which of the five stages you are in and the one system holding you back right now.'],
+   btn:'Take the Founder’s Evolution Scorecard',
+   disc:'Educational content only. No income or specific result is guaranteed. Results vary with your market, your team, your effort and your execution.'}
+];
+
+const stage=document.getElementById('stage');
+const countEl=document.getElementById('count');
+let i=0;
+function render(){
+  const s=S[i];
+  let inner='';
+  if(s.kicker) inner+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'){
+    inner+=`<h1>${s.h1}</h1><div class="sub">${s.sub}</div>`;
+  } else if(s.t==='quote'){
+    inner+=`<div class="quote">${s.quote}</div>`;
+  } else if(s.t==='ladder'){
+    if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+    if(s.body) s.body.forEach(p=>inner+=`<p>${p}</p>`);
+    inner+=`<div class="ladder"><span class="rung">Operator</span><span class="arrow">&rsaquo;</span><span class="rung">Manager</span><span class="arrow">&rsaquo;</span><span class="rung">Architect</span><span class="arrow">&rsaquo;</span><span class="rung">CEO</span><span class="arrow">&rsaquo;</span><span class="rung last">Owner</span></div>`;
+  } else if(s.t==='credit'){
+    if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+    if(s.body) s.body.forEach(p=>inner+=`<p>${p}</p>`);
+    inner+=`<div class="credit"><span class="who">Jason Swenk</span><span class="role">Founder, Agency Mastery, and author of Accelerating Your Agency</span></div>`;
+  } else if(s.t==='cta'){
+    if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+    if(s.body) s.body.forEach(p=>inner+=`<p>${p}</p>`);
+    if(s.btn) inner+=`<div><span class="cta-btn">${s.btn}</span></div>`;
+    if(s.disc) inner+=`<div class="disclaimer">${s.disc}</div>`;
+  } else {
+    if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+    if(s.body) s.body.forEach(p=>inner+=`<p>${p}</p>`);
+    if(s.list){inner+='<ul>';s.list.forEach(l=>inner+=`<li>${l}</li>`);inner+='</ul>';}
+  }
+  inner+=`<footer><span>Operator to Owner</span><span>Jason Swenk &middot; Agency Mastery</span></footer>`;
+  stage.innerHTML=`<div class="slide on">${inner}</div>`;
+  countEl.textContent=`${i+1} / ${S.length}`;
+}
+function go(n){i=(n+S.length)%S.length;render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+render();
+</script>
+</body>
+</html>
