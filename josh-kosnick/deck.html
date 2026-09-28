@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Leadership Quotient — a live masterclass with Josh Kosnick</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ee;        /* warm paper (their body bg) */
+    --panel:#ffffff;
+    --tint:#eef1f5;
+    --rule:#d4dae2;      /* their dominant light grey */
+    --ink:#111c2c;       /* their navy */
+    --muted:#5a6270;
+    --accent:#4da8b3;    /* their teal, the only chromatic signal */
+    --head:'Fraunces',Georgia,serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  .slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:7vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  .kick{font-size:clamp(12px,1.15vw,15px);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+  h1{font-family:var(--head);font-weight:600;font-size:clamp(38px,6.2vw,84px);line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(30px,4.4vw,58px);line-height:1.1;letter-spacing:-.005em}
+  .lead{font-size:clamp(19px,2.1vw,30px);line-height:1.5;color:var(--muted);margin-top:28px;max-width:60ch}
+  .big{font-family:var(--head);font-weight:500;font-size:clamp(30px,4.8vw,64px);line-height:1.16;max-width:20ch}
+  .em{color:var(--accent)}
+  .ital{font-style:italic}
+  .span-rule{width:120px;height:3px;background:var(--accent);border-radius:2px;margin-top:40px}
+  .bridges{display:flex;gap:10px;margin-top:44px;flex-wrap:wrap}
+  .bridges span{font-size:clamp(12px,1.1vw,15px);letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted);
+    border:1px solid var(--rule);border-radius:100px;padding:9px 16px}
+  .bridges span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .no{font-family:var(--head);font-size:clamp(46px,7vw,96px);font-weight:600;color:var(--accent);line-height:1}
+  .grid5{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px;max-width:1000px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:26px 24px}
+  .card h3{font-family:var(--head);font-weight:600;font-size:clamp(20px,2vw,26px);margin-bottom:10px}
+  .card p{font-size:clamp(14px,1.3vw,17px);color:var(--muted);line-height:1.45}
+  .card .n{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+  ul.clean{margin-top:30px;max-width:52ch;list-style:none}
+  ul.clean li{font-size:clamp(17px,1.7vw,23px);line-height:1.5;padding-left:34px;position:relative;margin-bottom:18px;color:var(--ink)}
+  ul.clean li::before{content:'';position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent);border-radius:2px}
+  .proof{display:flex;gap:40px;flex-wrap:wrap;margin-top:36px}
+  .proof div{min-width:150px}
+  .proof .num{font-family:var(--head);font-weight:600;font-size:clamp(32px,4vw,56px);color:var(--ink)}
+  .proof .lbl{font-size:14px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+  .cta-box{margin-top:36px;background:var(--ink);color:#fff;border-radius:20px;padding:40px 44px;max-width:760px}
+  .cta-box .step{display:flex;align-items:baseline;gap:16px;margin-top:18px;font-size:clamp(16px,1.6vw,21px);line-height:1.4}
+  .cta-box .step b{color:var(--accent);font-family:var(--head);font-weight:600}
+  .disc{font-size:13px;color:#9aa3b2;margin-top:30px;line-height:1.5;max-width:62ch}
+  .pg{position:absolute;right:8vw;bottom:5vh;font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+  .brandline{position:absolute;left:8vw;bottom:5vh;font-size:12px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+  @media(max-width:760px){.grid5{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Josh Kosnick',
+    h:'The Leadership <span class="em">Quotient</span>',
+    lead:'How 7 and 8-figure founders learn to lead their whole life, not just the business, in one live session.'},
+
+  {t:'audience', kick:'Who this is for',
+    big:'For the founder who looks successful on the outside and feels scattered on the inside.',
+    lead:'You built the revenue. You have the team, the title, the numbers. And somewhere along the way the rest of your life quietly started running on fumes.'},
+
+  {t:'trap', kick:'The trap',
+    big:'You optimized one thing, and let four others erode.',
+    lead:'Every ounce of discipline went into the company. Your body, your marriage, your calendar, your faith, they got whatever was left over. Which was usually nothing.'},
+
+  {t:'reframe', kick:'The reframe',
+    no:'You do not have a business problem.',
+    lead:'You have a bridge that is down. And no growth strategy can carry weight across a bridge that has collapsed.'},
+
+  {t:'part', kick:'Part One', h:'Why success stops <span class="em ital">feeling</span> like success'},
+
+  {t:'problem', kick:'The root',
+    h:'Chronos vs Kairos',
+    lead:'Most founders live in chronos: reactive, grinding, clock-driven time where every day is spent putting out the loudest fire. Kairos is the opposite. It is right-timed, purposeful action, doing the correct thing in its proper season. The whole shift starts there.'},
+
+  {t:'problem', kick:'The cost',
+    big:'When you live only in chronos, the strongest bridge hides the weakest one.',
+    lead:'The business looks healthy right up until the bridge you ignored, health, marriage, or meaning, gives out under load. By then it is expensive to rebuild.'},
+
+  {t:'part', kick:'Part Two', h:'The Five Bridges of Kairos'},
+
+  {t:'model', kick:'The framework',
+    h:'Leadership is not one bridge. It is five.',
+    lead:'A whole-life operating system. You are only as strong as the weakest bridge you have to cross, so we keep all five sound instead of over-building one.',
+    bridges:['Spiritual','Internal','Relationships','Environment','Legacy']},
+
+  {t:'bridge', n:'Bridge One', h:'Spiritual',
+    lead:'Purpose and your relationship with God. The anchor point everything else is tied back to. Without it, every other bridge drifts.'},
+
+  {t:'bridge', n:'Bridge Two', h:'Internal',
+    lead:'Body, mind, and discipline: the personal capacity to lead under pressure without burning down. This is the bridge founders sacrifice first and notice last.'},
+
+  {t:'bridge', n:'Bridge Three', h:'Relationships',
+    lead:'Marriage, family, and a trusted inner circle. The people who knew you before the revenue and will be there after it. Leadership that costs you these is not leadership.'},
+
+  {t:'bridge', n:'Bridge Four', h:'Environment',
+    lead:'Calendar, finances, and the operating system your business actually runs on. This is where an EOS-style structure lives, so the company stops depending on your adrenaline.'},
+
+  {t:'bridge', n:'Bridge Five', h:'Legacy',
+    lead:'The long-term, compounding impact past your own tenure. What you are building that outlasts you, and whether the way you are building it is worth inheriting.'},
+
+  {t:'lq', kick:'The through-line',
+    big:'Leadership capacity is measurable. That measure is your Leadership Quotient.',
+    lead:'The LQ Assessment scores where each of the five bridges stands today. Then the LQ Blueprint rebuilds them in order of load, not in order of noise. You stop guessing at what is off.'},
+
+  {t:'part', kick:'Part Three', h:'The far side of the bridge'},
+
+  {t:'after', kick:'A week in kairos',
+    lead:'The fires still come. The difference is you meet them from a full tank instead of an empty one.',
+    list:['You lead from decisions made in advance, not reactions made at 11pm.',
+          'The business runs on a system, so your presence is a choice, not a dependency.',
+          'The people closest to you get the best of you, not the leftovers.',
+          'You can name why you are doing all of this, and it holds up.']},
+
+  {t:'proof', kick:'Why listen to me',
+    h:'I built the thing before I taught it.',
+    lead:'Josh Kosnick, EOS Implementer and author of the USA Today featured bestseller The Kairos Code.',
+    stats:[['17 yrs','in wealth management'],['~250','team members led'],['~$4B','assets under management'],['1','operating system, five bridges']]},
+
+  {t:'path', kick:'The path',
+    h:'Where to start',
+    lead:'You do not fix five bridges in a weekend. You measure them, then rebuild the one under the most load first.',
+    list:['Step one: take the free LQ Assessment and get your current Leadership Quotient.',
+          'Step two: the LQ Blueprint, a 12-month cohort that rebuilds each bridge in sequence.',
+          'For founders who want the room: the Bridge Builder Mastermind, by application.']},
+
+  {t:'cta', kick:'Your next step',
+    h:'Measure the thing you have been <span class="em">guessing</span> at.',
+    lead:'Start with your Leadership Quotient. It takes about ten minutes and it tells you which bridge to cross first.',
+    steps:[['Free','Take the LQ Assessment'],['12 months','Build it inside the LQ Blueprint'],['By application','Join the Bridge Builder Mastermind']],
+    disc:'This masterclass is educational. No income, revenue, or life result is guaranteed. Results vary and depend on your own circumstances, effort, and many factors outside any program. Nothing here is financial, medical, or spiritual advice.'}
+];
+
+function slideHTML(s, i, total){
+  let inner = '';
+  const kick = s.kick ? `<div class="kick">${s.kick}</div>` : '';
+  if(s.t==='title'){
+    inner = `${kick}<h1>${s.h}</h1><div class="lead">${s.lead}</div><div class="span-rule"></div>`;
+  } else if(s.t==='part'){
+    inner = `${kick}<h1>${s.h}</h1><div class="span-rule"></div>`;
+  } else if(s.t==='reframe'){
+    inner = `${kick}<div class="no">${s.no}</div><div class="lead">${s.lead}</div>`;
+  } else if(s.t==='model'){
+    inner = `${kick}<h2>${s.h}</h2><div class="lead">${s.lead}</div>
+      <div class="bridges">${s.bridges.map(b=>`<span>${b}</span>`).join('')}</div>`;
+  } else if(s.t==='bridge'){
+    inner = `<div class="kick">${s.n}</div><h1>${s.h}</h1><div class="lead">${s.lead}</div>
+      <div class="bridges">${['Spiritual','Internal','Relationships','Environment','Legacy'].map(b=>`<span class="${b===s.h?'on':''}">${b}</span>`).join('')}</div>`;
+  } else if(s.t==='lq'){
+    inner = `${kick}<div class="big">${s.big}</div><div class="lead">${s.lead}</div>`;
+  } else if(s.t==='after' || s.t==='path'){
+    inner = `${kick}${s.h?`<h2>${s.h}</h2>`:''}<div class="lead">${s.lead}</div>
+      <ul class="clean">${s.list.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  } else if(s.t==='proof'){
+    inner = `${kick}<h2>${s.h}</h2><div class="lead">${s.lead}</div>
+      <div class="proof">${s.stats.map(([n,l])=>`<div><div class="num">${n}</div><div class="lbl">${l}</div></div>`).join('')}</div>`;
+  } else if(s.t==='cta'){
+    inner = `${kick}<h1>${s.h}</h1><div class="lead">${s.lead}</div>
+      <div class="cta-box">${s.steps.map(([a,b])=>`<div class="step"><b>${a}</b><span>${b}</span></div>`).join('')}</div>
+      <div class="disc">${s.disc}</div>`;
+  } else {
+    inner = `${kick}${s.h?`<h1>${s.h}</h1>`:''}${s.big?`<div class="big">${s.big}</div>`:''}${s.lead?`<div class="lead">${s.lead}</div>`:''}`;
+  }
+  return `<section class="slide">${inner}
+    <div class="brandline">The LQ Blueprint &middot; Josh Kosnick</div>
+    <div class="pg">${String(i+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}</div></section>`;
+}
+
+const deck = document.getElementById('deck');
+deck.innerHTML = S.map((s,i)=>slideHTML(s,i,S.length)).join('');
+
+// keyboard paging
+let idx = 0;
+const slides = () => Array.from(document.querySelectorAll('.slide'));
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();idx=Math.min(idx+1,S.length-1);slides()[idx].scrollIntoView({behavior:'smooth'});}
+  if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();idx=Math.max(idx-1,0);slides()[idx].scrollIntoView({behavior:'smooth'});}
+});
+</script>
+</body>
+</html>
