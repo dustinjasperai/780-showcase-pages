@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Virtual Facilitation Masterclass — Saïd Saddouk, The Facilitainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#fdfdfd;            /* site body bg */
+    --panel:#ffffff;
+    --faint:#f4f2fb;         /* accent-tinted panel */
+    --ink:#041225;           /* site heading navy */
+    --body:#1a1a1a;          /* site body text */
+    --muted:#5b6472;
+    --rule:#e7e4f4;
+    --accent:#6050dc;        /* site brand indigo */
+    --highlight:#fff8cc;     /* site pale yellow */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Manrope',-apple-system,system-ui,sans-serif;
+    background:var(--bg); color:var(--body);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .slide{
+    display:none; width:100%; height:100%;
+    padding:7vh 9vw; flex-direction:column; justify-content:center;
+    position:relative;
+  }
+  .slide.on{ display:flex; }
+  .kicker{ font-family:'Unbounded',sans-serif; font-weight:600; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-family:'Unbounded',sans-serif; font-weight:800; font-size:clamp(30px,5vw,60px); line-height:1.05; color:var(--ink); letter-spacing:-0.01em; }
+  h2{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:clamp(24px,3.6vw,42px); line-height:1.12; color:var(--ink); letter-spacing:-0.01em; margin-bottom:20px; }
+  p.lead{ font-size:clamp(17px,2vw,23px); color:var(--body); max-width:60ch; margin-top:22px; line-height:1.55; }
+  p.sub{ font-size:clamp(15px,1.6vw,19px); color:var(--muted); max-width:58ch; margin-top:16px; line-height:1.6; }
+  .byline{ margin-top:40px; font-family:'Unbounded',sans-serif; font-weight:600; font-size:16px; color:var(--ink); }
+  .byline span{ display:block; font-family:'Manrope',sans-serif; font-weight:500; font-size:14px; color:var(--muted); margin-top:4px; letter-spacing:.01em; }
+  ul{ list-style:none; margin-top:26px; max-width:62ch; }
+  ul li{ position:relative; padding-left:30px; font-size:clamp(16px,1.8vw,21px); color:var(--body); margin-bottom:16px; line-height:1.5; }
+  ul li::before{ content:""; position:absolute; left:0; top:.55em; width:12px; height:12px; background:var(--accent); border-radius:3px; }
+  .chip{ display:inline-block; background:var(--highlight); color:#4a4300; font-family:'Unbounded',sans-serif; font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border-radius:999px; margin-bottom:20px; }
+  .scene-stack{ display:flex; gap:10px; margin-top:34px; }
+  .scene-stack .pane{ flex:1; height:120px; border-radius:10px; border:1px solid var(--rule); background:var(--panel); display:flex; align-items:flex-end; padding:14px; font-family:'Unbounded',sans-serif; font-weight:600; font-size:13px; color:var(--muted); }
+  .scene-stack .pane.live{ background:var(--faint); border-color:var(--accent); color:var(--accent); box-shadow:0 8px 30px rgba(96,80,220,.14); }
+  .pillar-num{ font-family:'Unbounded',sans-serif; font-weight:800; font-size:clamp(50px,8vw,110px); color:var(--faint); line-height:.9; -webkit-text-stroke:1.5px var(--accent); }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center; }
+  .card{ background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:26px; }
+  .card h3{ font-family:'Unbounded',sans-serif; font-weight:600; font-size:15px; letter-spacing:.04em; color:var(--accent); text-transform:uppercase; margin-bottom:10px; }
+  .card p{ font-size:16px; color:var(--body); line-height:1.5; }
+  .stat{ font-family:'Unbounded',sans-serif; font-weight:800; font-size:clamp(34px,4.4vw,56px); color:var(--accent); line-height:1; }
+  .disc{ margin-top:30px; font-size:13px; color:var(--muted); max-width:66ch; line-height:1.5; font-style:italic; }
+  .cta-step{ margin-top:26px; font-family:'Unbounded',sans-serif; font-weight:600; font-size:clamp(17px,2vw,22px); color:var(--ink); }
+  .cta-step em{ color:var(--accent); font-style:normal; }
+  footer{ position:fixed; bottom:20px; left:0; right:0; display:flex; justify-content:space-between; padding:0 26px; font-family:'Unbounded',sans-serif; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  #dots{ display:flex; gap:6px; }
+  #dots i{ width:7px; height:7px; border-radius:50%; background:var(--rule); }
+  #dots i.on{ background:var(--accent); }
+  #nav{ position:fixed; bottom:14px; right:20px; display:flex; gap:8px; z-index:5; }
+  #nav button{ font-family:'Manrope',sans-serif; font-size:13px; border:1px solid var(--rule); background:var(--panel); color:var(--muted); border-radius:8px; padding:7px 12px; cursor:pointer; }
+  #nav button:hover{ border-color:var(--accent); color:var(--accent); }
+  .note{ display:none; position:fixed; left:24px; right:24px; bottom:60px; max-width:820px; margin:0 auto; background:var(--ink); color:#e9ecf5; font-size:13px; line-height:1.5; padding:14px 18px; border-radius:10px; }
+  .note.show{ display:block; }
+  @media (max-width:720px){ .two{ grid-template-columns:1fr; gap:24px; } .scene-stack{ flex-wrap:wrap; } .scene-stack .pane{ min-width:120px; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="note" id="note"></div>
+<footer>
+  <div>The Facilitainer &middot; Virtual Facilitation Masterclass</div>
+  <div id="dots"></div>
+</footer>
+<div id="nav">
+  <button onclick="toggleNotes()">Hide Notes</button>
+  <button onclick="go(-1)">Prev</button>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S=[
+  {t:'title',
+    h:'Your Virtual Room Should Feel Like a Show. Not a Meeting.',
+    sub:'How to run online sessions people actually lean into, using free production tools you can set up this week.',
+    by:'Saïd Saddouk', role:'The Facilitainer &middot; Virtual Facilitation Masterclass',
+    n:'Open on the promise, not the tools. The room is a stage. Todays session shows you how to build it.' },
+
+  {t:'promise', k:'What you will walk out with',
+    h:'A room that holds attention.',
+    lead:'By the end of this masterclass you will know how to turn a plain video call into a produced live experience, with cameras on, chat moving, and people staying to the end.',
+    bullets:['A clean broadcast-grade setup for camera, sound and screen','Custom scenes you switch between with one touch','A repeatable way to keep a virtual audience engaged for a full session'],
+    n:'Three concrete outcomes. Keep it about their result, not the software.' },
+
+  {t:'who', k:'Who this is for',
+    h:'Facilitators taking the work online.',
+    lead:'Trainers, workshop leaders, coaches and event hosts who are great in a room and want that same energy on a screen, without becoming a full-time video engineer.',
+    n:'Name the audience so the right people self-select. Everyone else politely leaves.' },
+
+  {t:'trap', k:'The trap',
+    h:'The default Zoom experience is working against you.',
+    lead:'Cameras off. One shared face on a grey grid. A slide deck read line by line. Within ten minutes half the room is answering email. The content might be brilliant, but the container is flat, so it feels flat.',
+    n:'Put them inside the customers world. They have all sat in this exact dead call.' },
+
+  {t:'reframe', k:'The reframe',
+    h:'It is almost never your content. It is your production.',
+    lead:'People do not disengage because the material is weak. They disengage because a single static webcam gives their attention nothing to hold onto. Fix the production and the same content lands twice as hard.',
+    n:'This is the hook that flips the room. The problem is not them, it is the medium, and the medium is fixable.' },
+
+  {t:'part', k:'Part one', h:'The flat-screen tax',
+    lead:'Every minute your room looks like an ordinary call, you pay a tax in three currencies.',
+    n:'Set up the cost of doing nothing before the solution.' },
+
+  {t:'cols', k:'Part one', h:'What the flat room costs you',
+    cards:[
+      {h:'Attention',p:'A motionless frame is easy to tune out. Multitasking becomes the default and your best points get missed.'},
+      {h:'Engagement',p:'No visual cue to speak up, so cameras stay off and the chat stays silent. The energy never builds.'},
+      {h:'Perceived value',p:'A premium program that looks like an internal team meeting is priced, in the viewer head, like one.'}
+    ],
+    n:'Three columns, one idea each. Perceived value is the money slide for a paid program.' },
+
+  {t:'part', k:'Part two', h:'The five-pillar system',
+    lead:'A produced session is not talent, it is a sequence. Five pillars, run in order, take you from a webcam to a broadcast. They also happen to spell out how a scene gets built.',
+    stack:['Setup','Create','Explore','Navigate','Execute'],
+    n:'Overview slide. The five pillars are the spine of the whole masterclass. Note the S-C-E-N-E ordering lightly, do not oversell the acronym.' },
+
+  {t:'pillar', num:'1', k:'Pillar one', h:'Setup',
+    lead:'Dial in camera, microphone and your tech stack so the picture and sound read as broadcast-grade before anyone joins. Good light and clean audio do more for perceived quality than any effect.',
+    n:'Foundations first. Boring but it is where most of the quality gap actually lives.' },
+
+  {t:'pillar', num:'2', k:'Pillar two', h:'Create',
+    lead:'Build custom scenes and overlays in OBS Studio, not generic templates. Every segment of your session gets its own designed look, so a transition feels like changing the channel, not sharing a screen.',
+    n:'This is the visible wow. Scenes are the unit of a produced session.' },
+
+  {t:'pillar', num:'3', k:'Pillar three', h:'Explore',
+    lead:'Wire those scenes to a Stream Deck so you switch the entire stage with one touch. No fumbling with windows, no dead air. The production runs while you stay present with the room.',
+    n:'One-touch control is what makes it sustainable solo. Reduces cognitive load mid-session.' },
+
+  {t:'pillar', num:'4', k:'Pillar four', h:'Navigate',
+    lead:'Facilitate in real time while the production runs underneath you. Read the room, pull people into the chat and onto camera, and use the scenes to direct attention exactly where you want it.',
+    n:'Tech serves facilitation, not the other way round. This is where their existing skill shines.' },
+
+  {t:'pillar', num:'5', k:'Pillar five', h:'Execute',
+    lead:'Deliver the full session live, end to end, with feedback built in. The goal is that you use what you build here in your very next real session, not someday.',
+    n:'Close the loop. Immediate application is the promise that makes it stick.' },
+
+  {t:'part', k:'Part three', h:'The moment they join the room',
+    lead:'The difference your audience feels in the first ten seconds.',
+    n:'Transition into the before and after.' },
+
+  {t:'cols', k:'Part three', h:'Before and after',
+    cards:[
+      {h:'Before',p:'One webcam. Cameras off across the grid. A slide read aloud. Questions trickle in at the end, if at all.'},
+      {h:'After',p:'A titled opening scene. Your face framed against your content. Cameras on, chat moving, a clear moment to interact every few minutes.'},
+      {h:'The result',p:'People stay to the end, remember what you said, and treat the session like the premium experience it is.'}
+    ],
+    n:'Make the transformation vivid and concrete. This is the payoff slide.' },
+
+  {t:'why', k:'Why learn it here', h:'I do this every week.',
+    lead:'I am Saïd, the Facilitainer. I help facilitators turn online sessions into experiences that do not feel like a Zoom meeting.',
+    stats:[{n:'1,700+',l:'read the weekly newsletter'},{n:'1,400+',l:'in the free community'}],
+    n:'Earned authority, quoted from real numbers only. No income claims.' },
+
+  {t:'objection', k:'The usual worry', h:'"But I am not technical."',
+    lead:'You do not need to be. The core tools, OBS Studio and the Stream Deck app, are free, and the whole point of the five pillars is to make the setup repeatable. If you can run a workshop, you can run this.',
+    n:'Handle the number-one objection head on. Free tools lowers the risk.' },
+
+  {t:'recap', k:'The takeaway', h:'Produce the room, and the content lands.',
+    lead:'Setup, Create, Explore, Navigate, Execute. Five pillars that turn a flat call into a session people lean into, using tools you can start with this week.',
+    n:'Tie the bow. Repeat the five pillars so they leave remembering the system.' },
+
+  {t:'cta', k:'Your next step', h:'Let us build your room together.',
+    step:'The next Virtual Facilitation Masterclass runs live in small cohorts of five. <em>Book a free discovery call</em> and we will map your setup and pick your cohort.',
+    disc:'Educational content only. No outcome, income or engagement results are promised or guaranteed; results vary by facilitator, audience and effort.',
+    by:'Saïd Saddouk', role:'The Facilitainer',
+    n:'End on the coach own CTA. Discovery call is the real next step on the site.' }
+];
+
+const stage=document.getElementById('stage');
+const dots=document.getElementById('dots');
+const noteEl=document.getElementById('note');
+let i=0, notesOn=true;
+
+function slideHTML(s){
+  const k = s.k ? `<div class="kicker">${s.k}</div>` : '';
+  if(s.t==='title')
+    return `<div class="slide"><div class="chip">The Facilitainer</div><h1>${s.h}</h1><p class="lead">${s.sub}</p><div class="byline">${s.by}<span>${s.role}</span></div></div>`;
+  if(s.t==='cta')
+    return `<div class="slide">${k}<h1>${s.h}</h1><div class="cta-step">${s.step}</div><div class="disc">${s.disc}</div><div class="byline">${s.by}<span>${s.role}</span></div></div>`;
+  if(s.t==='cols'){
+    const cards=s.cards.map(c=>`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('');
+    return `<div class="slide">${k}<h2>${s.h}</h2><div class="two" style="grid-template-columns:repeat(${s.cards.length},1fr)">${cards}</div></div>`;
+  }
+  if(s.t==='pillar')
+    return `<div class="slide">${k}<div class="pillar-num">${s.num}</div><h2>${s.h}</h2><p class="lead">${s.lead}</p></div>`;
+  if(s.t==='why'){
+    const st=s.stats.map(x=>`<div><div class="stat">${x.n}</div><p class="sub">${x.l}</p></div>`).join('');
+    return `<div class="slide">${k}<h2>${s.h}</h2><p class="lead">${s.lead}</p><div class="two" style="margin-top:34px">${st}</div></div>`;
+  }
+  if(s.t==='part'){
+    const stack = s.stack ? `<div class="scene-stack">${s.stack.map((x,ix)=>`<div class="pane ${ix===1?'live':''}">${x}</div>`).join('')}</div>` : '';
+    return `<div class="slide">${k}<h2>${s.h}</h2>${s.lead?`<p class="lead">${s.lead}</p>`:''}${stack}</div>`;
+  }
+  // promise / who / trap / reframe / recap / objection
+  const bl = s.bullets ? `<ul>${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : '';
+  return `<div class="slide">${k}<h2>${s.h}</h2>${s.lead?`<p class="lead">${s.lead}</p>`:''}${bl}</div>`;
+}
+
+function render(){
+  stage.innerHTML = slideHTML(S[i]);
+  stage.firstChild.classList.add('on');
+  dots.innerHTML = S.map((_,x)=>`<i class="${x===i?'on':''}"></i>`).join('');
+  noteEl.textContent = S[i].n || '';
+  noteEl.classList.toggle('show', notesOn && !!S[i].n);
+}
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+function toggleNotes(){ notesOn=!notesOn; document.querySelector('#nav button').textContent = notesOn?'Hide Notes':'Show Notes'; render(); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('#nav')&&!e.target.closest('.note')) go(1); });
+render();
+</script>
+</body>
+</html>
