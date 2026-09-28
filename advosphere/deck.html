@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Off the Clock — the P3 Method | ADVOS Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#17181C;
+    --panel:#20222A;
+    --rule:#2E313B;
+    --accent:#C8912E;
+    --text:#F3EFE7;
+    --muted:#A7A79C;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 8vw;}
+  .slide{width:100%;max-width:1000px;display:none;animation:fade .35s ease;}
+  .slide.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:20px;}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:56px;line-height:1.1;letter-spacing:-.01em;margin-bottom:18px;}
+  h2{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:40px;line-height:1.15;margin-bottom:20px;}
+  .sub{font-size:22px;color:var(--muted);line-height:1.5;max-width:760px;}
+  .lede{font-size:24px;line-height:1.55;max-width:800px;}
+  .big{font-family:'Newsreader',Georgia,serif;font-size:34px;line-height:1.3;max-width:820px;}
+  ul{list-style:none;margin-top:16px;}
+  li{font-size:22px;line-height:1.5;padding:14px 0 14px 30px;position:relative;border-bottom:1px solid var(--rule);max-width:820px;}
+  li:before{content:"";position:absolute;left:0;top:24px;width:12px;height:12px;border-radius:50%;background:var(--accent);}
+  li b{color:var(--text);font-weight:600;}
+  .note{margin-top:24px;font-size:17px;color:var(--muted);max-width:760px;}
+  .pillrow{display:flex;gap:16px;margin-top:26px;flex-wrap:wrap;}
+  .pill{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:22px 24px;flex:1;min-width:220px;}
+  .pill .p{font-family:'Newsreader',serif;font-size:26px;color:var(--accent);margin-bottom:8px;}
+  .pill .d{font-size:17px;color:var(--muted);line-height:1.45;}
+  .quote{font-family:'Newsreader',serif;font-size:30px;line-height:1.35;max-width:840px;}
+  .disc{margin-top:28px;font-size:15px;color:var(--muted);max-width:780px;line-height:1.5;}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:12px;padding:26px 28px;margin-top:24px;max-width:620px;}
+  .cta-box .step{font-size:22px;font-weight:600;margin-bottom:6px;}
+  .cta-box .where{font-size:17px;color:var(--muted);}
+  footer{position:fixed;bottom:22px;left:8vw;right:8vw;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);letter-spacing:.04em;}
+  .brand{color:var(--accent);font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
+  .nav{font-family:'IBM Plex Sans';}
+  @media(max-width:640px){h1{font-size:36px;}h2{font-size:28px;}.sub,.lede{font-size:18px;}li{font-size:18px;}.big{font-size:24px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>
+  <div class="brand">ADVOS Pro &middot; Measure What Matters</div>
+  <div class="nav"><span id="pos"></span> &nbsp; use arrow keys</div>
+</footer>
+<script>
+const S = [
+  {t:'title', kicker:'A masterclass for solo and small-firm attorneys',
+   h:'Get Off the Clock',
+   sub:'How to price your legal work by the value it delivers, not by the six-minute increment, and build a practice that scales with you instead of your timesheet.'},
+
+  {t:'audience', kicker:'Who this is for',
+   h:'You did not go to law school to sell hours',
+   sub:'This is for the owner of a solo or small firm who is good at the work, busy enough, and quietly capped, because the only lever you have to grow is billing more hours you do not have.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'The billable hour rewards the wrong thing',
+   sub:'The hour pays you for how long something takes. So the faster and better you get, the less you earn for the same result. Your expertise goes up and your invoice goes down.'},
+
+  {t:'hook', kicker:'The reframe',
+   big:'Your client never wanted an hour. They wanted the outcome. The hour is just the ruler we picked, and it measures the one thing that has nothing to do with your worth.'},
+
+  {t:'content', kicker:'Part one, the real problem',
+   h:'Why raising your rate does not fix it',
+   sub:'A higher hourly rate still ties your income to a clock and still makes the client watch the meter. You cap your calendar, your team resents the timesheet, and every efficiency you find quietly costs you money.',
+   points:[
+     '<b>Income is capped by hours in a day,</b> not by the value you create.',
+     '<b>Efficiency is punished,</b> because faster work bills fewer hours.',
+     '<b>The client is anxious,</b> watching a meter run with no fixed number.'
+   ]},
+
+  {t:'content', kicker:'Part one, the real problem',
+   h:'The number was always knowable',
+   sub:'Here is the quiet truth of hourly billing: an experienced lawyer already knows, at the start of a matter, roughly what it will take and what it is worth. The hour just hides that number and reveals it slowly, one entry at a time.',
+   note:'If the number is knowable at the start, you can price it at the start.'},
+
+  {t:'part', kicker:'Part two',
+   h:'The P3 Method',
+   sub:'Three moves to take a firm off the clock and onto value. Price, Pitch, Profit. This is the system we ran in our own firm for over a decade before we taught it to anyone.'},
+
+  {t:'framework', kicker:'P3, the shape of it',
+   h:'Price, Pitch, Profit',
+   pills:[
+     {p:'Price', d:'Assign point values to deliverables up front, by size, complexity and urgency.'},
+     {p:'Pitch', d:'Offer the client clear options and let them choose, instead of a running meter.'},
+     {p:'Profit', d:'Reward efficiency, so getting better makes the firm more, not less.'}
+   ]},
+
+  {t:'content', kicker:'P1, Price',
+   h:'Price the deliverable, in points',
+   sub:'Go back to the very start of the engagement. Break the matter into deliverables and assign each one a point value, the way an arcade token stands in for cash. A point is a unit of value, not a unit of time.',
+   points:[
+     '<b>Size it:</b> small, medium or large, set before the work begins.',
+     '<b>Weigh complexity:</b> a hard deliverable carries more points than a routine one.',
+     '<b>Add the urgency factor:</b> the thing hourly billing never charges for, and clients happily pay for.'
+   ]},
+
+  {t:'content', kicker:'P1, Price',
+   h:'Why points, and not just a flat fee',
+   sub:'A flat fee is a guess frozen in time. Points are a language. They let you size new work consistently, explain a price a client understands, and adjust scope without renegotiating your whole worth every time the matter shifts.',
+   note:'Same deliverable, same points, every time. The firm finally has a consistent unit of value.'},
+
+  {t:'content', kicker:'P2, Pitch',
+   h:'Let the client choose the path',
+   sub:'Pitching is not selling harder. It is presenting the work as options, good, better, best, and letting the client pick the one that fits their situation. Nobody is watching a meter, because the number is agreed before the work starts.',
+   points:[
+     '<b>Offer alternatives,</b> not a single take-it-or-leave-it quote.',
+     '<b>Price certainty up front,</b> so the client relaxes and says yes faster.',
+     '<b>No surprise invoices,</b> so the relationship survives the bill.'
+   ]},
+
+  {t:'content', kicker:'P3, Profit',
+   h:'Now efficiency finally pays you',
+   sub:'Once the price is fixed to the deliverable, every process you tighten, every template you build, every hour you save goes straight to the firm and to your life. Continuous improvement stops being a hobby and becomes the profit engine.',
+   points:[
+     '<b>Get faster, earn the same or more,</b> for the same delivered value.',
+     '<b>Systematize the repeatable work,</b> because the reward is now yours to keep.',
+     '<b>Protect the team from the timesheet,</b> and protect them from burnout.'
+   ]},
+
+  {t:'quote', kicker:'The whole idea in one line',
+   quote:'Measure what matters. Value, expertise and results, not six-minute increments on a clock.'},
+
+  {t:'content', kicker:'Part three, off the clock in practice',
+   h:'A week inside a firm that is off the clock',
+   sub:'The change is not abstract. It shows up in the ordinary week of a firm that has made the switch.',
+   points:[
+     '<b>New matters are priced in minutes,</b> not reconstructed from time entries.',
+     '<b>Clients say yes to a clear number,</b> and stop haggling over the meter.',
+     '<b>The team stops logging tenths of an hour</b> and starts finishing work.'
+   ]},
+
+  {t:'content', kicker:'Part three, making it stick',
+   h:'You do not have to hold it all in your head',
+   sub:'A points system is only useful if it is consistent from matter to matter and lawyer to lawyer. The method comes with the structure to price, pitch and track engagements the same way every time, so the model survives a busy week.',
+   note:'The discipline lives in the system, not in your willpower on a Friday afternoon.'},
+
+  {t:'content', kicker:'The objection',
+   h:'But will my clients accept it?',
+   sub:'They already do. Every time a client asks for an estimate, a cap or a flat fee, they are telling you they want price certainty. Deliverables-based pricing gives them exactly that, and gives you a firm that no longer punishes you for being good at your job.',
+   note:'The clients who love an open-ended meter are not the clients you are trying to keep.'},
+
+  {t:'why', kicker:'Why listen to us',
+   h:'We ran this before we taught it',
+   sub:'We are two attorneys who stopped billing by the hour more than a decade ago and built our own firm on a value, deliverables-based model. We spent ten years proving it works in a real practice, then spent the last five teaching other lawyers to make the same shift.',
+   note:'This is not theory from outside the profession. It is the operating model of a working firm.'},
+
+  {t:'recap', kicker:'The recap',
+   h:'Three moves, off the clock',
+   pills:[
+     {p:'Price', d:'Deliverables in points: size, complexity, urgency, set up front.'},
+     {p:'Pitch', d:'Options the client chooses, with the number agreed before the work.'},
+     {p:'Profit', d:'Efficiency rewarded, the team protected, the practice that scales with you.'}
+   ]},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Build the practice you love',
+   sub:'If you want the full method, the pricing structure and the tools to run it in your own firm, here is where to start.',
+   step:'Get the ADVOS Pro License',
+   where:'Or start free in the ADVOSphere community and explore the method first at advospro.com.',
+   disc:'This masterclass is educational. It is not legal, financial or business advice, and no specific revenue, profit or result is guaranteed. Results vary by firm, market and effort.'}
+];
+
+const stage=document.getElementById('stage');
+const pos=document.getElementById('pos');
+let i=0;
+function esc(s){return s;}
+function render(){
+  const s=S[i];
+  let html='<div class="slide active">';
+  if(s.kicker) html+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h) html+= (s.t==='title'? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`);
+  if(s.big) html+=`<div class="big">${s.big}</div>`;
+  if(s.quote) html+=`<div class="quote">${s.quote}</div>`;
+  if(s.sub) html+=`<p class="${s.t==='title'?'lede':'sub'}">${s.sub}</p>`;
+  if(s.pills){html+='<div class="pillrow">';s.pills.forEach(p=>{html+=`<div class="pill"><div class="p">${p.p}</div><div class="d">${p.d}</div></div>`;});html+='</div>';}
+  if(s.points){html+='<ul>';s.points.forEach(p=>{html+=`<li>${p}</li>`;});html+='</ul>';}
+  if(s.step){html+=`<div class="cta-box"><div class="step">${s.step}</div><div class="where">${s.where}</div></div>`;}
+  if(s.note) html+=`<div class="note">${s.note}</div>`;
+  if(s.disc) html+=`<div class="disc">${s.disc}</div>`;
+  html+='</div>';
+  stage.innerHTML=html;
+  pos.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+document.addEventListener('click',e=>{if(e.clientX < window.innerWidth*0.25)go(-1);else go(1);});
+render();
+</script>
+</body>
+</html>
