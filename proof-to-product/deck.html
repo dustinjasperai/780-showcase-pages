@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Wholesale Shelf System — a masterclass with Katie Hunt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf7f2;        /* warm paper white, from brand #fdece1 peach tint */
+    --panel:#ffffff;
+    --ink:#1c1c1c;       /* brand soft charcoal */
+    --muted:#6a625a;
+    --rule:#e7ded4;      /* paper-tint rule */
+    --accent:#ee3524;    /* Proof to Product signature red, brand.json #2 (72 uses) */
+    --accent2:#ff893d;   /* brand orange, brand.json #4 (12 uses) */
+    --display:'Zilla Slab', Georgia, serif;   /* analog of their Archer slab H2 */
+    --body:'Rubik', system-ui, sans-serif;    /* their actual body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 18px 80px}
+  .slide{
+    background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 26px;min-height:460px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(28,28,28,.03);
+  }
+  .kicker{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:700;font-size:36px;line-height:1.1}
+  h3{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;color:var(--ink)}
+  p{font-size:19px;line-height:1.6;color:var(--ink);max-width:60ch}
+  .lead{font-size:22px;color:var(--muted)}
+  .sub{color:var(--muted);font-size:18px;margin-top:14px;max-width:62ch}
+  ul{list-style:none;margin-top:18px}
+  li{font-size:19px;line-height:1.55;padding:12px 0 12px 34px;position:relative;border-bottom:1px solid var(--rule);max-width:64ch}
+  li:last-child{border-bottom:0}
+  li:before{content:"";position:absolute;left:2px;top:20px;width:12px;height:12px;
+    background:var(--accent);border-radius:2px}
+  .rows li:before{background:var(--accent2)}
+  .pillar{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .pnum{font-family:var(--display);font-weight:700;font-size:44px;color:var(--accent);line-height:1}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  .card{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:20px 22px}
+  .card h3{font-size:19px;color:var(--accent)}
+  .card p{font-size:16px;color:var(--muted);margin-top:6px}
+  .stat{font-family:var(--display);font-weight:700;font-size:40px;color:var(--accent)}
+  .statrow{display:flex;gap:44px;flex-wrap:wrap;margin-top:24px}
+  .statrow div span{display:block;font-size:15px;color:var(--muted);max-width:20ch;margin-top:4px}
+  .accentbar{height:6px;width:64px;background:var(--accent);border-radius:3px;margin-top:26px}
+  .cta{background:var(--ink);color:#fdf9f4;border-color:var(--ink)}
+  .cta .kicker{color:var(--accent2)}
+  .cta h2{color:#fdf9f4}
+  .cta p{color:#e7ddd2}
+  .btn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;
+    font-weight:600;font-size:18px;padding:15px 30px;border-radius:8px;text-decoration:none}
+  .disclaimer{font-size:13px;color:#b9afa3;margin-top:28px;max-width:64ch;line-height:1.5}
+  .pagenum{font-size:12px;color:#c3b9ad;margin-top:22px;letter-spacing:.1em}
+  .foot{font-family:var(--display);font-weight:600;color:var(--muted);font-size:15px}
+  @media(max-width:640px){.slide{padding:34px 24px}h1{font-size:36px}h2{font-size:27px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title',k:'A live masterclass with Katie Hunt, Proof to Product',h1:'The Wholesale Shelf System',lead:'How product brands land repeat retail orders without chasing every single sale.'},
+ {t:'who',k:'Who this is for',h2:'You make a product people love. Getting it onto store shelves is the hard part.',sub:'This is for product-based business owners, makers of stationery, candles, apparel, home decor, food, and gifts, who want wholesale to be a steady channel, not a lucky break.',pts:['You have sold wholesale a few times but it feels random','You are not sure your pricing actually leaves you a margin','You want stores reordering, not one and done']},
+ {t:'hook',k:'The trap',h2:'Most makers treat wholesale like a scavenger hunt.',p:'You pitch a store here, exhibit at a market there, post and hope. Some orders come in. But there is no system underneath it, so every month you start the hunt over again.',sub:'Wholesale is not a personality trait. It is a repeatable sales system, and it can be learned.'},
+ {t:'p1intro',k:'Part one, the real problem',h2:'The problem was never your product. It is the missing system.',p:'Talented makers stall at wholesale for the same reason every time: they are improvising the sales side. Pricing is a guess. The line sheet is an afterthought. The follow up never happens.',sub:'A great product with no sales system gets a few orders. The same product with a system gets shelves.'},
+ {t:'p1cost',k:'What it costs you',h2:'Guesswork shows up in your margins.',rows:['Priced too low, so every wholesale order quietly loses money','No terms, so you carry the cash-flow risk for the store','No follow up, so warm buyers go cold and you never know why'],sub:'Fix the system and the same effort starts compounding into reorders.'},
+ {t:'fwintro',k:'Part two, the framework',h2:'The Wholesale Shelf System, in four moves.',grid:[{h:'01 Position and Price',p:'Get pricing, margins, and positioning right first.'},{h:'02 Sales Tools and Faire',p:'Line sheets, catalogs, and a smart Faire play.'},{h:'03 Pitch and Follow Up',p:'Reach real buyers and close on the follow up.'},{h:'04 Grow and Trade Shows',p:'Scale the wins into repeat retail orders.'}]},
+ {t:'pillar',n:'01',h:'Position and Price',d:'Set your wholesale pricing, margins, and terms before you ever pitch a store. Position the line so a buyer sees where it fits on their shelf.',pts:['Wholesale pricing structures that still leave you a healthy margin','Product positioning a retail buyer understands in seconds','Terms and conditions that protect your cash flow']},
+ {t:'pillar',n:'02',h:'Sales Tools and Faire',d:'Build the professional sales tools buyers expect, then use Faire the smart way instead of paying commission on every order.',pts:['Line sheets and catalogs that read like a real brand','A Faire strategy that wins new stockists without eating your margin','Simple sales systems so nothing slips through']},
+ {t:'pillar',n:'03',h:'Pitch and Follow Up',d:'Pitch real stores with a repeatable approach, then follow up like a pro. Most of wholesale is won in the follow up, not the first email.',pts:['Store pitching that gets a reply from actual buyers','Follow up systems so you stop chasing and start closing','Relationships that turn one order into standing reorders']},
+ {t:'pillar',n:'04',h:'Grow and Trade Shows',d:'Make strategic growth decisions and, when you are ready, work a trade show so it pays for itself.',pts:['Which growth moves to make, and which to skip for now','Trade show selling without the overwhelm','A plan for repeat orders, not one time buys']},
+ {t:'through',k:'The through-line',h2:'Simplicity in business.',p:'Every part of this system is built on one idea: take a complicated strategy and break it into simple, repeatable steps. Stronger sales and higher margins come from doing a few things consistently, not from doing everything.'},
+ {t:'temp',k:'Before you scale',h2:'Take your business temperature first.',p:'Before you pour effort into growth, read the vitals: your financials and sales metrics, your systems, your team, and your own leadership. Scale a shaky foundation and you just get bigger problems faster.',pts:['Know your numbers, so decisions are made on data','Document the systems only you know how to run','Decide what to delegate before you are underwater']},
+ {t:'middle',k:'The messy middle',h2:'Past startup, not yet scaled. This is where brands get stuck.',p:'The messy middle is not a product problem. It is a foundations problem: fuzzy goals, no roadmap, systems in your head, and a sales plan that lives on hope. Solid foundations are what let wholesale actually scale.'},
+ {t:'works',k:'Part three, wholesale as a system',h2:'When the system is running.',rows:['You pitch from a real line sheet, not a screenshot','Buyers reply because your follow up is consistent','Stores reorder, so revenue is predictable, not a spike','You know your margins on every single order']},
+ {t:'proof',k:'Why learn this here',h2:'Proof to Product has taught this since 2011.',stats:[{n:'35,476+',l:'product brands supported since 2011'},{n:'$2M+',l:'annual revenue reached by alumni brands'},{n:'460+',l:'podcast episodes on selling product'}],sub:'Alumni products have landed in stores like Target, Anthropologie, Whole Foods, and REI, and the work has been featured in Forbes, Entrepreneur, and The New York Times.'},
+ {t:'myth',k:'One myth to drop',h2:'You do not have to chase every sale.',p:'The goal is not more hustle. It is a system that brings the right stores to you and keeps them reordering, so your time goes back into the product you actually love making.'},
+ {t:'cta',k:'Your next step',h2:'Ready to build your wholesale system?',p:'Paper Camp is the four-week program where you build this system with live coaching, step by step, for your product line.',btn:{href:'https://www.prooftoproduct.com/papercamp',label:'Join the Paper Camp wait list'},disc:'Educational content only. No specific result is guaranteed. Results vary by brand, effort, and market. The revenue and placement figures shown are examples reported by Proof to Product and its alumni, not a promise of your outcome.',foot:'Katie Hunt · Proof to Product · prooftoproduct.com'}
+];
+
+function esc(x){return x==null?'':String(x);}
+function slide(s,i,total){
+ const pg='<div class="pagenum">'+(i+1)+' / '+total+'</div>';
+ const kick=s.k?'<div class="kicker">'+esc(s.k)+'</div>':'';
+ if(s.t==='title'){
+  return `<div class="slide">${kick}<h1>${esc(s.h1)}</h1>
+     <p class="lead" style="margin-top:20px">${esc(s.lead)}</p>
+     <div class="accentbar"></div>${pg}</div>`;
+ }
+ if(s.t==='pillar'){
+  return `<div class="slide"><div class="kicker">The framework</div>
+     <div class="pillar"><span class="pnum">${esc(s.n)}</span><h2>${esc(s.h)}</h2></div>
+     <p style="margin-top:8px">${esc(s.d)}</p>
+     <ul>${(s.pts||[]).map(p=>'<li>'+esc(p)+'</li>').join('')}</ul>${pg}</div>`;
+ }
+ if(s.t==='fwintro'){
+  return `<div class="slide">${kick}<h2>${esc(s.h2)}</h2>
+     <div class="grid">${(s.grid||[]).map(c=>'<div class="card"><h3>'+esc(c.h)+'</h3><p>'+esc(c.p)+'</p></div>').join('')}</div>${pg}</div>`;
+ }
+ if(s.t==='proof'){
+  return `<div class="slide">${kick}<h2>${esc(s.h2)}</h2>
+     <div class="statrow">${(s.stats||[]).map(x=>'<div><span class="stat">'+esc(x.n)+'</span><span>'+esc(x.l)+'</span></div>').join('')}</div>
+     <p class="sub">${esc(s.sub)}</p>${pg}</div>`;
+ }
+ if(s.t==='cta'){
+  return `<div class="slide cta">${kick}<h2>${esc(s.h2)}</h2>
+     <p style="margin-top:16px">${esc(s.p)}</p>
+     <a class="btn" href="${esc(s.btn&&s.btn.href)}">${esc(s.btn&&s.btn.label)}</a>
+     <p class="disclaimer">${esc(s.disc)}</p>
+     <div class="foot" style="margin-top:24px">${esc(s.foot)}</div>${pg}</div>`;
+ }
+ // generic content slide: kicker + h2 + optional p + optional rows/pts + optional sub
+ let inner=kick+'<h2>'+esc(s.h2)+'</h2>';
+ if(s.p) inner+='<p style="margin-top:16px">'+esc(s.p)+'</p>';
+ if(s.rows) inner+='<ul class="rows">'+s.rows.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>';
+ if(s.pts) inner+='<ul>'+s.pts.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>';
+ if(s.sub) inner+='<p class="sub">'+esc(s.sub)+'</p>';
+ return `<div class="slide">${inner}${pg}</div>`;
+}
+const deck=document.getElementById('deck');
+deck.innerHTML=S.map((s,i)=>slide(s,i,S.length)).join('');
+</script>
+</body>
+</html>
