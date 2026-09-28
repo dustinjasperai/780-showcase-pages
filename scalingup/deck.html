@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scale Without Chaos - Scaling Up Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140F0A; --panel:#22190F; --rule:#3B2A1A;
+    --accent:#F26522; --ink:#F5EDE3; --muted:#C4B6A5;
+    --disp:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(96vw,1120px);aspect-ratio:16/9;position:relative}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;
+    flex-direction:column;justify-content:center;background:var(--bg)}
+  .slide.on{display:flex;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--disp);font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:20px}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.6vw,58px);
+    line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--disp);font-weight:600;font-size:clamp(24px,3.3vw,40px);
+    line-height:1.1;letter-spacing:-.01em}
+  .lead{font-size:clamp(17px,1.9vw,23px);color:var(--muted);max-width:52ch;
+    margin-top:22px;line-height:1.5}
+  p.body{font-size:clamp(15px,1.6vw,19px);color:var(--ink);max-width:56ch;
+    margin-top:16px;line-height:1.55}
+  ul{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:14px;max-width:60ch}
+  li{position:relative;padding-left:30px;font-size:clamp(15px,1.6vw,19px);
+    line-height:1.45;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;
+    background:var(--accent);border-radius:2px}
+  li b{font-family:var(--disp);font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:28px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:22px 24px}
+  .card .n{font-family:var(--disp);font-weight:700;color:var(--accent);font-size:15px;
+    letter-spacing:.08em}
+  .card h3{font-family:var(--disp);font-weight:600;font-size:20px;margin-top:8px}
+  .card p{color:var(--muted);font-size:15px;margin-top:8px;line-height:1.45}
+  .big{font-family:var(--disp);font-weight:700;font-size:clamp(48px,9vw,120px);
+    color:var(--accent);line-height:.9}
+  .rhythm{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+  .rhythm span{background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+    padding:10px 18px;font-family:var(--disp);font-weight:500;font-size:15px}
+  .rhythm span b{color:var(--accent)}
+  .quote{font-family:var(--disp);font-weight:600;font-size:clamp(22px,2.8vw,34px);
+    line-height:1.25;max-width:48ch}
+  .cite{color:var(--muted);margin-top:20px;font-size:16px}
+  .disclaimer{color:var(--muted);font-size:12px;line-height:1.5;margin-top:28px;max-width:60ch;
+    border-top:1px solid var(--rule);padding-top:16px}
+  .foot{position:absolute;bottom:22px;left:72px;right:72px;display:flex;
+    justify-content:space-between;font-size:12px;color:var(--muted);
+    font-family:var(--disp);letter-spacing:.06em}
+  .brand{color:var(--accent);font-weight:600}
+  #nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    display:flex;gap:8px;align-items:center;z-index:10}
+  #nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:8px;padding:8px 14px;font-family:var(--disp);font-size:14px;cursor:pointer}
+  #nav button:hover{border-color:var(--accent)}
+  #count{color:var(--muted);font-size:13px;font-family:var(--disp);min-width:56px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',kicker:'A Scaling Up Masterclass with Verne Harnish',h:'Scale Without Chaos',lead:'The operating rhythm that carries a company past the growth ceilings without the founder having to be in every decision.'},
+
+ {t:'content',kicker:'Who this is for',h:'You built it. Now it needs you everywhere.',body:'This is for founders and CEOs of companies between roughly $3M and $250M who are growing and feeling the strain: more revenue, more people, more moving parts, and somehow more of it running through you.'},
+
+ {t:'list',kicker:'The trap',h:'Growth made the chaos, not solved it',items:['The team is busy, but nobody is sure of the top priority this quarter.','Numbers show up late, so decisions get made on gut and memory.','Meetings multiply and still nothing gets decided.','You are the bottleneck, the tie-breaker, and the memory of the company.']},
+
+ {t:'reframe',kicker:'The reframe',h:'The problem is not effort. It is rhythm.',body:'Most companies do not stall because people stop working hard. They stall because there is no shared cadence for setting priorities, seeing the numbers, and holding each other to them. Rockefeller ran Standard Oil on that cadence over 100 years ago. It has not changed.'},
+
+ {t:'section',kicker:'Part one',h:'Why companies stop growing'},
+ {t:'list',kicker:'Part one',h:'The four things every scaling company must get right',items:['<b>People</b> - the right people in the right seats, wanting to be there.','<b>Strategy</b> - a plan customers care about that competitors cannot copy.','<b>Execution</b> - the disciplines that make results repeatable.','<b>Cash</b> - enough fuel that growth does not starve the company.'],body:'Get one wrong and growth punishes you for it. This is The Four Decisions.'},
+
+ {t:'stat',kicker:'The stakes',big:'96%',h:'of ventures never surpass $10M',body:'To break through, a team has to master the Four Decisions together, not the founder alone. That is what this rhythm builds.'},
+
+ {t:'section',kicker:'Part two',h:'The Scaling Up operating rhythm'},
+
+ {t:'cards',kicker:'The framework',h:'Four decisions, one page, one cadence',cards:[
+   {n:'01',t:'The One-Page Strategic Plan',p:'Core values, purpose, a long-range goal, and this quarter\'s priorities on a single page the whole company works from.'},
+   {n:'02',t:'The Rockefeller Habits Checklist',p:'10 habits, about 40 practices, that turn strategy into daily execution: priorities, data, and rhythm.'},
+   {n:'03',t:'A Meeting Rhythm',p:'Daily huddles, weekly and monthly reviews, quarterly resets, so alignment is maintained, not re-invented.'},
+   {n:'04',t:'The Cash Conversion Cycle',p:'Shorten the time between spending a dollar and collecting it, so growth funds itself.'}
+ ]},
+
+ {t:'rhythm',kicker:'The cadence',h:'Alignment is a rhythm, not an event',rhythm:['<b>Daily</b> huddle','<b>Weekly</b> team meeting','<b>Monthly</b> management review','<b>Quarterly</b> priorities reset','<b>Annual</b> plan'],body:'A short daily huddle surfaces stuck priorities in minutes. The quarterly reset keeps the One-Page Plan honest. The founder stops being the daily glue.'},
+
+ {t:'list',kicker:'People',h:'A players, in the right seats',items:['Hire and keep people who share the core values, not just the skills.','Give every seat a clear outcome, not a vague role.','A team of teams, so accountability does not all route back to you.']},
+
+ {t:'list',kicker:'Strategy',h:'A promise competitors cannot copy',items:['Get specific on the customer you are built to serve.','Name the brand promise you keep better than anyone.','Put it on one page so every person can repeat it.']},
+
+ {t:'list',kicker:'Execution',h:'Priorities, data, rhythm',items:['One top priority per quarter, with a number and an owner.','A short list of metrics reviewed on a fixed cadence.','A meeting rhythm that decides, instead of just reporting.']},
+
+ {t:'list',kicker:'Cash',h:'Growth that funds itself',items:['Map how long cash is tied up from spend to collection.','Find the levers that shorten that cycle.','Free up cash so scaling does not mean borrowing to survive.']},
+
+ {t:'section',kicker:'Part three',h:'Inside a company that runs the rhythm'},
+
+ {t:'quote',kicker:'Proof',quote:'"Millions start ventures, but 96% stay small. To surpass $10 Million, your team must master the 4 Decisions."',cite:'The Scaling Up methodology - used to align teams in over 102,000 companies.'},
+
+ {t:'list',kicker:'The shift',h:'From founder-dependent to founder-led',items:['The quarter has one clear priority everyone can name.','The numbers arrive on time, so decisions get faster.','The team runs the rhythm, so you work on the business again.','Growth stops feeling like it is about to break something.']},
+
+ {t:'why',kicker:'Why learn it here',h:'The original playbook, from the person who wrote it',body:'Verne Harnish founded the Entrepreneurs\' Organization, wrote Mastering the Rockefeller Habits and Scaling Up, and has spent decades helping companies grow. The Four Decisions and the Rockefeller Habits Checklist are his work, refined across 102,000+ companies.'},
+
+ {t:'cta',kicker:'Your next step',h:'Bring the rhythm into your company',body:'If this is the way you want to run your company, the next step is a conversation about where your Four Decisions stand today and where the rhythm would move the needle first.',cta:'Book a call with a certified Scaling Up coach, or start with the free Scaling Up Assessment.',disc:'Educational content only. This masterclass is for information, not financial, legal, or business advice. No income or specific business result is guaranteed. Results vary based on your market, your team, and how you execute.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(i===0?' on':'');
+    let h='';
+    if(s.kicker)h+=`<div class="kicker">${s.kicker}</div>`;
+    if(s.t==='title'){h+=`<h1>${s.h}</h1><div class="lead">${s.lead}</div>`;}
+    else if(s.t==='section'){h+=`<h1>${s.h}</h1>`;}
+    else if(s.t==='content'||s.t==='reframe'||s.t==='why'){h+=`<h2>${s.h}</h2><p class="body">${s.body}</p>`;}
+    else if(s.t==='list'){h+=`<h2>${s.h}</h2><ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`+(s.body?`<p class="body">${s.body}</p>`:'');}
+    else if(s.t==='cards'){h+=`<h2>${s.h}</h2><div class="grid">${s.cards.map(c=>`<div class="card"><div class="n">${c.n}</div><h3>${c.t}</h3><p>${c.p}</p></div>`).join('')}</div>`;}
+    else if(s.t==='rhythm'){h+=`<h2>${s.h}</h2><div class="rhythm">${s.rhythm.map(r=>`<span>${r}</span>`).join('')}</div><p class="body">${s.body}</p>`;}
+    else if(s.t==='stat'){h+=`<div class="big">${s.big}</div><h2 style="margin-top:18px">${s.h}</h2><p class="body">${s.body}</p>`;}
+    else if(s.t==='quote'){h+=`<div class="quote">${s.quote}</div><div class="cite">${s.cite}</div>`;}
+    else if(s.t==='cta'){h+=`<h2>${s.h}</h2><p class="body">${s.body}</p><p class="body" style="color:var(--accent);font-family:var(--disp);font-weight:600">${s.cta}</p><div class="disclaimer">${s.disc}</div>`;}
+    h+=`<div class="foot"><span class="brand">SCALING UP</span><span>${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</span></div>`;
+    d.innerHTML=h;
+    stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=`1 / ${S.length}`;
+}
+let cur=0;
+function go(n){
+  const s=stage.children;
+  s[cur].classList.remove('on');
+  cur=(cur+n+S.length)%S.length;
+  s[cur].classList.add('on');
+  document.getElementById('count').textContent=`${cur+1} / ${S.length}`;
+}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
