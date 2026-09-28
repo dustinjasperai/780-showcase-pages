@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Handler-First Method — a live masterclass with The Virtual Dog Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff9f2;        /* their warm off-white ground */
+    --panel:#ffffff;
+    --rule:#ece2d4;      /* warm hairline */
+    --ink:#33373d;       /* their dominant neutral */
+    --muted:#6b6f76;
+    --accent:#e67e22;    /* their dominant warm brand color */
+    --ink2:#1b263b;      /* their navy, for depth */
+    --display:'Montserrat',system-ui,sans-serif;
+    --body:'Roboto',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink2);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto;padding:28px 18px 64px}
+  .slide{
+    position:relative;background:var(--bg);border-radius:18px;
+    padding:64px 64px 58px;margin:0 0 26px;min-height:520px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 18px 44px rgba(0,0,0,.28);overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:64px;top:52px;width:64px;height:4px;background:var(--accent);border-radius:3px}
+  .slide.center{text-align:center;align-items:center}
+  .slide.dark{background:var(--ink2);color:#f4f1ea}
+  .slide.dark .h2,.slide.dark .lead{color:#fff}
+  .slide.dark .kicker{color:#f4b072}
+  .kicker{font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin:34px 0 18px}
+  .eyebrow{font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:14px}
+  .h1{font-family:var(--display);font-weight:800;font-size:56px;line-height:1.04;letter-spacing:-.02em;color:var(--ink)}
+  .h2{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
+  .lead{font-size:23px;line-height:1.45;color:var(--ink);margin-top:18px;max-width:40ch}
+  .lead.big{font-size:30px;max-width:24ch}
+  .sub{font-size:19px;color:var(--muted);margin-top:22px}
+  .who{font-size:21px;color:var(--ink);margin-top:14px;max-width:44ch}
+  .num{font-family:var(--display);font-weight:800;font-size:20px;color:var(--accent)}
+  .pillar-name{font-family:var(--display);font-weight:800;font-size:34px;color:var(--ink);margin-top:6px}
+  .steps{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px;max-width:52ch}
+  .steps li{display:flex;gap:16px;align-items:flex-start;font-size:19px}
+  .dot{flex:0 0 auto;width:12px;height:12px;border-radius:50%;background:var(--accent);margin-top:8px}
+  .arc{display:flex;flex-direction:column;gap:14px;margin-top:26px;max-width:54ch}
+  .arc div{padding:14px 18px;background:var(--panel);border-left:4px solid var(--accent);border-radius:8px;font-size:18px}
+  .presenter{margin-top:30px;font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink)}
+  .presenter b{color:var(--accent);font-weight:800}
+  .cta-box{margin-top:26px;padding:22px 26px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;max-width:48ch}
+  .cta-box .big{font-family:var(--display);font-weight:800;font-size:26px;color:var(--ink2)}
+  .disclaimer{margin-top:30px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .foot{position:absolute;right:30px;bottom:22px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .slide.dark .foot{color:#8f98a8}
+</style>
+</head>
+<body>
+<main class="deck" id="deck"></main>
+<script>
+/* The masterclass deck, as a slide array. Brian Gallardo / The Virtual Dog Trainer. */
+const S = [
+  {t:'title', kicker:'A Live Masterclass', h1:'The Handler-First Method',
+   lead:'How to calm a reactive or stubborn dog from home, live over Zoom.',
+   presenter:'Brian Gallardo · The Virtual Dog Trainer'},
+
+  {t:'who', kicker:'Who this is for', h2:'If your walks feel like damage control',
+   body:"You have a dog who lunges, pulls, barks, or simply tunes you out. You've tried trainers, treats, and tools. Some of it worked for a week. You still brace yourself every time another dog appears."},
+
+  {t:'point', kicker:'The trap', h2:'The dog behaved for the trainer. Then they left.',
+   body:"A trainer came, worked magic in an hour, and your dog listened. The moment they drove off, the old habits came back. So you decided the problem was the dog. Or that it was you."},
+
+  {t:'reframe', kicker:'The reframe',
+   lead:"Your dog isn't broken, and he isn't stubborn. He's responding to a handler who hasn't been coached yet."},
+
+  {t:'section', eyebrow:'Part One', h2:"Why most training doesn't stick",
+   body:'Two quiet reasons your results keep slipping, and why neither is about how good your dog is.'},
+
+  {t:'point', kicker:'Reason one', h2:'The trainer trains the dog. Nobody trains you.',
+   body:'Your dog learns to obey that person, in that room, with that timing. Back home, with you, every signal changes. The skill never actually transferred to the one person who is there every day.'},
+
+  {t:'point', kicker:'Reason two', h2:'Behavior is communication, not defiance',
+   body:"Lunging, pulling, and blowing off recall are not your dog being difficult. They're your dog telling you the message isn't landing. Fix the message and the behavior follows."},
+
+  {t:'section', eyebrow:'Part Two', h2:'The Handler-First Method',
+   body:"Three things I coach you through, live, so the change holds when I'm not there."},
+
+  {t:'pillar', num:'Pillar 1', name:'Communication',
+   body:'Bridge the gap between dog and human. You learn to send one clear, consistent signal your dog can actually read, so he is not guessing what you want. Most of the stubbornness disappears the moment the signal gets clean.'},
+
+  {t:'pillar', num:'Pillar 2', name:'Balance and timing',
+   body:"The right response at the right moment, matched to your dog's state, not a rigid one-size script. Balance and moderation are what turn a tense correction into a calm, understood cue."},
+
+  {t:'pillar-steps', num:'Pillar 3', name:'The practice loop',
+   steps:[
+     'Live coaching on Zoom, so you see exactly how a technique should look.',
+     'Daily reps against a step-by-step plan, in your own home and on your own street.',
+     'You send a short video. I review your timing and correct it fast.'
+   ]},
+
+  {t:'point', kicker:'Why online works better here', h2:'You practice where the problems actually happen',
+   body:'Your home. Your street. Your routine. Not a training center your dog will visit once and never see again. Real behavior change happens in the real environment, and that is exactly where we work.'},
+
+  {t:'section', eyebrow:'Part Three', h2:'What the change looks like',
+   body:'A path tailored to your dog, not a fixed curriculum.'},
+
+  {t:'arc', kicker:'The arc', h2:'From trigger to trust',
+   arc:[
+     'First, the one trigger that sets him off, defused so you both stop dreading it.',
+     'Then loose-leash walking on your own street, at your own pace.',
+     'Then calm passes: another dog, a jogger, a doorbell, without the meltdown.',
+     'Then the off-leash reliability that only comes once he trusts your signal.'
+   ]},
+
+  {t:'point', kicker:'The part everyone misses', h2:'You keep the skill for good',
+   body:'Because you were the one coached, the results do not walk out the door when a trainer leaves. You become the handler your dog needed all along, for this dog and the next one.'},
+
+  {t:'whyme', kicker:'Why me', h2:'Brian Gallardo, The Virtual Dog Trainer',
+   body:'I built a fully online program, the Canine Obedience Accelerator, that coaches dog parents through reactivity, aggression, and everyday obedience over live Zoom, backed by an online portal and video feedback between sessions. Any breed, any age, from wherever you and your dog live.'},
+
+  {t:'point', kicker:"What you'll leave with today", h2:'A clear method and a first move',
+   body:'You will understand the handler-first method, why your past attempts slipped, and the first shift to make with your dog this week, before we ever get on a call.'},
+
+  {t:'cta', kicker:'Your next step', h2:'Apply for a free Transformation Session',
+   cta:'A no-obligation Zoom call where we map your dog’s plan together.',
+   disclaimer:'This masterclass is educational. Every dog and household is different, and individual results vary. Nothing here is a guarantee of a specific outcome. Serious aggression or safety concerns should also be reviewed with your veterinarian.'}
+];
+
+const FOOT = 'The Virtual Dog Trainer';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function slideHTML(s){
+  let cls='slide', inner='';
+  if(s.t==='title'){cls+=' center';
+    inner=`<div class="kicker">${esc(s.kicker)}</div><h1 class="h1">${esc(s.h1)}</h1><p class="lead big">${esc(s.lead)}</p><div class="presenter">${esc(s.presenter)}</div>`;}
+  else if(s.t==='reframe'){cls+=' dark center';
+    inner=`<div class="kicker">${esc(s.kicker)}</div><p class="lead big">${esc(s.lead)}</p>`;}
+  else if(s.t==='section'){cls+=' center';
+    inner=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="h2">${esc(s.h2)}</h2><p class="sub">${esc(s.body)}</p>`;}
+  else if(s.t==='point'||s.t==='who'){
+    inner=`<div class="kicker">${esc(s.kicker)}</div><h2 class="h2">${esc(s.h2)}</h2><p class="who">${esc(s.body)}</p>`;}
+  else if(s.t==='pillar'){
+    inner=`<div class="num">${esc(s.num)}</div><div class="pillar-name">${esc(s.name)}</div><p class="who">${esc(s.body)}</p>`;}
+  else if(s.t==='pillar-steps'){
+    inner=`<div class="num">${esc(s.num)}</div><div class="pillar-name">${esc(s.name)}</div><ul class="steps">`+
+      s.steps.map(x=>`<li><span class="dot"></span><span>${esc(x)}</span></li>`).join('')+`</ul>`;}
+  else if(s.t==='arc'){
+    inner=`<div class="kicker">${esc(s.kicker)}</div><h2 class="h2">${esc(s.h2)}</h2><div class="arc">`+
+      s.arc.map(x=>`<div>${esc(x)}</div>`).join('')+`</div>`;}
+  else if(s.t==='whyme'){
+    inner=`<div class="kicker">${esc(s.kicker)}</div><h2 class="h2">${esc(s.h2)}</h2><p class="who">${esc(s.body)}</p>`;}
+  else if(s.t==='cta'){cls+=' center';
+    inner=`<div class="kicker">${esc(s.kicker)}</div><h2 class="h2">${esc(s.h2)}</h2>`+
+      `<div class="cta-box"><div class="big">${esc(s.cta)}</div></div>`+
+      `<p class="disclaimer">${esc(s.disclaimer)}</p>`;}
+  return `<section class="${cls}">${inner}<div class="foot">${FOOT}</div></section>`;
+}
+document.getElementById('deck').innerHTML = S.map(slideHTML).join('');
+</script>
+</body>
+</html>
