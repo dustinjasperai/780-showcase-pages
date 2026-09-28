@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ship It — a live masterclass with Britney Muller · Orange Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2b2e33;      /* Orange Labs dominant ground */
+    --panel:#22252a;   /* their header/footer panel */
+    --rule:#3c4046;    /* ground lightened for hairlines */
+    --ink:#f9f9f8;     /* their off-white text */
+    --muted:#b4b6ba;   /* their muted gray */
+    --accent:#f15722;  /* the Orange Labs orange */
+    --display:'Rajdhani',system-ui,sans-serif;
+    --body:'Poppins',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--panel);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 60px;margin:0 0 22px;min-height:520px;
+    display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent);opacity:.9}
+  .kicker{font-family:var(--display);letter-spacing:.16em;text-transform:uppercase;
+    font-size:14px;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;font-size:64px;line-height:1.02;letter-spacing:.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:42px;line-height:1.05}
+  .lede{font-size:22px;color:var(--muted);margin-top:20px;max-width:44ch;font-weight:300}
+  p.big{font-size:30px;line-height:1.28;max-width:36ch;font-weight:400}
+  ul{list-style:none;margin-top:26px;display:grid;gap:16px}
+  li{font-size:21px;line-height:1.4;padding-left:30px;position:relative;color:var(--ink);max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .steps{display:grid;gap:18px;margin-top:24px}
+  .step{display:flex;gap:20px;align-items:flex-start}
+  .num{font-family:var(--display);font-weight:700;font-size:38px;color:var(--accent);min-width:52px;line-height:1}
+  .step .t{font-size:22px;line-height:1.35}
+  .step .t b{font-weight:600}
+  .part{font-family:var(--display);font-size:20px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+  .quote{font-family:var(--display);font-size:46px;font-weight:600;line-height:1.1;max-width:24ch}
+  .who{font-size:19px;color:var(--muted);margin-top:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+  .box{border:1px solid var(--rule);border-radius:10px;padding:22px 24px}
+  .box h3{font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:8px}
+  .box p{font-size:17px;color:var(--muted);line-height:1.4}
+  .tiles{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .tile{border:1px solid var(--rule);border-radius:999px;padding:10px 18px;font-size:16px;color:var(--ink)}
+  .foot{position:absolute;bottom:20px;left:60px;right:60px;display:flex;justify-content:space-between;
+    font-size:13px;color:var(--muted);font-family:var(--display);letter-spacing:.08em;text-transform:uppercase}
+  .cta h1{font-size:56px}
+  .cta .row{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
+  .pill{border:1px solid var(--accent);border-radius:10px;padding:16px 24px;font-size:19px}
+  .pill b{color:var(--accent)}
+  .disclaimer{font-size:13px;color:var(--muted);margin-top:34px;max-width:70ch;line-height:1.5;font-weight:300}
+  .n{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Britney Muller · Orange Labs',
+   h:'Ship It.',
+   lede:'Build and ship your first real AI tool as a marketer, in one live session.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You are done watching AI demos.',
+   items:['You have tried ChatGPT, Claude, a dozen tools.',
+          'You have saved 100 threads and 40 tutorials.',
+          'And you still have not shipped anything you built yourself.'],
+   who:'If that is you, you are exactly who this hour is for.'},
+
+  {t:'big', kicker:'The trap',
+   h:'You are stuck between two bad options.',
+   big:'Everything is either too basic to matter or too technical to touch. So you keep consuming, and never build.'},
+
+  {t:'quote', kicker:'The reframe',
+   q:'The problem was never the tools. It is that nobody ever made you ship.'},
+
+  {t:'part', part:'Part One', h:'Why watching does not work'},
+
+  {t:'big', kicker:'The consumption trap',
+   h:'Passive learning decays fast.',
+   big:'You do not learn AI by watching someone else use it. You learn it by building on your own real work, with feedback before you ship.'},
+
+  {t:'grid', kicker:'Where marketers actually get stuck',
+   h:'The gap.',
+   boxes:[['Too basic','Prompt lists and tip threads. Fun to read, nothing ships.'],
+          ['Too technical','Docs and dev tutorials written for engineers, not marketers.']]},
+
+  {t:'part', part:'Part Two', h:'The Protocol'},
+
+  {t:'big', kicker:'The method',
+   h:'Three steps. Every session.',
+   big:'The Protocol is the loop that turns "learning AI" into a shipping habit. Bring a project, pick an experiment, ship it live.'},
+
+  {t:'steps', kicker:'The Protocol',
+   h:'How it runs.',
+   steps:[['1','<b>Introduce your project.</b> Bring one real problem from your own marketing work.'],
+          ['2','<b>Pick an experiment from the library.</b> Choose a vetted workflow to adapt, so you never start from a blank page.'],
+          ['3','<b>Ship it at the next live session.</b> Build it with feedback, then put it into your work.']]},
+
+  {t:'big', kicker:'The format',
+   h:'The 90 minute hackathon.',
+   big:'What takes weeks to solve solo, we solve together in 90 minutes. You leave the room with a working tool, not a reading list.'},
+
+  {t:'part', part:'Part Three', h:'What you will build'},
+
+  {t:'steps', kicker:'A live build, start to finish',
+   h:'From blank to shipped.',
+   steps:[['1','<b>Frame the job.</b> Pick a task you do by hand every week, like audience research or campaign analysis.'],
+          ['2','<b>Wire the workflow.</b> Assemble it live from an experiment in the library, no coding background needed.'],
+          ['3','<b>Ship and reuse.</b> Run it on real work before you leave, then keep it in your stack.']]},
+
+  {t:'tiles', kicker:'The experiment library',
+   h:'What you can build here.',
+   tiles:['MCPs in 30 minutes','Claude Code','Local LLMs','SEO workflows','Audience research','Campaign analysis','Content systems','Personalization'],
+   lede:'65 plus tutorials and workflows, curated for marketers, updated as the tools change.'},
+
+  {t:'who', kicker:'Why me',
+   h:'Britney Muller.',
+   items:['Former Senior SEO Scientist at Moz.',
+          'Marketing and machine learning at Hugging Face.',
+          'A decade in ML, now translating it for marketers who do not code.'],
+   who:'I sit on the line between too basic and too technical, and I teach from there.'},
+
+  {t:'grid', kicker:'What changes for you',
+   h:'You become the marketer who ships.',
+   boxes:[['This week','You leave with one working AI tool built on your own work.'],
+          ['Every week after','A room and a cadence that keep you shipping, not just saving links.']]},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Join Orange Labs.',
+   pills:[['Try the community','7 days free, then <b>$49/mo</b>. Live sessions, the experiment library, and feedback on your builds.'],
+          ['Go deeper','The <b>Actionable AI For Marketers</b> cohort: 9 live sessions to build and ship a set of tools.']],
+   disclaimer:'This masterclass is for educational purposes only. Results vary by person and effort, and nothing here is a promise or guarantee of income or specific outcomes.'}
+];
+
+const stage = document.getElementById('stage');
+const foot = (i) => `<div class="foot"><span>Orange Labs</span><span>${i+1} / ${S.length}</span></div>`;
+S.forEach((s,i)=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.t==='cta'?' cta':'');
+  let inner = '';
+  if(s.kicker) inner += `<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='part'){ inner = `<div class="kicker">${s.part}</div><h2>${s.h}</h2>`; }
+  else if(s.t==='quote'){ inner += `<div class="quote">${s.q}</div>`; }
+  else {
+    if(s.h) inner += (s.t==='title'||s.t==='cta') ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+    if(s.lede) inner += `<div class="lede">${s.lede}</div>`;
+    if(s.big) inner += `<p class="big">${s.big}</p>`;
+    if(s.items){ inner += '<ul>'; s.items.forEach(x=>inner+=`<li>${x}</li>`); inner += '</ul>'; }
+    if(s.who) inner += `<div class="who">${s.who}</div>`;
+    if(s.boxes){ inner += '<div class="grid2">'; s.boxes.forEach(b=>inner+=`<div class="box"><h3>${b[0]}</h3><p>${b[1]}</p></div>`); inner += '</div>'; }
+    if(s.steps){ inner += '<div class="steps">'; s.steps.forEach(st=>inner+=`<div class="step"><div class="num">${st[0]}</div><div class="t">${st[1]}</div></div>`); inner += '</div>'; }
+    if(s.tiles){ inner += '<div class="tiles">'; s.tiles.forEach(t=>inner+=`<span class="tile">${t}</span>`); inner += '</div>'; }
+    if(s.pills){ inner += '<div class="row">'; s.pills.forEach(p=>inner+=`<div class="pill"><b>${p[0]}.</b> ${p[1]}</div>`); inner += '</div>'; }
+    if(s.disclaimer) inner += `<div class="disclaimer">${s.disclaimer}</div>`;
+  }
+  inner += foot(i);
+  d.innerHTML = inner;
+  stage.appendChild(d);
+});
+</script>
+</body>
+</html>
