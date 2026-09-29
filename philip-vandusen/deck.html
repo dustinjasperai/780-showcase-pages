@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bulletproof Creative: A Masterclass with Philip VanDusen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f6; --panel:#f2efe9; --rule:#e2ddd2;
+    --ink:#262626; --muted:#6b6b6b;
+    --accent:#ff6f00; --accent2:#c5ce00;
+    --display:'Oswald',system-ui,sans-serif; --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;opacity:0;transition:opacity .25s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:var(--display);text-transform:uppercase;letter-spacing:.22em;
+    font-weight:600;font-size:clamp(11px,1.1vw,15px);color:var(--accent)}
+  h1{font-family:var(--display);font-weight:700;line-height:1.02;letter-spacing:-.5px;
+    font-size:clamp(34px,6.4vw,84px);text-transform:uppercase;margin:.28em 0}
+  h2{font-family:var(--display);font-weight:600;line-height:1.05;letter-spacing:-.3px;
+    font-size:clamp(26px,4.4vw,54px);text-transform:uppercase;margin:.2em 0 .3em}
+  p.lead{font-size:clamp(16px,1.9vw,24px);line-height:1.5;color:var(--ink);max-width:60ch;margin:.4em 0}
+  p.sub{font-size:clamp(15px,1.6vw,21px);line-height:1.55;color:var(--muted);max-width:62ch;margin:.35em 0}
+  .big{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.6vw,44px);
+    line-height:1.12;letter-spacing:-.3px;max-width:20ch}
+  ul{list-style:none;margin:.6em 0;display:grid;gap:.7em;max-width:64ch}
+  li{position:relative;padding-left:1.5em;font-size:clamp(15px,1.7vw,22px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.62em;height:.62em;
+    background:var(--accent);border-radius:2px}
+  .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1em;max-width:70ch;margin-top:.7em}
+  .card{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);
+    border-radius:8px;padding:1em 1.15em}
+  .card h3{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+    font-size:clamp(15px,1.5vw,19px);margin-bottom:.25em}
+  .card p{font-size:clamp(13px,1.35vw,16px);line-height:1.4;color:var(--muted)}
+  .credit{margin-top:1.3em;font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;
+    font-weight:500;font-size:clamp(13px,1.3vw,17px);color:var(--ink)}
+  .credit span{color:var(--accent)}
+  .note{margin-top:.9em;font-size:clamp(12px,1.2vw,14px);color:var(--muted);max-width:60ch;font-style:italic}
+  .rule{width:64px;height:5px;background:var(--accent);margin:.5em 0 .2em;border-radius:3px}
+  .wheel{display:grid;grid-template-columns:repeat(4,1fr);gap:.8em;max-width:76ch;margin-top:.8em}
+  .wheel div{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:.7em .6em;
+    text-align:center;font-size:clamp(12px,1.25vw,15px);line-height:1.25}
+  .wheel div b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;
+    color:var(--accent);font-weight:600;font-size:.82em;margin-bottom:.25em}
+  .nav{position:absolute;bottom:2.4vh;right:3vw;font-family:var(--display);letter-spacing:.1em;
+    font-size:13px;color:var(--muted)}
+  .brandmark{position:absolute;top:3vh;left:10vw;font-family:var(--display);text-transform:uppercase;
+    letter-spacing:.2em;font-weight:600;font-size:12px;color:var(--muted)}
+  .brandmark b{color:var(--accent)}
+  .cta-line{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-weight:600;
+    font-size:clamp(18px,2.2vw,28px);color:var(--accent2);margin-top:.5em}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="brandmark"><b>PV</b> &middot; Personal Brand Masterclass</div>
+<div class="nav"><span id="cur">1</span> / <span id="tot">1</span></div>
+
+<script>
+const S=[
+  {t:'title', k:'A Masterclass', h:'The Bulletproof Creative',
+   sub:'How to build a personal brand that keeps you in demand, in any market, at any price.',
+   credit:'Philip VanDusen',
+   note:'Former VP of Design, PepsiCo. Executive Creative Director, Landor. VP Graphics and Packaging, Old Navy.'},
+
+  {t:'agenda', k:'What you will walk away with',
+   items:[
+     'Why the most talented creatives so often stay the most interchangeable, and how to stop it.',
+     'A way to treat your own name with the same brand rigor as a billion dollar product.',
+     'The Personal Brand Wheel: 12 parts of a personal brand, so you can see exactly what to fix next.'
+   ]},
+
+  {t:'content', k:'Who this is for', h:'The talented and overlooked',
+   lead:'Designers, strategists and creative entrepreneurs who do excellent work, and still feel like the world’s best kept secret.',
+   sub:'Maybe you are a seasoned pro, maybe you are at a crossroads, maybe the industry shifted under your feet. The work is not the problem. Being findable, memorable and premium is.'},
+
+  {t:'list', k:'The trap', h:'Great work is not enough',
+   items:[
+     'You compete on price, because nothing else obviously separates you from the next portfolio.',
+     'Your best work lives in clients’ hands, under their brand, invisible to your next client.',
+     'When the market moves, or a tool like AI arrives, the undifferentiated get squeezed first.'
+   ]},
+
+  {t:'quote', k:'The reframe',
+   big:'Your portfolio is not your brand. Your reputation is. Right now it is being decided without you in the room.'},
+
+  {t:'content', k:'Part One. The real problem', h:'The commodity trap',
+   lead:'Talented creatives brand their <b>work</b>. They almost never brand <b>themselves</b>.',
+   sub:'So the market has no shorthand for who you are, what you stand for, or why you specifically. Without that shorthand you are compared on the one thing everyone can compare: price.'},
+
+  {t:'content', k:'Part One. Why it happens', h:'No system, just vibes',
+   lead:'Personal branding feels vague and overwhelming, so most people do a logo, a nicer website, a few posts, and hope.',
+   sub:'A hope is not a strategy. The brands you admire were not built on vibes. They were built on a deliberate, repeatable system, and your name deserves the same.'},
+
+  {t:'quote', k:'Part Two. The shift',
+   big:'Treat yourself like a Fortune 500 brand. The exact discipline used on Doritos and Old Navy, pointed at your own name.'},
+
+  {t:'content', k:'Part Two. The framework', h:'The Personal Brand Wheel',
+   lead:'Personal branding stops being overwhelming when you can measure it. The Wheel breaks your brand into 12 parts you can score, map and improve, one at a time.',
+   sub:'You stop guessing. You see at a glance what is strong, what is weak, and what to work on next.'},
+
+  {t:'wheel', k:'Part Two. The 12 parts', h:'What the Wheel measures',
+   cells:[
+     ['Foundation','Your story'],['Foundation','Your purpose'],['Foundation','Your values'],
+     ['Positioning','Value proposition'],['Positioning','Target audience'],['Positioning','Differentiation'],
+     ['Expression','Brand design'],['Expression','Voice and message'],['Expression','Online presence'],
+     ['Momentum','Content'],['Momentum','Community'],['Momentum','Network']
+   ]},
+
+  {t:'list', k:'Part Two. How to use it', h:'Measure, map, move',
+   items:[
+     '<b>Measure.</b> Score each of the 12 parts honestly, from strong to neglected.',
+     '<b>Map.</b> Plot them so the shape of your brand, and its dents, become obvious.',
+     '<b>Move.</b> Fix the weakest, highest leverage part first. Then the next. Compounding, not chaos.'
+   ]},
+
+  {t:'cards', k:'Part Two. Staying in demand', h:'The T-Shaped Creative',
+   lead:'Resilience comes from shape. Go deep in one craft, and wide across the skills that surround it.',
+   cards:[
+     {h3:'The vertical stroke', p:'Deep mastery of your core craft. This is your proof, the reason anyone takes you seriously.'},
+     {h3:'The horizontal stroke', p:'Business, marketing, communication and personal brand. This is what makes the mastery pay, and keeps you hard to replace.'}
+   ]},
+
+  {t:'list', k:'Part Three. What changes', h:'From chased to sought',
+   items:[
+     'Work starts finding you, because people finally know what you are known for.',
+     'Price stops being the conversation, because you are no longer interchangeable.',
+     'Market shifts feel like opportunities to reposition, not threats to survive.'
+   ]},
+
+  {t:'content', k:'Part Three. Why me', h:'Brands you know, for your name',
+   lead:'I spent 30 years building brands at the top of the corporate world, as VP of Design at PepsiCo, Executive Creative Director at Landor, and VP of Graphics and Packaging at Old Navy.',
+   sub:'Now I help creative professionals point that same brand strategy discipline at the one brand that matters most to your career: you.'},
+
+  {t:'quote', k:'The method, in one line',
+   big:'Brand yourself, not just your work. Measure it with the Wheel. Fix the weakest part. Repeat until you are the obvious choice.'},
+
+  {t:'cta', k:'Where to start', h:'Build your brand with me',
+   lead:'If you want to work on this directly, we can map your Personal Brand Wheel together and build the plan for your next 12 months.',
+   ctaLine:'philipvandusen.com',
+   note:'This masterclass is educational. Results depend on your own effort, market and execution. Nothing here is a promise or guarantee of income, work, or specific outcomes.'}
+];
+
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+var deck=document.getElementById('deck');
+S.forEach(function(s){
+  var sec=el('section','slide');
+  if(s.k) sec.appendChild(el('div','kicker',s.k));
+  if(s.t==='title'){
+    sec.appendChild(el('h1',null,s.h));
+    if(s.sub) sec.appendChild(el('p','lead',s.sub));
+    if(s.credit) sec.appendChild(el('div','credit','with <span>'+s.credit+'</span>'));
+    if(s.note) sec.appendChild(el('div','note',s.note));
+  } else if(s.t==='agenda'){
+    sec.appendChild(el('div','rule',''));
+    var ul=el('ul');s.items.forEach(function(x){ul.appendChild(el('li',null,x));});sec.appendChild(ul);
+  } else if(s.t==='quote'){
+    sec.appendChild(el('p','big',s.big));
+  } else if(s.t==='list'){
+    if(s.h) sec.appendChild(el('h2',null,s.h));
+    var ul2=el('ul');s.items.forEach(function(x){ul2.appendChild(el('li',null,x));});sec.appendChild(ul2);
+  } else if(s.t==='cards'){
+    if(s.h) sec.appendChild(el('h2',null,s.h));
+    if(s.lead) sec.appendChild(el('p','lead',s.lead));
+    var g=el('div','grid4');s.cards.forEach(function(c){var cd=el('div','card');cd.appendChild(el('h3',null,c.h3));cd.appendChild(el('p',null,c.p));g.appendChild(cd);});sec.appendChild(g);
+  } else if(s.t==='wheel'){
+    if(s.h) sec.appendChild(el('h2',null,s.h));
+    var w=el('div','wheel');s.cells.forEach(function(c){w.appendChild(el('div',null,'<b>'+c[0]+'</b>'+c[1]));});sec.appendChild(w);
+  } else if(s.t==='cta'){
+    if(s.h) sec.appendChild(el('h2',null,s.h));
+    if(s.lead) sec.appendChild(el('p','lead',s.lead));
+    if(s.ctaLine) sec.appendChild(el('div','cta-line',s.ctaLine));
+    if(s.note) sec.appendChild(el('p','note',s.note));
+  } else {
+    if(s.h) sec.appendChild(el('h2',null,s.h));
+    if(s.lead) sec.appendChild(el('p','lead',s.lead));
+    if(s.sub) sec.appendChild(el('p','sub',s.sub));
+  }
+  deck.appendChild(sec);
+});
+
+var slides=[].slice.call(document.querySelectorAll('.slide'));
+var i=0; var tot=slides.length;
+document.getElementById('tot').textContent=tot;
+function show(n){slides[i].classList.remove('on');i=(n+tot)%tot;slides[i].classList.add('on');
+  document.getElementById('cur').textContent=i+1;}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(i+1);e.preventDefault();}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){show(i-1);e.preventDefault();}
+});
+document.getElementById('deck').addEventListener('click',function(){show(i+1);});
+slides[0].classList.add('on');
+</script>
+</body>
+</html>
