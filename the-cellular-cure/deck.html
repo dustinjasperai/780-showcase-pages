@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Cellular Cure — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf7;        /* off-white paper ground (light-scheme brand -> light deck) */
+    --panel:#efeff6;     /* her pale lavender-grey panel */
+    --ink:#3a3a44;       /* her dominant text slate */
+    --anchor:#22301a;    /* her deep forest green (structure) */
+    --accent:#c6f24e;    /* her signature lime (the charge line) */
+    --muted:#6b6b74;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--anchor);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  #deck{max-width:1040px;margin:0 auto;padding:32px 18px 80px}
+  .slide{
+    background:var(--bg);border-radius:18px;margin:22px 0;padding:56px 56px 52px;
+    min-height:520px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 18px 50px rgba(34,48,26,.18);position:relative;overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:56px;top:44px;width:64px;height:5px;border-radius:3px;background:var(--accent)}
+  .slide.title::before,.slide.section::before{display:none}
+  .kicker{font:600 13px/1.4 'Manrope';letter-spacing:.16em;text-transform:uppercase;color:var(--anchor);opacity:.72;margin-bottom:18px}
+  h1{font-family:'Playfair Display',serif;font-weight:700;font-size:52px;line-height:1.08;color:var(--anchor);letter-spacing:-.01em}
+  h2{font-family:'Playfair Display',serif;font-weight:600;font-size:38px;line-height:1.12;color:var(--anchor);margin-top:14px}
+  h3{font-family:'Playfair Display',serif;font-weight:600;font-size:27px;color:var(--anchor);margin-bottom:10px}
+  p{font-size:20px;line-height:1.6;color:var(--ink);max-width:40em;margin-top:16px}
+  .lead{font-size:23px;color:var(--ink)}
+  .sub{font-size:19px;color:var(--muted);margin-top:20px}
+  ul{margin:22px 0 0 0;list-style:none;max-width:42em}
+  li{font-size:19px;line-height:1.5;color:var(--ink);padding:12px 0 12px 30px;position:relative;border-top:1px solid rgba(34,48,26,.10)}
+  li:first-child{border-top:0}
+  li::before{content:"";position:absolute;left:0;top:20px;width:14px;height:4px;border-radius:2px;background:var(--accent)}
+  li b{color:var(--anchor)}
+  .slide.title{background:linear-gradient(160deg,#ffffff 0%,var(--panel) 100%);align-items:flex-start}
+  .slide.title h1{font-size:60px}
+  .slide.title .charge{width:120px;height:6px;border-radius:3px;background:var(--accent);margin:8px 0 26px}
+  .slide.section{background:var(--anchor);color:#f3f6ee}
+  .slide.section h2{color:#ffffff;font-size:44px}
+  .slide.section .kicker{color:var(--accent);opacity:1}
+  .slide.section p{color:#dfe6d6}
+  .slide.cta{background:linear-gradient(160deg,var(--panel) 0%,#ffffff 100%)}
+  .btn{display:inline-block;margin-top:28px;background:var(--accent);color:var(--anchor);font-weight:700;font-size:19px;padding:16px 30px;border-radius:12px;text-decoration:none}
+  .disclaimer{margin-top:30px;font-size:14px;line-height:1.5;color:var(--muted);max-width:44em}
+  .pager{font:600 13px 'Manrope';color:var(--anchor);opacity:.5;position:absolute;right:56px;bottom:26px;letter-spacing:.08em}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:8px}
+  @media(max-width:720px){.slide{padding:34px 26px}h1{font-size:38px}.slide.title h1{font-size:42px}h2{font-size:30px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Justine Stenger',
+   h1:'Why Your Sickest Patients Are Not Responding to the Supplements',
+   lead:'The biophysics layer beneath every protocol, and why matching supplements to symptoms stalls on complex cases until you fix the cell environment first.'},
+
+  {t:'content', kicker:'Who this is for', h3:'Practitioners with cases that stall',
+   p:'This is for functional-medicine practitioners and health coaches who already run the panels, already build the protocols, and keep hitting the same wall on chronic and complex cases.',
+   li:['You know your way around labs and supplementation','Your straightforward cases respond','Your sickest patients plateau, and you are out of levers']},
+
+  {t:'content', kicker:'The trap', h3:'You did everything the model told you to',
+   p:'You test, you match supplements to findings, you adjust. On a complex case the needle barely moves, so you add another supplement, then another. The stack grows and the patient stays stuck.'},
+
+  {t:'section', kicker:'The reframe', h2:'The problem is not the protocol. It is the environment the cell is living in.'},
+
+  {t:'section', kicker:'Part One', h2:'Where biochemistry-first medicine hits a floor'},
+
+  {t:'content', kicker:'Part One', h3:'Test-and-match has a ceiling',
+   p:'Biochemistry-first medicine treats the cell like a chemistry set: find the deficiency, add the input. It works until the cell is in a defended state, where inputs stop landing no matter how precise the protocol.'},
+
+  {t:'content', kicker:'Part One', h3:'The cell is an environment, not a spreadsheet',
+   p:'A mitochondrion runs on light, electrons, water, and structured energy, not on supplements alone. When that environment is broken, biochemistry cannot get traction. This is the layer the standard workup never looks at.'},
+
+  {t:'section', kicker:'Part Two', h2:'The method: biophysics before biochemistry'},
+
+  {t:'content', kicker:'Pillar 1', h3:'Mitochondria and the meaning of life',
+   p:'Start where energy is actually made. Before any protocol, you read the case at the level of cellular energy production, because everything downstream depends on it.'},
+
+  {t:'content', kicker:'Pillar 2', h3:'The Cell Danger Response',
+   p:'Chronically ill patients are often locked in a protective metabolic state. Recognizing the Cell Danger Response tells you why inputs are not landing, and it changes what you do first.',
+   sub:'The Cell Danger Response is Robert Naviaux\'s published concept; the masterclass teaches how to read and operationalize it in practice.'},
+
+  {t:'content', kicker:'Pillar 4', h3:'Light and circadian biology',
+   p:'Light is a dose. Circadian signaling drives mitochondrial function, and it is one of the highest-leverage inputs you can give a patient before you touch the supplement stack.'},
+
+  {t:'content', kicker:'Pillar 5', h3:'Water, structure, and energy',
+   p:'Structured water inside the cell is part of how energy is stored and moved. It is invisible to the standard panel, and it is one of the levers that unlocks a stalled case.'},
+
+  {t:'content', kicker:'Pillar 6', h3:'Phospholipids and the membrane',
+   p:'Cell medicine happens at the membrane. Phospholipids and fatty acids decide what gets in and what gets out, which is why membrane work is where complex cases turn.'},
+
+  {t:'content', kicker:'The tool', h3:'The Bioenergetic Restoration Maps',
+   p:'The pillars are not a checklist, they are a sequence. The Bioenergetic Restoration Maps organize the order of interventions so you restore the cell environment first and let biochemistry finally take hold.',
+   li:['Read the case at the cellular-energy level','Sequence the environmental levers','Then, and only then, layer the targeted protocol']},
+
+  {t:'section', kicker:'Part Three', h2:'Where complex cases finally turn'},
+
+  {t:'content', kicker:'Part Three', h3:'Re-sequencing a stalled case',
+   p:'Instead of adding the next supplement, you step back one layer: is the cell in a defended state, is the environment able to hold a charge, is the membrane intact. You fix the order, and the same protocols start working.'},
+
+  {t:'content', kicker:'Why me', h3:'Where this comes from',
+   p:'Justine Stenger has spent 13-plus years in clinical work with chronic and complex illness, ten of them alongside Dr. Bruce Hoffman supporting his most complex patients nutritionally. Certified Functional Medicine Health Coach (IFM), Bredesen ReCODE trained, GAPS practitioner, with a specialty in cell-membrane medicine.'},
+
+  {t:'content', kicker:'The shift', h3:'From matching supplements to restoring the cell',
+   p:'Once you read a case biophysics-first, the sickest patients stop being a mystery. You are not adding more, you are restoring the environment so the body can use what you give it.'},
+
+  {t:'cta', kicker:'Go deeper', h3:'The Mitochondrial Restoration Program',
+   p:'The full method, all six pillars, the Bioenergetic Restoration Maps, and the clinical tools live inside the Mitochondrial Restoration Program, with a year in the Cellular Cure community and monthly live sessions.',
+   btn:'Join the waitlist',
+   disclaimer:'This masterclass is educational and is intended for practitioner and personal learning. It is not medical advice, diagnosis, or treatment. No specific health or income result is guaranteed. Results vary by individual.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide ' + s.t;
+  let html = '';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.h1) html += '<h1>' + s.h1 + '</h1>';
+  if (s.t === 'title') html += '<div class="charge"></div>';
+  if (s.h2) html += '<h2>' + s.h2 + '</h2>';
+  if (s.h3) html += '<h3>' + s.h3 + '</h3>';
+  if (s.lead) html += '<p class="lead">' + s.lead + '</p>';
+  if (s.p) html += '<p>' + s.p + '</p>';
+  if (s.li) html += '<ul>' + s.li.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+  if (s.sub) html += '<div class="sub">' + s.sub + '</div>';
+  if (s.btn) html += '<a class="btn" href="https://www.justinestenger.com/waitlist">' + s.btn + '</a>';
+  if (s.disclaimer) html += '<div class="disclaimer">' + s.disclaimer + '</div>';
+  html += '<div class="pager">' + (i + 1) + ' / ' + S.length + '</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
