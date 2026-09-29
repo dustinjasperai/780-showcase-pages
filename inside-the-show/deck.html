@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside The Show — The Virtual Show Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0d13;
+    --panel:#1a151f;
+    --accent:#be123c;
+    --ink:#f4ecec;
+    --muted:#b8a9ad;
+    --rule:#2b2230;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{
+    position:fixed;inset:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .slide{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;justify-content:center;
+    padding:8vh 10vw;
+    background:
+      radial-gradient(60% 45% at 50% 34%, rgba(190,18,60,0.14), rgba(190,18,60,0) 70%),
+      var(--bg);
+  }
+  .slide.on{display:flex;animation:rise .5s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .kicker{
+    font-size:.82rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:1.4rem;
+  }
+  h1{font-family:"DM Serif Display",serif;font-weight:400;line-height:1.02;
+     font-size:clamp(2.6rem,6.4vw,5.4rem);letter-spacing:-.01em;max-width:16ch}
+  h2{font-family:"DM Serif Display",serif;font-weight:400;line-height:1.06;
+     font-size:clamp(2rem,4.6vw,3.6rem);max-width:18ch}
+  .sub{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--muted);
+       margin-top:1.6rem;max-width:44ch;line-height:1.5}
+  .lead{font-size:clamp(1.15rem,1.9vw,1.7rem);line-height:1.5;max-width:46ch;margin-top:1.4rem}
+  .section-tag{font-family:"DM Serif Display",serif;font-style:italic;color:var(--accent);
+       font-size:clamp(1rem,1.5vw,1.3rem);margin-bottom:1rem}
+  ul{list-style:none;margin-top:2rem;max-width:52ch}
+  li{position:relative;padding-left:1.7rem;margin-bottom:1.1rem;
+     font-size:clamp(1rem,1.5vw,1.32rem);line-height:1.45;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:.6rem;height:.6rem;
+     background:var(--accent);border-radius:50%}
+  li b{color:var(--ink);font-weight:600}
+  li span{color:var(--muted)}
+  .pill{display:inline-block;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;
+     color:var(--muted);border:1px solid var(--rule);border-radius:999px;
+     padding:.4rem .9rem;margin-bottom:1.6rem;width:max-content}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;margin-top:2.2rem;max-width:70ch}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:1.6rem 1.8rem}
+  .card h3{font-family:"Inter";font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;
+     color:var(--muted);margin-bottom:.9rem;font-weight:600}
+  .card.hot h3{color:var(--accent)}
+  .card p{font-size:1.05rem;line-height:1.45;color:var(--ink)}
+  .quote{font-family:"DM Serif Display",serif;font-style:italic;
+     font-size:clamp(1.8rem,3.4vw,2.9rem);line-height:1.2;max-width:20ch}
+  .disclaimer{margin-top:2.4rem;font-size:.82rem;color:var(--muted);max-width:52ch;line-height:1.5}
+  .cta-line{margin-top:1.8rem;font-size:clamp(1.05rem,1.6vw,1.35rem);color:var(--ink);font-weight:600}
+  .cta-line span{color:var(--accent)}
+  .nums{display:flex;gap:2.6rem;margin-top:2.4rem;flex-wrap:wrap}
+  .num b{font-family:"DM Serif Display",serif;font-size:clamp(2rem,4vw,3rem);color:var(--accent);display:block}
+  .num span{color:var(--muted);font-size:.95rem}
+  footer{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+     align-items:center;padding:1.1rem 2rem;font-size:.78rem;color:var(--muted);
+     border-top:1px solid var(--rule);background:rgba(15,13,19,.7)}
+  footer .brand{letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .3s}
+  .hint{opacity:.5}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<footer>
+  <span class="brand">Inside The Show</span>
+  <span class="hint">&larr; &rarr; to move</span>
+  <span id="count"></span>
+</footer>
+<script>
+const S = [
+  {t:'title', kicker:'A Virtual Audience Experience Masterclass · with Felippe Nardi',
+   h:'Turn your Zoom room into a show they cannot look away from',
+   sub:'The difference between a webinar people leave and a live experience people stay for is not your content. It is whether it feels like a show.'},
+
+  {t:'agenda', pill:'Who this is for',
+   h:'You run something live, and the energy keeps dying',
+   b:['You host webinars, workshops, trainings, or community calls, and cameras go dark within minutes.',
+      'The chat is quiet, people are clearly multitasking, and half of them are gone before the important part.',
+      'You are great at the material. The room just never feels alive.']},
+
+  {t:'section', tag:'Part One',
+   h:'Everyone shows up to a meeting. Nobody shows up to a show.'},
+
+  {t:'content', pill:'The trap',
+   h:'Zoom trained your audience to behave like spectators',
+   b:['The default Zoom room looks and feels like a meeting, so people treat it like one.',
+      'Camera off, tab switched, "I will catch the replay." Attention leaks from the first minute.',
+      'You end up performing to a wall of initials while the real moment slips away.']},
+
+  {t:'content', pill:'What it actually costs',
+   h:'A flat room does not just feel bad. It does not convert.',
+   b:['<b>People drop off</b> <span>before you ever reach the invitation.</span>',
+      '<b>Nothing lands</b> <span>because passive attention does not remember.</span>',
+      '<b>The session is forgettable,</b> <span>so the follow-up conversation never happens.</span>']},
+
+  {t:'section', tag:'Part Two',
+   h:'A live session is not a presentation. It is a produced show.'},
+
+  {t:'content', pill:'The core idea',
+   h:'The Event Feeling',
+   lead:'A show has pacing, control, and moments. The instant your session gains those, the room stops feeling like a screen-share and starts feeling like an event people chose to attend.',
+   b:['Seamless transitions instead of "let me share my screen, one second."',
+      'Tight audio and visual control so nothing ever breaks the spell.',
+      'A rhythm that tells the room: something is happening here, stay with it.']},
+
+  {t:'content', pill:'Method · 1 of 5',
+   h:'The Secret Assistant',
+   lead:'A quiet producer curates the chat while you present. You surface the right message on screen with a single press, so the room feels seen without you ever losing your flow.',
+   b:['Live engagement gets managed, not ignored.',
+      'You never stop to read the chat out loud again.',
+      'The audience feels heard in real time, which is what keeps them present.']},
+
+  {t:'content', pill:'Method · 2 of 5',
+   h:'Engineered surprise',
+   lead:'Designed moments of participation and surprise, built on the same instincts a stage magician uses, are what make people lean in instead of lean out.',
+   b:['Interaction is planned into the run of show, not hoped for.',
+      'Small surprises reset attention exactly when it would normally fade.',
+      'People remember experiences. They forget slides.']},
+
+  {t:'content', pill:'Method · 3 of 5',
+   h:'The show spine',
+   lead:'Hook, promise, proof, invitation. A modular content sequence that holds a room from the first ten seconds all the way to a clear yes.',
+   b:['A hook that earns the next minute.',
+      'A promise that makes staying worth it.',
+      'Proof and an invitation that feel earned, not bolted on.']},
+
+  {t:'content', pill:'Method · 4 of 5',
+   h:'The one-person show',
+   lead:'You do not need a production team, a switcher, or a crew. The whole show is built to be run by one non-technical person: you.',
+   b:['No hiring a producer for every session.',
+      'No fragile tech that falls apart live.',
+      'One host, one laptop, a professional-grade experience.']},
+
+  {t:'content', pill:'Method · 5 of 5',
+   h:'Rehearsal changes everything',
+   lead:'The Interactive Audience Simulator lets you practice the full show against an audience that feels live, before a real one is ever watching.',
+   b:['Deliberate practice, not "wing it and hope."',
+      'You feel the pacing in your body before showtime.',
+      'By the time the room is real, the show is already in your hands.']},
+
+  {t:'section', tag:'Part Three',
+   h:'What changes when the room finally feels alive'},
+
+  {t:'compare', pill:'Before and after',
+   h:'The meeting versus the show',
+   left:{title:'The meeting', body:'Screen shared, chat silent, cameras off. You talk, they tolerate, most leave early. The offer arrives to an empty room.'},
+   right:{title:'The show', body:'Paced, interactive, controlled. They stay on, they respond, they lean in. By the invitation, the room is already sold on the method.'}},
+
+  {t:'content', pill:'Why it works',
+   h:'Attention is earned by experience, not by slides',
+   b:['A room that feels alive stays, and a room that stays remembers.',
+      'A room that remembers is a room that shows up for the next step.',
+      'The experience does the persuading long before the pitch does.']},
+
+  {t:'stats', pill:'The shift',
+   h:'From tolerated to unmissable',
+   nums:[{b:'60 min', s:'that feel like a live event, not a webinar'},
+         {b:'1', s:'host running the whole show, solo'},
+         {b:'0', s:'production crew required'}]},
+
+  {t:'content', pill:'Why me',
+   h:'I built this because it did not exist',
+   lead:'I am Felippe Nardi. Motion designer, software engineer, and stage magician. I put those three worlds together into one thing: virtual audience experiences that one person can run.',
+   b:['The design eye for how a show should look and move.',
+      'The engineering to make it run reliably and solo.',
+      'The showmanship that decides what a room actually feels.']},
+
+  {t:'content', pill:'Your next session',
+   h:'This starts on the very next show you run',
+   b:['You stop presenting to initials and start hosting a room.',
+      'You build one show spine you can reuse and adapt for years.',
+      'You practice it in the Simulator until it feels effortless.']},
+
+  {t:'cta', pill:'What to do next',
+   h:'Come build your show with me',
+   cta:'Join the <span>Acceleration Sprint</span>',
+   sub:'Four weeks, two live sessions a week, practice rooms across time zones, the Interactive Audience Simulator, and a full year of one-on-one support to make your virtual sessions feel like the show they should be.',
+   disclaimer:'This masterclass teaches a method for running live virtual sessions. No specific result is guaranteed. Results vary and depend on your material, your audience, and the work you put in.'}
+];
+
+const stage = document.getElementById('stage');
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="slide"><div class="kicker">${s.kicker}</div><h1>${s.h}</h1><div class="sub">${s.sub}</div></div>`;
+  }
+  if(s.t==='section'){
+    return `<div class="slide"><div class="section-tag">${s.tag}</div><h2>${s.h}</h2></div>`;
+  }
+  if(s.t==='agenda'){
+    const li = s.b.map(x=>`<li>${x}</li>`).join('');
+    return `<div class="slide"><div class="pill">${s.pill}</div><h2>${s.h}</h2><ul>${li}</ul></div>`;
+  }
+  if(s.t==='content'){
+    const lead = s.lead?`<div class="lead">${s.lead}</div>`:'';
+    const li = s.b?`<ul>${s.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+    return `<div class="slide"><div class="pill">${s.pill}</div><h2>${s.h}</h2>${lead}${li}</div>`;
+  }
+  if(s.t==='compare'){
+    return `<div class="slide"><div class="pill">${s.pill}</div><h2>${s.h}</h2><div class="two"><div class="card"><h3>${s.left.title}</h3><p>${s.left.body}</p></div><div class="card hot"><h3>${s.right.title}</h3><p>${s.right.body}</p></div></div></div>`;
+  }
+  if(s.t==='stats'){
+    const n = s.nums.map(x=>`<div class="num"><b>${x.b}</b><span>${x.s}</span></div>`).join('');
+    return `<div class="slide"><div class="pill">${s.pill}</div><h2>${s.h}</h2><div class="nums">${n}</div></div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide"><div class="pill">${s.pill}</div><h1>${s.h}</h1><div class="cta-line">${s.cta}</div><div class="sub">${s.sub}</div><div class="disclaimer">${s.disclaimer}</div></div>`;
+  }
+  return `<div class="slide"><h2>${s.h||''}</h2></div>`;
+}
+stage.innerHTML = S.map(slideHTML).join('');
+const slides = [...document.querySelectorAll('.slide')];
+let i = 0;
+const bar = document.getElementById('bar');
+const count = document.getElementById('count');
+function show(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((el,x)=>el.classList.toggle('on', x===i));
+  bar.style.width = ((i+1)/slides.length*100)+'%';
+  count.textContent = (i+1)+' / '+slides.length;
+}
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(i+1);
+  if(e.key==='ArrowLeft') show(i-1);
+});
+document.getElementById('stage').addEventListener('click', ()=>show(i+1));
+show(0);
+</script>
+</body>
+</html>
