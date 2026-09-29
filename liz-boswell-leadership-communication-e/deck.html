@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leading the Conversations That Set the Standard · Liz Boswell, Bold Moves Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f6;        /* warm paper, light deck, from brand light scheme */
+    --panel:#ffffff;
+    --ink:#1c1b1a;        /* charcoal ink (site body is black) */
+    --muted:#5a5754;
+    --rule:#537b8f;       /* slate secondary, brand.json ranked_colors */
+    --accent:#e60072;     /* brand magenta, brand.json ranked_colors */
+    --accent-soft:#fbe6f0;
+    --display:"League Spartan",system-ui,sans-serif;
+    --serif:"Libre Baskerville",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+  .deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;animation:fade .5s ease}
+  .slide.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--display);font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.8rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5.4vw,4rem);line-height:1.04;
+    letter-spacing:-.01em;color:var(--ink);margin-bottom:1.2rem}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,3.8vw,2.9rem);line-height:1.1;
+    margin-bottom:1.1rem}
+  p{font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.6;color:var(--muted);max-width:44ch;margin-bottom:1rem}
+  p.lead{color:var(--ink);max-width:40ch}
+  .big{font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.32;
+    color:var(--ink);max-width:24ch}
+  .rule{width:64px;height:3px;background:var(--accent);margin:0 0 1.6rem}
+  ul{list-style:none;max-width:46ch}
+  li{position:relative;padding-left:1.6rem;margin-bottom:1rem;font-size:clamp(1.02rem,1.6vw,1.28rem);
+    line-height:1.5;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;background:var(--accent);
+    border-radius:2px}
+  li span{color:var(--muted);display:block;font-size:.92em;margin-top:.2rem}
+  .cols{display:flex;gap:3.5vw;flex-wrap:wrap}
+  .card{background:var(--panel);border:1px solid #ece7e2;border-top:4px solid var(--accent);
+    border-radius:10px;padding:1.8rem;flex:1 1 220px;min-width:220px;box-shadow:0 6px 24px rgba(28,27,26,.05)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.25rem;margin-bottom:.6rem;color:var(--ink)}
+  .card p{font-size:1rem;margin:0;max-width:none}
+  .num{font-family:var(--display);font-weight:700;color:var(--accent);font-size:1rem;letter-spacing:.1em}
+  .credit{font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;
+    color:var(--rule);margin-top:2.4rem}
+  .disclaimer{font-size:.82rem;color:var(--muted);max-width:52ch;margin-top:1.6rem;line-height:1.45}
+  .cta-box{background:var(--accent-soft);border-radius:12px;padding:2rem 2.2rem;max-width:34rem;margin-top:.4rem}
+  .cta-box .step{font-family:var(--display);font-weight:700;color:var(--accent);font-size:1.3rem;margin-bottom:.5rem}
+  .nav{position:absolute;bottom:2.4vh;right:3vw;font-family:var(--display);font-size:.8rem;color:var(--rule);
+    letter-spacing:.1em;z-index:10}
+  .brandbar{position:absolute;top:3.2vh;left:10vw;font-family:var(--display);font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;font-size:.74rem;color:var(--rule)}
+  .dotrow{position:absolute;bottom:2.4vh;left:10vw;display:flex;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#ded8d2}
+  .dot.on{background:var(--accent)}
+  @media (max-width:640px){.slide{padding:7vh 7vw}.brandbar,.dotrow{left:7vw}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><span id="pos">1</span> / <span id="tot">1</span> &nbsp;·&nbsp; → to advance</div>
+<script>
+const S=[
+  {t:'title', kicker:'A live masterclass with Liz Boswell · Bold Moves Coaching',
+   h1:'Leading the Conversations That Set the Standard',
+   p:'Communication and presence for women stepping into senior leadership. The room reads you before you speak. Here is how to lead it on purpose.'},
+
+  {t:'body', kicker:'Who this is for',
+   h2:'You got here by being excellent.',
+   lead:'The room you are stepping into needs something excellence never taught you.',
+   p:'Senior Associate to Partner. Founder to Co-Director. Managing Director to CEO. The only woman on the board. The work that earned the seat is not the work that holds it.'},
+
+  {t:'quote', kicker:'The reframe',
+   big:'Leadership standards are set by what leaders allow. Especially under pressure.',
+   p:'Presence is not decided in the calm meetings. It is decided in the hard moment, when something needs to be said and everyone is watching how you say it.'},
+
+  {t:'part', num:'Part One', h1:'Presence is not polish.'},
+
+  {t:'body', kicker:'The trap',
+   h2:'The double bind is real, and preparation will not solve it.',
+   list:[
+     {b:'Speak up and risk "too much".', s:'Stay measured and risk being talked over. Both cost you the room.'},
+     {b:'Over-prepare the deck.', s:'Then the one unscripted question is where your authority is actually tested.'},
+     {b:'Wait to feel confident.', s:'Confidence is the output of handling the moment well, not the entry ticket to it.'}
+   ]},
+
+  {t:'body', kicker:'Where it is decided',
+   h2:'The pressure moment is the real interview.',
+   p:'The feedback nobody wants to give. The disagreement with a peer in front of the board. The decision you own when the room is uncertain. People do not remember your slides. They remember how you were when it got hard.'},
+
+  {t:'body', kicker:'Why the usual fixes miss',
+   h2:'There is no fixed script, and that is the point.',
+   p:'A borrowed line delivered under pressure sounds borrowed. What holds a room is the ability to read what is actually happening and respond to it plainly. That is a skill, and it can be built.'},
+
+  {t:'part', num:'Part Two', h1:'Three moves that build presence.'},
+
+  {t:'cards', kicker:'The Bold Moves approach',
+   h2:'Connection. Communication. Coaching.',
+   cards:[
+     {h:'Connection', p:'Read the room and the people in it. Understand your own communication style and how it lands, so you can adapt instead of bracing.'},
+     {h:'Communication', p:'The courageous conversation, done cleanly. Feedback, disagreement and hard truths said in a way people can actually hear and act on.'},
+     {h:'Coaching', p:'Lead with questions, not answers. Draw the thinking out of the room. We do not lecture, we lead.'}
+   ]},
+
+  {t:'body', kicker:'Move one · Connection',
+   h2:'Know how you land before you open your mouth.',
+   p:'Most miscommunication at senior level is a style clash, not a competence gap. When you can name your own style and read the styles across the table, you stop misreading resistance as disrespect and start adapting on the spot.'},
+
+  {t:'body', kicker:'Move two · Communication',
+   h2:'The courageous conversation is a repeatable skill.',
+   list:[
+     {b:'Name the thing plainly.', s:'Directness is a kindness. The vague version is what erodes trust.'},
+     {b:'Separate the person from the problem.', s:'You can be warm and exact in the same sentence.'},
+     {b:'Stay in the room after you say it.', s:'Presence is holding steady through the pause that follows.'}
+   ]},
+
+  {t:'body', kicker:'Move three · Coaching',
+   h2:'The senior move is asking, not telling.',
+   p:'When you lead through questions, you build people who think, and you stop being the bottleneck for every decision. It is also how you set the standard: what you ask about is what the room learns to pay attention to.'},
+
+  {t:'quote', kicker:'The through-line',
+   big:'What you allow under pressure is what your team will call normal by Friday.',
+   p:'Every hard conversation you handle well raises the standard for the whole room. That is the compounding return on presence.'},
+
+  {t:'part', num:'Part Three', h1:'In the room, when the pressure is on.'},
+
+  {t:'body', kicker:'A familiar moment',
+   h2:'The meeting where you are the only woman on the board.',
+   p:'Before: you soften the point until it disappears, then replay it for a week. After: you make the point once, cleanly, hold the pause, and let the room adjust to you. Same person. Different set of moves, practised until they are yours.'},
+
+  {t:'body', kicker:'Why me',
+   h2:'I am Liz Boswell, founder of Bold Moves Coaching.',
+   p:'Since 2017 I have coached senior leaders and high-achieving women across professional services, engineering and science through exactly these transitions. Straight talking, direct when it matters, thoughtful in how I challenge, and focused on the outcome you actually want. There is no fixed agenda. We work on what is really happening.',
+   credit:'Bold Moves Coaching · Helping brilliant people communicate brilliantly'},
+
+  {t:'body', kicker:'The path',
+   h2:'A journey, not a one-off.',
+   list:[
+     {b:'Find Your Bearings', s:'A short, focused start: an audit of where you are and the moves in front of you.'},
+     {b:'Executive Compass', s:'Sustained coaching through the transition, with the tools to keep navigating on your own.'},
+     {b:'Bold Moves Intensive', s:'Deep work for a decisive change, with support between sessions when it counts.'}
+   ]},
+
+  {t:'body', kicker:'Recap',
+   h2:'Presence is three moves, practised.',
+   p:'Connection: read the room and yourself. Communication: say the hard thing cleanly. Coaching: lead with questions and set the standard. None of it is polish. All of it can be built.'},
+
+  {t:'cta', kicker:'Your next move',
+   h1:'Book an Exploration Conversation.',
+   step:'A 30-minute, no-obligation conversation with Liz.',
+   p:'We talk about the transition you are in and the conversations that feel hardest right now, and you leave with something useful whether or not we work together.',
+   disclaimer:'This masterclass is educational. Coaching supports your own development as a leader; it does not guarantee any specific promotion, income or business outcome. Results vary by person and situation.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(i===0?' on':'');
+  let inner='';
+  if(s.t!=='title'&&s.t!=='part') inner+='<div class="brandbar">Bold Moves Coaching</div>';
+  if(s.kicker) inner+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.num) inner+=`<div class="kicker">${s.num}</div>`;
+  if(s.h1) inner+=`<h1>${s.h1}</h1>`;
+  if(s.h2){ inner+='<div class="rule"></div>'; inner+=`<h2>${s.h2}</h2>`; }
+  if(s.lead) inner+=`<p class="lead">${s.lead}</p>`;
+  if(s.big) inner+=`<p class="big">${s.big}</p>`;
+  if(s.cards){ inner+='<div class="cols">'; s.cards.forEach(c=>{inner+=`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`;}); inner+='</div>'; }
+  if(s.list){ inner+='<ul>'; s.list.forEach(li=>{inner+=`<li>${li.b}<span>${li.s}</span></li>`;}); inner+='</ul>'; }
+  if(s.step){ inner+=`<div class="cta-box"><div class="step">${s.step}</div>`; if(s.p) inner+=`<p style="max-width:none;margin:0">${s.p}</p>`; inner+='</div>'; }
+  else if(s.p && !s.big && !s.lead || (s.p && (s.big||s.lead))) { if(!s.step) inner+=`<p>${s.p}</p>`; }
+  if(s.credit) inner+=`<div class="credit">${s.credit}</div>`;
+  if(s.disclaimer) inner+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  el.innerHTML=inner;
+  deck.appendChild(el);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function show(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(slides.length-1,n));
+  slides[cur].classList.add('on');document.getElementById('pos').textContent=cur+1;}
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(cur+1);}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(cur-1);}
+});
+document.addEventListener('click',e=>{if(e.target.closest('.nav'))return;show(cur+1);});
+</script>
+</body>
+</html>
