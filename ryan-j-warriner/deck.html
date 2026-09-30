@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Winning Formula | A Masterclass with Ryan J Warriner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f8f3; --panel:#ffffff; --ink:#0b0b0c; --muted:#4f4f4f;
+    --rule:#e6e2d6; --accent:#b6a27b; --gold:#e9cb81;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-size:15px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(34px,6vw,74px);line-height:1.06;letter-spacing:-.01em}
+  h1 .g{color:var(--accent);font-style:italic}
+  .lead{font-size:clamp(18px,2.4vw,27px);color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.5}
+  h2{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,52px);line-height:1.12;max-width:22ch}
+  .body{font-size:clamp(17px,2.1vw,24px);color:var(--muted);margin-top:22px;max-width:58ch;line-height:1.55}
+  ul{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:16px;max-width:60ch}
+  li{font-size:clamp(17px,2.1vw,23px);color:var(--ink);padding-left:34px;position:relative;line-height:1.4}
+  li::before{content:'';position:absolute;left:0;top:.55em;width:16px;height:2.5px;background:var(--accent);border-radius:2px}
+  .part-no{font-family:'Newsreader',serif;font-size:clamp(60px,12vw,150px);color:var(--gold);line-height:.9;font-weight:600}
+  .part-label{font-family:'Newsreader',serif;font-size:clamp(30px,5vw,60px);margin-top:8px;font-weight:600}
+  .move{display:flex;gap:18px;align-items:baseline;margin-top:10px}
+  .move .n{font-family:'Newsreader',serif;color:var(--accent);font-size:clamp(20px,2.4vw,28px);font-weight:600;min-width:2.4ch}
+  .rule{width:64px;height:3px;background:var(--gold);border:none;margin:30px 0 0}
+  .cred{display:flex;flex-wrap:wrap;gap:12px 26px;margin-top:26px;max-width:64ch}
+  .cred span{font-size:clamp(15px,1.8vw,19px);color:var(--ink);border-left:2px solid var(--accent);padding-left:12px}
+  .disc{font-size:13px;color:#8a8478;margin-top:34px;max-width:60ch;line-height:1.5;font-family:'Space Grotesk',sans-serif}
+  .cta-next{font-size:clamp(18px,2.3vw,26px);color:var(--ink);margin-top:24px;font-weight:500}
+  .cta-next b{color:var(--accent)}
+  .foot{position:absolute;left:9vw;bottom:4vh;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#9a9488}
+  .nums{position:absolute;right:9vw;bottom:4vh;font-size:12px;letter-spacing:.14em;color:#9a9488}
+  .hint{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);font-size:12px;color:#b8b2a4;letter-spacing:.08em}
+  @media(max-width:640px){.slide{padding:6vh 8vw}.foot,.hint{display:none}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Ryan J Warriner',
+   h:`The Winning <span class="g">Formula</span>`,
+   lead:'How to prepare, design, and deliver business presentations that win the room.'},
+
+  {t:'audience', k:'Who this is for',
+   h2:'For the professional the room is waiting on',
+   body:'Executives, leaders, and specialists who have to present, pitch, and persuade. People who know their material cold, and still watch the room drift when it is their turn to speak.'},
+
+  {t:'trap', k:'The trap',
+   h2:'You are the most prepared person in the room, and the least remembered',
+   body:'You did the work. You know the numbers. But the deck runs long, the point arrives late, and the decision goes to whoever told the cleaner story. Being right is not the same as being convincing.'},
+
+  {t:'reframe', k:'The reframe',
+   h2:'It is not confidence. It is not talent.',
+   body:'We are told great presenters are just born that way. They are not. Command of a room is the visible output of a process, and the process can be learned. Confidence is what you feel after the method is in place, not before.'},
+
+  {t:'problem', k:'Part one, the real problem',
+   h2:'Presenting is treated as a personality, when it is a skill',
+   body:'Because nobody hands you a system, you rehearse harder, add more slides, and hope. That is why smart people give forgettable presentations. The fix is not more effort. It is a repeatable structure.'},
+
+  {t:'promise', k:'The method',
+   h2:'Three moves, every time',
+   body:'The Winning Formula is the process behind every presentation that lands. It has three parts, in order. Skip one and the room feels it, even if they cannot name why.',
+   moves:[['1','Prepare','before you open a slide'],['2','Design','how the message is built'],['3','Deliver','how it lands live']]},
+
+  {t:'part', no:'1', label:'Prepare'},
+
+  {t:'point', k:'Prepare, move one',
+   h2:'Start with the room, not the slides',
+   body:'Most presentations are built inside out, starting with what you want to say. Winning ones start with the audience: who is deciding, what they already believe, and what they need to feel to say yes.',
+   li:['Name the one decision this talk exists to move','Map what the room believes before you speak','Choose the single idea they must leave with']},
+
+  {t:'point', k:'Prepare, move two',
+   h2:'One objective, one message',
+   body:'If your talk has five goals, it has none. Preparation is the discipline of cutting until a single objective and a single core message remain. Everything else is support or it is deleted.',
+   li:['Write the objective in one sentence','Write the core message in one sentence','If a slide does not serve it, it goes']},
+
+  {t:'part', no:'2', label:'Design'},
+
+  {t:'point', k:'Design, move one',
+   h2:'Structure carries the room',
+   body:'A clear structure does the persuading for you. The audience should always know where they are and where you are taking them. Order is not decoration. It is the argument.',
+   li:['Open on the stakes, not the agenda','Sequence so each point earns the next','Close on the decision, not a thank-you']},
+
+  {t:'point', k:'Design, move two',
+   h2:'Visuals and persuasion, on purpose',
+   body:'Slides are evidence, not a script. Every visual should make one point faster than your words could. Persuasion is built in at design time, through contrast, proof, and a clear reason to act.',
+   li:['One idea per slide, shown not written','Use contrast to make the point obvious','Design the ask before you design the intro']},
+
+  {t:'part', no:'3', label:'Deliver'},
+
+  {t:'point', k:'Deliver, move one',
+   h2:'Presence is pace and attention',
+   body:'Delivery is not performance. It is managing attention. Pace, pause, and eye contact tell the room what matters. The most powerful moment in most talks is the silence a skilled presenter is willing to hold.',
+   li:['Slow down on the line that matters','Pause instead of filling the gap','Speak to one person, then the next']},
+
+  {t:'point', k:'Deliver, move two',
+   h2:'Confidence is the output, not the entry fee',
+   body:'When the preparation is done and the design is clear, confidence takes care of itself. You are not hoping it goes well. You are running a process you trust. That is what the room reads as authority.',
+   li:['Trust the structure under pressure','Recover in one breath, not one apology','Let the method carry the nerves']},
+
+  {t:'looks', k:'What changes',
+   h2:'The same talk, a different decision',
+   body:'The same person, the same material, a different result. The point lands in the first two minutes. Questions get sharper. The decision moves in the room instead of drifting to a follow-up that never comes.'},
+
+  {t:'why', k:'Why the formula holds',
+   h2:'This is method, not motivation',
+   body:'The formula comes from years of communication research and thousands of real presentations, refined into steps you can run under pressure. It works because it is repeatable, and repeatable is what survives a high-stakes room.'},
+
+  {t:'whyme', k:'Who is teaching this',
+   h2:'Built by someone who studies this for a living',
+   cred:['Professor of Communication, 10+ years','Author, The Effective Presenter','Two communication textbooks, Oxford University Press','Trained professionals across North America, Europe, and Asia'],
+   body:'This is not borrowed advice. It is one practitioner-scholar\'s own tested method for the exact problem you face.'},
+
+  {t:'recap', k:'The whole method, one view',
+   h2:'The Winning Formula',
+   moves:[['1','Prepare','the room, the objective, the message'],['2','Design','structure, visuals, persuasion'],['3','Deliver','presence, pace, confidence']],
+   body:'Three moves. Run them in order and the room follows.'},
+
+  {t:'cta', k:'Your next step',
+   h2:'Take the formula into your next high-stakes room',
+   ctaNext:'If you want this applied to your own presentations, work with <b>Ryan J Warriner</b> through Elite Executive Coaching. Start with a short fit call at ryanjwarriner.com.',
+   disc:'This masterclass is educational. No specific result, outcome, or business result is guaranteed. Results vary based on your effort, your material, and your circumstances.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (i===0?' on':'');
+  let inner = '';
+  if(s.k) inner += `<div class="kicker">${s.k}</div>`;
+  if(s.t==='title'){ inner += `<h1>${s.h}</h1>`; if(s.lead) inner += `<div class="lead">${s.lead}</div>`; }
+  else if(s.t==='part'){ inner = `<div class="part-no">${s.no}</div><div class="part-label">${s.label}</div><hr class="rule">`; }
+  else {
+    if(s.h2) inner += `<h2>${s.h2}</h2>`;
+    if(s.moves){ inner += '<div style="margin-top:26px">'; s.moves.forEach(m=>{ inner += `<div class="move"><span class="n">${m[0]}</span><div><b style="font-family:Newsreader,serif;font-size:1.15em">${m[1]}</b><span style="color:var(--muted)">, ${m[2]}</span></div></div>`; }); inner += '</div>'; }
+    if(s.body) inner += `<div class="body">${s.body}</div>`;
+    if(s.li){ inner += '<ul>'; s.li.forEach(x=> inner += `<li>${x}</li>`); inner += '</ul>'; }
+    if(s.cred){ inner += '<div class="cred">'; s.cred.forEach(c=> inner += `<span>${c}</span>`); inner += '</div>'; }
+    if(s.ctaNext) inner += `<div class="cta-next">${s.ctaNext}</div>`;
+    if(s.disc) inner += `<div class="disc">${s.disc}</div>`;
+  }
+  el.innerHTML = inner + `<div class="foot">The Winning Formula &middot; Ryan J Warriner</div><div class="nums">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>` + (i===0?'<div class="hint">Use arrow keys or click to advance</div>':'');
+  deck.appendChild(el);
+});
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+function go(n){ slides[cur].classList.remove('on'); cur=Math.max(0,Math.min(slides.length-1,n)); slides[cur].classList.add('on'); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' '){go(cur+1);e.preventDefault();} if(e.key==='ArrowLeft')go(cur-1); if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1); });
+document.getElementById('deck').addEventListener('click',e=>{ const x=e.clientX/window.innerWidth; go(x<0.25?cur-1:cur+1); });
+</script>
+</body>
+</html>
