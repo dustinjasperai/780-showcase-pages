@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Multi-Stream Notary Business, a masterclass with Amber Gist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#f7f9fa;      /* brand body bg */
+    --panel:#ffffff;
+    --rule:#e4e7eb;        /* brand neutral, 19 uses */
+    --ink:#1c2a43;         /* brand navy, dominant 59 uses */
+    --ink-soft:#3b3b3b;    /* brand body ink */
+    --accent:#f4d653;      /* brand gold */
+    --accent-deep:#013169; /* brand royal blue, secondary */
+    --serif:"DM Serif Display",Georgia,serif;
+    --sans:"Inter",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(96vw,1180px);aspect-ratio:16/9;position:relative}
+  .slide{position:absolute;inset:0;background:var(--panel);border:1px solid var(--rule);
+    border-radius:18px;box-shadow:0 24px 60px -30px rgba(28,42,67,.35);
+    padding:5.2% 6%;display:none;flex-direction:column;overflow:hidden}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--sans);font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    font-size:.82rem;color:var(--accent-deep)}
+  .kicker.gold::before{content:"";display:inline-block;width:22px;height:3px;background:var(--accent);
+    vertical-align:middle;margin-right:10px;border-radius:2px}
+  h1{font-family:var(--serif);font-weight:400;line-height:1.03;color:var(--ink)}
+  h2{font-family:var(--serif);font-weight:400;line-height:1.06;color:var(--ink)}
+  .title h1{font-size:4.4rem;margin:.35em 0 .28em}
+  .slide h2{font-size:2.7rem;margin:.15em 0 .5em}
+  p,li{color:var(--ink-soft);font-size:1.28rem;line-height:1.5}
+  .lead{font-size:1.5rem;color:var(--ink)}
+  .big{font-size:2rem;font-family:var(--serif);color:var(--ink);line-height:1.2}
+  .seal{position:absolute;right:5.5%;bottom:6%;width:118px;height:118px;border-radius:50%;
+    border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;
+    text-align:center;color:var(--ink);opacity:.9}
+  .seal span{font-family:var(--sans);font-weight:700;font-size:.62rem;letter-spacing:.14em;
+    text-transform:uppercase;line-height:1.35;padding:0 8px}
+  .seal.filled{background:var(--ink);border-color:var(--ink)}
+  .seal.filled span{color:var(--accent)}
+  .sign{margin-top:auto;border-top:1px solid var(--rule);padding-top:16px;
+    display:flex;align-items:baseline;gap:14px}
+  .sign .name{font-family:var(--serif);font-size:1.35rem;color:var(--ink)}
+  .sign .role{font-size:.98rem;color:var(--ink-soft)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:.4em}
+  li{padding-left:30px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:12px;
+    background:var(--accent);border-radius:3px;transform:rotate(45deg)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 34px;margin-top:.3em}
+  .card{background:var(--ground);border:1px solid var(--rule);border-radius:12px;padding:20px 22px}
+  .card .n{font-family:var(--serif);font-size:1.5rem;color:var(--accent-deep)}
+  .card h3{font-family:var(--sans);font-weight:700;font-size:1.16rem;color:var(--ink);margin:.15em 0 .35em}
+  .card p{font-size:1.04rem}
+  .stat{font-family:var(--serif);font-size:3.2rem;color:var(--ink);line-height:1}
+  .stat b{color:var(--accent-deep)}
+  .two{display:grid;grid-template-columns:1.1fr .9fr;gap:38px;align-items:center;height:100%}
+  .disc{font-size:.86rem;color:#6b7280;margin-top:14px;line-height:1.45}
+  .cta-btn{display:inline-block;margin-top:6px;background:var(--ink);color:#fff;
+    font-weight:600;font-size:1.12rem;padding:14px 26px;border-radius:10px;text-decoration:none}
+  .cta-alt{display:inline-block;margin-top:6px;margin-left:12px;color:var(--ink);font-weight:600;
+    font-size:1.12rem;padding:14px 22px;border-radius:10px;text-decoration:none;border:1.5px solid var(--ink)}
+  .foot{position:absolute;left:6%;bottom:4.4%;font-size:.82rem;color:#94a3b8;letter-spacing:.04em}
+  .pageno{position:absolute;right:6%;bottom:4.4%;font-size:.82rem;color:#94a3b8}
+  #nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+    align-items:center;font-family:var(--sans);z-index:10}
+  #nav button{background:var(--ink);color:#fff;border:0;width:38px;height:38px;border-radius:50%;
+    font-size:1.1rem;cursor:pointer}
+  #nav .count{font-size:.9rem;color:var(--ink-soft);min-width:54px;text-align:center}
+  .kbd{position:fixed;top:12px;right:16px;font-size:.72rem;color:#9aa5b4}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="Previous">‹</button>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="Next">›</button></div>
+<div class="kbd">Use ← → to move</div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker gold">A live masterclass with Amber Gist, M.Ed.</div>
+    <h1>The Multi-Stream<br>Notary Business</h1>
+    <p class="lead">How to turn one notary commission into a real business with several
+      income streams, instead of one stamp and a waiting game.</p>
+    <div class="sign"><span class="name">Amber Gist, M.Ed.</span>
+      <span class="role">Founder, Notary Training Hub &middot; Notary Business Coach</span></div>
+    <div class="seal filled"><span>Notary<br>Training<br>Hub</span></div>`},
+
+  {t:'who', html:`
+    <div class="kicker gold">Who this is for</div>
+    <h2>You have the stamp. Now you want the business.</h2>
+    <ul>
+      <li>You just got commissioned and you are not sure what actually pays.</li>
+      <li>You have done a handful of signings, and the work comes in waves.</li>
+      <li>You keep hearing "loan signings" is the answer, and it is only part of it.</li>
+      <li>You want steady income from your notary commission, not a side hobby.</li>
+    </ul>
+    <p class="lead" style="margin-top:22px">If that is you, the next 45 minutes map the
+      whole board.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker gold">The trap</div>
+    <h2>Getting commissioned is step one of about ten.</h2>
+    <p class="lead">The state hands you a stamp and a commission number. Nobody hands you
+      clients, pricing, a service menu, or a way to get found.</p>
+    <p style="margin-top:20px">So most new notaries do the one thing they have heard of,
+      general walk-in notarizations at a few dollars a signature, decide it does not pay,
+      and quietly stop. The commission was never the problem. The missing business around it
+      was.</p>`},
+
+  {t:'reframe', html:`
+    <div class="kicker gold">The reframe</div>
+    <h2 style="font-size:3rem">Your stamp is a license to run four or five<br>businesses, not one.</h2>
+    <p class="lead" style="margin-top:14px">The notaries who earn a full income are almost
+      never doing more general notarizations. They are stacking higher-value services on top
+      of the same commission.</p>
+    <p class="big" style="margin-top:26px;color:var(--accent-deep)">Same stamp. Several
+      income streams. That is the whole game.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker gold">Part one</div>
+    <h1 style="font-size:3.6rem;margin-top:.2em">The single-stream ceiling</h1>
+    <p class="lead">Why one service will always feel like feast or famine, and why that is
+      not a hustle problem.</p>
+    <div class="seal"><span>Part<br>One</span></div>`},
+
+  {t:'problem', html:`
+    <div class="kicker gold">The core problem</div>
+    <h2>One service means one market, one price, one line.</h2>
+    <p>When general notary work is your only offer, you are competing on being closest and
+      cheapest. There is a hard ceiling on both.</p>
+    <div class="grid" style="margin-top:22px">
+      <div class="card"><div class="n">Low ceiling</div><h3>Per-signature fees</h3>
+        <p>Capped by your state, and by how many people drive to you in a day.</p></div>
+      <div class="card"><div class="n">No moat</div><h3>Anyone nearby competes</h3>
+        <p>Nothing separates you from the next notary down the road.</p></div>
+      <div class="card"><div class="n">Feast or famine</div><h3>No recurring work</h3>
+        <p>Every dollar starts from zero. No pipeline, no repeat clients.</p></div>
+      <div class="card"><div class="n">Local only</div><h3>Bound to your zip code</h3>
+        <p>Your income stops at the edge of how far someone will drive.</p></div>
+    </div>`},
+
+  {t:'part', html:`
+    <div class="kicker gold">Part two</div>
+    <h1 style="font-size:3.6rem;margin-top:.2em">The revenue-stream map</h1>
+    <p class="lead">The higher-value services I teach inside the Education Suite, each one a
+      separate line of income built on the same commission.</p>
+    <div class="seal"><span>Part<br>Two</span></div>`},
+
+  {t:'stream', html:`
+    <div class="kicker gold">Stream 1</div>
+    <h2>Loan signings, your volume engine</h2>
+    <div class="two">
+      <div>
+        <p>Signing agents walk borrowers through closing packages for title companies and
+          signing services. It is the highest-volume paid work most notaries can add first.</p>
+        <ul style="margin-top:16px">
+          <li>A repeatable, per-package fee, not a per-stamp fee.</li>
+          <li>Ongoing orders once you are on a company's list.</li>
+          <li>This is the one service the paid ads are all about, and it is only the start.</li>
+        </ul>
+      </div>
+      <div class="card"><div class="stat"><b>Stream</b></div>
+        <h3 style="margin-top:8px">Higher fee, repeat orders</h3>
+        <p>The engine that funds the rest of the build.</p></div>
+    </div>`},
+
+  {t:'stream', html:`
+    <div class="kicker gold">Stream 2</div>
+    <h2>Apostille agent work</h2>
+    <div class="two">
+      <div>
+        <p>Documents headed overseas need apostille authentication. Far fewer notaries offer
+          it, which means higher fees and much less competition than general work.</p>
+        <ul style="margin-top:16px">
+          <li>Premium, specialized service most locals cannot provide.</li>
+          <li>Strong referral flow from attorneys and international clients.</li>
+          <li>You set the rate, because you are one of the few who does it.</li>
+        </ul>
+      </div>
+      <div class="card"><div class="stat"><b>Fewer</b></div>
+        <h3 style="margin-top:8px">Less competition</h3>
+        <p>Specialty work commands specialty pricing.</p></div>
+    </div>`},
+
+  {t:'stream', html:`
+    <div class="kicker gold">Stream 3</div>
+    <h2>Remote Online Notary (RON)</h2>
+    <div class="two">
+      <div>
+        <p>RON lets you notarize by secure video for clients anywhere your commission allows.
+          It breaks the one limit general work can never beat: your zip code.</p>
+        <ul style="margin-top:16px">
+          <li>Serve clients across the state, not just your neighborhood.</li>
+          <li>No drive time, so you fit more signings into the same day.</li>
+          <li>The stream that lets your income scale past local demand.</li>
+        </ul>
+      </div>
+      <div class="card"><div class="stat"><b>Reach</b></div>
+        <h3 style="margin-top:8px">Beyond your zip code</h3>
+        <p>Where notary work finally scales.</p></div>
+    </div>`},
+
+  {t:'stream', html:`
+    <div class="kicker gold">Stream 4</div>
+    <h2>Estate, immigration and specialty documents</h2>
+    <div class="two">
+      <div>
+        <p>Estate-planning packages, immigration paperwork and other specialty documents pull
+          you into steady, referral-rich work with attorneys, families and agencies.</p>
+        <ul style="margin-top:16px">
+          <li>Relationship-driven, so the same referrers send you work again.</li>
+          <li>Higher trust, higher fees, far less price shopping.</li>
+          <li>The stream that turns one-off jobs into a book of business.</li>
+        </ul>
+      </div>
+      <div class="card"><div class="stat"><b>Repeat</b></div>
+        <h3 style="margin-top:8px">Referral-rich work</h3>
+        <p>Where clients come back and send others.</p></div>
+    </div>`},
+
+  {t:'foundation', html:`
+    <div class="kicker gold">The foundation</div>
+    <h2>Notary Launch Lab: get commissioned right, get paid fast</h2>
+    <p>None of the streams matter if the base is shaky. The Launch Lab is the ground floor:
+      the commissioning steps done correctly, the core notary skills, and your first paid
+      services, so you are earning while you build the rest.</p>
+    <div class="grid" style="margin-top:20px">
+      <div class="card"><h3>Commission, done right</h3>
+        <p>Set up so you are compliant and insured from day one.</p></div>
+      <div class="card"><h3>First services live</h3>
+        <p>General work and your first signings, earning inside weeks.</p></div>
+    </div>`},
+
+  {t:'systems', html:`
+    <div class="kicker gold">The systems</div>
+    <h2>Streams need clients. Clients need to find you.</h2>
+    <p>Services do not sell themselves. The business layer is what turns a service menu into
+      booked work, and it is the part most notaries skip.</p>
+    <div class="grid" style="margin-top:20px">
+      <div class="card"><div class="n">Get found</div><h3>Google Business Profile</h3>
+        <p>Show up when someone searches for a notary near them, first.</p></div>
+      <div class="card"><div class="n">Get funded</div><h3>Business credit</h3>
+        <p>Build the business on its own credit, not your personal cards.</p></div>
+      <div class="card"><div class="n">Get known</div><h3>Brand and marketing</h3>
+        <p>A name clients remember and refer, not a stamp for hire.</p></div>
+      <div class="card"><div class="n">Get paid</div><h3>Pricing and packages</h3>
+        <p>Rates set by value, not by the person down the street.</p></div>
+    </div>`},
+
+  {t:'part', html:`
+    <div class="kicker gold">Part three</div>
+    <h1 style="font-size:3.6rem;margin-top:.2em">A week built on one stamp</h1>
+    <p class="lead">Put the streams and the systems together, and the week of a notary changes
+      shape.</p>
+    <div class="seal"><span>Part<br>Three</span></div>`},
+
+  {t:'week', html:`
+    <div class="kicker gold">A multi-stream week</div>
+    <h2>The same commission, working four ways</h2>
+    <div class="grid" style="margin-top:10px">
+      <div class="card"><div class="n">Mon &amp; Tue</div><h3>Loan signings</h3>
+        <p>Packages from title and signing companies you are listed with.</p></div>
+      <div class="card"><div class="n">Wed</div><h3>RON online day</h3>
+        <p>Video signings for clients across the state, zero drive time.</p></div>
+      <div class="card"><div class="n">Thu</div><h3>Apostille and estate work</h3>
+        <p>Higher-fee specialty jobs from your referral relationships.</p></div>
+      <div class="card"><div class="n">Ongoing</div><h3>Marketing runs quietly</h3>
+        <p>Your profile and brand bring in the next week while you work.</p></div>
+    </div>
+    <p class="disc">Illustrative example of how the services combine. Results vary by state,
+      effort and market.</p>`},
+
+  {t:'why', html:`
+    <div class="kicker gold">Why I teach this</div>
+    <h2>I built it before I taught it.</h2>
+    <div class="two">
+      <div>
+        <p>I started my notary business as a side hustle. When I moved past general work into
+          loan signings, apostille and estate documents, it grew past the income I left
+          behind. I did not do one thing well. I stacked several.</p>
+        <p style="margin-top:16px">Then I watched new notaries get a commission and no
+          direction, so I built Notary Training Hub to hand them the map I had to draw myself.</p>
+      </div>
+      <div class="card"><div class="stat">700+</div>
+        <h3 style="margin-top:8px">Signature Success Community</h3>
+        <p>Notary entrepreneurs learning and growing together. 15+ years in education,
+          Master's in Education.</p></div>
+    </div>`},
+
+  {t:'community', html:`
+    <div class="kicker gold">You do not build it alone</div>
+    <h2>Signature Success Community</h2>
+    <p class="lead">The streams are the plan. The community is how you actually finish it.</p>
+    <ul style="margin-top:16px">
+      <li>Weekly live coaching sessions, so you are never stuck for a week.</li>
+      <li>Accountability from notaries building the same business as you.</li>
+      <li>In-person local chapters, so it is real people, not just a login.</li>
+    </ul>`},
+
+  {t:'recap', html:`
+    <div class="kicker gold">The map, in one view</div>
+    <h2>One commission. A whole business.</h2>
+    <div class="grid" style="margin-top:8px">
+      <div class="card"><h3>Foundation</h3><p>Notary Launch Lab: commissioned right, first
+        services earning.</p></div>
+      <div class="card"><h3>Streams</h3><p>Loan signings, apostille, RON, estate and
+        specialty work.</p></div>
+      <div class="card"><h3>Systems</h3><p>Get found, get funded, get known, get paid.</p></div>
+      <div class="card"><h3>Community</h3><p>Live coaching and accountability that keeps you
+        moving.</p></div>
+    </div>`},
+
+  {t:'cta', html:`
+    <div class="kicker gold">Your next step</div>
+    <h2>Start building the multi-stream business.</h2>
+    <p class="lead">If you are brand new, start with the foundation. If you are already
+      working, come add the streams and the systems with people doing the same.</p>
+    <div style="margin-top:22px">
+      <a class="cta-btn" href="https://www.notarytraininghub.com/home-page">Start with the Notary Launch Lab</a>
+      <a class="cta-alt" href="https://www.notarytraininghub.com/community">Join the Signature Success Community</a>
+    </div>
+    <div class="sign" style="margin-top:26px"><span class="name">Amber Gist, M.Ed.</span>
+      <span class="role">Notary Training Hub</span></div>
+    <p class="disc">Educational content only. This masterclass shares strategies and examples;
+      it is not legal advice and makes no income or earnings guarantee. Notary rules,
+      services and fees vary by state, and results depend on your own effort and market.</p>`}
+];
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<section class="slide${i===0?' on':''}" data-i="${i}">
+  ${s.html}
+  <div class="foot">The Multi-Stream Notary Business &middot; Notary Training Hub</div>
+  <div class="pageno">${i+1} / ${S.length}</div>
+</section>`).join('');
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((el,i)=>el.classList.toggle('on',i===cur));
+  count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
