@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Likability Tax, a GAIA masterclass with Marisa Kamall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#180e3a;        /* GAIA darkest indigo (site theme) */
+    --panel:#211450;     /* GAIA deep indigo */
+    --rule:#2c256f;      /* GAIA indigo rule */
+    --accent:#4855bf;    /* GAIA periwinkle accent (site theme) */
+    --light:#d2d7db;     /* GAIA light grey text */
+    --white:#ffffff;
+    --muted:#9aa0c8;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',-apple-system,sans-serif;
+    background:var(--bg); color:var(--light);
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; overflow:hidden;
+  }
+  #stage{ width:min(1040px,94vw); aspect-ratio:16/9; position:relative; }
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:64px 72px; background:var(--bg);
+    border:1px solid var(--rule); border-radius:6px;
+    overflow:hidden;
+  }
+  .slide.on{ display:flex; }
+  /* rising threshold line motif */
+  .slide::after{
+    content:""; position:absolute; left:72px; bottom:52px; width:64px; height:2px;
+    background:linear-gradient(90deg,var(--accent),transparent);
+  }
+  .kicker{ font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-family:'Marcellus',Georgia,serif; font-weight:400; color:var(--white);
+    font-size:64px; line-height:1.06; letter-spacing:0.01em; margin-bottom:24px; }
+  h2{ font-family:'Marcellus',Georgia,serif; font-weight:400; color:var(--white);
+    font-size:42px; line-height:1.15; margin-bottom:20px; }
+  p{ font-size:21px; line-height:1.6; color:var(--light); max-width:46ch; margin-bottom:14px; }
+  p.lead{ font-size:24px; color:var(--white); }
+  .sub{ font-size:20px; color:var(--muted); max-width:52ch; }
+  ul{ list-style:none; margin-top:8px; }
+  li{ font-size:20px; line-height:1.5; color:var(--light); padding-left:26px; position:relative; margin-bottom:14px; max-width:48ch; }
+  li::before{ content:""; position:absolute; left:0; top:12px; width:12px; height:2px; background:var(--accent); }
+  .part{ font-family:'Marcellus',serif; font-size:15px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
+  .big{ font-family:'Marcellus',serif; font-size:120px; color:var(--panel); position:absolute; right:56px; top:36px; }
+  .present{ font-size:17px; color:var(--muted); margin-top:20px; }
+  .disclaimer{ font-size:13px; color:var(--muted); max-width:60ch; margin-top:22px; line-height:1.5; }
+  .cta-line{ font-family:'Marcellus',serif; font-size:26px; color:var(--accent); margin-top:8px; }
+  #nav{ position:fixed; bottom:18px; right:24px; font-family:'Inter',sans-serif;
+    font-size:13px; color:var(--muted); display:flex; gap:14px; align-items:center; }
+  #nav button{ background:var(--panel); color:var(--light); border:1px solid var(--rule);
+    border-radius:4px; padding:6px 12px; cursor:pointer; font-size:13px; }
+  #count{ font-variant-numeric:tabular-nums; }
+  @media (max-width:640px){ .slide{padding:34px 30px;} h1{font-size:38px;} h2{font-size:28px;} p,li{font-size:17px;} .big{font-size:70px;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S = [
+  {t:'title',
+    kicker:'A GAIA masterclass',
+    h:'The Likability Tax',
+    s:'Why senior women stall one step below the role they have already earned, and the system that moves them through it.',
+    present:'With Marisa Kamall, Founder of GAIA' },
+
+  {t:'who',
+    kicker:'Who this is for',
+    h:'The woman who is already leading',
+    s:'You run the team, you carry the number, you are the one people bring the hard problems to. And the next level keeps quietly moving one step further away.' },
+
+  {t:'trap',
+    kicker:'The trap',
+    h:'You have done everything they told you to do',
+    bullets:['You delivered the results, on time and under pressure.',
+             'You were told to lean in, speak up, and be more confident.',
+             'You did. The room still reads you differently than it reads him.'] },
+
+  {t:'reframe',
+    kicker:'The reframe',
+    h:'Confidence was never your problem',
+    lead:'The advice aimed at senior women assumes the barrier lives inside her. After twenty years inside the system, I can tell you it does not.',
+    s:'The barrier is a price. It has a shape, and once you can see it, you can stop paying it.' },
+
+  {t:'part', part:'Part one', h:'A tax nobody named' },
+
+  {t:'define',
+    kicker:'The core idea',
+    h:'The Likability Tax',
+    s:'In professional settings, a woman’s decisions are quietly priced against how likable the choice makes her. The direct ask, the held boundary, the unhedged no. Each one costs something a man is rarely charged for.' },
+
+  {t:'cost',
+    kicker:'What it costs',
+    h:'It compounds at the top',
+    bullets:['The ask gets softened, so it lands smaller.',
+             'The boundary gets a smile attached, so it holds for a week.',
+             'The promotion goes unrequested, because requesting it reads as too much.'] },
+
+  {t:'why-fail',
+    kicker:'Why the usual advice fails',
+    h:'You cannot affirm your way out of a system',
+    s:'Confidence work treats a systemic price as a personal deficit. Telling a taxed leader to feel more confident is like telling her to ignore the bill. The bill still arrives.',
+    sub:'Systemic change matters more than one more round of individual confidence building.' },
+
+  {t:'part', part:'Part two', h:'The system that gets you through' },
+
+  {t:'pillar',
+    kicker:'Pillar one',
+    h:'Name the tax',
+    s:'Seeing the pattern in the room, in real time, is the first move to stop paying it. What gets named gets negotiable. What stays invisible keeps charging you.' },
+
+  {t:'pillar',
+    kicker:'Pillar two',
+    h:'Sustainable leadership over intensity',
+    s:'Leadership is about sustainability. Showing up consistently, with energy and clarity, matters far more than burning brightly and briefly. At this level it is less about doing and more about enabling.' },
+
+  {t:'pillar',
+    kicker:'Pillar three',
+    h:'Authenticity and vulnerability as tools',
+    s:'Vulnerability is not the opposite of authority. It is how you build the psychological safety and trust that a high performing team actually runs on. Leading authentically is a strategy, not a confession.' },
+
+  {t:'pillar',
+    kicker:'Pillar four',
+    h:'A personal board of advisors',
+    s:'Nobody leads past a system alone. Peers who are one step ahead, coaching that is honest, and a board of your own making. Community is not a nice to have here. It is the mechanism that accelerates the growth.' },
+
+  {t:'part', part:'Part three', h:'The untaxed leader' },
+
+  {t:'looks',
+    kicker:'Ninety days from now',
+    h:'The same leader, untaxed',
+    bullets:['The ask made plainly, and it lands at full size.',
+             'The boundary held without the apology stapled to it.',
+             'The room read accurately, so you spend your energy on the work, not the tax.'] },
+
+  {t:'whyme',
+    kicker:'Why listen to me',
+    h:'I ran the system before I named it',
+    s:'Marisa Kamall. Former Managing Director in Finance and Regional COO for HSBC Middle East, leading hundreds of people and multi billion dollar budgets. ICF certified coach to more than 50 CEOs and 100 senior executives. I built GAIA after I saw, from the inside, how little of the system was built for the women inside it.' },
+
+  {t:'gaia',
+    kicker:'Where this lives',
+    h:'GAIA',
+    s:'A leadership community for senior and rising women, in Dubai and across the world. Peer groups, executive learning, one to one coaching, and a personal board of advisors, under one idea: lead with authenticity, vulnerability, and growth.' },
+
+  {t:'cta',
+    kicker:'Your next step',
+    h:'Stop paying the tax',
+    cta:'Join GAIA at gaiarises.com',
+    s:'Bring one decision you have been softening. We will look at what it is really costing you, and build the first move to take it off the table.',
+    disclaimer:'This masterclass is educational. It shares a leadership method and reflects the experiences of GAIA members. It is not a guarantee of any specific career, promotion, or financial outcome. Individual results vary.' }
+];
+
+const stage = document.getElementById('stage');
+S.forEach((sl,i)=>{
+  const d=document.createElement('div'); d.className='slide'+(i===0?' on':''); d.dataset.i=i;
+  let html='';
+  if(sl.part){ html += '<div class="big">'+String(i+1).padStart(2,'0')+'</div><div class="part">'+sl.part+'</div><h1 style="font-size:56px;margin-top:14px">'+sl.h+'</h1>'; }
+  else {
+    if(sl.kicker) html+='<div class="kicker">'+sl.kicker+'</div>';
+    if(sl.t==='title'||sl.t==='gaia'||sl.t==='cta') html+='<h1>'+sl.h+'</h1>'; else html+='<h2>'+sl.h+'</h2>';
+    if(sl.lead) html+='<p class="lead">'+sl.lead+'</p>';
+    if(sl.cta) html+='<div class="cta-line">'+sl.cta+'</div>';
+    if(sl.s) html+='<p>'+sl.s+'</p>';
+    if(sl.bullets){ html+='<ul>'; sl.bullets.forEach(b=>html+='<li>'+b+'</li>'); html+='</ul>'; }
+    if(sl.sub) html+='<p class="sub">'+sl.sub+'</p>';
+    if(sl.present) html+='<div class="present">'+sl.present+'</div>';
+    if(sl.disclaimer) html+='<div class="disclaimer">'+sl.disclaimer+'</div>';
+  }
+  d.innerHTML=html; stage.appendChild(d);
+});
+
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){ cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('on',i===cur));
+  count.textContent=(cur+1)+' / '+slides.length; }
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(cur+1); if(e.key==='ArrowLeft')show(cur-1); });
+show(0);
+</script>
+</body>
+</html>
