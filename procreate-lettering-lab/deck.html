@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Own Lettering Style in Procreate — a masterclass with Peggy Dean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfbf6;      /* her page cream */
+    --ink:#1b1b1b;     /* her body ink */
+    --accent:#e86f52;  /* her exact brand coral (button/link) */
+    --pop:#f58dbf;     /* her pink pop */
+    --panel:#ffffff;
+    --soft:#fff4ef;
+    --muted:#6f665f;
+    --rule:#eadfd4;
+    --head:'Poppins',system-ui,sans-serif;
+    --body:'Figtree',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--soft);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  #stage{width:min(960px,96vw);aspect-ratio:16/9;background:var(--bg);
+    border-radius:18px;box-shadow:0 20px 60px rgba(27,27,27,.12);
+    position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:58px 66px 64px;display:none;
+    flex-direction:column;justify-content:center;gap:16px}
+  .slide.on{display:flex;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--head);font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;font-size:13px;color:var(--accent)}
+  h1{font-family:var(--head);font-weight:800;font-size:50px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:37px;line-height:1.1;letter-spacing:-.01em}
+  p{font-size:21px;line-height:1.5;max-width:46ch;color:#2b2b2b}
+  p.lead{font-size:23px;color:var(--ink)}
+  .sub{font-size:20px;color:var(--muted)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:13px;margin-top:4px}
+  li{display:flex;gap:14px;align-items:flex-start;font-size:20px;line-height:1.42;max-width:48ch}
+  li .n{font-family:var(--head);font-weight:700;color:var(--accent);min-width:26px}
+  .band{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:8px 0;max-width:520px}
+  .band span{flex:1}
+  .pill{display:inline-block;font-family:var(--head);font-weight:600;font-size:14px;
+    background:var(--soft);border:1px solid var(--rule);color:var(--accent);
+    padding:6px 14px;border-radius:99px;width:max-content}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;max-width:660px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:16px 18px}
+  .card h3{font-family:var(--head);font-size:18px;color:var(--ink);margin-bottom:5px}
+  .card p{font-size:15px;color:var(--muted);max-width:none}
+  .cta-btn{display:inline-block;background:var(--accent);color:#fff;font-family:var(--head);
+    font-weight:700;font-size:19px;padding:14px 28px;border-radius:99px;margin-top:4px;width:max-content}
+  .disc{font-size:13px;color:var(--muted);max-width:62ch;margin-top:8px}
+  .foot{position:absolute;left:66px;bottom:24px;font-size:12px;color:var(--muted);
+    font-family:var(--head);letter-spacing:.05em;text-transform:uppercase}
+  #nav{position:fixed;bottom:20px;right:26px;display:flex;gap:10px;align-items:center;
+    font-family:var(--head);font-size:14px;color:var(--muted)}
+  #nav button{font-family:var(--head);font-weight:600;border:1px solid var(--rule);
+    background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer}
+  .dots{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+  .dots i{width:7px;height:7px;border-radius:99px;background:#d9cec3;display:block}
+  .dots i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="dots" id="dots"></div>
+<div id="nav"><span id="count"></span><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title', kicker:'A live masterclass with Peggy Dean',
+    h:'Find Your Own Lettering Style in Procreate', band:true,
+    sub:"Stop copying other people's alphabets. Learn to build lettering that looks like you."},
+  {t:'text', kicker:'The promise', h:'One hour from now',
+    lead:"You will know exactly how to take a style you admire and turn it into something that is recognizably yours, even if you have only ever traced other people's letters.",
+    pill:'You bring an iPad, an Apple Pencil, and Procreate'},
+  {t:'list', kicker:'Who this is for', h:'Sound familiar?',
+    list:[
+      'You have Procreate and a folder full of half-finished lettering.',
+      'You can follow a tutorial, but your own work still does not feel like yours.',
+      'You are not sure what actually makes one lettering style different from another.']},
+  {t:'text', kicker:'The trap', h:'Copying feels like progress',
+    lead:"Every new alphabet you trace looks good on the day. But a stack of copies is not a style, it is a stack of copies. And it quietly teaches you that a personal style is something other people were simply born with."},
+  {t:'text', kicker:'The reframe', h:'Creativity is a skill, not a talent',
+    lead:"The thing standing between you and your own style is not talent, it is vocabulary. Learn the language of letterforms and style becomes a set of choices you get to make on purpose."},
+  {t:'text', kicker:'Part One', h:'You were taught letters, not a language',
+    body:"Most lettering tutorials hand you one alphabet to trace, so you can recreate that one look. The moment you want something that feels like you, you are stuck. The gap is not talent. It is not having the words for what you are looking at."},
+  {t:'text', kicker:'Part Two', h:'The four things that turn copying into creating',
+    lead:"When you can see, name, and move the parts of a letter, style stops being a mystery. Here is the path we work through together, step by step."},
+  {t:'text', kicker:'Pillar 1', h:'The Style Spectrum',
+    lead:"A shared vocabulary for every lettering style, from modern to traditional. Once you can place a style on the spectrum you can name it, and once you can name it you can move it toward yours."},
+  {t:'text', kicker:'Pillar 2', h:'Letter Anatomy and Structure',
+    lead:"Line heights, spacing, weight, and contrast: the mechanics under every letterform. You learn the rules on purpose, so you can break them on purpose."},
+  {t:'text', kicker:'Pillar 3', h:'Build Your Lettering Library',
+    lead:"The signature move. Instead of one-off pieces, you develop a reusable collection of your own styles, each with a flair that reads as unmistakably yours."},
+  {t:'text', kicker:'Pillar 4', h:'Composition Lab',
+    lead:"Hierarchy with intent: size, style, mood, color, and shape-puzzling to guide the eye through a piece, so the whole thing feels composed instead of crowded."},
+  {t:'cards', kicker:'Proof of range', h:'One foundation, every look',
+    body:'From the same four pillars we build wildly different styles in the Style Labs:',
+    cards:[
+      ['Retro and neon','Warping, masking, gradients, and glow.'],
+      ['3D and beveled','Balloon letters and chiseled block with real depth.'],
+      ['Serif play','Color blocking and seamless shading.'],
+      ['Paper-cut','Handmade, organic forms with folded shadow.']]},
+  {t:'text', kicker:'The turning point', h:'From tracing to a signature',
+    lead:'You stop asking how did they do that and start asking how would I do that. Your pieces begin to rhyme with each other, and people start to recognize your work before they see your name.'},
+  {t:'text', kicker:'The studio rule', h:'No perfection required',
+    lead:'You can mess up, try again, and still walk away with something you will actually use. That is not a lowered bar. That is how real skill gets built.'},
+  {t:'list', kicker:'Why learn this with me', h:'Peggy Dean',
+    list:[
+      'Over 500,000 students taught over seven years.',
+      'Best-selling author of The Ultimate Brush Lettering Guide, Botanical Line Drawing, and the Guide to Nature Drawing and Watercolor.',
+      'Featured on the Today Show, in Style Me Pretty, and Smitten.',
+      'I teach everything I know. No fluff, no secrets.']},
+  {t:'list', kicker:'The path, in four steps', h:'How you build a style',
+    list:[
+      'Name any style with the Style Spectrum.',
+      'Control the letterform with Anatomy and Structure.',
+      'Collect your own looks in a Lettering Library.',
+      'Compose them with intent in the Composition Lab.']},
+  {t:'cta', kicker:'Your next step', h:'Come letter with me',
+    lead:'If you are ready to build a style that is unmistakably yours, the full path lives inside the Procreate Lettering Lab.',
+    cta:'Explore the Procreate Lettering Lab',
+    disclaimer:'This masterclass is for education only. No income or specific result is guaranteed. Results vary based on your own practice, effort, and starting point.'}
+];
+
+function slide(s){
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h) h+= s.t==='title'?`<h1>${s.h}</h1>`:`<h2>${s.h}</h2>`;
+  if(s.band) h+=`<div class="band"><span style="background:#1b1b1b"></span><span style="background:#e86f52"></span><span style="background:#f58dbf"></span><span style="background:#3cad78"></span><span style="background:#8c295b"></span></div>`;
+  if(s.sub) h+=`<p class="sub">${s.sub}</p>`;
+  if(s.lead) h+=`<p class="lead">${s.lead}</p>`;
+  if(s.body) h+=`<p>${s.body}</p>`;
+  if(s.list){h+='<ul>';s.list.forEach((x,i)=>h+=`<li><span class="n">${s.t==='list'&&s.kicker&&s.kicker.indexOf('Why')===0?'•':(i+1)}</span>${x}</li>`);h+='</ul>';}
+  if(s.cards){h+='<div class="grid">';s.cards.forEach(c=>h+=`<div class="card"><h3>${c[0]}</h3><p>${c[1]}</p></div>`);h+='</div>';}
+  if(s.pill) h+=`<span class="pill">${s.pill}</span>`;
+  if(s.cta) h+=`<span class="cta-btn">${s.cta}</span>`;
+  if(s.disclaimer) h+=`<p class="disc">${s.disclaimer}</p>`;
+  h+='<div class="foot">The Pigeon Letters</div>';
+  return h;
+}
+let i=0;const stage=document.getElementById('stage');const dots=document.getElementById('dots');
+S.forEach(s=>{const d=document.createElement('div');d.className='slide';d.innerHTML=slide(s);stage.appendChild(d);const dot=document.createElement('i');dots.appendChild(dot);});
+function render(){[...stage.children].forEach((c,idx)=>c.classList.toggle('on',idx===i));[...dots.children].forEach((c,idx)=>c.classList.toggle('on',idx===i));document.getElementById('count').textContent=(i+1)+' / '+S.length;}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
