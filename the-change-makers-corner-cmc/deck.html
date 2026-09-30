@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Transformations Don't Stick - The Leadership Bridges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1e2a37;
+    --panel:#26333f;
+    --rule:#3a4a58;
+    --accent:#ef8160;
+    --teal:#029ca2;
+    --chalk:#eef2f5;
+    --grey:#aebcc7;
+    --dim:#7d8f9d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--chalk);
+    font-family:"Montserrat",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{
+    display:none;width:min(1040px,92vw);min-height:min(620px,86vh);
+    background:linear-gradient(180deg,var(--panel),#212d38);
+    border:1px solid var(--rule);border-radius:18px;
+    padding:64px 72px;position:relative;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+  }
+  .slide.on{display:flex;flex-direction:column;justify-content:center}
+  .bridge{position:absolute;left:72px;right:72px;top:54px;height:1px;background:linear-gradient(90deg,transparent,var(--rule),transparent)}
+  .bridge::after{content:"";position:absolute;left:50%;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
+  .kick{font-family:"Montserrat";font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:13px;color:var(--accent)}
+  .part-no{font-family:"Tenor Sans";font-size:15px;letter-spacing:.3em;color:var(--teal);text-transform:uppercase;margin-bottom:14px}
+  h1{font-family:"Tenor Sans";font-weight:400;font-size:60px;line-height:1.05;letter-spacing:.01em;margin:18px 0}
+  h2{font-family:"Tenor Sans";font-weight:400;font-size:44px;line-height:1.1;margin:10px 0 14px}
+  h3{font-family:"Tenor Sans";font-weight:400;font-size:30px;line-height:1.15;color:var(--chalk)}
+  p{font-size:22px;line-height:1.55;color:var(--grey);max-width:46ch}
+  p.lead{font-size:26px;color:var(--chalk);max-width:40ch}
+  .accent{color:var(--accent)}
+  .teal{color:var(--teal)}
+  ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:16px}
+  li{font-size:22px;line-height:1.4;color:var(--grey);padding-left:26px;position:relative;max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:2px;background:var(--accent)}
+  li b{color:var(--chalk);font-weight:600}
+  .pillar-tag{font-family:"Tenor Sans";font-size:17px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase}
+  .stat-row{display:flex;gap:40px;flex-wrap:wrap;margin-top:26px}
+  .stat b{display:block;font-family:"Tenor Sans";font-size:46px;color:var(--accent);line-height:1}
+  .stat span{font-size:15px;color:var(--dim);letter-spacing:.04em}
+  .foot{position:absolute;bottom:26px;left:72px;right:72px;display:flex;justify-content:space-between;font-size:12px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+  .disc{font-size:14px;color:var(--dim);max-width:60ch;margin-top:22px;line-height:1.5}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;z-index:5}
+  .nav button{background:var(--panel);color:var(--chalk);border:1px solid var(--rule);border-radius:8px;padding:8px 14px;font-size:14px;cursor:pointer;font-family:inherit}
+  .count{font-size:13px;color:var(--dim);letter-spacing:.1em}
+  .big{font-size:34px;color:var(--chalk);line-height:1.25;max-width:30ch}
+  .strike{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span class="count" id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const BRAND = "Transformation Leadership Institute";
+const S = [
+  {t:'title', kick:'A live masterclass for change leaders',
+   h:"Why Transformations<br>Don't Stick",
+   lead:"And the leadership bridges that make them stick, taught live."},
+
+  {t:'audience', kick:'Who this is for',
+   h:"You own the change, not just the plan",
+   body:"For the C-level sponsor and the transformation leader carrying a program that has to actually land: adopted by people, sustained in the culture, still true a year after go-live."},
+
+  {t:'trap', part:'Part One', tag:'The core problem',
+   h:"The plan was never the problem",
+   body:"The business case got approved. The roadmap is clean. The steering committee is happy. And six months in, people have quietly gone back to how they always worked."},
+
+  {t:'reframe',
+   big:'A better plan will not save a change that <span class="accent">nobody adopts</span>.',
+   body:"Most transformation effort goes into deciding what to do. Almost none goes into whether the people actually change. That gap is where transformations die."},
+
+  {t:'cost',
+   h:"What the adoption gap costs",
+   list:["<b>Delivered, not adopted.</b> The system goes live, the behaviour does not.",
+         "<b>Culture snaps back.</b> Old incentives outlast the new process.",
+         "<b>The leader gets blamed</b> for a plan that was never the weak link."]},
+
+  {t:'signals',
+   h:"Three signals it is about to stall",
+   list:["People can describe the change but cannot say what they should do differently on Monday.",
+         "Every update is about milestones, none is about behaviour.",
+         "The energy lives with the project team, not with the leaders who own the work."]},
+
+  {t:'part', part:'Part Two', tag:'The framework',
+   h:"The Leadership Bridges",
+   body:"Strategic orchestration: the leader is the bridge that connects strategy to execution to people, so change is adopted and sustained instead of announced and abandoned. Three pillars carry it."},
+
+  {t:'pillar', tag:'Pillar One', part:'Prioritize impact',
+   h:"Do What Matters Well",
+   body:"When everything is urgent, transformation leaders protect focus. You concentrate scarce attention on the few moves that actually shift behaviour, and you let the rest wait."},
+
+  {t:'pillar', tag:'Pillar Two', part:'A multidisciplinary view',
+   h:"Redefining Success",
+   body:"On time and on budget is not the same as adopted and sustained. You measure success across culture, mindset, and lasting capability, not just delivery, drawing on more than one discipline to do it."},
+
+  {t:'pillar', tag:'Pillar Three', part:'Strategic orchestration',
+   h:"The Leadership Bridges",
+   body:"You stop being the messenger between silos and become the bridge. Strategy connects to execution, execution connects to the people doing the work, and nothing falls in the gap between them."},
+
+  {t:'bridges',
+   h:"The three spans",
+   list:["<b>Strategy to execution.</b> The intent survives contact with the plan.",
+         "<b>Execution to people.</b> The plan survives contact with the day job.",
+         "<b>People to culture.</b> The new way outlasts the project that started it."]},
+
+  {t:'method',
+   h:"Where adoption actually happens",
+   body:"Not in the launch email. In the hundred small moments where a leader models the change, removes a blocker, and makes the new way easier than the old one. That is orchestration, not communication."},
+
+  {t:'part', part:'Part Three', tag:'When the bridges hold',
+   h:"Adopted, and still true a year later",
+   body:"When the bridges hold, the change stops depending on the program. It becomes how people work, whether or not anyone is watching the dashboard."},
+
+  {t:'looks',
+   h:"Before and after",
+   list:["<span class=\"strike\">A change people comply with</span> becomes a change people own.",
+         "<span class=\"strike\">A plan that needs constant pushing</span> becomes momentum that carries itself.",
+         "<span class=\"strike\">Success measured at go-live</span> becomes success measured in behaviour that lasts."]},
+
+  {t:'whyme', kick:'Why learn this here',
+   h:"Built in the room, not the textbook",
+   body:"This is drawn from work leading transformation across industries and continents, with the leaders actually accountable for making change stick.",
+   stats:[["26+","years leading transformation"],["500+","C-level and change leaders"],["11","industries, 15+ countries"]]},
+
+  {t:'start',
+   h:"Where to begin",
+   body:"Start by finding your weakest span. Score how well strategy, execution, and people are bridged in your current program, then put your focus on the one that is breaking first."},
+
+  {t:'recap',
+   h:"The three pillars, together",
+   list:["<b>Do What Matters Well</b> protects your focus.",
+         "<b>Redefining Success</b> changes what you measure.",
+         "<b>The Leadership Bridges</b> makes the change hold."]},
+
+  {t:'cta', kick:'Your next step',
+   h:"Lead the change that sticks",
+   body:"If you own a transformation that has to land, take the Future Fit Change Leader assessment and bring your weakest span to the next live session inside The Change Makers Corner.",
+   disc:"This masterclass is educational. No specific outcome or business result is guaranteed. Results vary with your context, your team, and the work you put in."}
+];
+
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+let i=0;
+
+function slideHTML(s){
+  let inner="";
+  if(s.part) inner+=`<div class="part-no">${s.part} · ${s.tag||''}</div>`;
+  else if(s.kick) inner+=`<div class="kick">${s.kick}</div>`;
+  if(s.tag && !s.part) inner+=`<div class="pillar-tag">${s.tag}</div>`;
+  if(s.big) inner+=`<div class="big">${s.big}</div>`;
+  if(s.h) inner+= (s.t==='title') ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+  if(s.lead) inner+=`<p class="lead">${s.lead}</p>`;
+  if(s.body) inner+=`<p>${s.body}</p>`;
+  if(s.list){ inner+="<ul>"; s.list.forEach(x=>inner+=`<li>${x}</li>`); inner+="</ul>"; }
+  if(s.stats){ inner+='<div class="stat-row">'; s.stats.forEach(z=>inner+=`<div class="stat"><b>${z[0]}</b><span>${z[1]}</span></div>`); inner+="</div>"; }
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  inner+=`<div class="foot"><span>${BRAND}</span><span>The Leadership Bridges</span></div>`;
+  return `<div class="slide on"><div class="bridge"></div>${inner}</div>`;
+}
+function render(){ stage.innerHTML=slideHTML(S[i]); count.textContent=(i+1)+" / "+S.length; }
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
