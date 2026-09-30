@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close the Month in Half the Time | AI Finance Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0B0F14;
+    --panel:#141A22;
+    --ink:#FFFFFF;
+    --muted:#9aa4b2;
+    --rule:rgba(255,255,255,.14);
+    --accent:#03dc84;
+    --deep:#0f2d24;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;opacity:0;transition:opacity .25s ease}
+  .slide.on{display:flex;opacity:1}
+  .k{font-size:15px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'League Spartan',sans-serif;font-weight:800;font-size:clamp(34px,6.2vw,74px);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:'League Spartan',sans-serif;font-weight:700;font-size:clamp(28px,4.6vw,52px);line-height:1.08;letter-spacing:-.005em}
+  .accent{color:var(--accent)}
+  .sub{font-size:clamp(17px,2.1vw,25px);line-height:1.5;color:var(--muted);margin-top:26px;max-width:60ch}
+  ul{list-style:none;margin-top:34px;max-width:62ch}
+  li{position:relative;font-size:clamp(17px,2vw,24px);line-height:1.45;color:#dfe5ec;padding-left:38px;margin-bottom:20px}
+  li::before{content:'';position:absolute;left:0;top:.62em;width:16px;height:3px;border-radius:3px;background:var(--accent)}
+  .note{margin-top:auto;padding-top:26px;font-size:14px;color:var(--muted);border-top:1px solid var(--rule);letter-spacing:.02em}
+  .titlewrap .badge{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bg);background:var(--accent);padding:8px 16px;border-radius:100px;margin-bottom:30px}
+  .ctaline{margin-top:34px;font-family:'League Spartan',sans-serif;font-weight:700;font-size:clamp(20px,2.8vw,32px);color:var(--accent)}
+  .disc{margin-top:28px;font-size:13px;color:var(--muted);max-width:70ch;line-height:1.5}
+  .hud{position:fixed;bottom:22px;right:28px;font-size:13px;color:var(--muted);letter-spacing:.08em;z-index:10}
+  .hud b{color:var(--ink)}
+  .brandfoot{position:fixed;bottom:22px;left:28px;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.04em;z-index:10}
+  .brandfoot span{color:var(--accent)}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:10;transition:width .25s ease}
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;max-width:900px}
+  .cell{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:22px}
+  .cell .t{font-family:'League Spartan',sans-serif;font-weight:700;font-size:22px}
+  .cell .d{font-size:15px;color:var(--muted);margin-top:8px;line-height:1.4}
+  .cell.hot{background:var(--deep);border-color:var(--accent)}
+  .cell.hot .t{color:var(--accent)}
+  @media (max-width:640px){.slide{padding:6vh 7vw}.grid6{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="stage"></div>
+<div class="brandfoot">AI Finance <span>Club</span></div>
+<div class="hud"><b id="cur">1</b> / <span id="tot">1</span></div>
+<script>
+const S = [
+  {t:'title', badge:'A live masterclass', h:'Close the Month in <span class="accent">Half the Time</span>',
+    sub:'The finance leader’s AI playbook. The prompts and workflows that turn month-end from a two-day slog into a one-pass draft you can defend.',
+    note:'Live session with Nicolas Boucher, AI Finance Club'},
+
+  {t:'audience', k:'Who this is for', h:'For finance pros drowning in AI hype',
+    body:['You tried ChatGPT on a report and got generic mush.','Every tutorial you find was built for marketers, not finance.','Meanwhile the close still eats your nights and your weekends.']},
+
+  {t:'trap', k:'The trap', h:'Generic AI fails finance for one reason',
+    sub:'It has no finance context, no required format, and no accountability. A prompt that writes a decent blog post cannot defend a variance to your board.'},
+
+  {t:'reframe', k:'Part one', h:'The problem is not the tool. It is the brief.',
+    sub:'The same model that writes mush can write board-ready commentary. The only thing that changes is how you brief it.'},
+
+  {t:'problem', k:'Part one', h:'Three places finance loses hours every month',
+    body:['Month-end variance commentary, written from scratch every time.','Board narratives, rebuilt slide by slide.','Forecast scenarios, modeled by hand, one at a time.']},
+
+  {t:'framework', k:'Part two', h:'The <span class="accent">CSI + FBI</span> framework',
+    sub:'The structure that turns a vague ask into a defensible finance output. It is the spine of everything taught in the club.'},
+
+  {t:'pillar', k:'Part two', h:'CSI: brief the model like an analyst',
+    body:['Context: the business, the period, and the numbers that matter.','Specific problem: the exact question, not a broad topic.','Instructions: the steps, the guardrails, and what to leave out.']},
+
+  {t:'pillar', k:'Part two', h:'FBI: make the output defensible',
+    body:['Format: the exact shape you need, board memo, variance table, or email.','Blueprint: an example of good, so the output matches your standard.','Identity: who it is written for, and who it is written as.']},
+
+  {t:'proof', k:'Part two', h:'Same data. Two prompts.',
+    body:['A naive prompt returns a generic summary nobody trusts.','A CSI + FBI prompt returns board-ready commentary in one pass.','You move from authoring to editing.']},
+
+  {t:'section', k:'Part three', h:'Your next close, rebuilt',
+    sub:'Three live workflows you can run on the very next month-end.'},
+
+  {t:'workflow', k:'Workflow one', h:'Variance commentary',
+    body:['Feed actuals against budget, with the context that matters.','The CSI + FBI prompt drafts the narrative.','You edit instead of author. Minutes, not hours.']},
+
+  {t:'workflow', k:'Workflow two', h:'The board narrative',
+    body:['Turn the numbers into the story the board actually needs.','A consistent format every month, held by the Blueprint.','In your voice and to your standard, held by Identity.']},
+
+  {t:'workflow', k:'Workflow three', h:'Forecast scenarios',
+    body:['Describe the scenario in plain language.','Get the model and the stated assumptions written up.','Compare base, upside, and downside on demand.']},
+
+  {t:'grid', k:'The month-end, automated', h:'Where the hours come back',
+    cells:[
+      {lab:'Close data',d:'loaded in with context'},
+      {lab:'Variance',d:'AI drafts the commentary',hot:true},
+      {lab:'Board deck',d:'narrative in minutes'},
+      {lab:'Forecast',d:'scenarios on demand'},
+      {lab:'Reconcile',d:'AI checks the ties',hot:true},
+      {lab:'Recurring',d:'automated with custom GPTs'} ]},
+
+  {t:'tools', k:'One method, every tool', h:'ChatGPT, Claude, and Copilot',
+    body:['Each tool gets its own finance-specific playbook.','The method stays the same; the tool is your choice.','Custom GPTs take over the tasks that repeat every month.']},
+
+  {t:'why', k:'Why learn this here', h:'Built by finance, for finance',
+    body:['15 years in finance: PwC auditor, then finance leader at Thales.','50,000+ finance professionals taught.','3,600+ members inside the AI Finance Club community.']},
+
+  {t:'results', k:'What members report', h:'The results people talk about',
+    body:['14.5 hours saved per month.','6 recurring reports automated in a quarter.','Output they can defend to their board.'],
+    note:'Member-reported outcomes. Results vary by individual and effort.'},
+
+  {t:'recap', k:'Recap', h:'What you walk out with',
+    body:['The CSI + FBI prompting framework.','Three finance workflows ready to run on your next close.','A clear path to go deeper.']},
+
+  {t:'cta', k:'Your next step', h:'Go deeper inside the <span class="accent">AI Finance Club</span>',
+    sub:'Structured learning paths, live monthly workflow sessions, and finance-specific playbooks for ChatGPT, Claude, Copilot, and prompt engineering.',
+    ctaline:'Join the AI Finance Club at ai-finance.club',
+    disc:'This masterclass is for education only. No financial, career, or business result is guaranteed. Results vary and depend on your own work and circumstances.'}
+];
+
+const stage = document.getElementById('stage');
+function render(){
+  stage.innerHTML = S.map((s,i)=>{
+    let inner='';
+    if(s.t==='title'){
+      inner = `<div class="titlewrap">${s.badge?`<div class="badge">${s.badge}</div>`:''}<h1>${s.h}</h1>${s.sub?`<div class="sub">${s.sub}</div>`:''}</div>${s.note?`<div class="note">${s.note}</div>`:''}`;
+    } else if(s.t==='grid'){
+      const cells = s.cells.map(c=>`<div class="cell ${c.hot?'hot':''}"><div class="t">${c.lab}</div><div class="d">${c.d}</div></div>`).join('');
+      inner = `${s.k?`<div class="k">${s.k}</div>`:''}<h2>${s.h}</h2><div class="grid6">${cells}</div>`;
+    } else if(s.t==='cta'){
+      inner = `${s.k?`<div class="k">${s.k}</div>`:''}<h1>${s.h}</h1>${s.sub?`<div class="sub">${s.sub}</div>`:''}<div class="ctaline">${s.ctaline}</div><div class="disc">${s.disc}</div>`;
+    } else {
+      const bul = s.body?`<ul>${s.body.map(b=>`<li>${b}</li>`).join('')}</ul>`:'';
+      inner = `${s.k?`<div class="k">${s.k}</div>`:''}<h2>${s.h}</h2>${s.sub?`<div class="sub">${s.sub}</div>`:''}${bul}${s.note?`<div class="note">${s.note}</div>`:''}`;
+    }
+    return `<section class="slide" data-i="${i}">${inner}</section>`;
+  }).join('');
+  document.getElementById('tot').textContent = S.length;
+}
+let cur=0;
+function show(n){
+  cur=Math.max(0,Math.min(S.length-1,n));
+  document.querySelectorAll('.slide').forEach((el,i)=>el.classList.toggle('on',i===cur));
+  document.getElementById('cur').textContent=cur+1;
+  document.getElementById('prog').style.width=((cur+1)/S.length*100)+'%';
+}
+render();show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')show(cur-1);
+});
+document.getElementById('stage').addEventListener('click',e=>{
+  const w=window.innerWidth; (e.clientX < w*0.28)?show(cur-1):show(cur+1);
+});
+</script>
+</body>
+</html>
