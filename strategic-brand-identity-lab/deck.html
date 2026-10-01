@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Strategy-Led Brand Designer — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#16181C;        /* deepened from brand dominant #1f2329 */
+    --panel:#1F2329;     /* brand dominant, verbatim */
+    --rule:#39414C;      /* hue-preserving lighten of #1f2329 */
+    --ink:#F4F3EE;       /* brand white #ffffff, warmed a hair */
+    --muted:#AEB4BD;     /* desaturated mid of the brand hue */
+    --accent:#9DB2CE;    /* hue-preserving lighten/desat of #1f2329 (only accent) */
+    --body:"Helvetica Neue",Helvetica,Arial,sans-serif; /* her detected brand face */
+    --display:"Poppins",var(--body);                     /* her detected display face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;position:relative}
+  .slide{display:none;width:min(1120px,92vw);height:min(680px,88vh);background:
+      radial-gradient(1200px 600px at 18% -10%, rgba(157,178,206,.10), transparent 60%),
+      var(--panel);
+    border:1px solid var(--rule);border-radius:18px;
+    padding:64px 72px;position:relative;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .slide.active{display:flex;flex-direction:column}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .kicker::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.06;letter-spacing:-.01em;max-width:18ch}
+  h2{font-family:var(--display);font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-.01em;max-width:20ch}
+  .lead{font-size:22px;line-height:1.5;color:var(--ink);max-width:40ch;margin-top:22px;font-weight:400}
+  .sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:52ch;margin-top:18px}
+  .big{font-family:var(--display);font-weight:700;font-size:64px;line-height:1;letter-spacing:-.02em;color:var(--accent)}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px;max-width:54ch}
+  li{position:relative;padding-left:30px;font-size:20px;line-height:1.45;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border:2px solid var(--accent);border-radius:2px}
+  .steps{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .step{border:1px solid var(--rule);border-radius:12px;padding:20px 20px 22px;background:rgba(255,255,255,.015)}
+  .step .n{font-family:var(--display);font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.1em}
+  .step .t{font-family:var(--display);font-weight:600;font-size:18px;margin-top:8px;line-height:1.2}
+  .step .d{font-size:14.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:20px}
+  .framework{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .pill-row{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+  .pill{border:1px solid var(--rule);border-radius:999px;padding:9px 16px;font-size:15px;color:var(--ink)}
+  .quote{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.25;letter-spacing:-.01em;max-width:24ch}
+  .foot{position:absolute;left:72px;right:72px;bottom:30px;display:flex;justify-content:space-between;align-items:center;
+    font-size:12.5px;color:var(--muted);letter-spacing:.04em;border-top:1px solid var(--rule);padding-top:14px}
+  .foot .brand{font-family:var(--display);font-weight:600;color:var(--ink);letter-spacing:.02em}
+  .cta-box{margin-top:28px;border:1px solid var(--accent);border-radius:14px;padding:26px 30px;max-width:46ch;background:rgba(157,178,206,.06)}
+  .cta-box .do{font-family:var(--display);font-weight:600;font-size:22px}
+  .disclaimer{font-size:12.5px;color:var(--muted);margin-top:20px;max-width:60ch;line-height:1.5}
+  .metrics{display:flex;gap:46px;margin-top:30px;flex-wrap:wrap}
+  .metric .v{font-family:var(--display);font-weight:700;font-size:46px;color:var(--accent);line-height:1}
+  .metric .k{font-size:15px;color:var(--muted);margin-top:8px;max-width:16ch}
+  .nav{position:absolute;bottom:22px;right:28px;display:flex;gap:10px;z-index:5}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;
+    width:40px;height:34px;font-size:16px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{position:absolute;bottom:26px;left:28px;font-size:13px;color:var(--muted);z-index:5}
+  @media (max-width:720px){
+    .slide{padding:34px 28px}h1{font-size:34px}h2{font-size:27px}.steps{grid-template-columns:1fr}.two{grid-template-columns:1fr;gap:22px}
+    .foot{left:28px;right:28px}
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8249;</button><button id="next" aria-label="Next">&#8250;</button></div>
+<script>
+const FOOT = 'Abi Connick &middot; Strategic Brand Identity Lab';
+const S = [
+  {t:'title', k:'A masterclass for brand designers', h:'The Strategy-Led Brand Designer',
+   lead:'How to sell and deliver brand strategy, not just logos, so your work commands higher project fees.',
+   sub:'With Abi Connick. Nine years, 100+ brand projects.'},
+
+  {t:'who', k:'Who this is for', h:'You can design. That was never the problem.',
+   lead:'This is for the freelance brand and identity designer who is good at the craft and still feels stuck.',
+   list:['You deliver beautiful logos and still get treated like a pair of hands.',
+         'Clients push back on price, ask for endless revisions, and give vague feedback.',
+         'You know you should charge more, but you are not sure what justifies it.']},
+
+  {t:'hook', k:'The reframe', quote:'Clients do not buy logos. They buy certainty about their brand.',
+   sub:'When you sell a deliverable, you compete on taste and turnaround. When you sell strategy, you become the person who makes the decision safe. That is a different job, and a different fee.'},
+
+  {t:'part', k:'Part one', h:'The deliverable trap',
+   sub:'Most designers start with the visual. The visual is the easiest thing to argue about, the easiest thing to copy, and the easiest thing to discount. So that is exactly where the relationship gets stuck.'},
+
+  {t:'list', k:'What the trap costs you', h:'Why skill alone stops paying',
+   list:['Revisions never end, because nothing was decided before the design started.',
+         'Price feels arbitrary to the client, because they are paying for a picture, not a decision.',
+         'You get compared to every other designer, because a logo looks like a logo.',
+         'The best clients, the ones who pay $5k to $15k and up, never show up for a logo.']},
+
+  {t:'hook', k:'The shift', quote:'A brand does not start with a logo. It starts with a decision.',
+   sub:'Strategy is the layer underneath the visual: who this is for, what it stands for, why it wins. Decide that first, and the design becomes the obvious output of the thinking, not a guess you defend.'},
+
+  {t:'part', k:'Part two', h:'The Strategic Brand Design System',
+   sub:'A repeatable, six-step path that runs strategy first and lets the visual fall out of it. These are the pieces I use on my own projects, and they are what turn a designer into a strategic consultant.'},
+
+  {t:'fw', fw:'Framework 1 of 6', k:'The strategy call', h:'Strategy Call Framework',
+   sub:'A three-step process for running the discovery and strategy call: how to open it, how to lead it, and how to handle the objections that used to make you drop your price. The call is where the fee is won or lost.',
+   steps:[['01','Open','Set the frame so the client expects a strategist, not an order-taker.'],
+          ['02','Lead','Ask the questions that surface the real brand problem.'],
+          ['03','Hold','Handle objections with confidence instead of discounting.']]},
+
+  {t:'fw', fw:'Framework 2 of 6', k:'The foundations', h:'Brand Foundations Playbook',
+   sub:'Four strategic formulas to pin down the four things every brand decision rests on. Once these are written down, every colour, word, and layout choice has a reason behind it.',
+   pills:['Purpose','Mission','Vision','Values']},
+
+  {t:'fw', fw:'Framework 3 of 6', k:'The positioning', h:'Brand Positioning',
+   sub:'This is where the brand earns its price. You define who it is for, what it is up against, and the one thing it can own that competitors cannot.',
+   list:['Audience personas, so the brand speaks to a real person.',
+         'Competitor research, so you know the room you are walking into.',
+         'The competitive advantage, the single idea the brand owns.',
+         'Brand personality, so the voice and the visuals agree.']},
+
+  {t:'fw', fw:'Framework 4 of 6', k:'The direction', h:'Creative Direction Blueprint',
+   sub:'A three-step mood-board process that turns the strategy into a visual direction on purpose, so the design phase starts from a decision the client has already approved.',
+   steps:[['01','Gather','Collect inspiration against the strategy, not your taste.'],
+          ['02','Curate','Cut to the few references that express the positioning.'],
+          ['03','Direct','Agree the direction before a single asset is designed.']]},
+
+  {t:'fw', fw:'Framework 5 of 6', k:'The design', h:'Strategy into the visual',
+   sub:'Now the six-step design process runs with strategy baked in. Logos, colour, typography, and the full identity system are built as answers to decisions already made, which is why the revisions stop.',
+   list:['Every visual choice traces back to the foundations and positioning.',
+         'The client sees design as a conclusion, not an opinion to argue with.',
+         'The identity holds together because one strategy runs through all of it.']},
+
+  {t:'fw', fw:'Framework 6 of 6', k:'The presentation', h:'Presenting Brand Strategy',
+   sub:'The work only lands if the client buys the thinking. Three presentation methods plus a repeatable structure for gathering feedback and handling the final round of objections, so the reveal confirms the fee instead of reopening it.',
+   pills:['The Art of Presenting Brand Strategy','The Flawless Presentation Formula']},
+
+  {t:'part', k:'Part three', h:'What a project looks like now',
+   sub:'Strategy call, then foundations, then positioning, then creative direction, then design, then presentation. The client is bought in at every gate, so by the time they see the logo, they already said yes to the thinking behind it.'},
+
+  {t:'two-quote', k:'Why the fee changes', quote:'You are no longer paid for the file. You are paid for the decision the file protects.',
+   sub:'A logo is a commodity. A brand decision, made with evidence and presented with confidence, is worth $5k to $15k and up. Same designer, same hands, different job.'},
+
+  {t:'why', k:'Why me', h:'I built this on my own projects',
+   sub:'I am a brand designer first. This system is what I actually use with clients, refined over nine years, not theory.',
+   metrics:[['9 yrs','designing brand identities'],['100+','client projects delivered'],['$100 to $30k','my own project fee, over time']]},
+
+  {t:'recap', k:'The system, in one view', h:'Six steps, strategy first',
+   steps:[['01','Strategy Call','Win the room, not just the brief.'],
+          ['02','Foundations','Purpose, mission, vision, values.'],
+          ['03','Positioning','The idea the brand can own.'],
+          ['04','Creative Direction','Agree the look on purpose.'],
+          ['05','Design System','Visuals as the output of the thinking.'],
+          ['06','Presentation','Sell the thinking, confirm the fee.']]},
+
+  {t:'cta', k:'Your next step', h:'Learn the full system',
+   do:'Join the Strategic Brand Identity Lab',
+   sub:'The complete seven-module system, the frameworks, the formulas, real strategy-call footage, and the templates I use on my own projects.',
+   disclaimer:'This masterclass is educational. It teaches a process for selling and delivering brand strategy. Results depend on your own work and circumstances, and no specific income, fee, or outcome is promised or guaranteed.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return s;}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(i===0?' active':'');
+    let body='';
+    if(s.k) body+=`<div class="kicker">${s.k}</div>`;
+    if(s.fw) body=`<div class="kicker">${s.fw}</div>`+ (s.k?`<div class="framework">${s.k}</div>`:'');
+    if(s.h) body+=`<h1 style="${s.t==='title'?'':'font-size:40px'}">${s.h}</h1>`;
+    if(s.quote) body+=`<div class="quote">${s.quote}</div>`;
+    if(s.lead) body+=`<div class="lead">${s.lead}</div>`;
+    if(s.sub) body+=`<div class="sub">${s.sub}</div>`;
+    if(s.list){body+='<ul>';s.list.forEach(x=>body+=`<li>${x}</li>`);body+='</ul>';}
+    if(s.pills){body+='<div class="pill-row">';s.pills.forEach(p=>body+=`<span class="pill">${p}</span>`);body+='</div>';}
+    if(s.steps){body+='<div class="steps">';s.steps.forEach(st=>body+=`<div class="step"><div class="n">${st[0]}</div><div class="t">${st[1]}</div><div class="d">${st[2]}</div></div>`);body+='</div>';}
+    if(s.metrics){body+='<div class="metrics">';s.metrics.forEach(m=>body+=`<div class="metric"><div class="v">${m[0]}</div><div class="k">${m[1]}</div></div>`);body+='</div>';}
+    if(s.do){body+=`<div class="cta-box"><div class="do">${s.do}</div></div>`;}
+    if(s.disclaimer){body+=`<div class="disclaimer">${s.disclaimer}</div>`;}
+    body+=`<div class="foot"><span class="brand">${FOOT}</span><span>${String(i+1).padStart(2,'0')}</span></div>`;
+    d.innerHTML=body;
+    stage.appendChild(d);
+  });
+  document.getElementById('tot').textContent=S.length;
+}
+let idx=0;
+function show(n){
+  const sl=document.querySelectorAll('.slide');
+  idx=Math.max(0,Math.min(S.length-1,n));
+  sl.forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.getElementById('cur').textContent=idx+1;
+}
+render();
+document.getElementById('next').onclick=()=>show(idx+1);
+document.getElementById('prev').onclick=()=>show(idx-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(idx+1);if(e.key==='ArrowLeft')show(idx-1);});
+</script>
+</body>
+</html>
