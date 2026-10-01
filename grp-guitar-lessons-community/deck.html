@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play What You Feel - A Live Masterclass with Primož Grašič</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf8;        /* light-scheme brand -> light deck (site_scheme: light) */
+    --panel:#ffffff;
+    --rule:#e7e6df;
+    --ink:#1d252d;       /* their body/footer slate, verbatim from brand.json */
+    --muted:#5c6671;
+    --accent:#7faf18;    /* their link green, verbatim from brand.json */
+    --display:'Poppins',system-ui,sans-serif;   /* their h1/h2 face */
+    --body:'Nunito Sans',system-ui,sans-serif;  /* their body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:22px 0;min-height:60vh;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,52px);line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.6vw,38px);line-height:1.12;margin-bottom:10px}
+  .promise{font-size:clamp(17px,2vw,21px);color:var(--muted);margin-top:22px;max-width:40ch}
+  .lead{font-size:clamp(18px,2.2vw,23px);max-width:46ch}
+  .big{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.4vw,36px);line-height:1.2;max-width:24ch}
+  ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:14px;max-width:52ch}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,1.8vw,19px)}
+  li::before{content:"";position:absolute;left:0;top:9px;width:14px;height:3px;background:var(--accent)}
+  .fw-name{font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,30px);color:var(--ink)}
+  .fw-gloss{color:var(--muted);font-size:clamp(16px,1.9vw,19px);margin-top:10px;max-width:50ch}
+  .quote{font-style:italic;color:var(--ink);font-size:clamp(18px,2.1vw,22px);max-width:44ch;
+    border-left:3px solid var(--accent);padding-left:18px;margin-top:20px}
+  .credits{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px;max-width:58ch}
+  .chip{font-size:13px;background:#f1f4e7;border:1px solid #dfe8c6;color:#3f4a1d;border-radius:999px;padding:5px 11px}
+  .cta-steps{margin-top:22px;display:flex;flex-direction:column;gap:12px;max-width:50ch}
+  .disclaimer{margin-top:28px;font-size:12.5px;color:var(--muted);max-width:58ch;line-height:1.5}
+  .num{font-family:var(--display);color:var(--accent);font-weight:700;font-size:14px;margin-bottom:12px}
+  .footer-note{font-size:13px;color:var(--muted);margin-top:14px}
+  @media print{.slide{page-break-after:always;min-height:92vh}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+/* Masterclass deck. THE COACH'S masterclass to THE COACH'S audience.
+   Built on Primož Grašič's most distinctive angle: real improvisation and playing by
+   feel (not tab/riff memorization), with blues as the doorway. His own teaching pillars,
+   quoted. Zero trace of ads/us/strategy. Ends on HIS CTA. */
+const S = [
+  {t:'title',
+    kicker:'A live masterclass with Primož Grašič',
+    h1:'Play What You Feel',
+    promise:'How everyday guitarists stop memorizing songs they forget and start improvising music that is their own.' },
+
+  {t:'audience',
+    kicker:'Who this is for',
+    h2:'You can already play. You still cannot say anything.',
+    lead:'You have put in the hours. You know chords, a few scales, a pile of songs. But hand you a backing track and ask you to just play, and your hands lock up. This masterclass is for the player who wants to finally improvise and sound like themselves.' },
+
+  {t:'trap',
+    kicker:'The trap',
+    big:'More tabs will not fix this. You do not have a song problem. You have a language problem.',
+    note:'Every new tab you memorize is one more song you can copy and still cannot speak from.' },
+
+  {t:'reframe',
+    kicker:'The reframe',
+    h2:'The guitar is a language, not a library of songs.',
+    lead:'Fluent players are not recalling licks fast. They are hearing something and saying it. That is a skill you can be taught, in the right order, starting from the blues.' },
+
+  {t:'statement',
+    kicker:'What improvising really is',
+    big:'Improvising is not playing fast. It is hearing something in your head and being able to say it on the guitar.',
+    note:'Nobody is born able to do this. It is taught, in order, and it starts simpler than you think.' },
+
+  {t:'partlabel', num:'Part one', h2:'Why practice stops working', lead:'Most self-taught players plateau because they stack songs on top of a foundation that was never built. The missing layer is not more material. It is understanding what you are already playing.' },
+
+  {t:'bullets',
+    kicker:'The three plateaus',
+    h2:'Where players get stuck',
+    items:[
+      'You can play along, but silence scares you when the song stops.',
+      'You know scales as shapes, but not as sounds you can reach for.',
+      'You copy solos note for note, and none of them feel like yours.' ] },
+
+  {t:'framework',
+    kicker:'Pillar 1',
+    name:'Know how, then play by feeling',
+    gloss:'We build the mechanics and the theory first so that feel has something solid to stand on. Technique earns you the freedom to improvise; it does not compete with it.',
+    quote:'“We have first to know how and then to play by the feeling.”' },
+
+  {t:'framework',
+    kicker:'Pillar 2',
+    name:'Blues is the doorway',
+    gloss:'Blues is the emotional and historical root of everything that follows. We start here because a twelve-bar is the simplest place to learn to actually say something, and the feeling carries forward into every other style.',
+    quote:'“Blues was the beginning of jazz, and to play jazz you have to know much more than for playing the blues. But the feeling stays.”' },
+
+  {t:'bullets',
+    kicker:'The on-ramp',
+    h2:'Why we start with a 7-day blues',
+    items:[
+      'A twelve-bar blues is the simplest place to actually say something.',
+      'One week is short enough to finish and long enough to feel the shift.',
+      'The feel you build here carries straight into every other style.' ] },
+
+  {t:'partlabel', num:'Part two', h2:'Learning to speak', lead:'Once the foundation is real, improvising is not mysterious. It is a small set of habits practiced in the right order.' },
+
+  {t:'framework',
+    kicker:'Pillar 3',
+    name:'Improvise what you feel',
+    gloss:'Improvisation is personal expression, not a bank of licks to recall. We train your ear and hands together so that what you hear in your head is what comes out of the guitar, in any style.',
+    quote:'“I can play how I feel, and it offers me a lot of space to put my feelings into playing and improvising.”' },
+
+  {t:'framework',
+    kicker:'Pillar 4',
+    name:'Play honest, play by heart',
+    gloss:'Chasing trends and flash is how players lose their own voice. We practice playing what you actually want to play, so the technique serves the music instead of the other way around.',
+    quote:'“Learn how to play and try to play what you want to play. Be honest and play by heart, everything else will come by itself.”' },
+
+  {t:'partlabel', num:'Part three', h2:'From the first blues lick to real improvising', lead:'This is not watching tutorials alone. It is a structured path with other players, a jazz pro listening, and real feedback on the way up.' },
+
+  {t:'bullets',
+    kicker:'The path',
+    h2:'Basic to advanced, in the right order',
+    items:[
+      'Start with the free 7-day blues on-ramp, where the feel comes first.',
+      'Move through the Basic path until the foundation is genuinely yours.',
+      'Step into the Jazz and advanced path to improvise across styles.',
+      'Live coaching, personal feedback, and progress tracking the whole way.' ] },
+
+  {t:'bullets',
+    kicker:'Why learning with others matters',
+    h2:'You grow faster in a room than alone',
+    items:[
+      'Live sessions and workshops on specific techniques you can bring questions to.',
+      'A community of passionate players sharing what is working.',
+      'Feedback on your actual playing, not generic tutorial advice.',
+      'Someone who has done it at the highest level, listening to you.' ] },
+
+  {t:'why',
+    kicker:'Why learn this from me',
+    h2:'Primož Grašič',
+    lead:'30+ years as a working jazz guitarist. Full member of Big Band RTV Slovenia, winner of Slovenia’s highest jazz award, Yamaha and La Bella artist. I have shared the stage with the players below, and I teach the same way I learned to play with them: feel first, honestly, in order.',
+    credits:['Toots Thielemans','Ray Brown','Gary Burton','Clark Terry','Curtis Fuller','Niels-Henning Ørsted Pedersen','Johnny Griffin','Steve Swallow'] },
+
+  {t:'cta',
+    kicker:'Your next step',
+    h2:'Start where the feeling starts',
+    steps:[
+      'Join the free 7-Day Blues Challenge and play something that is yours by day seven.',
+      'Come into the GRP Guitar Lessons Community and keep going, Basic through Jazz and advanced.',
+      'Bring your playing to a live session and get real feedback.' ],
+    disclaimer:'This masterclass is for educational purposes only. Learning an instrument takes consistent practice, and individual progress varies from player to player. No specific skill level or outcome is promised or guaranteed.',
+    footer:'GRP Guitar Lessons Community · with Primož Grašič' }
+];
+
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d = el('section','slide');
+  if(s.kicker) d.appendChild(el('div','kicker',s.kicker));
+  if(s.num) d.appendChild(el('div','num',s.num));
+  if(s.t==='title'){ d.appendChild(el('h1',null,s.h1)); d.appendChild(el('p','promise',s.promise)); }
+  if(s.h2) d.appendChild(el('h2',null,s.h2));
+  if(s.big) d.appendChild(el('div','big',s.big));
+  if(s.lead) d.appendChild(el('p','lead',s.lead));
+  if(s.note) d.appendChild(el('p','footer-note',s.note));
+  if(s.name) d.appendChild(el('div','fw-name',s.name));
+  if(s.gloss) d.appendChild(el('p','fw-gloss',s.gloss));
+  if(s.quote) d.appendChild(el('div','quote',s.quote));
+  if(s.items){ const ul=el('ul'); s.items.forEach(i=>ul.appendChild(el('li',null,i))); d.appendChild(ul); }
+  if(s.credits){ const c=el('div','credits'); s.credits.forEach(n=>c.appendChild(el('span','chip',n))); d.appendChild(c); }
+  if(s.steps){ const c=el('div','cta-steps'); s.steps.forEach((st,i)=>c.appendChild(el('div','lead',(i+1)+'. '+st))); d.appendChild(c); }
+  if(s.disclaimer) d.appendChild(el('p','disclaimer',s.disclaimer));
+  if(s.footer) d.appendChild(el('div','footer-note',s.footer));
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
