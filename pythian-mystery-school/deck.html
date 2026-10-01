@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading the Cards Without the Book — Pythian Mystery School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070707;        /* their body background */
+    --panel:#13100a;     /* warm near-black lift */
+    --rule:#8c7240;      /* deep-gold hairline */
+    --accent:#c6a15b;    /* antique gold brand accent */
+    --cream:#efe4cc;     /* heading cream */
+    --body:#d9d9d9;      /* body light grey */
+    --display:"Cormorant Garamond", Georgia, serif;
+    --text:"Libre Baskerville", Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--body);
+    font-family:var(--text);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{
+    width:100vw;height:100vh;position:relative;
+  }
+  .slide{
+    position:absolute;inset:0;
+    display:none;flex-direction:column;justify-content:center;
+    padding:9vh 11vw;
+  }
+  .slide.active{display:flex;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{
+    font-family:var(--text);font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;
+  }
+  h1{
+    font-family:var(--display);font-weight:500;color:var(--cream);
+    font-size:4.6rem;line-height:1.04;letter-spacing:.01em;
+  }
+  h2{
+    font-family:var(--display);font-weight:500;color:var(--cream);
+    font-size:3.1rem;line-height:1.1;margin-bottom:1.6rem;
+  }
+  .sub{
+    font-family:var(--display);font-style:italic;color:var(--accent);
+    font-size:1.9rem;margin-top:1.8rem;line-height:1.3;max-width:40ch;
+  }
+  p,li{font-size:1.28rem;line-height:1.7;color:var(--body);max-width:52ch}
+  ul{list-style:none;margin-top:.6rem}
+  li{position:relative;padding-left:1.7rem;margin:1rem 0}
+  li::before{content:"";position:absolute;left:0;top:.72em;width:.6rem;height:.6rem;
+    background:var(--accent);transform:rotate(45deg)}
+  .lead{
+    font-family:var(--display);font-weight:400;color:var(--cream);
+    font-size:3.4rem;line-height:1.25;max-width:22ch;
+  }
+  .lead .hi{color:var(--accent);font-style:italic}
+  .kicker{font-family:var(--text);font-size:.8rem;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--rule);margin-bottom:1.1rem}
+  .rule{width:4.5rem;height:1px;background:var(--rule);margin:1.8rem 0}
+  .systems{display:flex;gap:2.4rem;margin-top:1.4rem;flex-wrap:wrap}
+  .sys{flex:1;min-width:220px;border-top:1px solid var(--rule);padding-top:1.1rem}
+  .sys h3{font-family:var(--display);font-weight:600;color:var(--accent);
+    font-size:1.8rem;margin-bottom:.6rem}
+  .sys p{font-size:1.06rem}
+  .proof{display:flex;gap:3.2rem;margin-top:1.8rem;flex-wrap:wrap}
+  .stat{border-left:1px solid var(--rule);padding-left:1.1rem}
+  .stat .n{font-family:var(--display);color:var(--cream);font-size:2.9rem;line-height:1}
+  .stat .l{font-size:.95rem;color:var(--body);margin-top:.4rem;letter-spacing:.02em}
+  .disclaimer{font-size:.82rem;color:#8b8578;margin-top:2.4rem;max-width:58ch;line-height:1.5}
+  .cta-step{font-family:var(--display);font-style:italic;color:var(--accent);font-size:1.7rem;margin-top:1.4rem}
+  footer{position:fixed;bottom:2.4vh;left:11vw;right:11vw;display:flex;
+    justify-content:space-between;align-items:center;
+    font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#6f6a5e}
+  .brand{color:var(--accent)}
+  #count{color:#6f6a5e}
+  .nav{position:fixed;bottom:2vh;right:2vw;display:flex;gap:.4rem;z-index:5}
+  .nav button{background:var(--panel);color:var(--accent);border:1px solid var(--rule);
+    font-family:var(--text);padding:.5rem .8rem;cursor:pointer;border-radius:2px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span class="brand">Pythian Mystery School</span><span id="count"></span></footer>
+<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
+<script>
+const S=[
+  {t:'title',
+    eyebrow:'A Live Masterclass with the Pythian Priestess',
+    h:'Reading the Cards Without the Book',
+    sub:'How to decode any tarot card from its structure, the way an initiate does.'},
+
+  {t:'content',
+    kicker:'What you will leave with',
+    h:'By the end of this hour',
+    b:['You will decode a card you have never studied, live, without reaching for a guidebook.',
+       'You will understand the three systems hidden inside every deck.',
+       'You will have a repeatable way to practice that turns guessing into reading.']},
+
+  {t:'who',
+    kicker:'Who this is for',
+    h:'You have bought the decks. You have bought the guidebooks.',
+    b:['You still freeze when a card comes up that you have not memorized.',
+       'You suspect there is a logic underneath the imagery, but no one has shown it to you.',
+       'You want to read intuitively and be right, not just hopeful.']},
+
+  {t:'lead',
+    lead:'Memorizing 78 card meanings is <span class="hi">not</span> mastery. It is dependence with extra steps.'},
+
+  {t:'part',kicker:'Part One',h:'The core problem'},
+
+  {t:'content',
+    kicker:'Why most readers stay stuck',
+    h:'Tarot is taught backwards',
+    b:['Most courses hand you 78 fixed meanings to memorize and a book to lean on forever.',
+       'The moment a reversal or an unfamiliar spread appears, the memory fails and the reading stalls.',
+       'You were given answers to recite. You were never taught the language the cards are written in.']},
+
+  {t:'content',
+    kicker:'The thesis of this school',
+    h:'Mysticism must be structured',
+    b:['The occult is not random woo. It is a discipline with a grammar you can actually learn.',
+       'Here you learn how to think, not what to think.',
+       'Read the structure and the meaning is no longer something you recall. It is something you can see.']},
+
+  {t:'part',kicker:'Part Two',h:'The Intuitive Tarot Method: three systems'},
+
+  {t:'systems',
+    kicker:'The decoder',
+    h:'Every card speaks in three languages at once',
+    sys:[
+      {n:'Symbology',p:'The imagery speaks through symbol. Colour, element, posture and object each carry meaning before a single keyword is involved.'},
+      {n:'Numerology',p:'The numbers reveal pattern and progression. A card\'s place in its sequence tells you where the story is on its arc.'},
+      {n:'Psychology',p:'The figures, archetypes, relationships and scenes communicate psychological information about the querent and the moment.'}]},
+
+  {t:'content',
+    kicker:'Live decode',
+    h:'One card, read from scratch',
+    b:['We take a card no one in the room has studied and read it in real time.',
+       'Symbol first: what the image is literally showing us.',
+       'Then number: where this sits in its suit\'s progression.',
+       'Then psychology: what the figures are doing, and what that means for the question.']},
+
+  {t:'content',
+    kicker:'How the skill actually sticks',
+    h:'You are a living laboratory',
+    b:['Learn how a method works. Put it into practice. Reflect on what you experience.',
+       'You do not need to know your strengths before you begin, because each person responds differently.',
+       'Reading is a muscle built through reps and reflection, not a list you finish memorizing.']},
+
+  {t:'part',kicker:'Part Three',h:'Where the method takes you'},
+
+  {t:'content',
+    kicker:'Before you go deeper',
+    h:'Discernment and protection come first',
+    b:['Real practice asks for spiritual hygiene, clear boundaries, and discernment about what you are working with.',
+       'Spirit identification, protection and warding are the responsible foundation, not an afterthought.',
+       'This is responsibility, consent and clarity, never escapism.']},
+
+  {t:'content',
+    kicker:'The path of study',
+    h:'From reader to initiate',
+    b:['The three-system method is the doorway. It is also how the deeper work is taught.',
+       'The same structured approach runs through divination, ritual, devotion and spirit communication.',
+       'You stop collecting isolated spells and start building a coherent practice of your own.']},
+
+  {t:'credibility',
+    kicker:'Who is teaching this',
+    h:'The Pythian Priestess',
+    b:['Ashley Ryan: B.A. in Philosophy and Theology, M.F.A. in writing, and an initiated Hermetic priestess within the Golden Dawn.',
+       'Founder of Pythian Mystery School, and spiritual advisor to creators including Sam and Colby.',
+       'She teaches the occult the way she was trained to study it: as a rigorous, structured discipline.']},
+
+  {t:'proof',
+    kicker:'The community you would be joining',
+    h:'This is a real school, not a feed',
+    stats:[
+      {n:'775,000+',l:'following across platforms'},
+      {n:'1,000+',l:'students taught'},
+      {n:'4.8 / 5',l:'Trustpilot, 54 reviews'}]},
+
+  {t:'cta',
+    kicker:'Your next step',
+    h:'Find your path of study',
+    step:'Take the free Find Your Spiritual Path quiz, then apply to be matched to the right program for where you are.',
+    disclaimer:'This masterclass is for educational purposes only. Spiritual and occult study is personal, outcomes vary from person to person, and nothing shared here is a guarantee of any specific result.'}
+];
+
+const stage=document.getElementById('stage');
+let i=0;
+function esc(s){return s;}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,idx)=>{
+    const d=document.createElement('section');
+    d.className='slide'+(idx===i?' active':'');
+    let html='';
+    if(s.eyebrow)html+=`<div class="eyebrow">${s.eyebrow}</div>`;
+    if(s.kicker)html+=`<div class="kicker">${s.kicker}</div>`;
+    if(s.t==='lead'){html+=`<div class="lead">${s.lead}</div>`;}
+    else if(s.t==='title'){html+=`<h1>${s.h}</h1>`;if(s.sub)html+=`<div class="sub">${s.sub}</div>`;}
+    else if(s.t==='part'){html+=`<h1>${s.h}</h1><div class="rule"></div>`;}
+    else{
+      if(s.h)html+=`<h2>${s.h}</h2>`;
+      if(s.t==='systems'){
+        html+='<div class="systems">';
+        s.sys.forEach(x=>{html+=`<div class="sys"><h3>${x.n}</h3><p>${x.p}</p></div>`});
+        html+='</div>';
+      } else if(s.t==='proof'){
+        html+='<div class="proof">';
+        s.stats.forEach(x=>{html+=`<div class="stat"><div class="n">${x.n}</div><div class="l">${x.l}</div></div>`});
+        html+='</div>';
+      } else if(s.t==='cta'){
+        html+=`<div class="cta-step">${s.step}</div>`;
+        html+=`<div class="disclaimer">${s.disclaimer}</div>`;
+      } else if(s.b){
+        html+='<ul>';s.b.forEach(x=>{html+=`<li>${x}</li>`});html+='</ul>';
+      }
+    }
+    d.innerHTML=html;
+    stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render()}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+});
+render();
+</script>
+</body>
+</html>
