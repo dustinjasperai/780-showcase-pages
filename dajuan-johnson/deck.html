@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Self-Booking Actor - a live masterclass with DaJuan Johnson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Nobile:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf8f2;
+    --panel:#ffffff;
+    --rule:#e4ddd0;
+    --ink:#1e365c;
+    --accent:#ffb000;
+    --dim:#5b6472;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Nobile',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .deck{
+    height:100vh;overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+  }
+  .slide{
+    position:relative;
+    min-height:100vh;
+    scroll-snap-align:start;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;
+    border-bottom:1px solid var(--rule);
+  }
+  /* self-tape slate motif: amber corner ticks + a record dot */
+  .slide::before,.slide::after{
+    content:"";position:absolute;width:26px;height:26px;pointer-events:none;
+    border-color:var(--accent);border-style:solid;border-width:0;
+  }
+  .slide::before{top:4.5vh;left:4.5vw;border-left-width:3px;border-top-width:3px}
+  .slide::after{bottom:4.5vh;right:4.5vw;border-right-width:3px;border-bottom-width:3px}
+  .rec{position:absolute;top:4.6vh;right:4.5vw;display:flex;align-items:center;gap:7px;
+    font-size:11px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+  .rec i{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+  .kicker{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:22px}
+  h1{font-family:'Abril Fatface',Georgia,serif;font-weight:400;line-height:1.02;
+    font-size:clamp(40px,7vw,86px);letter-spacing:-.01em;max-width:16ch}
+  h2{font-family:'Abril Fatface',Georgia,serif;font-weight:400;line-height:1.06;
+    font-size:clamp(30px,4.6vw,56px);max-width:18ch}
+  .sub{font-size:clamp(18px,2vw,24px);color:var(--dim);margin-top:26px;max-width:30ch;line-height:1.45}
+  .body{font-size:clamp(17px,1.7vw,22px);line-height:1.6;margin-top:26px;max-width:40ch;color:var(--ink)}
+  .presenter{margin-top:48px;font-size:15px;letter-spacing:.04em;color:var(--dim)}
+  .presenter b{color:var(--ink);font-weight:700}
+  ul{list-style:none;margin-top:30px;max-width:42ch}
+  li{position:relative;padding-left:30px;margin:16px 0;font-size:clamp(16px,1.7vw,21px);line-height:1.5}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:11px;
+    background:var(--accent);border-radius:2px}
+  .eq{font-family:'Abril Fatface',Georgia,serif;font-size:clamp(26px,3.6vw,46px);
+    line-height:1.2;max-width:20ch}
+  .eq span{color:var(--accent)}
+  .disclaimer{margin-top:40px;font-size:13px;line-height:1.5;color:var(--dim);max-width:46ch;
+    border-top:1px solid var(--rule);padding-top:18px}
+  .num{position:absolute;bottom:4.6vh;left:4.5vw;font-size:12px;letter-spacing:.14em;color:var(--dim)}
+  .cta-actions{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px}
+  .pill{display:inline-block;padding:14px 24px;border-radius:40px;font-weight:700;font-size:15px;
+    letter-spacing:.02em}
+  .pill.solid{background:var(--ink);color:var(--bg)}
+  .pill.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+  @media(max-width:640px){.slide{padding:8vh 8vw}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title',kicker:'A live masterclass',h:'The Self-Booking Actor',
+   sub:'How a working actor books from a self-tape, without waiting to be discovered.',
+   presenter:'with DaJuan Johnson, Think Bigger Coaching'},
+
+  {t:'who',h:'Who this is for',
+   bullets:['Trained actors who can act but are not booking enough',
+            'Actors who quietly dread the self-tape and rush it',
+            'Anyone waiting for a rep or a casting director to finally get them']},
+
+  {t:'trap',kicker:'The trap',h:'You were taught to audition. Nobody taught you to book.',
+   body:'The craft training ends at the scene. The part that actually decides the job, the tape you send from your living room, you were left to figure out alone.'},
+
+  {t:'reframe',kicker:'The reframe',h:'Nobody is coming to discover you.',
+   body:'The audition room moved into your home. The self-tape is now the one part of your career you own end to end. That is not the bad news. That is the opening.'},
+
+  {t:'part',kicker:'Part one',h:'Bookings are not a talent problem.'},
+
+  {t:'problem',h:'Where the booking leaks',
+   bullets:['You treat the tape as a test to pass, not a scene to live',
+            'You make the safe choice instead of the specific one',
+            'You send it, then you disappear']},
+
+  {t:'problem',h:'The first twenty seconds',
+   body:'Most tapes lose the room before the scene even starts, in the slate, the framing, and the energy of the first breath. Casting decides fast, so we make those seconds work for you.'},
+
+  {t:'part',kicker:'Part two',h:'The method: Focus, Preparation, Action.'},
+
+  {t:'pillar',kicker:'Focus',h:'Think Bigger',
+   body:'Rewrite the story from "please pick me" to "here is the work." You tape like the job is already yours, because the story you tell yourself shows up on camera.'},
+
+  {t:'pillar',kicker:'Preparation',h:'The BOOKED IT Self-Tape System',
+   body:'A repeatable setup and a clear way of making choices, so your tape reads like a booking and not an audition. The same system every time, so prep stops being a gamble.'},
+
+  {t:'pillar',kicker:'Action',h:'The self-booking loop',
+   body:'Tape, send, follow up, build your team. The actors who book are rarely the most talented in the room. They are the ones running the loop every single week.'},
+
+  {t:'synthesis',h:'The equation',
+   eq:'Focus <span>+</span> Preparation <span>+</span> Action <span>=</span> Success',
+   body:'Not a slogan, an order of operations. Mindset sets the choice, preparation makes it repeatable, and action compounds it into a career.'},
+
+  {t:'part',kicker:'Part three',h:'A week inside the system.'},
+
+  {t:'looks',h:'The self-booking week',
+   bullets:['Early week: a tape goes out with a specific, directed choice',
+            'Midweek: a short follow up that keeps you in the room',
+            'End of week: one new relationship added to your team, then repeat']},
+
+  {t:'looks',h:'Before and after',
+   body:'Before, you wait for the audition and then scramble. After, the tape is a process you trust, so the nerves move from "can I even do this" to "let me at it."'},
+
+  {t:'why',kicker:'Why me',h:'I still book this way.',
+   body:'I played a series regular on Bosch and Bosch: Legacy for seven seasons, and I recur on NCIS: Origins. This is not a theory I read somewhere. It is the system I run on my own tapes.'},
+
+  {t:'recap',h:'This is for you if',
+   bullets:['You are done waiting to be discovered',
+            'You want a system you actually control',
+            'You are ready to run the loop, not just take another class']},
+
+  {t:'step',kicker:'Your next step',h:'Stop running the loop alone.',
+   body:'The fastest way to make the system stick is a team around you. That is what the First Team Collective is for: the setup, the honest feedback, and the people who keep you taping.'},
+
+  {t:'cta',kicker:'Get started',h:'Join the First Team Collective.',
+   body:'Run the self-booking system with coaching, a community of working actors, and live monthly mentor sessions. If you want a personal career blueprint, apply for VIP coaching.',
+   disclaimer:'We can\'t guarantee any specific booking, representation, or career result. Results vary and depend on your own effort and circumstances. This masterclass is educational.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let html = '<div class="rec"><i></i>Rec</div>';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.t === 'title' || s.t === 'cta') {
+    html += '<h1>' + s.h + '</h1>';
+  } else {
+    html += '<h2>' + s.h + '</h2>';
+  }
+  if (s.sub) html += '<p class="sub">' + s.sub + '</p>';
+  if (s.eq) html += '<p class="eq">' + s.eq + '</p>';
+  if (s.body) html += '<p class="body">' + s.body + '</p>';
+  if (s.bullets) html += '<ul>' + s.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>';
+  if (s.cta_actions) {
+    html += '<div class="cta-actions"><span class="pill solid">' + s.cta_actions[0] +
+            '</span><span class="pill ghost">' + s.cta_actions[1] + '</span></div>';
+  }
+  if (s.presenter) html += '<p class="presenter"><b>' + s.presenter + '</b></p>';
+  if (s.disclaimer) html += '<p class="disclaimer">' + s.disclaimer + '</p>';
+  html += '<div class="num">' + String(i + 1).padStart(2, '0') + ' / ' +
+          String(S.length).padStart(2, '0') + '</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+document.addEventListener('keydown', e => {
+  const h = deck.clientHeight;
+  if (e.key === 'ArrowDown' || e.key === 'PageDown') { deck.scrollBy({top: h, behavior:'smooth'}); e.preventDefault(); }
+  if (e.key === 'ArrowUp' || e.key === 'PageUp') { deck.scrollBy({top: -h, behavior:'smooth'}); e.preventDefault(); }
+});
+</script>
+</body>
+</html>
