@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Out of Your Head, Into Your Life - a live masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3efe4; --panel:#e5ddca; --rule:#c9bca2; --ink:#2b2722; --accent:#99b2ec;
+    --muted:#6b6358;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Spectral',Georgia,serif;
+       -webkit-font-smoothing:antialiased;}
+  .deck{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+         padding:72px 76px;margin:26px 0;min-height:560px;display:flex;flex-direction:column;
+         justify-content:center;position:relative;box-shadow:0 10px 34px rgba(90,70,40,.07)}
+  .slide.panel{background:var(--panel)}
+  .kick{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:.22em;
+        text-transform:uppercase;font-size:14px;color:var(--accent);margin-bottom:22px}
+  h1,h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.015em;
+        line-height:1.05;color:var(--ink)}
+  h1{font-size:58px}
+  h2{font-size:40px;line-height:1.12}
+  .sub{font-size:24px;line-height:1.5;color:var(--muted);margin-top:24px;max-width:40ch}
+  .body{margin-top:28px;display:flex;flex-direction:column;gap:16px;max-width:52ch}
+  .body p{font-size:22px;line-height:1.55}
+  .row{display:flex;gap:18px;align-items:flex-start}
+  .dot{flex:none;width:12px;height:12px;border-radius:50%;background:var(--accent);margin-top:11px}
+  .num{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;color:var(--accent);
+       flex:none;width:2.2ch}
+  .quote{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:40px;line-height:1.22;
+         letter-spacing:-.01em;max-width:24ch}
+  .attr{margin-top:26px;font-size:18px;color:var(--muted);letter-spacing:.02em}
+  .rule{height:2px;width:64px;background:var(--accent);border:none;margin:0 0 30px}
+  .foot{margin-top:38px;font-size:16px;color:var(--muted);letter-spacing:.04em}
+  .note{margin-top:34px;font-size:15px;line-height:1.5;color:var(--muted);max-width:60ch;
+        border-top:1px solid var(--rule);padding-top:20px}
+  .big{font-size:66px;line-height:1.04}
+  .em{color:var(--accent)}
+  @media(max-width:640px){.slide{padding:44px 30px;min-height:auto}h1{font-size:40px}.big{font-size:44px}h2{font-size:30px}.quote{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'cover',k:'A live masterclass',h:'Out of Your Head, Into Your Life',s:'How to quiet a racing mind from the inside, using the intelligence of the whole body.',f:'The Embodied Present Process  /  with Philip Shepherd and Allyson Woodrooffe'},
+ {t:'big',k:'The promise',h:'In one live hour, you feel the shift.',s:'Not another idea about calm. A practice you can repeat tonight, and feel the difference in your body.'},
+ {t:'point',k:'Who this is for',h:'You help people for a living, or you want to.',body:['A coach, a therapist, a body worker, a leader, a parent, a healer.','People who have done the mindset work, read the books, tried the apps, and still feel the mind running the whole show.','You sense the body is holding something the head cannot reach. This hour is about reaching it.']},
+ {t:'big',k:'The reframe',h:'You do not have a thinking problem.',s:'You have a listening problem. And the part of you that knows how to listen has been quietly switched off.'},
+ {t:'point',k:'Part one  /  the problem',h:'Why thinking harder never brings calm',body:['The head runs on overdrive. Ask it to solve the restlessness it is causing and it only spins faster.','Our culture trained us to live almost entirely in the head, and to treat the body as something we drag around behind it.','So we try to think our way into presence. It is the one route that cannot work.']},
+ {t:'point',k:'Part one  /  the problem',h:'The sense you were trained to ignore',body:['There is a sense underneath thought: the felt sense of being whole, here, in this moment.','It is our primary sense, and almost every one of us was taught, gently and completely, to override it.','Getting it back is not a technique you add. It is a capacity you uncover.']},
+ {t:'framework',k:'Part two  /  the work',h:'Radical Wholeness',s:'Three principles that turn presence from an idea into something you can feel on command.'},
+ {t:'pillar',k:'Principle one',h:'Wholeness is already the truth',body:['You are not a mind piloting a body. You are one whole, and the whole is intelligent.','The work does not build wholeness. It removes what hides it.']},
+ {t:'pillar',k:'Principle two',h:'Sensing wholeness is your primary sense',body:['Beneath sight and sound there is the direct sense of being present and entire.','When it comes back online, calm is not something you reach for. It is the ground you are standing on.']},
+ {t:'pillar',k:'Principle three',h:'The culture disables that sense',body:['The restlessness is not a personal failing. It is trained in, and it can be trained out.','Naming how it happens is the first practice. You cannot un-see it once you feel it.']},
+ {t:'pillar',k:'The centre of the work',h:'Thinking with the whole body',body:['The West prized the head and dismissed the belly. Yet the pelvic bowl holds a deep, calm, integrative intelligence.','Uniting the quick intelligence of the head with the grounded intelligence of the body is where presence actually lives.']},
+ {t:'pillar',k:'The distinctive shift',h:'Listening through the body',body:['Most embodiment asks you to sit in your head and listen to your body.','We do the opposite. You drop beneath the head and listen to the world through the body. Everything changes from there.']},
+ {t:'quote',h:'Get out of your head and into your life.',s:'The whole of the work, in seven words.'},
+ {t:'framework',k:'Part three  /  in practice',h:'What this changes',s:'Presence is not a mood. It is a place you can learn to stand, on purpose, again and again.'},
+ {t:'point',k:'In your own life',h:'A quieter engine',body:['Decisions made from the whole body, not the spinning head.','Sleep that comes because the system has somewhere to settle, not because you finally wore yourself out.','A calm that does not depend on anything going right.']},
+ {t:'point',k:'In your work',h:'People feel the difference',body:['Clients can tell when you are present with them instead of thinking about them.','Facilitating from embodied presence does what no script can. The room settles because you have settled.','This is the ground the year-long training is built on.']},
+ {t:'cred',k:'Why me',h:'Philip Shepherd',body:['Internationally recognised authority on embodiment, and author of New Self, New World and Radical Wholeness.','More than two hundred original practices developed over decades to undo the patterning that pulls us up into the head.','Co-leading the year-long TEPP Facilitators Training with Allyson Woodrooffe.']},
+ {t:'big',k:'The invitation',h:'One hour. One shift. Live.',s:'Come to the live session, feel the practice in your own body, and see what a year of this could open.'},
+ {t:'point',k:'What happens in the hour',h:'Simple, and entirely practical',body:['We name the habit that keeps you in your head.','We practice the drop into the body, together, live.','You leave with one practice you can feel in ninety seconds and repeat on your own.']},
+ {t:'cta',k:'Your next step',h:'Come home to your body.',body:['Join the next live masterclass, then explore the year-long TEPP Facilitators Training if it calls you.','Apply at embodiedpresent.com.'],note:'This masterclass is educational. No specific outcome or result is guaranteed. Results vary and depend on your own practice and circumstances.'}
+];
+
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function bodyBlock(items,numbered){
+  var b=el('div','body');
+  items.forEach(function(it,i){
+    var r=el('div','row');
+    r.appendChild(el('div',numbered?'num':'dot',numbered?(i+1)+'':''));
+    r.appendChild(el('p',null,it));
+    b.appendChild(r);
+  });
+  return b;
+}
+var deck=document.getElementById('deck');
+S.forEach(function(s){
+  var panelTypes={framework:1,quote:1,cred:1};
+  var sl=el('section','slide'+(panelTypes[s.t]?' panel':''));
+  if(s.k) sl.appendChild(el('div','kick',s.k));
+  if(s.t==='quote'){
+    sl.appendChild(el('div','quote','&ldquo;'+s.h+'&rdquo;'));
+    if(s.s) sl.appendChild(el('div','attr',s.s));
+  } else if(s.t==='cover'){
+    sl.appendChild(el('h1',null,s.h));
+    if(s.s) sl.appendChild(el('div','sub',s.s));
+    if(s.f) sl.appendChild(el('div','foot',s.f));
+  } else if(s.t==='big'){
+    sl.appendChild(el('h1','big',s.h));
+    if(s.s) sl.appendChild(el('div','sub',s.s));
+  } else {
+    sl.appendChild(el('h2',null,s.h));
+    if(s.s) sl.appendChild(el('div','sub',s.s));
+    if(s.body) sl.appendChild(bodyBlock(s.body, s.t==='pillar'||s.t==='framework'?false:false));
+    if(s.note) sl.appendChild(el('div','note',s.note));
+  }
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
