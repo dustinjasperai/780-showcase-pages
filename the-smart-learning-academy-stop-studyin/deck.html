@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Learn Any Language Like a Polyglot — Luca Lampariello</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#201f1b;        /* ground: harvested dark scheme + #363636, warmed to ink */
+    --panel:#2a2824;
+    --rule:#403d36;      /* from harvested grey #b7b7b7 family, darkened for dark ground */
+    --ink:#efe7d7;       /* warm paper text */
+    --muted:#b7b0a0;
+    --accent:#c79a3e;    /* warm brass, asset-derived (see 01-deep-research ## Palette) */
+    --display:'Spectral', Georgia, serif;
+    --body:'Schibsted Grotesk', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 96px}
+  .slide{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:56px 56px 48px;
+    margin:0 0 26px;
+    min-height:430px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .num{position:absolute;top:22px;right:28px;font-family:var(--display);font-size:15px;color:var(--muted);letter-spacing:.14em}
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:600;font-size:60px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:42px;line-height:1.06;margin-bottom:20px}
+  .sub{font-family:var(--display);font-style:italic;font-weight:400;font-size:26px;color:var(--muted);margin-top:22px;line-height:1.3}
+  .by{margin-top:40px;font-size:15px;letter-spacing:.04em;color:var(--muted)}
+  .by b{color:var(--ink);font-weight:700}
+  p.lead{font-size:21px;line-height:1.5;color:var(--ink);max-width:40ch}
+  p.body{font-size:18px;line-height:1.6;color:var(--muted);max-width:52ch;margin-top:16px}
+  ul{list-style:none;margin-top:12px}
+  li{font-size:19px;line-height:1.5;color:var(--ink);padding-left:28px;position:relative;margin:14px 0;max-width:50ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:2px;background:var(--accent)}
+  .big{font-family:var(--display);font-size:46px;line-height:1.08;font-weight:500;max-width:22ch}
+  .big .hl{color:var(--accent)}
+  .section-title{font-family:var(--display);font-size:68px;font-weight:600}
+  .section-sub{font-size:19px;color:var(--muted);margin-top:16px;max-width:46ch;line-height:1.5}
+  /* bidirectional translation motif */
+  .cols{display:grid;grid-template-columns:1fr 44px 1fr;gap:0;align-items:center;margin-top:30px;max-width:640px}
+  .col{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:20px 22px;min-height:120px}
+  .col .lbl{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .col .txt{font-family:var(--display);font-size:22px;line-height:1.25;color:var(--ink)}
+  .arrow{text-align:center;font-family:var(--display);font-size:30px;color:var(--accent)}
+  .loop{margin-top:18px;font-size:15px;color:var(--muted);font-style:italic;font-family:var(--display)}
+  .cta-box{border-top:2px solid var(--accent);padding-top:26px;margin-top:8px}
+  .step{font-size:20px;line-height:1.5;color:var(--ink);margin:12px 0;padding-left:30px;position:relative;max-width:48ch}
+  .step .n{position:absolute;left:0;color:var(--accent);font-family:var(--display);font-size:22px;font-weight:600}
+  .disc{margin-top:34px;font-size:12.5px;line-height:1.55;color:var(--muted);max-width:60ch;border-top:1px solid var(--rule);padding-top:16px}
+  .foot{position:absolute;bottom:20px;left:56px;font-family:var(--display);font-size:14px;color:var(--muted);letter-spacing:.06em}
+  @media(max-width:720px){
+    .slide{padding:40px 28px 40px;min-height:auto}
+    h1{font-size:42px}.section-title{font-size:48px}h2{font-size:32px}.big{font-size:34px}
+    .cols{grid-template-columns:1fr;gap:12px}.arrow{transform:rotate(90deg)}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title',
+  kicker:'A live masterclass',
+  h1:'How to Learn Any Language Like a Polyglot',
+  sub:'The method behind speaking fourteen languages, and how to make it yours.',
+  by:'Presented live by <b>Luca Lampariello</b>'},
+
+ {t:'content',
+  kicker:'Who this is for',
+  h2:'You have studied for years. You still freeze when it is time to speak.',
+  list:['You can read and sort of follow a podcast, but the words will not come out of your mouth.',
+        'You have tried apps, classes, and flashcards, and you are still not fluent.',
+        'You suspect the problem is you. It is not.']},
+
+ {t:'reframe',
+  kicker:'The real problem',
+  big:'It was never your memory, your age, or some language gene. <span class="hl">Nobody ever taught you how to learn.</span>'},
+
+ {t:'section',
+  kicker:'Part one',
+  stitle:'Why studying stalls',
+  ssub:'Most methods pour information in. Almost none of them build the two things fluency actually requires.'},
+
+ {t:'content',
+  kicker:'The passive trap',
+  h2:'Recognizing a word is not the same as owning it.',
+  body:'Courses and apps grow your passive knowledge, the words you recognize when you see them. Speaking needs active knowledge, the words that arrive on their own when you need them. The gap between the two is where most learners get stuck for years.',
+  list:['Passive: you understand it when you read it.',
+        'Active: it comes out of your mouth without a pause.',
+        'The method has to convert one into the other on purpose.']},
+
+ {t:'content',
+  kicker:'The second trap',
+  h2:'You are still translating inside your head.',
+  body:'As long as every sentence makes a round trip through your native language, speaking stays slow and exhausting. The goal is not more vocabulary. The goal is to think directly in the language, so the round trip disappears.'},
+
+ {t:'section',
+  kicker:'Part two',
+  stitle:'The method',
+  ssub:'A small number of principles and one core exercise, the same ones behind every language I have learned.'},
+
+ {t:'bdt',
+  kicker:'The core exercise',
+  h2:'Bidirectional Translation',
+  intro:'Take a short, quality text at the right level. Then run it through a loop.',
+  leftlbl:'Target language',lefttxt:'The original text, as a native wrote it.',
+  rightlbl:'Your language',righttxt:'Your own translation of it.',
+  loop:'Translate it into your language, then back into the target, then compare your version to the original.'},
+
+ {t:'content',
+  kicker:'Why it works',
+  h2:'Every difference is a private lesson.',
+  body:'When your back-translation does not match the original, the gap is not a mistake to feel bad about. It is the exact grammar point or word you were missing, surfaced for you, in context. You fix what is actually weak instead of reviewing what you already know.',
+  list:['Run it on a short text every three to five days.',
+        'Lean on it hard in the first three to six months of a language.',
+        'It trains comprehension and production in the same motion.']},
+
+ {t:'content',
+  kicker:'The foundation',
+  h2:'The Five Learning Principles',
+  body:'Underneath the exercise sit five principles that make any method work. Once you can name them, you can judge any course, app, or teacher for yourself, and stop chasing the next shiny tool.',
+  list:['Learn from meaningful, comprehensible input, not word lists.',
+        'Work little and often, not in rare heroic bursts.',
+        'Build on what you already know in your other languages.',
+        'Make it enjoyable, because you will quit anything you dread.']},
+
+ {t:'content',
+  kicker:'Choose well once',
+  h2:'Your Language Learning Toolbox',
+  body:'Most learners collect ten half-used resources. A master picks the one resource that fits their level and goal, and uses it fully. The first decision, made well, saves you months.'},
+
+ {t:'content',
+  kicker:'Sound like yourself',
+  h2:'Phonetic Analysis',
+  body:'Before you drill grammar, you break the sounds of the language into their parts and train your ear and mouth on them. Authentic pronunciation is not a gift some people are born with. It is an early, trainable skill, and it changes how natives respond to you.'},
+
+ {t:'content',
+  kicker:'Make it stick',
+  h2:'Smart Review',
+  body:'Review is where most progress leaks away. Done right, reviewing what you already acquired stays challenging and even enjoyable, instead of rote repetition you avoid. The material compounds instead of fading.'},
+
+ {t:'content',
+  kicker:'The engine',
+  h2:'Build a routine you would not want to skip.',
+  body:'The learners who make it do not rely on willpower. They wrap the language around things they already love, their shows, their hobbies, their reading, until the daily habit feels less like studying and more like something they get to do.'},
+
+ {t:'section',
+  kicker:'Part three',
+  stitle:'Inside a real week',
+  ssub:'What the method looks like day to day, and why this is how I have done it for thirty years.'},
+
+ {t:'content',
+  kicker:'A week in the method',
+  h2:'Small, deliberate, repeatable.',
+  list:['A short text run through the translation loop, a few times a week.',
+        'A little phonetic work, so your ear keeps sharpening.',
+        'Real content you enjoy, every day, even ten minutes.',
+        'Smart Review of what you already have, so nothing slips.']},
+
+ {t:'content',
+  kicker:'Why me',
+  h2:'This is how I actually did it.',
+  body:'I have learned fourteen languages to a level I can live in, and I have coached learners one on one since 2011. None of it came from talent or a trick. It came from a repeatable method, the same one in this masterclass, and it works just as well for a complete beginner as it did for me.'},
+
+ {t:'cta',
+  kicker:'Your next language',
+  h2:'Make the method yours.',
+  steps:['Join Become a Master Language Learner and run the full method, module by module, with a live community.',
+         'Or work with me directly in one on one language coaching to build your personal plan.',
+         'Start with your next language, the right way, from the first week.'],
+  disc:'This masterclass is educational. Results depend on the time and effort each learner puts in, and no specific outcome, timeline, or level of fluency is promised or guaranteed.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const n=String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0');
+  let inner='';
+  if(s.t==='title'){
+    inner=`<div class="kicker">${s.kicker}</div><h1>${s.h1}</h1><div class="sub">${s.sub}</div><div class="by">${s.by}</div>`;
+  }else if(s.t==='reframe'){
+    inner=`<div class="kicker">${s.kicker}</div><div class="big">${s.big}</div>`;
+  }else if(s.t==='section'){
+    inner=`<div class="kicker">${s.kicker}</div><div class="section-title">${s.stitle}</div><div class="section-sub">${s.ssub}</div>`;
+  }else if(s.t==='bdt'){
+    inner=`<div class="kicker">${s.kicker}</div><h2>${s.h2}</h2><p class="body">${s.intro}</p>`+
+      `<div class="cols"><div class="col"><div class="lbl">${s.leftlbl}</div><div class="txt">${s.lefttxt}</div></div>`+
+      `<div class="arrow">&#8644;</div>`+
+      `<div class="col"><div class="lbl">${s.rightlbl}</div><div class="txt">${s.righttxt}</div></div></div>`+
+      `<div class="loop">${s.loop}</div>`;
+  }else if(s.t==='cta'){
+    let steps=s.steps.map((x,j)=>`<div class="step"><span class="n">${j+1}</span>${x}</div>`).join('');
+    inner=`<div class="kicker">${s.kicker}</div><div class="cta-box"><h2>${s.h2}</h2>${steps}</div><div class="disc">${s.disc}</div>`;
+  }else{
+    let b=s.body?`<p class="body">${s.body}</p>`:'';
+    let l=s.list?'<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>':'';
+    inner=`<div class="kicker">${s.kicker}</div><h2>${s.h2}</h2>${b}${l}`;
+  }
+  const foot=(s.t==='title')?'':`<div class="foot">Luca Lampariello</div>`;
+  deck.insertAdjacentHTML('beforeend',`<section class="slide"><div class="num">${n}</div>${inner}${foot}</section>`);
+});
+</script>
+</body>
+</html>
