@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Invisible 80% — A Facilitation Masterclass with Jean-Philippe Poupard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf8; --panel:#f3f1ea; --rule:#e6e3d8; --ink:#1a1a22;
+    --muted:#4b4b57; --accent:#2900dd; --spark:#f6e846;
+    --display:'Space Grotesk',system-ui,sans-serif; --body:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+    padding:64px 60px;margin:0 0 28px;min-height:520px;position:relative;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+  }
+  .slide .num{position:absolute;top:26px;right:30px;font-family:var(--display);
+    font-size:13px;letter-spacing:.14em;color:var(--muted);opacity:.7}
+  .kicker{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.05;
+    letter-spacing:-.02em;margin-bottom:22px}
+  h2{font-family:var(--display);font-weight:600;font-size:38px;line-height:1.1;
+    letter-spacing:-.01em;margin-bottom:20px}
+  h3{font-family:var(--display);font-weight:600;font-size:23px;margin:0 0 8px}
+  p{font-size:20px;line-height:1.55;color:var(--muted);max-width:40ch}
+  p.lead{font-size:23px;color:var(--ink)}
+  .big{font-size:30px;line-height:1.35;color:var(--ink);font-weight:500;max-width:30ch}
+  ul{list-style:none;margin:14px 0 0}
+  li{font-size:20px;line-height:1.5;color:var(--muted);padding-left:30px;position:relative;margin-bottom:12px;max-width:44ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;
+    border-radius:50%;background:var(--accent)}
+  .cols{display:flex;gap:40px;flex-wrap:wrap;margin-top:12px}
+  .col{flex:1;min-width:230px}
+  .mark{background:linear-gradient(transparent 62%,var(--spark) 62%);padding:0 2px}
+  .accent{color:var(--accent)}
+  .quote{font-family:var(--display);font-weight:500;font-size:32px;line-height:1.3;
+    color:var(--ink);max-width:28ch}
+  .cite{margin-top:18px;font-size:16px;color:var(--muted);letter-spacing:.04em}
+  /* process rail motif */
+  .rail{display:flex;align-items:center;gap:0;margin:34px 0 6px;flex-wrap:wrap}
+  .node{display:flex;flex-direction:column;align-items:center;flex:1;min-width:120px}
+  .dot{width:16px;height:16px;border-radius:50%;background:var(--accent);margin-bottom:10px}
+  .dot.hollow{background:var(--bg);border:2px solid var(--accent)}
+  .line{height:2px;background:var(--rule);flex:1;min-width:20px;margin-bottom:26px}
+  .node span{font-family:var(--display);font-size:14px;font-weight:500;color:var(--ink);text-align:center}
+  .bignum{font-family:var(--display);font-weight:700;font-size:120px;line-height:.9;
+    color:var(--accent);letter-spacing:-.03em}
+  .cardrow{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px}
+  .card{flex:1;min-width:220px;background:var(--panel);border-radius:14px;padding:26px 24px}
+  .card .n{font-family:var(--display);font-size:14px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:10px}
+  .foot{position:absolute;bottom:26px;left:60px;font-family:var(--display);font-size:13px;
+    letter-spacing:.1em;color:var(--muted);opacity:.75}
+  .disc{font-size:14px;line-height:1.5;color:var(--muted);max-width:60ch;margin-top:22px}
+  .title-slide{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .title-slide .kicker{color:var(--spark)}
+  .title-slide h1{color:var(--bg)}
+  .title-slide p{color:#cfcfe0}
+  .title-slide .num{color:#9a9ab0}
+  .title-slide .rail .line{background:#3a3a4a}
+  .title-slide .node span{color:var(--bg)}
+  @media(max-width:620px){
+    .slide{padding:44px 28px;min-height:auto}
+    h1{font-size:38px}h2{font-size:30px}.bignum{font-size:84px}.quote{font-size:26px}
+    .foot{left:28px}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A Facilitation Masterclass', h1:'The Invisible 80%',
+    sub:'Why great facilitation is posture and cadrage, not tools.',
+    by:'With Jean-Philippe Poupard, Formapart'},
+
+  {t:'audience', kicker:'Who this is for',
+    h2:'You want a room to actually decide.',
+    body:'For people stepping into facilitation: aspiring facilitators, managers and project leaders who have to turn a room full of opinions into a clear, shared decision, and want to do it with confidence.'},
+
+  {t:'trap', kicker:'The trap',
+    big:'You collected the tools. The sticky notes, the Miro board, the icebreakers, the voting dots. And the room still leaves without deciding anything.',
+    body:'More methods did not make it better. If anything, the workshop got busier and the decision got further away.'},
+
+  {t:'part', kicker:'The pattern', h2:'Busier is not better',
+    body:'The more activities you stack, the more energy goes into running them and the less goes into the one thing people came for: a decision they trust and will act on. Nobody books facilitation to admire the sticky notes.'},
+
+  {t:'reframe', kicker:'The reframe',
+    quote:'The problem was never your tools. It is the two invisible things no toolbox teaches you.',
+    cite:'Posture, and cadrage.'},
+
+  {t:'part', kicker:'Part one', h2:'The toolbox illusion',
+    body:'Most facilitation training sells you a bigger toolbox. The honest truth from more than fifteen years in the field is the opposite: the tools are the easy 20%. Simplicite plutot que complexite. What decides whether collective intelligence happens sits before and underneath the tools.'},
+
+  {t:'rail', kicker:'The whole intervention', h2:'Where the work really lives',
+    note:'A workshop runs along one arc. The tools sit on top of it. The 80% that decides the outcome sits underneath, in how you framed it and how you hold it.'},
+
+  {t:'part', kicker:'Part two, pillar one', h2:'La posture de facilitateur',
+    body:'The facilitator\'s inner stance: grounded, neutral, legitimate. It is "un art subtil d\'equilibre entre la posture, la maitrise technique du process et des outils." When your posture is solid, people feel safe enough to say the real thing, and that is the moment a room actually opens.',
+    foot:'Pillar 1 of 3'},
+
+  {t:'part', kicker:'Pillar one, under pressure', h2:'Steady when it goes sideways',
+    body:'Posture is what you fall back on when two people clash, when the senior voice shuts the room down, when the plan breaks in the first ten minutes. You do not reach for a new activity. You hold the space, stay neutral, and let the group find its way through. That calm is trained, not improvised.'},
+
+  {t:'bigstat', kicker:'Part two, pillar two', bignum:'80%',
+    h3:'Le cadrage', line:'"Un bon cadrage, c\'est 80% de la reussite d\'une intervention."',
+    body:'Most interventions fail before they start, not because the animation was weak, but because nobody cerned le bon sujet a traiter. Framing is where the outcome is won.',
+    foot:'Pillar 2 of 3'},
+
+  {t:'shift', kicker:'Pillar two, in practice', h2:'What cadrage actually changes',
+    cards:[
+      {n:'FROM', body:'Une reponse executante', to:'A strategic partner stance'},
+      {n:'FROM', body:'Un simple recueil d\'attentes', to:'A lucid, co-built frame'},
+      {n:'FROM', body:'Un mandat flou', to:'A clear, aligned mission'},
+    ],
+    note:'The scoping interview, the success factors, handling the client\'s objections. This is the quiet work that makes the day itself feel easy.'},
+
+  {t:'part', kicker:'Pillar two, the question', h2:'Frame the right question',
+    body:'Half the stuck workshops you will ever run were handed to you with the wrong question already baked in. Cadrage is how you catch that in the scoping conversation instead of in the room, and turn a vague mandate into a mission the group can actually move on.'},
+
+  {t:'part', kicker:'Part two, pillar three', h2:'Le process design',
+    body:'Only now do the tools arrive, and the discipline is matching each tool to the moment, not stacking activities. One clean arc, and the right method chosen for each step from a recueil de 80 methodes, techniques et outils.',
+    foot:'Pillar 3 of 3'},
+
+  {t:'railfull', kicker:'The arc', h2:'Inclusion to decision',
+    note:'Design the sequence first. Pick the method second. A workshop that follows the arc feels effortless to the people in it, which is exactly the point.'},
+
+  {t:'part', kicker:'Pillar three, the discipline', h2:'Pick the method second',
+    body:'A big toolbox is only dangerous when you reach for it first. When the arc is designed and the question is framed, choosing from the 80 methods becomes simple, because each moment already tells you what it needs. Fewer, better-placed tools beat more tools every time.'},
+
+  {t:'part', kicker:'And when the room is remote', h2:'Faciliter a distance',
+    body:'"Animer a distance, ce n\'est pas juste transposer le presentiel en visio." Posture on screen, technical mastery without overwhelming people, and sequences designed for attention, not just slides. The same two invisible things, harder to fake.'},
+
+  {t:'picture', kicker:'Part three', h2:'A ninety-minute decision',
+    body:'A strategy meeting that has stalled three times. Instead of reaching for a new tool, you reframe the question in the cadrage, hold a steady posture while it gets uncomfortable, and run one clean arc. The room decides in ninety minutes. Nobody notices the facilitation, which is the highest compliment it can get.'},
+
+  {t:'why', kicker:'Why learn this here', h2:'From the person who named the field in France',
+    body:'Jean-Philippe Poupard founded Formapart in 2009, the first French cabinet dedicated to facilitation, and wrote Devenir Facilitateur, the first French-language book on the profession. Formapart is Qualiopi and France Competences certified, with 14+ certified trainers across France, Switzerland, Germany and Reunion.',
+    stat:'Pioneer and reference figure of facilitation in France.'},
+
+  {t:'part', kicker:'The whole thing', h2:'Three things, in order',
+    body:'Hold a steady posture. Frame the right question. Design one clean arc and let the tools serve it. Get those three right and every method you already own finally starts to work. That order is the craft.'},
+
+  {t:'cta', kicker:'Your next step', h2:'Learn the invisible 80%',
+    body:'Posture and cadrage are learnable, and they are the fastest way to make every tool you already own finally work. The foundational training is Facilitation & Posture de facilitateur, the prerequisite to the full certifying parcours.',
+    cta:'Je souhaite me former pour devenir facilitateur.',
+    where:'formapart.fr',
+    disc:'Educational content only. Facilitation outcomes depend on context, group and practice; no specific result is promised or guaranteed. Formapart programs and certifications are described on formapart.fr.'},
+];
+
+const ARC = ['Inclusion','Divergence','Emergence','Convergence','Cloture'];
+
+function railHTML(hollowFrom){
+  let h='<div class="rail">';
+  ARC.forEach((a,i)=>{
+    const hollow = hollowFrom!=null && i>=hollowFrom ? ' hollow':'';
+    h+='<div class="node"><div class="dot'+hollow+'"></div><span>'+a+'</span></div>';
+    if(i<ARC.length-1) h+='<div class="line"></div>';
+  });
+  return h+'</div>';
+}
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const n=String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0');
+  let inner='<div class="num">'+n+'</div>';
+  if(s.kicker) inner+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){
+    inner+='<h1>'+s.h1+'</h1><p class="lead">'+s.sub+'</p>'+railHTML(null)+
+           '<p style="margin-top:14px">'+s.by+'</p>';
+  } else if(s.t==='audience'||s.t==='part'||s.t==='picture'||s.t==='why'||s.t==='shift'){
+    if(s.h2) inner+='<h2>'+s.h2+'</h2>';
+    if(s.body) inner+='<p class="lead">'+s.body+'</p>';
+    if(s.cards){
+      inner+='<div class="cardrow">';
+      s.cards.forEach(c=>{inner+='<div class="card"><div class="n">'+c.n+'</div><p style="margin-bottom:10px">'+c.body+'</p><h3 class="accent" style="font-size:19px">'+c.to+'</h3></div>';});
+      inner+='</div>';
+    }
+    if(s.note) inner+='<p style="margin-top:16px">'+s.note+'</p>';
+    if(s.stat) inner+='<p class="big" style="margin-top:18px"><span class="mark">'+s.stat+'</span></p>';
+  } else if(s.t==='trap'){
+    inner+='<p class="big">'+s.big+'</p><p style="margin-top:18px">'+s.body+'</p>';
+  } else if(s.t==='reframe'){
+    inner+='<p class="quote">'+s.quote+'</p><div class="cite accent">'+s.cite+'</div>';
+  } else if(s.t==='rail'){
+    if(s.h2) inner+='<h2>'+s.h2+'</h2>';
+    inner+=railHTML(null);
+    if(s.note) inner+='<p style="margin-top:16px">'+s.note+'</p>';
+  } else if(s.t==='railfull'){
+    if(s.h2) inner+='<h2>'+s.h2+'</h2>';
+    inner+=railHTML(null);
+    if(s.note) inner+='<p style="margin-top:16px">'+s.note+'</p>';
+  } else if(s.t==='bigstat'){
+    inner+='<div style="display:flex;gap:40px;align-items:center;flex-wrap:wrap">'+
+           '<div class="bignum">'+s.bignum+'</div>'+
+           '<div style="flex:1;min-width:260px"><h3 class="accent">'+s.h3+'</h3>'+
+           '<p class="big" style="margin:6px 0 14px;font-size:24px">'+s.line+'</p>'+
+           '<p>'+s.body+'</p></div></div>';
+  } else if(s.t==='cta'){
+    inner+='<h2>'+s.h2+'</h2><p class="lead">'+s.body+'</p>'+
+           '<p class="big accent" style="margin-top:20px">'+s.cta+'</p>'+
+           '<p style="margin-top:6px">'+s.where+'</p>'+
+           '<p class="disc">'+s.disc+'</p>';
+  }
+  if(s.foot) inner+='<div class="foot">'+s.foot+'</div>';
+  const cls='slide'+(s.t==='title'?' title-slide':'');
+  deck.insertAdjacentHTML('beforeend','<section class="'+cls+'">'+inner+'</section>');
+});
+</script>
+</body>
+</html>
