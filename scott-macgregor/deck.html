@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose Extraordinary - The Outlier Project Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfdf4;        /* their warm off-white ground (brand.json #fbfdf4) */
+    --panel:#ffffff;
+    --ink:#1c1c1c;       /* near-black ink (brand.json #1c1c1c) */
+    --muted:#55606a;
+    --accent:#32c0ed;    /* their dominant cyan (brand.json ranked_colors #1) */
+    --tint:#eaf7fc;
+    --rule:#e7e7e7;
+    --display:'Outfit',system-ui,sans-serif;
+    --body:'Manrope',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;animation:fade .4s ease}
+  .slide.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:.78rem;color:var(--accent);margin-bottom:1.1rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5.4vw,4rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.7rem,3.8vw,2.8rem);line-height:1.08;letter-spacing:-.01em}
+  p{font-size:clamp(1.05rem,1.7vw,1.4rem);line-height:1.5;color:var(--muted);max-width:46ch;margin-top:1.2rem}
+  p.lead{color:var(--ink);font-weight:500}
+  .big{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1.1;color:var(--ink);max-width:20ch}
+  .sub{font-size:1.05rem;color:var(--muted);margin-top:1.6rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem;max-width:860px}
+  .cell{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:1.5rem 1.6rem}
+  .cell .b{font-family:var(--display);font-weight:700;font-size:1.3rem;color:var(--accent)}
+  .cell p{margin-top:.5rem;font-size:1rem;max-width:34ch}
+  ul{margin-top:1.4rem;max-width:48ch;list-style:none}
+  li{position:relative;padding-left:1.5rem;margin:.7rem 0;font-size:1.1rem;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.55rem;height:.55rem;border-radius:50%;background:var(--accent)}
+  .accentbar{width:62px;height:6px;background:var(--accent);border-radius:4px;margin-bottom:1.6rem}
+  .credit{margin-top:2.2rem;font-size:1rem;color:var(--muted)}
+  .cta-box{background:var(--ink);color:#fff;border-radius:22px;padding:3rem;max-width:720px}
+  .cta-box h2{color:#fff}
+  .cta-box .accent{color:var(--accent)}
+  .cta-btn{display:inline-block;margin-top:1.6rem;background:var(--accent);color:#06222c;
+    font-family:var(--display);font-weight:700;padding:.9rem 1.8rem;border-radius:999px;font-size:1.1rem}
+  .disclaimer{margin-top:1.8rem;font-size:.82rem;color:#9aa6b0;max-width:60ch;line-height:1.5}
+  .dark{background:var(--ink);color:#fff}
+  .dark .kicker{color:var(--accent)}
+  .dark .big,.dark h1,.dark h2{color:#fff}
+  .dark p{color:#c3ccd3}
+  .nav{position:fixed;bottom:18px;right:22px;display:flex;gap:10px;align-items:center;z-index:10}
+  .nav button{font-family:var(--display);font-weight:500;border:1px solid var(--rule);background:var(--panel);
+    color:var(--ink);border-radius:999px;padding:.5rem .9rem;cursor:pointer;font-size:.95rem}
+  .count{position:fixed;bottom:22px;left:22px;font-family:var(--display);font-size:.8rem;color:var(--muted);z-index:10}
+  .brandline{position:fixed;top:22px;left:9vw;font-family:var(--display);font-weight:700;font-size:.85rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--accent);z-index:5}
+</style>
+</head>
+<body>
+<div class="brandline">The Outlier Project</div>
+<div id="deck"></div>
+<div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'content', k:'Who this is for',
+    h:'You are winning on paper and still on autopilot.',
+    p:'This is for founders, creators and high performers who have built real things, and who can feel they are running on someone else’s script. Successful, and quietly running with the herd.'},
+  {t:'dark',
+    big:'Ordinary is not a talent problem. It is a default.',
+    sub:'Nobody chooses ordinary on purpose. You drift into it, one unexamined year at a time.'},
+  {t:'content', k:'Today',
+    h:'The 60 minutes, mapped.',
+    list:['The fork: why extraordinary is a decision, not a gift','Influence over control, and why adversity is a gift','The Four B’s: a balanced operating system','Like-hearted rooms and the one-year contract']},
+  {t:'section', k:'Part One', h:'The core problem: the thundering herd'},
+  {t:'content', k:'The problem',
+    h:'Most people never actually choose.',
+    p:'They inherit a career, a schedule, a definition of success, and spend decades defending it. The herd is loud, comfortable, and moving in one direction. Choosing your own direction feels like a risk because almost nobody around you is doing it.'},
+  {t:'content', k:'The trap',
+    h:'Your role is not your value.',
+    p:'When your identity is welded to a title, every season of change reads as a threat instead of a choice. You protect the role instead of building the life. That is the quiet cost of running on default.'},
+  {t:'section', k:'Part Two', h:'Choose extraordinary'},
+  {t:'content', k:'The decision',
+    h:'Extraordinary is a choice you make again and again.',
+    p:'Not once, at a seminar. Daily, in small forks most people walk past. Anyone can be ordinary. We all have the power to choose to be extraordinary. The word that matters is choose.'},
+  {t:'content', k:'The practice',
+    h:'Influence what you can. Let go of the rest.',
+    p:'You do not control the market, the news, or other people. You do control four things: your attitude, your decisions, your behavior, and your energy. Outliers pour themselves into those four and stop bleeding out on the rest.'},
+  {t:'dark',
+    big:'Adversity is a gift.',
+    sub:'Victim mentality is seductive because it removes accountability. The reframe: where you are right now traces back to the decisions and choices you made. That is not blame. That is power.'},
+  {t:'section', k:'Part Two', h:'The Four B’s'},
+  {t:'grid', k:'The operating system',
+    h:'A whole life runs on four B’s.',
+    cells:[
+      {b:'Business',p:'Your craft and your work. Built on purpose, not just busyness.'},
+      {b:'Brain',p:'What you learn and how you think. Curiosity over certainty.'},
+      {b:'Buddies',p:'The people around you. Like-hearted, not just like-minded.'},
+      {b:'Body',p:'The vehicle for all of it. Energy is a strategy, not an afterthought.'}
+    ]},
+  {t:'content', k:'Buddies',
+    h:'Like-hearted beats like-minded.',
+    p:'The extraordinary people you admire probably were not the smartest in the room. They surrounded themselves with exceptional, like-hearted people and practiced gratitude as a default. Proximity rewrites your standards. Choose the room on purpose.'},
+  {t:'section', k:'Part Three', h:'What choosing looks like day to day'},
+  {t:'content', k:'The commitment model',
+    h:'The one-year contract.',
+    p:'Borrow it from pro sport. Each year you decide whether to re-sign with your role. Full engagement now, freedom to pivot later. You give this season everything without welding your identity to it, so growth never feels like betrayal.'},
+  {t:'content', k:'Why listen to me',
+    h:'I built my life around this, then a community around it.',
+    p:'I am Scott MacGregor, founder of The Outlier Project, a community of 700 plus members worldwide. I founded the talent firm SomethingNew, publish Outlier Magazine, and created the Standing O! gratitude book series. Everything here is what I actually practice.'},
+  {t:'cta',
+    h:'Choose extraordinary. On purpose.',
+    p:'If today landed, the next step is simple: come stand in a room full of people choosing the same thing, across all four B’s.',
+    btn:'Join The Outlier Project',
+    disc:'This masterclass is educational. No specific income, business, or personal result is guaranteed. Results vary and depend on your own effort and circumstances.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(s){return s}
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="slide"><div class="accentbar"></div>
+      <div class="kicker">A live masterclass</div>
+      <h1>Choose Extraordinary</h1>
+      <p class="lead">The operating system outliers use to build a life that does not run on autopilot.</p>
+      <div class="credit">With Scott MacGregor, founder of The Outlier Project</div></div>`;
+  }
+  if(s.t==='dark'){
+    return `<div class="slide dark"><div class="big">${s.big}</div><p class="sub">${s.sub}</p></div>`;
+  }
+  if(s.t==='section'){
+    return `<div class="slide"><div class="kicker">${s.k}</div><h2>${s.h}</h2></div>`;
+  }
+  if(s.t==='grid'){
+    const cells = s.cells.map(c=>`<div class="cell"><div class="b">${c.b}</div><p>${c.p}</p></div>`).join('');
+    return `<div class="slide"><div class="kicker">${s.k}</div><h2>${s.h}</h2><div class="grid">${cells}</div></div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide"><div class="cta-box"><div class="kicker">Your move</div>
+      <h2>${s.h.replace('extraordinary','<span class="accent">extraordinary</span>')}</h2>
+      <p style="color:#c3ccd3">${s.p}</p>
+      <span class="cta-btn">${s.btn}</span>
+      <div class="disclaimer">${s.disc}</div>
+      </div></div>`;
+  }
+  // content
+  const body = s.list
+    ? `<ul>${s.list.map(x=>`<li>${x}</li>`).join('')}</ul>`
+    : `<p>${s.p}</p>`;
+  return `<div class="slide"><div class="kicker">${s.k}</div><h2>${s.h}</h2>${body}</div>`;
+}
+deck.innerHTML = S.map(slideHTML).join('');
+const slides = Array.from(document.querySelectorAll('.slide'));
+let i = 0;
+document.getElementById('tot').textContent = slides.length;
+function show(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((el,idx)=>el.classList.toggle('on', idx===i));
+  document.getElementById('cur').textContent = i+1;
+}
+function go(d){show(i+d)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+});
+show(0);
+</script>
+</body>
+</html>
