@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Heart-Wall — A Live Masterclass with Dr. Bradley Nelson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1eefa; --panel:#fcfbff; --ink:#333333; --muted:#6b6b6b;
+    --rule:#ddd6ef; --accent:#473ba1; --accent2:#19ab7b;
+    --display:'Oswald',system-ui,sans-serif; --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;position:relative;
+    box-shadow:0 18px 50px rgba(71,59,161,.08);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;
+    justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:var(--display);font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;font-size:.8rem;color:var(--accent2);margin-bottom:1.1rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.2vw,3.4rem);
+    line-height:1.04;color:var(--accent);letter-spacing:.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,3.6vw,2.3rem);
+    line-height:1.1;color:var(--accent);margin-bottom:1rem}
+  p{font-size:clamp(1rem,1.7vw,1.22rem);line-height:1.6;color:var(--ink);max-width:40ch}
+  p.lead{font-size:clamp(1.15rem,2.1vw,1.5rem);color:var(--ink);max-width:34ch}
+  .sub{margin-top:1.2rem;color:var(--muted);font-size:1.05rem;max-width:42ch}
+  ul{margin-top:1.1rem;list-style:none;display:grid;gap:.7rem;max-width:44ch}
+  li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.7vw,1.18rem);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.7rem;height:.7rem;
+    border-radius:2px;background:var(--accent2)}
+  .grid6{margin-top:1.3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;max-width:46ch}
+  .cell{border:1px solid var(--rule);border-radius:8px;padding:.7rem .8rem;
+    font-family:var(--display);font-weight:500;font-size:.98rem;color:var(--accent)}
+  .cell span{display:block;font-family:var(--body);font-weight:400;font-size:.78rem;
+    color:var(--muted);margin-top:.15rem}
+  .wall{margin-top:1.3rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;max-width:40ch}
+  .brick{background:#f1eef9;border:1px solid var(--rule);border-radius:4px;padding:.5rem;
+    text-align:center;font-size:.8rem;color:var(--accent)}
+  .brick.off{background:transparent;border-style:dashed;color:var(--accent2);opacity:.65}
+  .byline{margin-top:1.6rem;font-family:var(--display);font-weight:500;letter-spacing:.04em;
+    color:var(--ink)}
+  .byline span{display:block;color:var(--muted);font-family:var(--body);font-weight:400;
+    font-size:.95rem;letter-spacing:0;margin-top:.2rem}
+  .disc{margin-top:1.4rem;font-size:.82rem;color:var(--muted);max-width:52ch;line-height:1.5}
+  .motif{position:absolute;left:8%;bottom:7%;height:3px;width:46px;background:var(--accent2)}
+  #nav{position:absolute;right:16px;bottom:12px;display:flex;align-items:center;gap:.6rem;
+    font-size:.82rem;color:var(--muted)}
+  button{font-family:var(--body);border:1px solid var(--rule);background:var(--bg);
+    color:var(--accent);border-radius:7px;padding:.35rem .7rem;cursor:pointer;font-size:.9rem}
+  button:hover{background:#f1eef9}
+  .count{min-width:48px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage" aria-live="polite"></div>
+<script>
+const S = [
+  {t:'title', kick:'A Live Masterclass with Dr. Bradley Nelson',
+    h:'The Heart-Wall',
+    lead:'The hidden barrier blocking your healing, and how to take it down.'},
+  {t:'content', kick:'Who this is for',
+    h:'You have done the work. And it is still there.',
+    sub:'For anyone who has read the books, talked it through, and still carries a heaviness they cannot name. And for anyone who wants to help others do the same.'},
+  {t:'content', kick:'The trap',
+    h:'We treat the symptom, not the source.',
+    pts:['The anxiety that comes back','The relationship that keeps repeating','The pain with no clear cause','The block you cannot think your way past']},
+  {t:'content', kick:'A different idea',
+    h:'What if it is not in your mind. It is in your body.',
+    sub:'The energy of past emotions can become trapped in the body, where it keeps shaping how you feel long after the moment has passed.'},
+  {t:'section', kick:'Part One', h:'Trapped emotions'},
+  {t:'content', kick:'Part One',
+    h:'What a trapped emotion is',
+    sub:'An intense emotional experience that was never fully processed can stay behind as a ball of energy, lodged in the body. It is not a memory. It is a physical charge that lingers.'},
+  {t:'content', kick:'Part One',
+    h:'How they add up',
+    pts:['Each unprocessed moment can leave one behind','They gather quietly over years','They influence mood, choices, and the body','We rarely connect them to how we feel today']},
+  {t:'section', kick:'Part Two', h:'The Heart-Wall'},
+  {t:'content', kick:'Part Two',
+    h:'How a Heart-Wall forms',
+    sub:'When emotional pain is too much, the body can build a wall of trapped emotions around the heart to protect it. In the moment it helps. Over time it shuts out the very connection we need.'},
+  {t:'wall', kick:'Part Two',
+    h:'A wall, brick by brick',
+    sub:'Each brick is a trapped emotion. The work is taking them down, one at a time.',
+    bricks:['anger','grief','fear','shame','anger','grief','fear','shame']},
+  {t:'content', kick:'Part Two',
+    h:'What a Heart-Wall quietly costs',
+    pts:['Harder to give and receive love','A sense of distance from others','Creativity and drive that feel capped','Feeling guarded without knowing why']},
+  {t:'content', kick:'Part Two',
+    h:'The tool: muscle testing',
+    sub:'Muscle testing is a simple way to ask the body yes or no questions and read the answer. It surfaces what talking alone often misses, so you can find the specific emotion that is trapped.'},
+  {t:'section', kick:'Part Three', h:'The method, in practice'},
+  {t:'content', kick:'Part Three',
+    h:'The Emotion Code release',
+    pts:['Identify the trapped emotion with muscle testing','Trace when and where it took hold','Release it, one emotion at a time','Let the body return to its natural balance']},
+  {t:'grid6', kick:'Part Three',
+    h:'Going deeper: the six imbalances',
+    sub:'The Body Code maps the root causes of physical and mental suffering into six categories.',
+    cells:[['Energetic','trapped emotions'],['Circuitry','energy pathways'],['Toxicity','what the body holds'],['Nutritional','what it lacks'],['Structural','bones and tissues'],['Pathogen','unwanted guests']]},
+  {t:'content', kick:'Part Three',
+    h:'And the stories underneath',
+    sub:'The Belief Code traces limiting beliefs through four layers of a faulty core belief system, down to the root, and replaces them with something that serves you.'},
+  {t:'content', kick:'Why this works',
+    h:'The body knows how to heal itself',
+    sub:'It simply cannot do it while the imbalance is in the way. This method is about finding what is blocking the natural process and removing it, so the body can do what it already knows.'},
+  {t:'content', kick:'Who is teaching this',
+    h:'Dr. Bradley Nelson',
+    byline:'Author of The Emotion Code and The Body Code',
+    sub:'Creator of the Emotion Code, Body Code, and Belief Code methods, taught to a worldwide community of certified practitioners.'},
+  {t:'content', kick:'What changes',
+    h:'When the wall comes down',
+    pts:['The heaviness lifts','Connection feels possible again','The body settles','You have a method you can use for life, or teach to others']},
+  {t:'cta', kick:'Your next step',
+    h:'Begin where thousands of healers began',
+    sub:'Start with the free Energy Healing Essentials course, then step into Emotion Code certification when you are ready.',
+    disc:'This masterclass is educational. It is not medical advice, and no result is promised or guaranteed. Individual results vary.'}
+];
+
+const stage = document.getElementById('stage');
+let i = 0;
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function render(){
+  let inner = '';
+  const s = S[i];
+  let body = '';
+  if(s.kick) body += '<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.t==='title'){ body += '<h1>'+esc(s.h)+'</h1>'; if(s.lead) body += '<p class="lead" style="margin-top:1.3rem">'+esc(s.lead)+'</p>'; }
+  else if(s.t==='section'){ body += '<h1 style="color:var(--accent2)">'+esc(s.h)+'</h1>'; }
+  else { if(s.h) body += '<h2>'+esc(s.h)+'</h2>'; }
+  if(s.lead && s.t!=='title') body += '<p class="lead">'+esc(s.lead)+'</p>';
+  if(s.pts){ body += '<ul>'; s.pts.forEach(p=>body+='<li>'+esc(p)+'</li>'); body += '</ul>'; }
+  if(s.cells){ body += '<div class="grid6">'; s.cells.forEach(c=>body+='<div class="cell">'+esc(c[0])+'<span>'+esc(c[1])+'</span></div>'); body += '</div>'; }
+  if(s.bricks){ body += '<div class="wall">'; s.bricks.forEach((b,n)=>body+='<div class="brick'+(n>=6?' off':'')+'">'+esc(b)+'</div>'); body += '</div>'; }
+  if(s.byline){ body += '<div class="byline">'+esc(s.byline)+'</div>'; }
+  if(s.sub) body += '<p class="sub">'+esc(s.sub)+'</p>';
+  if(s.disc) body += '<div class="disc">'+esc(s.disc)+'</div>';
+  inner = '<div class="slide on">'+body+'<div class="motif"></div></div>';
+  inner += '<div id="nav"><button onclick="go(-1)">Prev</button>'
+        +  '<span class="count">'+(i+1)+' / '+S.length+'</span>'
+        +  '<button onclick="go(1)">Next</button></div>';
+  stage.innerHTML = inner;
+}
+function go(d){ i = Math.max(0, Math.min(S.length-1, i+d)); render(); }
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') go(1); if(e.key==='ArrowLeft') go(-1); });
+render();
+</script>
+</body>
+</html>
