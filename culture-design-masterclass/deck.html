@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Culture by Design: a masterclass with Gustavo Razzetti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9ff; --panel:#f1eefe; --rule:#e2dbfb; --ink:#201a33;
+    --muted:#5d567a; --accent:#5815f8; --accent2:#f7941d; --white:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Nunito',system-ui,sans-serif;line-height:1.55}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{background:var(--white);border:1px solid var(--rule);border-radius:18px;
+    padding:46px 48px;margin:0 0 22px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(88,21,248,.04)}
+  .slide.cover{background:linear-gradient(140deg,#2b1370 0%,#5815f8 70%);color:#fff;border:none}
+  .slide.section{background:var(--panel)}
+  h1,h2,h3{font-family:'Poppins',sans-serif;line-height:1.12;margin:0 0 .4em}
+  h1{font-size:46px;font-weight:700;letter-spacing:-.5px}
+  h2{font-size:34px;font-weight:600;color:var(--accent)}
+  .cover h2{color:#fff}
+  h3{font-size:22px;font-weight:600}
+  .kicker{font-family:'Poppins';font-weight:600;text-transform:uppercase;
+    letter-spacing:.14em;font-size:13px;color:var(--accent);margin-bottom:14px}
+  .cover .kicker{color:#d9ccff}
+  p{font-size:19px;margin:.3em 0 .6em;color:var(--ink)}
+  .cover p{color:#efe9ff;font-size:21px}
+  .lede{font-size:23px;color:var(--muted)}
+  .big{font-size:38px;font-family:'Poppins';font-weight:600;line-height:1.2}
+  ul{margin:.4em 0;padding:0;list-style:none}
+  li{font-size:19px;margin:.5em 0;padding-left:30px;position:relative}
+  li:before{content:"";position:absolute;left:4px;top:11px;width:9px;height:9px;
+    border-radius:2px;background:var(--accent)}
+  .foot{margin-top:auto;padding-top:18px;font-size:13px;color:var(--muted);
+    font-family:'Poppins'}
+  .num{font-family:'Poppins';font-size:13px;color:var(--muted);margin-bottom:10px}
+  /* canvas grid motif */
+  .canvas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+  .cell{background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:16px 16px 14px}
+  .cell .lab{font-family:'Poppins';font-weight:600;font-size:13px;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+  .cell span{display:block;font-size:15px;color:var(--ink);margin:3px 0}
+  /* 2x2 */
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .q{border:1px solid var(--rule);border-radius:14px;padding:22px 22px;background:var(--panel)}
+  .q h3{color:var(--ink);margin-bottom:4px}
+  .q.hi{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .q.hi h3{color:#fff}
+  .q.hi p{color:#efe9ff}
+  .q p{font-size:16px;color:var(--muted);margin:0}
+  .stat{display:flex;gap:40px;flex-wrap:wrap;margin-top:18px}
+  .stat div{min-width:120px}
+  .stat b{font-family:'Poppins';font-size:40px;font-weight:700;color:var(--accent);display:block}
+  .stat span{font-size:15px;color:var(--muted)}
+  .disc{font-size:13px;color:var(--muted);margin-top:16px;line-height:1.5}
+  .cta-btn{display:inline-block;margin-top:18px;background:var(--accent);color:#fff;
+    font-family:'Poppins';font-weight:600;font-size:18px;padding:14px 30px;border-radius:999px}
+  @media(max-width:640px){.slide{padding:30px 22px}h1{font-size:34px}h2{font-size:26px}
+    .canvas{grid-template-columns:1fr 1fr}.big{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', kicker:'A live masterclass with Gustavo Razzetti',
+    h:'Culture by Design',
+    p:'How to map, read, and deliberately redesign your company culture on a single page, so you can fix what is actually broken instead of guessing.' },
+
+  {t:'who', kicker:'Who this is for',
+    h:'Leaders who can feel the culture slipping, but cannot point to why',
+    list:['Team leaders and senior executives who sense friction under the results',
+          'Founders scaling past the point where culture happened by accident',
+          'Org-development pros and consultants who need a tool, not another theory'],
+    foot:'If culture feels like a mood you cannot control, this session is for you.' },
+
+  {t:'content', kicker:'The trap', h:'Culture gets talked about everywhere and designed nowhere',
+    lede:'Most teams try to change culture with values posters, an engagement survey, and a bigger offsite. None of it sticks, because none of it starts with seeing the culture you actually have.' },
+
+  {t:'hook', big:'You cannot fix a culture you cannot see.',
+    p:'Before you change anything, you have to be able to look at your culture the way you look at a product: on one page, honestly, in full.' },
+
+  {t:'section', kicker:'Part one', h:'The real problem',
+    p:'Culture is not a vibe. It is a set of specific, observable building blocks, and almost nobody has ever mapped theirs.' },
+
+  {t:'content', kicker:'Why change fails', h:'Three quiet reasons culture work stalls',
+    list:['You are solving for symptoms (low morale, turnover) instead of the blocks underneath them',
+          'The whole team carries a different picture of "how we do things here", and none of them match',
+          'There is no shared language, so every conversation about culture turns vague and defensive'] },
+
+  {t:'section', kicker:'Part two', h:'The Culture Design Canvas',
+    p:'One page. Ten building blocks. A shared language that turns culture from a feeling into something you can read, assess, and redesign on purpose.' },
+
+  {t:'canvas', kicker:'The Core', h:'What the organization is built on',
+    cells:[ {lab:'Purpose', items:['Why we exist','The change we are here to make']},
+            {lab:'Core values', items:['The behaviors we stand for','What we will not trade away']},
+            {lab:'Priorities', items:['What matters most right now','Where focus actually goes']},
+            {lab:'Behaviors', items:['What gets rewarded','What gets quietly punished']} ] },
+
+  {t:'canvas', kicker:'The Emotional culture', h:'How it feels to work here',
+    cells:[ {lab:'Psychological safety', items:['Can people speak up','Is it safe to be wrong']},
+            {lab:'Feedback', items:['How candor travels','Up, down and sideways']},
+            {lab:'Team rituals', items:['The habits that bond us','How we mark moments']} ] },
+
+  {t:'canvas', kicker:'The Functional culture', h:'How the work actually gets done',
+    cells:[ {lab:'Rules and norms', items:['Written and unwritten','What is really expected']},
+            {lab:'Meetings', items:['How we spend time together','Decisions or theater']},
+            {lab:'Decision-making', items:['Who decides what','How fast and how clear']} ] },
+
+  {t:'content', kicker:'The shorthand', h:'The ABCs of a healthy culture',
+    list:['Alignment, so everyone is pulling toward the same purpose',
+          'Belonging, so people feel safe enough to do their best work',
+          'Collaboration, so the work flows across the team instead of stalling'],
+    foot:'Map the ten blocks and you can see at a glance where Alignment, Belonging, or Collaboration is leaking.' },
+
+  {t:'section', kicker:'Part two, continued', h:'Four types of culture',
+    p:'When you plot where a team really sits, every culture lands in one of four places. Most leaders are not where they think they are.' },
+
+  {t:'quad', kicker:'Which one is yours',
+    h:'The four cultures',
+    quads:[ {k:'Tribal', d:'Loyal and close, but inward and slow to adapt'},
+            {k:'Fearful', d:'Playing not to lose; silence, politics, hidden problems'},
+            {k:'Aggressive', d:'Driven and competitive, but it burns people out'},
+            {k:'Fearless', d:'Safe enough to be candid, bold enough to grow', hi:true} ] },
+
+  {t:'hook', big:'The goal is not comfort. It is a Fearless culture.',
+    p:'A place safe enough that people tell the truth, and bold enough that they take real swings. That is the culture you can design toward, block by block.' },
+
+  {t:'content', kicker:'The unsaid', h:'The Stinky Fish on the table',
+    lede:'Every team is carrying fears and tensions nobody says out loud. Left alone they rot. Named together, in a safe room, they lose their power. There is a simple way to surface them, and it changes the conversation instantly.' },
+
+  {t:'section', kicker:'Part three', h:'Your culture, mapped and moving',
+    p:'Not a theory session. A working map of your culture and a short list of the moves that matter most.' },
+
+  {t:'content', kicker:'What you walk away with', h:'By the end of the session',
+    list:['Your current culture mapped on the Canvas, across all ten blocks',
+          'A clear read on which of the four types you are actually in today',
+          'The one or two gaps to fix first, chosen for impact and speed, not guesswork'] },
+
+  {t:'cred', kicker:'Why learn this here', h:'The Canvas is already proven',
+    p:'The Culture Design Canvas is the tool, and this is the person who built it.',
+    stats:[ {n:'500,000+', l:'professionals and consultants who use the Canvas'},
+            {n:'50+', l:'countries where it is in use'},
+            {n:'4', l:'books on culture and change'} ],
+    foot:'Gustavo Razzetti, creator of the Culture Design Canvas. Work featured in the New York Times, Forbes, BBC and Fortune.' },
+
+  {t:'cta', kicker:'Your next step',
+    h:'Design your culture on purpose',
+    p:'If you want to map your team on the Culture Design Canvas and build toward a Fearless culture, the next live Masterclass is the place to start. Bring your real team, leave with your real map.',
+    btn:'Join the next Culture Design Masterclass',
+    disc:'Educational content only. No specific business, income, or culture-change result is guaranteed; outcomes vary with your team, context, and the work you put in.' }
+];
+
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  const d=document.getElementById('deck');
+  S.forEach(function(s,i){
+    const el=document.createElement('section');
+    el.className='slide '+(s.t==='cover'?'cover':(s.t==='section'?'section':''));
+    let html='';
+    if(s.t!=='cover'){ html+='<div class="num">'+(i+1)+' / '+S.length+'</div>'; }
+    if(s.kicker){ html+='<div class="kicker">'+esc(s.kicker)+'</div>'; }
+    if(s.h){ html+='<h1>'+esc(s.h)+'</h1>'; }
+    if(s.big){ html+='<div class="big">'+esc(s.big)+'</div>'; }
+    if(s.lede){ html+='<p class="lede">'+esc(s.lede)+'</p>'; }
+    if(s.p){ html+='<p>'+esc(s.p)+'</p>'; }
+    if(s.list){ html+='<ul>'+s.list.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'; }
+    if(s.cells){ html+='<div class="canvas">'+s.cells.map(function(c){
+        return '<div class="cell"><div class="lab">'+esc(c.lab)+'</div>'+
+          c.items.map(function(it){return '<span>'+esc(it)+'</span>';}).join('')+'</div>';
+      }).join('')+'</div>'; }
+    if(s.quads){ html+='<div class="quad">'+s.quads.map(function(q){
+        return '<div class="q'+(q.hi?' hi':'')+'"><h3>'+esc(q.k)+'</h3><p>'+esc(q.d)+'</p></div>';
+      }).join('')+'</div>'; }
+    if(s.stats){ html+='<div class="stat">'+s.stats.map(function(st){
+        return '<div><b>'+esc(st.n)+'</b><span>'+esc(st.l)+'</span></div>';
+      }).join('')+'</div>'; }
+    if(s.btn){ html+='<div><span class="cta-btn">'+esc(s.btn)+'</span></div>'; }
+    if(s.disc){ html+='<div class="disc">'+esc(s.disc)+'</div>'; }
+    if(s.foot){ html+='<div class="foot">'+esc(s.foot)+'</div>'; }
+    el.innerHTML=html;
+    d.appendChild(el);
+  });
+}
+render();
+</script>
+</body>
+</html>
