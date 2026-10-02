@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Calm Reset: a reactive-dog masterclass by Lizzy Sonoda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8f4ef;      /* lizzysonoda.com dominant ground (105 uses) */
+    --panel:#efe6da;   /* derived deeper cream */
+    --rule:#e3d6c6;    /* derived hairline */
+    --ink:#4b3f39;     /* lizzysonoda.com dominant text (119 uses) */
+    --muted:#8a7a6e;   /* derived from ink */
+    --accent:#d4907e;  /* lizzysonoda.com dusty rose (6 uses) */
+    --calm:#a4bcc2;    /* lizzysonoda.com sage (2 uses) */
+    --camel:#c9aa8c;   /* lizzysonoda.com camel (8 uses) */
+    --display:'Libre Baskerville',Georgia,serif;
+    --text:'Almarai',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--text);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);
+    border-radius:18px;padding:60px 64px;margin:0 0 28px;min-height:540px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(75,63,57,.03),0 18px 40px -28px rgba(75,63,57,.35);
+    overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .slide.sec::before{background:var(--calm)}
+  .slide.cta::before{background:var(--camel)}
+  .num{position:absolute;right:26px;top:22px;font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+  .kick{font-family:var(--text);font-weight:800;letter-spacing:.17em;text-transform:uppercase;font-size:12.5px;color:var(--accent);margin-bottom:20px}
+  .slide.sec .kick{color:#6f8f96}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-family:var(--display);font-weight:700;font-size:34px;line-height:1.16;margin-bottom:20px}
+  .sub{font-family:var(--display);font-style:italic;font-size:21px;color:var(--muted);line-height:1.45;margin-bottom:14px;max-width:40ch}
+  p.body{font-size:18.5px;line-height:1.62;margin-bottom:14px;max-width:60ch;color:#5c4e46}
+  ul{list-style:none;margin:8px 0 6px}
+  li{font-size:18px;line-height:1.5;margin:0 0 14px;padding-left:30px;position:relative;max-width:62ch;color:#5c4e46}
+  li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;border-radius:3px;background:var(--accent);transform:rotate(45deg)}
+  .slide.sec li::before{background:var(--calm)}
+  li b{color:var(--ink);font-weight:800}
+  .phase{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .chip{flex:1 1 180px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 20px}
+  .chip .n{font-family:var(--display);font-size:15px;color:var(--accent);font-weight:700;letter-spacing:.08em}
+  .chip h3{font-family:var(--display);font-size:21px;margin:4px 0 8px;font-weight:700}
+  .chip p{font-size:15px;line-height:1.5;color:#5c4e46}
+  .note{margin-top:22px;font-size:14.5px;color:var(--muted);line-height:1.5;max-width:64ch}
+  .by{margin-top:30px;font-size:16px;color:var(--ink);font-weight:700}
+  .by span{display:block;font-weight:400;color:var(--muted);font-size:14.5px;margin-top:3px}
+  .cta .btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;font-weight:800;
+    font-size:17px;padding:16px 30px;border-radius:40px;letter-spacing:.01em}
+  .disc{margin-top:26px;font-size:12.5px;color:var(--muted);line-height:1.55;max-width:70ch;border-top:1px solid var(--rule);padding-top:16px}
+  .lead{font-family:var(--display);font-size:24px;line-height:1.4;color:var(--ink);max-width:46ch;margin-bottom:10px}
+  @media(max-width:640px){.slide{padding:40px 26px;min-height:auto}h1{font-size:36px}h2{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title',
+   kick:'A live masterclass for dog parents',
+   h:'The Calm Reset',
+   sub:'Why your reactive dog is not being stubborn, and the real path from chaos to calm.',
+   by:'Lizzy Sonoda', byline:'Pawsitive Vibes Training'},
+
+  {t:'content',
+   kick:'Who this is for',
+   h:'You love your dog. The walks are wrecking you.',
+   body:['This is for you if your dog barks, lunges, or melts down at other dogs, people, or cars, and you have started planning your whole day around avoiding the trigger.',
+         'The 6am walks so nobody is out. Crossing the street before they see the other dog. The pit in your stomach every time a leash appears around the corner.'],
+   note:'You are not a bad owner, and your dog is not a bad dog. You just have not been given the piece that actually changes it.'},
+
+  {t:'content',
+   kick:'The trap',
+   h:'The usual advice makes a reactive dog worse.',
+   list:['<b>"Just socialize them more."</b> More exposure to the thing they are scared of, with no plan, is not socializing. It is flooding, and it deepens the fear.',
+         '<b>"Correct the behavior."</b> Punishing the bark teaches the dog that the trigger predicts something bad. The emotion underneath gets stronger, not weaker.',
+         '<b>Group obedience class.</b> A room full of triggers is the last place a reactive dog can learn anything.'],
+   note:'Every one of these targets the behavior you can see. None of them touch the reason it is happening.'},
+
+  {t:'sec',
+   kick:'The reframe',
+   h:'Reactivity is not a training problem. It is a nervous-system problem.',
+   lead:'A dog over its stress threshold cannot learn. Full stop.',
+   body:['When your dog is barking and lunging, the thinking part of its brain is offline. It is in survival mode. Asking it to "sit" in that moment is like handing someone a worksheet mid-panic attack.',
+         'So the first job was never obedience. The first job is helping the dog feel safe enough to think again.']},
+
+  {t:'content',
+   kick:'Part one, the dog',
+   h:'What is really happening on the walk',
+   list:['<b>Threshold.</b> There is a distance at which your dog notices a trigger but can still think. Past it, the brain floods and learning stops.',
+         '<b>Trigger stacking.</b> Stress does not reset between events. Three small scares before noon and a normally fine dog explodes at something tiny.',
+         '<b>The recovery window.</b> Stress hormones can take days to clear. A rough walk on Monday is still in the body on Tuesday.'],
+   note:'My mindset shift with my own reactive dog, Bella: I can have empathy for her without agreeing with her fear.'},
+
+  {t:'content',
+   kick:'Part one, you',
+   h:'Your dog is reading you before it reads the trigger',
+   body:['Dogs feel the leash tighten. They hear your breath catch. They watch you brace. To a dog already scanning for danger, that is confirmation the danger is real.',
+         'Calm is contagious. So is panic. Half of the reset is yours, and almost no training program tells owners that out loud.'],
+   note:'This is why drills on a quiet field fall apart the second a real dog appears. The missing variable was never the dog alone.'},
+
+  {t:'sec',
+   kick:'Part two, the method',
+   h:'Lifestyle Training',
+   lead:'Calm is not built in sessions. It is built into the day.',
+   body:['With Bella I stopped running structured training blocks and started changing the ordinary moments instead: the way I walked through the door, the way I set up the space, the way I responded when things got loud.',
+         'That is Lifestyle Training. The dog is not practicing calm for twenty minutes. The dog is living it.']},
+
+  {t:'content',
+   kick:'Part two, the lens',
+   h:'The Three Alignments',
+   list:['<b>Lifestyle Alignment.</b> Sleep, daily structure, and real fulfillment. A chronically under-rested, under-met dog has no calm to spend.',
+         '<b>Training Style Alignment.</b> Matching the method to the dog in front of you, not a one-size script.',
+         '<b>Learning Style Alignment.</b> Teaching in the way your specific dog actually takes information in.'],
+   note:'When reactivity will not budge, it is almost always one of these three that is out of line.'},
+
+  {t:'content',
+   kick:'Part two, the structure',
+   h:'The Four Pillars',
+   list:['<b>Management.</b> Set the environment so your dog is not rehearsing the meltdown while you work on it.',
+         '<b>Desensitization.</b> Change how the dog feels about the trigger, at a distance it can handle.',
+         '<b>Leash Walking.</b> The walk is the hardest arena, so it gets its own system.',
+         '<b>Lifestyle.</b> The daily foundation that holds the other three up.']},
+
+  {t:'sec',
+   kick:'Part two, the roadmap',
+   h:'The 90-day path: four phases',
+   phases:[
+     {n:'Phase 1',h:'Reset',p:'Lower stress and regulate the nervous system so your dog can actually learn.'},
+     {n:'Phase 2',h:'Build',p:'Create the daily routines and foundational skills that calm stands on.'},
+     {n:'Phase 3',h:'Manage',p:'Handle triggers in real, unpredictable, real-world moments.'},
+     {n:'Phase 4',h:'Rewire',p:'Change your dog\'s emotional response so the trigger stops being a threat.'}
+   ]},
+
+  {t:'content',
+   kick:'Phase 1',
+   h:'Reset: regulate before you train',
+   body:['Before a single behavior drill, we bring the dog back under threshold and keep it there: decompression, sleep, sniffing, a nervous-system reset protocol, and a few days where nothing scary is on the schedule.',
+         'A regulated dog is a dog that can learn. This phase is the one everyone skips, and it is why everyone gets stuck.']},
+
+  {t:'content',
+   kick:'Phase 2',
+   h:'Build: the daily foundation',
+   body:['Now we add structure the dog can rely on: predictable routines, a short list of foundational skills, and daily-structure templates so calm has a shape instead of being a mood you hope for.',
+         'Predictability is safety. A dog that knows what the day holds has less to brace against.']},
+
+  {t:'content',
+   kick:'Phase 3',
+   h:'Manage: the real world, on purpose',
+   body:['This is the walk, the doorway, the surprise dog around the corner. We work the trigger at a distance your dog can handle and build up, so reactive moments become practice instead of setbacks.',
+         'You stop bracing for the explosion because you finally have a plan for the exact moment it used to happen.']},
+
+  {t:'content',
+   kick:'Phase 4',
+   h:'Rewire: change the feeling, not just the behavior',
+   body:['The finish line is not a dog that white-knuckles past a trigger. It is a dog that sees the trigger and feels something closer to "that is fine."',
+         'Through desensitization done at the right distance and pace, the trigger stops predicting fear and starts predicting calm. The behavior changes because the emotion underneath it did.']},
+
+  {t:'content',
+   kick:'Life after the reset',
+   h:'An ordinary Tuesday, eventually',
+   body:['You walk out the door without the door becoming an event. You see a dog across the street and your dog notices, checks in with you, and keeps walking.',
+         'Not perfect. Not cured. Just a dog that can live in the real world with you, and an owner who is not holding their breath the whole time.'],
+   note:'Calm is not a trick your dog performs. It is a life the two of you can actually have.'},
+
+  {t:'content',
+   kick:'Why me',
+   h:'I built this on my own reactive dog',
+   body:['I spent years as a marine mammal trainer, then came home every night to Bella, my reactive dog, and it felt like a second job I was failing at.',
+         'Lifestyle Training is what got us out, and it is now the Chaos to Calm method I teach dog parents inside a community of thousands who are walking the same road.'],
+   by:'Lizzy Sonoda', byline:'Pawsitive Vibes Training'},
+
+  {t:'content',
+   kick:'Start this week',
+   h:'Three things you can do before we ever talk',
+   list:['<b>Add distance.</b> Find the range where your dog notices a trigger but can still take a treat. Work there, not closer.',
+         '<b>Protect recovery.</b> After a rough walk, give a few low-demand, high-sniff days. Let the stress hormones clear.',
+         '<b>Watch your own leash hand.</b> Loosen it, breathe out, and let your dog feel that you are not scared.'],
+   note:'Small, but this is the nervous-system-first order the whole method runs on.'},
+
+  {t:'cta',
+   kick:'Your next step',
+   h:'Ready to start your dog\'s reset?',
+   body:['If this is the missing piece, the full 4-phase path lives inside Chaos to Calm, my step-by-step program for reactive dogs, with the templates, the trigger plan, and a community walking it with you.'],
+   btn:'Join the Calm Reset with Lizzy',
+   disc:'Educational content only. Every dog and situation is different, and no specific training outcome or timeline is guaranteed. Results vary based on your dog, your consistency, and your circumstances. This masterclass does not replace in-person help for serious aggression or safety concerns.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide '+(s.t==='sec'?'sec':s.t==='cta'?'cta':'');
+  let h='<span class="num">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</span>';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='title'){ h+='<h1>'+s.h+'</h1>'; if(s.sub)h+='<div class="sub">'+s.sub+'</div>'; }
+  else { if(s.h)h+='<h2>'+s.h+'</h2>'; }
+  if(s.lead) h+='<div class="lead">'+s.lead+'</div>';
+  if(s.body) s.body.forEach(p=>h+='<p class="body">'+p+'</p>');
+  if(s.list){ h+='<ul>'; s.list.forEach(li=>h+='<li>'+li+'</li>'); h+='</ul>'; }
+  if(s.phases){ h+='<div class="phase">'; s.phases.forEach(p=>h+='<div class="chip"><div class="n">'+p.n+'</div><h3>'+p.h+'</h3><p>'+p.p+'</p></div>'); h+='</div>'; }
+  if(s.note) h+='<div class="note">'+s.note+'</div>';
+  if(s.btn) h+='<div><span class="btn">'+s.btn+'</span></div>';
+  if(s.by) h+='<div class="by">'+s.by+'<span>'+(s.byline||'')+'</span></div>';
+  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
