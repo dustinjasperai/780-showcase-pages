@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Shift — Align the Four Fs | The Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0e;        /* near-black ground (brand dark scheme + #000000) */
+    --panel:#16161a;     /* raised panel */
+    --rule:#2b2b31;      /* hairline rule */
+    --ink:#f3f1ea;       /* warm off-white */
+    --muted:#a7a49b;     /* muted body */
+    --accent:#e2c360;    /* brand gold, verbatim from brand.json button/link */
+    --display:'Black Ops One', system-ui, sans-serif;
+    --body:'Barlow', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kick{font-family:var(--display);font-size:.8rem;letter-spacing:.22em;color:var(--accent);text-transform:uppercase}
+  h1{font-family:var(--display);font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.02;margin:.5rem 0}
+  h2{font-family:var(--display);font-size:clamp(1.7rem,4vw,2.9rem);line-height:1.08;margin:.3rem 0 .8rem}
+  .sub{font-size:clamp(1.05rem,2vw,1.35rem);color:var(--muted);max-width:40ch;line-height:1.5}
+  .lede{font-size:clamp(1.15rem,2.2vw,1.6rem);line-height:1.5;max-width:46ch;margin-top:.6rem}
+  .big{font-family:var(--display);font-size:clamp(2.2rem,5.5vw,4rem);line-height:1.05}
+  p+p{margin-top:.9rem}
+  .rule{height:2px;width:72px;background:var(--accent);margin:1.2rem 0;border:0}
+  .grid{display:grid;gap:1rem;margin-top:1.4rem}
+  .grid.two{grid-template-columns:1fr 1fr}
+  .grid.four{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem}
+  .card .l{font-family:var(--display);color:var(--accent);font-size:1rem;letter-spacing:.06em}
+  .card .t{color:var(--muted);font-size:.98rem;margin-top:.45rem;line-height:1.45}
+  .pillar{font-family:var(--display);color:var(--accent);font-size:1.3rem}
+  .foot{position:fixed;left:7vw;right:7vw;bottom:3.2vh;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.78rem;border-top:1px solid var(--rule);padding-top:.7rem}
+  .foot b{color:var(--ink);font-weight:600}
+  .brandmark{font-family:var(--display);color:var(--ink);letter-spacing:.14em;font-size:.82rem}
+  .note{color:var(--muted);font-size:.86rem;max-width:62ch;line-height:1.5;margin-top:1.2rem}
+  .nav{position:fixed;right:3vw;bottom:3vh;display:flex;gap:.4rem;z-index:5}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:.5rem .8rem;font-family:var(--body);font-size:1rem;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+  .list{margin-top:1rem;list-style:none}
+  .list li{padding:.55rem 0;border-bottom:1px solid var(--rule);color:var(--ink);font-size:1.08rem}
+  .list li b{color:var(--accent);font-family:var(--display);font-weight:400;margin-right:.5rem}
+  .cta-box{background:var(--panel);border:1px solid var(--accent);border-radius:14px;padding:1.6rem 1.8rem;margin-top:1.4rem;max-width:44ch}
+  .cta-box .step{font-family:var(--display);color:var(--accent);font-size:1.2rem}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="foot"><span class="brandmark">THE PROGRAM</span><span>The Shift &nbsp;&middot;&nbsp; <b>with Nick Alfano</b></span></div>
+<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title',
+   kick:"A live masterclass for men in business",
+   h:"Align, Don't Balance",
+   sub:"How high-performing men lock faith, family, fitness and finance into one system that compounds, instead of trading one for another."},
+
+  {t:'who',
+   kick:"Who this is for",
+   h:"The man who is winning on paper",
+   lede:"You built the business. The revenue is real. And still, something is off. You are doing well enough, and a quieter voice keeps telling you that you were built for more."},
+
+  {t:'trap',
+   kick:"The trap",
+   h:"You optimized the business. It took everything else.",
+   body:["The calendar fills with other people's priorities. Home starts to feel like a hotel you check into. The workouts, the faith, the presence, all of it gets borrowed against to make the number.",
+         "Nobody warns you that the cost of scaling one area is usually paid quietly by the other three."]},
+
+  {t:'reframe',
+   kick:"The reframe",
+   big:"Balance is a lie.",
+   lede:"You do not balance four things you actually care about. Balance means something is always being set down. The men who last do not balance the four Fs. They align them so each one feeds the others."},
+
+  {t:'part',
+   kick:"Part one",
+   h:"Success without alignment is a faster treadmill",
+   lede:"More revenue on a misaligned life does not fix the misalignment. It accelerates it. Faster money, same fracture, higher stakes. The problem was never effort. It is that the four areas are being run as competitors instead of one team."},
+
+  {t:'cost',
+   kick:"The real cost",
+   h:"The four Fs decay silently",
+   grid:'four',
+   cards:[
+     {l:"Faith",tx:"Conviction thins out. Decisions get reactive and short-term."},
+     {l:"Family",tx:"Presence drops. You are in the room but not in the room."},
+     {l:"Fitness",tx:"Energy and discipline erode, and every other area runs on less."},
+     {l:"Finance",tx:"Money grows while meaning does not, which is its own kind of broke."}]},
+
+  {t:'framework',
+   kick:"Part two, the framework",
+   h:"The Four Fs as one operating system",
+   lede:"This is the core of The Program. Not a motivational speech about priorities, but a way to run faith, family, fitness and finance as one aligned system where progress in one creates capacity in the rest."},
+
+  {t:'pillars',
+   kick:"The four Fs",
+   h:"Aligned, in this order",
+   list:[
+     {k:"Faith",v:"The conviction and standard everything else is built on. First, because it sets the why."},
+     {k:"Family",v:"The relationships you are actually building the business for. Protected on purpose, not by leftover time."},
+     {k:"Fitness",v:"The physical base that funds energy, discipline and clarity for the other three."},
+     {k:"Finance",v:"The resource and the scoreboard, built to serve the first three rather than consume them."}]},
+
+  {t:'team',
+   kick:"How you resource it",
+   h:"The T.E.A.M. Model",
+   lede:"You align the four Fs by commanding the four resources every man actually controls. Most men manage their money and let the other three leak. T.E.A.M. puts all four under command."},
+
+  {t:'teamgrid',
+   kick:"T.E.A.M.",
+   h:"Time, Energy, Attention, Money",
+   grid:'four',
+   cards:[
+     {l:"Time",tx:"Where it goes is where your life goes. Spent on the plan, not the inbox."},
+     {l:"Energy",tx:"Protected and built through fitness, so you lead from a full tank."},
+     {l:"Attention",tx:"The scarcest asset. Pointed at what compounds, guarded from what does not."},
+     {l:"Money",tx:"Directed at the four Fs on purpose, instead of chasing the next number."}]},
+
+  {t:'map',
+   kick:"From insight to action",
+   h:"The 90-Day MAP",
+   lede:"Alignment that stays abstract changes nothing. You leave with a Massive Action Plan, a step by step 90-day blueprint built with you, not handed to you, and ready to run Monday morning."},
+
+  {t:'code',
+   kick:"What keeps it",
+   h:"The CODE",
+   lede:"Men do not hold new standards alone. The CODE is the brotherhood standard that keeps the work in place:",
+   list:[
+     {k:"T",v:"Trust the process."},
+     {k:"R",v:"Results matter."},
+     {k:"U",v:"Uphold the standard."},
+     {k:"T",v:"Take care of your brother."},
+     {k:"H",v:"Honor your word."}]},
+
+  {t:'part',
+   kick:"Part three",
+   h:"What an aligned week looks like",
+   lede:"The business still grows, often faster, because a man running on all four Fs makes cleaner decisions and quits less. The difference is that the growth no longer costs the marriage, the body, or the conviction to earn it."},
+
+  {t:'why',
+   kick:"Why listen to me",
+   h:"Nick Alfano",
+   body:["Former attorney who left the courtroom to build multiple 8-figure companies. Former wrestler, MMA fighter and NPC physique competitor, so the discipline is lived, not borrowed.",
+         "I built The Program because I watched capable men win the business and lose the rest. Two rules run everything I teach: show up different, and do hard things on purpose."]},
+
+  {t:'recap',
+   kick:"The whole idea in one line",
+   big:"Run the four as one team.",
+   lede:"Faith, family, fitness and finance, aligned and resourced through time, energy, attention and money, turned into a 90-day plan and held by a code."},
+
+  {t:'cta',
+   kick:"Your next step",
+   h:"Come to The Shift",
+   lede:"If this is the way you want to run the next chapter, the next step is a conversation.",
+   step:"Book your call and reserve your seat at reprogram.ai",
+   note:"This masterclass is educational. Results vary from man to man and depend on the work you put in. Nothing here is a guaranteed outcome or income claim."}
+];
+
+const stage=document.getElementById('stage');
+let i=0;
+function esc(s){return s}
+function slideHTML(s){
+  let h='<div class="slide">';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.big) h+='<div class="big">'+s.big+'</div>';
+  if(s.h) h+='<h1>'+s.h+'</h1>';
+  if(s.t==='title'||s.t==='who'||s.t==='framework') h+='<hr class="rule">';
+  if(s.sub) h+='<p class="sub">'+s.sub+'</p>';
+  if(s.lede) h+='<p class="lede">'+s.lede+'</p>';
+  if(s.body){for(const p of s.body) h+='<p class="lede">'+p+'</p>';}
+  if(s.cards){h+='<div class="grid '+(s.grid||'two')+'">';for(const c of s.cards){h+='<div class="card"><div class="l">'+c.l+'</div><div class="t">'+c.tx+'</div></div>';}h+='</div>';}
+  if(s.list){h+='<ul class="list">';for(const it of s.list){h+='<li><b>'+it.k+'</b>'+it.v+'</li>';}h+='</ul>';}
+  if(s.step){h+='<div class="cta-box"><div class="step">'+s.step+'</div></div>';}
+  if(s.note) h+='<p class="note">'+s.note+'</p>';
+  h+='</div>';
+  return h;
+}
+function render(){
+  stage.innerHTML=slideHTML(S[i]);
+  stage.firstChild.classList.add('on');
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
