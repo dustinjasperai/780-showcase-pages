@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your Kingdom Identity — a masterclass by Rachel Wortman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#16100f;        /* warm oxblood near-black (her dark scheme) */
+    --panel:#241a18;
+    --rule:#3a2a27;
+    --accent:#a31414;    /* her exact harvested brand crimson */
+    --ink:#f2e9e3;       /* her harvested warm ivory */
+    --muted:#b9a79f;
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'Public Sans',system-ui,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vmin}
+  .slide{display:none;width:min(1040px,94vw);max-height:92vh;overflow:auto}
+  .slide.on{display:block;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--sans);font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5vw,54px);line-height:1.06}
+  .lede{font-family:var(--serif);font-style:italic;font-size:clamp(22px,3.2vw,34px);line-height:1.3;color:var(--ink);max-width:30ch}
+  p.body{font-size:clamp(16px,1.8vw,20px);line-height:1.6;color:var(--muted);max-width:60ch;margin-top:20px}
+  .rule{height:2px;width:72px;background:var(--accent);margin:26px 0}
+  ul{list-style:none;margin-top:26px;display:grid;gap:14px;max-width:62ch}
+  li{position:relative;padding-left:26px;font-size:clamp(16px,1.8vw,20px);line-height:1.5}
+  li:before{content:"";position:absolute;left:0;top:.6em;width:9px;height:9px;background:var(--accent);transform:rotate(45deg)}
+  .mark{display:inline-grid;grid-template-columns:repeat(2,10px);gap:5px;margin-bottom:24px}
+  .mark i{width:10px;height:10px;background:var(--accent);display:block;opacity:.85}
+  .mark i:nth-child(2),.mark i:nth-child(3){opacity:.4}
+  .pillar-no{font-family:var(--serif);font-size:20px;color:var(--accent);letter-spacing:.1em}
+  .present{margin-top:34px;font-size:15px;color:var(--muted);letter-spacing:.04em}
+  .present b{color:var(--ink);font-weight:600}
+  .disc{margin-top:28px;font-size:13px;line-height:1.5;color:#8a7a73;max-width:64ch}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:28px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .cap{font-family:var(--serif);font-style:italic;color:var(--ink);font-size:22px}
+  #nav{position:fixed;bottom:22px;right:26px;display:flex;align-items:center;gap:16px;font-family:var(--sans);font-size:13px;color:var(--muted);z-index:10}
+  #nav button{background:transparent;border:1px solid var(--rule);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+  #count{min-width:54px;text-align:center;letter-spacing:.12em}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .4s ease;z-index:10}
+  .brandline{position:fixed;top:20px;left:26px;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--muted);z-index:10}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="brandline">Kingdom Leaders Community</div>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8249;</button><span id="count"></span><button id="next" aria-label="Next">&#8250;</button></div>
+<script>
+/* All masterclass copy lives inside const S (the coach's deck — no ad/vendor content). */
+const S = [
+  {t:'title',
+   kicker:'A live masterclass with Rachel Wortman',
+   h:'Your Kingdom Identity',
+   lede:'The divine advantage already wired into how God made you, and how to lead and build from it.',
+   present:'Rachel Wortman, Biblical Growth Architect &middot; host of Wisdom’s Table'},
+
+  {t:'agenda',
+   kicker:'What we’ll cover together',
+   h:'Three shifts in one hour',
+   items:['Why faith-driven leaders get stuck even when they do everything right',
+          'The Kingdom Identity Profile: the four facets that make up your design',
+          'How to align your mindset, money, and mission on top of that design']},
+
+  {t:'audience',
+   kicker:'Who this is for',
+   h:'The faithful builder who feels capped',
+   items:['Christian entrepreneurs and leaders carrying real responsibility',
+          'People who love Jesus and love their work, and are tired of keeping them in separate rooms',
+          'Leaders ready to understand why they feel stuck, and get biblical clarity on what’s next']},
+
+  {t:'problem',
+   kicker:'The trap',
+   h:'You followed the playbook. You’re still striving.',
+   body:'You read the business books. You hired the coaches. You run the funnels and the systems everyone recommends. And some of it worked. But underneath the growth there is a quiet friction, a sense that you are working harder than you were made to, chasing a version of success that was never actually yours.'},
+
+  {t:'reframe',
+   kicker:'The reframe',
+   h:'You are not stuck for lack of strategy.',
+   lede:'You are stuck because you are building from someone else’s blueprint.',
+   body:'Strategy copied from a leader God wired differently than you will always feel like swimming upstream. The breakthrough is not another tactic. It is building from the design you were actually given.'},
+
+  {t:'part',
+   no:'Part One',
+   h:'The split that caps most Christian leaders',
+   body:'Somewhere along the way, faith got filed under Sunday and strategy got filed under Monday. So you pray about your business, but you still build it like the world does. That split is the ceiling. When your faith and your work are two separate systems, you can only ever bring half of yourself to either one.'},
+
+  {t:'problem',
+   kicker:'The cost of the split',
+   h:'What it quietly costs you',
+   items:['Decisions made from fear and comparison instead of calling',
+          'Burnout from carrying a business your design was never meant to carry alone',
+          'A ceiling on impact, because the most powerful thing you have, your God-given wiring, is the thing you’re leaving out']},
+
+  {t:'part',
+   no:'Part Two',
+   h:'The Kingdom Identity Profile',
+   lede:'Identity before strategy. Always.',
+   body:'Before we talk tactics, we map who God actually designed you to be. The Kingdom Identity Profile combines four facets into one growth map that is tailored uniquely to you. Here are the four.'},
+
+  {t:'pillar',
+   no:'Facet One',
+   h:'Natural Talents',
+   body:'The abilities that come so easily to you that you discount them. These are not accidents. They are raw material God built into you on purpose, and the first clue to the work you are meant to carry.'},
+
+  {t:'pillar',
+   no:'Facet Two',
+   h:'Spiritual Gifts',
+   body:'What the Spirit adds on top of your natural ability. Where your talent and your gifting overlap is where your work stops being effort and starts being anointed, the place others feel something deeper than competence.'},
+
+  {t:'pillar',
+   no:'Facet Three',
+   h:'Sphere of Influence',
+   body:'The specific people and rooms you already have access to and credibility with. Your calling is not generic. It is aimed. Naming your sphere turns a vague desire to help into a clear picture of who you are here to serve.'},
+
+  {t:'pillar',
+   no:'Facet Four',
+   h:'God-given Calling',
+   body:'The thread running through all of it: the outcome your life keeps pointing toward. When calling sits on top of talent, gifting, and sphere, you stop asking what you should do and start recognizing what you were made to do.'},
+
+  {t:'practice',
+   kicker:'When the four come together',
+   h:'Your unfair advantage, by design',
+   body:'Mapped together, these four facets become a growth map no competitor can copy, because no one else was wired the way you were. This is what it means for your identity to carry a divine advantage in the marketplace. You stop competing on everyone else’s terms and start leading on yours.'},
+
+  {t:'part',
+   no:'Part Three',
+   h:'Mindset, Money, and Mission',
+   body:'Once your identity is clear, strategy finally has something true to stand on. We align three things to your design: your mindset, so you lead from faith instead of fear; your money, so you steward and build wealth the biblical way; and your mission, so your work becomes the ministry it was always meant to be.'},
+
+  {t:'practice',
+   kicker:'Faith and work, one system',
+   h:'A leader who is no longer divided',
+   items:['Clear on the handful of things only you are built to do, and free to release the rest',
+          'Making decisions from calling and conviction, not comparison',
+          'Faith and business finally running as one system, so growth stops costing you your peace']},
+
+  {t:'why',
+   kicker:'Why learn this from me',
+   h:'I left the pulpit to pastor builders',
+   body:'In 2021 God moved me from pastoring a local church to pastoring business leaders. I’m a coach, a four-time author including The Money Mandate, and the host of the Wisdom’s Table podcast. I built the Kingdom Leaders Community for exactly this: Christian leaders who refuse to keep faith and business in separate rooms.',
+   present:'Rachel Wortman &middot; Biblical Growth Architect &middot; founder, Kingdom Leaders Community'},
+
+  {t:'agenda',
+   kicker:'The one thing to take with you',
+   h:'Start with identity, not effort',
+   items:['Your wiring is not in the way of your calling. It is the map to it.',
+          'Name the four facets before you touch another strategy.',
+          'Then build mindset, money, and mission on top of who God already made you to be.']},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h:'Keep going inside the community',
+   body:'If this opened something up, the next step is to keep learning in a room full of leaders doing the same work. Inside the Kingdom Leaders Community you get the bi-weekly training calls and the people to grow alongside, and the door to deeper coaching when you’re ready.',
+   cta:'Join the Kingdom Leaders Community',
+   disc:'This masterclass is educational and reflects biblical and leadership principles, not professional, financial, or legal advice. Results vary from person to person based on effort and circumstances, and no specific outcome, result, or income is guaranteed.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return s==null?'':s;}
+function render(s){
+  if(s.t==='title'){
+    return `<div class="slide"><div class="kicker">${esc(s.kicker)}</div><h1>${esc(s.h)}</h1><div class="rule"></div><div class="lede">${esc(s.lede)}</div><div class="present">${esc(s.present)}</div></div>`;
+  }
+  if(s.t==='pillar'){
+    return `<div class="slide"><div class="mark"><i></i><i></i><i></i><i></i></div><div class="pillar-no">${esc(s.no)}</div><h2>${esc(s.h)}</h2><div class="rule"></div><p class="body">${esc(s.body)}</p></div>`;
+  }
+  if(s.t==='part'){
+    return `<div class="slide"><div class="kicker">${esc(s.no)}</div><h2>${esc(s.h)}</h2><div class="rule"></div>${s.lede?`<div class="lede">${esc(s.lede)}</div>`:''}${s.body?`<p class="body">${esc(s.body)}</p>`:''}</div>`;
+  }
+  if(s.t==='reframe'){
+    return `<div class="slide"><div class="kicker">${esc(s.kicker)}</div><h2>${esc(s.h)}</h2><div class="rule"></div><div class="lede">${esc(s.lede)}</div><p class="body">${esc(s.body)}</p></div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide"><div class="kicker">${esc(s.kicker)}</div><h2>${esc(s.h)}</h2><div class="rule"></div><p class="body">${esc(s.body)}</p><div class="cap">${esc(s.cta)}</div><div class="disc">${esc(s.disc)}</div></div>`;
+  }
+  // agenda / audience / problem / practice / why
+  let inner=`<div class="kicker">${esc(s.kicker||s.no||'')}</div><h2>${esc(s.h)}</h2><div class="rule"></div>`;
+  if(s.lede) inner+=`<div class="lede">${esc(s.lede)}</div>`;
+  if(s.body) inner+=`<p class="body">${esc(s.body)}</p>`;
+  if(s.items){inner+='<ul>'+s.items.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';}
+  if(s.present) inner+=`<div class="present">${esc(s.present)}</div>`;
+  return `<div class="slide">${inner}</div>`;
+}
+stage.innerHTML=S.map(render).join('');
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+const count=document.getElementById('count');
+const bar=document.getElementById('bar');
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((el,k)=>el.classList.toggle('on',k===i));
+  count.textContent=(i+1)+' / '+slides.length;
+  bar.style.width=((i+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);
+});
+show(0);
+</script>
+</body>
+</html>
