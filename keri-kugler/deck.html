@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Aligned Business — a live masterclass with Keri Kugler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141026;        /* deep midnight, from brand.json dominant hex, warmed to indigo */
+    --panel:#1E1838;     /* one step up, same hue */
+    --rule:#8C86A6;      /* desaturated lavender-grey, from probe grey lifted */
+    --accent:#C9A36B;    /* candlelight gold, single accent */
+    --ink:#F4EFE4;       /* warm near-white text */
+    --deep:#0C0A1C;
+    --head:'Cormorant Garamond', Georgia, serif;
+    --body:'Nunito Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--deep);color:var(--ink);font-family:var(--body);overflow:hidden}
+  #stage{position:relative;height:100vh;width:100vw;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:9vh 11vw;background:
+      radial-gradient(60vw 60vw at 72% 28%, rgba(201,163,107,.10), transparent 60%),
+      var(--bg);}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+    font-size:.78rem;color:var(--accent);margin-bottom:1.6rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.6rem,6vw,5rem);line-height:1.02;
+    letter-spacing:.3px}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.08}
+  .sub{font-size:clamp(1.05rem,1.7vw,1.5rem);color:#cfc9d9;margin-top:1.6rem;max-width:30ch;line-height:1.5}
+  .lead{font-size:clamp(1.15rem,1.9vw,1.7rem);line-height:1.5;max-width:34ch;color:#e6e1ee}
+  .big{font-family:var(--head);font-size:clamp(2.2rem,5vw,4rem);line-height:1.1;max-width:22ch}
+  .part{font-family:var(--body);font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--rule);font-size:.9rem}
+  .pillar-no{font-family:var(--head);font-size:clamp(3rem,7vw,6rem);color:var(--accent);line-height:1}
+  ul{list-style:none;margin-top:2rem;display:grid;gap:1rem;max-width:40ch}
+  li{font-size:clamp(1.05rem,1.6vw,1.35rem);padding-left:1.6rem;position:relative;color:#e6e1ee}
+  li:before{content:'';position:absolute;left:0;top:.62em;width:.6rem;height:.6rem;border-radius:50%;
+    background:var(--accent)}
+  .hair{width:4.5rem;height:2px;background:var(--accent);margin:2rem 0}
+  .two{display:grid;grid-template-columns:auto 1fr;gap:2.4rem;align-items:center}
+  .disc{margin-top:2.4rem;font-size:.82rem;color:var(--rule);max-width:46ch;line-height:1.5}
+  .cta-line{font-family:var(--head);font-size:clamp(1.4rem,2.4vw,2.1rem);color:var(--accent);margin-top:1.4rem}
+  #nav{position:fixed;bottom:3vh;right:4vw;display:flex;gap:.6rem;z-index:10}
+  #nav button{background:var(--panel);color:var(--ink);border:1px solid #2c2550;border-radius:999px;
+    width:2.6rem;height:2.6rem;font-size:1.1rem;cursor:pointer}
+  #count{position:fixed;bottom:3.4vh;left:4vw;color:var(--rule);font-size:.8rem;letter-spacing:.18em}
+  .brandline{position:fixed;top:3.2vh;left:4vw;color:var(--rule);font-size:.72rem;letter-spacing:.3em;
+    text-transform:uppercase}
+  em,.accent{color:var(--accent);font-style:normal}
+</style>
+</head>
+<body>
+<div class="brandline">The Aligned Woman</div>
+<div id="stage"></div>
+<div id="count"></div>
+<div id="nav"><button id="prev">&#8592;</button><button id="next">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Keri Kugler', h:'The Aligned Business', sub:'Why strategy alone keeps stalling, and the full-body fix.'},
+  {t:'audience', kicker:'Who this is for', h:'For the woman who has done the work.', lead:'You are a coach, a leader, a visionary. You have done the mindset work. You have bought the strategy. And still, the momentum keeps leaking out somewhere you cannot name.'},
+  {t:'trap', kicker:'The trap', h:'You were told it was mindset. Then you were told it was strategy.', lead:'So you did both. More courses, more frameworks, more affirmations. And the business still moves in starts and stops.'},
+  {t:'reframe', kicker:'The reframe', big:'The stall was never in your plan. It was in the parts of you the plan could not reach.'},
+  {t:'part', part:'Part One', h:'Why aligned women still stall'},
+  {t:'problem', kicker:'The split', h:'You are building from your head alone.', lead:'Your head says one thing, your body says another, and you push forward on the plan anyway. The gap between them is where the energy, and the momentum, drains out.'},
+  {t:'cost', kicker:'What the split costs', h:'This is what it looks like from the outside.', items:['Rewriting the offer again, sure it is almost right','Starting strong, then quietly stalling at the same place','Doing everything correctly and feeling strangely flat','An income that keeps hitting the same ceiling']},
+  {t:'part', part:'Part Two', h:'The Five Bodies'},
+  {t:'framework', kicker:'Full-body manifestation', h:'Results come from all five bodies aligned.', lead:'Not mindset on its own. When the mental, emotional, physical, spiritual and energetic bodies are aligned, you and the business move as one. That alignment is the engine.'},
+  {t:'pillar', no:'01', part:'The Mental body', h:'The plan you can defend.', sub:'Clear thinking, clear decisions, a strategy you actually believe.'},
+  {t:'pillar', no:'02', part:'The Emotional body', h:'The charge under the offer.', sub:'What you feel about the work is what the audience feels from it.'},
+  {t:'pillar', no:'03', part:'The Physical body', h:'The capacity to hold it.', sub:'A nervous system that can carry the growth you are asking for.'},
+  {t:'pillar', no:'04', part:'The Spiritual body', h:'The yes that does not waver.', sub:'Rooted in the calling, so you stop negotiating with yourself.'},
+  {t:'pillar', no:'05', part:'The Energetic body', h:'The field clients feel.', sub:'The quality people sense before you say a word. It either attracts or it leaks.'},
+  {t:'method', kicker:'The method', big:'Feel it fully enough that it releases its grip. Then build from there, in real time.'},
+  {t:'part', part:'Part Three', h:'When all five move as one'},
+  {t:'practice', kicker:'Attraction and Momentum', h:'Two forces, working together.', items:['Attraction: becoming the woman the work is already looking for','Momentum: daily, built-in-real-time action that compounds','One without the other stalls. Together they carry the business']},
+  {t:'after', kicker:'The shift', h:'Nothing on the outside is missing anymore.', lead:'The offer lands because you are behind it fully. The action holds because it is not fighting an inner no. The business feels like yours, because now it is aligned with all of you.'},
+  {t:'cred', kicker:'Why me', h:'I built this the long way, then the aligned way.', lead:'I took my coaching business full-time in under a year, and for nearly a decade I have partnered with women through growth, expansion and reinvention. I host The Aligned Woman podcast. This is the work I live.'},
+  {t:'recap', kicker:'In one breath', h:'Align the whole woman first. Then build.', items:['One: the stall is in the parts the plan cannot reach','Two: align all five bodies, full-body manifestation','Three: attraction plus momentum, built in real time']},
+  {t:'cta', kicker:'Your next step', h:'Ready to build your aligned business?', ctaLine:'Work with me one-on-one. We do the inner work and the building, together, in real time.', disc:'This masterclass is for education only. No specific results, income, or outcomes are guaranteed. Results vary and depend on your own effort, market, and many factors that no one fully controls.'}
+];
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function slideHTML(s){
+  let inner='';
+  if(s.kicker) inner+=`<div class="kicker">${esc(s.kicker)}</div>`;
+  if(s.part && s.t==='part') return `<div class="part">${esc(s.part)}</div><div class="hair"></div><h1>${esc(s.h)}</h1>`;
+  if(s.t==='pillar'){
+    return `<div class="two"><div class="pillar-no">${esc(s.no)}</div><div>`+
+      `<div class="part">${esc(s.part)}</div><h2>${esc(s.h)}</h2>`+
+      (s.sub?`<div class="sub">${esc(s.sub)}</div>`:'')+`</div></div>`;
+  }
+  if(s.big||s.t==='reframe'||s.t==='method'){
+    return inner+`<div class="big">${esc(s.big||s.h)}</div>`;
+  }
+  if(s.t==='title'){ inner+=`<h1>${esc(s.h)}</h1>`; if(s.sub) inner+=`<div class="sub">${esc(s.sub)}</div>`; return inner; }
+  inner+=`<h2>${esc(s.h)}</h2>`;
+  if(s.lead) inner+=`<div class="lead" style="margin-top:1.6rem">${esc(s.lead)}</div>`;
+  if(s.items){ inner+='<ul>'; s.items.forEach(i=>inner+=`<li>${esc(i)}</li>`); inner+='</ul>'; }
+  if(s.ctaLine) inner+=`<div class="cta-line">${esc(s.ctaLine)}</div>`;
+  if(s.disc) inner+=`<div class="disc">${esc(s.disc)}</div>`;
+  return inner;
+}
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' on':'');d.innerHTML=slideHTML(s);stage.appendChild(d);});
+let cur=0;const slides=document.querySelectorAll('.slide');const count=document.getElementById('count');
+function show(n){cur=(n+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
