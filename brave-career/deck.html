@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brave Career Masterclass - Stop Applying, Start Shipping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f3;        /* warm paper, from their #fbf9f4 button ground + light site scheme */
+    --panel:#f1ede4;     /* a shade down from bg */
+    --rule:#dfd8c9;
+    --ink:#14130f;       /* their dominant color (87 uses) */
+    --muted:#6b665c;
+    --accent:#2d4a2b;    /* their forest green */
+    --accent-soft:#e7ede3;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#2a2824;font-family:var(--body);color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(96vw,1040px);aspect-ratio:16/10;position:relative}
+  .slide{position:absolute;inset:0;background:var(--bg);border:1px solid var(--rule);border-radius:10px;
+    padding:64px 72px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    display:flex;align-items:center;gap:9px;margin-bottom:26px}
+  .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  h1{font-family:var(--display);font-weight:600;font-size:60px;line-height:1.02;letter-spacing:-.01em;margin-bottom:20px}
+  h2{font-family:var(--display);font-weight:600;font-size:40px;line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+  .lead{font-size:21px;line-height:1.5;color:var(--muted);max-width:30ch}
+  .big{font-family:var(--display);font-weight:600;font-size:46px;line-height:1.1;max-width:20ch}
+  p.body{font-size:19px;line-height:1.55;color:var(--ink);max-width:40ch}
+  .spacer{flex:1}
+  .part{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .part b{color:var(--accent)}
+  ul.points{list-style:none;margin-top:10px}
+  ul.points li{font-size:19px;line-height:1.5;padding-left:26px;position:relative;margin-bottom:14px;max-width:40ch}
+  ul.points li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;background:var(--accent);border-radius:2px}
+  .pillar-no{font-family:var(--mono);font-size:14px;color:var(--accent);margin-bottom:10px}
+  .grid3{display:flex;gap:18px;margin-top:8px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:22px;flex:1}
+  .card .n{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:10px}
+  .card h3{font-family:var(--display);font-weight:600;font-size:21px;margin-bottom:8px;line-height:1.1}
+  .card p{font-size:15px;line-height:1.45;color:var(--muted)}
+  .stat-row{display:flex;gap:40px;margin-top:14px}
+  .stat .v{font-family:var(--display);font-weight:600;font-size:46px;color:var(--accent);line-height:1}
+  .stat .l{font-size:14px;color:var(--muted);margin-top:8px;max-width:16ch}
+  .cta-box{margin-top:14px;padding:22px 26px;background:var(--accent);color:#f4f3ee;border-radius:8px;max-width:30ch}
+  .cta-box .step{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:8px}
+  .cta-box .txt{font-family:var(--display);font-weight:600;font-size:26px;line-height:1.1}
+  .disclaimer{font-size:12px;color:var(--muted);line-height:1.4;margin-top:auto;max-width:62ch}
+  .foot{position:absolute;left:72px;bottom:30px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+  .count{position:absolute;right:72px;bottom:30px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
+  .nav button{font-family:var(--mono);font-size:12px;background:#1b1a16;color:#cfc9ba;border:1px solid #3a382f;border-radius:6px;padding:7px 13px;cursor:pointer}
+  .title-mark{font-family:var(--display);font-weight:700;font-size:20px}
+  @media(max-width:720px){.slide{padding:34px 30px}h1{font-size:38px}h2{font-size:28px}.big{font-size:30px}.grid3{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'who'},
+  {t:'trap'},
+  {t:'reframe'},
+  {t:'part', part:'Part One', title:'Why the application game is rigged'},
+  {t:'points', kicker:'The volume trap', h:'You are one row in a spreadsheet',
+    points:['A single posting pulls hundreds of applicants.','Filters scan for keywords, not for what you can actually build.','Your resume never reaches a human who could say yes.']},
+  {t:'points', kicker:'No signal', h:'A resume cannot prove you can do the work',
+    points:['Everyone lists the same coursework, the same tools, the same bootcamp.','Hiring managers have no way to tell real skill from a well-worded line.','So they default to pedigree, referrals, and luck.']},
+  {t:'part', part:'Part Two', title:'The Brave method: three ways to be undeniable'},
+  {t:'pillar', n:'Pillar 01', h:'Let your work talk for you',
+    body:'Instead of applying into the void, you build one real, portfolio-grade project to the quality bar a working team would hold. The work becomes the proof.'},
+  {t:'points', kicker:'Pillar 01 in practice', h:'Shipped, not studied',
+    points:['Scope a project that mirrors the role you want.','Build it with a mentor who reviews your work the way a lead would.','Walk into every conversation with something real to show.']},
+  {t:'pillar', n:'Pillar 02', h:'Let hiring managers come to you',
+    body:'You share your progress at Brave events and on LinkedIn. The hiring managers who follow the community see the work and reach out, so the right people find you first.'},
+  {t:'points', kicker:'Pillar 02 in practice', h:'The inbound engine',
+    points:['Show the work in public, in front of people who hire for it.','Get surfaced to managers who source directly from the community.','Start conversations from a position of proof, not a cold application.']},
+  {t:'pillar', n:'Pillar 03', h:'Personalised to you',
+    body:'Everything is built around your background: the plan, the mentor you are matched with, and the timeline. No generic curriculum, no one-size path.'},
+  {t:'points', kicker:'Pillar 03 in practice', h:'A plan that fits one person',
+    points:['Map your current skills against the exact role you are targeting.','Match with a mentor who holds that role today.','Set a timeline built for your starting point, not an average.']},
+  {t:'part', part:'Part Three', title:'What the path actually looks like'},
+  {t:'points', kicker:'The path', h:'From first session to first offer',
+    points:['Months 1 to 2: scope and build the project, sharpen the profile.','Months 2 to 3: ship, go public, run mock interviews with a mentor.','Months 3 to 4: inbound conversations turn into offers.']},
+  {t:'why', kicker:'Why this works', h:'Mentors who hold the role, not just a course',
+    body:'Your mentor is a working professional in the role you want, from teams at companies like Intuit, Meta, Square, and AstraZeneca. They set your plan, review your work the way a lead would, and run your mock interviews.'},
+  {t:'stats'},
+  {t:'recap'},
+  {t:'cta', disclaimer:'This masterclass is educational. No job, income, or result is guaranteed. Results vary and depend on your effort, background, and the market. Past outcomes are not a promise of future results.'}
+];
+
+function render(s){
+  if(s.t==='title') return `
+    <div class="kicker"><span class="dot"></span>Brave Career Masterclass</div>
+    <div class="spacer"></div>
+    <h1>Stop Applying.<br>Start Shipping.</h1>
+    <p class="lead">How to get hired in tech by proving your work, not polishing your resume.</p>
+    <div class="spacer"></div>
+    <div class="foot">A live masterclass</div>`;
+  if(s.t==='who') return `
+    <div class="kicker"><span class="dot"></span>Who this is for</div>
+    <h2>You have done the hard part already</h2>
+    <p class="body">You learned the skills. You finished the degree or the bootcamp. You are ready to work in data, AI, software, or digital marketing. The only thing standing between you and the role is being seen.</p>`;
+  if(s.t==='trap') return `
+    <div class="kicker"><span class="dot"></span>The trap</div>
+    <div class="spacer"></div>
+    <div class="big">You have sent 200 applications and heard almost nothing back.</div>
+    <div class="spacer"></div>
+    <p class="lead">It is not you. It is the channel you were told to use.</p>`;
+  if(s.t==='reframe') return `
+    <div class="kicker"><span class="dot"></span>The reframe</div>
+    <div class="spacer"></div>
+    <div class="big">The resume pile is not a filter. It is a black hole.</div>
+    <div class="spacer"></div>
+    <p class="lead">Getting hired is not about applying more. It is about being impossible to ignore.</p>`;
+  if(s.t==='part') return `
+    <div class="kicker"><span class="dot"></span>${s.part}</div>
+    <div class="spacer"></div>
+    <div class="part"><b>${s.part}</b></div>
+    <h1>${s.title}</h1>
+    <div class="spacer"></div>`;
+  if(s.t==='points') return `
+    <div class="kicker"><span class="dot"></span>${s.kicker}</div>
+    <h2>${s.h}</h2>
+    <ul class="points">${s.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  if(s.t==='pillar') return `
+    <div class="kicker"><span class="dot"></span>The method</div>
+    <div class="pillar-no">${s.n}</div>
+    <h1>${s.h}</h1>
+    <div class="spacer"></div>
+    <p class="body">${s.body}</p>`;
+  if(s.t==='why') return `
+    <div class="kicker"><span class="dot"></span>${s.kicker}</div>
+    <h2>${s.h}</h2>
+    <p class="body">${s.body}</p>`;
+  if(s.t==='stats') return `
+    <div class="kicker"><span class="dot"></span>The track record</div>
+    <h2>What this has already produced</h2>
+    <div class="stat-row">
+      <div class="stat"><div class="v">500+</div><div class="l">Bravers hired into full-time roles</div></div>
+      <div class="stat"><div class="v">80+</div><div class="l">hiring managers who source from the community</div></div>
+      <div class="stat"><div class="v">4 mo</div><div class="l">typical time from first session to offer</div></div>
+    </div>
+    <p class="body" style="margin-top:28px;color:var(--muted)">Figures reflect past Brave Career outcomes. Individual results vary.</p>`;
+  if(s.t==='recap') return `
+    <div class="kicker"><span class="dot"></span>The whole idea</div>
+    <h2>Ship the work. Be seen. Get sourced.</h2>
+    <ul class="points">
+      <li>Build one real project that proves you can do the job.</li>
+      <li>Put it in front of the people who hire for the role.</li>
+      <li>Let the right conversations come to you.</li>
+    </ul>`;
+  if(s.t==='cta') return `
+    <div class="kicker"><span class="dot"></span>Your next step</div>
+    <h2>Build your path, personalised to you</h2>
+    <p class="body">If this is the way you want to run your job search, the next step is a plan built around your background, your target role, and your timeline.</p>
+    <div class="cta-box"><div class="step">Next step</div><div class="txt">Build your mentorship proposal</div></div>
+    <p class="disclaimer">${s.disclaimer}</p>`;
+  return '';
+}
+
+let i=0;
+const stage=document.getElementById('stage');
+function draw(){
+  stage.innerHTML = S.map((s,idx)=>`<section class="slide ${idx===i?'on':''}">
+    ${render(s)}
+    <div class="count">${String(idx+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>
+  </section>`).join('');
+}
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); draw(); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+draw();
+</script>
+</body>
+</html>
