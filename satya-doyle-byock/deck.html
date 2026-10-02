@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Four Pillars of Quarterlife — a live masterclass with Satya Doyle Byock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Voltaire&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ee;        /* paper ground, from brand.json light scheme */
+    --panel:#efe8da;     /* warm tint */
+    --rule:#d8ccb4;      /* gold-paper hairline */
+    --ink:#4e443e;       /* her dominant color #4e443e */
+    --muted:#7a7268;     /* softened ink */
+    --accent:#b09450;    /* her antique gold #b09450 */
+    --head:'Voltaire', Georgia, serif;
+    --body:'Bitter', Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--ink);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto}
+  .slide{
+    position:relative;background:var(--bg);min-height:62vh;
+    padding:64px 72px;margin:26px 16px;border-radius:6px;
+    box-shadow:0 18px 50px rgba(28,22,18,.28);overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .num{position:absolute;top:26px;right:34px;font-family:var(--head);font-size:15px;letter-spacing:.2em;color:var(--accent)}
+  .kick{font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:400;font-size:58px;line-height:1.04;letter-spacing:.01em;margin-bottom:22px}
+  h2{font-family:var(--head);font-weight:400;font-size:42px;line-height:1.08;margin-bottom:20px}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink);max-width:40ch}
+  .sub{font-size:20px;line-height:1.55;color:var(--muted);max-width:52ch;margin-top:14px}
+  .byline{margin-top:40px;font-size:18px;color:var(--muted);letter-spacing:.02em}
+  .byline b{color:var(--ink);font-weight:600}
+  ul{list-style:none;margin-top:10px}
+  li{position:relative;font-size:21px;line-height:1.5;padding:12px 0 12px 34px;border-bottom:1px solid var(--rule);max-width:50ch}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:21px;width:14px;height:2px;background:var(--accent)}
+  .roman{font-family:var(--head);font-size:30px;color:var(--accent);letter-spacing:.1em;margin-bottom:10px}
+  .pillarword{font-family:var(--head);font-size:52px;margin-bottom:16px}
+  .quote{font-family:var(--head);font-size:40px;line-height:1.2;max-width:24ch}
+  .cite{margin-top:26px;font-size:17px;color:var(--muted);letter-spacing:.04em}
+  .cycle{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
+  .cycle span{border:1.5px solid var(--accent);color:var(--ink);border-radius:999px;padding:10px 20px;font-size:18px;font-weight:600}
+  .disc{margin-top:30px;font-size:14px;line-height:1.5;color:var(--muted);max-width:60ch;font-style:italic}
+  .cta-line{font-family:var(--head);font-size:26px;color:var(--accent);margin-top:26px}
+  .foot{position:absolute;left:72px;bottom:30px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A free live masterclass',
+    h:'The Four Pillars of Quarterlife',
+    sub:'A Jungian map for the search for self.',
+    byline:'with <b>Satya Doyle Byock</b>, LPC &middot; The Salomé Institute of Jungian Studies' },
+
+  {t:'list', kick:'In the next hour', h:'What you will leave with',
+    items:[
+      'Why the "quarterlife crisis" is a developmental stage, not a personal failure',
+      'The two ways people get stuck: the Stability type and the Meaning type',
+      'The Four Pillars you can actually walk: Separate, Listen, Build, Integrate',
+      'Where the deeper, year-round work begins' ] },
+
+  {t:'lead', kick:'Who this is for',
+    h:'You did everything right.',
+    lead:'The degree, the job, the relationship, the plan. And somewhere in it you became a stranger to yourself.',
+    sub:'Or you walked away from all of it, and still feel lost. Either way, you are exactly who this hour is for.' },
+
+  {t:'lead', kick:'The trap',
+    h:'Two roads, one dead end',
+    lead:'One road says keep achieving and the feeling will pass. The other says burn it down and wander until something feels true.',
+    sub:'Both roads skip the actual work. Neither one gives you a map.' },
+
+  {t:'quote', kick:'The reframe',
+    q:'The search for self is not a breakdown. It is a stage. And stages have maps.',
+    cite:'This is the premise of everything that follows.' },
+
+  {t:'section', roman:'Part One', h:'Why the search gets stuck' },
+
+  {t:'lead', kick:'The Stability Type',
+    h:'The Stability Type',
+    lead:'Checks every box: security, structure, the right milestones in the right order.',
+    sub:'The life looks correct from the outside and feels hollow from the inside. Stability without meaning becomes a beautiful cage.' },
+
+  {t:'lead', kick:'The Meaning Type',
+    h:'The Meaning Type',
+    lead:'Rejects the conventional script in the name of something truer, and refuses to settle.',
+    sub:'But meaning without any stability becomes drift. The search never lands anywhere you can live.' },
+
+  {t:'lead', kick:'The real problem',
+    h:'Each type is missing the other half',
+    lead:'Stability types have to learn to listen inward. Meaning types have to learn to build something that holds.',
+    sub:'The work of Quarterlife is bringing both together. That is what the Four Pillars are for.' },
+
+  {t:'section', roman:'Part Two', h:'The Four Pillars' },
+
+  {t:'pillar', roman:'Pillar I', word:'Separate',
+    lead:'Gain independence from the relationships, roles, and expectations that no longer fit who you are becoming.',
+    sub:'Not cutting everyone off. Finding where you end and the inherited script begins.' },
+
+  {t:'pillar', roman:'Pillar II', word:'Listen',
+    lead:'Pay close, patient attention to your own wants, needs, dreams, and the signals of the unconscious.',
+    sub:'Jung called this the work of turning inward. It is a skill, and it can be taught.' },
+
+  {t:'pillar', roman:'Pillar III', word:'Build',
+    lead:'Create the tools, practices, and structures that hold the life you actually want.',
+    sub:'Meaning has to be housed in something real: a practice, a craft, a rhythm, a day you can live inside.' },
+
+  {t:'pillar', roman:'Pillar IV', word:'Integrate',
+    lead:'Take what you have separated, heard, and built, and make something new of it.',
+    sub:'Integration is where the two types finally meet, and the search becomes a self.' },
+
+  {t:'cycle', kick:'The shape of it', h:'A cycle, not a ladder',
+    lead:'You do not finish the Pillars and graduate. They turn, like a year, and you meet each one again at a deeper level.',
+    chips:['Separate','Listen','Build','Integrate'] },
+
+  {t:'section', roman:'Part Three', h:'When the search becomes a self' },
+
+  {t:'lead', kick:'The shift',
+    h:'From crisis to practice',
+    lead:'The feeling of being lost stops being an emergency and becomes information. You stop waiting to feel fixed.',
+    sub:'You start doing the small, repeatable inner work that a whole tradition has been refining for a century.' },
+
+  {t:'lead', kick:'Why me',
+    h:'I have spent my work here',
+    lead:'I am a psychotherapist and the author of Quarterlife: The Search for Self in Early Adulthood, translated into six languages.',
+    sub:'I founded The Salomé Institute of Jungian Studies and spent years teaching Jung’s Red Book. This hour is a doorway into that deeper study.' },
+
+  {t:'list', kick:'Going deeper', h:'The year-round study',
+    items:[
+      'Monthly live lectures on Jungian psychology',
+      'Fairy tale and myth telling, read as maps of the psyche',
+      'Monthly reading and writing to integrate the material',
+      'A real, consistent community of fellow students' ] },
+
+  {t:'cta', kick:'Your next step', h:'Join the next live session',
+    lead:'Come for the free live hour on the Four Pillars. If it speaks to you, the waitlist for the year-round study opens from there.',
+    ctaLine:'Reserve your seat for the live masterclass',
+    disc:'Educational only. This masterclass teaches a developmental framework and is not therapy, diagnosis, or treatment, and is not a substitute for care from a licensed professional. No income or result is guaranteed. Results vary by individual.' }
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const n = String(i+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0');
+  let inner = '';
+  if (s.t === 'title') {
+    inner = `<div class="kick">${s.kick}</div><h1>${s.h}</h1><div class="lead">${s.sub}</div><div class="byline">${s.byline}</div>`;
+  } else if (s.t === 'section') {
+    inner = `<div class="roman">${s.roman}</div><h1>${s.h}</h1>`;
+  } else if (s.t === 'list') {
+    inner = `<div class="kick">${s.kick}</div><h2>${s.h}</h2><ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  } else if (s.t === 'quote') {
+    inner = `<div class="kick">${s.kick}</div><div class="quote">“${s.q}”</div><div class="cite">${s.cite}</div>`;
+  } else if (s.t === 'pillar') {
+    inner = `<div class="roman">${s.roman}</div><div class="pillarword">${s.word}</div><div class="lead">${s.lead}</div><div class="sub">${s.sub}</div>`;
+  } else if (s.t === 'cycle') {
+    inner = `<div class="kick">${s.kick}</div><h2>${s.h}</h2><div class="lead">${s.lead}</div><div class="cycle">${s.chips.map(c=>`<span>${c}</span>`).join('')}</div>`;
+  } else if (s.t === 'cta') {
+    inner = `<div class="kick">${s.kick}</div><h1>${s.h}</h1><div class="lead">${s.lead}</div><div class="cta-line">${s.ctaLine}</div><div class="disc">${s.disc}</div>`;
+  } else { /* lead */
+    inner = `<div class="kick">${s.kick}</div><h2>${s.h}</h2><div class="lead">${s.lead}</div>${s.sub?`<div class="sub">${s.sub}</div>`:''}`;
+  }
+  deck.insertAdjacentHTML('beforeend', `<section class="slide"><div class="num">${n}</div>${inner}<div class="foot">The Four Pillars of Quarterlife &middot; Satya Doyle Byock</div></section>`);
+});
+</script>
+</body>
+</html>
