@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoFi Masterclass: Designing AI Products People Actually Trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ea;        /* warm paper, derived from CoFi body #faf9f5 */
+    --panel:#1c1b1a;     /* CoFi ink, used as the reversed feature panel (their hero device) */
+    --ink:#1c1b1a;       /* CoFi text color */
+    --paper:#f6f3ea;     /* reversed-out type on dark panels */
+    --rule:#d9d3c4;      /* warm hairline, low-chroma tint of ground */
+    --accent:#1c1b1a;    /* monochrome: the only harvested brand color */
+    --muted:#6b675f;     /* derived warm grey for secondary text */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Outfit',system-ui,sans-serif;font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  .stage{width:min(960px,94vw);aspect-ratio:16/10;position:relative}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;
+    padding:7% 8%;border:1px solid var(--rule);background:var(--bg);
+    overflow:hidden;
+  }
+  .slide.on{display:flex}
+  .slide.panel{background:var(--panel);color:var(--paper);border-color:var(--panel)}
+  .kicker{font-size:0.78rem;letter-spacing:0.28em;text-transform:uppercase;
+    font-weight:600;color:var(--muted)}
+  .slide.panel .kicker{color:#b8b2a6}
+  .num{position:absolute;right:7%;top:6%;font-weight:800;font-size:3.2rem;
+    line-height:1;color:var(--rule)}
+  .slide.panel .num{color:#3a3834}
+  h1{font-weight:800;font-size:3.1rem;line-height:1.04;letter-spacing:-0.02em;margin-top:auto}
+  h2{font-weight:700;font-size:2.15rem;line-height:1.08;letter-spacing:-0.015em}
+  .sub{font-weight:400;font-size:1.15rem;color:var(--muted);margin-top:1.1rem;max-width:42ch}
+  .slide.panel .sub{color:#c9c3b6}
+  .lead{font-weight:300;font-size:1.5rem;line-height:1.35;max-width:30ch;margin-top:1.4rem}
+  .body{font-weight:400;font-size:1.18rem;line-height:1.5;max-width:46ch;margin-top:1.3rem;color:#2c2a27}
+  .slide.panel .body{color:#ddd7ca}
+  ul{list-style:none;margin-top:1.5rem;display:flex;flex-direction:column;gap:0.85rem}
+  li{font-size:1.18rem;line-height:1.35;padding-left:1.6rem;position:relative;max-width:48ch}
+  li::before{content:"";position:absolute;left:0;top:0.55em;width:0.7rem;height:1px;background:var(--accent)}
+  .slide.panel li::before{background:var(--paper)}
+  .big{font-weight:800;font-size:2.6rem;line-height:1.08;letter-spacing:-0.02em;max-width:24ch}
+  .pillar-k{font-weight:600;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+  .quote{font-weight:300;font-size:1.7rem;line-height:1.3;max-width:30ch;margin-top:auto}
+  .cite{font-weight:600;font-size:1rem;color:var(--muted);margin-top:1.2rem}
+  .slide.panel .cite{color:#b8b2a6}
+  .foot{margin-top:auto;font-size:0.95rem;color:var(--muted);max-width:52ch;line-height:1.45}
+  .slide.panel .foot{color:#b8b2a6}
+  .logos{margin-top:1.6rem;font-size:1rem;color:var(--muted);letter-spacing:0.02em;line-height:1.7;max-width:50ch}
+  .disc{font-size:0.82rem;color:var(--muted);line-height:1.5;max-width:54ch;margin-top:1.4rem}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;gap:18px;align-items:center;font-size:0.85rem;color:var(--muted)}
+  .nav button{font-family:inherit;font-size:0.85rem;border:1px solid var(--rule);
+    background:transparent;color:var(--ink);padding:5px 14px;border-radius:2px;cursor:pointer}
+  .nav button:hover{background:var(--ink);color:var(--bg)}
+  .count{min-width:54px;text-align:center}
+  @media(max-width:640px){
+    h1{font-size:2rem}h2{font-size:1.5rem}.big{font-size:1.7rem}.lead{font-size:1.2rem}
+    .num{font-size:2rem}li,.body{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next">Next</button>
+</div>
+<script>
+const S=[
+  {t:'title',kicker:'CoFi Masterclass',h:'Designing AI Products People Actually Trust',sub:'A live session for product designers who just had AI land on their roadmap. How to design features users rely on, not features they learn to double-check.'},
+
+  {t:'audience',kicker:'Who this is for',h:'You design the product. Now you have to design the model.',body:'This is for working product designers, design leads, and UX teams adding AI to something real people already use.',items:['You ship to real users, not a demo','AI features are now on your roadmap, like it or not','You were trained to design screens that behave the same way every time']},
+
+  {t:'reframe',kicker:'The trap',big:'You were trained on products that do the same thing twice. AI does not.',sub:'Every instinct that made you good at deterministic design quietly works against you the moment the output becomes a guess.'},
+
+  {t:'reframe',panel:true,kicker:'The real risk',big:'The missing feature is not what loses users. The first confident wrong answer is.',sub:'People forgive a product that cannot do something yet. They do not forgive one that sounded certain and was wrong.'},
+
+  {t:'part',panel:true,kicker:'Part One',h:'Why trust breaks in AI products'},
+
+  {t:'problem',kicker:'Problem 1',h:'Chat is not the interface',body:'Dropping a text box on the product feels like shipping AI. It is really hiding the product behind a blank prompt and asking the user to guess what it can do. Intent, structure, and real surfaces do the work a chat box pretends to.'},
+
+  {t:'problem',kicker:'Problem 2',h:'The confident wrong answer',body:'A model will be wrong some of the time, stated with total confidence. If nothing in the design catches that moment, the user catches it instead, and that is the exact moment trust leaves. The recovery is a design problem, not a model problem.'},
+
+  {t:'problem',kicker:'Problem 3',h:'A design system built for humans, not agents',body:'Your components assume a person is placing them. When a model assembles the interface, the old rules bend in ways nobody reviewed. A system that is not agent-ready ships inconsistency at machine speed.'},
+
+  {t:'part',panel:true,kicker:'Part Two',h:'The CoFi playbook',sub:'Three moves, drawn from what designers at Google, Netflix, Slack, and Autodesk are actually shipping this year.'},
+
+  {t:'pillar',k:'Move 1 / Agentic UX',h:'Design beyond the box',body:'Give the agent intent, structure, and surfaces instead of one blank field. Decide what it does without being asked, what it shows its work on, and where it hands control back. The interface is the product, even when a model is driving it.'},
+
+  {t:'pillar',k:'Move 2 / Design for the wrong answer',h:'Trust is won in the error',body:'Design the correction, the recovery, and the confidence signals before you design the happy path. Show uncertainty honestly, make the fix one step, and never let a guess wear the clothes of a fact. This is where reliable products separate from impressive demos.'},
+
+  {t:'pillar',k:'Move 3 / Agent-ready systems',h:'Components that hold when a model builds the screen',body:'Write the rules so the system still reads as yours when an agent, not a designer, assembles it. Constraints, states, and defaults that survive automation keep quality from drifting the moment you scale.'},
+
+  {t:'pillar',panel:true,k:'The through-line',h:'Your judgment is the product now',body:'AI can generate a hundred screens in a second. What it cannot do is decide which one earns trust. The designer who owns that judgment owns the outcome. That ownership is the whole point of the three moves.'},
+
+  {t:'part',panel:true,kicker:'Part Three',h:'From trap to trust, in one screen'},
+
+  {t:'example',kicker:'Before and after',h:'Same feature, redesigned around trust',body:'Take a draft-generation feature. Before: a chat box and a Generate button, confident output, no way to tell good from guessed. After: a clear intent step, visible confidence on each block, one-tap correction, and a handoff back to the designer. Same model. A product people stop double-checking.'},
+
+  {t:'why',kicker:'Why learn this at CoFi',h:'Taught by people shipping it this quarter',body:'AI is changing faster than any course can keep up with. By the time a curriculum is recorded, half of it is out of date. CoFi runs live sessions with designers who are building AI products right now and tell you what is actually working, not what worked last year.',logos:'Practitioners from Google, Netflix, Slack, Autodesk, HubSpot, Databricks, and more.'},
+
+  {t:'proof',panel:true,kicker:'From the community',quote:'Fresh ideas on how AI can shape more human-centered experiences.',cite:'Livia Biondino, Charlotte Tilbury'},
+
+  {t:'proof',kicker:'From the community',quote:'My work has already improved since adopting these tools.',cite:'Emma M., Mighty Crow',foot:'6,500+ product builders from 1,700+ companies have joined CoFi sessions.'},
+
+  {t:'recap',kicker:'The three moves',h:'If you take three things',items:['Design beyond the chat box: give the agent intent and real surfaces','Design the wrong answer first: trust is won in the recovery','Make the system agent-ready so quality holds when you scale']},
+
+  {t:'cta',panel:true,kicker:'Join the next session',h:'Get invited to CoFi',body:'Live sessions on AI product design, with the people actually building it. Join 6,500+ product builders learning what is working right now.',cta:'Get invited at cofi.design',disc:'Educational session only. No outcome is promised or guaranteed; results vary by product, team, and effort. Examples are illustrative, not predictions.'}
+];
+
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+let i=0;
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,idx)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(s.panel?' panel':'')+(idx===i?' on':'');
+    let h='';
+    h+='<span class="num">'+String(idx+1).padStart(2,'0')+'</span>';
+    if(s.kicker)h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+    if(s.k)h+='<div class="pillar-k">'+esc(s.k)+'</div>';
+    if(s.big)h+='<div class="big">'+esc(s.big)+'</div>';
+    if(s.h)h+='<h1>'+esc(s.h)+'</h1>';
+    if(s.quote)h+='<div class="quote">&ldquo;'+esc(s.quote)+'&rdquo;</div>';
+    if(s.lead)h+='<div class="lead">'+esc(s.lead)+'</div>';
+    if(s.body)h+='<div class="body">'+esc(s.body)+'</div>';
+    if(s.items){h+='<ul>';s.items.forEach(x=>h+='<li>'+esc(x)+'</li>');h+='</ul>';}
+    if(s.logos)h+='<div class="logos">'+esc(s.logos)+'</div>';
+    if(s.cta)h+='<div class="lead" style="margin-top:1.6rem;font-weight:600">'+esc(s.cta)+'</div>';
+    if(s.cite)h+='<div class="cite">'+esc(s.cite)+'</div>';
+    if(s.sub)h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.foot)h+='<div class="foot">'+esc(s.foot)+'</div>';
+    if(s.disc)h+='<div class="disc">'+esc(s.disc)+'</div>';
+    d.innerHTML=h;
+    stage.appendChild(d);
+  });
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+render();
+</script>
+</body>
+</html>
