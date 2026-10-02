@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Research Wikipedia — a masterclass by Ilya Shabanov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e6ece9;        /* pale tint of their dominant sage #c1d2ce (brand.json) */
+    --panel:#f4f6f4;
+    --soft:#e9ece8;      /* lightened sage ground */
+    --sage:#c1d2ce;      /* their dominant color, 54 uses */
+    --ink:#1f2927;       /* their dark-forest heading color */
+    --muted:#4b5a56;
+    --accent:#37675b;    /* their signature teal-green link color */
+    --rule:#c7d4cf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(31,41,39,.04)}
+  .slide.title{background:linear-gradient(160deg,#eef2ef,#ffffff)}
+  .slide.section{background:var(--ink);color:#f2f1ed;border-color:var(--ink)}
+  .slide.section .kicker{color:var(--sage)}
+  .slide.cta{background:linear-gradient(160deg,#eef2ef,#ffffff)}
+  .kicker{font-family:'IBM Plex Sans';font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:'EB Garamond';font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:'EB Garamond';font-weight:600;font-size:34px;line-height:1.14;margin-bottom:10px}
+  .sub{font-family:'EB Garamond';font-style:italic;font-size:22px;color:var(--muted);margin-top:18px}
+  p{font-size:19px;line-height:1.5;color:var(--muted);margin-top:14px;max-width:62ch}
+  ul{margin:20px 0 0 0;padding:0;list-style:none}
+  li{font-size:19px;line-height:1.45;color:var(--ink);padding:12px 0 12px 34px;position:relative;
+    border-top:1px solid var(--rule)}
+  li:first-child{border-top:0}
+  li:before{content:"";position:absolute;left:4px;top:19px;width:10px;height:10px;border-radius:50%;
+    background:var(--accent)}
+  .pillar{font-family:'EB Garamond';font-weight:600;color:var(--ink)}
+  .big{font-size:60px;font-family:'EB Garamond';font-weight:600;color:var(--accent);line-height:1}
+  .cred{display:flex;gap:28px;flex-wrap:wrap;margin-top:24px}
+  .cred div{flex:1;min-width:180px;border-left:3px solid var(--accent);padding:6px 0 6px 16px}
+  .cred .n{font-family:'EB Garamond';font-size:30px;font-weight:600;color:var(--ink)}
+  .cred .l{font-size:15px;color:var(--muted);margin-top:4px}
+  .graph{margin-top:26px}
+  .disc{font-size:14px;color:#6a7873;margin-top:22px;border-top:1px solid var(--rule);padding-top:16px;
+    max-width:70ch}
+  .pg{font-size:13px;color:#8a9893;text-align:center;letter-spacing:.12em;text-transform:uppercase}
+  .btn{display:inline-block;margin-top:22px;background:var(--accent);color:#f2f1ed;font-weight:600;
+    font-family:'IBM Plex Sans';padding:14px 26px;border-radius:10px;font-size:17px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+/* All masterclass copy lives inside const S (the coach pitching their own audience). */
+const S = [
+  {t:'title',
+   kicker:'A live masterclass for researchers',
+   h:'The Research Wikipedia',
+   sub:'How to build a research system in Obsidian that files itself, so your papers, notes and ideas stay found.'},
+
+  {t:'content',
+   kicker:'Who this is for',
+   h:'You are a researcher, not a librarian',
+   p:'PhD students, postdocs and faculty who read dozens of papers a month and still cannot find the one quote they need at 11pm.',
+   li:['You have hundreds of PDFs and no idea which project each belongs to',
+       'Your notes live in five apps and none of them talk to each other',
+       'Every literature review starts from a blank page, as if you never read the field']},
+
+  {t:'section',
+   kicker:'The real problem',
+   h:'It was never a discipline problem',
+   p:'Students are simply not taught any information-handling skills. The overload is real, but the fix is a system, not more willpower.'},
+
+  {t:'content',
+   kicker:'Part one',
+   h:'The flat pile',
+   p:'Most researchers store papers as a flat reference list. A flat pile cannot tell you how two ideas connect, so every connection has to be re-discovered by hand, every time.',
+   li:['References pile up faster than you can read them',
+       'Highlights die inside PDFs you never reopen',
+       'The thinking you already did is lost between sessions']},
+
+  {t:'content',
+   kicker:'The cost',
+   h:'What disorganisation quietly takes',
+   li:['Weeks re-reading papers you have already read',
+       'A literature review that feels bottomless',
+       'Good ideas that never make it into a manuscript because you forgot you had them']},
+
+  {t:'section',
+   kicker:'Part two',
+   h:'Build a Wikipedia for your research',
+   p:'Instead of a pile, you build an interconnected wiki: every source, every idea and every argument is a linked note, so your library starts to organise itself.'},
+
+  {t:'content',
+   kicker:'Pillar 1',
+   h:'The Research Wiki, built in Obsidian',
+   p:'One local vault that holds every note. Notes link to each other the way Wikipedia pages do, so related thinking sits one click apart instead of lost in folders.',
+   li:['Plain-text notes you own, forever',
+       'Links instead of folders, so one idea can live in many contexts',
+       'Deep-links that jump straight to the exact PDF annotation']},
+
+  {t:'content',
+   kicker:'Pillar 2',
+   h:'Source, Topic, Argument',
+   p:'A simple structure so every paper knows which project and which manuscript it belongs to. Sources feed topics, topics feed arguments, and nothing floats unattached.',
+   li:['Sources: what you read',
+       'Topics: the questions you are chasing',
+       'Arguments: the claims your paper will actually make']},
+
+  {t:'content',
+   kicker:'Pillar 3',
+   h:'Your highlights stop dying in PDFs',
+   p:'Annotations flow out of the reader and into linked notes, tagged to the argument they support. The reading you already did becomes reusable instead of buried.'},
+
+  {t:'content',
+   kicker:'Pillar 4',
+   h:'AI that works on your knowledge, not the internet',
+   p:'Connect a tool like Claude to your own Zotero library so the AI reasons over the papers you actually trust. It drafts, compares and finds gaps inside your own evidence base, not a hallucinated one.',
+   li:['Ask questions across your full library at once',
+       'Surface research gaps with AI mind-maps',
+       'Keep the AI grounded in sources you can cite']},
+
+  {t:'section',
+   kicker:'The plan',
+   h:'Four steps, in order',
+   p:'Build the Research Wiki, add literature-review tools, integrate AI on top, then cultivate and nourish it so it grows with you.'},
+
+  {t:'content',
+   kicker:'In practice',
+   h:'A literature review that files itself',
+   p:'When every source is already linked to a topic and an argument, the review is not a blank page. It is a view of a system you have been building all along.'},
+
+  {t:'content',
+   kicker:'In practice',
+   h:'From notes to manuscript',
+   p:'Because arguments are first-class notes, the draft assembles from work you already did. Writing becomes arranging, not starting over.'},
+
+  {t:'content',
+   kicker:'Why me',
+   h:'I built this because I needed it',
+   p:'After twelve years in industry I started a PhD at 36 and finished in about two and a half years, with four first-author papers, by treating information as a system to engineer.',
+   cred:[['2.5 yrs','PhD in ecology, ahead of schedule'],
+         ['4','first-author papers'],
+         ['Nature','Scientific Reports, before enrollment']]},
+
+  {t:'content',
+   kicker:'If you take one thing',
+   h:'Organise once, benefit for the whole PhD',
+   li:['Find any paper, quote or idea in seconds',
+       'Start every review from a system, not a blank page',
+       'Let AI help without losing the thread of your own thinking']},
+
+  {t:'content',
+   kicker:'The common worry',
+   h:'You do not have to be technical',
+   p:'The whole point is effortless. You learn a small, repeatable set of moves and the system does the remembering. The tools are free or cheap, and the method matters more than any app.'},
+
+  {t:'cta',
+   kicker:'Where to start',
+   h:'Start organising your research this week',
+   p:'Begin with the free 21-day course on information management with Obsidian, then go deeper with the in-depth courses or work with me one-on-one.',
+   btn:'Start the free 21-day course',
+   disc:'This masterclass is educational and reflects one researcher’s method. Outcomes depend on your own work and circumstances. Results vary and are not guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide ' + (s.t||'content');
+  let h = '';
+  if(s.kicker) h += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.h) h += (s.t==='title' ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>');
+  if(s.sub) h += '<div class="sub">'+s.sub+'</div>';
+  if(s.p) h += '<p>'+s.p+'</p>';
+  if(s.li){ h += '<ul>'; s.li.forEach(x=>h+='<li>'+x+'</li>'); h += '</ul>'; }
+  if(s.cred){ h += '<div class="cred">'; s.cred.forEach(c=>h+='<div><div class="n">'+c[0]+'</div><div class="l">'+c[1]+'</div></div>'); h += '</div>'; }
+  if(s.btn) h += '<div><span class="btn">'+s.btn+'</span></div>';
+  if(s.disc) h += '<div class="disc">'+s.disc+'</div>';
+  el.innerHTML = h;
+  deck.appendChild(el);
+  const pg = document.createElement('div');
+  pg.className = 'pg';
+  pg.textContent = 'Effortless Academic  ·  ' + (i+1) + ' / ' + S.length;
+  deck.appendChild(pg);
+});
+</script>
+</body>
+</html>
