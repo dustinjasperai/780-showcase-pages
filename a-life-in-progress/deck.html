@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Befriend Yourself | A live masterclass with Krista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F1E9;      /* warm paper cream, from brand light scheme */
+    --panel:#FFFFFF;
+    --ink:#323232;     /* her body ink, brand.json */
+    --muted:#6b645b;
+    --accent:#B0703C;  /* her terracotta link-accent, brand.json (22 uses) */
+    --teal:#00584E;    /* her forest teal, brand.json */
+    --rule:#e4dccf;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Lato",-apple-system,Segoe UI,Roboto,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  .stage{width:min(960px,94vw);aspect-ratio:16/10;position:relative}
+  .slide{
+    position:absolute;inset:0;background:var(--panel);
+    border:1px solid var(--rule);border-radius:22px;
+    padding:clamp(28px,5vw,64px);display:none;flex-direction:column;
+    box-shadow:0 18px 50px rgba(50,50,50,.08);overflow:hidden;
+  }
+  .slide.on{display:flex}
+  .slide::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:8px;
+    background:linear-gradient(180deg,var(--accent),var(--teal));
+  }
+  .kicker{
+    font-family:"Quicksand",sans-serif;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;font-size:clamp(11px,1.5vw,14px);color:var(--accent);
+    margin:0 0 18px;
+  }
+  h1{
+    font-family:"Quicksand",sans-serif;font-weight:700;line-height:1.08;
+    font-size:clamp(30px,6.2vw,66px);margin:0 0 20px;color:var(--ink);
+  }
+  h2{
+    font-family:"Quicksand",sans-serif;font-weight:700;line-height:1.14;
+    font-size:clamp(24px,4.4vw,46px);margin:0 0 18px;color:var(--ink);
+  }
+  p{font-size:clamp(16px,2.3vw,24px);line-height:1.5;margin:0 0 14px;max-width:30ch}
+  .lead{max-width:34ch}
+  .big{font-size:clamp(20px,3vw,30px);line-height:1.4;max-width:26ch}
+  .meta{margin-top:auto;font-family:"Quicksand",sans-serif;color:var(--teal);font-weight:600;
+    font-size:clamp(14px,1.8vw,18px)}
+  .pill{display:inline-block;font-family:"Quicksand",sans-serif;font-weight:700;
+    color:#fff;background:var(--teal);padding:7px 16px;border-radius:999px;
+    font-size:clamp(12px,1.6vw,15px);letter-spacing:.04em;margin-bottom:22px}
+  .two{display:grid;grid-template-columns:28px 1fr;gap:14px 16px;align-items:start;max-width:34ch}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);margin-top:12px}
+  .disc{font-size:clamp(11px,1.5vw,13px);color:var(--muted);max-width:52ch;margin-top:14px;line-height:1.45}
+  .trail{position:absolute;right:-40px;bottom:-40px;width:230px;height:230px;opacity:.12}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;gap:10px;align-items:center;font-family:"Quicksand",sans-serif;color:var(--muted)}
+  .nav button{font:inherit;border:1px solid var(--rule);background:var(--panel);
+    color:var(--ink);border-radius:10px;padding:7px 14px;cursor:pointer}
+  .count{font-weight:600;font-size:13px;min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">Back</button>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="Next">Next</button>
+</div>
+<svg class="trailtpl" style="display:none"></svg>
+<script>
+const S = [
+  {t:'title', k:"A live masterclass with Krista, A Life in Progress",
+   h:"Befriend Yourself",
+   b:"The midlife turn from performing for your life to belonging in it.",
+   meta:"For women in their 40s, 50s and 60s"},
+
+  {t:'content', k:"Who this hour is for",
+   h:"You look fine on the outside.",
+   b:"And you are quietly tired of performing on the inside. If that landed, the next hour is for you."},
+
+  {t:'content', k:"The trap",
+   h:"You did everything right.",
+   b:"The list. The roles. The keeping of everyone happy. And somewhere in there, you went quiet to yourself."},
+
+  {t:'content', k:"The real reframe",
+   big:true,
+   h:"Midlife is not a crisis to fix.",
+   b:"The exhaustion is an old deal breaking: earn your worth by pleasing, achieving, disappearing. You cannot self-improve your way out of a deal you made with yourself. You can only change the deal."},
+
+  {t:'part', pill:"Part One", h:"The core problem",
+   b:"The inner critic you mistook for a coach."},
+
+  {t:'content', k:"Part One",
+   h:"You have been taking orders from a voice that calls itself discipline.",
+   b:"It got you here. It cannot take you home. Freedom does not come from a louder critic. It comes from a different relationship with yourself."},
+
+  {t:'content', k:"Part One",
+   h:"Every yes you did not mean was a small no to yourself.",
+   b:"People-pleasing is not kindness. Over years it becomes self-abandonment with good manners."},
+
+  {t:'part', pill:"Part Two", h:"The turn",
+   b:"Befriending your true self, walked on the Hope Map."},
+
+  {t:'content', k:"Part Two",
+   big:true,
+   h:"Befriending yourself is not self-care as a reward.",
+   b:"It is becoming the person who stays on your own side, especially when you are messy."},
+
+  {t:'content', k:"Part Two: the Hope Map",
+   h:"The Hope Map is the path from where you are now toward freedom, wholeness and joy.",
+   b:"It has two legs you walk together, not one before the other."},
+
+  {t:'content', k:"Part Two: pillar one",
+   h:"Inner Work",
+   b:"Learn to listen inward, recognize your own voice under the noise, and build real self-trust. This is where you meet the self you have been outrunning."},
+
+  {t:'content', k:"Part Two: pillar two",
+   h:"Outer Structure",
+   b:"Build the values-aligned rhythms, habits and practices that make the new way sustainable, so it is a life you live, not a weekend high you lose by Tuesday."},
+
+  {t:'content', k:"Part Two: the pace",
+   h:"You grow this. You do not sprint it.",
+   b:"Release and Rewild. Remember and Re-envision. Re-emerge and Recalibrate. Reclaim and Rewrite. A map walked at the pace of a life, not a launch."},
+
+  {t:'part', pill:"Part Three", h:"When the performing stops",
+   b:"What an ordinary day feels like once you live on your own side."},
+
+  {t:'content', k:"Part Three",
+   h:"You stop auditioning.",
+   b:"You rest without earning it first. You choose from your values instead of your fear. Your relationships get more honest because you finally are."},
+
+  {t:'content', k:"Part Three",
+   big:true,
+   h:"You are imperfect. Life is messy. You show up anyway.",
+   b:"That is not the booby prize of midlife. Done on purpose, that is the freedom."},
+
+  {t:'content', k:"Why me",
+   h:"I am Krista.",
+   b:"I have spent 15+ years in this practice and more than a decade guiding midlife women through it. I am not above the mess. I walk the map with you, as one more life in progress."},
+
+  {t:'content', k:"The three moves",
+   h:"So, in one breath:",
+   b:"Hear your real voice. Build the structure that honors it. Walk the map at the pace of a life. That is the whole turn."},
+
+  {t:'cta', k:"Where to go from here",
+   h:"Come walk it with women doing the same.",
+   b:"If this is the turn you have been circling, the Brave + Beautiful Community opens its next live session. The simplest first step is a free chat with me.",
+   cta:"alifeinprogress.ca",
+   disc:"This masterclass is educational and reflects one approach to midlife wellbeing. It is not therapy or medical advice. Results vary from person to person and are not guaranteed; your path is your own."}
+];
+
+const stage=document.getElementById('stage');
+let i=0;
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,idx)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(idx===i?' on':'');
+    let inner='';
+    if(s.pill) inner+='<span class="pill">'+s.pill+'</span>';
+    if(s.k) inner+='<p class="kicker">'+s.k+'</p>';
+    if(s.h) inner+='<h'+(s.t==='title'?'1':'2')+'>'+s.h+'</h'+(s.t==='title'?'1':'2')+'>';
+    if(s.b) inner+='<p class="'+(s.big?'big':(s.t==='title'?'lead':''))+'">'+s.b+'</p>';
+    if(s.cta) inner+='<p class="meta">'+s.cta+'</p>';
+    if(s.meta) inner+='<p class="meta">'+s.meta+'</p>';
+    if(s.disc) inner+='<p class="disc">'+s.disc+'</p>';
+    d.innerHTML=inner;
+    stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render()}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+render();
+</script>
+</body>
+</html>
