@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Service Exchange | A Make Moves Masterclass with Clayton Law</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #faf9f7;
+    --panel: #f1efe9;
+    --rule: #e4e0d6;
+    --ink: #191919;
+    --muted: #6f6a60;
+    --accent: #b8a88f;
+    --accent-ink: #8a7a5f;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Roboto', -apple-system, system-ui, sans-serif;
+    background: #2a2824;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px;
+  }
+  .stage { width: 100%; max-width: 960px; }
+  .slide {
+    position: relative;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    aspect-ratio: 16 / 9;
+    padding: 64px 72px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+  .slide::after {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+    background: var(--accent);
+  }
+  .kicker { font-family: 'Roboto'; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 20px; }
+  h1 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 58px; line-height: 1.04; letter-spacing: -0.01em; color: var(--ink); }
+  h2 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.12; color: var(--ink); margin-bottom: 18px; }
+  .lead { font-size: 22px; line-height: 1.5; color: var(--muted); margin-top: 22px; max-width: 42ch; }
+  .body { font-size: 21px; line-height: 1.6; color: #322f2a; max-width: 48ch; }
+  .big { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 150px; line-height: 0.9; color: var(--accent); letter-spacing: -0.02em; }
+  ul { list-style: none; margin-top: 26px; display: flex; flex-direction: column; gap: 16px; }
+  li { font-size: 21px; line-height: 1.4; color: #322f2a; padding-left: 30px; position: relative; max-width: 46ch; }
+  li::before { content: ""; position: absolute; left: 0; top: 11px; width: 12px; height: 12px; background: var(--accent); }
+  .num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--accent-ink); margin-bottom: 14px; }
+  .presenter { margin-top: 34px; font-size: 16px; color: var(--muted); letter-spacing: 0.02em; }
+  .presenter strong { color: var(--ink); font-weight: 500; }
+  .disclaimer { margin-top: 26px; font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 54ch; font-style: italic; }
+  .cta-step { margin-top: 18px; font-size: 24px; font-weight: 500; color: var(--ink); }
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; color: #cfc8ba; font-family: 'Roboto'; font-size: 13px; }
+  .nav button { background: none; border: 1px solid #5a564e; color: #cfc8ba; padding: 7px 16px; font-size: 13px; cursor: pointer; letter-spacing: 0.04em; }
+  .nav button:hover { border-color: var(--accent); color: var(--accent); }
+  .count { letter-spacing: 0.1em; }
+  @media (max-width: 680px) {
+    .slide { padding: 34px 30px; }
+    h1 { font-size: 34px; } h2 { font-size: 26px; } .big { font-size: 90px; }
+    .lead, .body, li { font-size: 17px; } .cta-step { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div id="deck"></div>
+  <div class="nav">
+    <button onclick="go(-1)">Prev</button>
+    <span class="count"><span id="cur">1</span> / <span id="tot">1</span></span>
+    <button onclick="go(1)">Next</button>
+  </div>
+</div>
+<script>
+const S = [
+  {t:'title', kicker:'A Make Moves Masterclass', h:'The Service Exchange',
+    lead:'How health and fitness coaches land dream clients from Instagram without another dead PDF.',
+    presenter:'Clayton Law, Make Moves' },
+  {t:'promise', kicker:'What you will walk away with', h:'By the end of this hour',
+    bullets:['A lead magnet that proves you can coach before anyone pays you','A simple way to turn Instagram attention into booked calls','The exact method we teach inside the Dream Client Blueprint'] },
+  {t:'audience', kicker:'Who this is for', h:'This is for you if',
+    bullets:['You coach health or fitness and you are good at it','You have an audience on Instagram but clients come in waves','You are tired of making free guides nobody opens'] },
+  {t:'trap', kicker:'The trap', h:'You were told to make a free PDF',
+    body:'Build a lead magnet, they said. A checklist, a guide, a seven day plan. So you made one. And the downloads went nowhere.' },
+  {t:'trap', kicker:'The trap', h:'A download is not a decision',
+    body:'A PDF proves nothing about whether you can actually help someone. It asks for an email and gives back a file. No progress, no trust, no reason to reply.' },
+  {t:'reframe', kicker:'The reframe', h:'Give progress, not information',
+    lead:'A lead magnet should create real progress for a real person, right now. The moment they feel it, you stop being another account and become their coach.' },
+  {t:'part', num:'Part One', h:'Why the PDF fails',
+    body:'Attention is earned with help, not with more information. People already have too much information. What they do not have is someone who looked at their situation and told them the truth.' },
+  {t:'body', kicker:'Part One', h:'The gap you can fill',
+    body:'Every coach in the feed is handing out the same recycled guide. The coach who offers to actually look at the person wins the conversation before the pitch ever starts.' },
+  {t:'part', num:'Part Two', h:'The method, in three moves' },
+  {t:'pillar', num:'Pillar one', h:'The Service Exchange',
+    body:'Offer a real assessment in exchange for a comment or a DM. A form check, a movement screen, a quick program audit. The assessment is the proof and the filter at the same time.' },
+  {t:'pillar', num:'Pillar one', h:'In practice',
+    bullets:['Send me a video of your squat and I will do a free form check','Drop the word READY and I will audit your week of training','Real help, for a real person, right now'] },
+  {t:'pillar', num:'Pillar two', h:'Sell with your voice',
+    body:'Tonality, animation and conviction decide whether that assessment turns into a call. The words matter less than how you say them. People buy the certainty in your voice.' },
+  {t:'pillar', num:'Pillar two', h:'Conviction is a skill',
+    bullets:['Speak to one person, not an audience','Say the hard thing plainly, with care','Let them hear that you have seen this before'] },
+  {t:'pillar', num:'Pillar three', h:'Book more calls from Instagram',
+    body:'Make the next step almost impossible to overthink. One link, a short qualifying question, and two specific time slots that lock commitment instead of leaving it open.' },
+  {t:'pillar', num:'Pillar three', h:'Remove the friction',
+    bullets:['One clear link, not a wall of options','A short form that qualifies and respects their time','Two time slots, so the choice is when, not whether'] },
+  {t:'part', num:'Part Three', h:'Thirty days from now' },
+  {t:'looks', kicker:'Part Three', h:'A different month',
+    body:'Assessments land in your DMs every day. The ones who are ready book a call already half sold, because you helped them before you ever pitched. The rest keep watching, and warm up on their own time.' },
+  {t:'whyme', kicker:'Why listen to me', h:'Where this comes from',
+    body:'I am Clayton Law. I host the Make Moves Podcast for health and fitness experts and I run the Make Moves Nation community, where coaches put this method to work every week.' },
+  {t:'recap', kicker:'The whole method', h:'Three moves, one path',
+    bullets:['Trade a real assessment for the DM','Convert it with conviction on camera and on the call','Book the call with a path that locks commitment'] },
+  {t:'cta', kicker:'Your next move', h:'Put the method to work',
+    step:'Join the Dream Client Blueprint and build your Service Exchange with me.',
+    disclaimer:'This masterclass is educational. Results vary from coach to coach and depend on your effort, your market, and your execution. Nothing here is a promise or guarantee of income or specific results.' }
+];
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide' + (i === 0 ? ' active' : '');
+  let html = '';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.num) html += '<div class="num">' + s.num + '</div>';
+  if (s.big) html += '<div class="big">' + s.big + '</div>';
+  if (s.h) html += (s.t === 'title' ? '<h1>' : '<h2>') + s.h + (s.t === 'title' ? '</h1>' : '</h2>');
+  if (s.lead) html += '<div class="lead">' + s.lead + '</div>';
+  if (s.body) html += '<div class="body">' + s.body + '</div>';
+  if (s.bullets) { html += '<ul>'; s.bullets.forEach(b => html += '<li>' + b + '</li>'); html += '</ul>'; }
+  if (s.step) html += '<div class="cta-step">' + s.step + '</div>';
+  if (s.presenter) html += '<div class="presenter"><strong>' + s.presenter + '</strong></div>';
+  if (s.disclaimer) html += '<div class="disclaimer">' + s.disclaimer + '</div>';
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent = slides.length;
+function show(n){ slides[cur].classList.remove('active'); cur = (n + slides.length) % slides.length; slides[cur].classList.add('active'); document.getElementById('cur').textContent = cur + 1; }
+function go(d){ show(cur + d); }
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); });
+</script>
+</body>
+</html>
