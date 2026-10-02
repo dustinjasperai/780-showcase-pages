@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parent the Brain, Not the Behaviour — a masterclass with Rachel Russell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF4EC;
+    --panel:#F4E6D6;
+    --ink:#2B2440;
+    --rule:#E4D0BC;
+    --accent:#E0556E;
+    --muted:#6B6276;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"Questrial",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:18px;padding:52px 48px;margin:0 0 20px;min-height:420px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide .no{position:absolute;top:20px;right:24px;font-size:13px;color:var(--muted);letter-spacing:.08em}
+  .kicker{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:18px}
+  h1,h2,h3{font-family:"Syne",sans-serif;line-height:1.08;font-weight:800;letter-spacing:-.01em}
+  h1{font-size:54px}
+  h2{font-size:38px}
+  h3{font-size:26px}
+  .sub{font-size:20px;color:var(--muted);margin-top:18px;max-width:40ch}
+  p.body{font-size:19px;margin-top:16px;max-width:52ch}
+  ul{list-style:none;margin-top:22px}
+  li{font-size:19px;padding:12px 0 12px 34px;border-top:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:19px;width:14px;height:14px;border-radius:50%;background:var(--accent)}
+  li b{font-family:"Syne",sans-serif}
+  .big{font-family:"Syne",sans-serif;font-weight:800;font-size:64px;line-height:1;color:var(--accent);margin:8px 0 10px}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:4px;color:var(--muted)}
+  .hit{color:var(--accent)}
+  /* title + part + cta variants */
+  .t-title{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .t-title h1{color:var(--bg)}
+  .t-title .sub{color:#D8CFE0}
+  .t-title .kicker{color:var(--accent)}
+  .t-part{background:var(--ink);color:var(--bg);border-color:var(--ink);min-height:300px}
+  .t-part h2{color:var(--bg)}
+  .t-part .kicker{color:var(--accent)}
+  .t-reframe{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .t-reframe h2{color:#fff}
+  .t-reframe .kicker{color:#fff;opacity:.85}
+  .t-reframe .sub{color:#fff;opacity:.92}
+  .t-cta{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .t-cta h2{color:var(--bg)}
+  .t-cta .kicker{color:var(--accent)}
+  .t-cta .sub{color:#D8CFE0}
+  .disclaimer{margin-top:26px;font-size:13px;color:#9a93a6;max-width:60ch;line-height:1.5}
+  .credit{font-size:15px;color:var(--muted);margin-top:22px}
+  @media(max-width:640px){
+    .slide{padding:36px 26px;min-height:340px}
+    h1{font-size:38px}h2{font-size:28px}h3{font-size:22px}.big{font-size:46px}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Rachel Russell', h:'Parent the Brain, Not the Behaviour', sub:'Why your child’s hardest moments are a nervous system asking for help, and what to do instead.'},
+  {t:'promise', kicker:'What you’ll leave with', h:'A new lens, and a plan', bullets:['Read behaviour as a brain state, not a character flaw','The R.A.D. framework you can use tonight','One calmer way through the 7pm meltdown']},
+  {t:'who', kicker:'Who this is for', h:'The parent who has tried everything', body:'Reward charts. Time-outs. Counting to three. Bribes, then guilt. You are not doing it wrong. You have just been handed the wrong map.'},
+  {t:'trap', kicker:'The trap', h:'We were taught to manage the behaviour', bullets:['Catch it, correct it, consequence it','It works for a day, then it does not','Everyone is more tired, and nothing underneath has changed']},
+  {t:'reframe', kicker:'The reframe', h:'The problem was never the behaviour', sub:'The behaviour is the smoke. The nervous system is the fire.'},
+  {t:'part', kicker:'Part One', h:'Behaviour is a nervous-system state'},
+  {t:'point', kicker:'The shift', h:'Defiance, or dysregulation?', body:'A dysregulated brain cannot access reason, memory or empathy in the moment. What looks like defiance is usually a child who has flipped into fight, flight or freeze and cannot climb back out alone.'},
+  {t:'point', kicker:'Why consequences backfire', h:'You cannot teach a brain that is in alarm', body:'When a child is dysregulated, a consequence lands as one more threat. It deepens the alarm. The lesson you meant to teach cannot be stored until the body feels safe again.'},
+  {t:'big', kicker:'The order that matters', big:'Regulate first', body:'Connection and calm come before correction. Always. That single reorder changes everything that follows.'},
+  {t:'part', kicker:'Part Two', h:'The R.A.D. framework'},
+  {t:'pillar', kicker:'Pillar one', h:'Regulation', body:'Settle the nervous system first, yours and theirs. Co-regulate before you correct. A calm adult is the intervention; the child borrows your steadiness until they can find their own.'},
+  {t:'pillar', kicker:'Pillar two', h:'Autonomy', body:'Boundaries with clarity and kindness. Hold the limit and hand back real agency inside it. A boundary held warmly builds trust; a boundary forced builds a battle.'},
+  {t:'pillar', kicker:'Pillar three', h:'Daring', body:'Resilience and self-trust. When a child feels regulated and respected, they dare to try, to fail, and to recover. They grow into someone who knows, likes and trusts themselves.'},
+  {t:'point', kicker:'How they compound', h:'R.A.D. is an order, not a menu', body:'Regulation makes Autonomy safe. Autonomy makes Daring possible. Skip the first and the rest collapse back into power struggles. Done in order, they build on each other.'},
+  {t:'part', kicker:'Part Three', h:'What it looks like at home'},
+  {t:'home', kicker:'The 7pm meltdown, re-run', h:'Same moment, different map', bullets:['Regulate: get low, get calm, let the storm pass','Autonomy: offer a real, small choice inside the limit','Daring: name what they handled once they are through']},
+  {t:'point', kicker:'The mechanism', h:'Connection is a chemical, not a reward', body:'Felt safety and connection release the chemistry that lets a child’s brain come back online. It is not indulgence. It is how regulation physically happens.'},
+  {t:'why', kicker:'Why me', h:'I am Rachel Russell', body:'Brain-based parenting coach in Bunbury, Western Australia, and author of Raising RAD Kids: Parenting with the brain in mind. I coach parents one to one and in workshops to read behaviour through the brain and the nervous system.'},
+  {t:'recap', kicker:'The whole method, in three words', h:'Regulation. Autonomy. Daring.', sub:'Parent the brain, and the behaviour follows.'},
+  {t:'cta', kicker:'If this is your way of parenting', h:'Let’s do this with your family', body:'If this is the way you want to parent, let’s work on it together, in 1:1 coaching or the next 4-week parent workshop.', credit:'Rachel Russell  ·  Quite Frankly Coaching  ·  quitefrankly.com.au', disclaimer:'This masterclass is educational and reflects one approach to parenting. No particular outcome is promised or guaranteed, and results vary from child to child and family to family.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide t-' + s.t;
+  let html = '<div class="no">' + (i+1) + ' / ' + S.length + '</div>';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.big) html += '<div class="big">' + s.big + '</div>';
+  if (s.h) {
+    const tag = (s.t === 'title') ? 'h1' : (s.t === 'part' || s.t === 'reframe' || s.t === 'cta') ? 'h2' : 'h2';
+    html += '<' + tag + '>' + s.h + '</' + tag + '>';
+  }
+  if (s.sub) html += '<div class="sub">' + s.sub + '</div>';
+  if (s.body) html += '<p class="body">' + s.body + '</p>';
+  if (s.bullets) {
+    html += '<ul>' + s.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>';
+  }
+  if (s.credit) html += '<div class="credit">' + s.credit + '</div>';
+  if (s.disclaimer) html += '<div class="disclaimer">' + s.disclaimer + '</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
