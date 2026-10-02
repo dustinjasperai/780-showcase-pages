@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Magnetic On Camera: The State-First Method</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6faf8;
+    --panel:#e7efe9;
+    --rule:#d7e2db;
+    --ink:#15110f;
+    --accent:#1fb488;
+    --blue:#0082f3;
+    --dim:#6b6763;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{width:min(100%,1040px);aspect-ratio:16/9;position:relative;padding:4px}
+  .slide{
+    position:absolute;inset:4px;background:var(--bg);
+    border:1px solid var(--rule);border-radius:14px;
+    padding:56px 64px;display:none;flex-direction:column;
+    overflow:hidden;
+  }
+  .slide.on{display:flex}
+  /* viewfinder corner motif */
+  .slide::before,.slide::after{
+    content:"";position:absolute;width:26px;height:26px;border:2px solid var(--accent);opacity:.5;
+  }
+  .slide::before{top:18px;left:18px;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+  .slide::after{bottom:18px;right:18px;border-left:0;border-top:0;border-radius:0 0 6px 0}
+  .kick{
+    font-family:"Inconsolata",monospace;font-weight:700;letter-spacing:.22em;
+    text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:20px;
+  }
+  h1{font-weight:700;font-size:58px;line-height:1.02;letter-spacing:-.02em;max-width:18ch}
+  h2{font-weight:700;font-size:38px;line-height:1.08;letter-spacing:-.01em;max-width:20ch}
+  .sub{font-size:21px;color:var(--dim);margin-top:18px;max-width:40ch;line-height:1.4}
+  .body{font-size:22px;line-height:1.5;margin-top:22px;max-width:44ch}
+  .big{font-size:30px;line-height:1.3;font-weight:500;max-width:34ch}
+  .foot{margin-top:auto;font-family:"Inconsolata",monospace;font-size:14px;color:var(--dim);letter-spacing:.05em}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:14px;max-width:46ch}
+  li{font-size:21px;line-height:1.35;padding-left:30px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;background:var(--accent);border-radius:2px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 34px;margin-top:28px;max-width:60ch}
+  .cell{border-left:3px solid var(--accent);padding:4px 0 4px 18px}
+  .cell .t{font-family:"Inconsolata",monospace;font-weight:700;letter-spacing:.06em;font-size:15px;text-transform:uppercase}
+  .cell .d{font-size:17px;color:var(--dim);margin-top:6px;line-height:1.4}
+  .steps{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+  .step{flex:1 1 0;min-width:150px;background:var(--panel);border-radius:10px;padding:16px 16px 18px}
+  .step .n{font-family:"Inconsolata",monospace;color:var(--accent);font-weight:700;font-size:14px}
+  .step .h{font-weight:600;font-size:18px;margin-top:6px}
+  .step .d{font-size:14px;color:var(--dim);margin-top:6px;line-height:1.35}
+  .part h2{font-size:48px;max-width:24ch}
+  .mark{color:var(--accent)}
+  .disc{font-size:14px;color:var(--dim);margin-top:22px;max-width:52ch;line-height:1.45}
+  .cta-row{font-family:"Inconsolata",monospace;font-weight:700;font-size:20px;margin-top:22px;color:var(--ink)}
+  .nav{position:fixed;bottom:16px;right:20px;font-family:"Inconsolata",monospace;font-size:13px;color:var(--dim)}
+  .prog{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);transition:width .2s}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="prog" id="prog"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass', h:'Magnetic On Camera', sub:'The State-First Method for speaking naturally and magnetically to camera.', foot:'Thomas Alex Norman · Portal Creative'},
+
+  {t:'who', kick:'Who this is for', h:'You are great at what you do. The camera does not show it.', ul:['You know your stuff, but on video you go stiff','You sound flat and rehearsed, not like the real you','You record, cringe, and quietly stop posting']},
+
+  {t:'trap', kick:'The trap', h:'You try to perform', body:'Most people meet the lens by switching into a polished, professional version of themselves. That performance is exactly what reads as awkward. The harder you act natural, the less natural you get.'},
+
+  {t:'reframe', kick:'The real problem', h:'It was never your script or your gear', big:'The camera is a mirror for your inner state. If you feel tense, the viewer feels it in the first two seconds. Fix the state and the delivery follows.'},
+
+  {t:'cost', kick:'What that costs you', h:'A flat delivery is expensive', ul:['Great ideas land as forgettable videos','No connection means no trust, and no trust means no sales','You post less, so the people who need you never find you']},
+
+  {t:'part', kick:'Part one', h:'You are performing, not being.'},
+
+  {t:'body', kick:'The shift', h:'Stop acting professional', body:'Authenticity is not a personality type. It is a decision to show up as yourself, louder, with nothing to prove. The goal is not a better performance. The goal is no performance at all.'},
+
+  {t:'reframe', kick:'Why "just be confident" fails', h:'Confidence is a byproduct, not a command', big:'You cannot order yourself to feel confident on cue. Confidence shows up when your state is regulated and your delivery has structure. Build those two and confidence arrives on its own.'},
+
+  {t:'part', kick:'Part two', h:'The method: State, Talk, Speech, Voice.'},
+
+  {t:'method', kick:'The 4 core components', h:'Built from the inside out', cells:[['State','Regulate your nervous system before you hit record, so you feel settled instead of braced'],['Talk','Deliver like a conversation with one person, not a broadcast to a crowd'],['Speech','Structure and story that hold attention from the first line to the last'],['Voice','Open up resonance and dynamics so your voice carries warmth and authority']]},
+
+  {t:'spot', kick:'Component one · State', h:'Settle before you speak', body:'The first skill is nervous-system regulation. A few seconds of grounding before you record changes everything the viewer feels. State is first on purpose. Technique on top of a tense body never works.'},
+
+  {t:'spot', kick:'Component two · Talk', h:'Talk to one person', body:'The fastest way to sound natural is to stop addressing an audience. You speak to a single person you can picture. Delivery turns conversational, and the stiffness disappears on its own.'},
+
+  {t:'spot', kick:'Component three · Speech', h:'Structure holds attention', body:'A magnetic video is not a monologue, it is a shape. You open with a hook, carry one idea, and land it. Story is the vehicle. The structure is what keeps a viewer past the first ten seconds.'},
+
+  {t:'spot', kick:'Component four · Voice', h:'A voice that carries', body:'Last comes the voice itself. Resonance training opens up tone and range so you stop going flat or tight on camera. The voice is the finish, never the foundation.'},
+
+  {t:'part', kick:'The 4 pillars', h:'What makes a delivery magnetic.'},
+
+  {t:'method', kick:'Pillars one and two', h:'Authenticity and emotion', cells:[['Authenticity','Show the real you, not a camera-ready character. People trust a person, not a presenter'],['Emotion','Let what you actually feel reach your face and voice. Flat is forgettable, felt is magnetic']]},
+
+  {t:'method', kick:'Pillars three and four', h:'Enthusiasm and humor', cells:[['Enthusiasm','Care out loud. Energy is contagious and it is the cheapest edit you will ever make'],['Humor','Stay human and let it be fun. Humor is what makes people want to watch you again']]},
+
+  {t:'part', kick:'Part three', h:'30 days from camera-shy to consistent.'},
+
+  {t:'steps', kick:'The arc', h:'From camera-resistant to consistent', steps:[['Week 1','Break the resistance','Get past the freeze and get comfortable rolling'],['Week 2','Find your style','Discover how you actually talk when you are not performing'],['Week 3','Voice and story','Advanced vocal work and storytelling that holds people'],['Week 4','Make it a habit','Integrate it into consistent, professional content']]},
+
+  {t:'why', kick:'Why me', h:'I had to learn this the hard way', ul:['I went from freezing on camera to being paid to teach it','I grew a YouTube channel to 320,000+ subscribers','I have made 250+ videos that have reached millions of people'], foot:'This is the exact method I used, taught step by step.'},
+
+  {t:'recap', kick:'The shift', h:'From performing to present', big:'Magnetic on camera is not a talent you were born without. It is a trainable state, a simple structure, and permission to be yourself on the lens.'},
+
+  {t:'cta', kick:'Your next step', h:'Join the next live masterclass', sub:'Bring the project you keep avoiding on camera. You will leave with the State-First Method and a plan to use it this week.', cta:'Save your seat for the live session', disc:'This masterclass is educational. No specific result, follower count, or income is guaranteed. Results vary and depend on the work you put in.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function render(sl){
+  let inner='';
+  if(sl.kick) inner+=`<div class="kick">${esc(sl.kick)}</div>`;
+  if(sl.h) inner+= sl.t==='part'||sl.t==='title' ? `<h1>${esc(sl.h)}</h1>` : `<h2>${esc(sl.h)}</h2>`;
+  if(sl.sub) inner+=`<div class="sub">${esc(sl.sub)}</div>`;
+  if(sl.big) inner+=`<div class="big">${esc(sl.big)}</div>`;
+  if(sl.body) inner+=`<div class="body">${esc(sl.body)}</div>`;
+  if(sl.ul) inner+='<ul>'+sl.ul.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';
+  if(sl.cells) inner+='<div class="grid">'+sl.cells.map(c=>`<div class="cell"><div class="t">${esc(c[0])}</div><div class="d">${esc(c[1])}</div></div>`).join('')+'</div>';
+  if(sl.steps) inner+='<div class="steps">'+sl.steps.map(s=>`<div class="step"><div class="n">${esc(s[0])}</div><div class="h">${esc(s[1])}</div><div class="d">${esc(s[2])}</div></div>`).join('')+'</div>';
+  if(sl.cta) inner+=`<div class="cta-row">${esc(sl.cta)} &rarr;</div>`;
+  if(sl.disc) inner+=`<div class="disc">${esc(sl.disc)}</div>`;
+  if(sl.foot) inner+=`<div class="foot">${esc(sl.foot)}</div>`;
+  const div=document.createElement('div');
+  div.className='slide'+(sl.t==='part'?' part':'');
+  div.innerHTML=inner;
+  return div;
+}
+S.forEach(s=>stage.appendChild(render(s)));
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('prog').style.width=((i+1)/slides.length*100)+'%';
+  document.getElementById('nav').textContent=(i+1)+' / '+slides.length;
+}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(i+1);e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){show(i-1)}
+});
+stage.addEventListener('click',e=>{show(i + (e.clientX < innerWidth/2 ? -1 : 1))});
+show(0);
+</script>
+</body>
+</html>
