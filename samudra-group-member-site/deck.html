@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transition Thinking — A Samudra Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Pontano+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f5f9fa; --panel:#ffffff; --ink:#021940; --ink-soft:#30505a;
+    --ink-muted:#6c7a85; --rule:#dfe6e9; --accent:#30505a;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Pontano Sans',-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage{ width:100vw; height:100vh; position:relative; }
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:8vh 10vw; opacity:0; transition:opacity .35s ease;
+  }
+  .slide.on{ display:flex; opacity:1; }
+  .kicker{
+    font-size:.78rem; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:1.4rem;
+  }
+  h1{ font-family:'Crimson Text',Georgia,serif; font-weight:700;
+    font-size:clamp(2.4rem,6vw,5rem); line-height:1.04; letter-spacing:-.01em; }
+  h2{ font-family:'Crimson Text',Georgia,serif; font-weight:600;
+    font-size:clamp(1.9rem,4.4vw,3.4rem); line-height:1.1; margin-bottom:1.4rem; }
+  .lead{ font-size:clamp(1.1rem,2vw,1.6rem); color:var(--ink-soft); max-width:46ch; line-height:1.5; margin-top:1.2rem;}
+  .big{ font-family:'Crimson Text',Georgia,serif; font-weight:600; font-size:clamp(2rem,5.2vw,4.2rem); line-height:1.08; max-width:20ch;}
+  ul{ list-style:none; margin-top:1rem; max-width:52ch;}
+  li{ font-size:clamp(1rem,1.7vw,1.45rem); color:var(--ink-soft); padding:.55rem 0 .55rem 1.6rem;
+    border-bottom:1px solid var(--rule); position:relative; }
+  li:before{ content:''; position:absolute; left:0; top:1.2rem; width:.7rem; height:2px; background:var(--accent);}
+  li b{ color:var(--ink); font-weight:600;}
+  .lenses{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--rule); margin-top:1.6rem; border:1px solid var(--rule); max-width:60ch;}
+  .lenses div{ background:var(--panel); padding:1.3rem 1.4rem;}
+  .lenses .n{ font-family:'Crimson Text',serif; color:var(--accent); font-size:1.4rem; }
+  .lenses .t{ font-weight:600; margin:.3rem 0; }
+  .lenses .d{ color:var(--ink-muted); font-size:.95rem; line-height:1.4;}
+  .study{ color:var(--ink-muted); font-style:italic; }
+  .cred{ display:flex; gap:2.6rem; margin-top:1.8rem; flex-wrap:wrap;}
+  .cred div span{ display:block; font-family:'Crimson Text',serif; font-size:2rem; color:var(--ink); }
+  .cred div small{ color:var(--ink-muted); letter-spacing:.04em;}
+  .disclaimer{ margin-top:2.2rem; font-size:.85rem; color:var(--ink-muted); max-width:60ch; line-height:1.5;}
+  .horizon{ margin-top:2rem; height:2px; width:60%; background:linear-gradient(90deg,var(--accent),transparent);}
+  footer{ position:fixed; bottom:2.2vh; left:10vw; right:10vw; display:flex; justify-content:space-between;
+    font-size:.72rem; color:var(--ink-muted); letter-spacing:.14em; text-transform:uppercase;}
+  .nav{ position:fixed; bottom:2vh; left:50%; transform:translateX(-50%); display:flex; gap:.5rem;}
+  .nav button{ border:1px solid var(--rule); background:var(--panel); color:var(--ink-soft);
+    width:38px;height:30px;border-radius:4px;cursor:pointer;font-size:1rem;}
+  .nav button:hover{ border-color:var(--accent); color:var(--ink);}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span>Samudra</span><span id="pageno"></span></footer>
+<div class="nav"><button onclick="go(-1)">&#8592;</button><button onclick="go(1)">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live Samudra masterclass', h:'Transition Thinking', lead:'How senior leaders see the shift before it is obvious, and find where the disruption creates new value.'},
+  {t:'audience', kicker:'Who this is for', h2:'You lead through a world that will not hold still', body:['<b>Senior executives, board members and founders</b> making bets that take years to pay off.','The trap: the strategy that built your position was designed for a <b>stable</b> world.','When the ground moves, experience can read it late.']},
+  {t:'reframe', kicker:'The uncomfortable part', big:'By the time a transition is obvious, the value has already been captured.'},
+  {t:'part', kicker:'Part one', h2:'Why conventional strategy misses the turn', lead:'Most planning extrapolates from the present. A transition is precisely the moment the present stops predicting the future.'},
+  {t:'problem', kicker:'The core problem', h2:'Three ways leaders arrive late', body:['<b>Single-variable thinking</b>: watching one trend while the shift happens across several at once.','<b>Over-simplifying complexity</b>: collapsing a tangled system into one clean story too early.','<b>Insight without adaptation</b>: seeing the change and still not moving the organization.']},
+  {t:'part', kicker:'Part two', h2:'Transition Thinking', lead:'A repeatable method for reading a transition early and turning foresight into advantage. Four lenses, each drawn from Samudra research.'},
+  {t:'lens', kicker:'Lens one', h2:'Sense the transition', lead:'Read intersecting shifts, like AI, before they are priced in. Spot the signal while it is still weak.', study:'From the All-Trust study "Everything, Everywhere, All at Once"'},
+  {t:'lens', kicker:'Lens two', h2:'Map the complexity', lead:'Stay in the complexity long enough to see the ecosystem, not the single variable, and find the non-obvious move.', study:'From the study "The Far Side of Complexity"'},
+  {t:'lens', kicker:'Lens three', h2:'Find the sweet spot', lead:'Locate where disruption and durable, sustainable growth overlap. That overlap is where the new value sits.', study:'From the study "The Sweet Spot"'},
+  {t:'lens', kicker:'Lens four', h2:'Build the forcing function', lead:'Foresight is useless without adaptation. Design the organizational forcing function that converts the insight into shipped change.', study:'From the study "Forcing Functions"'},
+  {t:'method', kicker:'The method, in one view', h2:'Four lenses, one discipline', lenses:[['01','Sense','Read the shift while the signal is weak.'],['02','Map','Hold the complexity; see the system.'],['03','Find','Where disruption meets durable growth.'],['04','Force','Turn foresight into shipped change.']]},
+  {t:'part', kicker:'Part three', h2:'Where the method gets sharpened', lead:'Transition Thinking is not a solo exercise. It is sharpened by the right people on one sustained problem.'},
+  {t:'trust', kicker:'The Trust model', h2:'Executives and academics, one problem, one year', body:['A curated peer community, <b>facilitated by domain experts</b>, convening monthly.','Not open networking: a <b>single complex issue</b>, carried across a year, with academics in the room.','The agenda is set by the members, for the members.']},
+  {t:'research', kicker:'The research engine', h2:'Foresight you can hold in your hand', body:['Bi-annual <b>All-Trust Studies</b> crafted with the whole membership.','<span class="study">"The Far Side of Complexity" &middot; "The Sweet Spot" &middot; "Forcing Functions" &middot; "Ties that Bind"</span>','Working papers, case studies and templates from each Trust.']},
+  {t:'cred', kicker:'Why Samudra', h2:'Built for leaders navigating transition', cred:[['2021','Founded in Austin, Texas'],['Fortune 100','Mentors and advisors'],['Bi-annual','All-Trust Assemblies']], lead:'A members-only network for purpose-driven senior leaders, built around a method, not just a room.'},
+  {t:'recap', kicker:'The takeaway', big:'See the shift early. Map it honestly. Find the value. Force the change.'},
+  {t:'cta', kicker:'Your next step', h2:'Sit in on a Trust', lead:'If reading transitions early is the edge you want, request an invitation and experience a Trust for yourself.', disclaimer:'This masterclass is educational. Outcomes depend on your own organization and decisions. Results vary and no specific result is guaranteed.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const el=document.createElement('section');
+    el.className='slide'+(i===0?' on':'');
+    let h='';
+    if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+    if(s.h) h+=`<h1>${s.h}</h1>`;
+    if(s.h2) h+=`<h2>${s.h2}</h2>`;
+    if(s.big) h+=`<div class="big">${s.big}</div>`;
+    if(s.lead) h+=`<p class="lead">${s.lead}</p>`;
+    if(s.body) h+='<ul>'+s.body.map(b=>`<li>${b}</li>`).join('')+'</ul>';
+    if(s.study) h+=`<p class="study" style="margin-top:1.4rem">${s.study}</p>`;
+    if(s.lenses) h+='<div class="lenses">'+s.lenses.map(l=>`<div><span class="n">${l[0]}</span><div class="t">${l[1]}</div><div class="d">${l[2]}</div></div>`).join('')+'</div>';
+    if(s.cred) h+='<div class="cred">'+s.cred.map(c=>`<div><span>${c[0]}</span><small>${c[1]}</small></div>`).join('')+'</div>';
+    if(s.t==='reframe'||s.t==='recap') h+='<div class="horizon"></div>';
+    if(s.disclaimer) h+=`<p class="disclaimer">${s.disclaimer}</p>`;
+    el.innerHTML=h;
+    stage.appendChild(el);
+  });
+}
+let cur=0;
+function show(n){
+  const slides=document.querySelectorAll('.slide');
+  cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((el,i)=>el.classList.toggle('on',i===cur));
+  document.getElementById('pageno').textContent=(cur+1)+' / '+S.length;
+}
+function go(d){ show(cur+d); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+render(); show(0);
+</script>
+</body>
+</html>
