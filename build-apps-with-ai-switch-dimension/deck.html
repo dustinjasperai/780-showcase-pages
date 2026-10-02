@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Idea to Deployed Product: The AI Native Builder Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1a26;        /* measured dark-navy ground (#1a2939) deepened */
+    --panel:#16263a;     /* measured #1a2939 as panel */
+    --rule:#26384a;      /* hairline, navy family */
+    --muted:#97a1af;     /* measured slate-blue, verbatim */
+    --ink:#eaf1f7;       /* near-white (measured white) softened */
+    --accent:#1c9be0;    /* measured slate-blue hue at full chroma */
+    --accent-dim:rgba(28,155,224,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  .deck{width:min(100%,960px);aspect-ratio:16/10;position:relative}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;
+    padding:clamp(28px,5vw,60px);border:1px solid var(--rule);
+    background:linear-gradient(180deg,#132131 0%,var(--bg) 70%);
+    border-radius:14px;overflow:hidden;
+  }
+  .slide.on{display:flex}
+  .kicker{
+    font-family:'Inter';font-weight:600;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .kicker::before{content:"\203A";font-weight:700;font-size:18px;line-height:1}
+  h1{font-family:'Merriweather';font-weight:900;font-size:clamp(30px,5.6vw,56px);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:'Merriweather';font-weight:700;font-size:clamp(24px,4vw,40px);line-height:1.1;letter-spacing:-.01em}
+  .lede{color:var(--muted);font-size:clamp(16px,2.2vw,22px);line-height:1.5;margin-top:18px;max-width:40ch}
+  .big{font-family:'Merriweather';font-weight:700;font-size:clamp(26px,4.4vw,44px);line-height:1.14;max-width:20ch}
+  .body{font-size:clamp(15px,2vw,19px);line-height:1.6;color:var(--ink);margin-top:16px;max-width:46ch}
+  .spacer{flex:1}
+  .foot{display:flex;justify-content:space-between;align-items:flex-end;color:var(--muted);font-size:13px;margin-top:22px}
+  .phase{display:flex;flex-direction:column;gap:14px;margin-top:26px}
+  .phase .row{display:flex;gap:16px;align-items:flex-start}
+  .chip{flex:none;font-family:'Inter';font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:6px 12px;min-width:104px;text-align:center}
+  .phase .row p{font-size:clamp(14px,1.9vw,18px);line-height:1.5;color:var(--ink)}
+  ul.list{margin-top:22px;display:flex;flex-direction:column;gap:14px;max-width:44ch}
+  ul.list li{list-style:none;position:relative;padding-left:26px;font-size:clamp(15px,2vw,19px);line-height:1.5;color:var(--ink)}
+  ul.list li::before{content:"\203A";position:absolute;left:0;color:var(--accent);font-weight:700}
+  .quote{font-family:'Merriweather';font-weight:700;font-style:italic;font-size:clamp(22px,3.6vw,38px);line-height:1.2;max-width:22ch}
+  .partnum{font-family:'Merriweather';font-weight:900;font-size:clamp(60px,12vw,120px);color:var(--accent-dim);line-height:.9}
+  .credits{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .credits span{font-size:13px;color:var(--muted);border:1px solid var(--rule);border-radius:8px;padding:6px 10px}
+  .disc{color:var(--muted);font-size:12px;line-height:1.5;margin-top:18px;max-width:52ch}
+  .ctaline{color:var(--accent);font-weight:600;font-size:clamp(17px,2.4vw,22px);margin-top:18px}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;
+    background:rgba(16,26,38,.9);border:1px solid var(--rule);border-radius:999px;padding:8px 16px;backdrop-filter:blur(6px)}
+  .nav button{background:none;border:none;color:var(--ink);font-size:18px;cursor:pointer;line-height:1;padding:4px 8px}
+  .nav button:hover{color:var(--accent)}
+  .count{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8592;</button><span class="count" id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S=[
+  {t:'title', kicker:'Live masterclass', h:'Idea to Deployed Product',
+   lede:'How to direct AI agents like Claude Code, Cursor and Codex to ship a real, revenue ready app. The AI Native Builder Path, start to finish.',
+   foot1:'Rob O’Shaughnessy, Switch Dimension', foot2:'Build With AI'},
+  {t:'who', kicker:'Who this is for', h:'Built for people who want to ship, not just tinker.',
+   list:['You want to ship your own product, a side project or a startup.',
+         'You’re a developer who wants to 10x your speed with AI agents.',
+         'You’ve outgrown no code and want to build something real.'],
+   body:'You do not need to be a developer. You do need enthusiasm to get technical.'},
+  {t:'trap', kicker:'The trap', h:'You have the idea. You still don’t have the product.',
+   body:'You’ve watched the prompting videos. Maybe you built something in a no code tool. But the gap between a clever prompt and a deployed app that takes payments never closes. The demo works on your screen and goes no further.'},
+  {t:'reframe', kicker:'The reframe',
+   quote:'Collecting prompting tips keeps you busy. It doesn’t get you shipped.',
+   body:'The models can already write the code. What stops most people is everything around the code: the setup, the messy middle, and the last mile to deployment.'},
+  {t:'part', kicker:'Part One', n:'One', h:'Why most builds stall'},
+  {t:'stall', kicker:'Three places people stall',
+   list:['Setup: the environment and tools feel like a wall before they’ve built anything.',
+         'The messy middle: they treat the AI like a chatbot, so it wanders and they lose the thread.',
+         'The last mile: they get a prototype, never payments, never a deploy, never live.']},
+  {t:'quote', kicker:'The shift',
+   quote:'The tools are not the bottleneck anymore. Knowing what to build, and how to direct the agent, is.'},
+  {t:'part', kicker:'Part Two', n:'Two', h:'The AI Native Builder Path'},
+  {t:'phases', kicker:'The path, three phases',
+   rows:[['Prime','Set up Claude Code and Cursor, learn the AI first fundamentals, and get comfortable directing coding agents.'],
+         ['Prototype','Stand up the web app stack: frontend, backend, app design, database, API and user access.'],
+         ['Product','Payments and deployment, Docker, and the product landing page. Ship something real and live.']]},
+  {t:'principle', kicker:'Principle 1', h:'Think like a builder, not a coder.',
+   body:'The job is product judgment: deciding what to build, what to cut, and what good looks like. Syntax is the part the agent handles. You bring the direction.'},
+  {t:'principle', kicker:'Principle 2', h:'Direct the agent. Don’t chat with it.',
+   body:'A repeatable loop: brief it like a teammate, steer it when it drifts, review every change. That loop is the difference between a prompt demo and production code.'},
+  {t:'part', kicker:'Part Three', n:'Three', h:'When it ships for real'},
+  {t:'outcome', kicker:'What changes', big:'One person can now build what used to take a team.',
+   body:'Frontend, backend, database, deployment. You own the decisions and the direction. The agent covers the ground you used to need four people for.'},
+  {t:'build', kicker:'What you actually build',
+   list:['A working, deployed app, not a slide of one.',
+         'Payments wired in, so it can make money from day one.',
+         'A repeatable way of working you can point at the next idea.']},
+  {t:'why', kicker:'Why listen to me',
+   body:'I’m Rob O’Shaughnessy. I’ve built startups from scratch to acquisition and spent 20 years turning ideas into products. I build with AI every week and teach it as Rob Shocks.',
+   credits:['Cisco','Porsche','Schneider Electric','CrossFit','20 years shipping']},
+  {t:'recap', kicker:'The whole thing in one line',
+   quote:'Prime, Prototype, Product. Direct the agent, and take your idea all the way to live.'},
+  {t:'cta', kicker:'Build it with us', h:'Come build your product with us.',
+   body:'Build With AI is a course and community where you build a real, deployed product alongside a small group of builders, with live weekly sessions.',
+   ctaline:'Join the next Build With AI cohort at switchdimension.com',
+   disc:'Educational only. No income or result is guaranteed. Results vary and depend on your own effort, skills and market.'}
+];
+
+function esc(x){return x;}
+function li(arr){return '<ul class="list">'+arr.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+function render(s){
+  const k = s.kicker ? `<div class="kicker">${s.kicker}</div>` : '';
+  if(s.t==='title') return `${k}<h1>${s.h}</h1><p class="lede">${s.lede}</p><div class="spacer"></div><div class="foot"><span>${s.foot1}</span><span>${s.foot2}</span></div>`;
+  if(s.t==='who'||s.t==='trap') return `${k}<h2>${s.h}</h2>${s.list?li(s.list):''}${s.body?`<p class="body">${s.body}</p>`:''}`;
+  if(s.t==='reframe') return `${k}<p class="quote">${s.quote}</p><p class="body">${s.body}</p>`;
+  if(s.t==='part') return `<div class="partnum">${s.n}</div>${k}<h1>${s.h}</h1>`;
+  if(s.t==='stall'||s.t==='build') return `${k}${li(s.list)}`;
+  if(s.t==='quote'||s.t==='recap') return `${k}<div class="spacer"></div><p class="quote">${s.quote}</p><div class="spacer"></div>`;
+  if(s.t==='phases') return `${k}<div class="phase">`+s.rows.map(r=>`<div class="row"><span class="chip">${r[0]}</span><p>${r[1]}</p></div>`).join('')+`</div>`;
+  if(s.t==='principle') return `${k}<h2>${s.h}</h2><p class="body">${s.body}</p>`;
+  if(s.t==='outcome') return `${k}<p class="big">${s.big}</p><p class="body">${s.body}</p>`;
+  if(s.t==='why') return `${k}<p class="body">${s.body}</p><div class="credits">`+s.credits.map(c=>`<span>${c}</span>`).join('')+`</div>`;
+  if(s.t==='cta') return `${k}<h2>${s.h}</h2><p class="body">${s.body}</p><p class="ctaline">${s.ctaline}</p><p class="disc">${s.disc}</p>`;
+  return '';
+}
+
+let i=0;const deck=document.getElementById('deck');
+S.forEach((s,idx)=>{const d=document.createElement('section');d.className='slide'+(idx===0?' on':'');d.innerHTML=render(s);deck.appendChild(d);});
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){i=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,idx)=>el.classList.toggle('on',idx===i));count.textContent=(i+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
