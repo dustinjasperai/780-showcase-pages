@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The People Management Check-Up — Anthony Smith</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14181d; --panel:#1e232a; --rule:#2c333c; --accent:#1abc9c; --ink:#f2efe9;
+    --muted:#9aa4af; --head:'Fira Sans',system-ui,sans-serif; --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);overflow:hidden}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 8vw}
+  .slide{display:none;width:100%;max-width:980px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:.82rem;color:var(--accent);margin-bottom:1.1rem}
+  h1{font-family:var(--head);font-weight:800;font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.05}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(1.7rem,3.6vw,2.6rem);line-height:1.12}
+  p{font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.6;color:#dfe4e8;margin-top:1.1rem;max-width:40ch}
+  .lead{color:var(--ink)}
+  .sub{color:var(--muted);font-size:clamp(1rem,1.6vw,1.2rem);margin-top:.9rem}
+  .accent{color:var(--accent)}
+  ul{margin-top:1.3rem;list-style:none;display:grid;gap:.75rem;max-width:44ch}
+  li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.6vw,1.22rem);color:#dfe4e8}
+  li:before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;background:var(--accent);border-radius:2px}
+  .big{font-size:clamp(2rem,4.4vw,3rem);font-family:var(--head);font-weight:800;line-height:1.1}
+  .pill{display:inline-block;font-family:var(--head);font-weight:700;color:var(--bg);background:var(--accent);
+    padding:.35rem .8rem;border-radius:6px;font-size:.9rem;margin-bottom:1rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:2.2rem 2.4rem}
+  .byline{margin-top:2rem;color:var(--muted);font-family:var(--head);font-weight:500}
+  .disclaimer{color:var(--muted);font-size:.86rem;margin-top:1.6rem;max-width:52ch}
+  .n{font-family:var(--head);font-weight:800;color:var(--accent);font-size:1rem;letter-spacing:.1em}
+  footer{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:space-between;
+    padding:0 8vw;color:var(--muted);font-size:.8rem;font-family:var(--head)}
+  .bar{position:fixed;top:0;left:0;height:4px;background:var(--accent);width:0;transition:width .3s}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div id="stage"></div>
+<footer><span>Anthony Smith · Executive Business Coach</span><span id="pg"></span></footer>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass for entrepreneurs and managers',
+   h:'The People Management Check-Up',
+   sub:'Why your best people are not performing, and why it is not a motivation problem.',
+   by:'Anthony Smith · 12 years at Nike, Sales Director Italy · Mental coach to top-division football coaches'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You lead a team you built yourself.',
+   bullets:['You run a growing Italian company of 5 to 50 people.','Your people are good, but output still lives on your shoulders.','You have tried bonuses, pep talks and new tools, and it keeps fading.']},
+
+  {t:'trap', kicker:'The trap',
+   h:'By Wednesday, the energy is gone again.',
+   p:'You give the talk on Monday. Everyone nods. For two days things move. Then the questions come back to your desk, the decisions wait for you, and you are the bottleneck again.'},
+
+  {t:'cost', kicker:'The cost',
+   h:'The bottleneck is not free.',
+   bullets:['Your best people stop growing and quietly start looking.','You cannot take a real week off without things slipping.','Growth is capped at whatever you personally can touch.']},
+
+  {t:'reframe', kicker:'The reframe',
+   big:'The problem was never their motivation. It is the <span class="accent">system</span> around them.',
+   sub:'Motivated people in a broken people-system still underperform. Clear people in a good system perform even on a flat week.'},
+
+  {t:'part', n:'Part one', h:'Motivation is the last lever, not the first.',
+   p:'Every coach in the feed sells motivation because it is easy to sell. It is also the weakest and shortest-lived lever you have. The durable levers sit underneath it.'},
+
+  {t:'levers', kicker:'The real levers',
+   h:'Four things decide whether a team performs.',
+   bullets:['Clarity, so people know what good looks like.','Roles, so ownership does not route through you.','Feedback, as a habit instead of an explosion.','The right people, kept and grown on purpose.']},
+
+  {t:'mistake', kicker:'The common mistake',
+   h:'Owners reach for the loudest lever.',
+   p:'Motivation feels like action, so it is the one everyone pulls first. But you cannot out-talk an unclear role or a feedback habit that does not exist. Pull the quiet levers first and the loud one finally sticks.'},
+
+  {t:'part', n:'Part two', h:'The People Management Check-Up',
+   p:'This is the diagnostic I run with executives before we change anything. You score your team honestly on four pillars, and the lowest one tells you where the real leak is.'},
+
+  {t:'pillar', n:'Pillar 1', h:'Clarity',
+   p:'Does every person know what a great week looks like in their role, in writing, without asking you? Most teams run on what the owner is holding in their head. Clarity is the first thing to externalise.'},
+
+  {t:'pillar', n:'Pillar 2', h:'Roles and ownership',
+   p:'When you leave the room for a week, what stops? Those are the decisions you have never truly handed over. Real roles mean someone owns the outcome, not just the task.'},
+
+  {t:'pillar', n:'Pillar 3', h:'Feedback as a cadence',
+   p:'If feedback only happens when something breaks, your team learns to hide problems until they are expensive. A simple weekly rhythm turns feedback from a confrontation into a habit.'},
+
+  {t:'pillar', n:'Pillar 4', h:'The right people, kept and grown',
+   p:'At Nike I was promoted five times, and every time it was for the same thing: growing the people around me. Keeping and developing your best people is a skill you can run on purpose, not luck.'},
+
+  {t:'story', kicker:'One story',
+   h:'The promotion I never applied for.',
+   p:'Every step up at Nike came after a team I led started outgrowing me, not after I hit a number alone. The people I grew became the reason I moved up. That is the whole game, and it is learnable.'},
+
+  {t:'part', n:'Part three', h:'A team that runs the week without you in the middle of it.',
+   bullets:['Decisions get made without routing through you.','Your best people stay, because they are growing.','You spend your week on the business, not inside every task.']},
+
+  {t:'why', kicker:'Why me',
+   h:'I learned this leading, not reading.',
+   bullets:['12 years at Nike, promoted five times, Sales Director for Italy.','Country Managing Director, Levi Strauss Italy.','Mental coach to coaches in the top divisions of Italian football.','Author of seven books, including Management Check-Up and Strategic Leadership Roadmap.']},
+
+  {t:'path', kicker:'The 30-day path',
+   h:'Run the check-up, fix the lowest pillar first.',
+   bullets:['Week 1: score the four pillars honestly with your team.','Week 2 to 3: fix the lowest-scoring pillar with one concrete change.','Week 4: set the feedback cadence that keeps it in place.']},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Run the People Management Check-Up with me.',
+   p:'Inside the People Management Membership you get the full check-up, the tools and templates, and weekly meetings with other Italian entrepreneurs working on the same thing. Start with the free trial and run the check-up on your own team this week.',
+   disclaimer:'This masterclass is educational. No business or income outcome is guaranteed, and results vary by company, team and effort.'}
+];
+
+const stage=document.getElementById('stage'), bar=document.getElementById('bar'), pg=document.getElementById('pg');
+let i=0;
+function render(){
+  stage.innerHTML='';
+  const s=S[i], d=document.createElement('div'); d.className='slide on';
+  let html='';
+  if(s.kicker) html+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.n) html+=`<div class="n">${s.n}</div>`;
+  if(s.pill) html+=`<div class="pill">${s.pill}</div>`;
+  if(s.big) html+=`<div class="big">${s.big}</div>`;
+  else if(s.h) html+=`<h${s.t==='title'?1:2}>${s.h}</h${s.t==='title'?1:2}>`;
+  if(s.sub) html+=`<div class="sub">${s.sub}</div>`;
+  if(s.p) html+=`<p class="lead">${s.p}</p>`;
+  if(s.bullets){html+='<ul>';s.bullets.forEach(b=>html+=`<li>${b}</li>`);html+='</ul>';}
+  if(s.by) html+=`<div class="byline">${s.by}</div>`;
+  if(s.disclaimer) html+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  d.innerHTML=html; stage.appendChild(d);
+  bar.style.width=((i+1)/S.length*100)+'%'; pg.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+document.addEventListener('click',()=>go(i+1));
+render();
+</script>
+</body>
+</html>
