@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100% of the Time | A masterclass with Michael Glanville</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#151515;      /* their near-black ground */
+    --panel:#2e4053;   /* their slate-blue */
+    --rule:#575757;    /* their grey */
+    --ink:#d5dbdb;     /* their hero display grey */
+    --muted:#aab7b8;   /* their cool grey */
+    --accent:#095bb1;  /* their corporate blue */
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  #deck{position:relative;height:100vh;width:100%;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px}
+  h1{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:1.08;letter-spacing:-.01em;color:#fff;margin-bottom:18px}
+  h2{font-family:'Merriweather',Georgia,serif;font-weight:700;font-size:clamp(26px,4vw,44px);line-height:1.15;color:#fff;margin-bottom:20px}
+  .lead{font-size:clamp(18px,2.4vw,26px);color:var(--ink);max-width:48ch}
+  .sub{font-size:clamp(16px,2vw,21px);color:var(--muted);margin-top:14px}
+  ul{list-style:none;margin-top:10px;max-width:52ch}
+  li{position:relative;padding-left:26px;margin:14px 0;font-size:clamp(16px,1.9vw,21px);color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:2px;background:var(--accent)}
+  .part h1{color:var(--accent)}
+  .quote{font-family:'Merriweather',Georgia,serif;font-size:clamp(26px,4.2vw,46px);line-height:1.2;color:#fff;max-width:20ch}
+  .panel{background:var(--panel);border-left:3px solid var(--accent);padding:26px 30px;max-width:56ch;border-radius:4px}
+  .cred{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin-top:8px;max-width:60ch}
+  .cred div{border-top:1px solid var(--rule);padding-top:12px}
+  .cred b{font-family:'Merriweather',serif;color:#fff;font-size:clamp(22px,3vw,34px);display:block}
+  .cred span{color:var(--muted);font-size:14px}
+  .disclaimer{font-size:15px;color:var(--muted);max-width:60ch;border:1px solid var(--rule);padding:22px 26px;border-radius:4px}
+  .cta-step{font-size:clamp(18px,2.2vw,24px);color:#fff;margin-top:8px}
+  .nav{position:fixed;bottom:18px;right:22px;font-family:'Open Sans',sans-serif;font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:center;z-index:10}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:4px;padding:6px 12px;cursor:pointer;font-size:13px}
+  .count{position:fixed;bottom:20px;left:22px;font-size:12px;color:var(--muted);letter-spacing:.1em;z-index:10}
+  .brand{position:fixed;top:20px;left:9vw;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="brand">Michael Glanville Executive Coaching</div>
+<div id="deck"></div>
+<div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button id="prev">Prev</button><button id="next">Next</button><span>arrow keys</span></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass for senior leaders', h:'100% of the Time', sub:'The leader your team is actually following. A live session with Michael Glanville, executive coach, former CEO and board director.'},
+  {t:'who', kicker:'Who this is for', h:'If people watch you for a living', items:['CEOs, MDs and managing partners','Founders scaling past the point they can do it all themselves','Board and non-board directors','Senior leaders who feel the weight of being watched every day']},
+  {t:'hook', kicker:'The uncomfortable part', q:'Your team reads you 100% of the time. Whether you mean them to or not.'},
+  {t:'part', kicker:'Part One', h:'The Gap'},
+  {t:'content', h:'Two leaders, one person', lead:'There is the leader you believe you are. And there is the leader your team actually experiences. The distance between those two is where trust, performance and culture are quietly won or lost.'},
+  {t:'content', h:'Intent sets your words. Behaviour sets the truth.', items:['Your team cannot see your intentions','They can only see what you do, say, reward and tolerate','In a vacuum, they fill the gap with their own story','Self-awareness is the only lever that closes it']},
+  {t:'part', kicker:'Part Two', h:'The Honest Mirror'},
+  {t:'panel', kicker:'How the coaching works', h:'Six months, one to one, in person', lead:'A structured blend of coaching, self-development, mentoring, reflection, support, 360 feedback and objective setting. Not theory from a slide. Work, over time, on how you actually lead.'},
+  {t:'content', h:'See how you lead before you try to change it', items:['Clifton Strengths to name what you do best and lean into it','Myers-Briggs to understand how you decide and manage under pressure','A clear picture of your strengths and your blind spots','You cannot lead on purpose what you cannot yet see']},
+  {t:'content', h:'The face to face 360', lead:'The raw truth about how you land with your team, your board and your clients, gathered through honest conversations rather than a tick-box form. Interviews are always done face to face. What comes back is the mirror most senior leaders never get held up to them.'},
+  {t:'content', h:'Once you can see it, you can choose it', lead:'Leadership stops being something that happens to your team and becomes something you do on purpose. The same behaviour, now chosen rather than accidental, sets a very different tone.'},
+  {t:'part', kicker:'Part Three', h:'In the Boardroom'},
+  {t:'content', h:'What changes when the mirror is clear', items:['Decisions get cleaner because you know how you make them','Board meetings get calmer because you are not performing','Your team follows the real you, not a version they have guessed at','Culture shifts because the person at the top finally sees their own shadow']},
+  {t:'cred', kicker:'Why learn this from me', h:'I have sat in the chair', items:[['25 yrs','leading and growing businesses'],['13','statutory boards, UK and overseas'],['1','Sunday Times / LDC leadership award']], lead:'I have had the sleepless nights, the hard board meetings and the pressure of shareholders and cash flow. This is coaching from someone who has done the job, not only studied it.'},
+  {t:'content', h:'How I work with you', items:['Experience and quality in every session','Honesty and integrity, even when it is hard to hear','Professionalism and good governance','You will always get the truth from me, delivered with care']},
+  {t:'content', h:'Three things to take with you today', items:['Your team experiences your behaviour, not your intentions','Self-awareness is the lever that closes the gap','Leading on purpose starts with an honest mirror']},
+  {t:'disclaimer', kicker:'Before you go', h:'An honest note', lead:'This masterclass is educational. Every leader and organisation is different, so results vary and no specific outcome is promised or guaranteed. What you take from it depends on the work you put in afterwards.'},
+  {t:'cta', kicker:'Your next step', h:'Book a free one hour Chemistry Session', step:'One honest hour with me to see how you lead and whether we are the right fit to work together. No pitch, no obligation.', foot:'Michael Glanville Executive Coaching'}
+];
+const deck=document.getElementById('deck');
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function liList(items){return '<ul>'+items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul>'}
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(s.t==='part'?' part':'');
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+  if(s.t==='title'){h+='<h1>'+esc(s.h)+'</h1><p class="sub">'+esc(s.sub)+'</p>';}
+  else if(s.t==='hook'){h+='<p class="quote">'+esc(s.q)+'</p>';}
+  else if(s.t==='part'){h+='<h1>'+esc(s.h)+'</h1>';}
+  else if(s.t==='panel'){h+='<div class="panel"><h2>'+esc(s.h)+'</h2><p class="lead">'+esc(s.lead)+'</p></div>';}
+  else if(s.t==='cred'){h+='<h2>'+esc(s.h)+'</h2><div class="cred">'+s.items.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'</div><p class="lead" style="margin-top:22px">'+esc(s.lead)+'</p>';}
+  else if(s.t==='disclaimer'){h+='<h2>'+esc(s.h)+'</h2><div class="disclaimer">'+esc(s.lead)+'</div>';}
+  else if(s.t==='cta'){h+='<h1>'+esc(s.h)+'</h1><p class="cta-step">'+esc(s.step)+'</p><p class="sub">'+esc(s.foot)+'</p>';}
+  else {h+='<h2>'+esc(s.h)+'</h2>';if(s.lead)h+='<p class="lead">'+esc(s.lead)+'</p>';if(s.items)h+=liList(s.items);}
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+let idx=0;const slides=document.querySelectorAll('.slide');
+document.getElementById('tot').textContent=slides.length;
+function show(n){idx=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===idx));document.getElementById('cur').textContent=idx+1}
+document.getElementById('next').onclick=()=>show(idx+1);
+document.getElementById('prev').onclick=()=>show(idx-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(idx+1);if(e.key==='ArrowLeft')show(idx-1)});
+show(0);
+</script>
+</body>
+</html>
