@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Science of the Swing - The Farm System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1012; --panel:#17191e; --rule:#2b2f37;
+    --ink:#f4f6fa; --muted:#9aa3b2; --accent:#006cff; --deep:#0a0c10;
+    --head:'Oswald',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--deep);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 52px;margin:0 0 20px;min-height:430px;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center}
+  .slide::before{content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,transparent 0,transparent calc(100% - 1px),rgba(0,108,255,.08) 100%),
+      radial-gradient(900px 300px at 110% -20%,rgba(0,108,255,.10),transparent 60%);
+    pointer-events:none}
+  .k{font-family:var(--head);text-transform:uppercase;letter-spacing:.22em;
+    font-weight:600;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:58px;line-height:1.02;
+    letter-spacing:.01em;text-transform:uppercase}
+  h2{font-family:var(--head);font-weight:600;font-size:40px;line-height:1.06;
+    text-transform:uppercase;letter-spacing:.01em}
+  .sub{color:var(--muted);font-size:21px;line-height:1.5;margin-top:20px;max-width:46ch}
+  .big{font-size:30px;line-height:1.3;font-weight:500;max-width:40ch}
+  ul{list-style:none;margin-top:26px;display:grid;gap:14px}
+  li{position:relative;padding-left:30px;font-size:20px;line-height:1.45;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;
+    background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .num{font-family:var(--head);font-weight:700;font-size:92px;color:var(--accent);
+    line-height:.9;letter-spacing:.02em}
+  .pillar-h{font-family:var(--head);text-transform:uppercase;font-size:34px;font-weight:700;margin-top:6px}
+  .foot{position:absolute;bottom:22px;left:52px;right:52px;display:flex;justify-content:space-between;
+    font-family:var(--head);text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--muted)}
+  .disc{color:var(--muted);font-size:14px;line-height:1.5;margin-top:22px;max-width:52ch}
+  .accent{color:var(--accent)}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:22px 24px;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title', k:'A live masterclass from The Farm System',
+  h:'The Science of the Swing',
+  s:'Why your hitter cannot repeat it, and the three pillars that make a swing hold up under speed.'},
+
+ {t:'lead', k:'Who this is for',
+  big:'Baseball and softball coaches who have collected the drills, watched the cage reps look great, and then watched the swing fall apart in the game.'},
+
+ {t:'point', k:'The trap', h:'You did everything right',
+  b:['You bought the drill library.','You run the tee work, the soft toss, the high-tee.','The swing looks clean on Tuesday.','Saturday, against real speed, it leaks again.']},
+
+ {t:'lead', k:'The reframe',
+  big:'The problem was never the drills. A swing is a force problem, not a feeling you can cue.'},
+
+ {t:'section', k:'Part one', h:'Why swings break'},
+
+ {t:'point', k:'Part one', h:'A cast is a force leak',
+  b:['Casting and bat drag are not hand problems.','They are the body running out of room and sequence.','When the move is out of order, force escapes before contact.','You can cue the hands all day and the leak stays.']},
+
+ {t:'point', k:'Part one', h:'Why cues do not transfer',
+  b:['A cue is a feeling, and feelings do not survive game speed.','The athlete cannot repeat a feeling they cannot measure.','Principles transfer because the body can organize around them.','That is the difference between a drill and development.']},
+
+ {t:'section', k:'Part two', h:'The three pillars'},
+
+ {t:'pillar', k:'Pillar one', num:'01', ph:'Spacing',
+  s:'Room for the body to work. Before anything moves forward, the hitter has to create space to sequence into. No space, no swing to build on.'},
+
+ {t:'pillar', k:'Pillar two', num:'02', ph:'Direction',
+  s:'Sequencing the move toward the ball in the right order. Direction is what keeps the energy pointed at contact instead of spraying sideways.'},
+
+ {t:'pillar', k:'Pillar three', num:'03', ph:'Force transmission',
+  s:'Delivering the energy you built into the ball. This is where spacing and direction get paid off, or where the whole swing leaks.'},
+
+ {t:'point', k:'Part two', h:'The pillars are a chain',
+  b:['Spacing creates the room.','Direction aims the sequence.','Force transmission delivers it.','Break one link and the next one cannot do its job.']},
+
+ {t:'section', k:'Part three', h:'How you train it'},
+
+ {t:'point', k:'Part three', h:'Identify the root, not the symptom',
+  b:['Start by finding the one issue the swing is built around.','The cast is usually a symptom of lost spacing.','Fix the root and the symptoms clear on their own.','Guessing at symptoms is why drills pile up.']},
+
+ {t:'point', k:'Part three', h:'Prioritize, then build',
+  b:['Pick the one change that transfers the most.','Build a progression from simple to game speed.','Every rep should have an intent, not just a count.','That is how cage work shows up on Saturday.']},
+
+ {t:'point', k:'Part three', h:'A plan beats a pile of drills',
+  b:['A planned session has a purpose for every block.','Drills become tools inside the plan, not the plan itself.','The hitter knows why they are doing each one.','Progress becomes something you can see and repeat.']},
+
+ {t:'cred', k:'Why listen to this', h:'The Farm System',
+  b:['Founded by Joey Cunha, a consultant to professional organizations.','Curriculums and products used by college and pro programs.','The Curriculum breaks the swing down across sixteen chapters of movement science.','This masterclass is one piece of that work, taught live.']},
+
+ {t:'point', k:'Recap', h:'If you remember three things',
+  b:['A swing is a force problem, not a cue.','Spacing, direction, and force transmission make it repeatable.','Identify the root, build a plan, and the cage work transfers.']},
+
+ {t:'cta', k:'Your next rep', h:'Keep building the swing',
+  s:'Go deeper in The Curriculum, or start with Farm Foundations to turn these pillars into a session plan you can run this week.',
+  disc:'This masterclass is educational and is not individualized instruction. Player development varies by athlete and effort, and no specific outcome is guaranteed. Results vary.'}
+];
+
+const deck=document.getElementById('deck');
+function foot(i){return '<div class="foot"><span>The Farm System</span><span>The Science of the Swing</span><span>'+String(i+1).padStart(2,'0')+'</span></div>';}
+S.forEach((s,i)=>{
+  let inner='';
+  if(s.k) inner+='<div class="k">'+s.k+'</div>';
+  if(s.t==='title'){inner+='<h1>'+s.h+'</h1><p class="sub">'+s.s+'</p>';}
+  else if(s.t==='lead'){inner+='<p class="big">'+s.big+'</p>';}
+  else if(s.t==='section'){inner+='<h2><span class="accent">'+s.h+'</span></h2>';}
+  else if(s.t==='point'||s.t==='cred'){inner+='<h2>'+s.h+'</h2><ul>'+s.b.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  else if(s.t==='pillar'){inner+='<div class="num">'+s.num+'</div><div class="pillar-h">'+s.ph+'</div><p class="sub">'+s.s+'</p>';}
+  else if(s.t==='cta'){inner+='<h2>'+s.h+'</h2><p class="sub">'+s.s+'</p><p class="disc">'+s.disc+'</p>';}
+  deck.insertAdjacentHTML('beforeend','<section class="slide">'+inner+foot(i)+'</section>');
+});
+</script>
+</body>
+</html>
