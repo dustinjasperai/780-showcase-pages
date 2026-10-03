@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fearless Shift — a live masterclass with Sharon Lee</title>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mulish:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F2EA; --panel:#FBFAF6; --ink:#33373d; --rule:#E4DCC8;
+    --accent:#CA6C3B; --accent2:#B5984B; --muted:#6c6a63;
+    --head:'Marcellus',Georgia,serif; --body:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--body)}
+  #deck{height:100vh;display:flex;align-items:center;justify-content:center}
+  .slide{display:none;width:min(960px,92vw);min-height:min(600px,86vh);background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;padding:64px 72px;position:relative;
+    box-shadow:0 18px 50px rgba(51,55,61,.08);overflow:hidden}
+  .slide.on{display:flex;flex-direction:column;justify-content:center}
+  .slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .kick{font-family:var(--body);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:400;font-size:52px;line-height:1.08;margin:0 0 18px}
+  h2{font-family:var(--head);font-weight:400;font-size:38px;line-height:1.12;margin:0 0 16px}
+  p{font-size:21px;line-height:1.5;margin:0 0 14px;max-width:62ch}
+  .lead{font-size:24px;color:var(--muted)}
+  .big{font-family:var(--head);font-size:44px;line-height:1.14}
+  .accent{color:var(--accent)}
+  ul{font-size:21px;line-height:1.6;padding-left:22px;margin:8px 0}
+  li{margin:6px 0}
+  .steps{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .chip{font-family:var(--head);font-size:20px;padding:12px 18px;border:1px solid var(--rule);
+    border-radius:999px;background:var(--bg)}
+  .chip.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .stepno{font-family:var(--head);font-size:64px;color:var(--accent2);line-height:1;margin-bottom:8px}
+  .foot{position:absolute;bottom:22px;left:72px;right:72px;display:flex;justify-content:space-between;
+    font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .disc{font-size:14px;color:var(--muted);margin-top:18px;max-width:64ch}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
+    font-size:13px;color:var(--muted)}
+  .nav button{font-family:var(--body);border:1px solid var(--rule);background:var(--panel);color:var(--ink);
+    border-radius:8px;padding:6px 12px;cursor:pointer}
+  del{color:var(--muted);text-decoration-thickness:2px}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', kick:'Fearless Pursuits · Live Masterclass',
+   h:'The Fearless Shift',
+   lead:'How to rewire your mindset and close with confidence.',
+   who:'with Sharon Lee'},
+
+  {t:'whofor', kick:'Who this is for',
+   h:'For the entrepreneur who did everything right',
+   body:'You read the books. You built the business. You hit the numbers. And it still feels like survival on most days. This hour is for you.'},
+
+  {t:'trap', kick:'The trap',
+   big:'The problem was never that you needed to work <span class="accent">harder</span>.',
+   body:'You are already doing more than enough. More effort on top of a tired mind just burns you out faster.'},
+
+  {t:'reframe', kick:'The real reason',
+   h:'Strategy alone was never the lever',
+   body:'You cannot build a sustainable business on mindset alone, and you cannot build one on tactics alone. It takes both, working together. Most coaching gives you one half and wonders why it did not stick.'},
+
+  {t:'part', kick:'Part one', h:'Why doing more stopped working'},
+
+  {t:'content', kick:'Part one',
+   h:'The survival loop',
+   body:'Overwhelm narrows your thinking. A narrow mind reaches for the quick fix. The quick fix creates more to manage. More to manage deepens the overwhelm. Round and round, no matter how hard you push.'},
+
+  {t:'content', kick:'Part one',
+   h:'It shows up on the sales call',
+   body:'When you doubt yourself, you hear it in how you sell. You discount before they object. You rush past the close. The self-doubt is not just a feeling, it is quietly costing you clients.'},
+
+  {t:'part', kick:'Part two', h:'The Fearless Framework'},
+
+  {t:'framework', kick:'Part two',
+   h:'Five steps, refined over fourteen years',
+   steps:['Clarify','Align','Act','Overcome','Thrive'],
+   body:'Every client I work with moves through the same five steps. Each one addresses the mindset and the strategy at the same time.'},
+
+  {t:'step', kick:'Step one', no:'01', h:'Clarify',
+   body:'Get clear on what actually matters and name what has been holding you back. You cannot shift what you have not made conscious.'},
+
+  {t:'step', kick:'Step two', no:'02', h:'Align',
+   body:'Reconnect your days with your values, your strengths, and your true direction, so your effort finally points the same way.'},
+
+  {t:'step', kick:'Step three', no:'03', h:'Act',
+   body:'Take bold, focused action toward the goal with confidence, instead of busy motion that keeps you safe and stuck.'},
+
+  {t:'step', kick:'Step four', no:'04', h:'Overcome',
+   body:'Break through the fear, the doubt, and the limiting beliefs for good, including the ones that show up when it is time to sell.'},
+
+  {t:'step', kick:'Step five', no:'05', h:'Thrive',
+   body:'Create results that last and keep growing into your next level, rather than resetting to zero every few months.'},
+
+  {t:'part', kick:'Part three', h:'What the shift looks like'},
+
+  {t:'content', kick:'Part three',
+   h:'The same week, a different mind',
+   body:'Same inbox. Same calendar. Same goals. What changes is the person meeting them: calmer, clearer, and able to ask for the sale without flinching. The business feels like yours again, not a weight you carry.'},
+
+  {t:'content', kick:'Part three',
+   h:'Mindset and sales, together',
+   body:'This is the whole point of the Framework. The inner game gives you the confidence. The sales skills give you the conversion. You need both in the same hands, which is yours.'},
+
+  {t:'proof', kick:'Why me',
+   h:'I have lived both ends of this',
+   body:'I spent years in poverty, and for a time, homeless. I found my way out by changing my mind first and my methods second. Fourteen years and a few hundred clients later, that is the work I teach. Certified Master Life Coach and Certified Business Coach, Fearless Pursuits.'},
+
+  {t:'recap', kick:'In one breath',
+   h:'The five shifts',
+   steps:['Clarify','Align','Act','Overcome','Thrive'],
+   body:'Clarify what matters. Align your effort. Act with confidence. Overcome the doubt. Thrive and keep rising.'},
+
+  {t:'cta', kick:'Your next step',
+   h:'Ready to make the shift?',
+   body:'If this resonated, the next step is a conversation. Book a call with me and we will map your first two shifts to your own business.',
+   disc:'This masterclass is educational and reflects one coach’s experience. Results vary from person to person, and nothing here is promised or guaranteed.'}
+];
+
+const deck=document.getElementById('deck');
+let i=0;
+function render(){
+  deck.innerHTML='';
+  const s=S[i];
+  const el=document.createElement('section');
+  el.className='slide on';
+  let inner='';
+  if(s.kick) inner+='<div class="kick">'+s.kick+'</div>';
+  if(s.h) inner+='<h1 style="font-size:'+(s.t==='title'?52:40)+'px">'+s.h+'</h1>';
+  if(s.lead) inner+='<p class="lead">'+s.lead+'</p>';
+  if(s.who) inner+='<p class="lead" style="margin-top:28px;color:var(--accent)">'+s.who+'</p>';
+  if(s.big) inner+='<p class="big">'+s.big+'</p>';
+  if(s.no) inner+='<div class="stepno">'+s.no+'</div>';
+  if(s.steps){inner+='<div class="steps">'+s.steps.map((x,n)=>'<span class="chip'+(n===0?' hot':'')+'">'+x+'</span>').join('')+'</div>';}
+  if(s.body) inner+='<p>'+s.body+'</p>';
+  if(s.disc) inner+='<p class="disc">'+s.disc+'</p>';
+  inner+='<div class="foot"><span>Fearless Pursuits</span><span>The Fearless Shift</span></div>';
+  el.innerHTML=inner;
+  deck.appendChild(el);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
