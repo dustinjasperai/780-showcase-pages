@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fearless Launch Map — Anne Samoilov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f6f5; --panel:#fbfdfc; --rule:#dde7e5;
+    --ink:#281712; --ink-soft:#40383e; --accent:#008494; --deep:#006470;
+    --head:'Noto Serif Display', Georgia, serif;
+    --body:'Montserrat', -apple-system, system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink-soft);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px;margin:22px 0;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(40,23,18,.02)}
+  .kick{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;color:var(--ink);font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;color:var(--ink);font-size:33px;line-height:1.14;margin-bottom:14px}
+  .lede{font-size:20px;color:var(--ink-soft);margin-top:20px;max-width:40ch}
+  p{font-size:18px;margin-top:14px;max-width:52ch}
+  .big{font-family:var(--head);font-size:40px;color:var(--ink);line-height:1.12;font-weight:700}
+  .em{color:var(--accent)}
+  .cover{background:linear-gradient(160deg,#fbfdfc 0%, #e6f0ef 100%)}
+  .cover h1{font-size:58px}
+  .by{margin-top:26px;font-weight:600;color:var(--ink)}
+  .by span{color:var(--accent)}
+  .sectionmark{background:var(--deep);color:#fff;border-color:var(--deep)}
+  .sectionmark .kick{color:#a9cace}
+  .sectionmark h1{color:#fff;font-size:40px}
+  ul{margin-top:20px;list-style:none}
+  li{font-size:19px;padding-left:28px;position:relative;margin-top:13px;max-width:50ch}
+  li:before{content:'';position:absolute;left:0;top:11px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+  .runway{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
+  .phase{border:1px solid var(--rule);border-radius:10px;padding:18px 16px;background:#f5faf9}
+  .phase .n{font-family:var(--head);font-size:15px;color:var(--accent);font-weight:700}
+  .phase .t{font-family:var(--head);font-size:21px;color:var(--ink);margin-top:4px;font-weight:700}
+  .phase .d{font-size:14px;margin-top:8px;color:var(--ink-soft)}
+  .phase.on{background:var(--accent);border-color:var(--accent)}
+  .phase.on .n{color:#bfe6ea}.phase.on .t,.phase.on .d{color:#fff}
+  .note{margin-top:22px;font-size:14px;color:#8a817c}
+  .cred li:before{background:var(--deep)}
+  .ctahint{margin-top:26px;display:inline-block;background:var(--accent);color:#fff;
+    font-weight:700;padding:14px 26px;border-radius:9px;font-size:17px}
+  .disc{margin-top:26px;font-size:13px;color:#8a817c;max-width:60ch;line-height:1.5}
+  .pg{font-size:13px;color:#b9b1aa;text-align:right;margin-top:-8px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', kick:'A live masterclass with Anne Samoilov',
+   h:'The Fearless Launch Map',
+   lede:'How to plan a launch you can actually follow through on.',
+   by:'with <span>Anne Samoilov</span>, launch strategist'},
+
+  {t:'who', kick:'Who this is for',
+   h:'You have something worth launching',
+   p:'A course, a coaching program, a digital product. The thing itself is good. What turns to chaos is the launch, and that is a planning problem, not a talent problem.'},
+
+  {t:'trap', kick:'The trap',
+   h:'Launch week becomes a blur',
+   p:'You wait until the cart is about to open, then try to write every email, every post, and every offer in one frantic push. Some of it lands. Most of it is guesswork, and you swear next time will be calmer.'},
+
+  {t:'reframe', kick:'The real problem',
+   big:'The problem was never your offer. It was launching on <span class="em">hope</span> instead of a <span class="em">map</span>.'},
+
+  {t:'section', mark:true, kick:'Part one',
+   h:'Why most launches feel frantic'},
+
+  {t:'point', kick:'The core problem',
+   h:'A launch is treated as one event',
+   p:'One big week. One flood of messages. One shot. When a launch is a single event, every decision happens under pressure and nothing compounds. The pressure is the symptom. The missing structure is the cause.'},
+
+  {t:'point', kick:'The shift',
+   h:'A launch is actually four phases',
+   p:'When you separate the launch into phases and plan each one before you start, the frantic week disappears. You are not writing on the fly. You are executing a map you already drew.'},
+
+  {t:'section', mark:true, kick:'Part two',
+   h:'The Fearless Launch Map'},
+
+  {t:'map', kick:'The four phases',
+   h:'Draw the whole launch before you write a word',
+   phases:[
+     {n:'Phase 1', t:'Plan', d:'Map the offer, the dates, and the path before anything ships.'},
+     {n:'Phase 2', t:'Pre-Launch', d:'Warm the room and start the conversation early.'},
+     {n:'Phase 3', t:'Open', d:'Make the offer the moment the cart opens.'},
+     {n:'Phase 4', t:'Close', d:'Message with intent all the way to cart close.'}
+   ],
+   note:'This is the map. The rest of the masterclass is what goes inside each phase.'},
+
+  {t:'phase', kick:'Phase one', on:0,
+   h:'Plan',
+   p:'Before a single email, you decide the offer, the promise, the dates, and the path a buyer takes. Most creators skip straight to writing. The plan is what makes the writing fast later.'},
+
+  {t:'phase', kick:'Phase two', on:1,
+   h:'Pre-Launch',
+   p:'You warm the room before you ever ask for the sale. You start the conversation, surface the problem your offer solves, and earn attention so the open does not land cold.'},
+
+  {t:'phase', kick:'Phase three', on:2,
+   h:'Open',
+   p:'The cart opens and the offer is clear, specific, and easy to say yes to. Because the first two phases did their job, the open is a natural next step, not a surprise.'},
+
+  {t:'phase', kick:'Phase four', on:3,
+   h:'Close',
+   p:'The last days of a launch are where most of the sales happen, and where most creators go quiet. You keep messaging with intent, phase by phase, all the way to cart close.'},
+
+  {t:'point', kick:'The Message Lab',
+   h:'The right message at the right time',
+   p:'Each phase has its own job, so each phase has its own message. The Message Lab is the cadence: what to write, say, and send at every step, from the first launch conversation to the moment the cart closes. You stop staring at a blank page because you already know what this phase is for.'},
+
+  {t:'reframe', kick:'The reframe',
+   big:'Fearless does not mean louder. It means <span class="em">planned</span>.'},
+
+  {t:'section', mark:true, kick:'Part three',
+   h:'What a mapped launch looks like'},
+
+  {t:'point', kick:'The outcome',
+   h:'A launch you can follow through on',
+   p:'Calm, because the work was done in advance. Repeatable, because you have a map you can run again. And honest, because the plan is built on your real offer, not on a hope that this week goes well.'},
+
+  {t:'list', kick:'Choose your launch adventure',
+   h:'One map, several launch styles',
+   items:[
+     'There are a few distinct launch types, and each fits a different moment.',
+     'Once you have the map, you can stack them across a year instead of burning out on one.',
+     'The goal is a launch calendar you look forward to, not dread.'
+   ]},
+
+  {t:'cred', kick:'Why me',
+   h:'A launch producer, not a hype coach',
+   items:[
+     'Anne spent years in visual-effects production before launches, and brings that producer discipline to every map: phases, timelines, and a plan you execute.',
+     'Her work has been featured on Forbes, the New York Times online, and Entrepreneur.com.',
+     'She has supported launches for creators including Marie Forleo, Laura Roeder, Jonathan Fields, and Denise Duffield-Thomas.'
+   ]},
+
+  {t:'cta', kick:'Your next step',
+   h:'Map your next launch with Anne',
+   p:'If you want help turning this into your actual launch map, the next step is a launch-strategy consultation with Anne. Bring the offer you want to launch and leave with the phases and the message plan.',
+   hint:'Work with Anne Samoilov',
+   disc:'This masterclass is educational and reflects one approach to planning a launch. It is not a promise of income or results. Results vary from person to person and are never guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.t === 'cover' ? ' cover' : '') + (s.mark ? ' sectionmark' : '') + (s.t === 'cred' ? ' cred' : '');
+  let h = '';
+  if (s.kick) h += '<div class="kick">' + s.kick + '</div>';
+  if (s.h && s.t === 'cover') h += '<h1>' + s.h + '</h1>';
+  else if (s.h && (s.t === 'section')) h += '<h1>' + s.h + '</h1>';
+  else if (s.h) h += '<h2>' + s.h + '</h2>';
+  if (s.lede) h += '<div class="lede">' + s.lede + '</div>';
+  if (s.big) h += '<div class="big">' + s.big + '</div>';
+  if (s.p) h += '<p>' + s.p + '</p>';
+  if (s.phases) {
+    h += '<div class="runway">';
+    s.phases.forEach(ph => { h += '<div class="phase"><div class="n">' + ph.n + '</div><div class="t">' + ph.t + '</div><div class="d">' + ph.d + '</div></div>'; });
+    h += '</div>';
+  }
+  if (typeof s.on === 'number') {
+    const labels = [['Phase 1','Plan'],['Phase 2','Pre-Launch'],['Phase 3','Open'],['Phase 4','Close']];
+    h += '<div class="runway">';
+    labels.forEach((l, k) => { h += '<div class="phase' + (k === s.on ? ' on' : '') + '"><div class="n">' + l[0] + '</div><div class="t">' + l[1] + '</div></div>'; });
+    h += '</div>';
+  }
+  if (s.items) {
+    h += '<ul>';
+    s.items.forEach(it => { h += '<li>' + it + '</li>'; });
+    h += '</ul>';
+  }
+  if (s.note) h += '<div class="note">' + s.note + '</div>';
+  if (s.hint) h += '<div class="ctahint">' + s.hint + '</div>';
+  if (s.disc) h += '<div class="disc">' + s.disc + '</div>';
+  h += '<div class="pg">' + (i + 1) + ' / ' + S.length + '</div>';
+  d.innerHTML = h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
