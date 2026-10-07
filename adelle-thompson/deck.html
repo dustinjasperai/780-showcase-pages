@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Your Own Lane — A Masterclass with Adelle Thompson, AT Enrich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ec;
+    --panel:#fffdf9;
+    --ink:#212832;
+    --accent:#007c89;
+    --rule:#212832;
+    --grey:#605b5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{
+    display:none;
+    width:100%;
+    max-width:980px;
+    background:var(--panel);
+    border:1px solid rgba(33,40,50,.12);
+    border-radius:4px;
+    padding:clamp(28px,5vw,64px);
+    box-shadow:0 18px 60px -30px rgba(33,40,50,.35);
+    animation:fade .5s ease;
+  }
+  .slide.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  h1{font-family:"Marcellus",serif;font-weight:400;line-height:1.05;font-size:clamp(34px,6vw,62px);letter-spacing:.3px}
+  h2{font-family:"Marcellus",serif;font-weight:400;line-height:1.1;font-size:clamp(26px,4.4vw,44px)}
+  h3{font-family:"Marcellus",serif;font-weight:400;font-size:clamp(20px,2.6vw,28px)}
+  p{font-size:clamp(15px,1.9vw,20px);line-height:1.65;color:var(--ink);max-width:66ch}
+  p+p{margin-top:14px}
+  .kicker{font-family:"Inter",sans-serif;font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:18px}
+  .lead{margin-top:22px;color:var(--grey)}
+  .brand{margin-top:34px;font-family:"Inter";font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--grey)}
+
+  /* the lane motif: a single clean horizontal path that opens up */
+  .lane{position:relative;height:2px;background:rgba(33,40,50,.14);margin:30px 0 8px;overflow:visible}
+  .lane::before{content:"";position:absolute;left:0;top:50%;height:2px;width:46%;background:var(--accent);transform:translateY(-50%)}
+  .lane::after{content:"";position:absolute;left:46%;top:50%;width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+
+  ul{list-style:none;margin-top:22px}
+  li{position:relative;padding:12px 0 12px 26px;font-size:clamp(15px,1.9vw,19px);line-height:1.5;border-bottom:1px solid rgba(33,40,50,.08)}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:22px;width:12px;height:2px;background:var(--accent)}
+
+  .pillar-no{font-family:"Marcellus",serif;font-size:clamp(40px,7vw,78px);color:var(--accent);line-height:1}
+  .grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,3vw,36px);align-items:start;margin-top:14px}
+
+  .quote{font-family:"Marcellus",serif;font-size:clamp(20px,2.8vw,30px);line-height:1.35;color:var(--ink)}
+  .quote .mk{color:var(--accent)}
+  .who{margin-top:18px;font-weight:600;color:var(--grey);font-size:14px;letter-spacing:.04em}
+  .stack .item{padding:18px 0;border-bottom:1px solid rgba(33,40,50,.1)}
+  .stack .item:last-child{border-bottom:0}
+
+  .cta-box{margin-top:26px;padding:22px 24px;border:1px solid var(--accent);border-radius:4px;background:rgba(0,124,137,.05)}
+  .cta-box p{font-size:clamp(16px,2.1vw,21px);color:var(--ink);max-width:none}
+  .disclaimer{margin-top:26px;font-size:12.5px;line-height:1.55;color:var(--grey);max-width:70ch}
+
+  .big{font-size:clamp(22px,3.2vw,34px);font-family:"Marcellus",serif;line-height:1.25}
+  .accent{color:var(--accent)}
+
+  #nav{position:fixed;bottom:18px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:18px;font-size:12px;color:var(--grey);letter-spacing:.08em}
+  #nav button{font:inherit;background:none;border:1px solid rgba(33,40,50,.25);color:var(--ink);border-radius:999px;width:30px;height:30px;cursor:pointer}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+  #count{font-variant-numeric:tabular-nums}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .3s ease}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<div id="nav">
+  <button id="prev" aria-label="Previous">&#8592;</button>
+  <span id="count">1 / 1</span>
+  <button id="next" aria-label="Next">&#8594;</button>
+</div>
+<script>
+const S = [
+  {t:'title',
+   kicker:'A Masterclass with Adelle Thompson',
+   h:'Create Your Own Lane',
+   sub:'How to Change Careers and Get Paid More Without Starting Over.',
+   brand:'AT Enrich · Career Mentor & Confidence Coach'},
+
+  {t:'promise',
+   kicker:'The promise',
+   h:'You do not need new qualifications. You need to repackage what you already have.',
+   body:['In the next hour I will show you how women move into a new industry, a better role or higher pay using the skills, the story and the experience they already own.',
+         'This is the exact approach I used to move out of a career I had outgrown, double my income and win back my time.']},
+
+  {t:'audience',
+   kicker:'Who this is for',
+   h:'This is for you if...',
+   list:['You feel stuck in a career you have quietly outgrown.',
+         'You suspect you are worth more than you are being paid, but you keep settling.',
+         'You want to switch industries and keep hearing you "do not have the experience."',
+         'You have asked for a pay rise before, maybe more than once, and been turned down.']},
+
+  {t:'problem',
+   kicker:'The trap',
+   h:'The "start from scratch" story',
+   body:['Most women are told the only way to change careers is to go back, retrain, collect another qualification and begin again at the bottom.',
+         'So you wait. You tell yourself you are not ready, not qualified, not experienced enough. The years pass and nothing changes.'],
+   note:'The problem was never your ability. It is how your experience has been packaged, and how little you have been taught to value it.'},
+
+  {t:'reframe',
+   kicker:'The reframe',
+   h:'Your experience is not the problem. Its packaging is.',
+   body:['Hiring managers do not buy your job titles. They buy the value you can clearly show them.',
+         'I spent 13 years in HR and recruitment. I have sat on the other side of the desk. The women who move up are rarely the most qualified. They are the ones who know how to present what they already carry.']},
+
+  {t:'turn',
+   kicker:'The insider view',
+   h:'What I learned from the other side of the desk',
+   body:['After years in HR and recruitment I noticed the same thing again and again. Brilliant women were invisible on paper because no one had taught them to translate their worth.',
+         'When you can reword your skills, repackage your story and market your value, the same experience suddenly reads as exactly what they are looking for.']},
+
+  {t:'framework',
+   kicker:'The method',
+   h:'Reword, Repackage and Market your Career Identity',
+   body:['This is the heart of Create Your Own Lane. You stop waiting to be chosen and you start paving your own way into the industry, the role and the pay you want.'],
+   lane:true,
+   steps:[['Reword','Translate your skills and experience into the language of the role you want next.'],
+          ['Repackage','Reposition your story so your value is obvious, on paper and in the room.'],
+          ['Market','Show up and sell your potential with confidence, so the right people see it.']]},
+
+  {t:'pillars',
+   kicker:'The work underneath',
+   h:'Strategy alone is not enough',
+   body:['The method only works when the mindset holds it up. Create Your Own Lane rests on four pillars. Practical strategy on the outside, confidence and belief on the inside.']},
+
+  {t:'pillar',
+   no:'01',
+   h:'Upgrade your confidence',
+   body:['We clear the self-doubt and insecurity that keeps you small, and we build real self-esteem.',
+         'The goal is to take your confidence from a 2 to a 10, and to learn the tools to stay there. You stop settling for less than you deserve.']},
+
+  {t:'pillar',
+   no:'02',
+   h:'Find a career you love',
+   body:['We quit the career you hate and get honest about your real skills and natural talents.',
+         'Then we map the move, step by step, from where you are now to where you actually want to be.']},
+
+  {t:'pillar',
+   no:'03',
+   h:'Monetise your mindset',
+   body:['We work on the limiting beliefs that have been holding you back and quietly capping your income.',
+         'The principle is simple. Learn your value so you can earn your value.']},
+
+  {t:'pillar',
+   no:'04',
+   h:'Become a magnet for happiness and success',
+   body:['We build high-achieving habits and a positive belief system, and we overcome the negative thought patterns running in the background.',
+         'Momentum stops being something you chase and becomes something you carry.']},
+
+  {t:'outcome',
+   kicker:'What this makes possible',
+   h:'Where your own lane can lead',
+   list:['Move into a new industry without new qualifications or experience.',
+         'Get paid more for the skills you already have.',
+         'Secure the promotion or pay rise, even after being turned down before.',
+         'Leave a toxic company for one that truly values you.',
+         'Or step out of corporate altogether and into your own thing.']},
+
+  {t:'bridge',
+   kicker:'The outcome I help create',
+   h:'I am the 5 Figure pay rise Maker',
+   body:['The women I work with have been paid up to 30k more for the value they already brought to the table. Not because they became someone new, but because they finally showed who they already were.'],
+   note:'This is about being paid what you are worth, on your terms.'},
+
+  {t:'story',
+   kicker:'Why me',
+   h:'I built my own lane first',
+   body:['I started out as an Early Years teacher, and I was unhappy. So I did the thing I now teach. I repackaged myself.',
+         'I highlighted my transferable skills, I sold my potential, and I got hired into a new industry with no new qualifications and no direct experience.',
+         'Then I doubled my income and moved to part-time hours for full-time pay. Everything I teach, I have lived.']},
+
+  {t:'proof',
+   kicker:'In their words',
+   q:'Adelle helped me get a 7k pay rise and when I first contacted her I only wanted 5k but had been refused twice. She really helped with my confidence and got my skills up.',
+   who:'Sharon'},
+
+  {t:'proof',
+   kicker:'In their words',
+   q:'A great CV that made me sound amazing. Booked two interviews and got an offer.',
+   who:'Davina T'},
+
+  {t:'proof',
+   kicker:'In their words',
+   q:'Adelle went out of her way to help me, and thanks to her I booked a 2 month temporary position.',
+   who:'Kirsty R'},
+
+  {t:'recap',
+   kicker:'Pulling it together',
+   h:'Your lane, in one line',
+   body:['You already have the raw material. The move is to reword it, repackage it and market it, with the confidence and the mindset to back it up.'],
+   list:['Confidence from a 2 to a 10.',
+         'A career you love, mapped step by step.',
+         'A mindset that earns what it is worth.',
+         'Habits that keep the momentum going.']},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h:'Ready to create your own lane?',
+   body:['If you are done waiting to be chosen and ready to pave your own way, let us talk.',
+         'Book a free discovery call with me and we will look at where you are, where you want to be, and the first move to get you there.'],
+   box:'Book your free discovery call with Adelle at AT Enrich.',
+   brand:'AT Enrich · Create Your Own Lane',
+   disclaimer:'This masterclass is educational and reflects my own experience and that of the women I have worked with. Results vary from person to person and no specific income, pay rise or career outcome is guaranteed.'}
+];
+
+const stage = document.getElementById('stage');
+
+function render(s){
+  const d = document.createElement('div');
+  d.className = 'slide';
+  let h = '';
+  if(s.kicker) h += '<div class="kicker">'+s.kicker+'</div>';
+
+  if(s.t === 'title'){
+    h += '<h1>'+s.h+'</h1>';
+    h += '<div class="lane"></div>';
+    if(s.sub) h += '<p class="lead">'+s.sub+'</p>';
+    if(s.brand) h += '<div class="brand">'+s.brand+'</div>';
+    d.innerHTML = h; return d;
+  }
+
+  if(s.t === 'pillar'){
+    h += '<div class="grid"><div class="pillar-no">'+s.no+'</div><div><h2>'+s.h+'</h2>';
+    (s.body||[]).forEach(p=> h += '<p>'+p+'</p>');
+    h += '</div></div>';
+    d.innerHTML = h; return d;
+  }
+
+  if(s.t === 'proof'){
+    h += '<div class="quote"><span class="mk">&ldquo;</span>'+s.q+'<span class="mk">&rdquo;</span></div>';
+    h += '<div class="who">'+s.who+'</div>';
+    d.innerHTML = h; return d;
+  }
+
+  if(s.h) h += (s.t==='cta'||s.t==='promise'||s.t==='reframe'||s.t==='bridge') ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>';
+  (s.body||[]).forEach(p=> h += '<p>'+p+'</p>');
+
+  if(s.lane) h += '<div class="lane"></div>';
+  if(s.steps){
+    h += '<div class="stack">';
+    s.steps.forEach(st=> h += '<div class="item"><h3 class="accent">'+st[0]+'</h3><p>'+st[1]+'</p></div>');
+    h += '</div>';
+  }
+  if(s.list){
+    h += '<ul>';
+    s.list.forEach(li=> h += '<li>'+li+'</li>');
+    h += '</ul>';
+  }
+  if(s.note) h += '<p class="big accent" style="margin-top:26px">'+s.note+'</p>';
+  if(s.box) h += '<div class="cta-box"><p>'+s.box+'</p></div>';
+  if(s.brand) h += '<div class="brand">'+s.brand+'</div>';
+  if(s.disclaimer) h += '<p class="disclaimer">'+s.disclaimer+'</p>';
+
+  d.innerHTML = h; return d;
+}
+
+const slides = S.map(render);
+slides.forEach(el=> stage.appendChild(el));
+let i = 0;
+const countEl = document.getElementById('count');
+const bar = document.getElementById('bar');
+function show(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((el,idx)=> el.classList.toggle('on', idx===i));
+  countEl.textContent = (i+1)+' / '+slides.length;
+  bar.style.width = ((i+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick = ()=> show(i+1);
+document.getElementById('prev').onclick = ()=> show(i-1);
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ show(i+1); e.preventDefault(); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ show(i-1); e.preventDefault(); }
+  if(e.key==='Home') show(0);
+  if(e.key==='End') show(slides.length-1);
+});
+stage.addEventListener('click', e=>{ if(e.target.closest('#nav')) return; show(i+1); });
+show(0);
+</script>
+</body>
+</html>
