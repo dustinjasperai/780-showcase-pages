@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Next One Up Mindset — A Mental Game Masterclass with Grant Parr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c1f33;      /* ground: derived from his brand navy #014f9b, darkened (site_scheme dark) */
+    --panel:#13304d;   /* panel: one step up, same navy family */
+    --rule:#24496e;    /* hairline */
+    --accent:#4a97d2;  /* his most-used brand hex (sky blue) */
+    --ink:#eef4fa;     /* near-white, matches his white H1 */
+    --muted:#9db6cf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:'Sora';font-weight:600;font-size:.82rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:'Sora';font-weight:700;font-size:clamp(2.1rem,5.2vw,4.2rem);line-height:1.04;
+    letter-spacing:-.01em}
+  h2{font-family:'Sora';font-weight:600;font-size:clamp(1.6rem,3.6vw,2.8rem);line-height:1.1}
+  p.lead{font-size:clamp(1.1rem,2vw,1.5rem);color:var(--muted);margin-top:1.4rem;max-width:52ch;line-height:1.5}
+  p.promise{font-size:clamp(1rem,1.7vw,1.3rem);margin-top:1.8rem;max-width:50ch;line-height:1.55}
+  .big{font-family:'Sora';font-weight:700;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.1;max-width:20ch}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:2rem;display:flex;flex-direction:column;gap:1.1rem;max-width:56ch}
+  li{display:flex;gap:1rem;font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.45}
+  li .n{font-family:'Sora';font-weight:700;color:var(--accent);min-width:2.2rem}
+  .pillar{font-family:'Sora';font-weight:600}
+  .part-num{font-family:'Sora';font-weight:700;font-size:clamp(3rem,8vw,6rem);color:var(--panel);
+    -webkit-text-stroke:1.5px var(--accent);line-height:1}
+  .foot{position:absolute;left:10vw;bottom:5vh;font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+  .cta-box{margin-top:2rem;padding:1.4rem 1.6rem;background:var(--panel);border:1px solid var(--rule);
+    border-radius:14px;max-width:46ch}
+  .cta-box .step{font-family:'Sora';font-weight:600;font-size:1.25rem;color:var(--accent)}
+  .disclaimer{margin-top:1.6rem;font-size:.82rem;color:var(--muted);max-width:60ch;line-height:1.5}
+  .nav{position:absolute;right:3vw;bottom:4vh;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--rule);margin-right:5px}
+  .dot.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><span id="pager"></span></div>
+<script>
+const S = [
+  {t:'title', kicker:'A Live Mental Game Masterclass', h:'The Next One Up Mindset', promise:'How golfers stop one bad hole from wrecking the round, with Grant Parr, M.A., founder of Game Face Performance and host of the 90% Mental podcast.'},
+  {t:'audience', kicker:'Who this is for', h:'The golfer whose range game vanishes under pressure.', lead:'Junior, high school, collegiate and competitive golfers who have the swing, but lose strokes to nerves, bad-hole spirals, and over-thinking the next shot.'},
+  {t:'trap', kicker:'The trap', h:'You tripled the 7th, and it cost you the back nine.', lead:'One shot goes sideways. Then the self-talk turns harsh, the next tee shot tightens up, and a single bad hole quietly becomes a bad round. The swing was never the problem.'},
+  {t:'reframe', kicker:'The reframe', big:'Golf is not won by the shot you just hit. It is won by how you meet the <span class="a">next one</span>.'},
+  {t:'part', num:'One', h:'The core problem: the spiral.', lead:'Pressure does not create one bad shot. It creates the chain reaction after it. Most golfers never train the thing that breaks the chain.'},
+  {t:'point', kicker:'Part one', h:'What the spiral actually is.', lead:'A mistake pulls your attention backward (replaying it) or forward (fearing the next one). Either way you are not present for the shot you are about to hit, so you hit it worse. That is the loop.'},
+  {t:'point', kicker:'Part one', h:'Why talent does not save you here.', lead:'The more you care, the tighter the loop. This is why gifted players melt down on tournament day and relaxed players overperform. It is trainable, and it is what we train.'},
+  {t:'part', num:'Two', h:'The framework: the Next One Up Mindset.', lead:'Bend, do not break. A playbook for the moments you cannot control, taught through three skills you can run shot to shot.'},
+  {t:'pillar', kicker:'Pillar one', h:'Managing Mistakes.', lead:'The reset. A repeatable routine that ends the spiral after a bad shot, so one tripled hole stays one hole instead of six.'},
+  {t:'pillar', kicker:'Pillar two', h:'Letting Go in the Moment.', lead:'Present-minded golf. Committing fully to the shot in front of you, free from the weight of the last hole or the fear of the next.'},
+  {t:'pillar', kicker:'Pillar three', h:'Creating Optimism During Adversity.', lead:'A durable frame that holds when the round turns, so pressure becomes a cue to focus instead of a threat to survive.'},
+  {t:'list', kicker:'The pre-round checklist', h:'Three things to run before the first tee.', items:['Reset after the bad shot, on purpose, every time.','Play only the shot in front of you.','Stay optimistic when the round turns.']},
+  {t:'part', num:'Three', h:'What it looks like on the course.', lead:'Not calmer in theory. Calmer on the 16th tee with a two-shot lead and your hands shaking.'},
+  {t:'point', kicker:'Part three', h:'From the range to the first tee.', lead:'The goal is a mental game that travels: the same composure in a qualifier, a final round, and a money match. You stop leaving your best golf on the practice tee.'},
+  {t:'whyme', kicker:'Why Grant', h:'Trained in it. Tested by it.', lead:'Grant Parr holds a Master’s in Sport Psychology and coaches golfers from promising juniors to collegiate athletes and tour professionals. He wrote The Next One Up Mindset and hosts the 90% Mental podcast, where tour players and coaches open up their own mental game.'},
+  {t:'recap', kicker:'What you leave with', h:'A mindset you can run tomorrow.', items:['A reset you trust after a bad shot.','A way to stay present for the shot that matters.','An optimistic frame that survives a bad stretch.']},
+  {t:'cta', kicker:'Your next step', h:'Work with Grant.', step:'Book a session with Game Face Performance.', body:'If this is the part of your game you have never actually trained, the next step is a conversation. Bring your season and your scores, and we will build the mental game to match.', disclaimer:'Educational content only. Mental performance coaching supports your game; it does not guarantee any score, ranking, or result, and individual results vary.'}
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (i===0?' on':'');
+  let html = '';
+  if(s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){ html += '<h1>'+s.h+'</h1><p class="promise">'+s.promise+'</p>'; }
+  else if(s.t==='reframe'){ html += '<div class="big">'+s.big+'</div>'; }
+  else if(s.t==='part'){ html += '<div class="part-num">'+s.num+'</div><h2 style="margin-top:1rem">'+s.h+'</h2><p class="lead">'+s.lead+'</p>'; }
+  else if(s.t==='list' || s.t==='recap'){ html += '<h2>'+s.h+'</h2><ul>'+s.items.map((it,n)=>'<li><span class="n">'+(n+1)+'</span><span>'+it+'</span></li>').join('')+'</ul>'; }
+  else if(s.t==='cta'){ html += '<h1>'+s.h+'</h1><div class="cta-box"><div class="step">'+s.step+'</div></div><p class="promise">'+s.body+'</p><p class="disclaimer">'+s.disclaimer+'</p>'; }
+  else { html += '<h2>'+s.h+'</h2>'+(s.lead?'<p class="lead">'+s.lead+'</p>':''); }
+  html += '<div class="foot">Game Face Performance · 90% Mental · The Next One Up Mindset</div>';
+  d.innerHTML = html;
+  stage.appendChild(d);
+});
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const pager = document.getElementById('pager');
+function draw(){
+  slides.forEach((el,i)=>el.classList.toggle('on', i===cur));
+  pager.textContent = (cur+1)+' / '+slides.length;
+}
+function go(n){ cur = Math.max(0, Math.min(slides.length-1, n)); draw(); }
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+});
+stage.addEventListener('click', ()=>go(cur+1));
+draw();
+</script>
+</body>
+</html>
