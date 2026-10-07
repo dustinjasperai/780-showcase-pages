@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 3-Part Flow — a masterclass with Michelle Leotta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ee; --panel:#ffffff; --rule:#ddd6ca;
+    --accent:#07515f; --accent-soft:#e2ecec; --ink:#20302f; --muted:#5d6b69;
+    --display:'Newsreader',Georgia,serif; --body:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:440px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:20px}
+  h1{font-family:var(--display);font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:38px;line-height:1.12;letter-spacing:-.01em}
+  p.lead{font-size:21px;color:var(--muted);margin-top:18px;max-width:38ch}
+  p.body{font-size:19px;margin-top:16px;max-width:46ch;color:var(--ink)}
+  .flowline{display:flex;align-items:center;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .node{background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:999px;
+    padding:12px 20px;font-size:16px}
+  .arrow{color:var(--accent);font-weight:700;font-size:20px}
+  ul.pillars{list-style:none;margin-top:26px;display:grid;gap:14px}
+  ul.pillars li{padding-left:22px;position:relative;font-size:19px;max-width:48ch}
+  ul.pillars li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;
+    border-radius:2px;background:var(--accent)}
+  .big{font-family:var(--display);font-size:120px;font-weight:600;color:var(--accent);line-height:1}
+  .stamp{margin-top:26px;font-weight:700;color:var(--accent);font-size:16px;letter-spacing:.02em}
+  .num{font-family:var(--display);font-size:22px;color:var(--accent);font-weight:600;margin-bottom:10px}
+  .credit{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+  .credit div{background:var(--accent-soft);border-radius:10px;padding:18px}
+  .credit .n{font-family:var(--display);font-size:34px;color:var(--accent);font-weight:600}
+  .credit .l{font-size:14px;color:var(--muted);margin-top:4px}
+  .cta h2{font-size:42px}
+  .btn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;font-weight:700;
+    padding:16px 30px;border-radius:999px;font-size:17px;text-decoration:none}
+  .disc{margin-top:28px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .pagetag{position:absolute;top:22px;right:28px;font-size:12px;color:var(--muted);letter-spacing:.1em}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);opacity:.55}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Michelle Leotta',
+    h:'The 3-Part Flow', lead:'How health coaches build consistent income without chasing 99 directions.'},
+
+  {t:'promise', kicker:'What you will leave with',
+    h:'A flow, not a scramble',
+    body:'By the end you will have a simple system where every free thing you offer feeds a paid thing, and every paid thing feeds the next, all pointed at one result your people will actually pay for.'},
+
+  {t:'who', kicker:'Who this is for',
+    h:'The certified coach who is stuck',
+    body:'You did the training. You know how to coach. What nobody taught you was how to turn that into clients on a schedule you can count on. This is for you.'},
+
+  {t:'trap', kicker:'The trap',
+    h:'You were told to build an audience',
+    body:'So you posted, you grew a following, you showed up everywhere. The followers came. The income did not. A big audience is not the same thing as proven demand.'},
+
+  {t:'reframe', kicker:'The reframe',
+    h:'Nobody wants <span class="strike">health coaching</span>',
+    body:'People do not wake up wanting "health coaching." They want a specific result, for a specific problem they already know they have. Sell the result. The label was never the product.'},
+
+  {t:'part', num:'Part One', h:'Why the income is inconsistent'},
+
+  {t:'problem', kicker:'Problem one',
+    h:'You chased attention, not demand',
+    body:'Attention is cheap and loud. Demand is quiet and specific: a person with a problem urgent enough to pay to solve. Find that first, before you build anything.'},
+
+  {t:'problem', kicker:'Problem two',
+    h:'Your energy went 99 directions',
+    body:'A freebie here, a workshop there, a new offer every month, each aimed at a different person. None of it compounds. The fix is not more effort. It is one direction.'},
+
+  {t:'part', num:'Part Two', h:'The 3-Part Flow'},
+
+  {t:'flow', kicker:'The whole system, one picture',
+    h:'Three offers, each feeds the next',
+    flow:['Free','Low-ticket','Premium']},
+
+  {t:'pillar', num:'Part 1 of the flow', kicker:'Free',
+    h:'Attract the right person',
+    body:'A free offer that is narrow on purpose. It is not for everyone. It is bait for exactly the person whose problem you solve, and it brings them into your world.'},
+
+  {t:'pillar', num:'Part 2 of the flow', kicker:'Low-ticket',
+    h:'Build trust, confirm readiness',
+    body:'A small paid offer does two jobs at once: it earns real trust by delivering a quick win, and it tells you who is actually ready to change, not just curious.'},
+
+  {t:'pillar', num:'Part 3 of the flow', kicker:'Premium',
+    h:'Deliver the transformation',
+    body:'Your signature program is where the full result happens. By the time someone arrives here, they have already been helped by you twice. The yes is easy.'},
+
+  {t:'through', kicker:'The through-line',
+    h:'One person. One problem. One result.',
+    body:'All three offers are built around the same person, the same problem, and the same result. That is what turns three separate things into a flow instead of 99 directions.',
+    stamp:'This is the whole discipline.'},
+
+  {t:'statement', kicker:'The input that makes it work',
+    h:'Your Best Work Statement',
+    body:'Before any of the offers, you write one statement: the problem plus the person. "Lawyers with gut issues" beats "gut health." Specific is not smaller. Specific is findable, and findable is payable.'},
+
+  {t:'part', num:'Part Three', h:'What it looks like in practice'},
+
+  {t:'practice', kicker:'Demand first',
+    h:'Validate before you build',
+    body:'I once spent a year building a big, engaged audience that never spent a dime. Now the order is reversed: prove the demand with the free and low-ticket offers, then build the premium program the demand asked for.'},
+
+  {t:'proof', kicker:'Why listen to me',
+    h:'I learned this the long way',
+    credit:[['20+ yrs','in marketing before coaching'],['2,000+','coaches through the Core Curriculum'],['15,000+','in the Health Coach Power community']]},
+
+  {t:'recap', kicker:'Recap',
+    h:'The flow in one breath',
+    body:'Find the one person and problem. Attract them free. Earn trust with a small paid win. Deliver the result in your premium program. Point everything at the same place.'},
+
+  {t:'cta', kicker:'Your next step',
+    h:'Build your flow inside Healthy Profit University',
+    body:'The Core Curriculum walks you through every piece of the 3-Part Flow at your own pace. Come build yours.',
+    btn:'Join Healthy Profit University',
+    disc:'For education only. No specific income or result is guaranteed. Results vary and depend on your own effort, market, and circumstances. Building a coaching business carries risk.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide' + (s.t === 'cta' ? ' cta' : '');
+  let inner = `<span class="pagetag">${String(i+1).padStart(2,'0')} / ${S.length}</span>`;
+  if (s.kicker) inner += `<div class="kicker">${s.kicker}</div>`;
+  if (s.num) inner += `<div class="num">${s.num}</div>`;
+  if (s.t === 'title') inner += `<h1>${s.h}</h1>`;
+  else inner += `<h2>${s.h}</h2>`;
+  if (s.lead) inner += `<p class="lead">${s.lead}</p>`;
+  if (s.flow) {
+    inner += '<div class="flowline">';
+    s.flow.forEach((n, j) => {
+      inner += `<span class="node">${n}</span>`;
+      if (j < s.flow.length - 1) inner += '<span class="arrow">&rarr;</span>';
+    });
+    inner += '</div>';
+  }
+  if (s.body) inner += `<p class="body">${s.body}</p>`;
+  if (s.stamp) inner += `<div class="stamp">${s.stamp}</div>`;
+  if (s.credit) {
+    inner += '<div class="credit">';
+    s.credit.forEach(c => inner += `<div><div class="n">${c[0]}</div><div class="l">${c[1]}</div></div>`);
+    inner += '</div>';
+  }
+  if (s.btn) inner += `<a class="btn" href="#">${s.btn}</a>`;
+  if (s.disc) inner += `<p class="disc">${s.disc}</p>`;
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
