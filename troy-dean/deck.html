@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Paid What You're Worth — a masterclass with Troy Dean</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFAFC; --panel:#F2EFF7; --rule:#E2DCEF;
+    --ink:#221C4B; --muted:#5B5676; --accent:#CC3366;
+    --head:'Manrope',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .stage{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:5vh 5vw}
+  .slide{width:min(960px,92vw);background:#fff;border:1px solid var(--rule);border-radius:18px;
+    padding:56px 60px;box-shadow:0 24px 60px rgba(34,28,75,.08);min-height:68vh;
+    display:flex;flex-direction:column;justify-content:center}
+  .slide.deep{background:var(--ink);color:var(--bg);border-color:#2f2767}
+  .slide.deep .muted{color:#b9b2d9}
+  .kicker{font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin:0 0 18px}
+  .label{font-family:var(--head);font-weight:800;color:var(--accent);font-size:15px;letter-spacing:.06em;margin:0 0 12px}
+  h1{font-family:var(--head);font-weight:800;font-size:clamp(30px,5vw,54px);line-height:1.05;margin:0 0 18px}
+  h2{font-family:var(--head);font-weight:800;font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:0 0 20px}
+  p.sub{font-size:clamp(17px,2vw,22px);color:var(--muted);margin:0;max-width:40ch}
+  p.body{font-size:clamp(17px,1.9vw,21px);line-height:1.5;margin:0;max-width:52ch}
+  ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:14px;max-width:48ch}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,1.8vw,20px);line-height:1.4}
+  li:before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border-radius:3px;
+    background:var(--accent);transform:rotate(45deg)}
+  .ghost{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:3px}
+  .a{color:var(--accent)}
+  .disc{margin-top:28px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .nav{position:fixed;bottom:18px;right:22px;font-family:var(--head);font-size:13px;color:var(--muted);
+    display:flex;gap:14px;align-items:center}
+  .nav button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);
+    border-radius:8px;padding:6px 12px;cursor:pointer}
+  .count{position:fixed;bottom:22px;left:22px;font-family:var(--head);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="stage"><div class="slide" id="slide"></div></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Troy Dean', h:'Get Paid What You\'re Worth', sub:'How to escape the order-taker trap, run Paid Discovery, and package your agency\'s IP.'},
+  {t:'who', h:'This is for you if...', items:['You run a web design or digital agency','You are tired of competing on price and scope creep','You give away strategy on free "quick calls"','You want recurring demand instead of feast or famine']},
+  {t:'content', h:'The trap', body:'You started an agency to do great work. Instead you became an order-taker: the client hands you a spec, you quote, you discount, and you build what they asked for even when you can see it will not get them the result.'},
+  {t:'deep', t2:'reframe', h:'The uncomfortable truth', body:'The problem was never your pricing. It is that you are selling websites. Clients cannot compare value they cannot see, so they compare the only number they can: your quote.'},
+  {t:'part', label:'Part One', h:'Why "just build what they asked for" keeps you cheap'},
+  {t:'content', h:'Order-taker vs advisor', body:'An order-taker executes a spec. An advisor diagnoses the business problem first. The same build is worth several times more when it is the answer to a diagnosis instead of a line item on a quote.'},
+  {t:'content', h:'Where the money leaks out', items:['Free scoping calls that become unpaid consulting','Proposals written on spec, most of which lose','Projects priced by the hour, not the outcome','No reason for the client to ever come back']},
+  {t:'part', label:'Part Two', h:'The Agency GPS path'},
+  {t:'content', h:'Agency GPS, in three waypoints', items:['Grow Authority: become the obvious choice','Package IP: turn your service into products','Scale Impact: build the systems and team so it runs']},
+  {t:'content', h:'Waypoint 1: Paid Discovery', body:'Charge for the diagnosis. A Paid Discovery session scopes the outcome, prices the roadmap, and hands the client a plan they have already invested in. You get paid to think, and you pre-qualify every build before you quote it.'},
+  {t:'content', h:'What a Paid Discovery session covers', items:['Diagnose the real business problem','Scope the outcome, not the hours','Price the roadmap with confidence','Hand over a plan they will pay to execute']},
+  {t:'content', h:'Waypoint 2: Package your IP', body:'Stop re-quoting from scratch. Turn the way you solve problems into a named, repeatable offer with a predictable price. Leverage replaces guesswork, and you stop trading hours for dollars.'},
+  {t:'content', h:'From a $2,000 website to a productized offer', body:'The $2,000 website is a race to the bottom. The same expertise, packaged as a named outcome with a roadmap, becomes a premium engagement clients choose on value instead of price.'},
+  {t:'content', h:'Waypoint 3: Scale your impact', body:'With authority driving demand and your IP packaged into products, the right people, automations and processes let the agency run without you living inside every project.'},
+  {t:'part', label:'Part Three', h:'Life as the advisor, not the order-taker'},
+  {t:'content', h:'The shift', items:['From free scoping to Paid Discovery','From hourly quotes to outcome pricing','From order-taker to trusted advisor','From feast or famine to recurring demand']},
+  {t:'content', h:'Why listen to me', body:'I am Troy Dean, founder of Agency Mavericks. Our team has spent more than a decade coaching thousands of agencies around the world through the Agency GPS framework to grow revenue, simplify their offer, and get their time back.'},
+  {t:'content', h:'The one decision', body:'You can keep quoting websites and hoping the next lead says yes. Or you can get paid to diagnose, package what you know, and become the agency clients cannot compare to anyone else.'},
+  {t:'cta', h:'Your next step', body:'If you want help mapping this to your agency, request a call with the Agency Mavericks team and we will walk through your Agency GPS Scorecard together.', disclaimer:'This masterclass is educational. Results vary and nothing here is guaranteed; it is not a promise of income or any specific outcome.'}
+];
+let i=0;
+function render(){
+  const s=S[i], el=document.getElementById('slide');
+  el.className='slide'+((s.t==='deep')?' deep':'');
+  let html='';
+  if(s.kicker) html+='<p class="kicker">'+s.kicker+'</p>';
+  if(s.label) html+='<p class="label">'+s.label+'</p>';
+  if(s.h) html+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+  if(s.sub) html+='<p class="sub">'+s.sub+'</p>';
+  if(s.body) html+='<p class="body">'+s.body+'</p>';
+  if(s.items){html+='<ul>';s.items.forEach(x=>html+='<li>'+x+'</li>');html+='</ul>';}
+  if(s.disclaimer) html+='<p class="disc">'+s.disclaimer+'</p>';
+  el.innerHTML=html;
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
