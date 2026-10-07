@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mega Open House System, Joshua Smith</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141414; --panel:#1f1f1f; --rule:#333333; --accent:#e93d3d;
+    --ink:#f5f5f5; --muted:#a8a8a8;
+    --head:'Montserrat',system-ui,sans-serif; --body:'Roboto',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0b0b0b;color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:10px;
+    padding:56px 52px;margin:0 0 22px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .num{position:absolute;top:22px;right:28px;font-family:var(--head);font-weight:800;
+    font-size:13px;color:var(--muted);letter-spacing:.14em}
+  .k{font-family:var(--head);font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:900;font-size:46px;line-height:1.05;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:800;font-size:33px;line-height:1.12;margin-bottom:16px}
+  p.lead{font-size:20px;line-height:1.5;color:#e6e6e6;max-width:42ch}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:19px;line-height:1.5;padding:9px 0 9px 30px;position:relative;color:#e6e6e6;
+    border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:0;top:18px;width:11px;height:11px;
+    background:var(--accent);border-radius:2px}
+  .big{font-family:var(--head);font-weight:900;font-size:108px;line-height:1;color:var(--accent)}
+  .sub{color:var(--muted);font-size:17px;margin-top:14px;max-width:48ch;line-height:1.5}
+  .cta h1{color:#fff}
+  .pill{display:inline-block;background:var(--accent);color:#fff;font-family:var(--head);
+    font-weight:800;padding:15px 26px;border-radius:7px;font-size:19px;margin-top:22px;letter-spacing:.02em}
+  .disc{margin-top:26px;font-size:13px;color:#8a8a8a;max-width:60ch;line-height:1.5}
+  .lanes{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .lane{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:8px;padding:18px}
+  .lane .h{font-family:var(--head);font-weight:800;color:#fff;font-size:17px}
+  .lane .d{color:var(--muted);font-size:14px;margin-top:6px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', h:'The Mega Open House System', k:'A live masterclass with Joshua Smith', lead:'How to turn one open house into a full week of listing and buyer appointments, without cold calling, buying leads, or paying for portals.'},
+  {t:'audience', h:'Who this is for', k:'Real estate agents', b:['Agents who want more listings, not more busywork','Anyone tired of open houses that produce a sign-in sheet and nothing else','Agents who want a repeatable system they can run every single week']},
+  {t:'trap', h:'Most open houses are a wasted Saturday', k:'The trap', lead:'You give up your weekend, a handful of neighbors wander through, you collect a few names, and by Monday the leads have gone cold. So you decide open houses "do not work."'},
+  {t:'reframe', h:'The open house is not the problem. Running it without a system is.', k:'Reframe', lead:'The agents dominating their market are running the exact same event you are. They just treat it as a lead machine with a process in front of it and a process behind it.'},
+  {t:'problem', h:'Sit-and-wait is the default, and it fails', k:'Part one, the core problem', b:['The wrong property gets picked, so the right buyers never show','No pre-marketing, so foot traffic is whoever happens to drive by','No conversion plan, so visitors leave without an appointment','No follow-up, so every name you did collect leaks away']},
+  {t:'cost', h:'Every leaked lead is a listing you handed to someone else', k:'The real cost', lead:'A single well-run open house in the right neighborhood can surface sellers, buyers, and referrals for weeks. Done without a system, that pipeline walks out the door and never comes back.'},
+  {t:'framework', h:'The Mega Open House System', k:'Part two, the framework', b:['Pillar 1, Pick the right property','Pillar 2, Pre-market so it is full before you unlock the door','Pillar 3, Convert the room','Pillar 4, The 7-day follow-up']},
+  {t:'pillarone', h:'Pillar 1, Pick the right property', k:'The system', lead:'Not every listing makes a good open house. You choose the property, the price band, and the neighborhood that attract the buyers and would-be sellers you actually want to meet.'},
+  {t:'pillartwo', h:'Pillar 2, Pre-market so it is full', k:'The system', b:['Work the surrounding streets before the weekend, not just the MLS','Give neighbors a reason to walk through, they are your future sellers','Arrive to a line at the door instead of hoping someone drives by']},
+  {t:'pillarthree', h:'Pillar 3, Convert the room', k:'The system', b:['Set up displays that start the right conversations','Run the tour so every visitor is guided, not left to wander','Ask for the appointment, out loud, every time']},
+  {t:'pillarfour', h:'Pillar 4, The 7-day follow-up', k:'The system', lead:'The appointment is usually set in the days after, not at the door. A simple seven-day cadence turns sign-ins into listing appointments, buyer consults, and referrals while you are still top of mind.'},
+  {t:'channels', h:'One system, four lead sources', k:'It scales past open houses', lead:'The same discipline runs your other channels. Pick the target, pre-market, convert, follow up.'},
+  {t:'outcome', h:'What one weekend should turn into', k:'Part three, one weekend in practice', b:['Saturday, one open house run the right way','The week after, listing appointments stacked across several days','A buyer consult and a follow-up list that feeds next weekend','A pipeline you refill every seven days instead of starting from zero']},
+  {t:'credibility', h:'Why listen to me on this', k:'Credibility', b:['Over 5,000 homes sold, more than one home a day over the years','Voted the 30th top realtor in America by The Wall Street Journal','Host of one of the most downloaded real estate agent podcasts','Still listing and selling homes, this is what I run now, not what I used to do']},
+  {t:'tech', h:'Capture it so nothing leaks', k:'The tech layer', lead:'Open house leads are only worth what your follow-up captures. A simple website and CRM setup holds every name and runs the seven-day cadence for you, so the system works even on your busiest week.'},
+  {t:'objections', h:'What this is not', k:'Objections', b:['No cold calling strangers who never asked to hear from you','No buying shared internet leads you have to chase','No paying portals for your own market back','Just your own open houses, run like a business']},
+  {t:'bigpicture', h:'Career to business in 90 days', k:'The bigger picture', lead:'One well-run channel proves the system. Layering the rest is how a solo career becomes a real estate business that does not depend on you chasing every deal.'},
+  {t:'recap', h:'The system in one picture', k:'Recap', b:['Pick the right property','Pre-market so it is full','Convert the room','Follow up for seven days','Repeat every weekend']},
+  {t:'cta', h:'Ready to build this into your business?', k:'Your next step', cta:true, lead:'If you want help installing the full system, the 90 Day Mastery Bootcamp walks you through it step by step. Book a zero-pressure discovery call and we will see if it is a fit.', pill:'Schedule your zero-pressure discovery call at gsdmode.com', disc:'This masterclass is educational only. No result is guaranteed and results vary by agent, market, effort, and experience. It is not a promise or guarantee of income or results.'}
+];
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.cta?' cta':'');
+  let h='<div class="num">'+String(i+1).padStart(2,'0')+' / '+S.length+'</div>';
+  if(s.k) h+='<div class="k">'+s.k+'</div>';
+  if(s.big){h+='<div class="big">'+s.big+'</div>';}
+  h+='<h1>'+s.h+'</h1>';
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.b){h+='<ul>'+s.b.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  if(s.pill) h+='<div class="pill">'+s.pill+'</div>';
+  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
