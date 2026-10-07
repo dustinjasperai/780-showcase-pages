@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Direction Problem - a Platform Seven masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ed; --panel:#e0dad1; --ink:#2b2c30; --muted:#666666; --accent:#a886cd;
+    --head:'Merriweather',Georgia,serif; --body:'Figtree',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:40px 24px 120px}
+  .slide{background:var(--bg);border:1px solid rgba(43,44,48,.10);border-radius:18px;
+    padding:56px 52px;margin:22px 0;min-height:60vh;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(43,44,48,.03)}
+  .slide.panel{background:var(--panel)}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:900;font-size:clamp(30px,5vw,52px);line-height:1.08;
+    letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(24px,3.6vw,36px);line-height:1.14}
+  p{font-size:clamp(16px,2vw,20px);line-height:1.6;color:var(--ink);max-width:62ch;margin-top:16px}
+  p.lead{font-size:clamp(18px,2.4vw,24px)}
+  .muted{color:var(--muted)}
+  .rule{width:60px;height:4px;background:var(--accent);border-radius:3px;margin:22px 0 4px}
+  ul{margin:22px 0 0 0;list-style:none}
+  li{font-size:clamp(16px,2vw,20px);line-height:1.5;padding:14px 0 14px 34px;position:relative;
+    border-top:1px solid rgba(43,44,48,.10)}
+  li:before{content:"";position:absolute;left:0;top:22px;width:14px;height:14px;border-radius:4px;
+    background:var(--accent)}
+  li b{font-family:var(--head);font-weight:700}
+  .big{font-family:var(--head);font-weight:900;font-size:clamp(40px,8vw,88px);line-height:1}
+  .strike{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+  .accent{color:var(--accent)}
+  .n{font-family:var(--head);font-weight:900;font-size:clamp(34px,5vw,60px);color:var(--accent);
+    display:block;margin-bottom:8px}
+  .foot{position:fixed;bottom:0;left:0;right:0;background:rgba(244,241,237,.92);
+    border-top:1px solid rgba(43,44,48,.12);padding:12px 24px;display:flex;justify-content:space-between;
+    font-size:12px;color:var(--muted);backdrop-filter:blur(4px)}
+  .brand{font-family:var(--head);font-weight:700;color:var(--ink)}
+  .disc{font-size:14px;color:var(--muted);max-width:70ch}
+  .cta-box{display:inline-block;margin-top:26px;padding:16px 26px;background:var(--ink);color:var(--bg);
+    border-radius:12px;font-weight:600;font-size:18px}
+</style>
+</head>
+<body>
+<main class="deck" id="deck"></main>
+<div class="foot"><span class="brand">Platform Seven</span><span id="pc"></span></div>
+<script>
+const S = [
+  {t:'title', kick:'A Platform Seven masterclass, with Ricky Blair',
+    h:'The Direction Problem',
+    p:'Why more information keeps founders stuck, and the three decisions that get you moving.'},
+
+  {t:'promise', kick:'What you\'ll leave with',
+    h:'One game, one goal, one next move',
+    p:'By the end of this session you will have named the game you are actually playing, written the single goal that makes this quarter real, and chosen the next move you will ship this week. Not notes. A direction.'},
+
+  {t:'who', kick:'Who this is for',
+    h:'You have the ideas. You have the tabs open. You still haven\'t moved.',
+    p:'This is for the ambitious founder who has read the books, saved the podcasts, and bought the courses, and is still sitting at the same starting line. If that is you, you are in the right room.'},
+
+  {t:'trap', kick:'The trap', panel:true,
+    h:'You think you have an information problem.',
+    p:'So you collect more. Another framework, another guru, another 47-module course. And the pile of information gets taller while the needle stays exactly where it was.'},
+
+  {t:'reframe', kick:'The reframe',
+    big:'You don\'t have an information problem. You have a direction problem.',
+    p:'Starting a business has never been easier. Building one has never been harder. The internet already gave you everything. That is precisely why you cannot choose.'},
+
+  {t:'p1', kick:'Part one', h:'Why you can\'t decide, even when you know all the options',
+    p:'When every option is available, the cost of picking the wrong one feels enormous, so you keep the options open and call it research. It is not research. It is avoidance wearing a smart outfit.',
+    p2:'Direction is not more information. Direction is a decision you commit to long enough to get feedback.'},
+
+  {t:'cost', kick:'The quiet cost',
+    h:'Every month without direction has a price',
+    p:'It is not just the revenue you did not earn. It is the slow erosion of belief, the growing suspicion that maybe you are not the kind of person who finishes. Direction is how you get that belief back.'},
+
+  {t:'turn', kick:'The turn', panel:true,
+    h:'The founders who move are not smarter. They decided sooner.',
+    p:'They stopped treating the next course as the thing standing between them and progress. Here are the three decisions that replace the noise.'},
+
+  {t:'overview', kick:'The three decisions',
+    h:'Three decisions replace a hundred open tabs',
+    list:['Change the game instead of competing in it.',
+          'Write the goal that sets your direction.',
+          'Ship imperfect and let the market correct you.'],
+    p:'We will take them one at a time.'},
+
+  {t:'move', kick:'Move one', n:'01',
+    h:'Don\'t compete. Change the game.',
+    p:'The first rule a mentor ever gave me. Most founders enter a crowded lane and try to be a slightly better version of what already exists. That is a fight you win slowly, if at all.',
+    p2:'Changing the game means choosing a lane where your unfair advantage is the whole point, not a tiebreaker. You decide what game you are actually playing before you play it.'},
+
+  {t:'move', kick:'Move two', n:'02',
+    h:'Write the goal. Set the direction.',
+    p:'Goal setting has been the single biggest game changer in every business I have built. Not a vision board. A written goal specific enough that you can tell, this week, whether you moved toward it or away from it.',
+    p2:'A written goal turns scattered ambition into a direction you can actually walk in.'},
+
+  {t:'move', kick:'Move three', n:'03',
+    h:'Ship it imperfect. Let the market correct you.',
+    p:'Do not wait for perfect. Put the idea into the real world and learn from the feedback. The market will tell you more in a week than another course will in a year.',
+    p2:'Perfection is just information-collecting with better lighting. Direction means you move before you feel ready.'},
+
+  {t:'together', kick:'Put together', panel:true,
+    h:'Direction is a loop, not a lightning bolt',
+    list:['Choose the game you are playing, on purpose.',
+          'Write the one goal that makes this quarter real.',
+          'Ship, get feedback, adjust, repeat.'],
+    p:'That loop is the whole thing. It is boring, and it is the difference between the founders who move and the ones who keep reading.'},
+
+  {t:'lonely', kick:'The honest part',
+    h:'The reason most people never run the loop',
+    p:'It is lonely. Entrepreneurship is full of moments where you feel like giving up, and doing it alone is where direction quietly dies. Mentored founders are far likelier to start, and to still be standing five years later.',
+    p2:'You were never meant to figure this out by yourself. That is the point of a room.'},
+
+  {t:'looks', kick:'A week with direction',
+    h:'What a Tuesday feels like once the fog lifts',
+    p:'You wake up knowing the one thing that matters today. You bring your real decision to a room of people who have made it before. You ship, you get feedback, you adjust. The fog lifts, and movement starts to feel normal again.'},
+
+  {t:'whyme', kick:'Why listen to me', panel:true,
+    h:'I left school at 16. I sold the company at 30.',
+    p:'Defeated and deflated at 16, a mentor unlocked something in me a year later. I went on to build a commercial real estate company and sell it. I did not do it with more information. I did it with direction, and with people who had already walked the road.',
+    p2:'I built Platform Seven so the next founder does not have to do the lonely version.'},
+
+  {t:'what', kick:'What Platform Seven is',
+    h:'A room, a mentor, and a direction, every week',
+    list:['Weekly live mentoring: bring one real decision, leave with a direction.',
+          'A peer community of founders who are actually building, not just posting.',
+          'Step-by-step courses and tools, in the order you actually need them.'],
+    p:'Not more noise. A place to turn ambition into movement, with people beside you.'},
+
+  {t:'recap', kick:'Recap', panel:true,
+    h:'Direction beats information, every time',
+    list:['The problem was never information. It was direction.',
+          'Change the game, write the goal, ship imperfect.',
+          'Do it in a room, not alone.'],
+    p:'That is the whole masterclass. The rest is reps.'},
+
+  {t:'cta', kick:'Your next step',
+    h:'Pick one. Start moving.',
+    p:'If you are tired of collecting ideas and ready to choose a direction, come and build inside Platform Seven. Join us, or book a call and we will find your next decision together.',
+    cta:'Join Platform Seven',
+    disc:'Educational content only. No income, revenue, or result is guaranteed, and results vary from person to person. Nothing here is financial advice.'}
+];
+
+const deck=document.getElementById('deck');
+function esc(x){return x==null?'':x}
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(s.panel?' panel':'');
+  let h='';
+  if(s.kick) h+='<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.big){ h+='<div class="big">'+esc(s.big)+'</div><div class="rule"></div>'; }
+  else if(s.t==='title'){ h+='<h1>'+esc(s.h)+'</h1><div class="rule"></div>'; }
+  else if(s.n){ h+='<span class="n">'+esc(s.n)+'</span><h2>'+esc(s.h)+'</h2><div class="rule"></div>'; }
+  else if(s.h){ h+='<h2>'+esc(s.h)+'</h2><div class="rule"></div>'; }
+  if(s.p) h+='<p class="lead">'+esc(s.p)+'</p>';
+  if(s.p2) h+='<p>'+esc(s.p2)+'</p>';
+  if(s.list){ h+='<ul>'+s.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'; }
+  if(s.cta) h+='<div class="cta-box">'+esc(s.cta)+'</div>';
+  if(s.disc) h+='<p class="disc">'+esc(s.disc)+'</p>';
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+document.getElementById('pc').textContent='The Direction Problem  /  '+S.length+' slides';
+</script>
+</body>
+</html>
