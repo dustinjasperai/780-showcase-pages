@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speak With Confidence On Camera — a masterclass with Sarina Mann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#241029;      /* deep plum ground, darkened from brand #603078 */
+    --panel:#321640;   /* panel */
+    --rule:#4a2a58;    /* rule */
+    --accent:#9048a8;  /* violet accent, sampled from cover art */
+    --accent-soft:#b982d0;
+    --text:#f3e9f5;    /* cream type, from brand #fff0ff */
+    --muted:#c6aed0;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',-apple-system,sans-serif;
+    background:var(--bg); color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:9vh 11vw; max-width:1100px; margin:0 auto; left:0; right:0;
+  }
+  .slide.active{display:flex; animation:fade .5s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+  /* soft lens glow motif */
+  .slide::before{
+    content:""; position:absolute; top:-12%; right:-6%;
+    width:46vw; height:46vw; border-radius:50%;
+    background:radial-gradient(circle, rgba(144,72,168,.28), rgba(144,72,168,0) 68%);
+    pointer-events:none; z-index:0;
+  }
+  .slide > *{position:relative; z-index:1;}
+  .kicker{font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-soft); margin-bottom:22px;}
+  h1{font-family:'Spectral',Georgia,serif; font-weight:700; font-size:clamp(34px,6vw,68px); line-height:1.08; letter-spacing:-.01em; margin-bottom:24px;}
+  h2{font-family:'Spectral',Georgia,serif; font-weight:600; font-size:clamp(28px,4.4vw,46px); line-height:1.15; margin-bottom:20px;}
+  .sub{font-size:clamp(17px,2.1vw,23px); color:var(--muted); line-height:1.5; max-width:40ch;}
+  p.body{font-size:clamp(17px,2vw,22px); color:var(--text); line-height:1.6; max-width:42ch; margin-bottom:14px;}
+  ul{list-style:none; margin-top:10px;}
+  li{font-size:clamp(16px,1.9vw,21px); line-height:1.5; padding:13px 0 13px 34px; border-bottom:1px solid var(--rule); position:relative; color:var(--text);}
+  li:last-child{border-bottom:none;}
+  li::before{content:""; position:absolute; left:4px; top:21px; width:10px; height:10px; border-radius:50%; background:var(--accent);}
+  li b{color:var(--accent-soft); font-weight:600;}
+  .big{font-family:'Spectral',Georgia,serif; font-size:clamp(30px,5vw,56px); font-weight:600; line-height:1.14; max-width:20ch;}
+  .num{font-family:'Spectral',Georgia,serif; font-size:clamp(40px,7vw,86px); font-weight:700; color:var(--accent); line-height:1; margin-bottom:10px;}
+  .panel{background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:30px 34px;}
+  .disc{font-size:14px; color:var(--muted); line-height:1.5; max-width:52ch; margin-top:26px; border-top:1px solid var(--rule); padding-top:16px;}
+  .cta-step{font-family:'Spectral',serif; font-size:clamp(20px,2.6vw,28px); color:var(--accent-soft); margin-top:10px;}
+  footer{position:fixed; bottom:20px; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:0 28px; font-size:12px; color:var(--muted); letter-spacing:.04em; z-index:5;}
+  .dots{display:flex; gap:7px;}
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--rule);}
+  .dot.on{background:var(--accent);}
+  .nav{position:fixed; inset:0; display:flex; z-index:4;}
+  .nav div{flex:1; cursor:pointer;}
+  .brandline b{color:var(--text); font-weight:600;}
+  @media(max-width:640px){ .slide{padding:8vh 8vw;} .sub,p.body,li{max-width:none;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><div id="prev"></div><div id="next"></div></div>
+<footer>
+  <span class="brandline"><b>Breakthrough Public Speaking</b> &nbsp;&middot;&nbsp; Sarina Mann</span>
+  <span class="dots" id="dots"></span>
+  <span id="count"></span>
+</footer>
+<script>
+const S = [
+  {t:'title',
+    kicker:'A live masterclass',
+    h1:'Speak With Confidence On Camera',
+    sub:'How business owners turn video, webinars and virtual stages into real growth. With Sarina Mann, Breakthrough Public Speaking.' },
+
+  {t:'who',
+    kicker:'Who this is for',
+    h2:'You are good in the room. The camera is a different story.',
+    body:'You can hold a meeting, win the client, lead the team. But the moment a lens is pointed at you, something changes. The energy drops. The words get careful. You put off the video, the webinar, the online talk for another week.' },
+
+  {t:'trap',
+    kicker:'The trap',
+    h2:'So the people who need to hear you never do.',
+    body:'Your best ideas stay inside rooms that only hold a handful of people. Meanwhile the owners who are willing to be seen on camera are the ones getting the reach, the authority and the enquiries, whether or not they are better at the work than you.' },
+
+  {t:'hook',
+    kicker:'The reframe',
+    big:'Confidence on camera is not a personality trait. It is a skill, and camera-fear is a separate skill from stage-fright.',
+    sub:'Plenty of people who are calm in front of a live audience freeze the instant it is only them and a lens. That is the gap almost no speaking training even talks about.' },
+
+  {t:'part', kicker:'Part one', h1:'Why confident people still freeze on camera' },
+
+  {t:'list',
+    kicker:'The myths that keep you stuck',
+    h2:'Three things you have probably been told that are not true',
+    items:[
+      '<b>"Wait until you feel ready."</b> Readiness is not a feeling you arrive at. It is a by-product of doing the skill badly, then less badly, on purpose.',
+      '<b>"Some people are just naturals."</b> The speakers you admire were almost all anxious once. You are watching the result of reps, not of a gift.',
+      '<b>"The camera does not lie."</b> The camera exaggerates. Small, learnable adjustments to eye-line, energy and pace change how you land completely.' ] },
+
+  {t:'statement',
+    kicker:'The real problem',
+    big:'You were taught to present to a room. Nobody taught you to present to a lens.',
+    sub:'A room gives you faces, nods and energy to feed off. A camera gives you nothing back. The mechanics that work on a stage quietly stop working, and it feels like a confidence problem when it is really a skills problem.' },
+
+  {t:'part', kicker:'Part two', h1:'The method: genuine confidence in five steps' },
+
+  {t:'body5',
+    kicker:'My framework',
+    h2:'Confidence is built, in this order',
+    body:'This is the five-step path I walked myself, from an anxious introvert to an award-winning speaker. We do not start with the camera. We start with what is actually driving the fear, and build up from there so the confidence is genuine and it holds.' },
+
+  {t:'list',
+    kicker:'The five steps, in short',
+    h2:'What we build together',
+    items:[
+      '<b>Understand it.</b> Name what the fear actually is, and retire the confidence myths that feed it.',
+      '<b>Reframe it.</b> Treat speaking as a learnable skill, not a verdict on who you are.',
+      '<b>Prepare it.</b> Structure a talk so clearly that you stop relying on nerve to carry you.',
+      '<b>Practise it.</b> Reps in the exact conditions you will perform in, camera included.',
+      '<b>Perform it.</b> Deliver, review, adjust. Confidence becomes the by-product.' ] },
+
+  {t:'part', kicker:'Part two, continued', h1:'The five speaker assets' },
+
+  {t:'body5',
+    kicker:'Why assets, not talks',
+    h2:'You do not need a stage. You need five assets.',
+    body:'A single talk is used once. An asset is built once and works for you across every channel, for years. I coach business owners to build five, and together they become a complete speaking engine for growth.' },
+
+  {t:'list',
+    kicker:'The 5 Speaker Assets',
+    h2:'Built once, used everywhere',
+    items:[
+      '<b>Your signature talk.</b> One keynote you can give on any stage, live or virtual.',
+      '<b>Your 60-second pitch.</b> Five versions for five situations, so you are never caught flat.',
+      '<b>Your webinar.</b> A live presentation that teaches and sells at the same time.',
+      '<b>Your social media video.</b> Short, regular, recognisable. The visibility layer.',
+      '<b>Your homepage video.</b> The 60 seconds that turns a visitor into an enquiry.' ] },
+
+  {t:'statement',
+    kicker:'The signature talk',
+    big:'One talk, built properly, feeds all the others.',
+    sub:'The signature talk is the spine. Once it is right, your webinar, your pitch and your videos are edits of it, not blank pages. This is how speaking stops eating your whole week.' },
+
+  {t:'part', kicker:'Part three', h1:'On camera, the small things decide everything' },
+
+  {t:'list',
+    kicker:'The on-camera mechanics',
+    h2:'The small things that change everything',
+    items:[
+      '<b>Eye-line.</b> Where you look decides whether a viewer feels spoken to or spoken past.',
+      '<b>Energy.</b> A lens flattens you. You learn to lift delivery just enough to land as yourself.',
+      '<b>Pace and pause.</b> Silence that feels right in a room reads as a mistake on camera, and the reverse.',
+      '<b>Setup.</b> Framing, light and sound that say "credible" before you have said a word.' ] },
+
+  {t:'why',
+    kicker:'Why me',
+    h2:'I built this because I needed it first',
+    body:'I started Breakthrough Public Speaking in 2020, when being on camera suddenly became non-negotiable for business. I am a former introvert who lived with an anxiety disorder. I learned this as a skill, step by step, and now I speak regularly, win awards, and coach business owners to do the same. If confidence were a personality type, I would not be here.' },
+
+  {t:'statement',
+    kicker:'The opportunity',
+    big:'Your audience is online, watching video, attending webinars. The only question is whether they are watching you.',
+    sub:'Being willing to be seen on camera, and good at it, is one of the few advantages left that your competitors cannot copy by spending more.' },
+
+  {t:'cta',
+    kicker:'Your next step',
+    h2:'Ready to become the owner people watch?',
+    body:'If you want to build your five speaker assets and finally feel at home on camera, this is what I do with business owners inside my coaching.',
+    step:'Book a call with me to talk through where you are and what we would build.',
+    disc:'This masterclass is educational. Nothing here is a guarantee of any specific business, revenue or growth result. Results vary from person to person and depend on your own effort, market and execution.' }
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' active':'');
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h1) h+=`<h1>${s.h1}</h1>`;
+  if(s.h2) h+=`<h2>${s.h2}</h2>`;
+  if(s.big) h+=`<div class="big">${s.big}</div>`;
+  if(s.body) h+=`<p class="body">${s.body}</p>`;
+  if(s.items){ h+='<ul>'; s.items.forEach(it=>h+=`<li>${it}</li>`); h+='</ul>'; }
+  if(s.sub) h+=`<p class="sub" style="margin-top:18px;">${s.sub}</p>`;
+  if(s.step) h+=`<div class="cta-step">${s.step}</div>`;
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  stage.appendChild(d);
+});
+
+const dots=document.getElementById('dots');
+S.forEach((_,i)=>{const b=document.createElement('span'); b.className='dot'+(i===0?' on':''); dots.appendChild(b);});
+const slides=[...document.querySelectorAll('.slide')];
+const dotEls=[...document.querySelectorAll('.dot')];
+const count=document.getElementById('count');
+let cur=0;
+function show(n){
+  cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===cur));
+  count.textContent=(cur+1)+' / '+S.length;
+}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+show(0);
+</script>
+</body>
+</html>
