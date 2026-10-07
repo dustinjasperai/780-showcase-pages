@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Champion Within - Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FCFCFD; --panel:#F2F3F6; --ink:#14161B; --muted:#5B606B;
+    --accent:#C00000; --line:#E3E5EA;
+    --head:'Playfair Display',Georgia,serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--panel);font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 20px}
+  .slide{background:var(--bg);border:1px solid var(--line);border-radius:18px;
+    padding:64px 72px;margin:0 0 26px;min-height:540px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden;box-shadow:0 10px 36px rgba(20,22,27,.05)}
+  .rule{width:78px;height:5px;background:var(--accent);border-radius:3px;margin:0 0 26px}
+  .kicker{font-size:14px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:58px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:42px;line-height:1.1;margin-bottom:8px}
+  .sub{font-size:22px;color:var(--muted);margin-top:18px;line-height:1.45;max-width:30em}
+  .big{font-family:var(--head);font-weight:700;font-size:48px;line-height:1.12;max-width:20em}
+  .big .a{color:var(--accent);font-style:italic}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px;max-width:34em}
+  li{position:relative;padding-left:40px;font-size:21px;line-height:1.45;color:#2b2f39}
+  li::before{content:'';position:absolute;left:0;top:9px;width:18px;height:18px;border:2.4px solid var(--accent);border-radius:5px}
+  .champ{display:grid;grid-template-columns:72px 1fr;gap:26px;align-items:center;margin-top:22px}
+  .glyph{font-family:var(--head);font-weight:700;font-size:72px;color:var(--accent);line-height:1}
+  .pillar-h{font-family:var(--head);font-size:34px;font-weight:700;margin-bottom:6px}
+  .pillar-b{font-size:21px;color:var(--muted);line-height:1.45;max-width:30em}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:30px}
+  .cell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 14px;text-align:center}
+  .cell .g{font-family:var(--head);font-weight:700;font-size:40px;color:var(--accent)}
+  .cell .n{font-size:15px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+  .who{font-size:22px;line-height:1.5;color:#2b2f39;max-width:32em;margin-top:8px}
+  .cred{font-size:21px;line-height:1.55;color:#2b2f39;max-width:32em;margin-top:8px}
+  .page{position:absolute;right:28px;bottom:22px;font-size:13px;color:#aab0bb;letter-spacing:.08em}
+  .cta-box{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 30px;max-width:34em}
+  .cta-box .step{font-size:22px;font-weight:600;color:var(--ink)}
+  .disclaimer{margin-top:22px;font-size:14px;color:#8b909b;max-width:40em;line-height:1.5}
+  .brand{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A LIVE MASTERCLASS WITH KATE McCAULEY',
+    h:'The Champion Within',
+    s:'The 5 mental skills athletes are never taught, and how to train them before the next big moment.'},
+
+  {t:'promise', k:'WHAT YOU WILL LEAVE WITH',
+    h:'A trained response for pressure',
+    b:['Why the mental game decides close moments more than talent does',
+       'The CHAMP framework: five skills you can train starting today',
+       'A reset you can run between points, reps, and plays',
+       'A way to walk into the big moment already rehearsed']},
+
+  {t:'who', k:'WHO THIS IS FOR',
+    h:'The athlete who looks ready',
+    who:'You put in the reps. You know the technical side. But when the stakes rise, the shoulders drop after one mistake, the bold choice turns safe, and the result stops matching the practice. This is for you, and for the coaches and parents who watch it happen.'},
+
+  {t:'trap', k:'THE PART NOBODY TALKS ABOUT',
+    big:'They look ready. The scoreboard says <span class="a">otherwise.</span>',
+    s:'The unspoken struggle is real. It is not effort. It is a skill set no one taught them.'},
+
+  {t:'reframe', k:'THE REFRAME',
+    big:'Mental toughness is not something you are born with. It is something you <span class="a">train.</span>',
+    s:'We train the body for the sport and learn the technical skills. Almost no one is taught how to stay calm and unshakable under pressure.'},
+
+  {t:'part', k:'PART ONE', h:'The core problem',
+    s:'The mind is the one system we leave untrained, then blame when it fails in the moment that matters most.'},
+
+  {t:'cost', k:'WHAT IT COSTS', h:'When the mind is untrained',
+    b:['Confidence drops after a single mistake',
+       'Focus disappears exactly when the stakes rise',
+       'Safe choices replace the bold ones you trained for',
+       'Results swing, and the effort stops showing up on the scoreboard']},
+
+  {t:'part', k:'PART TWO', h:'The CHAMP framework',
+    s:'Five trainable skills. Rooted in sports psychology, not motivation. Each one is a rep you can start today.'},
+
+  {t:'pillar', glyph:'C', h:'Confidence',
+    b2:'Own it before you feel ready. Confidence is not a feeling you wait for, it is a decision you practice until it shows up on demand.'},
+
+  {t:'pillar', glyph:'H', h:'Habits',
+    b2:'The repeatable routines that make performance consistent. What you do before and between moments is what holds up when nerves hit.'},
+
+  {t:'pillar', glyph:'A', h:'Attitude',
+    b2:'Your chosen response when pressure arrives. Reframe a mistake as research, reset, and get to the next rep without dragging the last one with you.'},
+
+  {t:'pillar', glyph:'M', h:'Mental imagery',
+    b2:'Rehearse the moment before you live it. Visualization and mental rehearsal mean the big moment is one you have already performed in your mind.'},
+
+  {t:'pillar', glyph:'P', h:'Purpose',
+    b2:'The why that holds your focus. When effort is anchored to something that matters, attention stops leaking to the crowd, the score, and the doubt.'},
+
+  {t:'together', k:'HOW IT FITS', h:'One trained response',
+    s:'Confidence, Habits, Attitude, Mental imagery, and Purpose are not five ideas to remember. Trained together, they become one automatic response you run without thinking.'},
+
+  {t:'part', k:'PART THREE', h:'What it looks like',
+    s:'The same skills that help an athlete reset after a mistake help a teammate lead, a coach stay steady, and a performer stay focused when the stakes are high.'},
+
+  {t:'reset', k:'IN THE MOMENT', h:'The reset',
+    b:['Name the next action, not the last mistake',
+       'Set your feet, take one deliberate breath',
+       'Cue the image you rehearsed',
+       'Play the moment you already trained for']},
+
+  {t:'recap', k:'THE FIVE SKILLS', h:'Train the mind behind the performance',
+    cells:[['C','Confidence'],['H','Habits'],['A','Attitude'],['M','Mental imagery'],['P','Purpose']]},
+
+  {t:'cred', k:'WHY LISTEN TO ME', h:'Kate McCauley, M.Ed.',
+    cred:'Mental Performance and Mindset Specialist, former college athlete, and an educator and coach for more than twenty years. I have spent the last six years helping athletes, teams, and professionals train the mental side of performance through the Champion Within programs. This is rooted in sports psychology. It is not woo woo.'},
+
+  {t:'cta', k:'YOUR NEXT STEP', h:'Train the champion within',
+    step:'If you want these five skills trained into you or your team, book a 1-on-1 mental performance session with Kate, or bring the CHAMP framework to your team as a workshop.',
+    disc:'This masterclass is educational. Mindset training supports performance, it does not promise a specific outcome. Results vary from athlete to athlete and are not guaranteed.'}
+];
+
+function esc(x){return x;}
+function render(){
+  const d=document.getElementById('deck');
+  S.forEach((sl,i)=>{
+    let inner='';
+    const rule='<div class="rule"></div>';
+    const kick=sl.k?`<div class="kicker">${sl.k}</div>`:'';
+    if(sl.t==='title'){
+      inner=`${kick}<h1>${sl.h}</h1><div class="sub">${sl.s}</div>`;
+    }else if(sl.t==='pillar'){
+      inner=`${rule}<div class="champ"><div class="glyph">${sl.glyph}</div>`+
+        `<div><div class="pillar-h">${sl.h}</div><div class="pillar-b">${sl.b2}</div></div></div>`;
+    }else if(sl.t==='recap'){
+      const cells=sl.cells.map(c=>`<div class="cell"><div class="g">${c[0]}</div><div class="n">${c[1]}</div></div>`).join('');
+      inner=`${rule}${kick}<h2>${sl.h}</h2><div class="grid5">${cells}</div>`;
+    }else if(sl.t==='cta'){
+      inner=`${rule}${kick}<h2>${sl.h}</h2><div class="cta-box"><div class="step">${sl.step}</div></div>`+
+        `<div class="disclaimer">${sl.disc}</div>`;
+    }else if(sl.t==='cred'){
+      inner=`${rule}${kick}<h2>${sl.h}</h2><div class="cred">${sl.cred}</div>`;
+    }else if(sl.t==='who'){
+      inner=`${rule}${kick}<h2>${sl.h}</h2><div class="who">${sl.who}</div>`;
+    }else if(sl.big){
+      inner=`${rule}${kick}<div class="big">${sl.big}</div>${sl.s?`<div class="sub">${sl.s}</div>`:''}`;
+    }else{
+      const bl=sl.b?`<ul>${sl.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+      inner=`${rule}${kick}<h2>${sl.h}</h2>${sl.s?`<div class="sub">${sl.s}</div>`:''}${bl}`;
+    }
+    d.insertAdjacentHTML('beforeend',`<section class="slide">${inner}<div class="page">The Champion Within &middot; ${i+1}/${S.length}</div></section>`);
+  });
+}
+render();
+</script>
+</body>
+</html>
