@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run by Power, Not Pace - A RunPowerCoach Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e9f1f8;      /* pale wash of the brand blue #1677be, derived (site_scheme:light) */
+    --panel:#f8fbfe;
+    --rule:#cfe0ee;
+    --ink:#0f2233;
+    --muted:#4a6077;
+    --accent:#1677be;  /* RunPowerCoach data-blue, extract_brand.js dominant hex */
+    --deep:#0d4f82;
+    --head:'Archivo', system-ui, sans-serif;
+    --body:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 120px}
+  .slide{
+    background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:56px 56px;margin:0 0 26px;min-height:420px;position:relative;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(15,34,51,.03);
+  }
+  .kicker{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.1;letter-spacing:-.01em}
+  .sub{font-size:19px;color:var(--muted);margin-top:18px;max-width:40ch;line-height:1.5}
+  .big{font-family:var(--head);font-weight:700;font-size:40px;color:var(--deep);margin-top:8px;line-height:1.08}
+  ul{list-style:none;margin-top:24px;display:grid;gap:14px}
+  li{position:relative;padding-left:30px;font-size:19px;line-height:1.45;max-width:46ch}
+  li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .num{font-family:var(--head);font-weight:700;color:var(--accent);font-size:15px;margin-right:8px}
+  .meta{position:absolute;bottom:24px;left:56px;font-size:13px;color:var(--muted);font-family:var(--head);letter-spacing:.04em}
+  .part h2{font-size:42px}
+  .part{background:linear-gradient(180deg,#eef4f9,#ffffff);border-color:#cfe0ee}
+  .title-slide{background:linear-gradient(170deg,#0d4f82,#1677be);color:#fff;border:none}
+  .title-slide .kicker{color:#bfe0f7}
+  .title-slide .sub{color:#dcecf8}
+  .title-slide .meta{color:#cfe6f7}
+  .zones{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+  .zone{flex:1;min-width:120px;border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+  .zone b{font-family:var(--head);display:block;color:var(--deep);font-size:15px}
+  .zone span{font-size:13px;color:var(--muted)}
+  .disc{font-size:14px;color:var(--muted);margin-top:22px;max-width:58ch;line-height:1.5}
+  .cta-slide{background:linear-gradient(170deg,#0d4f82,#1677be);color:#fff;border:none}
+  .cta-slide .kicker{color:#bfe0f7}
+  .cta-slide .sub{color:#eaf4fb}
+  .cta-btn{display:inline-block;margin-top:26px;background:#fff;color:var(--deep);font-family:var(--head);
+    font-weight:700;padding:14px 26px;border-radius:999px;font-size:17px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A Live Masterclass with Nathan Fenton', h:'Run by Power, Not Pace', s:'The marathon method that ends the 30K fade and turns your training into data you can trust.', meta:'RunPowerCoach'},
+  {t:'promise', kicker:'What you will walk away with', h:'By the end of this session', items:['Why your pace and heart rate are hiding the real story of your race','The one number that tells you how hard you are actually working, in real time','How to pace a marathon so the last 10K is where you pass people, not fall apart']},
+  {t:'who', kicker:'Who this is for', h:'You, if this sounds familiar', items:['You train hard and your easy runs feel easy, but your marathon keeps stalling','You pace by feel or by a GPS split, and the wheels come off late','You suspect you are fit enough to run faster, you just cannot hold it together on race day']},
+  {t:'trap', kicker:'The trap', h:'Halfway felt perfect', s:'You went out on your goal pace. It felt controlled. Then somewhere after 30K your legs emptied and the pace you trained for all year slipped away, one second per kilometre at a time. You did not get unfit in two hours. Something else broke.'},
+  {t:'reframe', kicker:'The reframe', h:'Pace is a result. Effort is the cause.', big:'And pace lies about effort.', s:'On a hill, into a headwind, in the heat, the same pace costs you wildly different effort. Pace measures the ground. It never measures you.'},
+  {t:'part', kicker:'Part One', h:'Why the usual numbers fail you'},
+  {t:'point', kicker:'Problem 1', h:'Pace lies the moment the road changes', s:'Hold 4:30 per kilometre up a rise and you are working far harder than 4:30 on the flat. Pace cannot see the hill, the wind or the heat, so it quietly lets you overspend early and pay for it late.'},
+  {t:'point', kicker:'Problem 2', h:'Heart rate is always late', s:'Heart rate drifts up minutes after the effort that caused it, and it climbs on a hot day even when you slow down. By the time your watch shows the number, the damage is already done. It is a rear-view mirror, not a dashboard.'},
+  {t:'part', kicker:'Part Two', h:'The RunPowerCoach method'},
+  {t:'point', kicker:'The fix', h:'Power is effort, measured live', big:'Watts, right now.', s:'A running power meter reads how hard you are working this second, on any terrain, in any weather. It is the real-time truth pace and heart rate only guess at, and it is the number every workout and every race gets built around.'},
+  {t:'framework', kicker:'Framework 1', h:'The Threshold Power Test', s:'One timed run sets your personal threshold - your real number. Every training zone is then built from that number, not from a generic age-graded chart. This is what no cookie-cutter plans actually means.'},
+  {t:'framework', kicker:'Framework 2', h:'The Power Duration Curve', s:'We plot the power you can hold across different durations. The shape exposes your individual limiter - whether you fade late or top out early - so your training targets your actual weakness instead of adding junk miles.'},
+  {t:'loop', kicker:'Framework 3', h:'The power loop', items:['Test Threshold - one timed run sets your real number','Train to Power - every workout runs to a watt target, not a guess','Retest Threshold - prove the gain, then reset the zones and go again']},
+  {t:'point', kicker:'Race day', h:'Pace the race by a ceiling, not a feeling', s:'We set one target power for the first half and you hold under it, no matter how good you feel. The watts stop you spending the race you need at 35K in the first hour. That is how the back half becomes the strong half.'},
+  {t:'part', kicker:'Part Three', h:'Inside a power-based block'},
+  {t:'zones', kicker:'A training week, by power', h:'Every run has a job', s:'No more junk miles at the wrong effort.', zones:[['Easy','Capped power, true recovery'],['Threshold','At your real number'],['Race power','Rehearsing the ceiling']]},
+  {t:'cred', kicker:'Why me', h:'I have run this loop for a long time', items:['8 years refining the RunPowerCoach marathon method, tracking every input and output','300+ athletes coached, and 15+ runners qualified for Boston','A power-meter coach since 2017, and a lifelong endurance athlete from triathlon to Ironman'], meta:'Nathan Fenton, RunPowerCoach'},
+  {t:'change', kicker:'What changes', h:'From guessing to knowing', items:['You stop racing on hope and start racing to a number you have rehearsed','Your training finally targets the thing holding you back','The last 10K becomes the part of the race you look forward to']},
+  {t:'cta', kicker:'Your next step', h:'Find your real number', s:'If you want to train by power instead of guessing by pace, start with a threshold test and let the data build your plan.', cta:'Work with Nathan at runpowercoach.com', disc:'This masterclass is educational. Results vary from runner to runner, and nothing here is a guaranteed finish time, qualification, or outcome. Train sensibly and build load gradually.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return (x||'')}
+for(const sl of S){
+  const d = document.createElement('section');
+  let cls = 'slide';
+  if(sl.t==='title') cls+=' title-slide';
+  if(sl.t==='part') cls+=' part';
+  if(sl.t==='cta') cls+=' cta-slide';
+  d.className = cls;
+  let html = '';
+  if(sl.kicker) html += '<div class="kicker">'+esc(sl.kicker)+'</div>';
+  if(sl.t==='title' || sl.t==='reframe' || sl.t==='point' || sl.t==='framework') html += '<h1>'+esc(sl.h)+'</h1>';
+  else html += '<h2>'+esc(sl.h)+'</h2>';
+  if(sl.big) html += '<div class="big">'+esc(sl.big)+'</div>';
+  if(sl.s) html += '<p class="sub">'+esc(sl.s)+'</p>';
+  if(sl.items){ html += '<ul>'; sl.items.forEach((it,i)=>{ html += '<li>'+esc(it)+'</li>'; }); html += '</ul>'; }
+  if(sl.zones){ html += '<div class="zones">'; sl.zones.forEach(z=>{ html += '<div class="zone"><b>'+esc(z[0])+'</b><span>'+esc(z[1])+'</span></div>'; }); html += '</div>'; }
+  if(sl.cta) html += '<div class="cta-btn">'+esc(sl.cta)+'</div>';
+  if(sl.disc) html += '<p class="disc">'+esc(sl.disc)+'</p>';
+  if(sl.meta) html += '<div class="meta">'+esc(sl.meta)+'</div>';
+  d.innerHTML = html;
+  deck.appendChild(d);
+}
+</script>
+</body>
+</html>
