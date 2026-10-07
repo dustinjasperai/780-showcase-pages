@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Database Business — Master Mind Agent Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cantarell:ital,wght@0,400;0,700;1,400&family=Fjalla+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf4ee; --panel:#fffdfa; --rule:#ece2d8;
+    --ink:#2b2b2b; --muted:#5a5a5a; --accent:#f78c40; --tint:#fab889;
+    --head:'Fjalla One',Impact,sans-serif; --body:'Cantarell','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#d9dade;font-family:var(--body);color:var(--ink);padding:28px 14px}
+  .deck{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  .slide{position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:10px;
+    padding:60px 64px;min-height:520px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--accent)}
+  .n{position:absolute;right:22px;top:18px;font-family:var(--head);color:var(--tint);font-size:15px;letter-spacing:1px}
+  .k{font-family:var(--head);text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-size:16px;margin-bottom:16px}
+  h1{font-family:var(--head);font-size:58px;line-height:1.02;color:var(--ink);margin-bottom:18px}
+  h2{font-family:var(--head);font-size:40px;line-height:1.08;color:var(--ink);margin-bottom:16px}
+  p{font-size:21px;line-height:1.5;color:var(--muted);max-width:46ch}
+  p.lead{font-size:24px;color:var(--ink)}
+  ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:13px}
+  li{font-size:21px;line-height:1.4;color:var(--ink);padding-left:30px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .big{font-family:var(--head);font-size:92px;color:var(--accent);line-height:1}
+  .title-slide{background:linear-gradient(180deg,#fffdfa 0%,#faf4ee 100%)}
+  .title-slide::before{width:12px}
+  .foot{margin-top:26px;font-family:var(--head);letter-spacing:1px;color:var(--muted);font-size:17px}
+  .note{margin-top:22px;font-size:15px;color:#8a8a8a;max-width:60ch;font-style:italic}
+  .section-slide{background:#2b2b2b}
+  .section-slide .k{color:var(--tint)}
+  .section-slide h2{color:#ffffff;font-size:52px}
+  .section-slide p{color:#cfcfcf}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A Master Mind Agent Masterclass', h:'The Database Business', b:'How top agents produce a year of closings from the people they already know, without buying a single lead.', foot:'Master Mind Agent  ·  with Mike Cerrone'},
+
+  {t:'who', k:'Who this is for', h:'The agent who wants a business they own', list:['Solo agents and small teams doing real volume who feel it reset to zero every January','Agents tired of renting leads that never belong to them','Anyone who senses their best clients already came from someone who knew them']},
+
+  {t:'trap', k:'The trap', h:'You have been taught to rent your pipeline', b:'Buy the lead. Chase the lead. Convert a sliver of them. Then buy more next month. The portal owns the relationship, and the day you stop paying, the pipeline stops too.'},
+
+  {t:'reframe', k:'The reframe', h:'Your best year should not depend on your ad budget', b:'The most predictable agents are not the ones spending the most on leads. They are the ones who built an asset that compounds: a database they work on a schedule.'},
+
+  {t:'section', k:'Part One', h:'The problem with the lead treadmill', b:'Why chasing strangers keeps most agents stuck at the same number every year.'},
+
+  {t:'content', k:'The math nobody runs', h:'A rented lead is the most expensive client you will ever meet', list:['Cold portal leads convert in the low single digits','You pay again for every one, every month','When the budget pauses, so does the business','None of them remember your name next year']},
+
+  {t:'content', k:'Hiding in plain sight', h:'You are sitting on your best source of business', b:'Past clients, friends, family, and your wider sphere already trust you. In this method that list has a name: your PCSOI, Past Clients and Sphere Of Influence. It is the asset the treadmill made you ignore.'},
+
+  {t:'section', k:'Part Two', h:'The system', b:'Three pieces that turn a contact list into a predictable referral business.'},
+
+  {t:'framework', k:'Piece one', h:'The PCSOI database', list:['Every past client, and everyone who already knows and trusts you','Organized so no relationship quietly goes cold','Not a CRM you ignore, a list you actually work','This is the foundation everything else runs on']},
+
+  {t:'framework', k:'Piece two', h:'The 62-Touch Annual Marketing Plan', b:'A full year of planned, scheduled touches to your database, calls, notes, pop-bys, market updates, events and more, so you stay top of mind with the people most likely to refer you. Consistency is the system, not luck.'},
+
+  {t:'content', k:'A year, on a calendar', h:'What 62 touches looks like', list:['Quarterly check-in calls that are about them, not a pitch','Handwritten notes and pop-bys at the right moments','Monthly value: market updates and home-value reports','Client events and year-end reviews that earn the next referral']},
+
+  {t:'framework', k:'Piece three', h:'The Referral Productivity Percentage', b:'Your own number: closings divided by the people in your database. It turns referrals from a thing that just happens into a number you can measure, forecast, and raise on purpose.'},
+
+  {t:'content', k:'Make it a number', h:'Measure it, then move it', list:['Count the closings that came from your database last year','Divide by the number of people in it','That percentage is your baseline','Work the plan, watch the number climb']},
+
+  {t:'example', k:'From the Success Calls podcast', h:'One agent, one worked list', b:'On the Real Estate Agent Success Calls podcast, one solo agent shared she receives about one referral closing for roughly every 4 to 5 people in her database. Not from ads. From a worked list and a plan.', note:'One agent\'s experience shared on the podcast. Results vary and are not a promise of income.'},
+
+  {t:'framework', k:'Making it happen', h:'Time Blocking', b:'The plan only works if it gets done. Single-purpose blocks by day of week put your database work on the calendar first, before the day fills up with everyone else\'s priorities.'},
+
+  {t:'framework', k:'Scaling without losing it', h:'The Showing Agent model', b:'When volume grows, a solo agent can add part-time showing agents and leverage before building a full team, so the relationships that drive referrals stay yours.'},
+
+  {t:'section', k:'Part Three', h:'The business this builds', b:'Where a worked database shows up once it is doing the heavy lifting.'},
+
+  {t:'payoff', k:'The payoff', h:'A pipeline you actually own', list:['Business that shows up whether or not you are spending on ads','A number you can forecast instead of a budget you have to feed','Clients who refer you because you never went quiet','A practice that compounds year over year']},
+
+  {t:'why', k:'Who is teaching this', h:'Mike Cerrone, Master Mind Agent', b:'Two decades coaching real estate agents. Host of the Real Estate Agent Success Calls podcast, where top agents break down exactly how they produce, and creator of the Solo Agent and Referral Agent Summits.'},
+
+  {t:'cta', k:'Your next step', h:'Build your database business with us', b:'Go deeper on the 62-Touch plan, the PCSOI database, and your Referral Productivity Percentage inside the Master Mind Agent Academy.', note:'This masterclass is educational only. No income or result is guaranteed. Results vary and depend on your effort, your market, and your execution.', foot:'Master Mind Agent  ·  mastermindagent.com'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const cls = s.t === 'title' ? 'slide title-slide' : (s.t === 'section' ? 'slide section-slide' : 'slide');
+  const el = document.createElement('div');
+  el.className = cls;
+  let html = '<span class="n">' + (i+1) + ' / ' + S.length + '</span>';
+  if (s.k) html += '<div class="k">' + s.k + '</div>';
+  if (s.t === 'title') { html += '<h1>' + s.h + '</h1>'; }
+  else { html += '<h2>' + s.h + '</h2>'; }
+  if (s.b) html += '<p class="lead">' + s.b + '</p>';
+  if (s.list) { html += '<ul>'; s.list.forEach(x => html += '<li>' + x + '</li>'); html += '</ul>'; }
+  if (s.note) html += '<div class="note">' + s.note + '</div>';
+  if (s.foot) html += '<div class="foot">' + s.foot + '</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
