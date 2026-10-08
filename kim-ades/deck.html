@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Change Your Thinking, Change Everything | Frame of Mind Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbf9f4; --panel:#eceae1; --ink:#0b142e; --ink-soft:#394056;
+    --muted:#747a8a; --rule:#d9d4c6; --navy:#002962; --accent:#8b0000;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Lato',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 8vw}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:58px;line-height:1.08;
+    letter-spacing:-.01em;color:var(--ink);margin-bottom:22px}
+  h2{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:40px;line-height:1.14;
+    color:var(--ink);margin-bottom:20px}
+  .big{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:52px;line-height:1.1;color:var(--ink)}
+  .sub{font-size:22px;line-height:1.5;color:var(--ink-soft);max-width:44ch}
+  .by{margin-top:34px;font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
+  ul{list-style:none;margin-top:10px}
+  li{font-family:'Playfair Display',Georgia,serif;font-size:30px;color:var(--ink);padding:16px 0;
+    border-bottom:1px solid var(--rule);display:flex;gap:18px;align-items:baseline}
+  li::before{content:'';flex:0 0 12px;height:12px;border-radius:50%;background:var(--accent);transform:translateY(-2px)}
+  .cred li{font-size:24px}
+  .slide.section{text-align:left}
+  .slide.section .wrap{background:var(--navy);color:#fbf9f4;padding:64px 60px;border-radius:8px}
+  .slide.section .kicker{color:#e4b7b7}
+  .slide.section h2{color:#fbf9f4;font-size:46px;margin-bottom:0}
+  .slide.cta .note{margin-top:30px;font-size:13px;line-height:1.5;color:var(--muted);max-width:52ch;font-style:italic}
+  .counter{position:fixed;bottom:22px;right:26px;font-size:12px;letter-spacing:.14em;color:var(--muted)}
+  .hint{position:fixed;bottom:22px;left:26px;font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  @media(max-width:680px){h1{font-size:38px}h2{font-size:30px}.big{font-size:34px}.sub{font-size:18px}li{font-size:22px}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="counter" id="counter"></div>
+<div class="hint">Arrow keys or click to advance</div>
+<script>
+const S=[
+  {t:'cover', k:"A Frame of Mind Coaching Masterclass", h:"Change Your Thinking, Change Everything", s:"How relentless leaders master the one thing that drives every result: the way they think.", by:"Kim Ades · Founder, Frame of Mind Coaching"},
+  {t:'statement', k:"Who this is for", h:"You are driven, successful, and still hitting a wall you cannot think your way past.", s:"You have read the books, hired the consultants, built the team. The bottleneck now is quieter than all of that."},
+  {t:'statement', k:"The trap", h:"You keep working on the business. Nobody is working on the thinking that runs it.", s:"More strategy stacked on an unexamined belief just moves faster in the same direction."},
+  {t:'big', h:"Your best decisions are being made by your worst 2am thoughts.", s:"And you have never once stopped to ask whether those thoughts are even true."},
+  {t:'section', k:"Part One", h:"You do not have an execution problem. You have a thinking problem."},
+  {t:'statement', k:"The real bottleneck", h:"Every result in your life is downstream of a thought you did not choose.", s:"The story you tell yourself about this quarter, this hire, this market, is shaping what you do long before you act."},
+  {t:'statement', k:"What actually predicts success", h:"Not talent, capital, or strategy. How fast you recover your thinking under pressure.", s:"Leaders with higher emotional resilience outperform across every industry and level. Resilience is a thinking skill, and thinking skills can be trained."},
+  {t:'section', k:"Part Two", h:"Thought Mastery: the method"},
+  {t:'list', k:"Four moves", h:"How a leader takes back the controls", items:["Catch the thought","Question the story","The journal that talks back","Rebuild resilience"]},
+  {t:'statement', k:"Move one: Catch the thought", h:"Name the sentence running in the background.", s:"Most leaders cannot tell you what they were thinking right before they reacted. The work starts by making the invisible thought visible on the page."},
+  {t:'statement', k:"Move two: Question the story", h:"This is just where you are, not who you are.", s:"I will not get caught up in your story, because the moment I believe it, I can no longer coach you. We treat the narrative as temporary, then test whether it is even true."},
+  {t:'statement', k:"Move three: The Journal That Talks Back", h:"Coaching that happens every day, not once a week.", s:"You journal daily. I read it and answer in writing between our calls. Your blind spots surface the moment they show up, not seven days later."},
+  {t:'statement', k:"Move four: Rebuild resilience", h:"Recover faster, re-aim sooner, repeat.", s:"When the thinking is trained, a setback costs you an afternoon instead of a quarter. That recovery speed compounds into everything you build."},
+  {t:'section', k:"Part Three", h:"A leader's week, lived inside the method"},
+  {t:'list', k:"Seven days inside the method", h:"Small reframes, written down, answered", items:["Monday: 'I have to' becomes 'I choose to'","Wednesday: the belief you never checked, named","Friday: the day a stuck story finally moves","Sunday: a faster recovery than last week"]},
+  {t:'cred', k:"Why listen to me", h:"Kim Ades", items:["20+ years coaching leaders","Leaders at 600+ companies","80% of clients are C-suite","Founder of Frame of Mind Coaching and the Journal That Talks Back"]},
+  {t:'statement', k:"What changes", h:"Same leader. Same market. Different thinking. Different everything.", s:"Nothing in your business has to change first. The thinking changes, and the results follow it out."},
+  {t:'cta', k:"Your next step", h:"Book a complimentary coaching call.", s:"We look at the one belief most in your way right now, and you leave the call with it already loosening.", note:"This masterclass is educational. Results vary and are not guaranteed; nothing here is a promise of income or outcome."}
+];
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function render(sl){
+  if(sl.t==='cover') return `<div class="kicker">${esc(sl.k)}</div><h1>${esc(sl.h)}</h1><div class="sub">${esc(sl.s)}</div><div class="by">${esc(sl.by)}</div>`;
+  if(sl.t==='big') return `<div class="big">${esc(sl.h)}</div>${sl.s?`<div class="sub" style="margin-top:26px">${esc(sl.s)}</div>`:''}`;
+  if(sl.t==='section') return `<div class="wrap"><div class="kicker">${esc(sl.k)}</div><h2>${esc(sl.h)}</h2></div>`;
+  if(sl.t==='list') return `<div class="kicker">${esc(sl.k)}</div><h2>${esc(sl.h)}</h2><ul>${sl.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+  if(sl.t==='cred') return `<div class="kicker">${esc(sl.k)}</div><h2>${esc(sl.h)}</h2><ul class="cred">${sl.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+  if(sl.t==='cta') return `<div class="kicker">${esc(sl.k)}</div><h1>${esc(sl.h)}</h1><div class="sub">${esc(sl.s)}</div><div class="note">${esc(sl.note)}</div>`;
+  return `<div class="kicker">${esc(sl.k)}</div><h2>${esc(sl.h)}</h2>${sl.s?`<div class="sub">${esc(sl.s)}</div>`:''}`;
+}
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<div class="slide ${s.t} ${i===0?'on':''}" data-i="${i}">${render(s)}</div>`).join('');
+let cur=0;const slides=[...document.querySelectorAll('.slide')];const counter=document.getElementById('counter');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,i)=>el.classList.toggle('on',i===cur));counter.textContent=(cur+1)+' / '+S.length}
+show(0);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+document.addEventListener('click',e=>{show(cur + (e.clientX < innerWidth*0.28 ? -1 : 1))});
+</script>
+</body>
+</html>
