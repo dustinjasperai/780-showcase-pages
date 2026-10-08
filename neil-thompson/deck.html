@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Translate the Room — Teach the Geek Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ec; --panel:#fffdf8; --rule:#e4ded2; --ink:#1d1d1d;
+    --grey:#5f5f5f; --accent:#f7542b;
+    --head:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:10px;
+    padding:48px 52px;margin:0 0 22px;min-height:380px;display:flex;flex-direction:column;
+    justify-content:center;position:relative}
+  .num{font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.14em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:18px;display:inline-block}
+  .num:after{content:"";display:block;width:34px;height:3px;background:var(--accent);margin-top:8px}
+  h1{font-family:var(--head);font-weight:700;font-size:44px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:32px;line-height:1.12;letter-spacing:-.01em}
+  .promise{font-size:20px;color:var(--grey);margin-top:20px;max-width:46ch}
+  p{font-size:19px;line-height:1.55;color:#333;max-width:58ch;margin-top:16px}
+  ul{margin:20px 0 0 0;max-width:58ch}
+  li{list-style:none;font-size:19px;line-height:1.5;padding:12px 0 12px 30px;position:relative;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:none}
+  li:before{content:"";position:absolute;left:0;top:21px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .big{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.1;letter-spacing:-.01em}
+  .strike{color:var(--grey);text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:3px}
+  .accent{color:var(--accent)}
+  .kick{font-size:17px;color:var(--grey);margin-top:14px}
+  .foot{position:absolute;bottom:20px;right:28px;font-family:var(--head);font-size:12px;
+    letter-spacing:.1em;color:var(--grey);text-transform:uppercase}
+  .disc{font-size:14px;color:var(--grey);margin-top:26px;max-width:60ch;line-height:1.5}
+  .cta-step{font-family:var(--head);font-weight:600;font-size:22px;color:var(--ink);margin-top:18px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', num:'Teach the Geek · Live Masterclass',
+   h:'Translate the Room',
+   promise:'How engineers and scientists present technical work to the people who decide, without data-dumping, freezing, or reading the slides.'},
+
+  {t:'who', num:'Who this is for',
+   h:'You know your work cold. The room is the part that breaks.',
+   lead:'This hour is for the technical professional who can defend a design for an hour one-on-one, then stands in front of leadership and watches it fall flat.',
+   items:['You sweat through the thought of the presentation before you ever stand up.',
+          'When you get up to speak, you end up reading your slides.',
+          'You get questions afterward you thought you had already answered.']},
+
+  {t:'point', num:'The myth',
+   h:'The myth that keeps technical people quiet',
+   lead:'The belief is that great speakers are born, not made, so if it does not come naturally you were dealt out of it.',
+   items:['Confidence is a preparation output, not a personality trait.',
+          'Clarity is a method you run, not a gift you were born with.',
+          'Every strong presenter you admire was once bad at it too.']},
+
+  {t:'trap', num:'The trap',
+   h:'More detail feels safer. It is what loses the room.',
+   lead:'Every instinct a technical person has says: add the chart, add the caveat, add the buzzword, cover everything. So the audience gets everything, and the one thing they needed to decide gets buried with it.'},
+
+  {t:'reframe', num:'The reframe',
+   big:'You are not a <span class="strike">bad speaker</span>.',
+   big2:'You are an engineer who was never taught to <span class="accent">translate</span>.',
+   kick:'Translation is a skill. Skills are learnable. That is the whole premise of this hour.'},
+
+  {t:'part', num:'Part One',
+   h:'The core problem: you are presenting your process, not their decision.',
+   lead:'Leadership does not need to re-derive your work. They need to know what to approve, fund, or change, and why. The data-dump answers a question nobody in the room is asking.'},
+
+  {t:'point', num:'Part One',
+   h:'What the room is actually doing while you talk',
+   items:['Deciding whether to trust you, in the first sixty seconds.',
+          'Looking for the one implication that affects their decision.',
+          'Quietly tuning out every slide that does not change that decision.']},
+
+  {t:'point', num:'Part One · the cost',
+   h:'What the data-dump actually costs you',
+   lead:'This is not stage fright for its own sake. The talk is where your work gets funded, trusted, and promoted, or does not.',
+   items:['Good work goes unfunded because the room never grasped the point.',
+          'Your credibility takes the hit, not the slide deck.',
+          'The promotion goes to the person who could explain it simply.']},
+
+  {t:'part', num:'Part Two',
+   h:'The method: a repeatable process, not a personality transplant.',
+   lead:'You do not have to become a different person at the front of the room. The Teach the Geek method is a 6-step process you run on any talk, so the preparation does the work instead of your nerves.'},
+
+  {t:'point', num:'Part Two · Step group 1',
+   h:'Decide before you design',
+   items:['Name the single decision the room is there to make.',
+          'Write the one sentence you need them to leave believing.',
+          'Everything that does not serve that sentence is a candidate for cutting.']},
+
+  {t:'point', num:'Part Two · Step group 2',
+   h:'Translate the data, do not dump it',
+   items:['Lead with the implication, then offer the evidence if asked.',
+          'Replace the buzzword with the plain thing it means.',
+          'Anticipate the three questions you will get, and answer them inside the talk.']},
+
+  {t:'point', num:'Part Two · Step group 3',
+   h:'Deliver as the best version of yourself',
+   items:['Do not copy a polished keynote speaker. The room can tell, and it reads as less credible, not more.',
+          'Cut the filler words you lean on when you are nervous, so the signal comes through.',
+          'Visualize the talk going well first. Calm is a preparation output, not a talent.']},
+
+  {t:'quote', num:'The principle',
+   big:'Sound like the best version of <span class="accent">yourself</span>.',
+   kick:'An authentic engineer who is simply clear will beat an imitation of a TED talk every single time.'},
+
+  {t:'point', num:'Part Two · Step group 4',
+   h:'Give the talk a spine',
+   items:['Open on the decision, not the agenda or your job title.',
+          'Move in one clear line: problem, what you found, what it means for them.',
+          'Close by asking for the specific thing you came to get.']},
+
+  {t:'part', num:'Part Three',
+   h:'What changes when the translation lands',
+   lead:'The same material, the same you, a different result: the room follows the thread, the questions land inside the decision instead of poking holes, and the talk ends with a yes instead of a follow-up meeting to clarify what you meant.'},
+
+  {t:'point', num:'Part Three',
+   h:'The before and the after',
+   items:['Before: forty slides, every graph, and a room checking its phones.',
+          'After: one decision, the evidence behind it, and a room that is still looking at you.',
+          'The work did not change. The translation did.']},
+
+  {t:'point', num:'Part Three',
+   h:'The questions change too',
+   lead:'When you lead with the decision and translate the evidence, the questions stop being people poking holes to look smart.',
+   items:['They ask about next steps instead of re-litigating your method.',
+          'The hard question lands inside your talk, because you already answered it.',
+          'You leave with a decision, not a follow-up meeting to clarify what you meant.']},
+
+  {t:'point', num:'The recap',
+   h:'The whole hour in one shape',
+   items:['Decide the one thing the room is there to approve.',
+          'Translate the data into that decision, and cut the rest.',
+          'Deliver it as the clearest version of yourself, with a spine the room can follow.']},
+
+  {t:'why', num:'Why me',
+   h:'I am an engineer who lived this problem first.',
+   lead:'I earned my degrees in product development engineering and got handed monthly status updates to senior management. I inundated them with data, graphs, and every buzzword I could muster, and I failed. Through trial, feedback, and a lot of self-reflection I built the process that fixed it, and I have taught it to technical professionals ever since through the Teach the Geek podcast, the book, and the course.'},
+
+  {t:'cta', num:'Your next step',
+   h:'Keep going with Teach the Geek.',
+   step:'Join the Teach the Geek to Speak Society to work through the full 6-step process, or bring the workshop to your technical team.',
+   lead:'If today gave you one thing you can use in your next presentation, the Society is where you build the rest into a habit.',
+   disc:'This masterclass is educational. No specific speaking, career, or business result is guaranteed. Results vary and depend on your own practice and effort.'}
+];
+
+const deck = document.getElementById('deck');
+for (const s of S) {
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let html = '';
+  if (s.num) html += `<span class="num">${s.num}</span>`;
+  if (s.t === 'title') {
+    html += `<h1>${s.h}</h1><div class="promise">${s.promise}</div>`;
+  } else if (s.t === 'reframe' || s.t === 'quote') {
+    html += `<div class="big">${s.big}</div>`;
+    if (s.big2) html += `<div class="big" style="margin-top:14px">${s.big2}</div>`;
+    if (s.kick) html += `<div class="kick">${s.kick}</div>`;
+  } else if (s.t === 'cta') {
+    html += `<h2>${s.h}</h2>`;
+    if (s.step) html += `<div class="cta-step">${s.step}</div>`;
+    if (s.lead) html += `<p>${s.lead}</p>`;
+    if (s.disc) html += `<div class="disc">${s.disc}</div>`;
+  } else {
+    html += `<h2>${s.h}</h2>`;
+    if (s.lead) html += `<p>${s.lead}</p>`;
+    if (s.items) html += '<ul>' + s.items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+  }
+  html += `<span class="foot">Teach the Geek</span>`;
+  el.innerHTML = html;
+  deck.appendChild(el);
+}
+</script>
+</body>
+</html>
