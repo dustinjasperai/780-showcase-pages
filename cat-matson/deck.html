@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speak With Authority, Without Sounding Arrogant — Impactful Presenters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Lato:wght@400;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf9f5;        /* warm off-white ground (light-scheme brand) */
+    --panel:#ffffff;
+    --ink:#30353e;       /* her slate ink */
+    --muted:#5e6969;     /* her slate grey */
+    --accent:#ff8a30;    /* her brand orange (#ff8a30, 25 uses) */
+    --blue:#144cbb;      /* her deep brand blue */
+    --rule:#e7e2d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Lato',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.on{display:block;animation:fade .45s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(30px,5vw,56px);line-height:1.06;letter-spacing:-.01em}
+  h2{font-family:'Montserrat',sans-serif;font-weight:700;font-size:clamp(24px,3.6vw,40px);line-height:1.12}
+  .kicker{font-family:'Montserrat',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--accent)}
+  .lede{font-size:clamp(17px,2.1vw,23px);line-height:1.5;color:var(--ink);max-width:46ch;margin-top:18px}
+  .muted{color:var(--muted)}
+  p+p{margin-top:14px}
+  .sub{font-size:clamp(16px,1.9vw,20px);color:var(--muted);margin-top:16px;max-width:48ch}
+  .accentbar{width:68px;height:6px;background:var(--accent);border-radius:4px;margin:0 0 22px}
+  ul{list-style:none;margin-top:20px;max-width:50ch}
+  li{position:relative;padding-left:30px;margin:13px 0;font-size:clamp(16px,1.9vw,20px);line-height:1.4}
+  li:before{content:'';position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:3px;background:var(--blue)}
+  .note{font-family:'Caveat',cursive;display:inline-block;background:#fff6c9;color:#6b5a16;padding:10px 16px;border-radius:3px;font-size:clamp(20px,2.6vw,30px);transform:rotate(-2deg);box-shadow:0 6px 18px rgba(48,53,62,.12);border:1px solid #efe6b4}
+  .big{font-size:clamp(26px,3.8vw,46px);font-family:'Montserrat',sans-serif;font-weight:700;line-height:1.1;max-width:20ch}
+  .quote{font-size:clamp(20px,2.6vw,30px);line-height:1.34;font-weight:700;font-family:'Montserrat',sans-serif;max-width:30ch}
+  .cite{margin-top:18px;color:var(--muted);font-size:16px}
+  .frame{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(22px,3.2vw,40px);box-shadow:0 10px 30px rgba(48,53,62,.06)}
+  .tag{display:inline-block;font-family:'Montserrat',sans-serif;font-weight:700;color:var(--blue);font-size:14px;letter-spacing:.04em;margin-bottom:10px}
+  .disc{margin-top:26px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.45}
+  .brand{position:fixed;left:7vw;bottom:4vh;font-family:'Montserrat',sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .brand b{color:var(--accent)}
+  #dots{position:fixed;right:7vw;bottom:4vh;display:flex;gap:7px;align-items:center}
+  #dots i{width:8px;height:8px;border-radius:50%;background:#d8d2c6;display:block}
+  #dots i.on{background:var(--accent);transform:scale(1.25)}
+  .nav{position:fixed;inset:0;display:flex;justify-content:space-between;pointer-events:none}
+  .nav button{pointer-events:auto;background:transparent;border:0;width:12vw;cursor:pointer;color:transparent}
+  .cta-btn{display:inline-block;margin-top:22px;background:var(--accent);color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:14px 26px;border-radius:9px;font-size:17px}
+  .cta-second{display:block;margin-top:14px;color:var(--blue);font-weight:700}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="brand">Impactful <b>Presenters</b></div>
+<div id="dots"></div>
+<div class="nav"><button onclick="go(-1)">prev</button><button onclick="go(1)">next</button></div>
+<script>
+const S = [
+  {t:'title',
+   kicker:'A live masterclass with Cat Matson',
+   h:'Speak With Authority,<br>Without Sounding Arrogant',
+   sub:'For humble leaders who are brilliant at the work, and want to be heard, trusted and remembered when it is their turn to speak.'},
+
+  {t:'promise',
+   kicker:'What you will walk away with',
+   h:'Be heard. Build influence. Show your expertise, credibly.',
+   sub:'A repeatable way to speak with confidence, authenticity and impact in every setting, from a one-on-one meeting to a room of three hundred.'},
+
+  {t:'who',
+   kicker:'Who this is for',
+   h:'You know your stuff. Speaking is the part that lets you down.',
+   bullets:['Business owners, leaders and corporate professionals','People who are the real expert, yet freeze when all eyes turn to them','Humble leaders who want influence without turning into someone they are not']},
+
+  {t:'trap',
+   kicker:'The trap',
+   h:'The moment the room goes quiet, it all falls apart.',
+   bullets:['You get nervous and tongue-tied','You think out loud, ramble, and go down all the rabbit holes','You feel like an imposter','So people with less expertise than you get the panels, the promotions and the following']},
+
+  {t:'reframe',
+   kicker:'The uncomfortable truth',
+   big:'It is not a confidence problem. It is a skill you were never taught.',
+   sub:'Speaking is a skill, not a talent. It is not about charisma or born-with-it confidence. Which means every one of us can learn it.'},
+
+  {t:'part',
+   tag:'Part One',
+   h:'Why "just be more confident" never works'},
+
+  {t:'content',
+   kicker:'The core problem',
+   h:'Faking it and memorising it both collapse under pressure.',
+   sub:'Most advice tells you to perform confidence or lock in a script. The humble leader does not want to perform. They want to be credible as themselves, and that is a different skill entirely.'},
+
+  {t:'content',
+   kicker:'The three things that create influence',
+   h:'What people with real influence quietly do',
+   bullets:['They know how to speak to be heard','They know how to create influence over time','They demonstrate their expertise with credibility, without sounding arrogant']},
+
+  {t:'part',
+   tag:'Part Two',
+   h:'The frameworks that make it repeatable'},
+
+  {t:'content',
+   kicker:'Framework 1',
+   note:'Earn the Right',
+   h:'The Earn-The-Right Framework',
+   sub:'How to earn attention and credibility before you ask for anything, so you land as the expert you already are instead of an imposter hoping to be believed.'},
+
+  {t:'content',
+   kicker:'Framework 2',
+   note:'Works Every Time',
+   h:'The Works-Every-Time Framework',
+   sub:'A simple four-part structure you can drop any message into, from a two-minute update to a keynote, so you never start from a blank page or lose your thread again.'},
+
+  {t:'content',
+   kicker:'Framework 3',
+   note:'Sticky notes',
+   h:'The Sticky Note Method',
+   sub:'Ditch the full script. A handful of sticky-note prompts keeps you natural, present and impossible to throw off, because you are talking, not reading.'},
+
+  {t:'content',
+   kicker:'Framework 4',
+   note:'One napkin',
+   h:'The Napkin Note Method',
+   sub:'Speak spontaneously in panels, Q&A and on-the-spot moments with a single napkin of prep, so you are never caught flat when someone turns to you.'},
+
+  {t:'content',
+   kicker:'Framework 5',
+   note:'Tell the story',
+   h:'The Storytelling Canvas',
+   sub:'Structure a story that actually lands, so your point sticks long after the meeting ends and people repeat it for you when you are not in the room.'},
+
+  {t:'part',
+   tag:'Part Three',
+   h:'When the room starts leaning in'},
+
+  {t:'quote',
+   q:'I am much calmer and clearer when I talk now. Now I am being invited to speak on industry panels and am recognised as an industry leader.',
+   cite:'Julia Van Der Sommen, Director, Sample Room and Pattern Room'},
+
+  {t:'content',
+   kicker:'Why me',
+   h:'Twenty five years of watching who really gets heard.',
+   sub:'I have spent more than 25 years speaking, presenting and facilitating, including ten years inside the public sector watching exactly who had the ear of the decision makers. I now coach humble leaders to do the same at Impactful Presenters.'},
+
+  {t:'recap',
+   kicker:'The skill stack',
+   h:'Everything you need, in one place',
+   bullets:['Earn-The-Right, so you are credible from the first sentence','Works-Every-Time, so you always have a structure','The Sticky Note and Napkin Note methods, so you stay natural','The Storytelling Canvas, so your message sticks']},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h:'Ready to speak with authentic authority?',
+   sub:'Book a curiosity call with Cat, or start the Impactful Presenters Program and learn to speak with confidence, authenticity and impact, every single time.',
+   disc:'This masterclass is educational. It shares skills and frameworks, not promises. Results vary from person to person and are not guaranteed.'}
+];
+
+const stage = document.getElementById('stage');
+const dots = document.getElementById('dots');
+let i = 0;
+function render(){
+  stage.innerHTML = '';
+  dots.innerHTML = '';
+  const s = S[i];
+  const d = document.createElement('div');
+  d.className = 'slide on';
+  let html = '';
+  if(s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.tag) html += '<div class="accentbar"></div><span class="tag">'+s.tag+'</span>';
+  if(s.note) html += '<div style="margin:6px 0 20px"><span class="note">'+s.note+'</span></div>';
+  if(s.big){ html += '<div class="accentbar"></div><div class="big">'+s.big+'</div>'; }
+  else if(s.q){ html += '<div class="accentbar"></div><div class="quote">&ldquo;'+s.q+'&rdquo;</div><div class="cite">'+s.cite+'</div>'; }
+  else if(s.h){ if(!s.tag && !s.kicker) html += '<div class="accentbar"></div>'; html += '<h1>'+s.h+'</h1>'; }
+  if(s.sub) html += '<p class="sub">'+s.sub+'</p>';
+  if(s.bullets){ html += '<ul>'; s.bullets.forEach(b=>html+='<li>'+b+'</li>'); html += '</ul>'; }
+  if(s.t==='cta'){ html += '<a class="cta-btn" href="#">Book a Curiosity Call</a><span class="cta-second">or explore the Impactful Presenters Program</span>'; }
+  if(s.disc) html += '<div class="disc">'+s.disc+'</div>';
+  d.innerHTML = html;
+  stage.appendChild(d);
+  S.forEach((_,n)=>{const b=document.createElement('i'); if(n===i)b.className='on'; dots.appendChild(b);});
+}
+function go(n){ i=Math.max(0,Math.min(S.length-1,i+n)); render(); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
