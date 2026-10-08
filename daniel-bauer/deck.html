@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ruckus Maker Flywheel, a live masterclass with Danny Bauer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1324;
+    --panel:#111d35;
+    --rule:#24324f;
+    --accent:#0051c3;
+    --accent2:#3d82ff;
+    --text:#eef2fb;
+    --muted:#9fb0cf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif}
+  .deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh}
+  .slide{
+    scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;padding:8vh 9vw;position:relative;border-bottom:1px solid var(--rule);
+  }
+  .arc{position:absolute;right:6vw;top:7vh;width:120px;height:120px;border:2px solid var(--rule);
+    border-top-color:var(--accent2);border-radius:50%;opacity:.55}
+  .eyebrow{font-family:'Sora',sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent2);margin-bottom:1.1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(2.1rem,5.2vw,4rem);line-height:1.04;max-width:16ch}
+  h2{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.7rem,4vw,3rem);line-height:1.08;max-width:18ch}
+  .sub{color:var(--muted);font-size:clamp(1.05rem,2vw,1.5rem);margin-top:1.3rem;max-width:40ch;line-height:1.5}
+  ul{margin-top:1.6rem;max-width:44ch;list-style:none}
+  li{font-size:clamp(1.05rem,1.9vw,1.4rem);padding:.55rem 0 .55rem 1.5rem;position:relative;color:var(--text)}
+  li:before{content:"";position:absolute;left:0;top:1.15rem;width:.6rem;height:.6rem;background:var(--accent);border-radius:50%}
+  .five{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem}
+  .five span{font-family:'Sora',sans-serif;font-weight:600;border:1px solid var(--rule);border-radius:999px;
+    padding:.5rem 1.1rem;color:var(--accent2)}
+  .note{margin-top:1.8rem;color:var(--muted);font-size:1rem;max-width:46ch;line-height:1.55;border-left:3px solid var(--accent);padding-left:1rem}
+  .cta{background:var(--panel)}
+  .pager{position:fixed;bottom:18px;right:22px;font-size:.8rem;color:var(--muted);font-family:'Sora',sans-serif}
+  .kicker{font-family:'Sora',sans-serif;color:var(--accent2);font-weight:600;margin-bottom:.6rem}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="pager" id="pager"></div>
+<script>
+const S = [
+  {t:'title', k:'The Ruckus Maker Flywheel', s:'How courageous school leaders build a winning culture, without burning out.', note:'A live masterclass with Danny Bauer, host of the number one downloaded podcast for school leaders.'},
+  {t:'audience', k:'This hour is for you if', b:['You lead a school or a district and care more about your people than the next compliance checklist.','The weight of the building sits on your chest most Sunday nights.','You want a culture your best staff do not want to leave.']},
+  {t:'hook', k:'The job quietly broke a lot of leaders before it ever broke you', s:'It is almost never the kids. It is leading from an empty cup inside a system that rewards managing over leading.'},
+  {t:'part', k:'Part One', s:'Why doing more is quietly making it worse.'},
+  {t:'problem', k:'The manager trap', b:['We train leaders to run the building: observations, reports, fires.','None of that transfers belief, and belief is the thing that actually moves a school.','So you work harder, the culture sits still, and you start to wonder if the problem is you.']},
+  {t:'reframe', k:'Your number one job is to transfer belief', s:'Ruckus Makers help staff and students see that they can solve hard problems and do extraordinary work. Nearly everything good in a school follows from that.'},
+  {t:'part', k:'Part Two', s:'The Ruckus Maker Flywheel.'},
+  {t:'framework', k:'The Flywheel, on one page', s:'Four turns that compound belief into a winning culture.', b:['Lead yourself first','Transfer belief','Build an abundant culture','Let momentum compound']},
+  {t:'pillar', k:'Turn one: lead yourself first', kick:'The Ruckus Maker Mindset Tool', five:['Eat','Sleep','Move','Meditate','Unplug'], note:'You cannot pour belief into a school from an empty cup. The five fundamentals come before the strategy, not after it.'},
+  {t:'pillar', k:'Turn two: transfer belief', b:['Name the extraordinary work you genuinely believe your people can do.','Say it out loud, to specific people, more often than feels natural.','Back it with trust instead of surveillance.']},
+  {t:'pillar', k:'Turn three: build an abundant culture', kick:'The Abundant Mindset', b:['Treat staff, families, even rivals as collaborators, not threats.','Scarcity hoards and protects; abundance multiplies and shares.','A school people believe in is a school people stay in.']},
+  {t:'pillar', k:'Turn four: let momentum compound', b:['Belief creates small wins.','Small wins become visible proof.','Proof creates more belief, and the flywheel starts turning on its own.']},
+  {t:'part', k:'Part Three', s:'Inside a building where the flywheel is turning.'},
+  {t:'example', k:'The shift the leader feels first', b:['Meetings stop being status updates and start being about people.','You stop carrying the entire building by yourself.','Staff begin making their own ruckus without waiting for permission.']},
+  {t:'example', k:'The shift the school feels next', b:['Trust quietly replaces the compliance theater.','Retention climbs because people believe in the work again.','The culture gets strong enough to defend itself.']},
+  {t:'misstep', k:'The one mistake to avoid', s:'Do not open with a shiny new program. Start with belief. A program without belief behind it dies on the vine every time.'},
+  {t:'credibility', k:'Why I can stand up here and say this', s:'I am Danny Bauer. I host the number one downloaded podcast for school leaders and have mentored thousands of leaders through the Ruckus Maker community, the podcast, and the book Mastermind.'},
+  {t:'recap', k:'Your first move this week', b:['Pick one of the five fundamentals and protect it like a meeting you cannot miss.','Tell one person the extraordinary thing you believe they are capable of.','Watch what the flywheel does with that single turn.']},
+  {t:'invite', k:'Keep turning the flywheel with us', s:'The Ruckus Maker Mastermind is where school leaders do this work together, every single week, with coaching and a room full of peers.'},
+  {t:'cta', k:'Come make a ruckus with us', s:'If this is the way you want to lead, apply to the Ruckus Maker Mastermind and keep the flywheel turning.', note:'This masterclass is educational. No specific outcome or result is guaranteed. Results vary by leader, school, and context.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((sl, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide' + (sl.t === 'cta' ? ' cta' : '');
+  let html = '<div class="arc"></div>';
+  html += '<div class="eyebrow">' + (sl.t === 'part' ? 'Section' : (sl.t === 'cta' ? 'Next step' : 'Ruckus Maker Masterclass')) + '</div>';
+  if (sl.kick) html += '<div class="kicker">' + sl.kick + '</div>';
+  html += (sl.t === 'title' || sl.t === 'part' || sl.t === 'cta') ? '<h1>' + sl.k + '</h1>' : '<h2>' + sl.k + '</h2>';
+  if (sl.s) html += '<p class="sub">' + sl.s + '</p>';
+  if (sl.five) html += '<div class="five">' + sl.five.map(x => '<span>' + x + '</span>').join('') + '</div>';
+  if (sl.b) html += '<ul>' + sl.b.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+  if (sl.note) html += '<p class="note">' + sl.note + '</p>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+
+const pager = document.getElementById('pager');
+const slides = [...document.querySelectorAll('.slide')];
+function updatePager(){
+  const idx = Math.round(deck.scrollTop / window.innerHeight);
+  pager.textContent = (Math.min(idx, S.length - 1) + 1) + ' / ' + S.length;
+}
+deck.addEventListener('scroll', updatePager); updatePager();
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'PageDown'){ deck.scrollBy({top:window.innerHeight, behavior:'smooth'}); e.preventDefault(); }
+  if (e.key === 'ArrowUp' || e.key === 'PageUp'){ deck.scrollBy({top:-window.innerHeight, behavior:'smooth'}); e.preventDefault(); }
+});
+</script>
+</body>
+</html>
