@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 750-Door Operating System — Peter Lohmann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#eef4f9; --rule:#dce4ec;
+    --ink:#1f3a4d; --muted:#5f7280; --accent:#2c7cb0; --hook:#e0703c;
+    --serif:'DM Serif Display',Georgia,serif;
+    --sans:'Mulish',-apple-system,Segoe UI,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--panel);color:var(--ink);font-family:var(--sans)}
+  #deck{max-width:1040px;margin:0 auto;padding:28px 18px 80px}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 60px;margin:0 0 22px;min-height:560px;
+    display:flex;flex-direction:column;justify-content:center;position:relative;
+    box-shadow:0 1px 0 rgba(31,58,77,0.04);
+  }
+  .eyebrow{font-family:var(--sans);font-weight:800;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:18px}
+  .eyebrow.hook{color:var(--hook)}
+  h1{font-family:var(--serif);font-weight:400;font-size:52px;line-height:1.05;
+    color:var(--ink);margin-bottom:20px}
+  h2{font-family:var(--serif);font-weight:400;font-size:38px;line-height:1.1;
+    color:var(--ink);margin-bottom:18px}
+  .sub{font-size:21px;line-height:1.5;color:var(--muted);font-weight:500;max-width:46ch}
+  p.body{font-size:20px;line-height:1.6;color:var(--ink);max-width:54ch;margin-top:6px}
+  p.body + p.body{margin-top:16px}
+  .lead{font-size:26px;line-height:1.45;color:var(--ink);max-width:48ch;font-weight:600}
+  .big{font-family:var(--serif);font-size:40px;line-height:1.15;max-width:40ch}
+  .part{font-family:var(--serif);font-size:30px;color:var(--accent)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:19px;line-height:1.5;color:var(--ink);padding-left:26px;position:relative;margin:12px 0;max-width:56ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;
+    background:var(--accent);border-radius:2px}
+  .pillarnum{font-family:var(--serif);font-size:16px;color:var(--bg);
+    background:var(--accent);width:40px;height:40px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .rule{height:3px;width:56px;background:var(--hook);border:none;margin:0 0 22px}
+  .who{display:inline-block;background:var(--panel);border:1px solid var(--rule);
+    border-radius:8px;padding:8px 14px;font-weight:700;font-size:16px;color:var(--ink);margin:6px 8px 0 0}
+  .presenter{position:absolute;left:60px;bottom:40px;font-size:15px;color:var(--muted);font-weight:600}
+  .pagenum{position:absolute;right:28px;bottom:22px;font-size:13px;color:var(--muted);font-weight:700}
+  .disc{font-size:14px;line-height:1.55;color:var(--muted);max-width:58ch;margin-top:26px;
+    border-top:1px solid var(--rule);padding-top:16px}
+  .cta-steps{font-size:20px;line-height:1.7;color:var(--ink);margin-top:10px;font-weight:600}
+  .cta-steps b{color:var(--accent)}
+  @media(max-width:720px){.slide{padding:38px 26px;min-height:460px}h1{font-size:36px}h2{font-size:28px}.presenter{left:26px}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title',
+   eyebrow:'A live masterclass for property management owners',
+   h:'The 750-Door Operating System',
+   sub:'How to build a property management company that runs on systems, not on you.',
+   presenter:'Peter Lohmann · CEO, RL Property Management'},
+
+  {t:'who',
+   eyebrow:'Who this is for',
+   h:'You are past the startup phase.',
+   sub:'This is for owners and operators of residential property management companies who have real doors under management and have become the bottleneck for all of it.',
+   chips:['150 to 2,000+ doors','You still touch every decision','Growth feels heavier, not lighter']},
+
+  {t:'trap',
+   eyebrow:'The trap',
+   lead:'You won the doors. Now the company cannot run a single day without you.',
+   body:['Owners, residents, your team, the vendors, every escalation routes back to you. You are the system. So the business is only ever as big, and as calm, as your own calendar.']},
+
+  {t:'hook',
+   eyebrow:'An uncomfortable reframe',
+   big:'More doors do not fix this. They make the bottleneck worse.',
+   body:['Every door you add pours more work through the one person who cannot scale. That is why so many PM companies hit a size where the owner is busier, the margins are thinner, and the service quietly gets worse.']},
+
+  {t:'part', eyebrow:'Part one', part:'Why growth breaks a PM company'},
+
+  {t:'content',
+   eyebrow:'The real constraint',
+   h:'It was never a lead problem.',
+   body:['Most advice aimed at PM owners is about winning more doors. But the thing that actually caps the company is operations that do not scale: work routed through the founder, knowledge living in one head, and no clear owner for any outcome.',
+         'You do not have a growth problem. You have an operating-system problem.']},
+
+  {t:'content',
+   eyebrow:'What happens without a system',
+   h:'The symptoms every owner knows.',
+   list:['Nothing gets done the same way twice, because it lives in your memory',
+         'New hires take months to be useful and still ask you everything',
+         'Maintenance is a black hole of cost, risk, and angry owners',
+         'You cannot take a real week off without the company wobbling']},
+
+  {t:'part', eyebrow:'Part two', part:'The operating system'},
+
+  {t:'pillar', num:'1',
+   eyebrow:'Pillar one',
+   h:'Documented SOPs',
+   body:['The company’s memory has to live in written process, not in your head. Every recurring job gets one documented way it is done, so the work survives turnover and stops depending on you being available to explain it.']},
+
+  {t:'pillar', num:'2',
+   eyebrow:'Pillar two',
+   h:'Clear role ownership',
+   body:['Every outcome gets exactly one owner, and that owner is usually not you. When responsibility is named, decisions stop bouncing back to the founder and the team can actually move without permission.']},
+
+  {t:'pillar', num:'3',
+   eyebrow:'Pillar three',
+   h:'A data-first scoreboard',
+   body:['You run the company on the few numbers that tell you it is healthy, reviewed on a rhythm. Show me the data: when the scoreboard is honest and visible, problems surface early instead of as a 9pm phone call.']},
+
+  {t:'pillar', num:'4',
+   eyebrow:'Pillar four',
+   h:'The maintenance and vendor engine',
+   body:['Maintenance is where most PM companies bleed margin, trust, and owner retention, because they outsource all of it. Built in-house and run as its own division, it becomes a profit center and the strongest reason owners stay.']},
+
+  {t:'content',
+   eyebrow:'How they fit',
+   h:'Four pillars, one weekly rhythm.',
+   body:['SOPs make the work repeatable. Role ownership makes it move without you. The scoreboard tells you where to look. The maintenance engine protects the margin. Run together on a weekly cadence, they become the thing the company runs on instead of running on you.']},
+
+  {t:'part', eyebrow:'Part three', part:'A week that runs without you'},
+
+  {t:'content',
+   eyebrow:'A self-running week',
+   h:'What you stop doing.',
+   list:['You stop being the escalation path for routine decisions',
+         'Your team runs the day from documented process, not from asking you',
+         'The scoreboard, not your inbox, tells you what needs attention',
+         'You spend your week on the few things only the owner can do']},
+
+  {t:'content',
+   eyebrow:'A realistic picture',
+   h:'What changes when the system is in.',
+   body:['Within a focused stretch of installing this, owners typically see the same pattern: the processes are written down, roles are clear, the dashboard is live, and the company stops stalling every time the founder steps away. This is an example of the direction, not a promise of a specific number.']},
+
+  {t:'why',
+   eyebrow:'Why me',
+   h:'I run the company I am teaching you to build.',
+   body:['I am Peter Lohmann, CEO of RL Property Management, a residential PM company in Columbus managing more than 750 units. More than 25,000 property management professionals read my newsletter every week. Everything here is the operating system I actually use to run RLPM, not theory from the sidelines.']},
+
+  {t:'recap',
+   eyebrow:'The operating system, in one frame',
+   h:'If you build nothing else, build these four.',
+   list:['Documented SOPs so the work survives you',
+         'Clear role ownership so decisions move without you',
+         'A data-first scoreboard so you run on the numbers',
+         'An in-house maintenance engine so the margin and the owners stay']},
+
+  {t:'cta',
+   eyebrow:'Keep building the system',
+   h:'Build the operating system with people doing it already.',
+   steps:['If you run a PM company and want this installed around you, the next step is <b>Crane</b>, my private community for serious operators.',
+          'Prefer to start one on one? Book a <b>consult</b> with me at peterlohmann.com.'],
+   disc:'This masterclass is educational. Nothing in it is a guaranteed result or an income claim, and no specific outcome is promised. Results vary by company, market, team, and the work you put in. Peter Lohmann is sharing operator experience, not professional, legal, or financial advice.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let html = '';
+  const eye = s.eyebrow ? `<div class="eyebrow ${s.t==='hook'?'hook':''}">${s.eyebrow}</div>` : '';
+  if (s.t === 'title') {
+    html = eye + `<h1>${s.h}</h1><p class="sub">${s.sub}</p>`;
+    if (s.presenter) html += `<div class="presenter">${s.presenter}</div>`;
+  } else if (s.t === 'who') {
+    html = eye + `<h2>${s.h}</h2><p class="sub">${s.sub}</p><div style="margin-top:22px">` +
+      s.chips.map(c => `<span class="who">${c}</span>`).join('') + `</div>`;
+  } else if (s.t === 'trap') {
+    html = eye + `<p class="lead">${s.lead}</p>` + s.body.map(b => `<p class="body">${b}</p>`).join('');
+  } else if (s.t === 'hook') {
+    html = eye + `<hr class="rule"><p class="big">${s.big}</p>` + s.body.map(b => `<p class="body">${b}</p>`).join('');
+  } else if (s.t === 'part') {
+    html = eye + `<div class="part">${s.part}</div>`;
+  } else if (s.t === 'pillar') {
+    html = `<div class="pillarnum">${s.num}</div>` + eye + `<h2>${s.h}</h2>` + s.body.map(b => `<p class="body">${b}</p>`).join('');
+  } else if (s.t === 'content' || s.t === 'why' || s.t === 'recap') {
+    html = eye + `<h2>${s.h}</h2>`;
+    if (s.body) html += s.body.map(b => `<p class="body">${b}</p>`).join('');
+    if (s.list) html += '<ul>' + s.list.map(li => `<li>${li}</li>`).join('') + '</ul>';
+  } else if (s.t === 'cta') {
+    html = eye + `<h2>${s.h}</h2><div class="cta-steps">` +
+      s.steps.map(x => `<div>${x}</div>`).join('') + `</div><p class="disc">${s.disc}</p>`;
+  }
+  html += `<div class="pagenum">${i+1} / ${S.length}</div>`;
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
