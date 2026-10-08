@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sean McCormick — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f5f2;
+    --panel:#2a2829;
+    --ink:#2a2829;
+    --accent:#253551;
+    --rule:#dcd9d3;
+    --display:'Archivo Black', system-ui, sans-serif;
+    --body:'Space Grotesk', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    padding:64px clamp(48px,8vw,160px);
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .slide.on{display:flex;opacity:1;}
+  .wrap{max-width:1040px;width:100%;margin:0 auto;}
+
+  /* vertical keyline that anchors every slide to a shared grid */
+  .slide::before{
+    content:"";position:absolute;top:64px;bottom:64px;
+    left:clamp(40px,6vw,120px);width:2px;background:var(--rule);
+  }
+
+  .kicker{
+    font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:16px;
+  }
+  .kicker .num{font-variant-numeric:tabular-nums;color:var(--ink);opacity:.45;}
+
+  h1{font-family:var(--display);line-height:.98;letter-spacing:-.01em;}
+  .t-title h1{font-size:clamp(44px,8vw,104px);}
+  .t-part h1{font-size:clamp(40px,7vw,84px);}
+  .t-content h1{font-size:clamp(32px,4.6vw,56px);line-height:1.02;}
+  .t-cta h1{font-size:clamp(40px,7vw,84px);}
+
+  .sub{
+    font-size:clamp(17px,1.9vw,24px);line-height:1.45;max-width:30ch;
+    margin-top:28px;color:var(--ink);
+  }
+  .sub.wide{max-width:46ch;}
+  .lead{font-size:clamp(19px,2.2vw,28px);line-height:1.4;max-width:34ch;margin-top:8px;}
+
+  .rule{height:2px;width:72px;background:var(--accent);margin:32px 0;}
+
+  ul.points{list-style:none;margin-top:32px;max-width:52ch;}
+  ul.points li{
+    position:relative;padding:16px 0 16px 40px;
+    font-size:clamp(16px,1.7vw,20px);line-height:1.4;
+    border-top:1px solid var(--rule);
+  }
+  ul.points li:last-child{border-bottom:1px solid var(--rule);}
+  ul.points li::before{
+    content:attr(data-k);position:absolute;left:0;top:16px;
+    font-family:var(--display);font-size:13px;color:var(--accent);
+    letter-spacing:.02em;
+  }
+  ul.points li b{font-weight:700;}
+
+  .note{
+    margin-top:36px;font-size:14px;line-height:1.5;color:var(--ink);opacity:.6;
+    max-width:56ch;
+  }
+  .disc{
+    margin-top:40px;padding-top:20px;border-top:1px solid var(--rule);
+    font-size:13px;line-height:1.55;color:var(--ink);opacity:.62;max-width:62ch;
+  }
+
+  .cta-step{
+    font-family:var(--display);font-size:clamp(18px,2vw,22px);
+    color:var(--accent);margin-top:28px;
+  }
+
+  /* calibration dial motif — a few key inputs, tuned */
+  .dial{position:absolute;top:56px;right:clamp(40px,7vw,120px);width:92px;height:92px;opacity:.9;}
+  .dial .tick{stroke:var(--rule);stroke-width:2;}
+  .dial .live{stroke:var(--accent);stroke-width:3;}
+  .dial .hub{fill:var(--accent);}
+  .dial .needle{stroke:var(--ink);stroke-width:2.5;}
+
+  footer{
+    position:fixed;bottom:24px;left:clamp(40px,6vw,120px);right:clamp(40px,6vw,120px);
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  }
+  footer .brand{font-weight:700;}
+  footer .count{font-variant-numeric:tabular-nums;opacity:.55;}
+  .hint{opacity:.4;letter-spacing:.14em;}
+
+  @media (max-width:640px){
+    .slide::before{display:none}
+    .dial{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>
+  <span class="brand">Sean McCormick</span>
+  <span class="hint">&larr; &rarr; to advance</span>
+  <span class="count" id="count"></span>
+</footer>
+
+<script>
+const S=[
+  {t:'title',
+   kicker:'Live Masterclass',
+   h:'Running On Default',
+   sub:'Why your best years of output are hiding behind settings you have never actually tuned.'},
+
+  {t:'content',
+   kicker:'The Promise',
+   h:'You do not need more grit. You need the dials.',
+   points:[
+     {k:'01', tx:'Why high performers plateau even while working harder than everyone around them.'},
+     {k:'02', tx:'The four inputs that quietly govern your energy, focus, and output.'},
+     {k:'03', tx:'How to run yourself as a calibrated system instead of on factory defaults.'}
+   ]},
+
+  {t:'content',
+   kicker:'Who This Is For',
+   h:'The operator who is already winning, and quietly running on fumes.',
+   sub:'Founders, executives, and elite athletes who have the drive handled. The part that is leaking is the human engine underneath the ambition.',
+   note:'If more willpower were the answer, you would have solved this years ago. You are not short on willpower.'},
+
+  {t:'content',
+   kicker:'The Trap',
+   h:'You optimize the business. You leave yourself on stock settings.',
+   points:[
+     {k:'A', tx:'You measure revenue, pipeline, and performance to the decimal.'},
+     {k:'B', tx:'You measure your own energy, recovery, and state almost never.'},
+     {k:'C', tx:'So the one instrument every result flows through stays uncalibrated.'}
+   ]},
+
+  {t:'part',
+   kicker:'The Reframe',
+   h:'This is a system problem, not a willpower problem.',
+   lead:'Stop trying to out-discipline a machine nobody tuned.'},
+
+  {t:'part',
+   kicker:'Part One',
+   h:'The Default Settings',
+   lead:'What runs you when you have never decided what should.'},
+
+  {t:'content',
+   kicker:'Part One',
+   h:'Default is not neutral. Default is decay.',
+   sub:'Left untuned, sleep drifts, recovery disappears, focus fragments, and your baseline state becomes whatever the last email set it to. You adapt to it and call it normal.',
+   note:'Most high performers are not broken. They are simply running unmanaged inputs at a very high load.'},
+
+  {t:'content',
+   kicker:'Part One',
+   h:'The cost compounds where you cannot see it.',
+   points:[
+     {k:'01', tx:'Output feels heavier each quarter for the same result.'},
+     {k:'02', tx:'Recovery stops arriving, so every week starts in a deficit.'},
+     {k:'03', tx:'You trade state for output until the trade stops working.'}
+   ]},
+
+  {t:'part',
+   kicker:'Part Two',
+   h:'The Four Strategic Areas',
+   lead:'The framework I use to tune a life as one system, across six months.'},
+
+  {t:'content',
+   kicker:'Area 01 of 04',
+   h:'Performance Optimization',
+   sub:'The signature edge. We engineer the body-and-mind inputs that set your ceiling: energy, focus, recovery, sleep, and state.',
+   note:'Built on a decade running wellness and float businesses and one of the longest-running biohacking shows. Performance is protocols, not vibes.'},
+
+  {t:'content',
+   kicker:'Area 02 of 04',
+   h:'Personal Development',
+   sub:'Up-level faster than you ever would on your own, using classic coaching work alongside out-of-the-box techniques including NLP.',
+   note:'This is where the patterns that quietly cap you get surfaced and rewired.'},
+
+  {t:'content',
+   kicker:'Area 03 of 04',
+   h:'Career Optimization',
+   sub:'Align the work with the larger life so output rises without burning the operator who produces it.',
+   note:'Growth that costs you your health is not growth. It is a loan against yourself.'},
+
+  {t:'content',
+   kicker:'Area 04 of 04',
+   h:'Spiritual Development',
+   sub:'Ground the body and connect the work to something past the quarter: a way to serve, and a reason the output matters.',
+   note:'The part most performance advice skips, and the part that makes the rest hold.'},
+
+  {t:'content',
+   kicker:'How It Fits',
+   h:'Four dials. One instrument. Tuned together.',
+   sub:'These are not four separate projects. They are four inputs on the same system. Move one well and the others get easier. That is what calibration means.'},
+
+  {t:'part',
+   kicker:'Part Three',
+   h:'What Calibrated Feels Like',
+   lead:'Same person, same ambition, finally running on purpose.'},
+
+  {t:'content',
+   kicker:'Part Three',
+   h:'The shift you are actually after.',
+   points:[
+     {k:'01', tx:'Energy you can plan around instead of hope for.'},
+     {k:'02', tx:'Focus that holds, so your best hours produce your best work.'},
+     {k:'03', tx:'A state you set on purpose, not one the day hands you.'}
+   ]},
+
+  {t:'content',
+   kicker:'Why Me',
+   h:'I have spent 5,000+ hours tuning high performers.',
+   points:[
+     {k:'', tx:'Over 5,000 hours coaching high-level performers to be their best.'},
+     {k:'', tx:'Clients across CEOs, venture investors, network-TV talent, and NFL and MLS athletes.'},
+     {k:'', tx:'Founder of Float Seattle and host of the Optimal Performance Podcast, with well over a million downloads.'}
+   ],
+   note:'This is the lane I have lived in for over a decade. Not theory. Reps.'},
+
+  {t:'content',
+   kicker:'The Takeaway',
+   h:'You cannot willpower your way past bad settings.',
+   sub:'But you can tune them. A few key inputs, measured and adjusted on purpose, change what you are capable of holding. That is the whole game.'},
+
+  {t:'cta',
+   kicker:'Your Next Step',
+   h:'Let us tune your system.',
+   sub:'If you are ready to stop running on default, the next move is a conversation. We look at your four areas and map what calibration would actually change for you.',
+   step:'Book a coaching session with Sean to map your next six months.',
+   disc:'This masterclass is educational. No specific outcome or result is guaranteed, and nothing here is medical advice. Results vary with your effort, context, and consistency.'}
+];
+
+const stage=document.getElementById('stage');
+const counter=document.getElementById('count');
+
+const DIAL=`<svg class="dial" viewBox="0 0 100 100" aria-hidden="true">
+  <line class="tick" x1="50" y1="8"  x2="50" y2="18"/>
+  <line class="tick" x1="8"  y1="50" x2="18" y2="50"/>
+  <line class="tick" x1="92" y1="50" x2="82" y2="50"/>
+  <line class="tick" x1="50" y1="92" x2="50" y2="82"/>
+  <path class="live" fill="none" d="M 25 72 A 35 35 0 0 1 72 25"/>
+  <line class="needle" x1="50" y1="50" x2="70" y2="33"/>
+  <circle class="hub" cx="50" cy="50" r="5"/>
+</svg>`;
+
+function points(list){
+  return '<ul class="points">'+list.map(p=>
+    `<li data-k="${p.k||''}">${p.tx}</li>`).join('')+'</ul>';
+}
+
+function render(s){
+  let inner='';
+  if(s.kicker) inner+=`<div class="kicker"><span class="num"></span>${s.kicker}</div>`;
+  inner+=`<h1>${s.h}</h1>`;
+  if(s.t==='part'){ inner+=`<div class="rule"></div>`; }
+  if(s.lead) inner+=`<p class="lead">${s.lead}</p>`;
+  if(s.sub) inner+=`<p class="sub${s.points?' wide':''}">${s.sub}</p>`;
+  if(s.points) inner+=points(s.points);
+  if(s.step) inner+=`<div class="cta-step">${s.step}</div>`;
+  if(s.note) inner+=`<p class="note">${s.note}</p>`;
+  if(s.disc) inner+=`<p class="disc">${s.disc}</p>`;
+  return `<div class="wrap">${inner}</div>`;
+}
+
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide t-'+s.t;
+  el.innerHTML=(s.t!=='title'?DIAL:'')+render(s);
+  stage.appendChild(el);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((el,k)=>el.classList.toggle('on',k===i));
+  const kn=slides[i].querySelector('.kicker .num');
+  if(kn) kn.textContent=String(i+1).padStart(2,'0');
+  counter.textContent=(i+1)+' / '+slides.length;
+}
+function next(){show(i+1)}
+function prev(){show(i-1)}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){show(0);}
+  else if(e.key==='End'){show(slides.length-1);}
+});
+document.addEventListener('click',e=>{
+  if(e.target.closest('footer'))return;
+  (e.clientX < window.innerWidth*0.28 ? prev : next)();
+});
+show(0);
+</script>
+</body>
+</html>
