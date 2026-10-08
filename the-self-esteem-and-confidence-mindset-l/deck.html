@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mental Muscles — Jonny Pardoe</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#111111; --panel:#1b1b1b; --rule:#333333;
+    --ink:#f1f1f1; --muted:#9aa0a6; --accent:#3a8fff;
+    --head:'Heebo',system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto}
+  .slide{position:relative;background:var(--bg);min-height:540px;padding:64px 72px;
+    display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--rule)}
+  .kick{font-family:var(--head);font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:900;font-size:58px;line-height:1.02;letter-spacing:-.02em}
+  h2{font-family:var(--head);font-weight:800;font-size:40px;line-height:1.06;letter-spacing:-.01em}
+  h3{font-family:var(--head);font-weight:800;font-size:26px;line-height:1.1}
+  p{font-size:20px;line-height:1.5;color:var(--muted);margin-top:18px;max-width:60ch}
+  .lead{font-size:24px;color:var(--ink)}
+  .big{font-family:var(--head);font-weight:900;font-size:46px;line-height:1.08;letter-spacing:-.015em}
+  .accent{color:var(--accent)}
+  .sub{font-size:22px;color:var(--ink);margin-top:20px;max-width:58ch}
+  .by{margin-top:40px;font-family:var(--head);font-weight:700;font-size:17px;color:var(--ink)}
+  .by span{color:var(--muted);font-weight:600}
+  .num{font-family:var(--head);font-weight:900;font-size:16px;color:var(--accent);
+    border:1px solid var(--accent);border-radius:999px;width:40px;height:40px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+  ul{list-style:none;margin-top:26px;display:grid;gap:14px}
+  li{font-size:20px;color:var(--ink);padding-left:26px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:2px;background:var(--accent)}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:28px 32px;margin-top:8px}
+  .disc{font-size:14px;color:var(--muted);line-height:1.5;max-width:70ch;margin-top:26px}
+  .foot{position:absolute;bottom:22px;left:72px;font-family:var(--head);font-weight:700;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .pageno{position:absolute;bottom:22px;right:72px;font-size:12px;color:var(--muted)}
+  .strike{position:relative;color:var(--muted)}
+  .strike::after{content:"";position:absolute;left:0;right:0;top:52%;height:3px;background:var(--muted)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass', h:'The Mental Muscles', sub:'How quiet men learn to be fully seen, without faking confidence.', by:'Jonny Pardoe'},
+
+  {t:'forwho', kick:'Who this is for', h:'You have the answer. You just don’t say it.', p:'The meeting where you knew the right call and stayed quiet. The room where a smaller version of you did the talking. If that’s familiar, this hour is built for you.'},
+
+  {t:'trap', kick:'The trap', h:'You’ve been told confidence is a feeling.', p:'So you wait to feel it. You wait to feel ready, feel sure, feel like the kind of person who speaks up. The feeling never arrives on its own, and the waiting becomes the habit.'},
+
+  {t:'reframe', kick:'The reframe', big:'You don’t lack confidence.<br>You’ve been <span class="accent">waiting too long</span> to use it.', p:'Confidence is not a mood you catch. It’s a muscle you build. And like any muscle, it only grows from reps, not from reading about it.'},
+
+  {t:'part', kick:'Part one', h:'Why willpower and affirmations fail', p:'Two things quietly run the show before you ever open your mouth. Until you deal with them, "just be confident" is advice that can’t land.'},
+
+  {t:'idea', kick:'The subconscious tape', h:'You rehearsed the worst version 100 times.', p:'Before you walked into the room, a tape already played: how it goes wrong, who judges you, why you should stay small. Affirmations paint over that tape. They don’t rewrite it. We rewrite it.'},
+
+  {t:'idea', kick:'The validation trap', h:'Your worth is renting space to strangers.', p:'When your sense of yourself depends on other people’s approval, every room becomes an audition. Real confidence is internal validation. You decide you’re enough before anyone votes.'},
+
+  {t:'part', kick:'Part two', h:'The Five Mental Muscles', p:'This is the method. Five muscles, trained on purpose. None of them require you to become a louder or fake person. They make the real one easier to reach.'},
+
+  {t:'pillar', n:'1', h:'Retrain the subconscious tape', p:'Surface the worst-case story you run on repeat, then build a truer one you actually believe. This is the foundation; the other four sit on top of it.'},
+
+  {t:'pillar', n:'2', h:'Stop outsourcing your worth', p:'Move your source of validation inside. You practise deciding you’re enough without the room’s permission, so approval becomes a bonus instead of oxygen.'},
+
+  {t:'pillar', n:'3', h:'Change the room you stand in', p:'The people around you set your ceiling. We audit who you spend your hours with and change the room on purpose, because confidence is caught as much as it’s trained.'},
+
+  {t:'pillar', n:'4', h:'Carry yourself like it’s handled', p:'Body language is the fastest rep, because it’s external. How you stand, breathe and take up space feeds back into how confident you actually feel, not just how you look.'},
+
+  {t:'pillar', n:'5', h:'Train the body, steady the mind', p:'How you sleep, move and eat is the physical floor under all of it. Mindset work on an empty, exhausted body is swimming against the current. Fix the floor first.'},
+
+  {t:'part', kick:'Part three', h:'What the first week looks like', p:'You don’t wait weeks to feel a shift. The muscles start small and specific.'},
+
+  {t:'idea', kick:'The first reps', h:'Say the thing while it’s still your turn.', p:'One unsaid thought, said. One room entered a little taller. One approval you didn’t chase. Small reps, logged daily, compound faster than any motivational high.'},
+
+  {t:'idea', kick:'The outcome', h:'Being fully seen.', p:'Not performing a bigger personality. Letting the real you be visible and heard, on purpose, without shrinking. That’s the whole point of the work, and it’s trainable.'},
+
+  {t:'whyme', kick:'Why me', h:'I built this because I needed it.', p:'I spent years in self-hate and silence before I learned confidence could be trained. I’ve got a degree in psychology, a coaching diploma, and I mentor speakers through Toastmasters. The podcast has passed 3.7 million downloads with one question coming back again and again: how do I stop disappearing.'},
+
+  {t:'recap', kick:'The method', h:'Five muscles, trained on purpose.', items:['Retrain the subconscious tape','Stop outsourcing your worth','Change the room you stand in','Carry yourself like it’s handled','Train the body, steady the mind']},
+
+  {t:'cta', kick:'Your next rep', h:'Train these with me.', p:'If you want to go past this hour, I coach men through the full method one to one and in small groups. Head to jonnypardoe.com and start the conversation.', disc:'This masterclass is educational. It shares a method and personal experience; it is not therapy or medical advice, and no specific result is guaranteed. Results vary from person to person and depend on the work you put in.'}
+];
+
+const foot = 'The Self Esteem and Confidence Mindset';
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let inner = '';
+  if (s.kick) inner += '<div class="kick">'+s.kick+'</div>';
+  if (s.t === 'title') {
+    inner += '<h1>'+s.h+'</h1><div class="sub">'+s.sub+'</div><div class="by">'+s.by+' <span>/ live masterclass</span></div>';
+  } else if (s.t === 'reframe') {
+    inner += '<div class="big">'+s.big+'</div>'+(s.p?'<p>'+s.p+'</p>':'');
+  } else if (s.t === 'pillar') {
+    inner = '<div class="num">'+s.n+'</div>'+(s.kick?'<div class="kick">'+s.kick+'</div>':'')+'<h2>'+s.h+'</h2>'+(s.p?'<p>'+s.p+'</p>':'');
+  } else if (s.t === 'recap') {
+    inner += '<h2>'+s.h+'</h2><ul>'+s.items.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  } else if (s.t === 'cta') {
+    inner += '<h2>'+s.h+'</h2><p>'+s.p+'</p><div class="disc">'+s.disc+'</div>';
+  } else {
+    inner += '<h2>'+s.h+'</h2>'+(s.p?'<p>'+s.p+'</p>':'');
+  }
+  inner += '<div class="foot">'+foot+'</div><div class="pageno">'+(i+1)+' / '+S.length+'</div>';
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
