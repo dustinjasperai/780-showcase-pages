@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Red Line — A Masterclass with Jim Lubinski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0E10;        /* near-black: the dark of a 5am swim */
+    --panel:#17181B;
+    --rule:#2A2B30;
+    --accent:#E0312A;    /* racing red = Red Performance + the red line */
+    --ink:#F4F4F5;       /* chalk white */
+    --muted:#9A9BA1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 22px 120px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 48px;margin:22px 0;min-height:430px;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .redline{height:3px;width:72px;background:var(--accent);margin:18px 0 26px;border:0}
+  .kick{font-family:'Oswald',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);font-weight:600}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:58px;line-height:1.02;
+    letter-spacing:.01em;text-transform:uppercase}
+  h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:40px;line-height:1.06;
+    text-transform:uppercase;letter-spacing:.01em}
+  .sub{color:var(--muted);font-size:20px;margin-top:16px;max-width:62ch;line-height:1.5}
+  p.body{font-size:19px;line-height:1.62;margin-top:14px;max-width:64ch;color:#E7E7E9}
+  ul{margin:20px 0 0 2px;list-style:none;max-width:64ch}
+  li{font-size:19px;line-height:1.5;padding:11px 0 11px 30px;position:relative;color:#E7E7E9;
+    border-bottom:1px solid var(--rule)}
+  li::before{content:"";position:absolute;left:0;top:19px;width:14px;height:3px;background:var(--accent)}
+  .divider h2{font-size:52px}
+  .divider .num{font-family:'Oswald',sans-serif;font-size:120px;font-weight:700;
+    color:var(--rule);line-height:.8}
+  .big{font-family:'Oswald',sans-serif;font-size:46px;line-height:1.08;text-transform:uppercase;
+    max-width:20ch}
+  .cite{color:var(--muted);font-size:15px;margin-top:22px;font-style:italic}
+  .foot{position:absolute;right:24px;bottom:18px;color:var(--muted);font-size:12px;
+    font-family:'Oswald',sans-serif;letter-spacing:.12em;text-transform:uppercase}
+  .disc{color:var(--muted);font-size:13px;margin-top:26px;max-width:68ch;line-height:1.5}
+  .cta li::before{background:var(--accent)}
+  .cover{min-height:540px;display:flex;flex-direction:column;justify-content:center}
+  .cover h1{font-size:76px}
+  .credrow{display:flex;gap:30px;flex-wrap:wrap;margin-top:24px}
+  .credrow span{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;
+    font-size:13px;color:var(--muted);border:1px solid var(--rule);padding:8px 12px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', kick:'A live masterclass', h:'The Red Line',
+   sub:'How age-group triathletes race like pros - without training like one.',
+   who:'With Jim Lubinski, founder of Red Performance Multisport'},
+
+  {t:'promise', kick:'What you leave with',
+   h:'Race the thing you trained for',
+   list:['Why your fitness was almost never the reason race day went sideways',
+         'How to pace to your red line and finish stronger than you started',
+         'A swim fix that does not mean living in the pool',
+         'The mental game that holds when the race starts to hurt']},
+
+  {t:'who', kick:'Who this is for',
+   h:'The athlete who trains hard and still blows up',
+   body:'You log the hours. You hit the sessions. Then on race day the wheels come off in the back half - the run falls apart, the swim rattles you, the power fades. This is for the age-grouper who is tired of training like a pro and racing like an amateur.'},
+
+  {t:'trap', kick:'The trap',
+   big:'You did the training. Then race day happened.',
+   body:'Most triathletes spend all year on the plan and almost no time on the one thing that decides the result: how you actually execute on the day.'},
+
+  {t:'reframe', kick:'The reframe',
+   big:'Your fitness was never the problem. Your execution was.',
+   body:'The gap between training well and racing well is not more volume. It is pacing, patience, and the ability to stay calm at the edge. That edge has a name.'},
+
+  {t:'divider', num:'01', kick:'Part one', h:'The core problem'},
+
+  {t:'problem', kick:'Racing on feel',
+   h:'Going out hot is the oldest mistake',
+   body:'Adrenaline makes the first half feel easy, so you spend what you do not have. By the back half you are paying it back with interest. Racing on feel is racing blind - and it is why the strongest training block can still end in a positive split and a blow-up.'},
+
+  {t:'divider', num:'02', kick:'Part two', h:'The red line'},
+
+  {t:'redline', kick:'The red line',
+   h:'Learn where your edge actually is',
+   body:'The red line is the effort right at your threshold - fast enough to compete, controlled enough to hold. Most athletes have never measured theirs, so they guess, and they guess high. We find it, we train it, and we teach you to sit on it without tipping over.'},
+
+  {t:'negsplit', kick:'Negative splits',
+   h:'Finish stronger than you start',
+   body:'Hold steady, consistent power and effort across changing terrain instead of chasing the pace that feels good early. The patient athlete passes people for the entire back half while everyone around them fades.',
+   cite:'T.J. Tollakson won Ironman Lake Placid holding roughly 260 watts wire to wire across a rolling bike course - consistency, not heroics.'},
+
+  {t:'swim', kick:'Quest for Lane #1',
+   h:'Fix the swim without living in the pool',
+   body:'The swim is the discipline age-groupers fear most, and more yardage rarely fixes it.',
+   list:['Dryland warm-ups so you start the set already moving well',
+         'Swim-specific strength in the gym, not just laps',
+         'Technique drills that transfer to open water',
+         'Foam rolling and mobility so the stroke holds under fatigue']},
+
+  {t:'mind', kick:'The mental game',
+   h:'From cut to the start line',
+   body:'I got cut from teams over and over before I made a pro career in two sports. Resilience is not a personality trait, it is a practice: goals you can visualize inside every single session, and a plan for what you tell yourself when the race gets hard. That is trainable, and it is the difference on the day.'},
+
+  {t:'divider', num:'03', kick:'Part three', h:'What it looks like'},
+
+  {t:'raceday', kick:'Race day',
+   h:'A plan you execute, not a hope you hold',
+   list:['A swim pace you can hold calm, off a warm-up that works',
+         'A bike held at your red line, not the ego number',
+         'A run you build into instead of survive',
+         'A clear line to talk yourself across when it hurts']},
+
+  {t:'whyme', kick:'Why me',
+   h:'Jim Lubinski',
+   body:'Fifteen-plus years coaching triathletes from first-timer to Kona qualifier. Former ten-year professional triathlete and former professional ice hockey player. Founder of Red Performance Multisport and a coach at Tower 26.',
+   creds:['USAT Certified','Ironman Certified','TrainingPeaks','NASM-CPT','F.I.S.T. Bike Fit']},
+
+  {t:'recap', kick:'The three shifts',
+   h:'Train less on feel, race more on a plan',
+   list:['Find and hold your red line instead of guessing high',
+         'Negative split every discipline and finish strong',
+         'Train the mind the way you train the body']},
+
+  {t:'cta', kick:'Next step', h:'Race your next one on purpose',
+   body:'If you want help turning a strong training block into a strong race, let us talk. We will look at where your execution is leaking time and whether coaching is the right fit.',
+   list:['Book a coaching consult with Jim','Red Performance Multisport'],
+   disc:'This masterclass is educational. It does not guarantee any race result, qualification, or outcome. Results vary by athlete, effort, health, and circumstance.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide '+(s.t==='divider'?'divider ':'')+(s.t==='cover'?'cover ':'')+(s.t==='cta'?'cta':'');
+  let h='';
+  if(s.kick) h+='<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.t==='divider'){ h+='<div class="num">'+esc(s.num)+'</div><h2>'+esc(s.h)+'</h2>'; }
+  else {
+    if(s.h) h+='<h1>'+esc(s.h)+'</h1>';
+    if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+    h+='<hr class="redline">';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.who) h+='<div class="sub">'+esc(s.who)+'</div>';
+    if(s.body) h+='<p class="body">'+esc(s.body)+'</p>';
+    if(s.list){ h+='<ul>'; s.list.forEach(x=>h+='<li>'+esc(x)+'</li>'); h+='</ul>'; }
+    if(s.creds){ h+='<div class="credrow">'; s.creds.forEach(x=>h+='<span>'+esc(x)+'</span>'); h+='</div>'; }
+    if(s.cite) h+='<div class="cite">'+esc(s.cite)+'</div>';
+    if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+  }
+  h+='<div class="foot">The Red Line &middot; Red Performance Multisport</div>';
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
