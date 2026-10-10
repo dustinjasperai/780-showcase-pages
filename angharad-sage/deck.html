@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aligned to Your Design — a live masterclass with Angharad Sage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f5f3; --panel:#efeae1; --ink:#1b1b1b; --soft:#5a5146;
+    --rule:#e4ddd0; --accent:#dab271;
+    --head:'Cormorant Garamond', Georgia, serif;
+    --body:'Montserrat', -apple-system, sans-serif;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;overflow:hidden;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{display:none;width:min(1040px,92vw);padding:6vh 6vw;}
+  .slide.on{display:block;animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  .star{display:inline-block;width:58px;height:1px;background:var(--accent);
+    vertical-align:middle;position:relative;margin-left:12px;}
+  .star::after{content:'';position:absolute;right:-3px;top:-2.5px;width:6px;height:6px;
+    background:var(--accent);transform:rotate(45deg);}
+  h1{font-family:var(--head);font-weight:600;font-size:clamp(40px,6.4vw,76px);
+    line-height:1.04;letter-spacing:-.01em;}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(30px,4.4vw,52px);
+    line-height:1.1;margin-bottom:22px;}
+  .sub{font-family:var(--head);font-style:italic;font-weight:500;
+    font-size:clamp(20px,2.6vw,30px);color:var(--soft);margin-top:20px;line-height:1.3;}
+  p.body{font-size:clamp(16px,1.6vw,20px);line-height:1.6;color:var(--soft);
+    max-width:40ch;margin-top:10px;}
+  .part{font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+  ul.list{list-style:none;margin-top:14px;}
+  ul.list li{font-size:clamp(16px,1.7vw,21px);line-height:1.5;color:var(--ink);
+    padding:12px 0 12px 26px;border-bottom:1px solid var(--rule);position:relative;}
+  ul.list li::before{content:'';position:absolute;left:0;top:21px;width:7px;height:7px;
+    background:var(--accent);transform:rotate(45deg);}
+  ul.list li b{color:var(--ink);font-weight:600;}
+  .types{display:grid;grid-template-columns:1fr 1fr;gap:16px 34px;margin-top:22px;}
+  .types .t{border-top:2px solid var(--accent);padding-top:12px;}
+  .types .t .n{font-family:var(--head);font-size:clamp(22px,2.6vw,30px);font-weight:600;}
+  .types .t .d{font-size:14px;color:var(--soft);margin-top:4px;line-height:1.45;}
+  .pull{font-family:var(--head);font-size:clamp(26px,3.6vw,44px);line-height:1.2;
+    font-weight:500;}
+  .pull .a{color:var(--accent);font-style:italic;}
+  .cred{font-size:clamp(15px,1.6vw,19px);line-height:1.7;color:var(--soft);
+    max-width:46ch;margin-top:14px;}
+  .cred b{color:var(--ink);font-weight:600;}
+  .cta-line{font-size:clamp(16px,1.7vw,21px);color:var(--soft);margin-top:16px;max-width:42ch;line-height:1.55;}
+  .disc{font-family:var(--body);font-size:12px;color:#8a8275;margin-top:34px;
+    border-top:1px solid var(--rule);padding-top:14px;max-width:56ch;line-height:1.5;}
+  #nav{position:fixed;bottom:18px;right:22px;font-family:var(--body);font-size:12px;
+    color:var(--soft);letter-spacing:.08em;}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .3s;}
+  .hint{position:fixed;bottom:18px;left:22px;font-size:11px;color:#a69f90;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<div id="nav"></div>
+<div class="hint">Use arrow keys to move through the masterclass</div>
+<script>
+const S=[
+  {t:'title', k:'A live masterclass with Angharad Sage', h:'Aligned to Your Design', s:'The business and sales strategy that is coded to your Human Design type.'},
+  {t:'for', h:'This is for you if...', b:'You are building a business, you keep doing all the right steps, and it keeps feeling wrong to do them. You are not lazy and you are not behind. You are running a plan that was never built for you.'},
+  {t:'trap', h:'You followed the plan.', b:'The launch calendar. The daily posting. The ten step strategy everyone swears by. And it drained you, and it barely moved. So you decided the problem was you.'},
+  {t:'reframe', pull:true, h:'The strategy was not wrong.<br>It just was not <span class="a">yours</span>.', s:'It was built for a different Human Design type, and sold to everyone as the one true way.'},
+  {t:'part', p:'Part One', h:'Why generic strategy exhausts you'},
+  {t:'body', h:'Most advice is one person’s energy, turned into a rule.', b:'A strategy that made one founder rich becomes a template the whole internet copies. But the reason it worked for them was their design, not the steps. Copy the steps without the energy and you get the burnout without the result.'},
+  {t:'body', h:'Your energy is the asset, not the obstacle.', b:'You do not need more discipline to force a plan that fights you. You need the plan that runs on how you are actually built to create, decide, and sell.'},
+  {t:'part', p:'Part Two', h:'Your type changes the plan'},
+  {t:'types', h:'The four types do not build the same way.', types:[
+    {n:'Generators', d:'Built to respond and sustain. Momentum comes from what lights you up, not from forcing the next step.'},
+    {n:'Projectors', d:'Built to guide and be invited. Visibility and recognition matter more than volume.'},
+    {n:'Manifestors', d:'Built to initiate and inform. Bursts and bold moves, not a rigid daily grind.'},
+    {n:'Reflectors', d:'Built to sample and reflect. Timing and environment change everything.'}
+  ]},
+  {t:'body', h:'It changes your offers.', b:'What you sell, how you package it, and how you talk about it should match how your type naturally makes decisions, so the offer feels like a yes instead of a push.'},
+  {t:'body', h:'It changes when you launch.', b:'Some types are built for bursts and big openings. Others are built for steady, responsive rhythm. Launching against your type is why a "proven" calendar can still flop for you.'},
+  {t:'body', h:'It changes how you sell every day.', b:'Daily visibility, outreach, and selling look completely different for a Projector than for a Generator. Aligned selling is consistent because it stops costing you more than it returns.'},
+  {t:'pull', pull:true, h:'For Generators: <span class="a">respond, do not force.</span>', s:'This is the heart of Glow, the genetic coding for Generators.'},
+  {t:'pull', pull:true, h:'Sell in alignment, <span class="a">not in a script.</span>', s:'The Galactic Guide to Sales: enrolment that feels like truth, not pressure.'},
+  {t:'part', p:'Part Three', h:'When the business finally fits you'},
+  {t:'body', h:'From forcing to flow.', b:'The work does not disappear. It stops fighting you. You recognise the moves that are yours, you drop the ones that never were, and the business starts to feel like it belongs to you again.'},
+  {t:'cred', h:'Why I teach this.', cred:'I am Angharad Sage. I founded Angharad Sage Limited in 2018 and have worked with women entrepreneurs all over the world since. I host <b>Your Galactic Guide</b> (150+ episodes) and teach inside the <b>High Vibe CEO Biz School</b>. My whole body of work is one idea: build your business and your selling around your actual Human Design, and it finally gets to feel aligned.'},
+  {t:'recap', h:'The three shifts.', list:['<b>Stop copying</b> a strategy built for a different type.','<b>Build your offers, timing, and selling</b> around how you actually create.','<b>Let your energy lead</b> so consistency stops costing you everything.']},
+  {t:'cta', h:'Build the strategy coded to you.', ctaline:'If this is landing, the next step is simple. Come deeper inside the work with me, in the Study Club or in private mentorship, and we will map your design to your business directly.', disc:'This masterclass is educational and reflects one approach to building a business around Human Design. It is not financial, legal, or professional advice. No income or result is guaranteed. Results vary and depend on many factors outside any teacher’s control.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((sl,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(sl.k) html+='<div class="kicker">'+sl.k+'<span class="star"></span></div>';
+  if(sl.p) html+='<div class="part">'+sl.p+'</div>';
+  if(sl.pull){ html+='<div class="pull">'+sl.h+'</div>'; }
+  else if(sl.h){ html+=(sl.t==='title'?'<h1>':'<h2>')+sl.h+(sl.t==='title'?'</h1>':'</h2>'); }
+  if(sl.s) html+='<div class="sub">'+sl.s+'</div>';
+  if(sl.b) html+='<p class="body">'+sl.b+'</p>';
+  if(sl.types){ html+='<div class="types">'; sl.types.forEach(x=>{html+='<div class="t"><div class="n">'+x.n+'</div><div class="d">'+x.d+'</div></div>';}); html+='</div>'; }
+  if(sl.list){ html+='<ul class="list">'; sl.list.forEach(x=>{html+='<li>'+x+'</li>';}); html+='</ul>'; }
+  if(sl.cred) html+='<p class="cred">'+sl.cred+'</p>';
+  if(sl.ctaline) html+='<p class="cta-line">'+sl.ctaline+'</p>';
+  if(sl.disc) html+='<div class="disc">'+sl.disc+'</div>';
+  d.innerHTML=html;
+  stage.appendChild(d);
+});
+let cur=0;const bar=document.getElementById('bar');const nav=document.getElementById('nav');
+function show(n){document.querySelectorAll('.slide')[cur].classList.remove('on');
+  cur=Math.max(0,Math.min(S.length-1,n));
+  document.querySelectorAll('.slide')[cur].classList.add('on');
+  bar.style.width=((cur+1)/S.length*100)+'%';
+  nav.textContent=(cur+1)+' / '+S.length;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')show(cur-1);});
+document.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
