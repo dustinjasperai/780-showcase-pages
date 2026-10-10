@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survive, Then Thrive — A Masterclass with Chef Tony Marciante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f2;      /* cream ground, from brand.json */
+    --panel:#f2ece3;   /* warm off-white panel */
+    --ink:#14110f;     /* warm near-black ink */
+    --muted:#5c524a;   /* muted warm grey */
+    --accent:#e0a455;  /* amber accent, from brand.json */
+    --deep:#925617;    /* deep caramel */
+    --rule:#e3d8c7;
+    --display:'Instrument Serif',Georgia,serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto}
+  .slide{
+    position:relative;background:var(--bg);min-height:92vh;
+    padding:72px 80px;display:none;flex-direction:column;justify-content:center;
+    border-bottom:1px solid rgba(0,0,0,.05);
+  }
+  .slide.on{display:flex}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    font-size:13px;color:var(--deep);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .kick:before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+  h1{font-family:var(--display);font-weight:400;font-size:76px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:400;font-size:52px;line-height:1.06;margin-bottom:18px}
+  .lede{font-size:21px;line-height:1.55;color:var(--muted);max-width:40ch;margin-top:22px}
+  .big{font-family:var(--display);font-size:60px;line-height:1.08;max-width:22ch}
+  .big .a{color:var(--deep);font-style:italic}
+  ul{list-style:none;margin-top:26px;display:grid;gap:16px;max-width:52ch}
+  li{position:relative;padding-left:30px;font-size:20px;line-height:1.5}
+  li:before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:26px}
+  .card .n{font-family:var(--display);font-size:30px;color:var(--deep)}
+  .card h3{font-family:var(--display);font-weight:400;font-size:25px;margin:8px 0 10px}
+  .card p{font-size:16px;line-height:1.5;color:var(--muted)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px}
+  .two .box{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:28px}
+  .two .box h3{font-family:var(--display);font-weight:400;font-size:28px;margin-bottom:12px}
+  .two .box.alt{background:var(--ink);color:var(--bg)}
+  .two .box.alt h3{color:var(--accent)}
+  .two .box p{font-size:18px;line-height:1.5;color:var(--muted)}
+  .two .box.alt p{color:#e7ddd0}
+  .credit{display:flex;gap:28px;align-items:flex-start;margin-top:26px;flex-wrap:wrap}
+  .credit div{flex:1;min-width:220px}
+  .num{font-family:var(--display);font-size:68px;color:var(--deep);line-height:1}
+  .cta-wrap{background:var(--ink);color:var(--bg)}
+  .cta-wrap h1{color:var(--bg)}
+  .cta-wrap .kick{color:var(--accent)}
+  .cta-wrap .lede{color:#e7ddd0}
+  .step{display:inline-block;margin-top:30px;font-family:var(--body);font-weight:600;
+    background:var(--accent);color:var(--ink);padding:16px 30px;border-radius:999px;font-size:18px}
+  .disc{margin-top:34px;font-size:13px;line-height:1.5;color:#9c9183;max-width:64ch}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+    background:rgba(20,17,15,.82);padding:8px 14px;border-radius:999px;z-index:10}
+  .nav button{background:none;border:0;color:#f2ece3;font-size:20px;cursor:pointer;padding:2px 8px}
+  .count{color:#f2ece3;font-family:var(--body);font-size:13px;align-self:center;opacity:.8}
+  .foot{position:absolute;bottom:26px;left:80px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:#b4a996}
+  @media(max-width:720px){.slide{padding:48px 28px}h1{font-size:46px}h2{font-size:36px}
+    .big{font-size:38px}.pillars,.two{grid-template-columns:1fr}.foot{left:28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><button id="prev">&#8249;</button><span class="count" id="count"></span><button id="next">&#8250;</button></div>
+<script>
+const S = [
+  {t:'title', kick:'A Live Masterclass', h1:'Survive, Then Thrive', lede:'How independent restaurants fill the room and build a brand people come back for. With Chef Tony Marciante, 39 years on the line.'},
+  {t:'who', kick:'Who this is for', h2:'For the owner who is surviving, not thriving', lede:'You run a good independent restaurant. The food is dialed in, the costs are under control, and the weekends are fine. The problem is the rest of the week.'},
+  {t:'trap', kick:'The trap', big:'You fixed the food. The dining room <span class="a">still isn\'t full</span> midweek.', lede:'Most owners respond by cutting costs again. The costs were never the thing holding you back.'},
+  {t:'reframe', kick:'The reframe', big:'An empty table is a <span class="a">marketing problem</span>, not a menu problem.', lede:'The money does not leak out of your food cost. It leaks out of every seat a new guest never sat in.'},
+  {t:'part', kick:'Part One', h1:'Where the money really leaks'},
+  {t:'problem', kick:'The core problem', h2:'Cost-control alone has a ceiling', lede:'You can only cut so far. A restaurant grows when more of the right people walk in and more of them come back. That is a demand problem, and almost nobody is teaching it to independent owners.'},
+  {t:'part', kick:'Part Two', h1:'The three growth dials'},
+  {t:'pillars', kick:'The method', h2:'Brand, experience, reach', pillars:[
+    {n:'01', h:'Brand', p:'Be the restaurant people remember and choose by name, not the one they settle for because it was close.'},
+    {n:'02', h:'Guest Experience', p:'Service that turns a first visit into a regular, and a regular into someone who brings two friends.'},
+    {n:'03', h:'Reach', p:'The free and cheap digital tools that put an independent restaurant in front of new guests who have never heard of you.'}
+  ]},
+  {t:'brand', kick:'Dial one, brand', h2:'The restaurant people remember', lede:'Most independent restaurants look and sound like every other restaurant in town. A clear brand is the cheapest table-filler you are not using yet. It costs almost nothing and it is the reason a new guest picks you.'},
+  {t:'exp', kick:'Dial two, guest experience', h2:'The regular\'s math', lede:'One regular who brings two friends, twice a month, is worth more than any discount you could run. Guest experience is the lever that compounds. We make it deliberate instead of accidental.'},
+  {t:'reach', kick:'Dial three, reach', h2:'Be found', lede:'Online ordering, reservations, social, the free digital tools most owners ignore. You do not need a big budget. You need the few that actually bring new guests through the door, set up the way a working operator would set them up.'},
+  {t:'prog', kick:'The progression', big:'Survive first. Then <span class="a">thrive</span>.', lede:'Stabilize the operation and the cash, then turn the three dials in order. That sequence is the whole method.'},
+  {t:'part', kick:'Part Three', h1:'What thriving looks like'},
+  {t:'picture', kick:'The picture', h2:'A full room, on a Tuesday', two:[
+    {h:'Surviving', p:'Covering payroll, living for the weekend, hoping the slow nights fix themselves.', alt:false},
+    {h:'Thriving', p:'A line out the door midweek, regulars who bring friends, a brand people drive past two closer options to reach.', alt:true}
+  ]},
+  {t:'whyme', kick:'Why learn this from me', h2:'39 years on the line, still cooking', credit:[
+    {num:'39', label:'years in the restaurant business, from the line up'},
+    {num:'2', label:'award-winning seafood restaurants I own and still run in Bethesda, Maryland'}
+  ], lede:'I am not a retired consultant with a spreadsheet. I am a chef-owner who is still in the kitchen, teaching what is working in my own dining rooms right now.'},
+  {t:'podcast', kick:'How I teach', h2:'Restaurant Owner Lessons', lede:'Hundreds of conversations with working restaurateurs on my podcast and channel, distilled into the few moves that actually move the needle for an independent restaurant.'},
+  {t:'recap', kick:'The recap', h2:'Here is the whole thing', ul:['An empty table is a demand problem, not a menu problem','Three dials, in order: brand, guest experience, reach','Survive first, then thrive','Learn it from a chef who is still on the line']},
+  {t:'cta', kick:'Your next step', h1:'Work with Chef Tony', lede:'If you are a committed owner ready to go from surviving to thriving, apply to work with me. I review every application personally, usually within 48 hours.', step:'Apply at tmarciante.com', disc:'Educational content only. This masterclass shares strategies and experience, not promises. Results depend on your market, your execution, and many factors outside anyone\'s control. Results vary, and no specific income or revenue result is guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x||''}
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (s.t==='cta'?' cta-wrap':'') + (i===0?' on':'');
+  let h = '';
+  if(s.kick) h += '<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.h1) h += '<h1>'+esc(s.h1)+'</h1>';
+  if(s.h2) h += '<h2>'+esc(s.h2)+'</h2>';
+  if(s.big) h += '<div class="big">'+esc(s.big)+'</div>';
+  if(s.pillars){h+='<div class="pillars">';s.pillars.forEach(p=>{h+='<div class="card"><div class="n">'+p.n+'</div><h3>'+p.h+'</h3><p>'+p.p+'</p></div>'});h+='</div>'}
+  if(s.two){h+='<div class="two">';s.two.forEach(b=>{h+='<div class="box'+(b.alt?' alt':'')+'"><h3>'+b.h+'</h3><p>'+b.p+'</p></div>'});h+='</div>'}
+  if(s.credit){h+='<div class="credit">';s.credit.forEach(c=>{h+='<div><div class="num">'+c.num+'</div><div class="lede" style="margin-top:8px">'+c.label+'</div></div>'});h+='</div>'}
+  if(s.ul){h+='<ul>';s.ul.forEach(x=>{h+='<li>'+x+'</li>'});h+='</ul>'}
+  if(s.lede) h += '<div class="lede">'+esc(s.lede)+'</div>';
+  if(s.step) h += '<div class="step">'+esc(s.step)+'</div>';
+  if(s.disc) h += '<div class="disc">'+esc(s.disc)+'</div>';
+  h += '<div class="foot">Survive, Then Thrive &middot; Chef Tony Marciante</div>';
+  el.innerHTML = h;
+  deck.appendChild(el);
+});
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const count = document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+slides.length;window.scrollTo(0,0)}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+show(0);
+</script>
+</body>
+</html>
