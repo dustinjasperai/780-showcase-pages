@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Happy Hustle Masterclass — Cary Jack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#111418;        /* dark navy-black ground (brand dark scheme) */
+    --panel:#1b2026;     /* raised panel */
+    --rule:rgba(255,255,255,0.12);
+    --ink:#f4f1e9;       /* warm off-white text */
+    --muted:#a9b0b8;
+    --accent:#FFC21A;    /* the Happy Hustle yellow/gold smiley */
+    --accent2:#2E8B63;   /* forest green, from the adventure imagery */
+    --display:'Anton',system-ui,sans-serif;
+    --body:'Instrument Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--body);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.74rem;color:var(--accent);margin-bottom:1.1rem}
+  h1{font-family:var(--display);font-weight:400;font-size:clamp(2.3rem,6.2vw,4.4rem);
+    line-height:.98;letter-spacing:.01em;text-transform:uppercase}
+  h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,4.4vw,3rem);
+    line-height:1.02;text-transform:uppercase}
+  p,li{font-size:clamp(1.02rem,1.7vw,1.3rem);line-height:1.5;color:var(--ink);max-width:40ch}
+  p.lede{color:var(--muted);max-width:52ch;margin-top:1.1rem}
+  .big{font-size:clamp(3.4rem,11vw,7rem);font-family:var(--display);color:var(--accent);line-height:.9}
+  .sub{color:var(--muted);margin-top:.5rem;letter-spacing:.02em}
+  ul{list-style:none;margin-top:1.4rem;display:grid;gap:.7rem}
+  li{display:flex;gap:.8rem;align-items:flex-start;max-width:46ch}
+  li::before{content:"";flex:0 0 auto;width:.7rem;height:.7rem;margin-top:.5rem;border-radius:50%;
+    background:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.6rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:1.2rem 1.3rem}
+  .card .t{font-family:var(--display);color:var(--accent);font-size:1.25rem;letter-spacing:.02em}
+  .card .d{color:var(--muted);margin-top:.35rem;font-size:.98rem;max-width:36ch}
+  .tag{display:inline-block;border:1px solid var(--accent2);color:var(--accent2);border-radius:999px;
+    padding:.25rem .8rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+  .soul{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem 1.6rem;margin-top:1.5rem}
+  .soul div{display:flex;gap:.7rem;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:.5rem}
+  .soul .l{font-family:var(--display);color:var(--accent);font-size:1.4rem;width:1.4rem;flex:0 0 auto}
+  .soul .n{font-size:1rem}
+  .soul .n b{display:block;color:var(--ink)}
+  .soul .n span{color:var(--muted);font-size:.86rem}
+  .rule{height:1px;background:var(--rule);margin:1.6rem 0}
+  .disc{color:var(--muted);font-size:.82rem;line-height:1.5;max-width:60ch;margin-top:1.6rem}
+  .cta-line{font-family:var(--display);color:var(--accent);font-size:clamp(1.3rem,2.6vw,1.9rem);
+    margin-top:1.2rem;letter-spacing:.02em;text-transform:uppercase}
+  footer{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+    align-items:center;padding:1rem 7vw;font-size:.76rem;color:var(--muted);letter-spacing:.06em}
+  .dots{display:flex;gap:.35rem}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+  .dot.on{background:var(--accent)}
+  .brand{font-family:var(--display);letter-spacing:.06em;color:var(--ink)}
+  .brand b{color:var(--accent)}
+  .nav{position:fixed;inset:0;display:flex;justify-content:space-between;pointer-events:none}
+  .nav button{pointer-events:auto;background:none;border:0;color:transparent;width:18vw;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev" aria-label="previous"></button><button id="next" aria-label="next"></button></div>
+<footer>
+  <div class="brand">THE HAPPY <b>HUSTLE</b></div>
+  <div class="dots" id="dots"></div>
+  <div id="count">01</div>
+</footer>
+<script>
+const S=[
+  {t:'title', html:`
+    <div class="kicker">A live masterclass with Cary Jack</div>
+    <h1>Ambition<br>Without the<br>Burnout</h1>
+    <p class="lede">How high-performing entrepreneurs scale the business and the body, the family and the mission, at the same time. Built on the 10 Alignments.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You are winning at work.<br>So why does it feel like losing?</h2>
+    <p class="lede">You hit the revenue. You also skip the workout, miss the dinner, and cannot remember your last unplugged weekend. You told yourself it was temporary. It has been three years.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">The quiet tax</div>
+    <h2>The scoreboard only tracks one number.</h2>
+    <p class="lede">Revenue is loud. Your sleep, your marriage, your health, and your sense of why you started all go quiet long before they go missing. By the time they get loud again, the repair is expensive.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The reframe</div>
+    <h2>Hustle culture sold you a trade that was never real.</h2>
+    <p class="lede">Grind now, live later. But "later" keeps moving, and the cost compounds quietly. The founders who last did not grind harder. They got aligned.</p>`},
+
+  {t:'part', html:`
+    <span class="tag">Part One</span>
+    <h2>The false choice</h2>
+    <p class="lede">Most entrepreneurs believe success and well-being pull against each other, so they pick success and pay in health, relationships, and meaning. The data says the opposite: the two compound.</p>`},
+
+  {t:'cost', html:`
+    <div class="kicker">The cost of imbalance</div>
+    <div class="big">7 of 10</div>
+    <p class="sub">pillars of your life quietly neglected while one gets all of you.</p>
+    <p class="lede">Burnout is not a willpower problem. It is a structural one. When nine areas of your life run on empty to fund one, the one eventually breaks too.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The real goal</div>
+    <h2>Balance is the new hustle.</h2>
+    <p class="lede">Not slowing down. Not doing less. A business that funds a life you actually want to be present for, and a life that makes you sharper in the business. That is the whole thesis.</p>`},
+
+  {t:'part', html:`
+    <span class="tag">Part Two</span>
+    <h2>The 10 Alignments</h2>
+    <p class="lede">S.O.U.L.M.A.P.P.I.N. is the operating system. Ten areas you score, rebalance, and run on purpose instead of by accident. Balance made measurable.</p>`},
+
+  {t:'soul', html:`
+    <div class="kicker">S.O.U.L.M.A.P.P.I.N., alignments 1 to 5</div>
+    <div class="soul">
+      <div><span class="l">S</span><span class="n"><b>Selfless Service</b><span>giving beyond yourself</span></span></div>
+      <div><span class="l">O</span><span class="n"><b>Optimized Health</b><span>the body that carries it all</span></span></div>
+      <div><span class="l">U</span><span class="n"><b>Unplug Digitally</b><span>attention on your terms</span></span></div>
+      <div><span class="l">L</span><span class="n"><b>Loving Relationships</b><span>the people who matter</span></span></div>
+      <div><span class="l">M</span><span class="n"><b>Mindful Spirituality</b><span>a connection bigger than work</span></span></div>
+    </div>`},
+
+  {t:'soul', html:`
+    <div class="kicker">S.O.U.L.M.A.P.P.I.N., alignments 6 to 10</div>
+    <div class="soul">
+      <div><span class="l">A</span><span class="n"><b>Abundance Financially</b><span>money as freedom, not a cage</span></span></div>
+      <div><span class="l">P</span><span class="n"><b>Personal Development</b><span>the next version of you</span></span></div>
+      <div><span class="l">P</span><span class="n"><b>Passionate Hobbies</b><span>joy that is not monetized</span></span></div>
+      <div><span class="l">I</span><span class="n"><b>Impactful Work</b><span>the business, aligned to meaning</span></span></div>
+      <div><span class="l">N</span><span class="n"><b>Nature Connection</b><span>the reset the screen cannot give</span></span></div>
+    </div>`},
+
+  {t:'measure', html:`
+    <div class="kicker">The method</div>
+    <h2>Score it before you fix it.</h2>
+    <p class="lede">You cannot rebalance what you refuse to look at. Each alignment gets an honest score from one to ten. The lowest numbers are not weaknesses to hide. They are the highest-leverage moves you have this quarter.</p>`},
+
+  {t:'measure', html:`
+    <div class="kicker">Where founders start</div>
+    <h2>Fix the lowest number first.</h2>
+    <p class="lede">You do not rebuild all ten at once. You take the single lowest score, give it one honest commitment for the next 90 days, and let the lift ripple. Optimized Health alone changes how every other alignment feels.</p>`},
+
+  {t:'cards', html:`
+    <div class="kicker">The operating values: R.O.I.</div>
+    <h2>How aligned people behave</h2>
+    <div class="grid">
+      <div class="card"><div class="t">Reciprocal Respect</div><div class="d">No transactional energy. You show up for people before you need something.</div></div>
+      <div class="card"><div class="t">Outgoing Optimism</div><div class="d">Glass-half-full by default. The posture that makes hard quarters survivable.</div></div>
+      <div class="card"><div class="t">Inspirational Integrity</div><div class="d">You do what you said you would do, especially when no one is watching.</div></div>
+      <div class="card"><div class="t">Compounding Returns</div><div class="d">Aligned habits stack. Small, consistent moves across ten areas beat one heroic sprint.</div></div>
+    </div>`},
+
+  {t:'part', html:`
+    <span class="tag">Part Three</span>
+    <h2>Living it, not visiting it</h2>
+    <p class="lede">Alignment is not a retreat you attend once. It is a rhythm. A weekly review, a quarterly rebalance, and a room of peers who hold you to the score you set.</p>`},
+
+  {t:'practice', html:`
+    <div class="kicker">A rebalanced week</div>
+    <h2>Same ambition, different operating system.</h2>
+    <ul>
+      <li>The hard work still ships. The deadline still gets hit.</li>
+      <li>The workout, the dinner, and the unplugged morning are on the calendar first, not last.</li>
+      <li>One weekly review asks the only question that matters: which number slipped?</li>
+    </ul>`},
+
+  {t:'practice', html:`
+    <div class="kicker">The adventure mastermind model</div>
+    <h2>Learning that sticks because you lived it.</h2>
+    <p class="lede">The lessons that change a founder do not come from slides. They come from a cold plunge in Montana, a hard conversation on a trail, a room of peers who refuse to let you shrink. You remember what you experience.</p>`},
+
+  {t:'why', html:`
+    <div class="kicker">Why me</div>
+    <h2>I built the system I needed.</h2>
+    <ul>
+      <li>USA Today bestselling author of The Happy Hustle</li>
+      <li>776-plus episodes of a top-ranked global podcast on ambition without burnout</li>
+      <li>Thousands of entrepreneurs scored and rebalanced through the 10 Alignments</li>
+      <li>A mastermind community built on experience, not theory</li>
+    </ul>`},
+
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Rebalance the ten. Keep the ambition.</h2>
+    <p class="lede">If you are ready to run your life like the high performer you already are in business, the Happy Hustle Club is where it happens. It is application-only, so the room stays right.</p>
+    <div class="cta-line">Apply to the Happy Hustle Club</div>
+    <p class="disc">This masterclass is educational. It shares a framework and a way of thinking, not a promise of results. No specific income, business, or health result is guaranteed. Results vary and depend on your own effort, circumstances, and decisions. Nothing here is financial, medical, or professional advice.</p>`}
+];
+
+const stage=document.getElementById('stage');
+const dots=document.getElementById('dots');
+const count=document.getElementById('count');
+let i=0;
+S.forEach((s,idx)=>{const d=document.createElement('div');d.className='slide';d.innerHTML=s.html;stage.appendChild(d);
+  const dot=document.createElement('div');dot.className='dot';dots.appendChild(dot);});
+const slides=[...document.querySelectorAll('.slide')];
+const dotsEl=[...document.querySelectorAll('.dot')];
+function show(n){i=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((s,idx)=>s.classList.toggle('on',idx===i));
+  dotsEl.forEach((d,idx)=>d.classList.toggle('on',idx===i));
+  count.textContent=String(i+1).padStart(2,'0');}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
