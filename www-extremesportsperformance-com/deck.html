@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Durability System | Extreme Sports Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#f6f3f3;
+  --rule:#e6e2e3;
+  --ink:#111113;
+  --dim:#5c5c62;
+  --grey:#8b8b91;
+  --accent:#eb063e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--panel);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:4vh 4vw}
+.slide{display:none;width:min(1040px,94vw);aspect-ratio:16/9;background:var(--bg);border:1px solid var(--rule);
+  border-radius:14px;box-shadow:0 24px 60px rgba(17,17,19,.10);overflow:hidden;position:relative}
+.slide.on{display:block}
+.pad{position:absolute;inset:0;padding:64px 72px;display:flex;flex-direction:column}
+.kick{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:14px;font-weight:600;color:var(--accent)}
+.mark{position:absolute;top:60px;right:72px;width:44px;height:5px;background:var(--accent);border-radius:3px}
+h1{font-family:"Oswald",sans-serif;font-weight:700;line-height:1.02;letter-spacing:-.01em;font-size:66px;margin-top:14px}
+h2{font-family:"Oswald",sans-serif;font-weight:700;line-height:1.05;font-size:44px;margin-top:12px}
+.lead{font-size:23px;line-height:1.5;color:var(--dim);margin-top:20px;max-width:40ch}
+.body{font-size:21px;line-height:1.55;margin-top:18px;max-width:46ch;color:var(--ink)}
+ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:14px}
+li{font-size:21px;line-height:1.4;padding-left:30px;position:relative}
+li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:50%}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--grey);
+  font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.16em}
+.big{font-size:92px}
+.stepno{font-family:"Oswald",sans-serif;font-size:140px;font-weight:700;color:var(--accent);line-height:.8}
+.row{display:flex;gap:28px;align-items:flex-start}
+.card{flex:1;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:24px}
+.card h3{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:18px;color:var(--accent)}
+.card p{font-size:17px;line-height:1.45;margin-top:8px;color:var(--ink)}
+.dark{background:var(--ink)}
+.dark .kick{color:#ff6a86}
+.dark h1,.dark h2{color:#ffffff}
+.dark .lead,.dark .body{color:#d7d7da}
+.dark .foot{color:#6f6f77}
+.disc{font-size:14px;line-height:1.5;color:var(--grey);margin-top:16px;max-width:60ch}
+.nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
+  font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.nav button{font:inherit;letter-spacing:.14em;border:1px solid var(--rule);background:var(--bg);color:var(--ink);
+  border-radius:8px;padding:7px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S = [
+  {t:'title', k:'Extreme Sports Performance', h:'The Durability System', sub:'How action and adventure athletes stay strong when conditions change, built around real life.'},
+  {t:'who', k:'Who this is for', h:'The athlete with a life', body:'Pro competitors, serious recreational athletes, and developing youth who train in high-demand, unpredictable environments, while balancing work, travel and life.'},
+  {t:'trap', k:'The trap', h:'Chasing the peak day', body:'Most training is built for one perfect day. Action and adventure sport is not one perfect day. It is a long, unpredictable season where the conditions keep changing on you.', dark:true},
+  {t:'hook', k:'The reframe', h:'You do not need a bigger peak', body:'You need to hold up. The athletes who last are not the ones who peaked highest. They are the ones who stayed durable when they were tired, travelling, and under pressure.', dark:true},
+  {t:'section', k:'Part one', h:'Why strong athletes break down late'},
+  {t:'content', k:'The real problem', h:'Fitness is not the gap', body:'You can crush every session and still fall apart by comp day. That is not a fitness gap. It is a durability gap: fatigue, poor recovery, and a plan that never accounted for your actual life.'},
+  {t:'content', k:'The three pressures', h:'What actually decides the result', items:['Fatigue that stacks up across a long season','Conditions that change without warning','Training squeezed around work and travel']},
+  {t:'section', k:'Part two', h:'The five-stage system'},
+  {t:'step', no:'1', k:'Assess', h:'Assess', body:'Profile the athlete and the real demands of their sport and life, so the plan is built on what they actually face, not a generic template.'},
+  {t:'step', no:'2', k:'Build', h:'Build', body:'Build one individualised plan across strength and conditioning, nutrition and mindset, matched to the season ahead.'},
+  {t:'step', no:'3', k:'Develop', h:'Develop', body:'Develop capacity through the training block with clear progressions, so durability grows instead of just fatigue.'},
+  {t:'step', no:'4', k:'Support', h:'Support', body:'Support with regular review, adjusting load, fuelling and recovery as conditions and life change week to week.'},
+  {t:'step', no:'5', k:'Integrate', h:'Integrate', body:'Integrate the habits so the athlete can hold the standard on their own, around work, travel and life.'},
+  {t:'content', k:'The core method', h:'One system, not silos', body:'Strength, nutrition and mindset are coached together as a single system, not three separate apps. When they move together, durability compounds.'},
+  {t:'section', k:'Part three', h:'What a durable athlete looks like'},
+  {t:'content', k:'Across the season', h:'Repeatable, not fragile', items:['Performs when the conditions turn','Recovers fast enough to go again','Holds form when tired and travelling','Trains consistently without burning out']},
+  {t:'content', k:'Under fatigue', h:'When you are tired, the plan decides', body:'Durability is built in the boring moments: recovery, fuelling, and knowing which cues to trust when you are fatigued. That is where the season is really won.'},
+  {t:'cred', k:'Who is teaching this', h:'Extreme Sports Performance', body:'Founded by Ryan Blake in 2018 out of years in competitive sport and applied performance. Home of the Extreme Sports Performance Podcast on durability, recovery and decision-making under fatigue.'},
+  {t:'recap', k:'The one idea', h:'Train for every day, not the peak day', body:'Durability, coached as one system across the five stages, is what keeps action and adventure athletes performing when it counts.'},
+  {t:'cta', k:'Your next step', h:'Book a free discovery call', body:'Bring your sport, your season and your schedule. We will map where your durability gaps are and what the first block would look like.', disc:'Educational content only. No specific performance result is guaranteed. Results vary by athlete, effort, consistency, and starting point.'}
+];
+
+const stage = document.getElementById('stage');
+let i = 0;
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  stage.innerHTML = S.map((s, idx) => {
+    const dark = s.dark ? ' dark' : '';
+    let inner = '';
+    if (s.t === 'step') {
+      inner = `<div class="kick">Stage ${esc(s.no)}</div><div class="row" style="margin-top:10px;align-items:center">`
+            + `<div class="stepno">${esc(s.no)}</div><div><h1 style="font-size:58px">${esc(s.h)}</h1>`
+            + `<p class="body">${esc(s.body)}</p></div></div>`;
+    } else {
+      const tag = (s.t === 'title') ? `<h1>${esc(s.h)}</h1>` : `<h2>${esc(s.h)}</h2>`;
+      inner += `<div class="kick">${esc(s.k)}</div>${tag}`;
+      if (s.sub) inner += `<p class="lead">${esc(s.sub)}</p>`;
+      if (s.body) inner += `<p class="body">${esc(s.body)}</p>`;
+      if (s.items) inner += '<ul>' + s.items.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>';
+      if (s.disc) inner += `<p class="disc">${esc(s.disc)}</p>`;
+    }
+    return `<div class="slide${dark}${idx===i?' on':''}"><div class="mark"></div><div class="pad">${inner}`
+         + `<div class="foot"><span>Extreme Sports Performance</span><span>${idx+1} / ${S.length}</span></div></div></div>`;
+  }).join('');
+  document.getElementById('count').textContent = (i+1) + ' / ' + S.length;
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, n)); render(); }
+document.getElementById('next').onclick = () => go(i+1);
+document.getElementById('prev').onclick = () => go(i-1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(i+1);
+  if (e.key === 'ArrowLeft') go(i-1);
+});
+render();
+</script>
+</body>
+</html>
