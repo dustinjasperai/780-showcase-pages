@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connection Over Conflict | Therese Connolly, LCSW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#fbf7ec;        /* warm cream, from brand footer #fbeeb2 */
+    --panel:#ffffff;
+    --rule:#e7dcc3;      /* warm sand */
+    --ink:#161e2a;       /* her navy heading color */
+    --ink-soft:#3b4654;
+    --ink-muted:#7b8591;
+    --accent:#fac51d;    /* her gold */
+    --calm:#5b7c8a;      /* deepened from her muted blue-gray */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Lato',system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--panel);
+    border:1px solid var(--rule);border-radius:18px;
+    box-shadow:0 24px 60px rgba(22,30,42,.10);
+    position:relative;overflow:hidden;}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;}
+  .slide.on{display:flex;}
+  .kick{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--calm);margin-bottom:22px;}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;}
+  h2{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:36px;line-height:1.14;margin-bottom:18px;}
+  .lede{font-size:21px;color:var(--ink-soft);line-height:1.5;margin-top:18px;max-width:40ch;}
+  p{font-size:19px;color:var(--ink-soft);line-height:1.55;max-width:46ch;}
+  .big{font-family:'Playfair Display',Georgia,serif;font-size:30px;line-height:1.25;color:var(--ink);max-width:30ch;}
+  ul{list-style:none;margin-top:14px;}
+  li{font-size:19px;color:var(--ink-soft);line-height:1.5;padding-left:26px;position:relative;margin-bottom:14px;max-width:44ch;}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent);}
+  .num{font-family:'Playfair Display',serif;font-size:15px;color:var(--bg);background:var(--ink);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:20px;}
+  .rule{height:3px;width:68px;background:var(--accent);border-radius:2px;margin:22px 0;}
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;}
+  .byline{font-size:14px;color:var(--ink-muted);}
+  .disclaimer{font-size:13px;color:var(--ink-muted);line-height:1.5;max-width:52ch;margin-top:16px;}
+  .cta-line{font-family:'Playfair Display',serif;font-size:24px;color:var(--ink);margin-top:10px;}
+  .accentword{color:var(--calm);font-style:italic;}
+  .pager{position:absolute;bottom:16px;right:24px;font-size:12px;color:var(--ink-muted);letter-spacing:.08em;}
+  .dotrow{position:absolute;bottom:18px;left:24px;display:flex;gap:7px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--rule);}
+  .dot.on{background:var(--accent);}
+  @media(max-width:620px){.slide{padding:38px 30px;}h1{font-size:34px;}h2{font-size:26px;}.lede,p,li{font-size:16px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const S = [
+  {t:'title',
+    kick:'A live masterclass for parents of tweens and teens',
+    h1:'Connection Over Conflict',
+    lede:'Resetting the tween and teen years, so boundaries stick and the fighting stops.',
+    byline:'Therese Connolly, LCSW · Mindful Kids and Families'},
+
+  {t:'promise',
+    kick:'What you will leave with',
+    h2:'Three shifts you can make this week',
+    body:'Not another behavior chart. A way to reset the dynamic in your home so your tween or teen actually hears you, and you stop bracing for the next blow-up.'},
+
+  {t:'audience',
+    kick:'Who this is for',
+    h2:'If this sounds like your house',
+    items:['You feel like every ask turns into a standoff.','Screens have become the daily battle.','The back talk has you second-guessing yourself.','You miss the kid you used to feel close to.']},
+
+  {t:'trap',
+    kick:'The trap',
+    h2:'The escalation spiral',
+    body:'When a tween pushes, most of us reach for more: more rules, more consequences, more taking the phone. It works for a day. Then it stops working, so we tighten again, and the distance grows.'},
+
+  {t:'hook',
+    kick:'The reframe',
+    big:'The behavior is not the problem. The dynamic is. You cannot correct your way back to a kid who has stopped listening. You have to reconnect first.'},
+
+  {t:'part',
+    num:'1',
+    kick:'Part one',
+    h2:'Why correction-first parenting stalls in the teen years',
+    body:'A young child obeys to stay close to you. A teenager is wired to pull away and test every limit. So consequences that used to land now read as control, and control is the one thing their development is pushing against.'},
+
+  {t:'problem',
+    kick:'The cost',
+    h2:'What gets lost',
+    body:'Every standoff spends trust. By the time the real stuff arrives, friends, pressure, choices you want a say in, the channel you need most is the one the fighting has worn down.'},
+
+  {t:'part',
+    num:'2',
+    kick:'Part two',
+    h2:'The Parenting Reset',
+    body:'A reset is not a punishment and it is not giving in. It is deliberately changing how you respond, connect, and hold the line, in that order. Three essentials carry it.'},
+
+  {t:'framework',
+    kick:'Essential one',
+    h2:'Connection before correction',
+    body:'Before you fix the behavior, close the gap. Two minutes of real attention with no agenda buys you more cooperation than an hour of consequences. Connection is the foundation that makes every boundary hold.'},
+
+  {t:'framework',
+    kick:'Essential two',
+    h2:'Respond, not react',
+    body:'An outburst is a bid, not a verdict on your parenting. When you stay regulated, you teach your teen how to come back down. The pause between their heat and your answer is where the whole relationship turns.'},
+
+  {t:'framework',
+    kick:'Essential three',
+    h2:'Boundaries without the battle',
+    body:'Clear, calm, and few. A boundary your teen helped shape is a boundary they will keep. You can be warm and still hold the line, and that combination is what actually changes behavior.'},
+
+  {t:'deepdive',
+    kick:'The distinctive piece',
+    h2:'The Tech Reset',
+    body:'Screen time is where most families lose the connection first. The fix is not a tighter rule you impose. It is a collaborative agreement you build together, so your teen owns it instead of fighting it.'},
+
+  {t:'howto',
+    kick:'How the Tech Reset works',
+    h2:'Co-create, do not confiscate',
+    items:['Sit down together and name what tech is costing the family.','Write the agreement WITH your teen, in their words.','Trade a freedom for a responsibility, both ways.','Revisit it, do not police it.']},
+
+  {t:'reframe2',
+    kick:'A worked example',
+    h2:'Back talk is not defiance',
+    body:'That eye-roll and sharp reply is usually a reach for autonomy or a signal something is off. Answer the need under it, not the tone of it, and the defiance you were bracing for often never arrives.'},
+
+  {t:'part',
+    num:'3',
+    kick:'Part three',
+    h2:'What a reset week actually looks like',
+    body:'Fewer rules, held calmly. One real connection moment a day. One hard conversation that does not become a fight. It is quieter than you expect, and the quiet is the point.'},
+
+  {t:'shift',
+    kick:'The shift',
+    big:'You stop managing a kid and start leading a relationship. Same house, same teenager, a completely different current running through it.'},
+
+  {t:'whyme',
+    kick:'Why listen to me',
+    h2:'Twenty-six years in the room',
+    body:'I am Therese Connolly, a Licensed Clinical Social Worker and parent coach. I have spent 26 years helping families through exactly these years, I host The Single Parenting Reset Show, and my Tech Reset work has been featured on the Today Show.'},
+
+  {t:'recap',
+    kick:'The reset, in one view',
+    h2:'Three essentials, one method',
+    items:['Connection before correction.','Respond, not react.','Boundaries without the battle.','And the Tech Reset to end the screen war.']},
+
+  {t:'cta',
+    kick:'Your next step',
+    h2:'Ready to reset your house?',
+    body:'If you want help turning these shifts into a plan for your own family, start with a free Parent Reset Call.',
+    cta:'Book your free Parent Reset Call at mindfulkidsandfamilies.com',
+    disclaimer:'This masterclass is educational and reflects general parenting guidance, not clinical or therapeutic advice. Results vary from family to family and nothing here is a guaranteed outcome.'}
+];
+
+const stage = document.getElementById('stage');
+let i = 0;
+function render(){
+  stage.innerHTML = '';
+  S.forEach((s, idx) => {
+    const d = document.createElement('div');
+    d.className = 'slide' + (idx === i ? ' on' : '');
+    let h = '';
+    if (s.kick) h += `<div class="kick">${s.kick}</div>`;
+    if (s.num) h += `<div class="num">${s.num}</div>`;
+    if (s.h1) h += `<h1>${s.h1}</h1>`;
+    if (s.h2) h += `<h2>${s.h2}</h2>`;
+    if (s.t === 'title') h += `<div class="rule"></div>`;
+    if (s.lede) h += `<div class="lede">${s.lede}</div>`;
+    if (s.big) h += `<div class="big">${s.big}</div>`;
+    if (s.body) h += `<p>${s.body}</p>`;
+    if (s.items){ h += '<ul>'; s.items.forEach(x => h += `<li>${x}</li>`); h += '</ul>'; }
+    h += '<div class="foot">';
+    if (s.cta) h += `<div class="cta-line">${s.cta}</div>`;
+    else if (s.byline) h += `<div class="byline">${s.byline}</div>`;
+    else h += '<div></div>';
+    h += '</div>';
+    if (s.disclaimer) h += `<div class="disclaimer">${s.disclaimer}</div>`;
+    h += `<div class="pager">${idx+1} / ${S.length}</div>`;
+    let dots = '<div class="dotrow">';
+    S.forEach((_,k)=> dots += `<span class="dot${k===i?' on':''}"></span>`);
+    dots += '</div>';
+    h += dots;
+    d.innerHTML = h;
+    stage.appendChild(d);
+  });
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, n)); render(); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(i+1);
+  if (e.key === 'ArrowLeft') go(i-1);
+});
+stage.addEventListener('click', () => go(i+1));
+render();
+</script>
+</body>
+</html>
