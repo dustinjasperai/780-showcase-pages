@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raising Kids Who Keep the Faith — Courageous Parenting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Zilla+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#16130d; --panel:#211c12; --ink:#efe7d6; --muted:#b8ad97;
+    --accent:#b79748; --rule:rgba(183,151,72,0.28);
+    --head:'Zilla Slab', Georgia, serif; --body:'Jost', system-ui, sans-serif;
+  }
+  html,body{ height:100%; }
+  body{ background:var(--bg); color:var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased; }
+  #stage{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .slide{ display:none; width:100%; max-width:960px; padding:72px 64px; }
+  .slide.on{ display:block; animation:fade .4s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .kick{ font-family:var(--body); font-size:13px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-family:var(--head); font-weight:700; font-size:58px; line-height:1.08; letter-spacing:-.01em; }
+  h2{ font-family:var(--head); font-weight:600; font-size:40px; line-height:1.14; }
+  .sub{ font-size:21px; color:var(--muted); margin-top:22px; max-width:40ch; line-height:1.55; }
+  .big{ font-family:var(--head); font-weight:600; font-size:46px; line-height:1.2; max-width:20ch; }
+  .big .a{ color:var(--accent); }
+  .num{ font-family:var(--head); font-weight:700; font-size:120px; color:var(--rule); line-height:1; }
+  .rule{ width:64px; height:2px; background:var(--accent); margin:28px 0; }
+  ul{ list-style:none; margin-top:26px; }
+  li{ font-size:22px; color:var(--ink); padding:13px 0; border-bottom:1px solid var(--rule); display:flex; gap:16px; align-items:baseline; }
+  li::before{ content:'·'; color:var(--accent); font-size:26px; line-height:1; }
+  li .t{ font-family:var(--head); font-weight:600; }
+  .pill-idx{ font-family:var(--body); font-size:14px; letter-spacing:.2em; color:var(--muted); text-transform:uppercase; margin-bottom:18px; }
+  .lead{ font-size:24px; line-height:1.55; color:var(--ink); max-width:34ch; }
+  .lead strong{ color:var(--accent); font-weight:600; }
+  .disc{ font-size:15px; color:var(--muted); margin-top:28px; max-width:52ch; line-height:1.5; }
+  .cta{ display:inline-block; margin-top:30px; font-family:var(--body); font-weight:600; font-size:17px; letter-spacing:.04em; color:var(--bg); background:var(--accent); padding:16px 30px; border-radius:2px; }
+  .foot{ position:fixed; bottom:26px; left:64px; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  .count{ position:fixed; bottom:26px; right:64px; font-size:12px; letter-spacing:.1em; color:var(--muted); }
+  .nav{ position:fixed; inset:0; display:flex; justify-content:space-between; }
+  .nav button{ flex:1; background:none; border:none; cursor:pointer; }
+  @media (max-width:640px){ .slide{ padding:48px 28px; } h1{ font-size:38px; } h2{ font-size:30px; } .big{ font-size:32px; } .num{ font-size:80px; } .foot,.count{ left:28px; right:28px; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev" aria-label="previous"></button><button id="next" aria-label="next"></button></div>
+<div class="foot">Courageous Parenting</div>
+<div class="count" id="count"></div>
+<script>
+const S = [
+  {t:'title', kick:'A Courageous Parenting Masterclass', h:"Raising Kids Who Keep the Faith", sub:"The heart-first method Isaac and Angie Tolpin used to disciple nine children in a culture built to pull them away."},
+  {t:'who', kick:'Who this is for', h:"For parents raising kids in unprecedented times", sub:"Christian parents who do not just want well-behaved children, they want children whose faith is still standing long after they leave home."},
+  {t:'stat', kick:'The trap', big:"Most children raised in Christian homes are walking away from the faith, and good behavior did not stop it.", sub:"Compliance at home is not the same as conviction that lasts. The culture is discipling our kids while we are managing their behavior."},
+  {t:'reframe', kick:'The reframe', big:"You can win the <span class=\"a\">behavior</span> and still lose the heart.", sub:"Every parenting shortcut aims at behavior because behavior is visible. The heart is where faith is actually kept or lost."},
+  {t:'part', num:'01', h:"The real problem", sub:"Why behavior-first parenting quietly fails the kids it is trying to protect."},
+  {t:'lead', kick:'Part one', lead:"When obedience is the only goal, you raise a child who performs for approval and stops the moment the approval is gone. <strong>The goal was never behavior. It was the heart.</strong>"},
+  {t:'lead', kick:'Part one', lead:"The home is the first and most important ministry a parent will ever have. Most of us outsourced discipleship to a youth group one hour a week and wondered why it did not hold. <strong>Discipleship is a daily thing, in the house.</strong>"},
+  {t:'part', num:'02', h:"The method: six pillars", sub:"The framework at the center of the Parenting Mentor Program. Each pillar is a place most parenting leaves empty."},
+  {t:'pillar', idx:'Pillar one', h:"Theology", lead:"Parenting starts with who God is. When the home has a fixed reference point, every decision has a why underneath it instead of shifting with the culture."},
+  {t:'pillar', idx:'Pillar two', h:"Heart", lead:"Aim at the heart and the motive, not just the outward act. A child trained only to behave is a child who will walk when the rules stop mattering to them."},
+  {t:'pillar', idx:'Pillar three', h:"Purity", lead:"Teach discernment and self-government in a saturated culture, media, relationships, identity. Not fear, formation. Kids who can see clearly can stand firmly."},
+  {t:'pillar', idx:'Pillar four', h:"Obedience", lead:"Loving, consistent authority framed as discipleship, not punishment. Obedience is the soil conviction grows in, never the crop itself."},
+  {t:'pillar', idx:'Pillar five', h:"Discipleship", lead:"The parent is the primary disciple maker. The home is where faith is modeled, questioned, and made real, day after ordinary day."},
+  {t:'pillar', idx:'Pillar six', h:"Courage", lead:"Raising kids with the conviction to stand against pressure, and parents with the courage to lead counter-culturally when it costs something."},
+  {t:'part', num:'03', h:"Inside a courageous home", sub:"A home built on the six pillars does not look perfect. It looks intentional."},
+  {t:'list', kick:'In a courageous home', h:"The six pillars, lived", list:["A fixed theology the whole family can name","Conversations aimed at the heart, not just the rule","Discernment taught before the culture teaches it","Discipline that disciples instead of only correcting","Faith modeled daily by the parents first","Courage to be different, together"]},
+  {t:'why', kick:'Why listen to us', h:"Isaac and Angie Tolpin", sub:"Married 26 years, parents of nine children, five grandchildren. A church planter and pastor, best-selling authors, and hosts of the Courageous Parenting podcast reaching parents in 194 countries. This is the method, from a home that has lived it."},
+  {t:'cta', kick:'The next step', h:"Keep going with the Parenting Mentor Program", sub:"If this masterclass gave you one shift, the full program walks you through all six pillars, session by session, with your spouse.", cta:"Start the Parenting Mentor Program", disc:"Educational content only. No parenting, spiritual, or financial result is guaranteed. Results vary and depend on many factors outside any program's control."}
+];
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+let i=0;
+function render(){
+  const s=S[i];
+  let html='';
+  if(s.t==='title'){ html=`<div class="kick">${s.kick}</div><h1>${s.h}</h1><div class="rule"></div><p class="sub">${s.sub}</p>`; }
+  else if(s.t==='who'||s.t==='why'){ html=`<div class="kick">${s.kick}</div><h2>${s.h}</h2><p class="sub">${s.sub}</p>`; }
+  else if(s.t==='stat'||s.t==='reframe'){ html=`<div class="kick">${s.kick}</div><p class="big">${s.big}</p><p class="sub">${s.sub}</p>`; }
+  else if(s.t==='part'){ html=`<div class="num">${s.num}</div><h2>${s.h}</h2><p class="sub">${s.sub}</p>`; }
+  else if(s.t==='lead'){ html=`<div class="kick">${s.kick}</div><p class="lead">${s.lead}</p>`; }
+  else if(s.t==='pillar'){ html=`<div class="pill-idx">${s.idx}</div><h2>${s.h}</h2><div class="rule"></div><p class="lead">${s.lead}</p>`; }
+  else if(s.t==='list'){ html=`<div class="kick">${s.kick}</div><h2>${s.h}</h2><ul>${s.list.map(x=>`<li><span class="t">${x}</span></li>`).join('')}</ul>`; }
+  else if(s.t==='cta'){ html=`<div class="kick">${s.kick}</div><h2>${s.h}</h2><p class="sub">${s.sub}</p><span class="cta">${s.cta}</span><p class="disc">${s.disc}</p>`; }
+  stage.innerHTML=`<div class="slide on">${html}</div>`;
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(n){ i=Math.max(0,Math.min(S.length-1,i+n)); render(); }
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
