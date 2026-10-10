@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escaping the Hamster Wheel — a masterclass with Peter Boolkah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fcfcff;        /* boolkah.com ground (light scheme) */
+    --panel:#f3f1f8;     /* indigo tint on white */
+    --ink:#181d27;       /* dominant text colour */
+    --deep:#2d2250;      /* deep indigo structure */
+    --accent:#f08c20;    /* the one warm accent */
+    --rule:#e4e0ef;
+    --head:'Plus Jakarta Sans',system-ui,sans-serif;
+    --body:'Montserrat',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--ink);color:var(--ink);font-family:var(--body)}
+  #deck{max-width:960px;margin:0 auto}
+  .slide{
+    background:var(--bg);min-height:92vh;margin:18px auto;padding:72px 72px 64px;
+    display:flex;flex-direction:column;justify-content:center;
+    border:1px solid var(--rule);border-radius:6px;position:relative;
+  }
+  .k{font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+     font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:800;font-size:58px;line-height:1.04;color:var(--ink);margin-bottom:20px}
+  h2{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.1;color:var(--ink);margin-bottom:18px}
+  .s{font-size:21px;line-height:1.5;color:var(--deep);max-width:46ch}
+  p.b{font-size:20px;line-height:1.6;color:var(--ink);max-width:52ch;margin-top:8px}
+  ul{list-style:none;margin-top:18px}
+  li{font-size:20px;line-height:1.5;color:var(--ink);padding-left:30px;position:relative;margin-bottom:14px;max-width:54ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .big{font-size:72px;font-weight:800;font-family:var(--head);line-height:1.02;color:var(--ink)}
+  .big .a{color:var(--accent)}
+  .part{border-left:6px solid var(--accent);padding-left:26px}
+  .num{font-family:var(--head);font-weight:800;color:var(--deep);font-size:16px;letter-spacing:.12em;text-transform:uppercase}
+  .foot{position:absolute;bottom:26px;left:72px;right:72px;display:flex;justify-content:space-between;
+        font-size:12px;color:#9a93ad;font-family:var(--head);letter-spacing:.04em}
+  .cta-box{background:var(--deep);color:#fff;border-radius:8px;padding:30px 34px;margin-top:24px;max-width:56ch}
+  .cta-box .step{font-family:var(--head);font-weight:700;font-size:22px;margin-bottom:8px;color:#fff}
+  .cta-box .step .a{color:var(--accent)}
+  .disc{font-size:13px;line-height:1.5;color:#6b6480;margin-top:22px;max-width:60ch}
+  @media(max-width:640px){.slide{padding:40px 26px 60px}h1{font-size:38px}h2{font-size:28px}.big{font-size:44px}.foot{left:26px;right:26px}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A masterclass with Peter Boolkah', h:'Escaping the Hamster Wheel',
+   s:'How to build a business that runs and scales without you.', by:'Peter Boolkah, The Transition Guy'},
+
+  {t:'who', k:'Who this is for', h:'You built it. Now it needs you for everything.',
+   li:['You own a business that cannot run a full week without you',
+       'You have not taken a real, uninterrupted holiday in years',
+       'Every time you try to step back, growth stalls or problems pile up',
+       'You want the business to be worth something without you in the middle of it']},
+
+  {t:'trap', k:'The hard truth', h:'You did not buy a business. You built yourself a job.',
+   b:'The business depends on you. Decisions, customers and problems all route back through you. The more it grows, the more it needs you. That is the trap.'},
+
+  {t:'reframe', k:'The reframe', big:true,
+   a1:'You think you own it.', a2:'The truth is you', a3:'are it.'},
+
+  {t:'part', num:'Part One', h:'The Hamster Wheel Trap'},
+
+  {t:'body', k:'The Hamster Wheel Trap', h:'Why working harder makes it worse.',
+   b:'Every growth phase you solved the same way: by doing more yourself. It worked, so you did it again. That is how the owner quietly becomes the single biggest bottleneck in the business.'},
+
+  {t:'signs', k:'The Hamster Wheel Trap', h:'Four signs you are the bottleneck.',
+   li:['Every decision of any size still routes through you',
+       'The business cannot take a two week holiday without you',
+       'Growth stalls the moment you step back',
+       'There is no real second line of leadership yet']},
+
+  {t:'body', k:'What it costs you', h:'The real price of being the bottleneck.',
+   b:'No time back. A ceiling on how far the business can grow. And a company that is hard to sell, because a buyer is not buying a business, they are buying your diary. The trap caps your freedom and your valuation at once.'},
+
+  {t:'part', num:'Part Two', h:'The Transition Method'},
+
+  {t:'framework', k:'The Transition Method', h:'Four stages off the wheel.',
+   li:['Assess: the honest truth of the company today',
+       'Build: the structure that holds without you',
+       'Optimise: sharper numbers, time and customer journeys',
+       'Scale: strengthen what must hold before the next stage']},
+
+  {t:'stage', num:'Stage one', h:'Assess',
+   b:'Start with the truth of the company as it stands today. Performance, cash, people, delivery, positioning, pressure points, and above all how dependent the business is on you. You cannot change what you will not look at honestly.'},
+
+  {t:'stage', num:'Stage two', h:'Build',
+   b:'Turn intention into something reliable. Structure and roles, the numbers that matter, sales activity, delivery standards, and a practical rhythm to the week that happens whether or not you are in the room.'},
+
+  {t:'stage', num:'Stage three', h:'Optimise',
+   b:'Now make it sharper. Margins, how time is used, the customer journey, and financial performance, improved without losing sight of the people who deliver it. This is where a steadier business starts to earn more.'},
+
+  {t:'stage', num:'Stage four', h:'Scale',
+   b:'Scaling takes discipline, not excitement. Before the next stage you strengthen people, systems, management rhythm, cash, the sales process and delivery capacity, so growth does not simply pull you back onto the wheel.'},
+
+  {t:'body', k:'The keystone', h:'A second line that decides without you.',
+   b:'The single move that takes you off the wheel is building leaders and accountability so decisions happen correctly when you are not there. Systems carry the routine. People carry the judgement. That is what lets the owner step back.'},
+
+  {t:'part', num:'Part Three', h:'Life off the wheel'},
+
+  {t:'body', k:'The first ninety days', h:'From operator to owner.',
+   b:'In the first quarter you stop being the person who does the work and become the person who runs the business. The daily decisions move to your team. Your week starts to clear. The business keeps moving without a hand on every lever.'},
+
+  {t:'signs', k:'The week it runs without you', h:'Your name off every tile.',
+   li:['The team runs the standup and the quotes get signed off',
+       'Sales calls are handled by your people, not by you',
+       'Escalations get resolved before they reach you',
+       'You take the day, and nothing breaks']},
+
+  {t:'why', k:'Why me', h:'Peter Boolkah, The Transition Guy.',
+   li:['Award winning business and scale up coach, 20 plus years',
+       'Creator of The Hamster Wheel Trap',
+       'Forbes Coaches Council; helping owners build valuable companies since 2005',
+       'Host of the Business Owners and Entrepreneurs Podcast']},
+
+  {t:'cta', k:'Your next step', h:'Ready to step off the wheel?',
+   step:'Book a call with Peter', step2:'and map your transition out of the day to day.',
+   b:'We will look at how dependent the business is on you today, and the first moves to change it.',
+   disc:'This masterclass is educational. It is not financial, legal or tax advice. No specific income or result is guaranteed. Outcomes depend on your business, your market and the work you put in. Results vary.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x;}
+S.forEach(function(sl, i){
+  const d = document.createElement('section');
+  d.className = 'slide';
+  let inner = '';
+  if(sl.k) inner += '<div class="k">'+sl.k+'</div>';
+  if(sl.t==='title'){
+    inner += '<h1>'+sl.h+'</h1><div class="s">'+sl.s+'</div>';
+    inner += '<p class="b" style="margin-top:30px;color:var(--deep);font-weight:600">'+sl.by+'</p>';
+  } else if(sl.t==='part'){
+    inner = '<div class="part"><div class="num">'+sl.num+'</div><h2 style="margin-top:10px">'+sl.h+'</h2></div>';
+  } else if(sl.t==='reframe'){
+    inner += '<div class="big">'+sl.a1+'<br>'+sl.a2+' <span class="a">'+sl.a3+'</span></div>';
+  } else {
+    if(sl.num) inner += '<div class="num">'+sl.num+'</div>';
+    if(sl.h) inner += '<h2>'+sl.h+'</h2>';
+    if(sl.b) inner += '<p class="b">'+sl.b+'</p>';
+    if(sl.li){ inner += '<ul>'; sl.li.forEach(function(x){inner+='<li>'+x+'</li>';}); inner += '</ul>'; }
+  }
+  if(sl.t==='cta'){
+    inner += '<div class="cta-box"><div class="step"><span class="a">'+sl.step+'</span> '+sl.step2+'</div><div style="font-size:16px;line-height:1.5;opacity:.92">'+sl.b+'</div></div>';
+    inner += '<div class="disc">'+sl.disc+'</div>';
+  }
+  inner += '<div class="foot"><span>The Transition Guy</span><span>'+(i+1)+' / '+S.length+'</span></div>';
+  d.innerHTML = inner;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
