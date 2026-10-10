@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Profit Operating System · Susie Carder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4e1e1; --panel:#fbf3f3; --rule:#e4c9c9;
+    --accent:#ef9c48; --ink:#13185d; --soft:#3f4472; --dim:#8a7f92;
+  }
+  html,body{height:100%}
+  body{background:#e9d6d6;font-family:'Manrope',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9d6d6}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Manrope',sans-serif;font-size:1.06vw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:.002em}
+  .t-title h1{font-size:5.2vw;font-weight:600;letter-spacing:.005em}
+  .t-title h1 b{color:var(--accent);font-weight:600}
+  .t-normal h1{font-size:3.3vw;max-width:90%;font-weight:600}
+  .t-normal h1 b{color:var(--accent);font-weight:600}
+  .t-normal .body{font-family:'Manrope',sans-serif;font-size:1.44vw;color:var(--soft);margin-top:2.6vh;max-width:80%;line-height:1.6;font-weight:400}
+  .sub{font-family:'Manrope',sans-serif;font-size:1.7vw;color:var(--soft);margin-top:3.2vh;max-width:82%;line-height:1.52;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Manrope',sans-serif;font-size:1.25vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.2em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:92%;font-weight:600}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#1b2168 0%,#0d1147 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:90%;color:#f7ecec;font-weight:500}
+  .t-dark h1 b{color:var(--accent)}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#1b2168 0%,#0d1147 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.9vw;max-width:88%;color:#f7ecec;font-weight:600}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Manrope',sans-serif;border:1.6px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.9vw;font-size:1.18vw;font-weight:600;letter-spacing:.02em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:#c9b9c0;font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .ledger-motif{position:absolute;pointer-events:none;opacity:.95}
+  .title-ledger{right:6.2%;bottom:8%;width:27vw;opacity:.9}
+  .corner-ledger{right:6%;bottom:7.4%;width:11vw;opacity:.5}
+  .brandline{font-family:'Manrope',sans-serif;font-size:1.28vw;color:var(--soft);margin-top:3.4vh;font-weight:600;letter-spacing:.03em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(19,24,93,.09);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.7vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">The Profit Operating System</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a ledger climbing into an ascending bar. numbers becoming a rising line, her world -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="ledger" viewBox="0 0 280 200">
+  <g fill="none" stroke="#ef9c48" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="40" y1="150" x2="240" y2="150" opacity="0.5"/>
+    <rect x="70"  y="118" width="22" height="32" opacity="0.35"/>
+    <rect x="108" y="96"  width="22" height="54" opacity="0.55"/>
+    <rect x="146" y="70"  width="22" height="80" opacity="0.78"/>
+    <rect x="184" y="42"  width="22" height="108" opacity="0.95"/>
+    <path d="M70 128 L119 104 L157 80 L206 50" opacity="0.9"/>
+    <path d="M190 50 L206 50 L206 66" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Profit <b>Operating System</b>',sub:'A live masterclass on how founder-led companies make profit predictable, so the business grows without depending on you.',brand:true,ledger:'title'},
+ {t:'normal',k:'Who this is for',title:'Your revenue is up. Your <b>profit</b> is not.',body:'You crossed a million, maybe several. From the outside it looks like it is working. But the take-home has not moved with the top line, the month still swings between feast and famine, and every important decision still runs through you. If that is your business, this hour is for you.'},
+ {t:'dark',title:'You do not have a revenue problem. You have a <b>profit</b> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Growth Keeps Outrunning Your Profit'},
+ {t:'normal',k:'The trap',title:'You built a business that <b>depends on you</b>.',body:'In the early days being the hub was the whole advantage. You could out-work and out-care everyone. But the same instinct that got you to a million is what caps you now: nothing runs without you in the room, so more growth just means more weight on the one person who cannot be replaced.'},
+ {t:'normal',k:'The hidden cost',title:'More revenue, the <b>same</b> take-home.',body:'Revenue is loud and profit is quiet, so most owners chase the number they can see. Underneath, prices set years ago, margins nobody has rebuilt, and money leaking in places nobody is watching quietly eat the growth. You feel busier and richer on paper, and the bank account never quite agrees.'},
+ {t:'dark',title:'Working harder is not the fix. A <b>system</b> is.'},
+
+ {t:'section',idx:'Part Two',title:'The Predictable Success Method'},
+ {t:'normal',k:'The method',title:'Profit becomes predictable when the business runs on a <b>system</b>.',body:'The Predictable Success Method is the operating system I used to build and sell two companies, taught step by step. It is not one clever tactic. It is the handful of systems that, run together, turn profit from something you hope for at the end of the month into something you plan for at the start of it.'},
+ {t:'normal',k:'Pillar one',title:'Lead with <b>power</b>.',body:'Before the spreadsheets, the owner decides. You set the standard, you make the calls the business has been waiting on you to make, and you stop being the bottleneck you keep complaining about. Everything downstream moves at the speed of the decisions you are willing to own.'},
+ {t:'normal',k:'Pillar two',title:'Plan a <b>profitable</b> business, on purpose.',body:'Most plans are revenue goals wearing a suit. A profitable plan starts from the profit you intend to keep and works backwards into the pricing, the offers, and the costs that produce it. You design the outcome first, then build the business that pays it.'},
+ {t:'normal',k:'Pillar three',title:'Build the <b>operating system</b>.',body:'This is the core: the meetings, metrics, roles, and rhythms that let the company run without you carrying it. When the right numbers get looked at by the right people on a set cadence, the business starts making good decisions on its own, and your calendar stops being the constraint.'},
+ {t:'normal',k:'Pillar four',title:'Make <b>sales</b> a system, not a scramble.',body:'A predictable business does not wait for referrals to appear. It knows where the next customer comes from, what happens at each step, and what a lead is worth. When sales is a repeatable process instead of a monthly miracle, revenue stops being a surprise and starts being a plan.'},
+ {t:'normal',k:'Pillar five',title:'Make <b>marketing</b> repeatable.',body:'You do not need to be everywhere. You need one message that lands and a repeatable way to put it in front of the people who need it. Marketing that runs on a system fills the top of the business steadily, instead of in the panic bursts that follow a slow month.'},
+ {t:'normal',k:'Pillar six',title:'Run the business on your <b>numbers</b>.',body:'Data-driven leadership means the dashboard, not the gut, drives the week. A few key metrics, forecast forward and reviewed on a rhythm, tell you where profit is being made and where it is leaking long before the year-end tells you the hard way. What gets measured on purpose gets managed.'},
+ {t:'normal',k:'The fastest win',title:'Fix the <b>profit leaks</b> first.',body:'Before you chase another dollar of revenue, you plug the ones running out. Repricing what is underpriced, rebuilding the margins that eroded, and cutting the quiet costs nobody questioned can add profit this quarter without a single new customer. It is the fastest money in the building.'},
+ {t:'dark',title:'Profit is not what is left over. It is what you <b>plan for</b>.'},
+
+ {t:'section',idx:'Part Three',title:'When Profit Becomes Predictable'},
+ {t:'normal',k:'The shift',title:'The business runs. The profit shows up <b>on purpose</b>.',body:'Nothing magic happens to the market. What changes is the machine: the team makes the small calls, the numbers are current, the margins hold, and the profit you planned for actually lands. You go from being the business to owning it, with the room to grow it or step back from it on your terms.'},
+ {t:'normal',k:'Why me',title:'I built it, sold it, then <b>systematized</b> it.',body:'I started with nothing close to a business degree, built and sold two companies valued at eight figures, and served as president and COO of a national training company. Power Your Profits, my book with Simon and Schuster, put the method on paper. This is not theory I read. It is the operating system I ran, taught the way I wish someone had taught me.'},
+ {t:'dark',title:'The system that makes profit predictable is <b>learnable</b>. That is the whole point.'},
+
+ {t:'section',idx:'Your next step',title:'Make Your Profit Predictable With Me'},
+ {t:'normal',k:'Where this goes',title:'The Predictable Success Method, applied to <b>your</b> business.',body:'This masterclass is the map. The coaching is where we install the operating system inside your company: your pricing, your metrics, your rhythms, built and run until the profit is predictable and the business no longer needs you in every room. That is where the shift stops being an idea and becomes your numbers.'},
+ {t:'cta',title:'Ready to make your profit predictable?',chips:['Book a strategy call with Susie','Start with Power Your Profits'],disc:'Educational content for business owners and entrepreneurs. No specific revenue, profit, or financial result is guaranteed. Results vary by business, effort, and circumstance.'},
+];
+
+const deck=document.getElementById('deck');
+function ledger(kind){return `<svg class="ledger-motif ${kind==='title'?'title-ledger':'corner-ledger'}"><use href="#ledger"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Susie Carder · <b>Predictable Success Method</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ledger) h+=ledger(s.ledger);
+  else if(s.t==='title') h+=ledger('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
