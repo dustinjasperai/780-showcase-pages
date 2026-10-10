@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Grow Without the Grind · Serendipitous Rebel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#241f20; --panel:#302a2b; --rule:#4a4142;
+    --accent:#bca0a1; --accent2:#4d2060; --ink:#f3ece9; --dim:#b7a9a6;
+  }
+  html,body{height:100%}
+  body{background:#191516;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#191516}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Montserrat',sans-serif;font-size:1.02vw;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);line-height:1.14;letter-spacing:-.01em}
+  .t-title h1{font-size:4.7vw;font-weight:700}
+  .t-title h1 b{color:var(--accent);font-weight:700}
+  .t-normal h1{font-size:3.2vw;max-width:88%}
+  .t-normal h1 b{color:var(--accent);font-weight:700}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.5vw;color:var(--dim);margin-top:2.6vh;max-width:78%;line-height:1.58;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.8vw;color:var(--dim);margin-top:3.2vh;max-width:82%;line-height:1.5;font-weight:400}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Montserrat',sans-serif;font-size:1.28vw;font-weight:700;color:var(--accent);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.5vw;max-width:88%}
+  .t-section .rule{width:15vw;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(120% 120% at 50% 0%,#302a2b 0%,#1c1819 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:90%;color:var(--ink)}
+  .t-dark h1 b{color:var(--accent)}
+  .t-cta{background:radial-gradient(120% 120% at 50% 100%,#33223a 0%,#1c1819 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:86%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Montserrat',sans-serif;border:1.5px solid var(--accent);color:var(--accent);border-radius:100px;padding:1.3vh 1.7vw;font-size:1.2vw;font-weight:600;background:rgba(188,160,161,.06)}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .link-motif{position:absolute;pointer-events:none;opacity:.9}
+  .title-link{right:6.5%;bottom:8%;width:24vw}
+  .corner-link{right:6%;bottom:7.2%;width:11vw;opacity:.55}
+  .brandline{font-family:'Montserrat',sans-serif;font-size:1.3vw;color:var(--dim);margin-top:3.4vh;font-weight:600;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:700}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:600}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8vw}.t-normal h1{font-size:5.6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7.2vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.7vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">Grow Without The Grind</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a calm horizon at sea, their world, used as a quiet divider -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="link" viewBox="0 0 280 150">
+  <g fill="none" stroke="#bca0a1" stroke-width="2.4" stroke-linecap="round">
+    <line x1="34" y1="98" x2="246" y2="98" opacity="0.8"/>
+    <circle cx="140" cy="70" r="20" fill="#bca0a1" opacity="0.14" stroke="#bca0a1" stroke-width="2.4"/>
+    <path d="M40 112 q 26 -14 52 0 t 52 0 t 52 0 t 44 0" opacity="0.5"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Grow Without the <b>Grind</b>',sub:'A masterclass for midlife women in business. How to get visible, get clients, and grow your revenue on a schedule that fits your life, without the hustle you were told was the price of success.',brand:true,ledger:'title'},
+ {t:'normal',k:'Who this is for',title:'You built something real. And you are quietly worn out.',body:'You know your craft, you get results for the women you work with, and yet the growth advice online always ends the same way. Post more, show up harder, be everywhere. You are done pretending that burnout is the entry fee. This hour is for you.'},
+ {t:'dark',title:'You do not have a work-harder problem. You have a <b>work-aligned</b> problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Hustle Stopped Working'},
+ {t:'normal',k:'The badge',title:'Burnout is not a badge of honor.',body:'Somewhere along the way, exhaustion got rebranded as commitment. Hustle harder became the answer to every dip. But an engine that only runs on adrenaline eventually stalls, and it takes your clarity, your creativity, and your best ideas down with it.'},
+ {t:'normal',k:'The cost',title:'The algorithm is a treadmill, not a strategy.',body:'Chasing trends and daily posting keeps you busy and invisible at the same time. You end each week drained, with a feed full of content and a calendar that still has gaps. Volume is not the same as being known by the right people.'},
+ {t:'dark',title:'Being everywhere is exhausting. Being <b>unmistakable</b> is what sells.'},
+
+ {t:'section',idx:'Part Two',title:'The SAVOUR Method'},
+ {t:'normal',k:'The shift',title:'A way to grow that you can actually keep.',body:'SAVOUR is how we help women move out of burnout and into intentional, empowered leadership. Six moves that turn your business back into something you run on purpose, instead of something that runs you. Each one is a decision, not a hustle.'},
+ {t:'normal',k:'S · Step out',title:'<b>Step</b> out of your comfort zone.',body:'Growth lives one honest step past the familiar. Not a leap into someone else’s playbook, but the specific edge you have been avoiding, the offer you have not named, the audience you have not asked. Visibility starts the moment you stop playing small.'},
+ {t:'normal',k:'A · Align',title:'<b>Align</b> with your purpose and interests.',body:'When your message comes from what you actually care about, marketing stops feeling like a costume. Align the offer, the words, and the audience to your real strengths, and the right women recognize themselves in it. Alignment is the shortcut, not the detour.'},
+ {t:'normal',k:'V · Venture',title:'<b>Venture</b> under your own power.',body:'Stop outsourcing your strategy to whoever went viral last week. You get to build on your terms, at your pace, with the model that fits your season of life. Borrowed urgency is not your urgency. Your own power is a far steadier fuel.'},
+ {t:'normal',k:'O · Open',title:'<b>Open</b> yourself to community and connection.',body:'Growth is not a solo sport, and it is not cold DMs either. Real referrals, collaborations, and clients come from genuine relationships built over time. The women who last are the ones who let people in instead of broadcasting at them.'},
+ {t:'normal',k:'U · Unwind',title:'<b>Unwind</b> with self-care that protects the work.',body:'Rest is not the reward for the work, it is part of the work. Space is where the good decisions and the fresh ideas actually come from. Protect it deliberately and your business gets sharper, not slower. This is where hustle culture has it exactly backward.'},
+ {t:'normal',k:'R · Ritualize',title:'<b>Ritualize</b> gratitude and celebrating.',body:'What you celebrate, you repeat. Building the habit of noticing what is working keeps you motivated on the long road and shows you which moves to double down on. Momentum is built on acknowledged wins, not on ignored ones.'},
+ {t:'dark',title:'Not more effort. The <b>right</b> effort, on a life you recognize.'},
+
+ {t:'section',idx:'Part Three',title:'When the Grind Is Gone'},
+ {t:'normal',k:'The new rhythm',title:'A business that fits your life, not the reverse.',body:'When your message is aligned and your visibility comes from real connection, clients start arriving because they already trust you. Revenue climbs, the frantic weeks fade, and you spend your time on the work only you can do. That is the whole point.'},
+ {t:'normal',k:'Why us',title:'We closed the wrong business to build the right one.',body:'We are Wendy and Krystal. We built digital travel brands, hit the wall, and rebuilt from purpose. Wendy is a Certified Business Coach and Krystal a Certified Master Marketer, and we teach this because we have lived every step of leaving the grind behind.'},
+ {t:'dark',title:'You can care about your life <b>and</b> grow a serious business.'},
+
+ {t:'section',idx:'Your next step',title:'Keep Going With Us'},
+ {t:'normal',k:'How we help',title:'SAVOUR coaching and the mastermind.',body:'This masterclass is the map. Working together is where it becomes your week: personalized 2:1 coaching that sees your whole life, and the SAVOUR Mastermind for the women ready to go deeper. The podcast gets you started, and this is where it sticks.'},
+ {t:'cta',title:'Ready to grow without the grind?',chips:['Work with Wendy & Krystal','Join the SAVOUR waitlist'],disc:'Educational content for women in business. No income, revenue, or business result is guaranteed. Results vary by person, offer, and market.'},
+];
+
+const deck=document.getElementById('deck');
+function ledger(kind){return `<svg class="link-motif ${kind==='title'?'title-link':'corner-link'}"><use href="#link"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Serendipitous Rebel · <b>Wendy & Krystal</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.ledger) h+=ledger(s.ledger);
+  else if(s.t==='title') h+=ledger('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
