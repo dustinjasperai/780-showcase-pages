@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Only Option in Town - a masterclass with Melissa Rose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fffbfb;        /* her near-white (brand.json) */
+    --panel:#ffffff;
+    --rule:#8c9391;      /* her sage-grey (brand.json) */
+    --ink:#1e2322;       /* her near-black footer ground (brand.json) */
+    --muted:#5c6361;
+    --accent:#ff0099;    /* her dominant signature pink (brand.json, 61 uses) */
+    --display:'Red Hat Display',system-ui,sans-serif;  /* her heading face */
+    --body:'Raleway',system-ui,sans-serif;             /* her body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(100vw,1180px);aspect-ratio:16/9;max-height:100vh;position:relative;
+    background:var(--panel);border:1px solid #efe7ea;box-shadow:0 10px 40px rgba(30,35,34,.08)}
+  .slide{position:absolute;inset:0;padding:6.2% 7.4%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:clamp(11px,1.15vw,14px);color:var(--accent);margin-bottom:.9rem}
+  h1{font-family:var(--display);font-weight:800;line-height:1.02;font-size:clamp(30px,5.6vw,66px);letter-spacing:-.02em}
+  h2{font-family:var(--display);font-weight:700;line-height:1.08;font-size:clamp(24px,3.9vw,44px);letter-spacing:-.01em}
+  p{font-size:clamp(15px,1.7vw,22px);line-height:1.5;color:var(--muted);max-width:46ch;margin-top:1.1rem}
+  .lede{color:var(--ink);font-weight:500}
+  .big{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.6vw,52px);color:var(--ink);line-height:1.06;max-width:20ch}
+  .big .hit{color:var(--accent)}
+  ul{list-style:none;margin-top:1.4rem;display:grid;gap:.85rem;max-width:40ch}
+  li{position:relative;padding-left:1.7rem;font-size:clamp(15px,1.7vw,21px);color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.7rem;height:.7rem;border-radius:50%;background:var(--accent)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.6rem}
+  .card{background:var(--bg);border:1px solid #efe7ea;border-top:3px solid var(--accent);border-radius:12px;padding:1.1rem 1.1rem 1.25rem}
+  .card .n{font-family:var(--display);font-weight:800;color:var(--accent);font-size:1.1rem}
+  .card h3{font-family:var(--display);font-weight:700;font-size:clamp(16px,1.9vw,22px);margin:.3rem 0 .4rem}
+  .card p{font-size:clamp(13px,1.3vw,16px);margin:0;color:var(--muted)}
+  .foot{position:absolute;left:7.4%;right:7.4%;bottom:3.4%;display:flex;justify-content:space-between;
+    font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.04em;color:var(--rule)}
+  .cta-box{margin-top:1.4rem;display:inline-block;background:var(--accent);color:#fff;font-family:var(--display);
+    font-weight:700;padding:.85rem 1.4rem;border-radius:999px;font-size:clamp(15px,1.8vw,20px)}
+  .disc{margin-top:1.5rem;font-size:clamp(11px,1.1vw,13px);color:var(--rule);max-width:60ch;line-height:1.45}
+  .pin{display:inline-flex;align-items:center;gap:.5rem;color:var(--accent);font-family:var(--display);font-weight:700;margin-bottom:.6rem}
+  .nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
+    font-family:var(--display);font-size:13px;color:var(--rule)}
+  .nav button{font-family:var(--display);font-weight:700;border:1px solid var(--rule);background:transparent;color:var(--ink);
+    border-radius:8px;padding:5px 11px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">&larr;</button><span id="count"></span><button id="next">&rarr;</button></div>
+<script>
+const BRAND = 'Melissa Rose';
+const S = [
+  {t:'title', kick:'A live masterclass with Melissa Rose',
+    h1:'The Only Option in Town',
+    sub:'How your studio becomes the obvious local choice, without more hours on marketing you cannot keep up with.'},
+  {t:'who', kick:'Who this is for',
+    h2:'You pour real hours into getting seen.',
+    p:'This is for studio owners who are showing up everywhere and still waiting to be found by the families right down the road.'},
+  {t:'trap', kick:'The trap',
+    big:'You are not losing to better studios. You are losing to more <span class="hit">findable</span> ones.',
+    p:'A parent three blocks away is searching tonight. The studio that shows up clearly is the one that gets the call.'},
+  {t:'reframe', kick:'The hard truth',
+    big:'If they cannot <span class="hit">get it in two seconds</span>, you have already lost them.',
+    p:'Visibility is not about doing more. It is about being instantly understandable the moment someone looks.'},
+  {t:'part', kick:'Part one', h2:'The real problem is scatter, not effort.',
+    p:'Your presence is spread across a website, a few platforms, and word of mouth, none of them pointing at the same clear answer. So the search engine, and the parent, stay unsure.'},
+  {t:'cost', kick:'What it costs',
+    big:'Whoever shows up first, <span class="hit">wins the search.</span>',
+    p:'The 10pm "dance classes near me" search decides more enrollments than any flyer. Right now that moment is going to whoever Google trusts most, not whoever teaches best.'},
+  {t:'part', kick:'Part two', h2:'The Visibility Blueprint.',
+    p:'Three moves that turn a scattered presence into one clear, findable answer. This is the system I walk every rebel woman through.'},
+  {t:'pillars', kick:'The three pillars',
+    cards:[
+      {n:'01', h:'Get Found', p:'Google Business Profile optimization so you surface in the local map results where parents actually look.'},
+      {n:'02', h:'Get Clear', p:'Two-second positioning, your Sweet Spot, so anyone who lands understands in one glance why you.'},
+      {n:'03', h:'Get Connected', p:'Connect the disconnected channels so website, profile, and social all point at the same clear answer.'}
+    ]},
+  {t:'deep', kick:'Pillar one, get found', h2:'Own the map, not just the website.',
+    p:'Most owners obsess over the website and ignore the Google Business Profile that decides the local results. We fix the profile first, because that is the window parents look through before they ever reach your site.'},
+  {t:'deep', kick:'Pillar two, get clear', h2:'Your Sweet Spot in one glance.',
+    p:'We name the exact families you are built for and prune the rest, so your message reads clearly to the right-fit parent and quietly filters out the wrong one. Clarity is what makes you the obvious choice.'},
+  {t:'deep', kick:'Pillar three, get connected', h2:'One answer, everywhere they look.',
+    p:'When your profile, your site, and your social all say the same clear thing, trust compounds. A parent who checks three places and sees one confident answer books without second-guessing.'},
+  {t:'map', kick:'The Rebel Woman Life Map',
+    big:'Map the <span class="hit">vision</span>, then build the business around it.',
+    p:'Visibility is not the goal. It is the path to a studio that supports the life you actually want. We map vision, business, and life so the growth serves you, not the other way around.'},
+  {t:'part', kick:'Part three', h2:'What being the Only Option looks like.',
+    p:'Steady inbound from parents who already feel like they found "the one." Less chasing, less discounting, more right-fit families who stay.'},
+  {t:'day', kick:'The shift',
+    big:'Stop spinning your wheels. <span class="hit">Start positioning.</span>',
+    p:'Not another platform to post on. A clear system that makes the next family find you, understand you, and choose you, on repeat.'},
+  {t:'why', kick:'Why listen to me', h2:'I have lived both sides of this.',
+    p:'Thirty-plus years teaching dance, and I built The Dancing House from my basement into a premier studio. I host the Brick and Mortar Visibility Podcast and coach rebel women to be the obvious choice in their own towns.'},
+  {t:'recap', kick:'The blueprint, in one breath',
+    cards:[
+      {n:'01', h:'Get Found', p:'Show up in the local search that decides the call.'},
+      {n:'02', h:'Get Clear', p:'Be understood in two seconds, by the right family.'},
+      {n:'03', h:'Get Connected', p:'One clear answer across every place they check.'}
+    ]},
+  {t:'cta', kick:'Your next step',
+    h2:'Become the Only Option in Town.',
+    p:'If you want help mapping this for your studio, let us talk it through together.',
+    cta:'Book a complimentary Clarity Call at msmelissarose.com',
+    disc:'This masterclass is educational. No specific enrollment, revenue, or income result is guaranteed. Results vary and depend on your market, your effort, and how you execute.'}
+];
+
+const stage = document.getElementById('stage');
+function render(s){
+  let inner = '<div class="kick">'+(s.kick||'')+'</div>';
+  if(s.h1) inner += '<h1>'+s.h1+'</h1>';
+  if(s.big) inner += '<div class="big">'+s.big+'</div>';
+  if(s.h2) inner += '<h2>'+s.h2+'</h2>';
+  if(s.sub) inner += '<p class="lede">'+s.sub+'</p>';
+  if(s.p) inner += '<p>'+s.p+'</p>';
+  if(s.cards){ inner += '<div class="grid3">'; s.cards.forEach(c=>{
+    inner += '<div class="card"><div class="n">'+c.n+'</div><h3>'+c.h+'</h3><p>'+c.p+'</p></div>'; }); inner += '</div>'; }
+  if(s.cta) inner += '<div class="cta-box">'+s.cta+'</div>';
+  if(s.disc) inner += '<div class="disc">'+s.disc+'</div>';
+  inner += '<div class="foot"><span>'+BRAND+'</span><span>The Only Option in Town</span></div>';
+  return inner;
+}
+let i=0;
+function show(n){ i=Math.max(0,Math.min(S.length-1,n));
+  stage.innerHTML = '<section class="slide on">'+render(S[i])+'</section>';
+  document.getElementById('count').textContent=(i+1)+' / '+S.length; }
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(i+1); if(e.key==='ArrowLeft')show(i-1); });
+show(0);
+</script>
+</body>
+</html>
