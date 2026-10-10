@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hidden Market — a masterclass by Andrew MacAskill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f0a;
+    --panel:#141a12;
+    --rule:#27331d;
+    --accent:#8bc63d;
+    --blue:#0072ef;
+    --chalk:#fafafa;
+    --dim:#9aa89a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--chalk);
+    font-family:'Open Sans',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{
+    position:absolute;inset:0;display:none;
+    flex-direction:column;justify-content:center;
+    padding:7vmin 9vmin;
+  }
+  .slide.on{display:flex}
+  h1,h2,h3,.kicker,.num{font-family:'Poppins',sans-serif}
+  .kicker{color:var(--accent);font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;font-size:clamp(11px,1.5vmin,15px);margin-bottom:3vmin}
+  h1{font-size:clamp(34px,8.2vmin,86px);line-height:1.02;font-weight:700;letter-spacing:-.01em}
+  h2{font-size:clamp(26px,5.4vmin,56px);line-height:1.08;font-weight:600;letter-spacing:-.01em}
+  h3{font-size:clamp(19px,3vmin,30px);font-weight:600;color:var(--chalk)}
+  p{font-size:clamp(15px,2.4vmin,24px);line-height:1.5;color:var(--dim);max-width:60ch;margin-top:2.4vmin}
+  p strong{color:var(--chalk);font-weight:600}
+  .lede{color:var(--chalk);font-size:clamp(17px,2.8vmin,28px)}
+  .sub{color:var(--dim);font-size:clamp(15px,2.3vmin,22px);margin-top:3vmin}
+  .by{margin-top:6vmin;color:var(--dim);font-size:clamp(13px,1.9vmin,18px)}
+  .by b{color:var(--accent);font-weight:600}
+  .num{font-size:clamp(44px,12vmin,120px);color:var(--blue);font-weight:700;line-height:1}
+  .rule{height:2px;width:14vmin;background:var(--accent);margin:4vmin 0}
+  ul{margin-top:3vmin;list-style:none;max-width:62ch}
+  li{position:relative;padding-left:4.4vmin;margin:2.2vmin 0;
+    font-size:clamp(15px,2.4vmin,24px);color:var(--dim);line-height:1.45}
+  li b{color:var(--chalk);font-weight:600}
+  li::before{content:"";position:absolute;left:0;top:.9vmin;width:1.7vmin;height:1.7vmin;
+    background:var(--accent);border-radius:2px}
+  .part .kicker{color:var(--blue)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2vmin;margin-top:4vmin;max-width:84ch}
+  .cell{border:1px solid var(--rule);background:var(--panel);border-radius:10px;padding:3vmin}
+  .cell .k{color:var(--accent);font-family:'Poppins';font-weight:600;font-size:clamp(14px,2vmin,20px)}
+  .cell .v{color:var(--dim);font-size:clamp(13px,1.8vmin,17px);margin-top:1.4vmin;line-height:1.4}
+  .stats{display:flex;gap:7vmin;flex-wrap:wrap;margin-top:5vmin}
+  .stat .n{font-family:'Poppins';font-weight:700;color:var(--accent);font-size:clamp(30px,6.4vmin,64px)}
+  .stat .l{color:var(--dim);font-size:clamp(13px,1.9vmin,18px);margin-top:1vmin;max-width:22ch}
+  .cta h1{max-width:20ch}
+  .disc{margin-top:6vmin;color:var(--dim);font-size:clamp(11px,1.6vmin,15px);max-width:70ch;opacity:.8}
+  .map{display:flex;gap:1.2vmin;margin-top:5vmin;align-items:flex-end;height:22vmin}
+  .map .bar{background:var(--rule);border-radius:4px 4px 0 0;flex:1;position:relative}
+  .map .bar.lit{background:var(--accent)}
+  .map .bar.hid{background:var(--blue)}
+  nav{position:absolute;bottom:3.2vmin;right:4vmin;color:var(--dim);
+    font-family:'Poppins';font-size:13px;letter-spacing:.04em;z-index:5}
+  nav b{color:var(--accent)}
+  .foot{position:absolute;bottom:3.2vmin;left:4vmin;color:var(--dim);
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<nav><b id="cur">1</b> / <span id="tot">1</span></nav>
+<script>
+const S = [
+  {t:'title', k:'A masterclass for senior leaders', h:'The Hidden Market',
+   lede:'How senior leaders land roles that are never advertised.',
+   by:'with <b>Andrew MacAskill</b>, founder of Executive Career Jump'},
+
+  {t:'who', k:'Who this is for', h:'You are a senior leader between chapters.',
+   p:'Director, VP, or C-level. You are in transition, or quietly getting ready for the next move. You are good at the job. The part that feels broken is the <strong>search</strong> itself.'},
+
+  {t:'trap', k:'The trap', h:'The application queue.',
+   p:'You rewrite the CV. You apply to the posted roles. You wait. A few rejections, mostly silence. So you polish the CV again and apply to more. At executive level, <strong>this is the slowest road there is</strong>, and almost everyone is on it.'},
+
+  {t:'reframe', k:'The reframe', h:'85% of senior roles are never advertised.',
+   p:'They are filled through networks, referrals, and headhunters before a job post ever exists. If you only chase the posted 15%, you are competing hardest for the <strong>smallest, most crowded</strong> part of the market, and you never see the rest.'},
+
+  {t:'map', k:'The market, to scale',
+   h:'This is where the roles actually are.',
+   p:'Each blue bar is a senior role filled quietly, inside the hidden market. The green bars are the few that got posted. The queue everyone is standing in is the thin green strip on the end.'},
+
+  {t:'part', part:true, k:'Part one', h:'The real problem is your operating model.',
+   p:'A junior job search is reactive: see a post, apply, repeat. That model works when there are thousands of posted roles. At senior level there are not, so the reactive model quietly starves. You do not need to work it harder. You need to run a different one.'},
+
+  {t:'shift', k:'The shift', h:'Stop being an applicant. Start running a launch.',
+   p:'The strongest candidates I have placed treated their search like a company treats a product launch: a clear target, sharp positioning, and deliberate outreach to a named list. Not more applications. A <strong>campaign</strong>.'},
+
+  {t:'part', part:true, k:'Part two', h:'The Go-To-Market Job Search.',
+   p:'Five pillars. Together they turn a reactive search into a campaign that reaches the hidden market and gets you found.'},
+
+  {t:'pillar', k:'Pillar 1', h:'Define your go-to-market.',
+   p:'Treat the search as a project. A target list of companies and people, a one-line positioning of the value you move, and a weekly plan. <strong>Clarity first</strong>, activity second. Most searches fail on this slide and nowhere else.'},
+
+  {t:'pillar', k:'Pillar 2', h:'The CV is a marketing document.',
+   p:'Not a history of everything you have done. It is the most important marketing document you will ever write: positioned for one target reader, ATS-clean so it survives the screen, and built to sell a <strong>narrative</strong>, not a timeline.'},
+
+  {t:'pillar', k:'Pillar 3', h:'Be found on LinkedIn.',
+   p:'LinkedIn is where headhunters and hiring leaders go first. Optimise the profile so the right people <strong>find you</strong> for the roles you want, instead of you applying out into the void. Visibility is the asset.'},
+
+  {t:'pillar', k:'Pillar 4', h:'Get onto the headhunters radar.',
+   p:'A small number of search firms own most of the hidden roles in your field. There is a right way to approach them and stay top of mind. I spent years on their side of the table, so this is the part most coaches cannot teach.'},
+
+  {t:'pillar', k:'Pillar 5', h:'The search is built on psychology.',
+   p:'A senior transition is emotional. Confidence, rejection, and pace all decide outcomes as much as tactics do. The leaders who land well <strong>protect their mindset</strong> on purpose, the same way they protect a budget.'},
+
+  {t:'assemble', k:'Put together', h:'One plan, five moving parts.',
+   grid:[
+     {k:'Target', v:'A named list of companies and decision-makers, not a job board.'},
+     {k:'Position', v:'One sharp line on the value you move at this level.'},
+     {k:'Assets', v:'CV and LinkedIn built as marketing, not history.'},
+     {k:'Reach', v:'Deliberate outreach plus headhunter engagement.'},
+     {k:'Mindset', v:'Pace and resilience managed like any other project.'},
+     {k:'Review', v:'A weekly rhythm so the campaign keeps moving.'}
+   ]},
+
+  {t:'practice', k:'In practice', h:'The search, run like a launch.',
+   p:'Weeks one to two you build the target list and the assets. Weeks three onward the campaign runs: outreach, conversations, headhunter contact, interviews. You stop refreshing job boards and start working a <strong>pipeline you control</strong>. Offers come from conversations, not applications.'},
+
+  {t:'why', k:'Why me', h:'I built this from the other side of the desk.',
+   p:'I was Managing Director of an international executive recruitment firm before I coached anyone. I know how senior roles really get filled, because I filled them. Executive Career Jump is where I teach leaders to use that same machine for themselves.'},
+
+  {t:'proof', k:'The track record', h:'This is not theory.',
+   stats:[
+     {n:'900+', l:'job search clients hired, across 19 countries'},
+     {n:'1,200+', l:'coaching, speaking and workshop sessions delivered'},
+     {n:'#1', l:'Amazon best-selling book, The Job Search Playbook'}
+   ]},
+
+  {t:'recap', k:'The method, in one line', h:'Be found, do not just apply.',
+   p:'Run your search as a go-to-market campaign into the hidden market. Target, position, build the assets, get found, manage the mindset. That is the whole model, and it works at the level you are playing at.'},
+
+  {t:'cta', cta:true, k:'Your next step', h:'Run your next move like a launch.',
+   p:'If you want the full system, start with <strong>The Job Search Playbook</strong>, go deeper inside the <strong>Online Executive Job Search Mastery</strong> course, or work with me one to one. Everything lives at execcareerjump.com.',
+   disc:'This masterclass is educational. No specific job offer, salary, or outcome is guaranteed. Results vary and depend on your experience, effort, and market conditions.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(x){return x==null?'':x}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');
+    d.className='slide'+(s.part?' part':'')+(s.cta?' cta':'');
+    let h='';
+    if(s.k) h+='<div class="kicker">'+esc(s.k)+'</div>';
+    if(s.h) h+=(s.t==='title'?'<h1>':'<h2>')+esc(s.h)+(s.t==='title'?'</h1>':'</h2>');
+    if(s.lede) h+='<p class="lede">'+esc(s.lede)+'</p>';
+    if(s.t==='map'){
+      let bars='';const pat=[1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0];
+      pat.forEach((v,j)=>{const ht=25+((j*37)%70);
+        bars+='<div class="bar '+(v? 'lit':'hid')+'" style="height:'+ht+'%"></div>';});
+      h+='<div class="map">'+bars+'</div>';
+    }
+    if(s.p) h+='<p>'+esc(s.p)+'</p>';
+    if(s.grid){h+='<div class="grid">';s.grid.forEach(c=>{h+='<div class="cell"><div class="k">'+c.k+'</div><div class="v">'+c.v+'</div></div>';});h+='</div>';}
+    if(s.stats){h+='<div class="stats">';s.stats.forEach(c=>{h+='<div class="stat"><div class="n">'+c.n+'</div><div class="l">'+c.l+'</div></div>';});h+='</div>';}
+    if(s.by) h+='<div class="by">'+esc(s.by)+'</div>';
+    if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+    if(s.t!=='title'&&s.t!=='cta') h+='<div class="foot">Executive Career Jump</div>';
+    d.innerHTML=h;
+    stage.appendChild(d);
+  });
+  document.getElementById('tot').textContent=S.length;
+  show(0);
+}
+let cur=0;
+function show(i){
+  cur=Math.max(0,Math.min(S.length-1,i));
+  [...stage.children].forEach((c,j)=>c.classList.toggle('on',j===cur));
+  document.getElementById('cur').textContent=cur+1;
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(cur+1);e.preventDefault();}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){show(cur-1);e.preventDefault();}
+});
+stage.addEventListener('click',()=>show(cur+1));
+render();
+</script>
+</body>
+</html>
