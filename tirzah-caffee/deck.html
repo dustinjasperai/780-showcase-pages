@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Booked-Out Tour — Tirzah Caffee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#24382f;      /* her forest green, deepened */
+    --panel:#2e4942;   /* her exact h2 green */
+    --rule:#617671;    /* her sage */
+    --accent:#b87e58;  /* her bronze */
+    --ink:#f3efe6;      /* warm ivory */
+    --muted:#c9d2cb;
+    --display:'Cormorant Garamond', Georgia, serif;
+    --sans:'Jost', 'Futura', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .4s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:var(--sans);font-weight:500;letter-spacing:.28em;text-transform:uppercase;
+    font-size:clamp(11px,1.3vw,14px);color:var(--accent);margin-bottom:2.2vh}
+  h1{font-family:var(--display);font-weight:600;line-height:1.02;font-size:clamp(34px,6.6vw,86px);letter-spacing:.3px}
+  h2{font-family:var(--display);font-weight:600;line-height:1.06;font-size:clamp(28px,4.8vw,60px)}
+  .lede{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(20px,2.8vw,34px);
+    color:var(--muted);margin-top:3vh;max-width:30ch;line-height:1.3}
+  p.body{font-size:clamp(15px,1.7vw,21px);line-height:1.6;color:var(--muted);margin-top:2.4vh;max-width:40ch}
+  .big{font-family:var(--display);font-size:clamp(30px,5.2vw,66px);line-height:1.1;max-width:24ch}
+  .sub{font-size:clamp(14px,1.5vw,18px);color:var(--muted);margin-top:1.4vh;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:400}
+  .stageno{font-family:var(--display);font-size:clamp(60px,12vw,150px);color:var(--accent);line-height:.9;opacity:.9}
+  .rule{width:64px;height:2px;background:var(--accent);margin:3vh 0}
+  ul.steps{list-style:none;margin-top:3vh;display:grid;gap:1.4vh;max-width:36ch}
+  ul.steps li{font-size:clamp(16px,1.9vw,23px);display:flex;gap:16px;align-items:baseline;color:var(--ink)}
+  ul.steps li span{font-family:var(--display);color:var(--accent);font-size:1.1em;min-width:1.4em}
+  .path{display:flex;flex-wrap:wrap;gap:0;margin-top:4vh;max-width:46ch}
+  .path .node{display:flex;align-items:center;gap:14px;font-size:clamp(13px,1.5vw,18px);color:var(--ink)}
+  .path .dot{width:11px;height:11px;border-radius:50%;background:var(--accent)}
+  .path .arm{width:30px;height:2px;background:var(--rule);margin:0 10px}
+  .cred{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4vh 4vw;margin-top:3.4vh;max-width:50ch}
+  .cred .n{font-family:var(--display);font-size:clamp(26px,3.6vw,46px);color:var(--accent);line-height:1}
+  .cred .l{font-size:clamp(13px,1.4vw,16px);color:var(--muted);margin-top:.6vh}
+  .disc{font-size:12px;color:var(--rule);margin-top:4vh;max-width:52ch;line-height:1.5;letter-spacing:.02em}
+  .cta-steps{font-size:clamp(16px,1.9vw,22px);color:var(--ink);margin-top:2.6vh;line-height:1.7;max-width:34ch}
+  .brandline{position:absolute;left:9vw;bottom:5vh;font-size:12px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--rule)}
+  nav{position:absolute;right:9vw;bottom:5vh;display:flex;align-items:center;gap:18px;color:var(--rule);font-size:13px}
+  nav button{background:none;border:1px solid var(--rule);color:var(--muted);border-radius:30px;
+    padding:7px 16px;font-family:var(--sans);cursor:pointer;font-size:12px;letter-spacing:.1em}
+  nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+  const S=[
+    {t:'title', kicker:'A live masterclass for venue owners',
+     h1:'The Booked-Out Tour',
+     lede:'How venue owners turn inquiries and tours into signed weddings.'},
+
+    {t:'who', kicker:'Who this is for',
+     h2:'You have open dates and inquiries coming in.',
+     body:'But too many of them tour, say they love it, and then go quiet. This is for the venue owner who knows the demand is there and wants a repeatable way to convert it.'},
+
+    {t:'trap', kicker:'The trap',
+     big:'You think you are losing bookings on price.',
+     sub:'Almost no one is.'},
+
+    {t:'reframe', kicker:'The real reason',
+     big:'You are losing them inside the sales cycle.',
+     body:'Between the first inquiry and the signed contract there are five moments where a couple quietly decides. Miss one and the booking is gone, and it rarely has anything to do with your number.'},
+
+    {t:'part', kicker:'Part one',
+     h2:'The gap no one teaches venue owners.'},
+
+    {t:'problem', kicker:'What actually happens',
+     h2:'A couple will tour three venues.',
+     body:'The one that converts is not the cheapest or the prettiest. It is the one that ran the tour, answered fast, closed with confidence, and followed up. Most owners are brilliant hosts and were never taught the selling.'},
+
+    {t:'problem2', kicker:'The silent killer',
+     h2:'The inquiry that goes quiet is a follow-up failure.',
+     body:'It is not a rejection. It is a couple who got busy and never heard from you again. The follow-up most owners never send is the booking they never made.'},
+
+    {t:'part', kicker:'Part two',
+     h2:'The Venue Sales Cycle: five stages.'},
+
+    {t:'stage', no:'01', name:'Competitive Pricing',
+     body:'Price your venue against your real local market so you hold your rate with confidence instead of discounting to win the date.'},
+
+    {t:'stage', no:'02', name:'Communication, Inquiry to Booking',
+     body:'A deliberate process that moves a lead from first message to signed contract, so no couple falls through the cracks between inquiry and booking.'},
+
+    {t:'stage', no:'03', name:'Giving Compelling Tours',
+     body:'Run a tour that sells the day, not just the space. The tour is where the booking is won, and it can be taught, scripted, and repeated by your whole team.'},
+
+    {t:'stage', no:'04', name:'Effectively Closing the Sale',
+     body:'Ask for the booking from posture and confidence. Closing is not pushy when the tour did its job; it is the natural next step you simply have to make.'},
+
+    {t:'stage', no:'05', name:'Strategically Following Up',
+     body:'The sequence that brings back the on-the-fence couple. Most of your lost bookings are sitting in follow-ups that were never sent.'},
+
+    {t:'path', kicker:'The throughline',
+     h2:'Five stages. One signed contract.',
+     nodes:['Price','Inquiry','Tour','Close','Follow-Up']},
+
+    {t:'part', kicker:'Part three',
+     h2:'Inside a season that books itself.'},
+
+    {t:'picture', kicker:'The shift',
+     big:'You hold your price and still book the date.',
+     body:'Tours convert because they are run the same confident way every time. Inquiries stop going quiet because the follow-up is built in. Your calendar fills on purpose, not by luck.'},
+
+    {t:'why', kicker:'Why learn this from me',
+     h2:'I built a venue on this cycle.',
+     creds:[['4th gen','Fourth-generation wedding professional'],
+            ['7 figures','Built Alexander Homestead to multiple seven figures'],
+            ['120+','Full-service weddings a year'],
+            ['30+ yrs','My family has run venues nationwide']]},
+
+    {t:'recap', kicker:'The five stages, again',
+     h2:'This is the whole cycle.',
+     steps:['Competitive Pricing','Communication, Inquiry to Booking','Giving Compelling Tours','Effectively Closing the Sale','Strategically Following Up']},
+
+    {t:'cta', kicker:'Your next step',
+     h2:'Master your sales cycle.',
+     ctas:['Enroll in the Venue Success Blueprint: Mastering the Sales Cycle','Or book a free consultation to map your own cycle with me'],
+     disc:'This masterclass is educational. It shares the strategies I used in my own venue. It is not a guarantee of income or bookings. Every venue, market, and owner is different, and results vary.'}
+  ];
+
+  var deck=document.getElementById('deck'), i=0;
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function render(){
+    deck.innerHTML='';
+    S.forEach(function(s,idx){
+      var el=document.createElement('section');
+      el.className='slide'+(idx===i?' on':'');
+      var h='';
+      if(s.kicker) h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+      if(s.h1) h+='<h1>'+esc(s.h1)+'</h1>';
+      if(s.h2) h+='<h2>'+esc(s.h2)+'</h2>';
+      if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+      if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+      if(s.lede) h+='<div class="lede">'+esc(s.lede)+'</div>';
+      if(s.t==='stage'){ h+='<div class="rule"></div><div style="display:flex;gap:4vw;align-items:center;flex-wrap:wrap">'+
+        '<div class="stageno">'+esc(s.no)+'</div><div><h2>'+esc(s.name)+'</h2>'+(s.body?'<p class="body">'+esc(s.body)+'</p>':'')+'</div></div>'; }
+      else if(s.body){ h+='<p class="body">'+esc(s.body)+'</p>'; }
+      if(s.nodes){ h+='<div class="path">'; s.nodes.forEach(function(n,k){ h+='<div class="node"><span class="dot"></span>'+esc(n)+'</div>'; if(k<s.nodes.length-1) h+='<span class="arm"></span>'; }); h+='</div>'; }
+      if(s.creds){ h+='<div class="cred">'; s.creds.forEach(function(c){ h+='<div><div class="n">'+esc(c[0])+'</div><div class="l">'+esc(c[1])+'</div></div>'; }); h+='</div>'; }
+      if(s.steps){ h+='<ul class="steps">'; s.steps.forEach(function(st,k){ h+='<li><span>'+(k+1)+'</span>'+esc(st)+'</li>'; }); h+='</ul>'; }
+      if(s.ctas){ h+='<div class="cta-steps">'; s.ctas.forEach(function(c){ h+='<div>'+esc(c)+'</div>'; }); h+='</div>'; }
+      if(s.disc){ h+='<div class="disc">'+esc(s.disc)+'</div>'; }
+      el.innerHTML=h;
+      deck.appendChild(el);
+    });
+    var b=document.createElement('div'); b.className='brandline'; b.textContent='Tirzah Caffee  ·  Venue Success Coach'; deck.appendChild(b);
+    var n=document.createElement('nav');
+    n.innerHTML='<button id="pv">Prev</button><span class="count">'+(i+1)+' / '+S.length+'</span><button id="nx">Next</button>';
+    deck.appendChild(n);
+    document.getElementById('pv').onclick=function(){go(-1);};
+    document.getElementById('nx').onclick=function(){go(1);};
+  }
+  function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+  document.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+  render();
+</script>
+</body>
+</html>
