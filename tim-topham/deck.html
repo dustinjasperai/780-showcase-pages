@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Studio That Stays Full — a masterclass with Tim Topham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faf9f6;
+    --ink:#121163;
+    --ink-soft:#2b2a63;
+    --muted:#58595b;
+    --accent:#3accc3;
+    --paper:#ffffff;
+    --rule:#e6e4da;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Hanken Grotesk',-apple-system,sans-serif;
+    background:#ecebe4;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    position:relative;
+    width:min(960px,96vw);
+    aspect-ratio:16/9;
+    background:var(--bg);
+    box-shadow:0 18px 60px rgba(18,17,99,.18);
+    overflow:hidden;
+  }
+  .slide{
+    position:absolute;inset:0;
+    padding:64px 72px;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .slide.on{display:flex;}
+  .slide::before{
+    content:"";position:absolute;left:72px;top:54px;width:46px;height:3px;background:var(--accent);
+  }
+  .kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:18px;}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:60px;line-height:1.05;letter-spacing:-.01em;color:var(--ink);}
+  h2{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:40px;line-height:1.12;color:var(--ink);margin-bottom:20px;}
+  .sub{font-size:22px;color:var(--muted);margin-top:22px;max-width:40ch;line-height:1.5;}
+  p{font-size:21px;color:var(--ink-soft);line-height:1.5;max-width:46ch;margin-bottom:14px;}
+  ul{list-style:none;margin-top:10px;}
+  li{font-size:21px;color:var(--ink-soft);line-height:1.4;padding-left:30px;position:relative;margin-bottom:16px;max-width:44ch;}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:12px;background:var(--accent);border-radius:2px;}
+  .part-num{font-family:'Newsreader',serif;font-size:140px;font-weight:600;color:var(--accent);line-height:.9;opacity:.9;}
+  .big{font-family:'Newsreader',serif;font-size:52px;font-weight:600;line-height:1.1;color:var(--ink);max-width:22ch;}
+  .big .hl{color:var(--accent);}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:4px;color:var(--muted);}
+  .plan{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;margin-top:14px;}
+  .plan .step{border-left:3px solid var(--accent);padding:6px 0 6px 16px;}
+  .plan .step b{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+  .plan .step span{font-size:19px;color:var(--ink-soft);}
+  .pillars{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;}
+  .pillars .pill{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--accent);padding:14px 18px;font-size:18px;color:var(--ink);font-weight:600;}
+  .cred{font-size:21px;color:var(--ink-soft);line-height:1.5;max-width:46ch;}
+  .cred b{color:var(--ink);}
+  .cta-head{font-family:'Newsreader',serif;font-size:50px;font-weight:600;color:var(--ink);line-height:1.08;max-width:24ch;}
+  .cta-step{margin-top:22px;font-size:23px;color:var(--accent);font-weight:700;}
+  .cta-sub{margin-top:10px;font-size:19px;color:var(--muted);max-width:44ch;line-height:1.5;}
+  .disclaimer{position:absolute;left:72px;right:72px;bottom:34px;font-size:13px;color:var(--muted);line-height:1.4;max-width:64ch;}
+  .presenter{margin-top:34px;font-size:18px;color:var(--muted);}
+  .presenter b{color:var(--ink);font-weight:600;}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-family:'Hanken Grotesk',sans-serif;}
+  #nav button{border:1px solid var(--ink);background:var(--bg);color:var(--ink);font-size:15px;padding:7px 16px;cursor:pointer;border-radius:3px;}
+  #nav button:hover{background:var(--ink);color:var(--bg);}
+  #count{font-size:14px;color:#55544e;min-width:58px;text-align:center;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'A free live masterclass for piano teachers',h:'The Studio That Stays Full',sub:'Why students quit, and the creative-teaching shift that keeps them for years.',presenter:'with Tim Topham, founder of TopMusic'},
+  {t:'content',kicker:'What you will leave with',h:'By the end of this hour',list:['Why your students really stop lessons, and when','The one shift that turns beginners into students who stay for years','A simple way to start it in your very next lesson, no new curriculum to buy']},
+  {t:'content',kicker:'Who this is for',h:'If you teach, this is for you',list:['Independent piano and instrumental teachers','Studio owners with a waitlist or empty slots to fill','Anyone tired of re-recruiting every single term']},
+  {t:'content',kicker:'The trap',h:'The quiet term-end churn',p:['Every term a few students drift away. Life got busy, they say. Exams. A sport.','So you teach more trial lessons to replace them, and the studio never quite fills.','It feels like a marketing problem. Most of the time it is not.']},
+  {t:'statement',big:'Students do not quit piano. They quit the <span class="strike">method book</span> <span class="hl">music that never felt like theirs.</span>'},
+  {t:'part',num:'01',kicker:'Part one',h:'Why students really leave'},
+  {t:'content',kicker:'The real reason',h:'Week after week of other people’s music',p:['A beginner opens a method book and plays what the book says, at the pace the book sets.','It is competent. It is also someone else’s music, and it never becomes theirs.','Around the second year, the effort stops feeling worth it. That is the quit cliff.']},
+  {t:'content',kicker:'The tell',h:'The lesson they would not miss',p:['Think of the students who never quit. They had a song they loved, a piece they wrote, a thing that was theirs.','Ownership is the difference between a chore and a lesson they ask to come back to.','So the question is not how do I get more students. It is how do I make this theirs.']},
+  {t:'part',num:'02',kicker:'Part two',h:'The shift: integrated, creative teaching'},
+  {t:'content',kicker:'No Book Beginners',h:'Creating from lesson one',p:['Integrated teaching puts creativity first: improvising, composing and playing by ear from the very first lesson.','Reading still happens. It just grows out of music the student already cares about, instead of the other way round.','This is the No Book Beginners approach, and it is the engine of everything that follows.']},
+  {t:'plan',kicker:'The first 10 weeks',h:'The first ten weeks, lesson by lesson',steps:[['Week 1','Improvise on two black keys, no reading yet'],['Week 2','Compose a tiny piece that is entirely theirs'],['Week 3','Play a real song they chose, still no method book'],['Weeks 4 to 10','Reading grows out of the music they love']]},
+  {t:'content',kicker:'Why it holds',h:'Engagement compounds',p:['A student who made something wants to make the next thing. Practice stops being a fight.','Parents hear real music at home, not drills, so they keep paying and they tell other parents.','Retention and referrals are the same lever. Creative teaching pulls it.']},
+  {t:'pillars',kicker:'The wider system',h:'Five pillars of a transformed studio',pills:['Clarity over chaos','Teaching that excites you again','Real business skills','Systems that give your time back','A community that keeps you accountable']},
+  {t:'part',num:'03',kicker:'Part three',h:'What a full, creative studio feels like'},
+  {t:'content',kicker:'The compounding',h:'The calendar fills itself',p:['Students stay for years instead of terms, so every new enrolment adds instead of replacing.','Word of mouth does the recruiting you used to pay for in trial lessons.','The waitlist becomes real, and you get to choose who you teach.']},
+  {t:'content',kicker:'A week inside it',h:'Teaching you actually enjoy',p:['Lessons are different every time because the music comes from the students.','You teach fewer trials and spend more time on the students you have.','The business runs on systems, not on your constant hustle.']},
+  {t:'cred',kicker:'Why listen to me',h:'Where this comes from',cred:'I am <b>Tim Topham</b>, founder of <b>TopMusic</b>. I have spent years helping a community of more than <b>50,000 music teachers</b> teach creatively and build studios they love, through the <b>Integrated Music Teaching</b> podcast, the <b>No Book Beginners</b> method, and our teacher programs. I hold an MBA in Educational Leadership alongside my music degrees, and I have taught this to teachers on every continent.'},
+  {t:'content',kicker:'The recap',h:'Three shifts, starting Monday',list:['Let students create before they read','Grow reading out of music they already love','Teach for retention, and let referrals fill the room']},
+  {t:'cta',kicker:'Bring this to your studio',h:'Want help putting this in place?',step:'Apply for the next 12-Week Studio Transformation cohort, or start inside TopMusicPro.',sub:'Twelve weeks of live coaching, the full playbook, and a community of teachers doing exactly this. Head to topmusic.co to take the next step.',disclaimer:'This masterclass is for educational purposes only. It shares teaching and studio-building methods, not guarantees. Results vary by teacher, studio, and effort; no specific income, enrolment, or retention outcome is promised.'}
+];
+const stage=document.getElementById('stage');
+function esc(x){return x;}
+function slideHTML(s){
+  if(s.t==='title'){return `<div class="kicker">${s.kicker}</div><h1>${s.h}</h1><div class="sub">${s.sub}</div><div class="presenter">${s.presenter}</div>`;}
+  if(s.t==='statement'){return `<div class="big">${s.big}</div>`;}
+  if(s.t==='part'){return `<div class="kicker">${s.kicker}</div><div class="part-num">${s.num}</div><h2 style="margin-top:12px">${s.h}</h2>`;}
+  if(s.t==='plan'){let g=s.steps.map(x=>`<div class="step"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');return `<div class="kicker">${s.kicker}</div><h2>${s.h}</h2><div class="plan">${g}</div>`;}
+  if(s.t==='pillars'){let g=s.pills.map(x=>`<div class="pill">${x}</div>`).join('');return `<div class="kicker">${s.kicker}</div><h2>${s.h}</h2><div class="pillars">${g}</div>`;}
+  if(s.t==='cred'){return `<div class="kicker">${s.kicker}</div><h2>${s.h}</h2><div class="cred">${s.cred}</div>`;}
+  if(s.t==='cta'){return `<div class="kicker">${s.kicker}</div><div class="cta-head">${s.h}</div><div class="cta-step">${s.step}</div><div class="cta-sub">${s.sub}</div><div class="disclaimer">${s.disclaimer}</div>`;}
+  let body='';
+  if(s.p){body=s.p.map(x=>`<p>${x}</p>`).join('');}
+  if(s.list){body='<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+  return `<div class="kicker">${s.kicker}</div><h2>${s.h}</h2>${body}`;
+}
+let i=0;
+function render(){
+  stage.innerHTML='';
+  const d=document.createElement('div');
+  d.className='slide on';
+  d.innerHTML=slideHTML(S[i]);
+  stage.appendChild(d);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+document.getElementById('next').onclick=()=>{i=Math.min(i+1,S.length-1);render();};
+document.getElementById('prev').onclick=()=>{i=Math.max(i-1,0);render();};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();});
+render();
+</script>
+</body>
+</html>
