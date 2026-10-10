@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fit Mind Masterclass — Seamus Fox</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000321; --panel:#0b1534; --rule:#2d409a; --accent:#188bf6;
+    --ink:#eef3f8; --mut:#c9d8e0; --head:'Montserrat',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 72px}
+  .slide{background:var(--panel);border:1px solid rgba(45,64,154,.5);border-radius:14px;
+    padding:46px 44px;margin:16px 0;position:relative;overflow:hidden;min-height:340px;
+    display:flex;flex-direction:column;justify-content:center}
+  .slide::before{content:"";position:absolute;left:44px;top:34px;width:38px;height:3px;
+    background:var(--accent);border-radius:2px}
+  .slide.axis::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(24,139,246,.55),transparent)}
+  .k{font-family:var(--head);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);margin:22px 0 14px;font-weight:700}
+  h1{font-family:var(--head);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:30px;line-height:1.15;letter-spacing:-.01em}
+  .sub{color:var(--mut);font-size:18px;margin-top:16px;max-width:60ch}
+  ul{list-style:none;margin:20px 0 0;padding:0}
+  li{position:relative;padding:9px 0 9px 26px;font-size:18px;color:var(--ink);
+    border-bottom:1px solid rgba(45,64,154,.28)}
+  li::before{content:"";position:absolute;left:0;top:18px;width:9px;height:9px;border-radius:50%;
+    background:var(--accent)}
+  .big{font-family:var(--head);font-weight:800;font-size:38px;line-height:1.15}
+  .big .a{color:var(--accent)}
+  .disc{color:var(--mut);font-size:13px;margin-top:22px;max-width:62ch;line-height:1.5}
+  .pg{font-family:var(--head);position:absolute;right:30px;bottom:18px;font-size:12px;color:#5b6b89}
+  .part{min-height:240px}
+  .part h2{font-size:34px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title', h:"Successful on paper. Still running on empty?", sub:"A live masterclass for driven founders and CEOs, with Seamus Fox."},
+  {t:'promise', k:"The next hour", h:"Why high performers run out of energy, and the body-and-values system that fixes it for good.", sub:"Not more motivation. A different diagnosis, and a plan you can actually hold."},
+  {t:'who', k:"Who this is for", h:"This will land if you are:", list:["Hitting the numbers, yet flat and foggy by mid-afternoon","Doing more every quarter and feeling less","Disconnected from your health, energy, or direction","Quietly wondering if this is just what success feels like"]},
+  {t:'trap', k:"The trap", h:"You have tried the obvious fixes.", list:["Another productivity system","Another 5am routine","More discipline, more willpower","Pushing harder until the fog comes back"], sub:"They treat the symptom. None of them touch the cause."},
+  {t:'reframe', axis:true, h:"Burnout is not a <span class='a'>motivation</span> problem. It is a <span class='a'>values and energy</span> problem."},
+  {t:'part', k:"Part one", h:"Why driven men run on empty"},
+  {t:'point', k:"The gap", h:"What you say matters and what you actually do are two different things.", sub:"Most high performers have never mapped their real hierarchy of values, so the calendar drifts away from what they care about, and the energy goes with it."},
+  {t:'point', k:"The spillover", h:"The persona you hold up at work leaks into the rest of your life.", sub:"Suppressing one side of yourself to look the part is expensive. It drains the exact energy you are trying to protect, at work and at home."},
+  {t:'point', axis:true, k:"The real fuel gauge", h:"Energy follows alignment, not discipline.", sub:"Time spent out of line with your core values drains you no matter how disciplined you are. Time in line with them gives energy back."},
+  {t:'part', k:"Part two", h:"The Fit Mind system"},
+  {t:'pillar', k:"Pillar 1 of 4", h:"Values and Vision", sub:"We surface what truly drives you with a Value Determination Process, so your goals carry real meaning and your week has something honest to line up behind."},
+  {t:'pillar', k:"Pillar 2 of 4", h:"Health, Energy and Physical Standards", sub:"The body is the engine. Strength, sleep, nutrition and training set the ceiling for your clarity and output. This is the pillar most leaders skip, and the one I rebuilt my own life on."},
+  {t:'pillar', k:"Pillar 3 of 4", h:"Mindset and Behaviour", sub:"How your thinking patterns shape your results, and how to shift them so the change actually holds instead of fading by Monday."},
+  {t:'pillar', k:"Pillar 4 of 4", h:"Execution and Consistency", sub:"Turning insight into action without overwhelm. We build your Shit List and systematically cut, automate or delegate the low-value work that quietly eats your week."},
+  {t:'point', k:"The quiet multiplier", h:"Authenticity is an energy strategy, not a soft skill.", sub:"When you stop projecting a persona and own both the strong and the difficult parts of your nature, the internal tension drops and the energy it was burning comes back to you."},
+  {t:'part', k:"Part three", h:"When the mind gets fit"},
+  {t:'point', axis:true, k:"A week in alignment", h:"Clear mornings. Protected energy. Decisions that match what you say matters.", sub:"Not a slower life. A sharper one, where your effort compounds because it is all pointed the same way."},
+  {t:'why', k:"Why me", h:"Seamus Fox", sub:"Twenty-one years coaching mindset, behaviour and performance. Mr. Northern Ireland 2005. I came back from a car crash and destructive habits by rebuilding my body first, then my mind, then my work. I teach the exact path I walked."},
+  {t:'recap', k:"The three shifts", h:"If you take three things from today:", list:["Align the calendar to your real values","Raise your physical standards first, not last","Execute consistently and cut what drains you"]},
+  {t:'cta', h:"Ready to build a fit mind?", sub:"If this is the work you want to do, there are two ways in. Book a free discovery call to talk it through one to one, or join the Fit Mind Academy and do it alongside other driven founders.", disc:"This masterclass is educational. No income or specific result is guaranteed. Results vary and depend on your own effort, health and circumstances."}
+];
+function esc(s){return s;}
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(s.axis?' axis':'')+(s.t==='part'?' part':'');
+  let html='';
+  if(s.k) html+='<div class="k">'+esc(s.k)+'</div>';
+  if(s.t==='reframe'){ html+='<div class="big">'+s.h+'</div>'; }
+  else if(s.t==='title'){ html+='<h1>'+esc(s.h)+'</h1>'; }
+  else if(s.t==='part'){ html+='<h2>'+esc(s.h)+'</h2>'; }
+  else { html+='<h2>'+esc(s.h)+'</h2>'; }
+  if(s.sub) html+='<div class="sub">'+esc(s.sub)+'</div>';
+  if(s.list){ html+='<ul>'; s.list.forEach(x=>html+='<li>'+esc(x)+'</li>'); html+='</ul>'; }
+  if(s.disc) html+='<div class="disc">'+esc(s.disc)+'</div>';
+  html+='<div class="pg">'+(i+1)+' / '+S.length+'</div>';
+  el.innerHTML=html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
