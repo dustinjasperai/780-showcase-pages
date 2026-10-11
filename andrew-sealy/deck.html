@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teach Presence — Andrew Sealy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2b2520; --panel:#3c342f; --accent:#288a85;
+    --ink:#ece7e1; --muted:#a69f97; --rule:rgba(255,255,255,0.12);
+    --head:'Jost',system-ui,sans-serif; --body:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:1040px;margin:0 auto}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 7vw;border-bottom:1px solid var(--rule);position:relative}
+  .kick{font-family:var(--head);text-transform:uppercase;letter-spacing:.22em;
+    font-size:.72rem;color:var(--accent);font-weight:600;margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.4rem,6vw,4.4rem);
+    line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.7rem);
+    line-height:1.12;letter-spacing:-.01em;margin-bottom:1.1rem}
+  p{font-size:clamp(1.02rem,1.5vw,1.26rem);color:var(--ink);max-width:48ch;margin-top:1rem}
+  p.sub{color:var(--muted)}
+  .horizon{height:2px;width:84px;background:var(--accent);margin:1.6rem 0}
+  ul{list-style:none;margin-top:1.4rem;max-width:56ch}
+  li{position:relative;padding-left:1.7rem;margin:.8rem 0;font-size:clamp(1rem,1.5vw,1.2rem)}
+  li:before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;
+    background:var(--accent);border-radius:50%}
+  .foot{position:absolute;bottom:3.2vh;left:7vw;color:var(--muted);
+    font-family:var(--head);letter-spacing:.14em;text-transform:uppercase;font-size:.66rem}
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;background:var(--rule);margin-top:1.8rem;border:1px solid var(--rule)}
+  .pillars div{background:var(--panel);padding:1.3rem 1.2rem}
+  .pillars h3{font-family:var(--head);color:var(--accent);font-size:1.02rem;font-weight:600;margin-bottom:.3rem}
+  .pillars span{color:var(--muted);font-size:.92rem}
+  .big{font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--ink);max-width:44ch;font-family:var(--head);font-weight:500}
+  .cta-note{color:var(--muted);font-size:.84rem;margin-top:2.4rem;max-width:50ch;line-height:1.5}
+  .num{font-family:var(--head);color:var(--accent);font-weight:600;font-size:.9rem;margin-bottom:.8rem;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title', kick:'A live masterclass', h:'Teach Presence', sub:'The Studio to Street path from a devoted practitioner into a yoga teacher people seek out.', foot:'Andrew Sealy · Yoga Revealed'},
+
+  {t:'reframe', kick:'The promise', h:'One live hour. Three things to take with you.', list:['Why presence, not a bigger sequence, is what fills a room','The first drill I teach every new teacher to find it','How to carry the practice off the mat, Studio to Street'], foot:'What you will leave with'},
+
+  {t:'who', kick:'Who this is for', h:'You already love the practice.', list:['You have practiced for years and people tell you to teach','You finished a training, or you are about to, and still feel unready','You want to lead a room, not just hand out a sequence'], foot:'If that is you, keep reading'},
+
+  {t:'trap', kick:'The trap', h:'A certificate is not the same as a teacher.', sub:'The feed is full of self-paced certifications you finish alone at a screen. They hand you a credential and a template. What they cannot hand you is the thing students actually come back for: your presence in the room.', foot:'The gap nobody fills'},
+
+  {t:'reframe', kick:'The myth', h:'You do not need another 200 hours of cueing.', sub:'Most teachers who feel unready reach for more information: another module, another sequence, another certificate. But the thing missing was never information. It was the skill of staying in the room while you teach.', foot:'More hours is not the fix'},
+
+  {t:'reframe', kick:'The real question', h:'Students do not remember the sequence.', sub:'They remember how it felt to be guided by someone fully there. Presence is trainable. It is the skill under every great class, and it is the one a PDF leaves out.', foot:'Presence is the lesson'},
+
+  {t:'part', num:'PART ONE', h:'Why presence disappears the moment you teach.', sub:'The first time you lead, your attention splits a hundred ways: the next cue, the clock, the student by the door. The practice you love vanishes behind performance. Part one names the three leaks that pull a new teacher out of the room.', foot:'The core problem'},
+
+  {t:'list', kick:'Part one', h:'The three leaks', list:['Cue-chasing: narrating the next pose instead of watching the people','Clock-panic: teaching the plan, not the room in front of you','Self-monitoring: performing "a teacher" instead of being one'], foot:'Name them to close them'},
+
+  {t:'reframe', kick:'Part one', h:'What the room feels when presence leaks.', sub:'Students cannot always say what is off, but they feel it. The class is technically fine and somehow forgettable. They drift, check the clock, and do not come back. A present teacher changes that before saying a single cue.', foot:'Presence is felt, not announced'},
+
+  {t:'part', num:'PART TWO', h:'The Studio to Street method.', sub:'My training is built on one idea: the practice is not something you leave on the mat. The same presence you build in a handstand at the edge is the presence you carry into a room, a conversation, a life. Five pillars make it portable.', foot:'The framework'},
+
+  {t:'pillars', kick:'Part two', h:'Studio to Street, five pillars', cells:[['Daily practice','presence as a habit, not a mood'],['Gratitude','attention that opens a room'],['Service','teaching as giving, not proving'],['Nature','steadiness borrowed from the ground'],['Play','the ease students trust']], foot:'The method, made portable'},
+
+  {t:'part', num:'PART TWO', h:'Edge practice: presence you can feel.', sub:'Inversions and arm balances are not a party trick. Practiced at your edge, they force the one thing you cannot fake: being completely here. That is why I teach them first. When you know what full presence feels like in your own body, you can hold it for a room.', foot:'Movement as meditation'},
+
+  {t:'reframe', kick:'Part two', h:'Breath opens the room before you speak.', sub:'The fastest way to bring a room into presence is to change how everyone is breathing. Pranayama is not a warm-up. It is how a teacher sets the temperature of a space in the first ninety seconds, before a word of instruction.', foot:'The first ninety seconds'},
+
+  {t:'list', kick:'Part two', h:'What you practice', list:['Breath that opens a room before you say a word','Inversions and balances as a doorway into presence','Teaching labs: holding a room while fully in it','Carrying the practice off the mat, Studio to Street'], foot:'Embodiment first'},
+
+  {t:'part', num:'PART THREE', h:'When the room fills itself.', sub:'A teacher who is fully present does not chase students. Rooms fill because people feel something they cannot get from a screen. You teach less from a script and more from attention, and your practice stops being a thing you do and becomes the way you move.', foot:'Taught from presence'},
+
+  {t:'reframe', kick:'Part three', h:'Teaching becomes the practice.', sub:'The point was never to collect poses. It was to live with the steadiness the mat gave you and to pass it on. When you teach from presence, the room becomes part of your practice, and the practice finally goes everywhere with you.', foot:'Studio to Street, for good'},
+
+  {t:'why', kick:'Why me', h:'Andrew Sealy', sub:'For over seven years I have hosted the Yoga Revealed Podcast, sitting with the teachers who shaped this practice. I teach inversions and presence around the world, from Venice to Costa Rica, and I have trained teachers through immersions built on Studio to Street. I teach presence because it is the only thing that ever made me a teacher.', foot:'Connection catalyst'},
+
+  {t:'cta', kick:'Your next step', h:'Train presence, live, with me.', big:'Join the next live Teach Presence session, then step into the 200-Hour Teacher Training when you are ready.', disc:'This masterclass is educational. No income, result, or career outcome is guaranteed. Results vary and depend on your own practice, effort, and circumstances.', foot:'Andrew Sealy · Yoga Revealed'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach(s=>{
+  const sec=document.createElement('section');
+  sec.className='slide';
+  let h='';
+  if(s.kick) h+=`<div class="kick">${s.kick}</div>`;
+  if(s.num) h+=`<div class="num">${s.num}</div>`;
+  if(s.h) h+=(s.t==='title'?`<h1>${s.h}</h1>`:`<h2>${s.h}</h2>`);
+  if(s.t==='title'||s.t==='part'||s.t==='why'||s.t==='trap'||s.t==='reframe') h+=`<div class="horizon"></div>`;
+  if(s.sub) h+=`<p class="sub">${s.sub}</p>`;
+  if(s.big) h+=`<p class="big">${s.big}</p>`;
+  if(s.list){h+='<ul>';s.list.forEach(i=>h+=`<li>${i}</li>`);h+='</ul>';}
+  if(s.cells){h+='<div class="pillars">';s.cells.forEach(c=>h+=`<div><h3>${c[0]}</h3><span>${c[1]}</span></div>`);h+='</div>';}
+  if(s.disc) h+=`<div class="cta-note">${s.disc}</div>`;
+  if(s.foot) h+=`<div class="foot">${s.foot}</div>`;
+  sec.innerHTML=h;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
