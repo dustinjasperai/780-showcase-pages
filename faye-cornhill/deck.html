@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Flow Method — a masterclass with Faye Cornhill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #faf7f1;
+    --panel: #f1ebdf;
+    --ink: #211f1c;
+    --ink-muted: #6f675d;
+    --rule: #ddd4c4;
+    --accent: #9a7b43;
+  }
+  html, body { height:100%; }
+  body {
+    font-family:'Lato', -apple-system, sans-serif;
+    background:var(--ink);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .slide {
+    display:none; width:100%; height:100%;
+    background:var(--bg);
+    padding:7vh 9vw;
+    flex-direction:column; justify-content:center;
+    position:relative;
+  }
+  .slide.on { display:flex; }
+  .kick { font-family:'Lato',sans-serif; font-size:13px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:26px; }
+  h1 { font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:clamp(34px,6vw,70px); line-height:1.07; letter-spacing:-.01em; }
+  h2 { font-family:'Playfair Display',Georgia,serif; font-weight:600; font-size:clamp(28px,4.4vw,50px); line-height:1.12; margin-bottom:22px; }
+  .lede { font-size:clamp(18px,2.2vw,26px); color:var(--ink-muted); line-height:1.5; max-width:30ch; margin-top:26px; }
+  .body { font-size:clamp(17px,1.9vw,22px); color:var(--ink); line-height:1.6; max-width:36ch; }
+  .sig { margin-top:40px; font-family:'Playfair Display',serif; font-size:20px; }
+  .sig span { display:block; font-family:'Lato',sans-serif; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:6px; }
+  ul { list-style:none; margin-top:14px; max-width:40ch; }
+  li { font-size:clamp(16px,1.8vw,21px); line-height:1.5; padding:14px 0; border-bottom:1px solid var(--rule); display:flex; gap:16px; }
+  li b { font-family:'Playfair Display',serif; color:var(--accent); font-weight:700; min-width:1.4em; }
+  .part { color:var(--accent); font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(20px,2.4vw,30px); margin-bottom:10px; }
+  .big { font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(40px,8vw,96px); line-height:1; }
+  .big .st { text-decoration:line-through; text-decoration-color:var(--rule); color:var(--ink-muted); }
+  .big .ac { color:var(--accent); }
+  .panel { background:var(--panel); padding:5vh 6vw; border-left:3px solid var(--accent); max-width:40ch; }
+  .disc { font-size:13px; color:var(--ink-muted); line-height:1.5; max-width:52ch; margin-top:30px; font-style:italic; }
+  .cta-line { font-family:'Playfair Display',serif; font-size:clamp(22px,3vw,34px); color:var(--accent); margin-top:18px; }
+  .num { position:absolute; bottom:4vh; right:6vw; font-size:12px; letter-spacing:.1em; color:var(--ink-muted); }
+  .flowword { font-family:'Playfair Display',serif; font-size:clamp(44px,9vw,120px); font-weight:700; letter-spacing:.04em; color:var(--ink); }
+  .flowword b { color:var(--accent); }
+  .hint { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); font-family:'Lato',sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8378; z-index:5; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="hint">Use arrow keys to move through the masterclass</div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Faye Cornhill',
+    h:'The Flow Method',
+    lede:'How to build a fully booked wedding business that actually pays you.',
+    sig:'Faye Cornhill', sigsub:'Business & Mindset Coach to the wedding industry'},
+
+  {t:'lede', kick:'What this hour is for',
+    h:'By the end of the next hour',
+    body:'You will see why being fully booked has not made you feel wealthy, and the four-part shift that changes it. No new hustle. A different way to run the business you already have.'},
+
+  {t:'lede', kick:'Who this is for',
+    h:'The booked-out creative',
+    body:'Wedding photographers, planners, florists and stylists who are busy, talented, and quietly wondering why the money and the calm have not arrived yet.'},
+
+  {t:'lede', kick:'The story you were sold',
+    h:'"Just book more weddings"',
+    body:'Every piece of advice points the same way: more enquiries, more bookings, more weekends. So you did that. And the diary filled up.'},
+
+  {t:'reframe', kick:'The uncomfortable part',
+    big:['Being fully booked is how most wedding businesses stay', ['broke','ac']]},
+
+  {t:'part', part:'Part One', h:'Why booked-out still means underpaid'},
+
+  {t:'list', kick:'The three quiet leaks',
+    h:'Where the money goes',
+    items:[['1','You priced to win the booking, not to build a business.'],
+           ['2','Peak season carries the whole year, so it is feast then famine.'],
+           ['3','You are the brand, the sales team and the admin, so there is no room to grow.']]},
+
+  {t:'lede', kick:'The real diagnosis',
+    h:'This is not a marketing problem',
+    body:'More bookings cannot fix an undercharging, over-giving, all-on-your-shoulders business. It only makes it heavier. The problem sits underneath the marketing, in the mindset and the money.'},
+
+  {t:'part', part:'Part Two', h:'The Flow Method'},
+
+  {t:'flow', kick:'The four-part shift',
+    words:[['F','earless'],['L','ove Centered'],['O','rganized'],['W','ealthy']],
+    body:'Four elements that move a wedding business from busy to genuinely well-paid.'},
+
+  {t:'list', kick:'Flow, part one', h:'Fearless',
+    items:[['·','Raise your prices to what the work is worth, without flinching.'],
+           ['·','Make the bold move you have been circling for a year.'],
+           ['·','Stop letting the fear of "no" set your numbers.']]},
+
+  {t:'list', kick:'Flow, part two', h:'Love Centered',
+    items:[['·','Build the business around the life and the clients you actually want.'],
+           ['·','Say no to the work that drains you, on purpose.'],
+           ['·','Let your values, not the feed, decide what you offer.']]},
+
+  {t:'list', kick:'Flow, part three', h:'Organized',
+    items:[['·','Put the systems in place that hold the business without you.'],
+           ['·','Smooth the feast-and-famine so income is steadier across the year.'],
+           ['·','Give every enquiry, booking and payment a path it runs on.']]},
+
+  {t:'list', kick:'Flow, part four', h:'Wealthy',
+    items:[['·','Charge well, and keep more of what you charge.'],
+           ['·','Make the money the business earns actually reach you.'],
+           ['·','Grow without simply adding more weekends to your diary.']]},
+
+  {t:'lede', kick:'How it fits together',
+    h:'Fearless sets the price. Wealthy keeps it.',
+    body:'Love Centered decides what you build and Organized makes it run. Pull one and the business wobbles. Together they are flow: booked, calm, and paid.'},
+
+  {t:'part', part:'Part Three', h:'What flow looks like in your diary'},
+
+  {t:'lede', kick:'The shift',
+    h:'Booked and paid',
+    body:'A calendar that is full on your terms, prices you are no longer scared to say out loud, and a business that finally funds the life you got into this for.'},
+
+  {t:'lede', kick:'Why listen to me',
+    h:'I built the business first',
+    body:'I spent a decade as one of the UK’s leading fine-art wedding photographers before I coached anyone. The bookings were never the hard part. The money and the mindset were, and that is the work I now do with wedding business owners.'},
+
+  {t:'lede', kick:'Where this goes next',
+    h:'A path, not a one-off',
+    body:'The Flow Method is the thinking. Booked in 90 Days and The Wedding Business Club are where we put it to work together, step by step, with other wedding business owners.'},
+
+  {t:'cta', kick:'Your next step',
+    h:'Come and do the work',
+    cta:'Join me inside The Wedding Business Club and start with The Flow Method.',
+    disc:'This masterclass is for education only. It is not a guarantee of income or results; outcomes vary and depend on your own business, market and effort.',
+    sig:'Faye Cornhill', sigsub:'fayecornhillcoaching.co.uk'}
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s, i) => {
+  const d = document.createElement('section');
+  d.className = 'slide' + (i===0?' on':'');
+  let html = '';
+  if (s.kick) html += `<div class="kick">${s.kick}</div>`;
+  if (s.t === 'title') {
+    html += `<h1>${s.h}</h1><div class="lede">${s.lede}</div>`;
+    html += `<div class="sig">${s.sig}<span>${s.sigsub}</span></div>`;
+  } else if (s.t === 'lede') {
+    html += `<h2>${s.h}</h2><div class="body">${s.body}</div>`;
+  } else if (s.t === 'part') {
+    html += `<div class="part">${s.part}</div><h1>${s.h}</h1>`;
+  } else if (s.t === 'reframe') {
+    const parts = s.big.map(p => Array.isArray(p) ? `<span class="${p[1]||''}">${p[0]}</span>` : p).join(' ');
+    html += `<div class="big">${parts}</div>`;
+  } else if (s.t === 'list') {
+    html += `<h2>${s.h}</h2><ul>` + s.items.map(it => `<li><b>${it[0]}</b><span>${it[1]}</span></li>`).join('') + `</ul>`;
+  } else if (s.t === 'flow') {
+    html += `<div class="flowword">` + s.words.map(w => `<b>${w[0]}</b>${w[1]}`).join('  ') + `</div><div class="body" style="margin-top:28px">${s.body}</div>`;
+  } else if (s.t === 'cta') {
+    html += `<h1>${s.h}</h1><div class="cta-line">${s.cta}</div>`;
+    html += `<div class="disc">${s.disc}</div>`;
+    html += `<div class="sig">${s.sig}<span>${s.sigsub}</span></div>`;
+  }
+  html += `<div class="num">${i+1} / ${S.length}</div>`;
+  d.innerHTML = html;
+  stage.appendChild(d);
+});
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+function go(n){ slides[cur].classList.remove('on'); cur = Math.max(0, Math.min(slides.length-1, n)); slides[cur].classList.add('on'); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(cur+1); e.preventDefault(); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(cur-1); e.preventDefault(); }
+});
+document.getElementById('stage').addEventListener('click', () => go(cur+1));
+</script>
+</body>
+</html>
