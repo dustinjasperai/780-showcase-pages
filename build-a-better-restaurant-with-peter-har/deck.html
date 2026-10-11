@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 60% Restaurant - A Live Masterclass with Peter Harman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5ebe0;        /* warm red-tinted paper, derived from the Food Guru appetite-red identity */
+    --panel:#fffaf4;
+    --ink:#2f2e2e;       /* dominant harvested hex, brand.json */
+    --muted:#6f6a63;
+    --rule:#e7d9c8;
+    --accent:#e21c21;    /* Food Guru red, brand.json */
+    --head:'Lato',system-ui,sans-serif;
+    --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{width:100%}
+  .slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;
+    justify-content:center;padding:7vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  .num{position:absolute;top:4vh;right:8vw;font-family:var(--head);font-weight:900;
+    font-size:13px;letter-spacing:.14em;color:var(--muted)}
+  .brandmark{position:absolute;bottom:4vh;left:8vw;font-family:var(--head);font-weight:900;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .brandmark b{color:var(--accent)}
+  .kicker{font-family:var(--head);font-weight:900;font-size:13px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:900;font-size:clamp(34px,6.4vw,78px);line-height:1.02;
+    letter-spacing:-.01em;max-width:16ch}
+  h2{font-family:var(--head);font-weight:900;font-size:clamp(28px,4.4vw,54px);line-height:1.06;
+    letter-spacing:-.01em;max-width:18ch}
+  .lead{font-size:clamp(17px,2vw,23px);color:var(--muted);margin-top:8px;max-width:30ch;font-weight:400}
+  .body{font-size:clamp(16px,1.7vw,21px);margin-top:26px;max-width:40ch}
+  .body.wide{max-width:52ch}
+  ul{margin-top:26px;max-width:46ch;list-style:none}
+  li{font-size:clamp(16px,1.6vw,20px);padding:13px 0 13px 40px;border-bottom:1px solid var(--rule);
+    position:relative}
+  li:before{content:"";position:absolute;left:0;top:19px;width:16px;height:16px;border-radius:3px;
+    background:var(--accent)}
+  li.plain:before{background:none;border:2px solid var(--rule);top:17px}
+  li b{font-family:var(--head);font-weight:700}
+  .check{margin-top:30px;max-width:420px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:4px;padding:22px 24px;box-shadow:0 18px 40px -28px rgba(47,46,46,.5);
+    font-family:'Lato',monospace}
+  .check .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--rule);
+    font-size:16px}
+  .check .row span:last-child{color:var(--accent);font-weight:700}
+  .check .tot{display:flex;justify-content:space-between;padding-top:14px;margin-top:6px;
+    font-family:var(--head);font-weight:900;font-size:19px}
+  .big{font-family:var(--head);font-weight:900;color:var(--accent);
+    font-size:clamp(70px,16vw,180px);line-height:.9;margin-top:10px}
+  .disc{margin-top:30px;font-size:13px;color:var(--muted);max-width:52ch;line-height:1.6}
+  .next{margin-top:28px;font-family:var(--head);font-weight:700;font-size:clamp(18px,2vw,24px)}
+  .next span{color:var(--accent)}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);
+    text-decoration-thickness:4px;color:var(--muted)}
+  @media (max-width:640px){.slide{padding:9vh 7vw}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:"A Live Masterclass", h:"The 60% Restaurant",
+   lead:"How to add more than half your sales again without chasing new customers.",
+   foot:"With Peter Harman, The Food Guru"},
+
+  {t:'promise', k:"What you will leave with", h:"Six levers you can pull this month",
+   b:"In the next 60 minutes you will see exactly where your restaurant is leaving money on the table, and the six moves that put it back. Most of them have nothing to do with getting more customers in the door."},
+
+  {t:'trap', k:"Who this is for", h:"Slammed, yet barely making money",
+   b:"You are busy. The covers are up. The reviews are good. And the bank account still does not reflect the hours you put in. If that is you, you are not working too little. You are pulling the wrong lever."},
+
+  {t:'reframe', k:"The hard truth", h:"More customers is the most expensive way to grow",
+   b:"Chasing new covers costs the most and pays the slowest. The fastest profit in any restaurant is already sitting in your dining room, on your menu, and on your current guest count. We are going to go get it first."},
+
+  {t:'part', k:"Part One", h:"Why the volume trap keeps you broke",
+   b:"When sales feel flat, most owners discount. Peter's rule: discounting is the tax you pay for being mediocre. Quality guests do not want a bargain. They want to be taken care of. Price and hospitality, not coupons, are where the margin lives."},
+
+  {t:'proof', k:"The math that changes everything", h:"Ten percent, six times over",
+   b:"Improve six small things by ten percent each and they compound. Peter's own model shows roughly a 60 percent sales increase, and five of the six moves are about the guests you already have.",
+   check:[["Raise prices 10%","+"],["Keep more regulars","+"],["Lift the average check","+"],["More frequent visits","+"],["Right guests only","+"]], tot:["Same room","+60% sales"]},
+
+  {t:'part', k:"Part Two", h:"The Six Sales Pillars",
+   b:"This is the framework. Six pillars, pulled in order. The first five grow profit from the customers you already have. Only the sixth is about new ones, and by then it is far cheaper to win them.",
+   list:["Raise Prices","Keep Current Customers","Increase the Average Check","Increase Visit Frequency","Eliminate the Wrong Customers","Attract New Customers"]},
+
+  {t:'pillar', k:"Pillar One", h:"Raise Prices",
+   b:"An immediate increase of at least ten percent, done with confidence. Quality guests value excellent food, drink and service far more than a low price. Discounting trains your best customers to wait for a deal. Pricing trains them to trust you."},
+
+  {t:'pillar', k:"Pillar Two", h:"Keep Current Customers",
+   b:"Delivering the Customer Promise: being, consistently, exactly what you told the guest you would be. A kept promise turns a satisfied patron into an advocate who comes back and brings others. Retention is the cheapest sales you will ever make."},
+
+  {t:'pillar', k:"Pillar Three", h:"Increase the Average Check",
+   b:"Table-level selling, not upselling scripts. The Golden Ticket, the Ahh Moment, the small suggestion at the right second. A dollar or two per guest, multiplied by every cover, every night, is a new revenue line with no new marketing."},
+
+  {t:'pillar', k:"Pillar Four", h:"Increase Visit Frequency",
+   b:"A guest who came twice a month coming three times is worth more than a stranger you paid to find. Relationship and permission marketing turn first timers into regulars, and regulars into the rhythm your week is built on."},
+
+  {t:'pillar', k:"Pillar Five", h:"Eliminate the Wrong Customers",
+   b:"The pillar nobody teaches. Stop trying to serve everyone. Focus on the guests who love your concept and fit it, and gently let go of the ones who cost you more in energy and discounts than they ever return. Fit is a profit decision."},
+
+  {t:'pillar', k:"Pillar Six", h:"Attract New Customers",
+   b:"Last, not first, and now far cheaper. With the first five pillars working, every new guest lands in a restaurant that prices well, keeps people, sells at the table and brings them back. New customers now compound instead of leaking away."},
+
+  {t:'part', k:"Part Three", h:"Stacked, the pillars change the business",
+   b:"No single pillar transforms a restaurant. All six, pulled in order, do. This is the difference between an owner who works harder every year and one whose restaurant finally funds the life they opened it for."},
+
+  {t:'system', k:"Underneath the pillars", h:"Eight Basic Fundamentals",
+   b:"Sales sit on top of a sound operation. The pillars work because they rest on the fundamentals every strong restaurant runs on.",
+   list:["Set and achieve a Noble Goal","Own the Owner Mindset","Build a Winning Team","Keep a relentless Customer Focus","Manage the Money","Run Bulletproof Systems","Innovate and Adapt","Aim for ten percent monthly profit"]},
+
+  {t:'why', k:"Why listen to me", h:"I have run the room, not just the slides",
+   b:"Peter Harman: Certified Executive Chef at 27, the youngest to earn the title. Owner of Martini's Grille, named Best Steakhouse in Iowa. Host of Build A Better Restaurant, nearly 400 weekly episodes across eight years. This is the system I use with the owners I coach."},
+
+  {t:'objection', k:"The objection I always hear", h:"My guests are price sensitive",
+   b:"Some are. Those are often the wrong customers, Pillar Five. The guests who fit your concept are not shopping on price. They are shopping on whether tonight is worth it. Make it worth it, charge for it, and the price objection quietly disappears."},
+
+  {t:'action', k:"What to do Monday", h:"Pull one pillar this week",
+   b:"Pick your weakest pillar and move it ten percent. Reprint the menu a little higher. Name three regulars you will call. Add one Golden Ticket to the floor. You do not need a new restaurant. You need the one you have, run on purpose."},
+
+  {t:'recap', k:"The whole masterclass, in one line", h:"Grow the restaurant you already have",
+   b:"Price with confidence. Keep your people. Sell at the table. Bring them back. Serve the right guests. Then, and only then, go win new ones.",
+   list:["Raise Prices","Keep Current Customers","Increase the Average Check","Increase Visit Frequency","Eliminate the Wrong Customers","Attract New Customers"]},
+
+  {t:'cta', k:"Your next step", h:"Let's build your 60% plan together",
+   b:"If you want help pulling these pillars in your restaurant, this is exactly what I do with owners one on one. Start with a Strategy Session, or go deeper with the 90-Day Plan, at foodguru.com.",
+   next:"Work with Peter at <span>foodguru.com</span>",
+   disc:"Educational content only. Figures shown, including the 60 percent example, are illustrative models used to teach the method, not a forecast of your results. No income or result is guaranteed. Results vary by restaurant, market, effort and execution."}
+];
+
+function esc(x){return x;}
+function render(){
+  const deck=document.getElementById('deck');
+  S.forEach((s,i)=>{
+    const el=document.createElement('section');
+    el.className='slide';
+    let html='';
+    html+='<div class="num">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>';
+    if(s.k) html+='<div class="kicker">'+s.k+'</div>';
+    if(s.t==='title'){
+      html+='<h1>'+s.h+'</h1>';
+      if(s.lead) html+='<p class="lead">'+s.lead+'</p>';
+      if(s.foot) html+='<p class="next" style="margin-top:34px">'+s.foot+'</p>';
+    } else {
+      html+='<h2>'+s.h+'</h2>';
+      if(s.b) html+='<p class="body wide">'+s.b+'</p>';
+    }
+    if(s.check){
+      html+='<div class="check">';
+      s.check.forEach(r=>{html+='<div class="row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>';});
+      if(s.tot) html+='<div class="tot"><span>'+s.tot[0]+'</span><span>'+s.tot[1]+'</span></div>';
+      html+='</div>';
+    }
+    if(s.list){
+      html+='<ul>';
+      s.list.forEach(it=>{html+='<li>'+it+'</li>';});
+      html+='</ul>';
+    }
+    if(s.next) html+='<p class="next">'+s.next+'</p>';
+    if(s.disc) html+='<p class="disc">'+s.disc+'</p>';
+    html+='<div class="brandmark">FOOD<b>GURU</b></div>';
+    el.innerHTML=html;
+    deck.appendChild(el);
+  });
+}
+render();
+</script>
+</body>
+</html>
