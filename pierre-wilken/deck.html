@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Quiet Pipeline — Pierre Wilken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f3f5f9; --rule:#cbd5e1; --ink:#0f1729;
+    --body:#314059; --muted:#64748b; --accent:#fcedca;
+    --display:"Plus Jakarta Sans",system-ui,sans-serif;
+    --text:"Inter",system-ui,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,"Geist Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--panel);color:var(--body);font-family:var(--text);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:min(960px,96vw)}
+  .slide{display:none;background:var(--bg);border:1px solid var(--rule);
+    border-radius:14px;padding:56px 56px 48px;min-height:560px;
+    box-shadow:0 1px 0 rgba(15,23,41,.03);position:relative}
+  .slide.on{display:block}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:22px;
+    display:flex;align-items:center;gap:10px}
+  .kicker::before{content:"";width:26px;height:2px;background:var(--ink);display:inline-block}
+  h1{font-family:var(--display);font-weight:800;color:var(--ink);
+    font-size:46px;line-height:1.08;letter-spacing:-.02em}
+  h2{font-family:var(--display);font-weight:700;color:var(--ink);
+    font-size:34px;line-height:1.14;letter-spacing:-.015em;margin-bottom:18px}
+  p{font-size:19px;line-height:1.55;color:var(--body);max-width:62ch;margin-top:14px}
+  .lead{font-size:22px;color:var(--ink);font-weight:500}
+  .sub{font-size:20px;color:var(--muted);margin-top:18px;max-width:60ch}
+  .mark{background:linear-gradient(transparent 58%,var(--accent) 58%);padding:0 2px}
+  ul{margin:20px 0 0 0;list-style:none}
+  li{font-size:19px;line-height:1.5;color:var(--body);padding:12px 0 12px 30px;
+    position:relative;border-top:1px solid var(--rule);max-width:64ch}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:19px;width:10px;height:10px;
+    background:var(--ink);border-radius:2px}
+  li b{color:var(--ink);font-weight:700}
+  .ladder{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .rung{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:10px;padding:20px}
+  .rung .n{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .rung .t{font-family:var(--display);font-weight:700;color:var(--ink);font-size:20px;margin-top:8px}
+  .rung.hi{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .rung.hi .t{background:linear-gradient(transparent 60%,var(--accent) 60%);display:inline}
+  .quote{font-family:var(--display);font-weight:600;color:var(--ink);font-size:26px;
+    line-height:1.3;max-width:60ch;letter-spacing:-.01em}
+  .cite{font-size:15px;color:var(--muted);margin-top:16px;font-family:var(--mono)}
+  .big{font-family:var(--display);font-weight:800;color:var(--ink);font-size:40px;
+    line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+  .strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .cta-line{font-size:20px;color:var(--ink);font-weight:600;margin-top:10px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);border:1px solid var(--ink);
+    border-radius:999px;padding:7px 14px;margin-top:28px}
+  .disc{font-size:13px;color:var(--muted);margin-top:30px;max-width:66ch;line-height:1.5}
+  .foot{position:absolute;left:56px;right:56px;bottom:22px;display:flex;
+    justify-content:space-between;align-items:center;font-family:var(--mono);
+    font-size:11px;color:var(--muted);letter-spacing:.08em}
+  .nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;
+    gap:8px;align-items:center;background:var(--bg);border:1px solid var(--rule);
+    border-radius:999px;padding:6px 10px}
+  .nav button{font-family:var(--mono);font-size:13px;border:none;background:none;
+    color:var(--ink);cursor:pointer;padding:4px 8px}
+  .nav span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .title-wrap .by{font-family:var(--mono);font-size:14px;color:var(--muted);margin-top:34px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><button id="prev">prev</button><span id="count"></span><button id="next">next</button></div>
+<script>
+const S=[
+  {t:'title',k:'Live masterclass',h:'The Quiet Pipeline',s:'How introverted IT experts win better clients without becoming salespeople.',by:'Pierre Wilken · IT Business Growth'},
+  {t:'audience',k:'Who this is for',h2:'You are excellent at the work. The pipeline is the problem.',p:'This is for the senior developer, the IT consultant, the DevOps specialist who delivers great work and is quietly tired of waiting on recruiters, referrals, and luck for the next project.'},
+  {t:'trap',k:'The trap',h2:'Your pipeline runs on other people.',p:'Recruiters decide which projects reach you. Referrals come when they come. A good month is often just a lucky one. None of that is in your hands, and it is the part that keeps you up at night.'},
+  {t:'reframe',k:'The reframe',big:'The best developer in the room is rarely the one with the fullest calendar.',p:'The fullest calendar belongs to the one clients can find and remember. That is a different skill, and it is learnable.'},
+  {t:'problem',k:'Part one · the core problem',h2:'You were never taught to be found.',p:'You were trained to build things that work. Nobody taught you how to be the obvious choice for the right client before a recruiter ever enters the picture. That gap is not a talent problem. It is a positioning problem.'},
+  {t:'problem',k:'Part one · the rate trap',h2:'"A developer" is a price, not a position.',p:'When you are interchangeable, the conversation is always about rate. Someone asks you to drop 15%, and you have no reason they can see to say no. The market cannot pay a premium for a role it cannot tell apart.'},
+  {t:'problem',k:'Part one · who holds the risk',h2:'The recruiter owns the client. You own the risk.',p:'In the recruiter pipeline the relationship, the margin, and the next project all sit with someone else. When the work dries up, the risk lands entirely on you.'},
+  {t:'framework',k:'Part two · the system',h2:'Three steps, none of them loud.',p:'Marketing and client acquisition do not have to be loud, pushy, or unpleasant. The whole system is built so a technologist can win good clients while staying a technologist.'},
+  {t:'pillar',k:'Pillar 1 · Positionierung',h2:'Be the specialist clients ask for by name.',p:'Positioning is choosing a narrow, valuable problem you are the obvious person to solve. The counterintuitive part: the narrower you go, the more the right clients recognise themselves in you, and the less you compete on rate.'},
+  {t:'pillar',k:'Pillar 1 · Positionierung',h2:'Narrow is not smaller. Narrow is findable.',p:'A clear position is what makes everything after it work. You cannot run inbound on a fuzzy "full-stack generalist." You can run it on "the person who fixes a specific thing for a specific client."'},
+  {t:'pillar',k:'Pillar 2 · Inbound',h2:'Let the work come to you.',p:'Show your thinking where your clients already look, which in this field is almost always LinkedIn. Consistently, in public, in your own voice. Over time the inbound message replaces the recruiter call: "Saw your post, are you available?"'},
+  {t:'pillar',k:'Pillar 2 · Inbound',h2:'Content is positioning made visible.',p:'You are not trying to go viral. You are trying to be the name that comes to mind for one specific problem. A handful of the right readers matters more than a large audience of the wrong ones.'},
+  {t:'pillar',k:'Pillar 3 · Selling',h2:'Selling without being a salesperson.',p:'You do not have to become someone you are not. When your product and your expertise are genuinely useful to a clearly chosen client, the call is a fit check, not a pitch. You qualify, you are honest, and the right ones say yes.'},
+  {t:'pillar',k:'Pillar 3 · Selling',h2:'The call is a diagnosis, not a performance.',p:'Introverts are often better at this than extroverts, because listening and precision beat charisma here. The quiet approach is not a handicap. For this buyer it is an advantage.'},
+  {t:'ladder',k:'Part three · the climb',h2:'From employee to owner, one rung at a time.',ladder:[['01','Angestellter','employed, capped'],['02','Freelancer','booked, in demand'],['03','200k Unternehmer','you set the terms']]},
+  {t:'outcome',k:'Part three · the result',h2:'A calendar you control.',p:'A steady flow of inbound projects from clients who chose you specifically. You set the rate because you are not interchangeable. The business runs on a system you own, not on who happens to call.'},
+  {t:'why',k:'Why me',h2:'I built this the same way.',p:'I started as an application developer, went employed, then freelance, and built a highly profitable freelance business before turning it into a company with real processes and recurring revenue. I am a genuine tech nerd and naturally introverted, so I built a path that works for people like us.'},
+  {t:'proof',k:'What clients say',quote:'"Today I am no longer dependent on recruiters or on chance."',cite:'Maximilian S., program participant (quoted from it-business-growth.com)'},
+  {t:'proof',k:'What clients say',quote:'"I learned I do not have to be a salesperson, because the product and service are genuinely useful to my target group."',cite:'Thomas S., program participant (quoted from it-business-growth.com)'},
+  {t:'shift',k:'The shift',h2:'Positioning, inbound, and quiet selling give you your own pipeline.',p:'Three steps that fit how you already think. Clients find you, remember you, and choose you, and the recruiter stops being the gatekeeper to your year.'},
+  {t:'cta',k:'Your next step',h2:'Let us map your quiet pipeline.',ctaLine:'Book a free Erstgespräch (initial consultation) with me.',pill:'it-business-growth.com',disc:'Educational content only. No specific income or result is guaranteed. Results vary with your market, your effort, and your circumstances. This masterclass teaches an approach to positioning and client acquisition, not a promise of earnings.'}
+];
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.k) html+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='title'){
+    html+=`<div class="title-wrap"><h1>${s.h}</h1><p class="sub">${s.s}</p><div class="by">${s.by}</div></div>`;
+  } else if(s.big){
+    html+=`<p class="big">${s.big}</p>`+(s.p?`<p>${s.p}</p>`:'');
+  } else if(s.quote){
+    html+=`<p class="quote">${s.quote}</p><div class="cite">${s.cite}</div>`;
+  } else {
+    if(s.h2) html+=`<h2>${s.h2}</h2>`;
+    if(s.p) html+=`<p>${s.p}</p>`;
+    if(s.ladder){
+      html+='<div class="ladder">';
+      s.ladder.forEach((r,ri)=>{html+=`<div class="rung${ri===2?' hi':''}"><div class="n">${r[0]}</div><div class="t">${r[1]}</div><p style="margin-top:8px;font-size:15px;color:var(--muted)">${r[2]}</p></div>`;});
+      html+='</div>';
+    }
+    if(s.ctaLine) html+=`<div class="cta-line">${s.ctaLine}</div>`;
+    if(s.pill) html+=`<div class="pill">${s.pill}</div>`;
+    if(s.disc) html+=`<div class="disc">${s.disc}</div>`;
+  }
+  html+=`<div class="foot"><span>IT BUSINESS GROWTH</span><span>${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</span></div>`;
+  d.innerHTML=html;
+  deck.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;slides[cur].classList.add('on');count.textContent=`${cur+1} / ${slides.length}`;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+count.textContent=`1 / ${slides.length}`;
+</script>
+</body>
+</html>
