@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Pro Producer Path - Masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000321; --panel:#101828; --rule:#26324a; --muted:#8893a8;
+    --accent:#e9b444; --ink:#f4f6fb; --head:'Syne',sans-serif; --body:'Hanken Grotesk',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);overflow:hidden}
+  #stage{position:relative;height:100vh;width:100vw}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:9vh 10vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .k{font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.8rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:800;font-size:clamp(2.2rem,6vw,4.4rem);line-height:1.02}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(1.7rem,4vw,3rem);line-height:1.08}
+  .sub{color:var(--muted);font-size:clamp(1.05rem,1.8vw,1.5rem);margin-top:1.6rem;max-width:46ch;line-height:1.5}
+  .big{font-family:var(--head);font-weight:800;font-size:clamp(2rem,5vw,3.6rem);line-height:1.1;max-width:24ch}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:2rem;max-width:40ch}
+  li{position:relative;padding-left:1.6rem;margin:1rem 0;font-size:clamp(1.05rem,1.7vw,1.4rem);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;background:var(--accent);border-radius:50%}
+  .step{font-family:var(--head);font-weight:800;color:var(--accent);font-size:1rem;letter-spacing:.14em;margin-bottom:.8rem}
+  .quote{font-family:var(--head);font-weight:600;font-size:clamp(1.4rem,3vw,2.3rem);line-height:1.25;max-width:24ch}
+  .by{color:var(--muted);margin-top:1.4rem;font-size:1rem;letter-spacing:.04em}
+  .cta h1{max-width:20ch}
+  .next{display:inline-block;margin-top:2rem;font-family:var(--head);font-weight:700;
+    background:var(--accent);color:#1a1200;padding:.9rem 1.6rem;border-radius:.5rem;font-size:1.1rem}
+  .disc{color:var(--muted);font-size:.82rem;margin-top:2.4rem;max-width:52ch;line-height:1.5}
+  .brandline{position:absolute;left:10vw;bottom:5vh;color:var(--muted);font-family:var(--head);
+    font-weight:600;letter-spacing:.14em;font-size:.72rem;text-transform:uppercase}
+  .accentbar{position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--accent)}
+  #dots{position:absolute;right:3vw;bottom:3vh;display:flex;gap:.4rem;z-index:5}
+  #dots span{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+  #dots span.on{background:var(--accent)}
+  #hint{position:absolute;left:3vw;bottom:3vh;color:var(--muted);font-size:.72rem;z-index:5}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="dots"></div>
+<div id="hint">Use arrow keys</div>
+<script>
+const S=[
+  {t:'title', k:'A Masterclass with Varti Deuchoghlian',
+   h:'Think Like a Pro, Sound Like a Pro',
+   sub:'How serious electronic producers go from almost-there tracks to label-ready music, through clarity and a plan instead of guesswork.'},
+
+  {t:'point', k:'Who this is for',
+   h:'You, if your tracks are almost there',
+   sub:'You can finish a record. It sounds close. But labels keep passing, and you cannot name exactly what is missing. This hour is for producers who are serious about going pro.'},
+
+  {t:'list', k:'The trap',
+   h:'Why more tutorials are not working',
+   list:['You collect tutorials but still feel stuck','You chase plugins and presets, not a sound','Every track restarts the learning from scratch','No one has ever audited where you actually are']},
+
+  {t:'big', k:'The reframe',
+   big:'Almost-there is a <span class="a">plan problem</span>, not a plugin problem.'},
+
+  {t:'point', k:'Part one - the core problem',
+   h:'Broken knowledge keeps you almost-there',
+   sub:'Random tutorials give you pieces. Pieces do not add up to a professional, repeatable process. What is missing is clarity on what to work on next, and in what order.'},
+
+  {t:'list', k:'Part one',
+   h:'The three gaps that stall producers',
+   list:['The fundamentals gap: skills learned out of order','The mindset gap: thinking like a hobbyist, not a pro','The identity gap: sounding like everyone else']},
+
+  {t:'big', k:'Part one',
+   big:'If you want to live off music, stop thinking like just an artist. Start thinking like a <span class="a">pro</span>.'},
+
+  {t:'point', k:'Part two - the framework',
+   h:'The Pro Producer Path',
+   sub:'A personalized path from where you are to label-ready, built in three steps around your sound, not a one-size course.'},
+
+  {t:'step', k:'Part two', step:'Step one',
+   h:'The Clarity Call',
+   sub:'A real audit of your skills and your goals. We find exactly where you are and name what is actually holding the music back, so you stop guessing.'},
+
+  {t:'step', k:'Part two', step:'Step two',
+   h:'Design Your Pro Plan',
+   sub:'A strategic roadmap built for you: the specific skills, in the right order, that take your tracks from almost-there to signable. Structure instead of scattered effort.'},
+
+  {t:'step', k:'Part two', step:'Step three',
+   h:'Pro Mode Mentorship',
+   sub:'Result-oriented one-to-one mentorship. We work the plan together until the sound is professional and the process is repeatable, track after track.'},
+
+  {t:'list', k:'The pillars',
+   h:'Think like a pro',
+   list:['High-level thinking before plugins','Decisions a professional would make','Treat the music like a career, not a hobby']},
+
+  {t:'list', k:'The pillars',
+   h:'Own your fundamentals',
+   list:['A proper grasp of the core, not tutorial scraps','Walk into the studio with real confidence','Fundamentals are what make the pro sound repeatable']},
+
+  {t:'list', k:'The pillars',
+   h:'Find your sound',
+   list:['Stop sounding like everyone else','Build a signature a label can recognize','Your identity becomes the reason you get signed']},
+
+  {t:'point', k:'Part three - the signable record',
+   h:'From almost-there to label-ready',
+   sub:'With clarity, a plan, and mentorship, the jump that takes most producers three or more years of trial and error can happen in a matter of months, because the effort finally points in one direction.'},
+
+  {t:'list', k:'Why me',
+   h:'I have walked this path',
+   list:['Releases on Anjunadeep and its Reflections imprint','Support from Above & Beyond and Lee Burridge','Studied at Berklee, a decade producing and engineering','I now mentor producers to do the same']},
+
+  {t:'quote', k:'From a student',
+   quote:'"I made years of progress in a matter of months."',
+   by:'Jan Barganowski, Pro Producer Path student'},
+
+  {t:'quote', k:'From a student',
+   quote:'"A kind, smart and objective mentor - attention to detail you will not get in a classroom."',
+   by:'Andres Martinez and Francoys Cloutier, students'},
+
+  {t:'big', k:'The opportunity',
+   big:'The gap between your music and a label is a <span class="a">path</span>. Let us build yours.'},
+
+  {t:'cta', k:'Your next step',
+   h:'Book your Clarity Call',
+   sub:'If you are serious about going pro, start with a Clarity Call. We will audit where you are and map your Pro Producer Path.',
+   next:'Book your Clarity Call at visionaryproducer.com',
+   disc:'Educational only. No income, signing, or specific result is guaranteed. Results vary and depend on your own effort, skill, and circumstances.'}
+];
+
+const stage=document.getElementById('stage'), dots=document.getElementById('dots');
+function esc(x){return x;}
+function build(){
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');
+    d.className='slide'; d.dataset.i=i;
+    let inner='<div class="accentbar"></div>';
+    if(s.k) inner+='<div class="k">'+s.k+'</div>';
+    if(s.t==='title'){ inner+='<h1>'+s.h+'</h1>'+(s.sub?'<p class="sub">'+s.sub+'</p>':''); }
+    else if(s.t==='point'){ inner+='<h2>'+s.h+'</h2>'+(s.sub?'<p class="sub">'+s.sub+'</p>':''); }
+    else if(s.t==='list'){ inner+='<h2>'+s.h+'</h2><ul>'+s.list.map(x=>'<li>'+x+'</li>').join('')+'</ul>'; }
+    else if(s.t==='big'){ inner+='<p class="big">'+s.big+'</p>'; }
+    else if(s.t==='step'){ inner+='<div class="step">'+s.step+'</div><h2>'+s.h+'</h2>'+(s.sub?'<p class="sub">'+s.sub+'</p>':''); }
+    else if(s.t==='quote'){ inner+='<p class="quote">'+s.quote+'</p><p class="by">'+s.by+'</p>'; }
+    else if(s.t==='cta'){ d.classList.add('cta'); inner+='<h1>'+s.h+'</h1>'+(s.sub?'<p class="sub">'+s.sub+'</p>':'')+'<div class="next">'+s.next+'</div><p class="disc">'+s.disc+'</p>'; }
+    inner+='<div class="brandline">Visionary Producer</div>';
+    d.innerHTML=inner; stage.appendChild(d);
+    const dot=document.createElement('span'); dot.dataset.i=i; dots.appendChild(dot);
+  });
+}
+let cur=0; const slides=()=>document.querySelectorAll('.slide'); const ds=()=>document.querySelectorAll('#dots span');
+function show(n){ cur=Math.max(0,Math.min(S.length-1,n));
+  slides().forEach(el=>el.classList.toggle('on', +el.dataset.i===cur));
+  ds().forEach(el=>el.classList.toggle('on', +el.dataset.i===cur)); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(cur+1); if(e.key==='ArrowLeft')show(cur-1); });
+stage.addEventListener('click',()=>show(cur+1));
+build(); show(0);
+</script>
+</body>
+</html>
