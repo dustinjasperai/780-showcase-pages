@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow on Demand, a live masterclass with Cameron Norsworthy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:#121829; --rule:#1e2742;
+    --accent:#002fff; --ink:#f5f7ff; --muted:#9aa6c4;
+    --head:'Sora',system-ui,sans-serif; --body:'IBM Plex Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100%;max-width:1100px;aspect-ratio:16/9;max-height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7% 8%;background:var(--bg)}
+  .slide.on{display:flex}
+  .k{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-size:clamp(11px,1.3vw,15px);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;line-height:1.02;font-size:clamp(34px,6.2vw,74px);
+    letter-spacing:-.02em}
+  h2{font-family:var(--head);font-weight:700;line-height:1.05;font-size:clamp(26px,4.4vw,52px);
+    letter-spacing:-.015em}
+  .s{color:var(--muted);font-size:clamp(16px,2.1vw,26px);line-height:1.5;margin-top:26px;max-width:40ch}
+  .foot{margin-top:30px;color:var(--ink);font-size:clamp(14px,1.7vw,20px);opacity:.9}
+  ul{margin-top:30px;list-style:none;display:flex;flex-direction:column;gap:16px;max-width:42ch}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,2vw,24px);line-height:1.4;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:12px;background:var(--accent)}
+  .section h2{font-size:clamp(34px,6vw,70px)}
+  .section{border-left:10px solid var(--accent)}
+  .disc{margin-top:34px;color:var(--muted);font-size:clamp(11px,1.3vw,15px);max-width:46ch;line-height:1.5}
+  .cta h2{color:var(--ink)} .cta .btn{margin-top:30px;display:inline-block;align-self:flex-start;
+    background:var(--accent);color:#fff;font-family:var(--head);font-weight:600;
+    font-size:clamp(15px,1.9vw,22px);padding:16px 30px;border-radius:2px}
+  /* flow channel visual */
+  .channel{margin-top:34px;position:relative;height:40%;min-height:180px;border:1px solid var(--rule);
+    background:var(--panel);overflow:hidden}
+  .channel .band{position:absolute;left:-5%;bottom:-20%;width:130%;height:120%;
+    background:linear-gradient(60deg,transparent 42%,var(--accent) 42%,var(--accent) 58%,transparent 58%);
+    opacity:.85}
+  .channel .lab{position:absolute;font-family:var(--head);font-size:clamp(11px,1.4vw,16px);color:var(--muted)}
+  .channel .lx{left:18px;bottom:14px} .channel .ly{left:18px;top:14px}
+  .channel .flow{right:20px;top:46%;color:#fff;font-weight:600}
+  .num{font-family:var(--head);color:var(--accent);font-weight:700;font-size:clamp(20px,2.6vw,30px);margin-bottom:10px}
+  .nav{position:fixed;bottom:16px;right:20px;color:var(--muted);font-family:var(--head);font-size:13px}
+  .bar{position:fixed;left:0;top:0;height:4px;background:var(--accent);width:0;transition:width .2s}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div id="stage"></div>
+<div class="nav"><span id="pg">1</span> / <span id="tot"></span></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Cameron Norsworthy', h:'Flow on Demand',
+   s:'How to coach anyone into their highest-performing state on purpose, not by luck.'},
+  {t:'who', h:'Who this is for',
+   list:['Coaches who want clients to break through, not just feel better',
+         'Leaders whose best people are capable of far more than they deliver',
+         'Anyone tired of teaching mindset and hoping it sticks'],
+   foot:'If performance matters to the people you serve, this is for you.'},
+  {t:'point', k:'The trap', h:'We coach the wrong lever',
+   s:'We were taught that peak performance is about motivation, willpower and the right mindset. So we coach harder on all three. And still the breakthrough comes and goes without warning.'},
+  {t:'point', k:'The reframe', h:'Flow is not a mood. It is a set of conditions.',
+   s:'The state where people do their best work is measurable and repeatable. Once you know the conditions, you can set them on command, for anyone.'},
+  {t:'point', k:'The stakes', h:'What the gap costs',
+   s:'When flow is left to chance, your best people stall at the worst moments and your coaching results swing. Reliability, not inspiration, is what clients actually pay for.'},
+  {t:'section', k:'Part one', h:'Why performance stalls'},
+  {t:'point', h:'Motivation is the wrong lever',
+   s:'Motivation explains why someone starts. It does not explain why they lock in. Pulling harder on motivation leaves the real driver untouched, which is why effort so rarely converts into flow.'},
+  {t:'point', h:'The gap nobody coaches',
+   s:'Between trying hard and being in the zone sits a specific set of conditions. Most training walks straight past it. Close that gap and performance stops being a surprise.'},
+  {t:'section', k:'Part two', h:'The Flow Model'},
+  {t:'point', h:'A model, not a mantra',
+   s:'The Flow Model maps how attention, challenge and skill combine to produce flow. It turns a vague feeling into a system you can diagnose and coach, built from twenty years of flow research.'},
+  {t:'channel', k:'The Flow Model', h:'Flow lives in the channel',
+   s:'Too little challenge and people drift. Too much and they strain. Flow sits in the narrow band where challenge meets skill, and that band is something you can engineer.'},
+  {t:'list', k:'The Flow Drivers', h:'The levers you can set on demand',
+   list:['Challenge matched precisely to skill',
+         'Clear goals and immediate feedback',
+         'Deep, protected attention',
+         'Autonomy and meaning in the task'],
+   foot:'Set the drivers and flow follows. These are the conditions, not the slogans.'},
+  {t:'point', k:'The Psychological Flow Scale', h:'If you can measure it, you can coach it',
+   s:'The Psychological Flow Scale gives you a read on where someone actually is. You stop guessing, you see which driver is missing, and you coach the one that moves the needle.'},
+  {t:'section', k:'Part three', h:'Flow, coached on command'},
+  {t:'point', h:'From one person to a whole team',
+   s:'The conditions that put a person in flow scale to a team. Flow Leadership is how managers build an environment where their people reach that state together, not by accident.'},
+  {t:'point', h:'A session you can repeat',
+   s:'Diagnose with the scale, find the missing driver, adjust the conditions, and watch the state return on command. That is the difference between inspiring people and reliably changing their performance.'},
+  {t:'credibility', k:'Why me', h:'Cameron Norsworthy',
+   list:['Twenty years setting the standard for high-performance coaching',
+         'PCC coach, sports psychologist and flow researcher',
+         'Creator of the Psychological Flow Scale and a global flow research group',
+         'Trains coaches and leaders worldwide through the Flow Coaching Federation'],
+   foot:'This masterclass is a live walk through the method I teach my own coaches.'},
+  {t:'cta', k:'Your next step', h:'Bring flow into your coaching',
+   s:'Join the live masterclass and leave with the Flow Model, the drivers, and a way to measure flow you can use on Monday.',
+   cta:'Reserve your place at the live masterclass',
+   disc:'Educational only. No income, performance or result is guaranteed. Outcomes vary by individual and by effort.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.t==='section'?' section':'')+(s.t==='cta'?' cta':'')+(i===0?' on':'');
+  let html='';
+  if(s.k) html+='<div class="k">'+esc(s.k)+'</div>';
+  if(s.t==='title'||s.t==='section'){ html+='<h1>'+esc(s.h)+'</h1>'; }
+  else { html+='<h2>'+esc(s.h)+'</h2>'; }
+  if(s.t==='channel'){
+    html+='<div class="channel"><div class="band"></div>'
+      +'<div class="lab lx">challenge &rarr;</div><div class="lab ly">skill &uarr;</div>'
+      +'<div class="lab flow">flow</div></div>';
+  }
+  if(s.s) html+='<p class="s">'+esc(s.s)+'</p>';
+  if(s.list){ html+='<ul>'+s.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'; }
+  if(s.foot) html+='<div class="foot">'+esc(s.foot)+'</div>';
+  if(s.cta) html+='<span class="btn">'+esc(s.cta)+'</span>';
+  if(s.disc) html+='<div class="disc">'+esc(s.disc)+'</div>';
+  d.innerHTML=html;
+  stage.appendChild(d);
+});
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((e,i)=>e.classList.toggle('on',i===cur));
+  document.getElementById('pg').textContent=cur+1;
+  document.getElementById('bar').style.width=((cur+1)/S.length*100)+'%';}
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft')show(cur-1);});
+addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
