@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Other Side of the Desk · Touch MBA, Darren C. Joe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f9f9f9; --panel:#f0f0f0; --rule:#e2e2e2;
+    --ink:#111111; --body:#3a3a38; --dim:#6b6b6b; --line:#e2e2e2;
+  }
+  html,body{height:100%}
+  body{background:#e4e4e4;font-family:'Inter',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e4e4e4}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.8%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:.98vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);margin-bottom:2.6vh}
+  .kicker::before{content:'';display:inline-block;width:2.2vw;height:1.5px;background:var(--ink);vertical-align:middle;margin-right:.9vw;transform:translateY(-.25vh)}
+  h1{font-family:'Cardo',Georgia,serif;font-weight:700;color:var(--ink);line-height:1.13;letter-spacing:.002em}
+  .t-title h1{font-size:5.2vw;max-width:95%}
+  .t-normal h1{font-size:3.25vw;max-width:90%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.36vw;color:var(--body);margin-top:3.0vh;max-width:75%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Cardo',serif;font-size:2.0vw;color:var(--body);margin-top:3.4vh;max-width:82%;line-height:1.44;font-weight:400;font-style:italic}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.05vw;font-weight:600;color:var(--ink);margin-bottom:2.2vh;letter-spacing:.26em;text-transform:uppercase}
+  .t-section h1{font-size:4.9vw;max-width:92%}
+  .t-section .rule{width:14vw;height:2px;background:var(--ink);margin-top:3.6vh}
+  .t-dark{background:var(--ink);align-items:flex-start}
+  .t-dark h1{font-size:3.55vw;max-width:90%;color:#f9f9f9;font-style:italic}
+  .t-dark .mk{font-family:'Inter',sans-serif;font-size:.98vw;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#9a978f;margin-bottom:2.6vh}
+  .t-cta{background:var(--ink);align-items:flex-start}
+  .t-cta h1{font-size:3.75vw;max-width:88%;color:#f9f9f9}
+  .t-cta .body{font-family:'Inter',sans-serif;color:#d8d5cd;font-size:1.34vw;margin-top:3vh;max-width:74%;line-height:1.62}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap}
+  .chip{border:1.5px solid #f9f9f9;color:#f9f9f9;border-radius:2px;padding:1.4vh 1.8vw;font-size:1.12vw;font-weight:500}
+  .disc{position:absolute;left:8.8%;right:8.8%;bottom:4.2vh;font-size:.82vw;color:var(--dim);text-align:left;line-height:1.45}
+  .t-cta .disc{color:#8f8c84}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.1vw;color:var(--dim);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--ink);font-weight:600}
+  .lp-motif{position:absolute;pointer-events:none;right:8.8%;bottom:9%;width:12vw;opacity:.9}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(17,17,17,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--ink);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.6vw}.t-normal h1{font-size:5.8vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4vw}.t-section h1{font-size:7.6vw}.t-dark h1{font-size:6.2vw}
+    .t-cta h1{font-size:7.2vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Touch MBA</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a reader's tick in the margin of a file, drawn in ink -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="lp" viewBox="0 0 120 120">
+  <g fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="26" y1="30" x2="94" y2="30" opacity="0.35"/>
+    <line x1="26" y1="48" x2="94" y2="48" opacity="0.35"/>
+    <line x1="26" y1="66" x2="76" y2="66" opacity="0.35"/>
+    <path d="M74 80 L86 94 L104 60" opacity="0.95"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The Other Side of the Desk',sub:'How to choose the right MBA anywhere in the world, and get in, from someone who sat on the admissions committee.',brand:true,lp:true},
+ {t:'normal',k:'Who this is for',title:'You are weighing an MBA, and the rankings are quietly running the whole decision.',body:'You are a working professional deciding whether to do an MBA, where to apply, and how to pay for it. You are staring at the same three or four brand names everyone repeats, unsure if you can get in, and unsure who to trust if you are applying from outside the usual networks. This hour is for you.'},
+ {t:'dark',mk:'The trap',title:'Applying to the three schools everyone can name is not a strategy. It is how strong candidates get lost in a pool of people exactly like them.'},
+
+ {t:'section',idx:'Part One',title:'The Rankings Trap'},
+ {t:'normal',k:'There are more than three schools',title:'There are far more than three schools where you can get a world-class business education.',body:'The list of programs worth your two years and your money is much longer than the handful at the top of one American ranking. Some of the best options for your goals sit in Europe, Asia, Australia, and Canada, and they never show up when a ranking is the only map you use. The ranking is measuring prestige. You should be measuring fit.'},
+ {t:'normal',k:'Fit is the real filter',title:'An MBA is an investment. Evaluate it like one, and evaluate it globally.',body:'The right question is not which school is highest, it is which program moves you toward where you are going, at a cost and in a place that make sense for your life. Career goal, culture, network, geography, and total cost matter more than a position on a list. Weigh those honestly across the whole world of programs and the shortlist changes completely.'},
+ {t:'dark',mk:'The reframe',title:'The best MBA is not the highest-ranked one. It is the one that gets you where you are going.'},
+
+ {t:'section',idx:'Part Two',title:'Reading Your Own File'},
+ {t:'normal',k:'The Admissions Rubric',title:'Score your own profile the way the committee will, before they ever do.',body:'The Admissions Rubric reads every applicant on three things. Academic aptitude: can you handle a demanding graduate program. Work experience: can the degree actually move your career. Ambassadorial potential: will classmates, alumni, and professors be glad you are in the room. Hold your own file up against those three honestly, and you start to see it the way a reader does, not the flattering version in your head.'},
+ {t:'normal',k:'Fix what moves the decision',title:'Once you see your file the way a reader does, your effort finally goes to the parts that change the answer.',body:'Most applicants pour months into the pieces that feel productive and ignore the one gap that is actually costing them the admit. When you can see your profile through a reader’s eyes, you spend your limited time where it shifts the decision, and you stop polishing things no reader was going to weigh.'},
+ {t:'dark',mk:'The truth about admissions',title:'It was never a black box. It is a room of tired readers deciding whether it is easy to say yes to you.'},
+
+ {t:'section',idx:'Part Three',title:'In the Adcom’s Shoes'},
+ {t:'normal',k:'Make it easy to say yes',title:'Stop writing for yourself. Write for the person reading their fortieth file today.',body:'The whole craft of getting in is putting yourself in the committee’s seat and making their job simple. Give them a clear reason, evidence they can point to, and a candidate they can advocate for in the room. When you understand what they actually value beyond the scores, you stop guessing and start giving them the yes they are already looking for.'},
+ {t:'normal',k:'Tell your best story',title:'Your scores get you read. Your story is what a reader still remembers at the end of the day.',body:'A strong application is a coherent story, not a list of achievements. Authentic positioning, a narrative that connects your past to the future you are asking them to fund, and leadership shown through what you did rather than adjectives you chose. That is what survives a long day of reading and turns a qualified applicant into a memorable one.'},
+ {t:'dark',mk:'The line that matters',title:'Everyone in the pile is qualified. The one who gets in is the one they remember.'},
+
+ {t:'section',idx:'Part Four',title:'The Right Yes'},
+ {t:'normal',k:'Not just an admit, the right admit',title:'The goal is not any acceptance. It is the offer that actually fits your life.',body:'Winning here looks like a program aligned to your real goals, ideally with scholarship money attached, in a place and a network you will genuinely use for the next twenty years. When the fit work and the admissions work are done together, you are not just hoping to get in somewhere. You are choosing between offers that were worth wanting.'},
+ {t:'normal',k:'Why Touch MBA',title:'The person telling you how the committee thinks has actually been in the room.',body:'Darren built and ran the MBA admissions process at Singapore Management University, from recruiting to interviews to scholarships, after Princeton. Since then Touch MBA has guided more than 4,000 applicants from over 50 countries, and the Touch MBA podcast has featured 75-plus admissions directors and admitted students. This is not theory about the other side of the desk. It is the view from that chair.'},
+
+ {t:'section',idx:'Your Next Step',title:'Touch MBA'},
+ {t:'normal',k:'Start with a clear read',title:'See your best-fit schools and an honest read of your odds, then build the plan.',body:'The free Touch MBA profile review is the simplest place to begin: send your background, get real best-fit program recommendations and a straight read on where you stand. From there, one-on-one consulting is how you turn that read into an application strategy with someone who has sat on the committee you are trying to convince.'},
+ {t:'cta',title:'Ready to find the MBA that actually fits?',body:'Start with a free profile review from Touch MBA, and see your best-fit schools from the other side of the desk.',chips:['Get your free profile review','Book a one-on-one consultation'],disc:'Educational content for prospective MBA applicants. Nothing here is admissions, financial, or legal advice, and no admission, scholarship, or specific result is guaranteed. Results vary by applicant and program.'},
+];
+
+const deck=document.getElementById('deck');
+function lp(){return `<svg class="lp-motif"><use href="#lp"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else if(s.t==='dark'){ if(s.mk) h+=`<div class="mk">${s.mk}</div>`; h+=`<h1>${s.title}</h1>`; }
+  else if(s.t==='cta'){ h+=`<h1>${s.title}</h1>`; if(s.body) h+=`<div class="body">${s.body}</div>`; if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Touch MBA · <b>Darren C. Joe</b></div>`;
+  }
+  if(s.lp) h+=lp();
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
