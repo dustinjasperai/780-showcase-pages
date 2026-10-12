@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Living Lighting Portrait - The Lighting Trade School</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071f2f;      /* their H1 navy (brand.json) */
+    --panel:#0d2b40;   /* lift toward dominant #014e7d */
+    --rule:#014e7d;    /* dominant brand navy */
+    --accent:#f37f21;  /* their warm amber, 28 uses - the light itself */
+    --ink:#fdfdfd;
+    --muted:#9db6c6;
+    --display:'Poppins',system-ui,sans-serif;
+    --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#02101a;color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:1040px;margin:0 auto;padding:28px 18px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);
+    border-radius:16px;padding:54px 56px;margin:0 0 22px;min-height:460px;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+  }
+  .slide::after{
+    content:"";position:absolute;right:-120px;bottom:-140px;width:360px;height:360px;
+    background:radial-gradient(circle,rgba(243,127,33,.22),rgba(243,127,33,0) 68%);
+    pointer-events:none;
+  }
+  .slide.title{background:linear-gradient(160deg,#0d2b40,#02101a)}
+  .k{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+     font-size:.78rem;color:var(--accent);margin-bottom:16px}
+  h1{font-family:var(--display);font-weight:800;font-size:3rem;line-height:1.05;margin-bottom:18px}
+  h2{font-family:var(--display);font-weight:800;font-size:2.1rem;line-height:1.1;margin-bottom:16px}
+  .sub{font-size:1.25rem;color:var(--muted);max-width:30ch}
+  .big{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1.1}
+  .big .a{color:var(--accent)}
+  p.body{font-size:1.18rem;color:#e8eef2;max-width:46ch;margin-top:6px}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:1.15rem;color:#e8eef2;padding:10px 0 10px 28px;position:relative;max-width:48ch}
+  li::before{content:"";position:absolute;left:0;top:18px;width:12px;height:12px;border-radius:50%;
+     background:var(--accent)}
+  .cred li::before{background:var(--rule);box-shadow:0 0 0 2px var(--accent)}
+  .foot{margin-top:28px;font-family:var(--display);font-weight:600;color:var(--accent);font-size:1.05rem}
+  .disc{margin-top:22px;font-size:.92rem;color:var(--muted);max-width:60ch}
+  .pageno{position:absolute;top:20px;right:26px;font-size:.8rem;color:#4e7690}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with the 3 Amigos', h:'The Living Lighting Portrait', sub:'How to turn a 20-fixture quote into a 40 to 60 fixture design.'},
+  {t:'who', k:'Who this is for', h:'Lighting owners tired of competing on price', body:'If you install great lighting but keep losing jobs to whoever quotes the lowest number, this hour is built for you.'},
+  {t:'trap', k:'The trap', h:'You hand over a list of fixtures', body:'The second your proposal is a count of fixtures and a price, the client has one job: compare your number to the next guy down the street.'},
+  {t:'reframe', k:'The reframe', big:'The problem was never your price. It was that you sold a <span class="a">fixture list</span>, not a design.'},
+  {t:'section', k:'Part one', h:'Why fixture-quoting keeps you small'},
+  {t:'list', k:'Three ways a fixture count caps your ticket', h:'The commodity trap', list:['It is instantly comparable, so it becomes a price war','It carries no vision, so the client cannot see what they are missing','It anchors the job to hardware, not to the result they actually want']},
+  {t:'list', k:'What they actually want', h:'Nobody wants fixtures', list:['They want the view lit so the yard feels alive at night','They want to pull in the driveway and feel something','They want the house to look designed, not dotted with lights']},
+  {t:'section', k:'Part two', h:'The Living Lighting Portrait'},
+  {t:'list', k:'Pillar one', h:'Structure of a composition', list:['Read the whole property before you place a single fixture','Find the focal points, the layers, and the lines the eye should travel','You are composing a picture, not spacing lights evenly']},
+  {t:'list', k:'Pillar two', h:'Levels of light', list:['Layer high, mid, and low light instead of flooding everything flat','Contrast is what makes a scene read as designed','Dark is a tool, not a gap to fill']},
+  {t:'list', k:'Pillar three', h:'Balancing and blending', list:['Place for the effect, not for even coverage','Use color temperature on purpose, warm where it belongs','Blend beams so the light feels like it belongs to the house']},
+  {t:'list', k:'Pillar four', h:'Light the view, not just the house', list:['The trees, the water, the path, the architecture, as one scene','This is the move that doubles the scope of the job honestly','Because now you are lighting a property, not a facade']},
+  {t:'list', k:'Avoid these', h:'The 7 Deadly Sins, in short', list:['Lighting the house and ignoring the view','Even spacing instead of composition','One color temperature everywhere','Quoting fixtures before you have designed anything','Skipping the nighttime demo that sells the whole thing']},
+  {t:'section', k:'Part three', h:'The designed yard, after dark'},
+  {t:'content', k:'The mechanic', h:'The nighttime demo that closes it', body:'When the client stands in the yard and sees the designed scene lit in front of them, the conversation stops being about price and starts being about which rooms of the yard they want to feel that way.'},
+  {t:'content', k:'The result', h:'20 fixtures becomes a designed property', body:'The ticket moves because the scope moves, honestly. You did not inflate a price. You showed them a bigger, better result and they said yes to it.'},
+  {t:'cred', k:'Who is teaching this', h:'The 3 Amigos of landscape lighting', list:['Nate "The Illuminator" Mullen, 34 years in the trade, inventor of a multi-tap transformer, founder of IAALL and the LITE standards','Captain Matt Martoccio, Level 11 Certified Lighting Designer and IAALL board member','Shane "Glow Daddy" Duffy, Level 11 Certified, founder of Glo Geeks']},
+  {t:'recap', k:'The shift', big:'Stop quoting fixtures. Start selling the <span class="a">design</span>.'},
+  {t:'cta', k:'Your next step', h:'Come learn it live with us', body:'Join the next live training with the 3 Amigos and bring your own jobs to work through. Everything in this masterclass, with real lights and your real projects.', foot:'lightingtradeschool.com', disc:'This masterclass is educational. No income or result is guaranteed. Results vary with your market, your effort, and how you apply what you learn.'}
+];
+function esc(x){return x;}
+function render(){
+  const d=document.getElementById('deck');
+  S.forEach((s,i)=>{
+    const sec=document.createElement('section');
+    sec.className='slide '+(s.t==='title'?'title':'')+(s.t==='cred'?' cred':'');
+    let html='<span class="pageno">'+(i+1)+' / '+S.length+'</span>';
+    if(s.k) html+='<div class="k">'+s.k+'</div>';
+    if(s.h) html+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+    if(s.big) html+='<div class="big">'+s.big+'</div>';
+    if(s.sub) html+='<div class="sub">'+s.sub+'</div>';
+    if(s.body) html+='<p class="body">'+s.body+'</p>';
+    if(s.list){html+='<ul>';s.list.forEach(it=>{html+='<li>'+it+'</li>';});html+='</ul>';}
+    if(s.foot) html+='<div class="foot">'+s.foot+'</div>';
+    if(s.disc) html+='<div class="disc">'+s.disc+'</div>';
+    sec.innerHTML=html;
+    d.appendChild(sec);
+  });
+}
+render();
+</script>
+</body>
+</html>
