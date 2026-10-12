@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Field Advantage — a masterclass with Angela Coté</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#171210; --panel:#241b18; --rule:#3a2c28;
+    --ink:#f4f4f3; --mut:#9a9a9a; --gray:#636363;
+    --accent:#fc232b;
+    --head:'Montserrat',system-ui,sans-serif;
+    --body:'Lora',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0c0c0c;color:var(--ink);font-family:var(--body)}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 18px 96px}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:10px;
+    padding:52px 54px;margin:0 0 22px;min-height:430px;position:relative;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .idx{position:absolute;top:20px;right:26px;font-family:var(--head);font-size:12px;
+    letter-spacing:.18em;color:var(--gray)}
+  .kick{font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:800;font-size:46px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:33px;line-height:1.12;letter-spacing:-.01em}
+  .lead{font-size:20px;line-height:1.5;color:var(--ink);margin-top:18px;max-width:60ch}
+  .sub{font-size:17px;line-height:1.55;color:var(--mut);margin-top:14px;max-width:62ch}
+  .big{font-family:var(--head);font-weight:800;font-size:40px;line-height:1.1;letter-spacing:-.01em}
+  .strike{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--accent);
+    text-decoration-thickness:4px}
+  .hl{color:var(--accent)}
+  ul{list-style:none;margin-top:26px;display:grid;gap:14px}
+  li{position:relative;padding-left:40px;font-size:18px;line-height:1.45}
+  li .n{position:absolute;left:0;top:-2px;font-family:var(--head);font-weight:800;color:var(--accent);
+    font-size:20px}
+  li b{font-family:var(--head);font-weight:700}
+  .steps{margin-top:24px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .step{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+  .step .sn{font-family:var(--head);font-weight:800;color:var(--accent);font-size:14px;letter-spacing:.1em}
+  .step .st{font-family:var(--head);font-weight:700;font-size:18px;margin-top:4px}
+  .step .sd{color:var(--mut);font-size:14px;line-height:1.45;margin-top:6px}
+  .metrics{margin-top:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .metric{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:20px 22px}
+  .metric .mv{font-family:var(--head);font-weight:800;font-size:38px;color:var(--accent)}
+  .metric .ml{color:var(--mut);font-size:15px;margin-top:4px;line-height:1.4}
+  .src{margin-top:22px;color:var(--gray);font-size:13px;font-style:italic}
+  .present{margin-top:30px;font-family:var(--head);font-size:15px;letter-spacing:.04em;color:var(--mut)}
+  .present b{color:var(--ink);font-weight:700}
+  .cta-actions{margin-top:26px;display:grid;gap:12px;max-width:52ch}
+  .cta-actions .a{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);
+    border-radius:6px;padding:14px 18px;font-family:var(--head);font-weight:600;font-size:17px}
+  .disc{margin-top:28px;color:var(--gray);font-size:13px;line-height:1.5;max-width:64ch;font-style:italic}
+  .foot{font-family:var(--head);color:var(--mut);font-size:14px;margin-top:22px;letter-spacing:.03em}
+  @media(max-width:620px){.slide{padding:38px 26px}h1{font-size:34px}h2{font-size:26px}
+    .steps,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'promise'},
+  {t:'who'},
+  {t:'trap'},
+  {t:'reframe'},
+  {t:'part', k:'Part One', h:'The real reason franchise systems stall'},
+  {t:'three'},
+  {t:'r1'},
+  {t:'r2'},
+  {t:'r3'},
+  {t:'part', k:'Part Two', h:'The method: Strategic Growth Coaching'},
+  {t:'method'},
+  {t:'stepsA'},
+  {t:'stepsB'},
+  {t:'stepsC'},
+  {t:'part', k:'Part Three', h:'Inside a system that coaches well'},
+  {t:'results'},
+  {t:'whyme'},
+  {t:'recap'},
+  {t:'cta', disc:'This masterclass is educational. No specific result is guaranteed. Results vary by brand, by franchisee, and by your own execution.'}
+];
+
+function slide(inner, i){
+  return '<section class="slide"><span class="idx">'+String(i+1).padStart(2,'0')+' / '+
+    String(S.length).padStart(2,'0')+'</span>'+inner+'</section>';
+}
+
+const T = {
+  title:()=>`<div class="kick">A live masterclass for franchise brands</div>
+    <h1>The Field Advantage</h1>
+    <p class="lead">Why your fastest growth lever isn't more franchisees. It's the people who
+    coach the ones you already have.</p>
+    <div class="present">with <b>Angela Coté</b> &middot; Founder, AC Inc &middot; 25+ years scaling franchise systems</div>`,
+  promise:()=>`<div class="kick">What you'll leave with</div>
+    <h2>One hour, three things you can use Monday</h2>
+    <ul>
+      <li><span class="n">1</span><b>A new growth diagnosis.</b> Where your system is actually leaking performance, and why the usual answer makes it worse.</li>
+      <li><span class="n">2</span><b>A repeatable coaching method.</b> The 7 steps a great field coach runs on every franchisee, every visit.</li>
+      <li><span class="n">3</span><b>A way to install it.</b> How to turn your field team from box-tickers into a growth engine.</li>
+    </ul>`,
+  who:()=>`<div class="kick">Who this is for</div>
+    <h2>Franchisors who have proven the model, and now need the system to perform</h2>
+    <p class="sub">Founders, COOs, and franchise operations leaders running a brand with real
+    unit count, who can feel that the next stage of growth depends on existing franchisees
+    performing better, not just signing more of them.</p>`,
+  trap:()=>`<div class="kick">The trap</div>
+    <h2>You keep investing in the top of the funnel</h2>
+    <p class="lead">More franchise sales. More territories. More locations. It feels like
+    growth.</p>
+    <p class="sub">But every underperforming franchisee you already have is quietly capping
+    the brand: soft same-store sales, drifting standards, owners who feel alone out there.
+    Adding units on top of a shaky base multiplies the problem, it does not solve it.</p>`,
+  reframe:()=>`<div class="kick">The reframe</div>
+    <p class="big">Your growth problem isn't franchise <span class="strike">sales</span>.<br>
+    It's franchisee <span class="hl">support</span>.</p>
+    <p class="sub">The brands that compound fastest are not the ones recruiting hardest. They
+    are the ones whose field coaches turn average franchisees into strong operators, on repeat.</p>`,
+  part:(s)=>`<div class="kick">${s.k}</div><h1>${s.h}</h1>`,
+  three:()=>`<div class="kick">The diagnosis</div>
+    <h2>Three reasons systems underperform</h2>
+    <ul>
+      <li><span class="n">1</span><b>Reactive support.</b> The field team shows up when something is already broken, not before.</li>
+      <li><span class="n">2</span><b>Undertrained coaches.</b> Good operators get promoted into coaching with no method for how to coach.</li>
+      <li><span class="n">3</span><b>Franchisees without business acumen.</b> Owners who can run a shift but were never taught to run a business.</li>
+    </ul>`,
+  r1:()=>`<div class="kick">Reason one</div>
+    <h2>Reactive support arrives too late</h2>
+    <p class="lead">Most field visits are inspections. Someone drives out when the numbers
+    slip, runs a checklist, and leaves.</p>
+    <p class="sub">By then the behavior is already set. Great support is proactive: it builds
+    the operator's capability before the quarter goes sideways, not after.</p>`,
+  r2:()=>`<div class="kick">Reason two</div>
+    <h2>We promote operators and call them coaches</h2>
+    <p class="lead">Being great behind the counter does not make someone great at changing
+    another owner's behavior.</p>
+    <p class="sub">Coaching is a skill with a structure. Without one, every field coach
+    improvises, quality swings wildly across the system, and the role gets blamed for results
+    it was never equipped to drive.</p>`,
+  r3:()=>`<div class="kick">Reason three</div>
+    <h2>Franchisees were sold a system, not a business education</h2>
+    <p class="lead">They can follow the manual. Reading a P&amp;L, managing labor, and
+    coaching their own team is a different muscle.</p>
+    <p class="sub">A field coach who can teach business acumen, not just enforce standards, is
+    the difference between a franchisee who survives and one who grows.</p>`,
+  method:()=>`<div class="kick">Strategic Growth Coaching</div>
+    <h2>A 7-step method your field team runs on every franchisee</h2>
+    <p class="sub">Not personality. Not luck. A repeatable sequence that takes a coach from
+    understanding a franchisee's reality all the way through to sustained accountability, so
+    every visit moves the business forward.</p>`,
+  stepsA:()=>`<div class="kick">Steps 1 to 3 &middot; See clearly</div>
+    <div class="steps">
+      <div class="step"><div class="sn">01</div><div class="st">Understand</div><div class="sd">Get a clear picture of the franchisee's business, goals, and current reality.</div></div>
+      <div class="step"><div class="sn">02</div><div class="st">Identify</div><div class="sd">Pinpoint the specific behaviors, gaps, or opportunities holding them back.</div></div>
+      <div class="step"><div class="sn">03</div><div class="st">Evaluate</div><div class="sd">Assess their systems, performance metrics, and operational execution.</div></div>
+    </div>`,
+  stepsB:()=>`<div class="kick">Steps 4 to 5 &middot; Create movement</div>
+    <div class="steps">
+      <div class="step"><div class="sn">04</div><div class="st">Solve</div><div class="sd">Work together on solutions that are realistic, actionable, and on brand.</div></div>
+      <div class="step"><div class="sn">05</div><div class="st">Motivate</div><div class="sd">Build the confidence, commitment, and ownership that make change stick.</div></div>
+    </div>
+    <p class="sub">This is the hinge. Most field roles stop at telling. Coaching gets the
+    owner to decide, which is the only thing that changes behavior.</p>`,
+  stepsC:()=>`<div class="kick">Steps 6 to 7 &middot; Make it hold</div>
+    <div class="steps">
+      <div class="step"><div class="sn">06</div><div class="st">Implement</div><div class="sd">The franchisee puts the agreed actions in motion, backed by practical tools and guidance.</div></div>
+      <div class="step"><div class="sn">07</div><div class="st">Accountability</div><div class="sd">Structured check-ins that reinforce progress, clear obstacles, and sustain performance.</div></div>
+    </div>
+    <p class="sub">Steps 6 and 7 are where results compound, and where most systems quietly
+    give up.</p>`,
+  results:()=>`<div class="kick">What changes when the method is in place</div>
+    <h2>The field becomes measurable</h2>
+    <div class="metrics">
+      <div class="metric"><div class="mv">93%</div><div class="ml">franchisee show rate for coaching sessions</div></div>
+      <div class="metric"><div class="mv">22%+</div><div class="ml">same-store sales growth</div></div>
+      <div class="metric"><div class="mv">35%</div><div class="ml">increase in brand-standard compliance</div></div>
+      <div class="metric"><div class="mv">60+</div><div class="ml">integrated coaching tools and templates</div></div>
+    </div>
+    <p class="src">Figures reported by AC Inc for the Strategic Growth Coaching system. Results vary by brand and execution.</p>`,
+  whyme:()=>`<div class="kick">Why listen to me on this</div>
+    <h2>I grew up in the field</h2>
+    <p class="sub">I started dressing as the mascot at grand openings, then coached
+    franchisees in my twenties, then operated as a multi-unit franchisee myself for 18 years.
+    Across 25+ years I helped scale my family's brand, M&amp;M Food Markets, to nearly 500
+    locations, from the franchisor, field-coaching, and franchisee sides. The field-coach
+    role is not a theory to me. It is the lever I watched build a system.</p>`,
+  recap:()=>`<div class="kick">The one idea</div>
+    <p class="big">Action = Growth.</p>
+    <p class="sub">You do not grow a franchise system from the top of the funnel. You grow it
+    one franchisee at a time, through a field team that knows how to coach. Build that
+    capability and the units take care of themselves.</p>`,
+  cta:(s)=>`<div class="kick">Your next step</div>
+    <h2>Bring the method to your field team</h2>
+    <p class="sub">If this is the gap in your system, there are three ways to work with AC Inc:</p>
+    <div class="cta-actions">
+      <div class="a">Certify your field coaches in the Strategic Growth Coaching method</div>
+      <div class="a">Add fractional field coaching for franchisees who need it now</div>
+      <div class="a">Join a Play Bigger performance group with other high-achieving franchisors</div>
+    </div>
+    <div class="foot">angelacote.com &middot; Start a conversation with Angela</div>
+    <p class="disc">${s.disc}</p>`
+};
+
+document.getElementById('deck').innerHTML =
+  S.map((s,i)=>slide(T[s.t](s), i)).join('');
+</script>
+</body>
+</html>
