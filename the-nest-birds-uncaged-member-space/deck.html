@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncaged — a masterclass with Nikkia Reveillac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#211A2E;      /* plum-ink ground (from ## Palette) */
+    --panel:#2E2440;   /* raised panel */
+    --rule:#403355;    /* hairline */
+    --ink:#F4EFE9;     /* warm off-white text */
+    --muted:#C9BFD6;   /* muted plum */
+    --accent:#F2B705;  /* dawn gold (from ## Palette) */
+    --head:"Playfair Display", Georgia, serif;
+    --body:"Karla", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 22px 90px}
+  .slide{background:linear-gradient(180deg,var(--panel),var(--bg));border:1px solid var(--rule);
+    border-radius:18px;padding:54px 50px;margin:22px 0;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent);opacity:.9}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:34px;line-height:1.14;letter-spacing:-.01em}
+  .lead{font-size:20px;line-height:1.55;color:var(--ink);margin-top:20px;max-width:40ch}
+  .sub{font-size:17px;line-height:1.6;color:var(--muted);margin-top:16px;max-width:52ch}
+  ul{margin-top:22px;list-style:none;display:flex;flex-direction:column;gap:14px}
+  li{font-size:18px;line-height:1.5;padding-left:26px;position:relative;color:var(--ink);max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .two .col{background:rgba(255,255,255,.03);border:1px solid var(--rule);border-radius:12px;padding:20px}
+  .two h3{font-family:var(--body);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .two p{font-size:16px;line-height:1.5}
+  .big{font-family:var(--head);font-size:40px;line-height:1.12;color:var(--ink)}
+  .em{color:var(--accent)}
+  .pill{display:inline-block;font-size:13px;font-weight:600;color:var(--bg);background:var(--accent);
+    padding:7px 14px;border-radius:999px;margin-top:26px;letter-spacing:.04em}
+  .foot{font-size:12px;color:var(--muted);position:absolute;right:26px;bottom:18px;letter-spacing:.06em}
+  .disc{font-size:13px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:56ch;border-top:1px solid var(--rule);padding-top:16px}
+  .n{font-family:var(--head);font-size:15px;color:var(--accent);margin-bottom:8px;display:block}
+  @media(max-width:640px){.slide{padding:38px 26px}h1{font-size:34px}h2{font-size:26px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Nikkia Reveillac',
+    h:'Uncaged: How to Lead Without Losing Yourself',
+    lead:'For the ones who made it on paper and still feel boxed in. One live hour on breaking free from the cage and leading on your own terms.'},
+
+  {t:'who', kick:'Who this is for',
+    h:'You did everything right. So why does it feel like a cage?',
+    sub:'The overachieving underdog. The creative who has been quiet too long. The leader who is quietly unlearning what leadership was supposed to mean. You are good at the role. You are tired of performing it.'},
+
+  {t:'trap', kick:'The trap',
+    h:'The better you perform, the tighter the cage gets.',
+    sub:'Every promotion rewards the version of you that fits. So you optimize for fit, keep the real voice offstage, and wonder why success feels like holding your breath. The trap is not a lack of ambition. It is a life built to other people’s specifications.'},
+
+  {t:'reframe', kick:'A harder truth',
+    big:'You did not outgrow the <span class="em">job</span>.<br>You outgrew the <span class="em">cage</span>.',
+    sub:'The problem was never that you were not enough. It is that the room you earned was built smaller than you.'},
+
+  {t:'cost', kick:'What it costs',
+    h:'The cage is expensive in a currency nobody tracks.',
+    sub:'Not money. Energy, creativity, and the slow leak of a voice you keep offstage. You can carry it for years. Most high-achievers do. The bill comes due as a quiet question: is this really it?'},
+
+  {t:'hope', kick:'The good news',
+    big:'The bars are <span class="em">learned</span>.<br>Which means they can be <span class="em">unlearned</span>.',
+    sub:'Nobody is born performing. You were taught the cage one reward at a time. Anything taught can be untaught, on purpose, with a method.'},
+
+  {t:'part', kick:'Part one', h:'The invisible bars.',
+    sub:'Before you can leave a cage, you have to see it. Two kinds of bars hold high-achievers in place, and most coaching only ever names the first.'},
+
+  {t:'points', kick:'The two kinds of bars',
+    items:[
+      'Personal bars: the old stories, the perfectionism, the fear of being too much, the permission you are still waiting for.',
+      'Systemic bars: who is allowed to be a leader, which voices get rewarded, the quiet rules nobody wrote down but everyone obeys.'],
+    sub:'Name only the personal ones and you blame yourself for a cage you did not build alone.'},
+
+  {t:'part', kick:'Part two', h:'The Liberation Lab.',
+    sub:'A simple arc for walking out: Unlearn, Reimagine, Liberate. Here is what each one actually asks of you.'},
+
+  {t:'pillar', kick:'Step one', n:'Name the barriers',
+    h:'See both sets of bars, out loud.',
+    sub:'We map the personal and the systemic together, on paper, without flinching. What you can name, you can stop obeying by accident.'},
+
+  {t:'pillar', kick:'Step two', n:'Unlearn',
+    h:'Let go of the version they rewarded.',
+    sub:'The habits that earned the promotion are not the habits that set you free. We separate the discipline worth keeping from the conformity worth dropping.'},
+
+  {t:'pillar', kick:'Step three', n:'Reimagine',
+    h:'Decide what success feels like on your terms.',
+    sub:'Not the next rung by default. We rebuild the definition from your truth first, then design the role around it, instead of the other way around.'},
+
+  {t:'pillar', kick:'Step four', n:'Liberate',
+    h:'Put the real voice back on stage.',
+    sub:'The voice you kept offstage is the one people were waiting for. We make small, repeatable moves that let it lead, in the room you are actually in.'},
+
+  {t:'looks', kick:'Leading as yourself',
+    h:'Uncaged is not quitting. It is leading as yourself.',
+    two:[
+      {k:'The cage', p:'Performing for approval. Waiting for permission. Managing everyone’s comfort but your own.'},
+      {k:'Uncaged', p:'Leading in your own voice. Deciding on your own terms. Building the next chapter on purpose.'}],
+    sub:'Same person. Same ambition. A room that finally fits.'},
+
+  {t:'why', kick:'Why me',
+    h:'I spent fifteen years finding the real story inside the data.',
+    sub:'As an insights and brand-strategy executive at Netflix, Twitter, and Colgate, my job was to see the pattern everyone else missed and name it plainly. I do the same thing now, for people instead of brands. I am Nikkia Reveillac, founder of Birds Uncaged.'},
+
+  {t:'method', kick:'How the work goes', h:'A mirror, then a map.',
+    sub:'First I reflect back the real pattern, the one you are too close to see: that is the strategic mirror. Then we build the practical roadmap, the small repeatable moves that get you out. Insight without a plan is just a nicer cage.'},
+
+  {t:'nest', kick:'You are not doing this alone', h:'A nest of beautiful misfits.',
+    sub:'Leaving a cage is lonely if you do it quietly, by yourself. The Nest is a community of people walking the same arc, so the moves you are practising get witnessed, challenged, and cheered on by people who get it.'},
+
+  {t:'cta', kick:'Your next step',
+    h:'Ready to step out of the cage?',
+    sub:'The Liberation Lab is a six-month journey to name the barriers, unlearn the conformity, and lead on your own terms, with a community of beautiful misfits doing the same. If this masterclass named something true for you, that is where we go deeper.',
+    pill:'Join the next live session at birdsuncaged.com',
+    disc:'This masterclass is educational only. No income, title, or career result is guaranteed. Results vary from person to person and depend on your own circumstances and effort.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('section');
+  d.className = 'slide';
+  let html = '';
+  if (s.kick) html += `<div class="kick">${s.kick}</div>`;
+  if (s.n)    html += `<span class="n">${s.n}</span>`;
+  if (s.big)  html += `<div class="big">${s.big}</div>`;
+  else if (s.h) html += (s.t === 'title') ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+  if (s.lead) html += `<p class="lead">${s.lead}</p>`;
+  if (s.items){ html += '<ul>'; s.items.forEach(it => html += `<li>${it}</li>`); html += '</ul>'; }
+  if (s.two){ html += '<div class="two">'; s.two.forEach(c => html += `<div class="col"><h3>${c.k}</h3><p>${c.p}</p></div>`); html += '</div>'; }
+  if (s.sub)  html += `<p class="sub">${s.sub}</p>`;
+  if (s.pill) html += `<div class="pill">${s.pill}</div>`;
+  if (s.disc) html += `<div class="disc">${s.disc}</div>`;
+  html += `<div class="foot">Birds Uncaged · ${i + 1} / ${S.length}</div>`;
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
