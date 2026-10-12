@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Improvement That Actually Matters | Brion Hurley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#F9FEFD;
+    --panel:#e9fbe5;
+    --rule:#C7C7C7;
+    --ink:#16181A;
+    --ink-soft:#33383c;
+    --ink-muted:#5c6468;
+    --accent:#339933;
+  }
+  html,body { height:100%; }
+  body {
+    font-family:'Inter', -apple-system, system-ui, sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage { width:100vw; height:100vh; position:relative; }
+  .slide {
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:8vh 10vw; max-width:1100px; margin:0 auto;
+  }
+  .slide.on { display:flex; }
+  .kicker {
+    font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:22px; padding-bottom:10px;
+    border-bottom:2px solid var(--accent); display:inline-block; align-self:flex-start;
+  }
+  h1 { font-family:'IBM Plex Serif', Georgia, serif; font-weight:600; font-size:clamp(30px,5vw,56px); line-height:1.12; letter-spacing:-0.01em; margin-bottom:22px; }
+  h2 { font-family:'IBM Plex Serif', Georgia, serif; font-weight:600; font-size:clamp(26px,3.6vw,40px); line-height:1.18; margin-bottom:20px; }
+  .sub { font-size:clamp(17px,2vw,23px); color:var(--ink-soft); line-height:1.5; max-width:46ch; }
+  .body { font-size:clamp(16px,1.7vw,20px); color:var(--ink-soft); line-height:1.6; max-width:52ch; margin-bottom:14px; }
+  .presenter { margin-top:34px; font-size:15px; color:var(--ink-muted); }
+  .presenter strong { color:var(--ink); font-weight:600; }
+  ul { list-style:none; margin-top:6px; }
+  li { font-size:clamp(16px,1.8vw,21px); color:var(--ink-soft); line-height:1.5; padding:12px 0 12px 30px; position:relative; border-bottom:1px solid var(--rule); max-width:52ch; }
+  li:before { content:""; position:absolute; left:0; top:21px; width:14px; height:2px; background:var(--accent); }
+  .part { font-family:'IBM Plex Serif', serif; font-size:clamp(14px,1.4vw,16px); color:var(--accent); font-weight:600; letter-spacing:0.04em; }
+  .stat-row { display:flex; gap:40px; flex-wrap:wrap; margin-top:10px; }
+  .stat { border-left:3px solid var(--accent); padding:4px 0 4px 18px; max-width:30ch; }
+  .stat b { display:block; font-family:'IBM Plex Serif', serif; font-size:clamp(24px,3vw,34px); color:var(--ink); }
+  .stat span { font-size:15px; color:var(--ink-muted); }
+  .disc { margin-top:28px; font-size:13px; color:var(--ink-muted); line-height:1.5; max-width:60ch; font-style:italic; }
+  .panel { background:var(--panel); border:1px solid var(--rule); border-radius:4px; padding:22px 26px; margin-top:8px; }
+  .nav { position:fixed; bottom:22px; right:28px; font-size:13px; color:var(--ink-muted); font-variant-numeric:tabular-nums; z-index:5; }
+  .hint { position:fixed; bottom:22px; left:28px; font-size:12px; color:var(--ink-muted); z-index:5; }
+  @media (max-width:640px){ .slide{ padding:7vh 8vw; } .stat-row{ gap:22px; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="hint">Use arrow keys or click to advance</div>
+<script>
+const S=[
+  {t:'title',
+   h:"Process Improvement That Actually Matters",
+   sub:"How to use Lean Six Sigma to create measurable impact, not just cut costs on a factory floor.",
+   who:"A live masterclass with Brion Hurley, Lean Six Sigma Master Black Belt"},
+
+  {t:'who', k:"Who this is for",
+   h:"You already believe the tools work.",
+   list:[
+     "Professionals who want to get Lean Six Sigma certified and make it count for something",
+     "People working inside nonprofits, NGOs, government and mission-driven organizations",
+     "Improvers at green, sustainable and B Corp businesses who care about People, Planet and Profit",
+     "Anyone who has sat through a textbook course and wondered where the meaning went"]},
+
+  {t:'trap', k:"The trap",
+   h:"Certification can become a box you tick.",
+   body:["Most Lean Six Sigma training teaches the tools against factory examples that have nothing to do with the work you actually care about.",
+     "So you learn the method, pass the quiz, and the project dies the day the class ends. The skill never attaches to anything that matters to you."]},
+
+  {t:'reframe', k:"A harder question",
+   h:"What if the problem was never your ability?",
+   body:["It is not that you cannot run a DMAIC project. It is that you were taught to point it at waste, instead of at outcomes a human being would feel.",
+     "Change the target and the same tools change everything."]},
+
+  {t:'part', part:"Part One", h:"Why most improvement fizzles"},
+
+  {t:'content', k:"Part One",
+   h:"Improvement with no cause behind it does not last.",
+   body:["A project tied only to a cost number ends when the number is hit. Nobody fights to sustain it.",
+     "A project tied to something people believe in keeps going long after the belt is earned. The energy comes from the mission, not the memo."]},
+
+  {t:'part', part:"Part Two", h:"The Lean Six Sigma for Good approach"},
+
+  {t:'content', k:"Part Two · Pillar 1",
+   h:"Lean Six Sigma for Good",
+   body:["The same Lean and Six Sigma methods that work in a Fortune 500 plant work just as well inside a nonprofit, an NGO or a mission-driven team.",
+     "You do not water the method down for the social sector. You aim it at the problems the social sector actually has."]},
+
+  {t:'content', k:"Part Two · Pillar 2",
+   h:"The triple bottom line",
+   body:["Measure a project across three outcomes at once: People, Planet and Profit.",
+     "When you can show improvement on all three, you align the work with causes people care about, and you can tie it straight to the UN 2030 goals your organization already reports against."]},
+
+  {t:'content', k:"Part Two · Pillar 3",
+   h:"DMAIC, pointed at a cause you choose",
+   body:["Define, Measure, Analyze, Improve, Control is the backbone of every project you will run.",
+     "The shift is simple: you run it against a problem you are genuinely passionate about, in your own organization, instead of a case study from a textbook."]},
+
+  {t:'proof', k:"This is not theory",
+   h:"What the method has already done",
+   stats:[
+     {b:"3h to 1.2h", s:"Disaster relief delivery time cut after Hurricane Sandy"},
+     {b:"$100,000", s:"Supply costs removed from an East Africa program"},
+     {b:"+50%", s:"Volunteer recruitment efficiency gained"}],
+   note:"Documented cases from the Lean Six Sigma for Good work. Your results will depend on your own projects and organization."},
+
+  {t:'part', part:"Part Three", h:"When the method meets a cause you care about"},
+
+  {t:'content', k:"Part Three",
+   h:"You learn by finishing a real project.",
+   body:["You pick a process inside your own organization and improve it for real, with a Master Black Belt reviewing your work each step of the way.",
+     "That project is how you earn the belt. You leave with a certification and with something that actually changed."]},
+
+  {t:'who', k:"The path",
+   h:"Yellow, Green, Black. One belt at a time.",
+   list:[
+     "Self-paced course you move through on your own schedule",
+     "A live two-hour coaching session every week to keep you accountable",
+     "A real improvement project, reviewed and coached until it is certification-ready",
+     "Built for people who stall out watching videos alone"]},
+
+  {t:'why', k:"Why learn this from me",
+   h:"Brion Hurley",
+   body:["Lean Six Sigma Master Black Belt and Lean Master. Eighteen years leading improvement and corporate sustainability teams at Rockwell Collins before founding Business Performance Improvement.",
+     "Author of the Lean Six Sigma for Good book series and host of the Lean Six Sigma Ecosystem community. I teach this because I care about the environment and our society, and I want your skills to do the same."]},
+
+  {t:'cta',
+   k:"Your next step",
+   h:"Get certified. Make it matter.",
+   body:["Join the Lean Six Sigma Ecosystem and start with the free courses, then step up to the belt certification program when you are ready to run a real project.",
+     "Bring a cause you care about. We will build the skills around it together."],
+   disc:"Educational content only. No income, career or project result is guaranteed. Results vary by individual, organization and effort."}
+];
+
+const stage=document.getElementById('stage');
+function esc(x){return x;}
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="slide"><h1>${s.h}</h1><p class="sub">${s.sub}</p><p class="presenter">${s.who}</p></div>`;
+  }
+  if(s.t==='part'){
+    return `<div class="slide"><div class="part">${s.part}</div><h1>${s.h}</h1></div>`;
+  }
+  if(s.t==='who'||s.t==='trap'||s.t==='reframe'||s.t==='content'||s.t==='why'){
+    let inner=`<div class="slide"><div class="kicker">${s.k}</div><h2>${s.h}</h2>`;
+    if(s.list){ inner+='<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>'; }
+    if(s.body){ inner+=s.body.map(x=>`<p class="body">${x}</p>`).join(''); }
+    return inner+'</div>';
+  }
+  if(s.t==='proof'){
+    let inner=`<div class="slide"><div class="kicker">${s.k}</div><h2>${s.h}</h2><div class="stat-row">`;
+    inner+=s.stats.map(x=>`<div class="stat"><b>${x.b}</b><span>${x.s}</span></div>`).join('');
+    inner+=`</div><p class="disc">${s.note}</p></div>`;
+    return inner;
+  }
+  if(s.t==='cta'){
+    let inner=`<div class="slide"><div class="kicker">${s.k}</div><h1>${s.h}</h1>`;
+    inner+=s.body.map(x=>`<p class="body">${x}</p>`).join('');
+    inner+=`<p class="disc">${s.disc}</p></div>`;
+    return inner;
+  }
+  return '<div class="slide"></div>';
+}
+stage.innerHTML=S.map(slideHTML).join('');
+const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+let i=0;
+function show(n){ i=Math.max(0,Math.min(slides.length-1,n)); slides.forEach((el,x)=>el.classList.toggle('on',x===i)); document.getElementById('cur').textContent=i+1; }
+show(0);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){show(i+1);e.preventDefault();} if(e.key==='ArrowLeft'||e.key==='ArrowUp'){show(i-1);} });
+document.addEventListener('click',e=>{ show(i + (e.clientX < window.innerWidth*0.28 ? -1 : 1)); });
+</script>
+</body>
+</html>
