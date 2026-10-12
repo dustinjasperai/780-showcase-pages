@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The SOLD OUT Coach Method - Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef3f9;      /* cool blue-tinted light ground, derived from his navy #102e47 + blue #129fea */
+    --panel:#ffffff;
+    --ink:#102e47;     /* his body-text deep navy */
+    --muted:#5b6b7a;
+    --rule:#d7dde3;
+    --accent:#129fea;  /* his ThriveCart CTA blue */
+    --teal:#2ed5a0;    /* his secondary accent */
+    --head:'Montserrat',system-ui,sans-serif;
+    --body:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);display:flex;align-items:center;justify-content:center}
+  .stage{width:min(960px,96vw);aspect-ratio:16/10;background:var(--panel);border:1px solid var(--rule);border-radius:16px;box-shadow:0 18px 50px rgba(16,46,71,.08);position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:flex;flex-direction:column;justify-content:center}
+  .kicker{font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:800;font-size:46px;line-height:1.04;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.1;margin-bottom:16px}
+  p{font-size:20px;line-height:1.5;color:var(--ink);max-width:46ch}
+  p.sub{color:var(--muted)}
+  .lead{font-size:24px}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:20px;line-height:1.5;padding-left:30px;position:relative;margin:12px 0;max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  .steps li::before{background:transparent;border:2px solid var(--teal);width:18px;height:18px;top:6px;left:0}
+  .path{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--accent))}
+  .tag{display:inline-block;font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);border-radius:999px;padding:6px 12px;margin-bottom:22px}
+  .disc{font-size:14px;color:var(--muted);max-width:60ch;margin-top:22px;line-height:1.5}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-family:var(--head);font-size:13px;color:var(--muted)}
+  .nav button{font-family:var(--head);font-weight:700;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer}
+  .cols{display:flex;gap:28px;margin-top:8px}
+  .card{flex:1;background:var(--bg);border:1px solid var(--rule);border-radius:12px;padding:20px}
+  .card h3{font-family:var(--head);font-size:18px;color:var(--accent);margin-bottom:8px}
+  .card p{font-size:16px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S=[
+ {t:'hero',k:'The SOLD OUT Coach Method',h:'How to fill a premium group coaching program with a single serve call.',sub:'Without launches, funnels, or losing your Saturdays.',path:1},
+ {t:'list',k:'What you will walk away with',items:['A position buyers trust enough to pay premium prices','A single free conversation that enrolls the right clients','One group offer you can run in about 90 minutes a week']},
+ {t:'plain',k:'Who this is for',h:'Experts, coaches, and creators with something real to teach',p:'You already know your craft. You have helped people one at a time. What you want now is a way to help more of them without cloning yourself, and without turning into a full time marketer.'},
+ {t:'tagged',tag:'The trap',h:'You were told the answer was more',p:'More followers. More content. A bigger funnel. So you chase reach, and the business keeps costing you the exact freedom it was supposed to buy.'},
+ {t:'hero',k:'The reframe',h:'You do not need a bigger audience. You need a better conversation.',sub:'The people who can pay you are already within reach. The gap is how you talk to them.'},
+ {t:'part',k:'Part One',h:'Why the usual routes burn you out',path:1},
+ {t:'plain',k:'The treadmill',h:'1:1 coaching caps you at hours',p:'Every new client is another slot on your calendar. Trade enough hours and you have bought yourself a job, not a business.'},
+ {t:'plain',k:'The launch cycle',h:'Course launches run your life',p:'Big launches mean big spikes and long droughts, plus the pressure to keep growing an audience just to fill the next one. That is how you lose your Saturdays.'},
+ {t:'part',k:'Part Two',h:'The method: position, then serve',path:1},
+ {t:'list',k:'Framework 1',h:'The Sage, the Struggler, and the Sherpa',items:['The Sage sits on the mountain and talks down. People admire the Sage and buy from someone else.','The Struggler is still lost in it. Relatable, but not yet trusted to lead.','The Sherpa has walked the path just ahead of you. That is the position that sells, and the one you build everything on.']},
+ {t:'list',k:'Framework 2',h:'The serve call, in six moves',steps:1,items:['Open on their goal, not your pitch','Find the real gap between here and there','Map the path out loud, for free','Name what it takes to walk it','Invite them to walk it with you','Let them choose, with no pressure']},
+ {t:'plain',k:'Why it works',h:'The sale happens because you served',p:'When one free call genuinely moves someone forward, enrolling is the obvious next step, not a leap. No countdown timers, no hard close. You help first, and the premium program is simply how you keep helping.'},
+ {t:'part',k:'Part Three',h:'The business that fits your life',path:1},
+ {t:'list',k:'Framework 3',h:'One premium group, run in about 90 minutes a week',items:['One offer, one room, many people served at once','A weekly live call where the real coaching happens','Five of the right clients beats fifty of the wrong ones']},
+ {t:'cards',k:'Framework 4',h:'The 3-product business',cards:[{h:'Free',p:'An email, a quiz, a short guide. The invitation to a conversation.'},{h:'Entry',p:'A low-cost class or book that proves the method and earns trust.'},{h:'Premium',p:'The group program, where the real transformation and the real revenue live.'}]},
+ {t:'plain',k:'Leads without the feed',h:'The Handraiser email',p:'You do not need to live on social media. A simple email that invites a reply turns your existing list into conversations, and conversations into serve calls. Marketing that sounds like a human, because it is one.'},
+ {t:'list',k:'Why listen to me',h:'I have been building this for a decade',items:['Helped lead Platform University inside Michael Hyatt and Company','Author of three books, including Serve to Sell and SOLD OUT Coach','My clients have earned more than one million dollars from group coaching']},
+ {t:'plain',k:'Inside your week',h:'A week on this model',p:'One live group call. A handful of serve calls with people who raised their hand. A short email or two. The rest of the week is yours, because the business is built to run in the margins of your life, not to consume it.'},
+ {t:'hero',k:'The method, in one line',h:'Position as the Sherpa. Serve on one call. Enroll into one premium group.',path:1},
+ {t:'cta',k:'Your next step',h:'Ready to build your own SOLD OUT group program?',p:'Book a free serve call and we will map your premium offer, your positioning, and the first five clients, live, together.',disc:'This masterclass is for education only. No income or result is guaranteed. Results vary from person to person depending on your own effort, market, and execution.'}
+];
+function render(i){
+ const s=S[i];let html='';
+ const path=s.path?'<div class="path"></div>':'';
+ if(s.t==='hero'){html=`<div class="kicker">${s.k}</div><h1>${s.h}</h1>${s.sub?`<p class="sub lead">${s.sub}</p>`:''}${path}`}
+ else if(s.t==='part'){html=`<div class="kicker">${s.k}</div><h1>${s.h}</h1>${path}`}
+ else if(s.t==='plain'){html=`<div class="kicker">${s.k}</div><h2>${s.h}</h2><p>${s.p}</p>`}
+ else if(s.t==='tagged'){html=`<div class="tag">${s.tag}</div><h2>${s.h}</h2><p>${s.p}</p>`}
+ else if(s.t==='list'){html=`<div class="kicker">${s.k}</div>${s.h?`<h2>${s.h}</h2>`:''}<ul class="${s.steps?'steps':''}">${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`}
+ else if(s.t==='cards'){html=`<div class="kicker">${s.k}</div><h2>${s.h}</h2><div class="cols">${s.cards.map(c=>`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')}</div>`}
+ else if(s.t==='cta'){html=`<div class="kicker">${s.k}</div><h2>${s.h}</h2><p>${s.p}</p><p class="disc">${s.disc}</p>`}
+ document.getElementById('stage').innerHTML=`<div class="slide">${html}</div>`;
+ document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+let i=0;render(i);
+document.getElementById('next').onclick=()=>{i=Math.min(S.length-1,i+1);render(i)};
+document.getElementById('prev').onclick=()=>{i=Math.max(0,i-1);render(i)};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click()});
+</script>
+</body>
+</html>
