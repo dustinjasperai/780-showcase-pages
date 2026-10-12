@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Record Year | A Masterclass by Austin L. Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAF1ED;        /* faint warm paper: ~5% tint of the rust accent #BE3017 over white (site_scheme light) */
+    --panel:#FFFFFF;
+    --rule:#E7DECF;      /* tint of the cream ground */
+    --ink:#2A2420;       /* warm near-black (from #333333) */
+    --ink-soft:#574E46;
+    --ink-muted:#8A8178;
+    --accent:#BE3017;    /* dominant brand rust, verbatim from brand.json */
+  }
+  html,body{height:100%}
+  body{font-family:'Source Serif 4',Georgia,serif;background:#ECDED6;color:var(--ink);-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:4vh 4vw}
+  .slide{display:none;width:min(1040px,94vw);aspect-ratio:16/9;background:var(--bg);border:1px solid var(--rule);
+    border-radius:6px;box-shadow:0 18px 50px rgba(42,36,32,.14);padding:7% 8%;overflow:hidden;position:relative}
+  .slide.on{display:flex;flex-direction:column;justify-content:center}
+  .kicker{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(34px,5.6vw,68px);line-height:1.02;letter-spacing:-.02em;color:var(--ink)}
+  h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(26px,3.6vw,44px);line-height:1.08;letter-spacing:-.015em;color:var(--ink);margin-bottom:18px}
+  .sub{font-size:clamp(17px,2vw,24px);color:var(--ink-soft);margin-top:20px;max-width:30ch;line-height:1.4}
+  .lead{font-size:clamp(17px,1.9vw,22px);color:var(--ink-soft);line-height:1.5;max-width:46ch}
+  .big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(40px,7vw,86px);color:var(--accent);line-height:1;letter-spacing:-.02em}
+  ul{list-style:none;margin-top:14px}
+  li{font-size:clamp(16px,1.8vw,22px);color:var(--ink-soft);padding:9px 0 9px 30px;position:relative;line-height:1.35}
+  li::before{content:"";position:absolute;left:0;top:17px;width:11px;height:11px;background:var(--accent);border-radius:2px}
+  li b{color:var(--ink);font-weight:600}
+  .present{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;letter-spacing:.04em;color:var(--ink-muted);margin-top:40px}
+  .flow{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+  .flow .step{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--accent);border-radius:5px;padding:18px}
+  .flow .step .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:var(--accent);font-size:14px;letter-spacing:.1em}
+  .flow .step h3{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;color:var(--ink);margin:6px 0 6px}
+  .flow .step p{font-size:14px;color:var(--ink-soft);line-height:1.35}
+  .disclaimer{font-family:'Bricolage Grotesque',sans-serif;font-size:12px;color:var(--ink-muted);margin-top:26px;max-width:60ch;line-height:1.4;letter-spacing:.01em}
+  .cta-line{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(20px,2.4vw,30px);color:var(--accent);margin-top:18px}
+  .pg{position:fixed;bottom:16px;right:22px;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--ink-muted)}
+  .hint{position:fixed;bottom:16px;left:22px;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;color:var(--ink-muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 34px;margin-top:16px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="hint">Use arrow keys to navigate</div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">1</span></div>
+<script>
+const S = [
+  {t:'title', kicker:'A free live masterclass', h:'The Record Year', sub:'How freelance creatives and consultants raise their income while working fewer hours.', present:'Austin L. Church · Freelance Cake'},
+  {t:'who', kicker:'Who this is for', h:'You are good at the work. The money just does not match.', lead:'For freelancers and consultants two or more years in: booked but not paid enough, busy but not building anything that lasts.'},
+  {t:'trap', kicker:'The trap', h:'The feast-or-famine loop', bullets:['<b>Famine:</b> the pipeline runs dry, so you say yes to anything.','<b>Feast:</b> now you are slammed, with no time to market.','<b>Repeat:</b> every month resets to zero and starts over.']},
+  {t:'reframe', kicker:'The reframe', h:'The problem was never your pipeline.', lead:'It was your pricing and the shape of your offers. More clients at the wrong rate just buys you more exhaustion.'},
+  {t:'part', kicker:'Part one', h:'Why more clients is the wrong goal'},
+  {t:'content', kicker:'The hourly ceiling', h:'Selling hours caps your income by definition', lead:'There are only so many billable hours in a week. Once they are full, the only lever left is price. Most freelancers never pull it.'},
+  {t:'part', kicker:'Part two', h:'The 6 P’s of a freelance business'},
+  {t:'sixp', kicker:'The framework', h:'Six levers, not one', grid:['<b>Positioning:</b> who you are the obvious choice for','<b>Packaging:</b> what you sell and how it is shaped','<b>Pricing:</b> what you charge and why','<b>Pipeline:</b> how the right work finds you','<b>Psychology:</b> your money beliefs','<b>Process:</b> how the work gets delivered']},
+  {t:'content', kicker:'The lever most skip', h:'The Dream Rate', lead:'Set your rate from the life and income you actually want, then work backward. Not from what the market "allows," and never from an hourly guess.'},
+  {t:'content', kicker:'Psychology', h:'Free Money starts in your head', lead:'The nine counterintuitive moves in Free Money are mostly about belief. The freelancer who thinks a high rate is fair quotes it without flinching. That is the whole game.'},
+  {t:'part', kicker:'Part two, continued', h:'The $300K Flywheel'},
+  {t:'flyw', kicker:'Three offers that feed each other', h:'Stop starting from zero every month', steps:[['01','Strategy Offer','A paid diagnostic or plan. Low commitment for the client, high trust for you.'],['02','Signature Offer','Your productized service, priced as a result, not a timesheet.'],['03','Subscription Offer','A monthly retainer that turns past clients into steady income.']]},
+  {t:'content', kicker:'Why it compounds', h:'Each offer makes the next one easier', lead:'The strategy offer earns the signature project. The signature project earns the retainer. Revenue stacks instead of resetting, and that is how a freelance business clears $300K without more hours.'},
+  {t:'part', kicker:'Part three', h:'What a redesigned week looks like'},
+  {t:'content', kicker:'The shift', h:'Fewer clients, higher rates, steadier income', lead:'You stop chasing. You raise your rate and lose the wrong-fit work on purpose. The retainers cover the floor, so the famine months disappear.'},
+  {t:'why', kicker:'Why me', h:'Fifteen years of figuring this out the hard way', lead:'I started freelancing in 2009 after a layoff, built Freelance Cake, wrote Free Money, and now coach freelancers through this exact redesign. I made every one of these mistakes first.'},
+  {t:'recap', kicker:'The record year', h:'Charge right. Stack offers. Fix the mindset.', lead:'That is the whole masterclass. More income, fewer hours, and a business that does not reset to zero every month.'},
+  {t:'cta', kicker:'Your next step', h:'Build the redesign with me', ctaLine:'Apply to join Business Redesign at freelancecake.com', disclaimer:'This masterclass is educational. It is not a guarantee of income or results, which vary by person, market, and effort. Nothing here is financial advice.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.kicker)html+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'){html+=`<h1>${s.h}</h1><p class="sub">${s.sub}</p><div class="present">${s.present}</div>`;}
+  else if(s.t==='part'){html+=`<h1>${s.h}</h1>`;}
+  else if(s.t==='sixp'){html+=`<h2>${s.h}</h2><div class="grid2">`+s.grid.map(g=>`<div class="lead">${g}</div>`).join('')+`</div>`;}
+  else if(s.t==='flyw'){html+=`<h2>${s.h}</h2><div class="flow">`+s.steps.map(st=>`<div class="step"><div class="n">${st[0]}</div><h3>${st[1]}</h3><p>${st[2]}</p></div>`).join('')+`</div>`;}
+  else if(s.bullets){html+=`<h2>${s.h}</h2><ul>`+s.bullets.map(b=>`<li>${b}</li>`).join('')+`</ul>`;}
+  else if(s.t==='cta'){html+=`<h1>${s.h}</h1><div class="cta-line">${s.ctaLine}</div><div class="disclaimer">${s.disclaimer}</div>`;}
+  else{html+=`<h2>${s.h}</h2>`+(s.lead?`<p class="lead">${s.lead}</p>`:'');}
+  d.innerHTML=html;stage.appendChild(d);
+});
+let cur=0;const slides=document.querySelectorAll('.slide');
+document.getElementById('tot').textContent=slides.length;
+function go(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;slides[cur].classList.add('on');document.getElementById('cur').textContent=cur+1;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);});
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
