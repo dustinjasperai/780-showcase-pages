@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train Your Own Power Curve — BaseCamp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071a28; --panel:#0f2c42; --rule:#20455f; --accent:#90dfe2;
+    --ink:#eaf6f7; --muted:#9fc0cf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{
+    background:linear-gradient(180deg,var(--panel),#0b2234);
+    border:1px solid var(--rule); border-radius:16px;
+    padding:52px 48px; margin:0 0 22px; min-height:420px;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .curve{position:absolute;right:-40px;bottom:-30px;width:360px;height:220px;opacity:.5;pointer-events:none}
+  .kick{font-family:"Oswald";letter-spacing:.22em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:"Oswald";font-weight:700;font-size:54px;line-height:1.02;letter-spacing:.01em}
+  h2{font-family:"Oswald";font-weight:600;font-size:38px;line-height:1.08}
+  .part{font-family:"Oswald";font-weight:700;font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .promise{font-size:20px;color:var(--muted);margin-top:22px;max-width:36ch;line-height:1.5}
+  p.body{font-size:21px;line-height:1.55;color:var(--ink);margin-top:20px;max-width:46ch}
+  .big{font-family:"Oswald";font-weight:600;font-size:40px;line-height:1.12;max-width:24ch}
+  ul{margin-top:24px;list-style:none;display:grid;gap:14px;max-width:48ch}
+  li{position:relative;padding-left:30px;font-size:19px;line-height:1.45;color:var(--ink)}
+  li:before{content:"";position:absolute;left:0;top:10px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .metric{font-family:"Oswald";color:var(--accent);font-weight:600}
+  .foot{position:absolute;left:48px;bottom:22px;font-family:"Oswald";letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:var(--muted)}
+  .disc{margin-top:26px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .cta-step{margin-top:22px;font-size:22px;color:var(--accent);font-family:"Oswald";font-weight:600}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<svg width="0" height="0"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+<stop offset="0" stop-color="#90dfe2" stop-opacity="0"/><stop offset="1" stop-color="#90dfe2"/></linearGradient></defs></svg>
+<script>
+const CURVE='<svg class="curve" viewBox="0 0 360 220"><path d="M8 200 C60 180 110 120 150 96 C210 62 270 46 352 38" fill="none" stroke="url(#g)" stroke-width="3"/></svg>';
+const S=[
+ {t:'title', kick:'A BaseCamp Masterclass', h:'Train Your Own Power Curve',
+  promise:'Why the riders who stop chasing a single FTP number, and start training to their own data, are the ones who finally break through.'},
+
+ {t:'who', kick:'Who this is for', h:'For the rider who does everything right, and still plateaus',
+  body:'You ride consistently. You test your FTP. You add hours when progress stalls. And somewhere around mid-season, the gains quietly stop coming.'},
+
+ {t:'trap', kick:'The trap', big:'You have been handed someone else’s zones and told they are yours.',
+  body:'Percent-of-FTP training zones are one formula applied to every rider on earth. They were never built from your physiology.'},
+
+ {t:'reframe', kick:'The real problem', big:'The problem was never your effort. It was training to an average that is not yours.',
+  body:'Two riders with the same FTP can need completely different training. The number you have been optimizing hides that.'},
+
+ {t:'part', part:'Part One', h:'Why generic zones fail you'},
+
+ {t:'c', kick:'One number, every rider', h:'FTP is a single dot',
+  body:'A threshold test tells you one point on a line. It says nothing about your sprint, your repeatability, or how long you can hold the efforts your events actually demand.'},
+
+ {t:'c', kick:'The hidden cost', h:'Training the wrong system',
+  body:'When your zones are not yours, you spend months building the engine you already have and starving the one your goal event needs. Effort goes in. The specific fitness does not come out.'},
+
+ {t:'part', part:'Part Two', h:'The power-duration curve'},
+
+ {t:'c', kick:'The whole picture', h:'Your best efforts, across every duration',
+  body:'The power-duration curve models your maximal power from a few seconds to several hours, from your own ride data. It is the difference between one dot and the entire shape of your fitness.'},
+
+ {t:'list', kick:'iLevels', h:'Zones built from your curve, not a formula',
+  items:['Training levels calculated from your actual power-duration curve','They move as your fitness moves, so the prescription stays individual','No more riding someone else’s percentage of someone else’s threshold']},
+
+ {t:'list', kick:'Read the shape', h:'Three numbers that actually describe you',
+  items:['mFTP: your modeled threshold, from all your data, not one painful test','FRC: your Functional Reserve Capacity, the work you can do above threshold','Pmax: your peak neuromuscular power, the top of your sprint']},
+
+ {t:'list', kick:'Rider type', h:'The curve names your phenotype',
+  items:['Sprinter, pursuiter, time-trialist, or climber','Your shape tells us what you are built to do, and what to develop','We train toward your event, not a generic fitness ideal']},
+
+ {t:'c', kick:'Match work to limiter', h:'Train the system your goal demands',
+  body:'Once the curve shows where you are strong and where you are losing watts, every workout has a job. You stop guessing which efforts matter and start spending training time where it changes the result.'},
+
+ {t:'part', part:'Part Three', h:'A season built on your curve'},
+
+ {t:'c', kick:'A season, not a template', h:'Roadmap, adapt, peak',
+  body:'We build a season around your curve, translate your goals into daily training, review the data as it comes in, adjust for real life, and bring you to your key events sharp instead of cooked.'},
+
+ {t:'list', kick:'The whole athlete', h:'One plan, every lever',
+  items:['Nutrition that fuels the training, not fights it','Strength work that protects the watts you build','Mental performance and recovery held inside the same plan']},
+
+ {t:'why', kick:'Why trust this method', h:'Built by the person who built the tool',
+  body:'Tim Cusick is the product leader for TrainingPeaks WKO and co-built its power-duration model, the analysis engine coaches across the sport rely on. His athletes include world and national champions. BaseCamp exists to put that same analysis in the hands of everyday riders.'},
+
+ {t:'recap', kick:'The method in one line', big:'Stop training to an average. Start training to your own curve.',
+  body:'That single shift is what separates the riders who keep plateauing from the ones who finally move.'},
+
+ {t:'cta', kick:'Your next step', h:'See what your own curve says',
+  cta:'Book a free, no-obligation conversation with Coach Kathy at BaseCamp. No payment, no credit card. Just a look at where your training could go.',
+  disc:'Educational only. No income, result, or performance outcome is guaranteed; individual results vary with history, health, consistency, and circumstances.'}
+];
+const el=document.getElementById('deck');
+S.forEach(s=>{
+  const d=document.createElement('section'); d.className='slide';
+  let h='';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.part) h+='<div class="part">'+s.part+'</div>';
+  if(s.h) h+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+  if(s.big) h+='<div class="big">'+s.big+'</div>';
+  if(s.promise) h+='<div class="promise">'+s.promise+'</div>';
+  if(s.body) h+='<p class="body">'+s.body+'</p>';
+  if(s.items){h+='<ul>';s.items.forEach(i=>h+='<li>'+i+'</li>');h+='</ul>';}
+  if(s.cta) h+='<div class="cta-step">'+s.cta+'</div>';
+  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
+  h+='<div class="foot">BaseCamp · joinbasecamp.com</div>';
+  if(s.t==='title'||s.t==='reframe'||s.t==='recap'||s.t==='cta') h+=CURVE;
+  d.innerHTML=h; el.appendChild(d);
+});
+</script>
+</body>
+</html>
