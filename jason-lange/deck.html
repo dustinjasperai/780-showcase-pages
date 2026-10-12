@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presence, Not Performance - A Live Masterclass with Jason Lange</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;          /* light ground, from site_scheme:light */
+    --panel:#ffffff;
+    --deep:#003f3a;        /* dominant brand teal (brand.json, 68+ uses) */
+    --accent:#2fabaf;      /* brand bright teal accent (brand.json) */
+    --mist:#92d9d7;        /* brand tint */
+    --ink:#14211f;
+    --muted:#55615e;
+    --rule:#dfe7e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:54px 56px;margin:0 0 22px;min-height:460px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--deep)}
+  .slide.title::before,.slide.section::before,.slide.cta::before{width:100%;height:6px;bottom:auto;background:linear-gradient(90deg,var(--deep),var(--accent))}
+  .kicker{font-family:"Bebas Neue",sans-serif;letter-spacing:.14em;font-size:18px;color:var(--accent);text-transform:uppercase;margin-bottom:18px}
+  h1{font-family:"Bebas Neue",sans-serif;font-weight:400;letter-spacing:.01em;line-height:.98;font-size:68px;color:var(--deep);margin-bottom:18px}
+  h2{font-family:"Bebas Neue",sans-serif;font-weight:400;letter-spacing:.01em;line-height:1.02;font-size:46px;color:var(--deep);margin-bottom:16px}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink);max-width:62ch}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);max-width:60ch;margin-top:10px}
+  .horizon{height:1px;background:var(--rule);margin:22px 0;position:relative}
+  .horizon::after{content:"";position:absolute;left:0;top:0;height:1px;width:72px;background:var(--accent)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:20px;line-height:1.5;color:var(--ink);padding:12px 0 12px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:20px;width:12px;height:12px;border-radius:50%;background:var(--mist);border:2px solid var(--accent)}
+  .pillarno{font-family:"Bebas Neue",sans-serif;font-size:22px;color:var(--accent);letter-spacing:.1em;margin-bottom:8px}
+  .quote{font-size:30px;line-height:1.35;color:var(--deep);font-style:italic;max-width:24ch}
+  .byline{margin-top:22px;font-size:17px;color:var(--muted)}
+  .meta{margin-top:26px;font-size:18px;color:var(--muted)}
+  .meta b{color:var(--deep);font-weight:700}
+  .tag{display:inline-block;font-family:"Bebas Neue",sans-serif;letter-spacing:.12em;font-size:15px;color:var(--deep);background:rgba(47,171,175,.14);border:1px solid var(--mist);border-radius:999px;padding:5px 14px;margin-bottom:20px}
+  .disclaimer{margin-top:28px;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:66ch}
+  .pagenum{position:absolute;right:20px;bottom:14px;font-size:13px;color:var(--muted);font-family:"Bebas Neue",sans-serif;letter-spacing:.1em}
+  .cta .lead{font-size:24px}
+  .steps{margin-top:16px}
+  .steps li::before{background:var(--accent);border-color:var(--deep)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A Live Masterclass with Jason Lange', h:'Presence, Not Performance',
+   lead:'The four shifts that make a man magnetic from the inside out.',
+   sub:'Evolutionary Men. Attraction, intimacy and purpose built on presence, not tactics.'},
+
+  {t:'point', kicker:'Who this is for', h:'You have done real things. You still disappear at home.',
+   lead:'Capable in the world, unsure in the moments that matter most with the person closest to you.',
+   sub:'This hour is for the man who senses the gap between how he performs and how present he actually is.'},
+
+  {t:'point', kicker:'The trap', h:'You learned to keep the peace.',
+   lead:'Agreeable. Accommodating. Easy to be around.',
+   sub:'Nobody warned you that keeping the peace and being present are not the same thing, and that one quietly costs you the other.'},
+
+  {t:'quote', kicker:'The reframe', q:'Attraction was never about tactics. It was always about presence.',
+   byline:'Which is why the scripts never worked, and why the shift is simpler and harder than you were told.'},
+
+  {t:'section', kicker:'Part One', h:'The Problem'},
+
+  {t:'point', kicker:'The pattern', h:'Two ways men leave the room without moving.',
+   lead:'Bracing and disappearing.',
+   sub:'You either tighten up and manage the moment, or you go quiet and vacate it. Both read as absence. Both are learned, and both can be unlearned.'},
+
+  {t:'point', kicker:'The cost', h:'Performance is exhausting and it never lands.',
+   lead:'The harder you work to be good, the less of you is actually there.',
+   sub:'Desire, trust and respect do not respond to effort. They respond to a man who is present enough to be felt.'},
+
+  {t:'section', kicker:'Part Two', h:'The Pillars of Presence'},
+
+  {t:'pillar', no:'Pillar One', h:'Embodied presence',
+   lead:'Presence is a skill of the body, not a mindset.',
+   sub:'The actual ability to stay grounded in yourself instead of bracing or disappearing. Trained, not willed.'},
+
+  {t:'pillar', no:'Pillar Two', h:'The patterns underneath',
+   lead:'What your past taught you about love, desire and your own worth.',
+   sub:'These run on autopilot in your closest relationship. Seeing them is the first time you get a choice.'},
+
+  {t:'pillar', no:'Pillar Three', h:'Wanting out loud',
+   lead:'Reclaiming desire without apology.',
+   sub:'Most men have quietly agreed to want less. Presence returns when a man can state what he wants and stay standing in it.'},
+
+  {t:'pillar', no:'Pillar Four', h:'Purpose that does not need approval',
+   lead:'Direction that is yours, independent of her validation.',
+   sub:'A man anchored in his own purpose stops auditioning. That is the ground attraction actually grows in.'},
+
+  {t:'pillar', no:'The Deeper Work', h:'Heart of Shadow',
+   lead:'The parts you have hidden are not the problem. Hiding them is.',
+   sub:'Shadow work meets the disowned material driving the reactivity and the absence, so presence has somewhere to stand.'},
+
+  {t:'section', kicker:'Part Three', h:'Lived, Not Performed'},
+
+  {t:'point', kicker:'In the real moments', h:'Present when it counts.',
+   lead:'Conflict. Desire. Leading at home.',
+   sub:'Not calm for its own sake. Grounded enough to stay in the moment with real stakes instead of numbing out or taking over.'},
+
+  {t:'point', kicker:'Polarity', h:'Polarity without performance.',
+   lead:'Attraction as something felt, not staged.',
+   sub:'When presence is real, polarity takes care of itself. No lines, no routines, nothing to maintain.'},
+
+  {t:'point', kicker:'Why me', h:'Where this work comes from.',
+   lead:'Jason Lange, founder of Evolutionary Men.',
+   sub:'Trained with John Wineland, Dr. Robert Glover, Ken Wilber and Robert Augustus Masters. Years guiding men through presence, polarity and shadow work in groups, retreats and one on one.'},
+
+  {t:'quote', kicker:'In his words', q:'Presence from practice becomes presence as identity.',
+   byline:'The goal is not a better performance. It is a man who no longer has to perform.'},
+
+  {t:'recap', kicker:'The four shifts', h:'What you walk away with.',
+   items:['Presence you can feel in your body, on command','The patterns that have been running you, in the open','Desire you can state out loud without shame','Purpose that holds whether or not she approves']},
+
+  {t:'cta', kicker:'Your next step', h:'Find your edge, then let’s go deeper.',
+   lead:'Start with the free Evolutionary Edge assessment to see exactly where your presence breaks down.',
+   steps:['Take the Evolutionary Edge assessment (about 20 minutes)','Apply for a discovery call','Step into Pillars of Presence with Jason and the men’s group'],
+   disclaimer:'Educational content only. This masterclass offers teaching and practices, not therapy or guaranteed outcomes. Results depend on the individual and vary from man to man.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide ' + s.t;
+  let html = '';
+  if(s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){
+    html += '<h1>'+s.h+'</h1><div class="horizon"></div><p class="lead">'+s.lead+'</p><p class="sub">'+s.sub+'</p>';
+  } else if(s.t==='section'){
+    html += '<h1>'+s.h+'</h1>';
+  } else if(s.t==='quote'){
+    html += '<p class="quote">“'+s.q+'”</p><p class="byline">'+s.byline+'</p>';
+  } else if(s.t==='pillar'){
+    html += '<div class="pillarno">'+s.no+'</div><h2>'+s.h+'</h2><p class="lead">'+s.lead+'</p><p class="sub">'+s.sub+'</p>';
+  } else if(s.t==='recap'){
+    html += '<h2>'+s.h+'</h2><ul>'+s.items.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  } else if(s.t==='cta'){
+    html += '<h2>'+s.h+'</h2><p class="lead">'+s.lead+'</p><ul class="steps">'+s.steps.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="disclaimer">'+s.disclaimer+'</p>';
+  } else {
+    html += '<h2>'+s.h+'</h2><p class="lead">'+s.lead+'</p><p class="sub">'+s.sub+'</p>';
+  }
+  html += '<div class="pagenum">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
