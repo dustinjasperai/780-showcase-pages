@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Vector Art Mindset | A live masterclass with Laura Coyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,500&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f3f5fb; --panel:#fcfdff; --rule:#dde2f0;
+    --ink:#13285d; --ink-soft:#33406a; --ink-mute:#6b7190;
+    --accent:#13285d; --accent-soft:#3a4f86; --paper-line:#e2e7f4;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Albert Sans',system-ui,sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{
+    position:absolute; inset:0; display:none;
+    padding:9vh 10vw; flex-direction:column; justify-content:center;
+    gap:2.2vh;
+  }
+  .slide.on{display:flex}
+  .kick{font-family:'Albert Sans';font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft)}
+  h1{font-family:'Newsreader';font-weight:700;font-size:clamp(34px,6.4vw,76px);line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:'Newsreader';font-weight:700;font-size:clamp(28px,4.6vw,52px);line-height:1.12;letter-spacing:-.005em}
+  .sub{font-size:clamp(17px,2.1vw,26px);color:var(--ink-soft);max-width:30ch;line-height:1.5}
+  .big{font-family:'Newsreader';font-weight:500;font-style:italic;font-size:clamp(30px,5.2vw,62px);line-height:1.15;max-width:18ch}
+  ul{list-style:none;display:flex;flex-direction:column;gap:1.6vh;max-width:34ch}
+  li{position:relative;padding-left:34px;font-size:clamp(17px,2.1vw,25px);color:var(--ink-soft);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:2px;background:var(--accent)}
+  .label{font-family:'Albert Sans';font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute)}
+  .partnum{font-family:'Newsreader';font-weight:700;font-size:clamp(60px,12vw,150px);color:var(--paper-line);line-height:.8}
+  .note{font-size:15px;color:var(--ink-mute);max-width:46ch;line-height:1.5}
+  .cred{display:flex;flex-wrap:wrap;gap:14px;max-width:40ch}
+  .cred span{font-family:'Albert Sans';font-weight:600;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:7px 15px}
+  .disc{font-size:13px;color:var(--ink-mute);max-width:52ch;line-height:1.55;border-top:1px solid var(--rule);padding-top:14px;margin-top:6px}
+  .bez{position:absolute;right:6vw;top:7vh;width:120px;height:120px;opacity:.5}
+  .bez .pt{fill:var(--accent)}
+  .bez .ln{stroke:var(--accent-soft);stroke-width:2;fill:none}
+  .bez .cv{stroke:var(--accent);stroke-width:3;fill:none}
+  #nav{position:absolute;bottom:3vh;right:3vw;font-family:'Albert Sans';font-size:13px;color:var(--ink-mute);letter-spacing:.08em}
+  #bar{position:absolute;bottom:0;left:0;height:4px;background:var(--accent);transition:width .25s ease}
+  .foot{position:absolute;bottom:3vh;left:10vw;font-family:'Albert Sans';font-size:13px;color:var(--ink-mute);letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"></div>
+<div id="bar"></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Laura Coyle',
+    h:'The Vector Art Mindset',
+    sub:'How working illustrators actually think in Adobe Illustrator.'},
+
+  {t:'promise', label:'In the next hour',
+    h:'Three shifts',
+    list:['Stop memorizing clicks and start thinking in vectors',
+          'Make precise vector work look like you drew it by hand',
+          'Use color as a tool, not an afterthought']},
+
+  {t:'who', label:'Who this is for',
+    h:'You can use the tools. The work still feels stiff.',
+    list:['You know the panels, the shortcuts, the menus',
+          'But your pieces still look flat, generic, a little "Illustrator-y"',
+          'You want work that looks intentional and yours']},
+
+  {t:'trap', label:'The trap',
+    h:'You were taught tools, not reasoning.',
+    sub:'Most Illustrator learning is a tour of buttons. Nobody explains the why behind each step, so every new project starts from zero again.'},
+
+  {t:'reframe',
+    big:'Great vector art is decisions, not clicks.'},
+
+  {t:'part', num:'01', h:'Why your work looks "Illustrator-y"'},
+
+  {t:'content', label:'The real problem',
+    h:'The software has a default look',
+    sub:'Perfect curves, even weights, flat fills. Left on autopilot, the tool makes every piece look the same. The fix is not another button. It is how you decide what the tool should do.'},
+
+  {t:'content', label:'Tools vs mindset',
+    h:'A tool answers "how". A mindset answers "why".',
+    list:['"How do I use the Pen Tool" keeps you a beginner forever',
+          '"Why this anchor point, here" makes you an illustrator',
+          'The why is portable. It works on every future project']},
+
+  {t:'part', num:'02', h:'The vector art mindset'},
+
+  {t:'content', label:'Shift one - Think in vectors',
+    h:'See the shape before you place a point',
+    sub:'This is the heart of the method: plan the fewest points that describe the form, and know what each one is doing. I explain the reasoning behind every step so it becomes yours, not a sequence you copied.'},
+
+  {t:'content', label:'Shift two - Make it look hand-drawn',
+    h:'Get organic results from a precise tool',
+    sub:'Art brushes and linework let you keep vector flexibility while losing the stiff, machine-made look. This is the difference between art that reads as "made in Illustrator" and art that reads as yours.'},
+
+  {t:'content', label:'Shift three - Color as a secret weapon',
+    h:'The part most designers never unlock',
+    sub:'Buttery gradients and Generative Recolor turn flat fills into depth and mood in minutes. Color is where a competent piece becomes a striking one, and it is far more learnable than it looks.'},
+
+  {t:'content', label:'The feared one',
+    h:'Think with the Pen Tool',
+    sub:'The Pen Tool is not a dexterity test. It is a thinking skill. Once you know why a handle goes where it goes, the tool everyone avoids becomes the one you reach for first.'},
+
+  {t:'part', num:'03', h:'The mindset on a real piece'},
+
+  {t:'content', label:'A worked piece',
+    h:'From rough shape to finished mark',
+    sub:'We take one simple form and build it the way a working illustrator would: plan the points, keep it editable, give it a hand-drawn edge, then let color do the heavy lifting. Same tools you already own, a completely different result.'},
+
+  {t:'cred', label:'Why listen to me',
+    h:'Thirty years of this, for real brands',
+    cred:['Adobe Community Expert','Target','Hallmark','Hasbro','Amazon','Disney','Papyrus','~30 years in vector art'],
+    note:'This is not theory. It is the mindset behind decades of commercial illustration, taught plainly so you can use it on your own work.'},
+
+  {t:'content', label:'What changes',
+    h:'Projects stop starting from zero',
+    list:['You make decisions on purpose instead of nudging and hoping',
+          'Your work starts to look like a person made it',
+          'New projects get faster because the reasoning carries over']},
+
+  {t:'recap', label:'The three shifts, again',
+    h:'Think in vectors. Draw with the tool. Let color lead.',
+    sub:'That is the vector art mindset. It is learnable, and it is the thing no shortcut list will ever give you.'},
+
+  {t:'cta', label:'Your next step',
+    h:'Keep learning the mindset with me',
+    sub:'If this way of thinking clicked, Laura Coyle Courses is where it goes deep: eight self-paced courses, live sessions, and a friendly place to ask questions. Start with The Heart of Illustrator.',
+    cta:'Join Laura Coyle Courses',
+    disc:'Educational content only. No income, career, or specific result is guaranteed. Outcomes vary with your own practice, background, and effort.'}
+];
+
+const bez = `<svg class="bez" viewBox="0 0 120 120"><path class="ln" d="M14 100 L14 60"/><path class="ln" d="M106 100 L106 40"/><path class="cv" d="M14 100 C14 60 106 80 106 40"/><circle class="pt" cx="14" cy="100" r="6"/><circle class="pt" cx="106" cy="100" r="6"/><circle class="pt" cx="14" cy="60" r="4"/><circle class="pt" cx="106" cy="40" r="4"/></svg>`;
+
+function liList(arr){ return '<ul>'+arr.map(x=>'<li>'+x+'</li>').join('')+'</ul>'; }
+
+function render(s){
+  let b='';
+  if(s.t==='title') b=`<div class="kick">${s.k}</div><h1>${s.h}</h1><div class="sub">${s.sub}</div>`;
+  else if(s.t==='reframe') b=`${bez}<div class="big">${s.big}</div>`;
+  else if(s.t==='part') b=`<div class="partnum">${s.num}</div><h2>${s.h}</h2>`;
+  else if((s.t==='promise'||s.t==='who')||(s.t==='content'&&s.list)) b=`<div class="label">${s.label}</div><h2>${s.h}</h2>${liList(s.list)}`;
+  else if(s.t==='content') b=`<div class="label">${s.label}</div><h2>${s.h}</h2><div class="sub">${s.sub}</div>`;
+  else if(s.t==='trap') b=`<div class="label">${s.label}</div><h2>${s.h}</h2><div class="sub">${s.sub}</div>`;
+  else if(s.t==='cred') b=`<div class="label">${s.label}</div><h2>${s.h}</h2><div class="cred">${s.cred.map(c=>'<span>'+c+'</span>').join('')}</div><div class="note">${s.note}</div>`;
+  else if(s.t==='recap') b=`<div class="label">${s.label}</div><h2>${s.h}</h2><div class="sub">${s.sub}</div>`;
+  else if(s.t==='cta') b=`${bez}<div class="label">${s.label}</div><h2>${s.h}</h2><div class="sub">${s.sub}</div><div class="cred"><span>${s.cta}</span></div><div class="disc">${s.disc}</div>`;
+  return b;
+}
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slide'+(i===0?' on':''); d.innerHTML=render(s)+'<div class="foot">Laura Coyle - lauracoylecreative.com</div>'; stage.appendChild(d); });
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+const nav=document.getElementById('nav'), bar=document.getElementById('bar');
+function show(n){ cur=Math.max(0,Math.min(S.length-1,n)); slides.forEach((s,i)=>s.classList.toggle('on',i===cur)); nav.textContent=(cur+1)+' / '+S.length; bar.style.width=((cur+1)/S.length*100)+'%'; }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ') show(cur+1); if(e.key==='ArrowLeft') show(cur-1); });
+document.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
