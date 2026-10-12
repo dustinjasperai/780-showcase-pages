@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Débloquer un client - Masterclass LevelUp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1d22;        /* from brand.json #1a1a1a/#222222/#33373d dark family */
+    --panel:#24282f;     /* from #33373d */
+    --rule:#3a3f47;
+    --ink:#f1f1f1;       /* from #f1f1f1 */
+    --muted:#b3afab;     /* from #b3afab */
+    --accent:#ff1700;    /* verbatim brand.json, 27 uses - the LevelUp red */
+    --head:'Chakra Petch', sans-serif;  /* their h2 face */
+    --body:'Space Grotesk', sans-serif; /* their body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#0d0f12;color:var(--ink);font-family:var(--body);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--bg);border:1px solid var(--rule);border-radius:14px;position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;justify-content:center;gap:18px}
+  .slide.on{display:flex}
+  .kick{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--accent)}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(28px,5.4vw,56px);line-height:1.04}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(22px,3.8vw,38px);line-height:1.1}
+  p{font-size:clamp(15px,2vw,21px);line-height:1.5;color:var(--ink);max-width:40ch}
+  p.muted{color:var(--muted)}
+  .big{font-family:var(--head);font-weight:700;font-size:clamp(26px,4.6vw,48px);line-height:1.08}
+  .accent{color:var(--accent)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  li{display:flex;gap:14px;align-items:flex-start;font-size:clamp(15px,2vw,20px);line-height:1.4}
+  li .n{font-family:var(--head);font-weight:700;color:var(--accent);min-width:34px}
+  .ladder{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .rung{background:var(--panel);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px}
+  .rung b{font-family:var(--head)}
+  .foot{position:absolute;left:8%;right:8%;bottom:4.5%;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:10px}
+  .tag{font-family:var(--head);letter-spacing:.1em;text-transform:uppercase}
+  .disc{font-size:12px;color:var(--muted);max-width:52ch;line-height:1.45}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:22px 26px;display:inline-block}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;font-family:var(--head);font-size:13px;color:#8a9099}
+  .nav button{background:#1a1d22;color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:var(--head)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">&larr;</button><span id="count"></span><button id="next">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title', kick:'Masterclass en direct - LevelUp',
+   h1:'Débloquer un client',
+   p:'Comment faire passer un plan parfait à l\'action. Avec Loïc Salvado, coach certifié et Maître Praticien PNL.'},
+
+  {t:'for', kick:'Pour qui',
+   h2:'Pour les consultants et les coachs',
+   p:'Tu sais construire une stratégie solide. Le vrai défi arrive après : amener la personne en face à l\'appliquer vraiment.'},
+
+  {t:'trap', kick:'La scène que tu connais',
+   big:'Le client adore le plan. Et puis la semaine d\'après, rien n\'a bougé.',
+   p:'Pas par mauvaise volonté. Quelque chose le bloque, et ce quelque chose n\'est pas dans le document.'},
+
+  {t:'reframe', kick:'Le vrai sujet',
+   big:'Le problème n\'a jamais été ton plan.',
+   p:'C\'est ce qui se passe dans la tête du client une fois le plan posé. C\'est là que se joue le résultat.'},
+
+  {t:'part', kick:'Partie 1', h1:'Pourquoi les plans restent sur l\'étagère'},
+
+  {t:'content', kick:'Conseiller n\'est pas coacher',
+   h2:'Tu donnes la carte. Tu n\'as pas appris à faire marcher la personne.',
+   p:'Un bon plan informe. Il ne débloque pas une peur, une croyance limitante ou un manque de levier. C\'est un autre métier : coacher le passage à l\'action.'},
+
+  {t:'content', kick:'Le coût',
+   h2:'Un plan non appliqué, c\'est un résultat perdu, et un client qui doute de toi.',
+   p:'Le mérite de ton travail disparaît derrière l\'inaction. Tu portes la responsabilité d\'un échec qui ne vient pas de ta stratégie.'},
+
+  {t:'part', kick:'Partie 2', h1:'La méthode du dojo'},
+
+  {t:'ladder', kick:'La progression', h2:'De la technique à ton style',
+   rungs:[['1 - Technique','Les bons gestes, les bonnes questions, le cadre.'],
+          ['2 - Mécanique','Pourquoi ça marche, pour savoir quoi faire hors script.'],
+          ['3 - Ton style','Tes propres protocoles, ta posture, assumée.']]},
+
+  {t:'content', kick:'Le principe',
+   h2:'70% de pratique, en petit groupe.',
+   p:'On n\'apprend pas une posture de coach en théorie. On l\'apprend par les reps. C\'est le coeur du Dojo des coachs.'},
+
+  {t:'content', kick:'Pilier - débloquer le client',
+   h2:'La posture de questionnement qui fait bouger.',
+   p:'Pas d\'ajouter un conseil de plus. Faire émerger chez le client la prochaine action qu\'il va vraiment faire, et lever ce qui l\'empêche.'},
+
+  {t:'content', kick:'Pilier - décodage de l\'inconscient (PNL)',
+   h2:'Lire ce qui bloque vraiment : peur, croyance, levier manquant.',
+   p:'La PNL donne une grille pour repérer et travailler le mécanisme sous le blocage, puis réactiver la motivation. Lignée certifiée Richard Bandler.'},
+
+  {t:'part', kick:'Partie 3', h1:'À quoi ça ressemble en séance'},
+
+  {t:'content', kick:'Un exemple',
+   h2:'Le client dit oui au plan, mais traîne.',
+   p:'On ne répète pas le plan. On cherche la croyance derrière le délai, on la travaille, et on sort de la séance avec une action précise et une échéance que le client a choisie.'},
+
+  {t:'recap', kick:'Les trois bascules', h2:'Ce qui change pour toi',
+   items:[['Du plan','à l\'action réellement engagée'],
+          ['Du conseil','à la posture de coach'],
+          ['De la technique empruntée','à ton style de coach']]},
+
+  {t:'why', kick:'Qui te forme',
+   h2:'Loïc Salvado, LevelUp',
+   p:'Coach certifié (RNCP7) et Maître Praticien PNL certifié Richard Bandler. Formateur de coachs et de consultants. Fondateur du Dojo des coachs. À mi-chemin entre le théâtre d\'impro, la formation au coaching et le dépannage d\'urgence business.'},
+
+  {t:'cta', kick:'Prochaine étape',
+   h1:'Passe au niveau supérieur',
+   p:'Si tu veux apprendre à débloquer tes clients et construire ta propre posture de coach, réserve ton visio-café avec Loïc et découvre le cursus Coaching & PNL.',
+   go:'Réserve ton visio-café sur lvlup-coaching.com',
+   disc:'Contenu pédagogique et informatif. Educational content only. No specific result is guaranteed. Results vary by individual, depending on each person and their practice.'}
+];
+
+const stage = document.getElementById('stage');
+const countEl = document.getElementById('count');
+let i = 0;
+
+function render(){
+  stage.innerHTML = '';
+  const s = S[i];
+  const el = document.createElement('div');
+  el.className = 'slide on';
+  let h = '';
+  if(s.kick) h += '<div class="kick">'+s.kick+'</div>';
+  if(s.h1) h += '<h1>'+s.h1+'</h1>';
+  if(s.h2) h += '<h2>'+s.h2+'</h2>';
+  if(s.big) h += '<div class="big">'+s.big+'</div>';
+  if(s.rungs){ h += '<div class="ladder">'; s.rungs.forEach(r=>{ h += '<div class="rung"><b>'+r[0]+'</b> : '+r[1]+'</div>'; }); h += '</div>'; }
+  if(s.items){ h += '<ul>'; s.items.forEach(it=>{ h += '<li><span class="n accent">&rsaquo;</span><span><b>'+it[0]+'</b> '+it[1]+'</span></li>'; }); h += '</ul>'; }
+  if(s.p) h += '<p'+(s.t==='for'?' class="muted"':'')+'>'+s.p+'</p>';
+  if(s.go) h += '<div class="cta-box"><span class="tag accent">'+s.go+'</span></div>';
+  if(s.disc) h += '<p class="disc">'+s.disc+'</p>';
+  h += '<div class="foot"><span class="tag">LevelUp</span><span>lvlup-coaching.com</span></div>';
+  el.innerHTML = h;
+  stage.appendChild(el);
+  countEl.textContent = (i+1)+' / '+S.length;
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, n)); render(); }
+document.getElementById('next').onclick = ()=>go(i+1);
+document.getElementById('prev').onclick = ()=>go(i-1);
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'||e.key===' ') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+render();
+</script>
+</body>
+</html>
