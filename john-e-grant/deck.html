@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Firm That Runs Without the Heroics · John E. Grant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6f4ef; --panel:#ece7dc; --rule:#e2dccd;
+    --ink:#1d3349; --accent:#ae7a3d; --dim:#5f6470;
+  }
+  html,body{height:100%}
+  body{background:#e6e2d8;font-family:'Inter',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e6e2d8}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Inter',sans-serif;font-size:1.0vw;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2.2vh}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-.006em}
+  .t-title h1{font-size:4.3vw;max-width:92%}
+  .t-normal h1{font-size:3.15vw;max-width:86%}
+  .t-normal .body{font-family:'Inter',sans-serif;font-size:1.46vw;color:var(--dim);margin-top:2.6vh;max-width:75%;line-height:1.56;font-weight:400}
+  .sub{font-family:'Inter',sans-serif;font-size:1.62vw;color:var(--dim);margin-top:3.0vh;max-width:80%;line-height:1.5;font-weight:400}
+  /* section: a kanban column-header strip */
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Inter',sans-serif;font-size:1.22vw;font-weight:700;color:#fff;background:var(--ink);
+    display:inline-block;padding:1.1vh 1.5vw;border-radius:9px 9px 0 0;letter-spacing:.12em;text-transform:uppercase}
+  .t-section .tabwrap{border-top:3px solid var(--accent);padding-top:3vh;width:76%}
+  .t-section h1{font-size:4.5vw;max-width:92%}
+  /* reframe: full navy field, paper type */
+  .t-reframe{background:var(--ink);align-items:center;text-align:center}
+  .t-reframe h1{font-family:'Spectral',serif;font-size:3.5vw;max-width:84%;font-style:italic;font-weight:400;color:#f6f4ef}
+  .t-reframe .mark{width:4.4vw;height:3px;background:var(--accent);margin:0 auto 4vh}
+  /* cta */
+  .t-cta{background:var(--panel);align-items:center;text-align:center}
+  .t-cta h1{font-size:3.7vw;max-width:86%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--ink);color:var(--ink);border-radius:100px;padding:1.3vh 1.7vw;font-family:'Inter',sans-serif;font-size:1.14vw;font-weight:700}
+  .chip:first-child{background:var(--accent);border-color:var(--accent);color:#fff}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.6vh;font-family:'Inter',sans-serif;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.42}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .brandline{font-family:'Inter',sans-serif;font-size:1.24vw;color:var(--dim);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--ink);font-weight:700}
+  /* pillar-card: a named framework pillar, kanban card motif */
+  .t-pillar h1{font-size:2.9vw}
+  .t-pillar .letter{font-family:'Spectral',serif;font-size:2.0vw;font-weight:600;color:#fff;background:var(--ink);
+    width:4.4vw;height:4.4vw;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:2.4vh;border-left:5px solid var(--accent)}
+  .t-pillar .body{font-family:'Inter',sans-serif;font-size:1.42vw;color:var(--dim);margin-top:2.2vh;max-width:75%;line-height:1.55}
+  .corner-tab{position:absolute;right:0;top:16%;width:2.2vw;height:11vh;background:var(--accent);border-radius:8px 0 0 8px;opacity:.9}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(29,51,73,.10);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:700}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:700}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:7.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-reframe h1{font-size:5.6vw}
+    .t-cta h1{font-size:6.6vw}.chip{font-size:2.6vw}.t-pillar .letter{width:11vw;height:11vw;font-size:5vw}.t-pillar .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 22</div>
+<div class="brand-foot">The Agile Attorney</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<script>
+const S = [
+ {t:'title',title:'The Firm That Runs Without the Heroics',sub:'A live masterclass for law firm owners who are tired of being the person every case, deadline, and detail quietly depends on.',brand:true},
+ {t:'normal',k:'Who this is for',title:'You are not short on effort. You are short on a system.',body:'You bill the hours, answer the late emails, and catch the thing that would have slipped. The firm works because you keep catching it. That is exactly the problem, and it does not get better by working harder.'},
+ {t:'reframe',title:'You do not have a work ethic problem. You have a workflow you cannot see.'},
+
+ {t:'section',idx:'Part One',title:'Why Good Firms Stay Stuck'},
+ {t:'normal',k:'The core problem',title:'When the work is invisible, the bottleneck is invisible.',body:'Matters live in your head, your inbox, and a dozen other places. Nobody can see the whole flow, so nobody can see where it jams. You feel the overload every day but you cannot point at it, which means you cannot fix it.'},
+ {t:'normal',k:'The hidden tax',title:'Every heroic save hides a broken step.',body:'The last-minute diving catch feels like a win. It is really a signal that the system let the ball get that far. Firms that run on heroics burn out their best people and call it commitment.'},
+ {t:'reframe',title:'Adding hours to an overloaded firm just burns the hours faster.'},
+
+ {t:'section',idx:'Part Two',title:'The Agile Law Firm Operating System'},
+ {t:'normal',k:'The framework',title:'A law firm is a system. Systems can be designed.',body:'The same disciplines that let a factory or a software team ship reliable work apply directly to legal work. You do not need more willpower. You need to make the work visible, protect your capacity, and let the system carry the load. Five pillars do that.'},
+ {t:'pillar',letter:'1',k:'Pillar one',title:'Make the Work Visible',body:'Put every matter and every task on one board, where the whole team can see it move from intake to done. The moment the work is visible, the bottleneck stops hiding and the guessing stops.'},
+ {t:'pillar',letter:'2',k:'Pillar two',title:'Cap the Work in Progress',body:'A firm that starts everything finishes nothing on time. Limit how many things are in flight at once so matters actually move through instead of piling up half-done across every desk.'},
+ {t:'pillar',letter:'3',k:'Pillar three',title:'Protect Your Capacity',body:'Your capacity is finite and it is your most valuable asset. Measure what the firm can truly carry, then guard it, so you take on the right work at a pace the team can deliver without heroics.'},
+ {t:'pillar',letter:'4',k:'Pillar four',title:'Delegate, Do, Defer, Drop',body:'Most of what lands on the owner does not belong there. Run every task through four choices, delegate it, do it, defer it, or drop it, and the owner stops being the place work goes to wait.'},
+ {t:'pillar',letter:'5',k:'Pillar five',title:'Design the Flow, Not the Heroics',body:'Once the work is visible and capacity is protected, you improve the system itself. You fix the step that keeps jamming instead of rescuing the same fire every week. Flow replaces the diving catch.'},
+ {t:'reframe',title:'A system you can see, you can improve. Heroics, you can only repeat.'},
+
+ {t:'section',idx:'Part Three',title:'A Firm With Room to Breathe'},
+ {t:'normal',k:'What changes',title:'More work moves through the same team.',body:'When the flow is visible and capacity is protected, the firm handles more matters without more people. Growth stops meaning another hire and another payroll risk, and starts meaning better throughput from the team you already have.'},
+ {t:'normal',k:'What changes for you',title:'The owner stops being the bottleneck.',body:'The late saves get rarer. Work is handed off with a system behind it instead of a hope. You get to lead the firm instead of holding it together, and the evenings and weekends slowly come back.'},
+ {t:'normal',k:'Why John',title:'A decade in tech, brought back into law.',body:'John E. Grant spent nearly ten years in the technology industry, in product development and process improvement, before law school. Since 2013 he has helped law firms apply Agile, Lean, and Kanban to legal work. He co-authored The Lean Law Firm and runs the Agile Attorney Network, where owners share what actually works.'},
+ {t:'reframe',title:'The goal was never to work more hours. It is to build a firm that does not need them.'},
+
+ {t:'section',idx:'Your Next Step',title:'Build the System, End the Heroics'},
+ {t:'cta',title:'Ready to build a firm that runs on a system, not on saves?',chips:['Book a free Discovery Session','Join the Agile Attorney Network','Listen to the Agile Attorney Podcast'],disc:'Educational content for law firm owners. No income, revenue, or business result is guaranteed. Outcomes vary by firm, practice area, market, and implementation.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.t==='section'){
+    h=`<div class="tabwrap"><span class="idx">${s.idx}</span></div><h1>${s.title}</h1>`;
+  } else if(s.t==='pillar'){
+    h=`<div class="letter">${s.letter}</div>`;
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    h+=`<div class="corner-tab"></div>`;
+  } else {
+    if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+    h+=`<h1>${s.title}</h1>`;
+    if(s.t==='reframe') h=`<div class="mark"></div>`+h;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The <b>Agile Attorney</b> · John E. Grant</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
