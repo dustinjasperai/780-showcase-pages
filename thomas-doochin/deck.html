@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Living Leadership — a masterclass by Thomas Doochin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1510;
+    --panel:#2a2418;
+    --rule:#433b32;
+    --accent:#b99b56;
+    --accent2:#b16f4a;
+    --ink:#f5f0e8;
+    --dim:#c9bfa8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Figtree",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;position:relative}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.on{display:block;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kick{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;font-weight:600}
+  h1{font-family:"Playfair Display",serif;font-weight:700;font-size:clamp(2.1rem,5.4vw,4rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:"Playfair Display",serif;font-weight:600;font-size:clamp(1.7rem,4vw,2.9rem);line-height:1.1}
+  .sub{margin-top:1.4rem;font-size:clamp(1.05rem,2vw,1.35rem);color:var(--dim);max-width:46ch;line-height:1.5}
+  .lede{margin-top:1.1rem;font-size:clamp(1.15rem,2.2vw,1.5rem);line-height:1.5;max-width:40ch}
+  ul{margin-top:1.6rem;list-style:none;display:grid;gap:.95rem;max-width:44ch}
+  li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.9vw,1.25rem);line-height:1.45;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:.6em;width:.6rem;height:.6rem;background:var(--accent);border-radius:50%}
+  .big{font-family:"Playfair Display",serif;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.05;letter-spacing:-.01em}
+  .acc{color:var(--accent)}
+  .quote{font-family:"Playfair Display",serif;font-style:italic;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.3;max-width:34ch}
+  .who{margin-top:1.4rem;color:var(--accent2);font-weight:600;letter-spacing:.04em}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:2rem 2.2rem;margin-top:1.6rem}
+  .foot{position:absolute;left:7vw;bottom:4vh;font-size:.78rem;color:var(--dim);letter-spacing:.08em}
+  .page{position:absolute;right:7vw;bottom:4vh;font-size:.78rem;color:var(--dim)}
+  .disc{margin-top:1.8rem;font-size:.8rem;color:var(--dim);max-width:52ch;line-height:1.5}
+  .cta-step{margin-top:1.5rem;display:inline-block;font-family:"Playfair Display",serif;font-size:1.3rem;color:var(--bg);background:var(--accent);padding:.7rem 1.5rem;border-radius:10px}
+  nav{position:absolute;right:7vw;top:4vh;display:flex;gap:.5rem}
+  nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;width:38px;height:34px;font-size:1rem;cursor:pointer}
+  nav button:hover{border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <nav><button id="prev" aria-label="previous">&larr;</button><button id="next" aria-label="next">&rarr;</button></nav>
+  <div class="foot">Heart of Men &middot; Living Leadership</div>
+  <div class="page" id="page"></div>
+</div>
+<script>
+const S=[
+ {t:'title', kick:'A live masterclass for men', h:'Living Leadership', sub:'How to lead your life from your own genius, without blowing it up. Presented live by Thomas Doochin, Heart of Men.'},
+ {t:'promise', kick:'What you will leave with', h:'A way to come home to yourself.', list:['Why you can feel far from yourself even when the life looks right','The one move that integrates the worlds you keep in separate rooms','A repeatable practice for leading from who you actually are']},
+ {t:'who', kick:'Who this is for', h:'The man who looks fine and feels fragmented.', who:'Entrepreneurs. Tradespeople. Artists. Fathers.', sub:'You have built capacity, respect, maybe a company and a family. And some quiet part of you suspects you are succeeding at a life that is not fully yours.'},
+ {t:'trap', kick:'The trap', h:'You learned to perform. You never learned to be yourself.', sub:'Most men spend their lives learning how to succeed, protect, compete and provide. Very few are ever taught how to live truthfully from the inside out.'},
+ {t:'reframe', kick:'The real problem', h:'This is not about doing more. It is about becoming one man.', sub:'Work in one room. Creativity in another. Family in a third. Purpose somewhere you rarely visit. The cost of keeping them separate is you.'},
+ {t:'cost', kick:'Part one', h:'What fragmentation quietly costs.', list:['You optimize the rooms and lose the man who lives in all of them','Your nervous system stays braced, so nothing you achieve lands','You ruminate in your head instead of leading from your heart']},
+ {t:'engine', kick:'Part two: the engine', h:'Capacity. Initiation. Collaboration.', sub:'Real change needs all three at once: the capacity to hold more, a threshold worth crossing, and brothers to cross it with. Alone, men stall. Together, they move.'},
+ {t:'arc', kick:'The arc', h:'Three acts, over eight months.', list:['Act one: Converge','Act two: Desire','Act three: Build']},
+ {t:'converge', kick:'Act one', h:'Converge.', sub:'Bring the separate worlds into one body. We train the nervous system and the thought patterns that keep you braced, so the man in every room is finally the same man.'},
+ {t:'desire', kick:'Act two', h:'Desire.', sub:'Get honest about what your life is actually for. Not the goal you inherited or the one that impresses the room, but the thing that is genuinely yours to build.'},
+ {t:'build', kick:'Act three', h:'Build.', sub:'Create and lead from your genius. Take brave, aligned action in the world, and let the fruit of it change how you father, partner, work and lead.'},
+ {t:'format', kick:'How the room works', h:'Council, Curriculum, and Coaching.', sub:'Every session holds all three: a circle where you are fully seen, teaching that gives you the map, and live coaching that meets you exactly where you are stuck.'},
+ {t:'practice', kick:'So it survives Monday', h:'Drink From The Well.', sub:'Transformation that does not survive the week is theater. A daily practice, roughly ten minutes, keeps the work alive long after the session ends.'},
+ {t:'map', kick:'The on-ramp', h:'True North.', list:['The Why: find your true north clarity','The Wound: name the resistance that hides your genius','The Way: embody the self you are becoming','The Win: mark the progress and keep moving']},
+ {t:'looks', kick:'Part three', h:'What eight months actually looks like.', list:['Sixteen live sessions with your council, twice a month','Two gatherings on the land, by a real fire, under real stars','A brotherhood thread that texts you back on the hard days']},
+ {t:'not', kick:'What this is not', h:'Not paint your face and get primal.', sub:'This is not shadow-work theater or a fluorescent room talking about feelings. It is the hike you always wanted to take with your best men, to the summit, earned.'},
+ {t:'whyme', kick:'Why I hold this', h:'I built a life that looked right and felt wrong.', sub:'I founded and sold a company, then moved to the mountains to answer the part of my leadership I had been abandoning. This work is fifteen years of practice, held for you.'},
+ {t:'proof', kick:'In their words', h:'What men say after.', quote:'I left less interested in performing masculinity and more interested in living truthfully.', who:'Lane Rankin, Living Leadership participant'},
+ {t:'invite', kick:'The invitation', h:'A warm fire for the fire of your life.', sub:'You already carry the fire. This is a place to let it do what it came here to do, among men who will not let you shrink from it.'},
+ {t:'recap', kick:'The whole arc, in one line', h:'Converge the man. Clarify the desire. Build from the genius.', sub:'That is Living Leadership. The rest is the courage to begin it with other men.'},
+ {t:'cta', kick:'Your next step', h:'Apply for Living Leadership.', sub:'The cohort is intimate and by application, so the work can stay real. If this is your season, start there.', step:'Apply at heartofmen.community', disc:'Educational only. No income, outcome, or result is guaranteed; every man\'s journey varies. Participation is an invitation to do your own work, not a promise of any specific outcome.'}
+];
+const stage=document.getElementById('stage');
+const page=document.getElementById('page');
+let i=0;
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  document.querySelectorAll('.slide').forEach(n=>n.remove());
+  const s=S[i];
+  const d=document.createElement('div');
+  d.className='slide on';
+  let html='';
+  if(s.kick) html+='<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.t==='proof'){
+    html+='<div class="quote">&ldquo;'+esc(s.quote)+'&rdquo;</div>';
+    html+='<div class="who" style="margin-top:1.6rem">'+esc(s.who)+'</div>';
+  } else if(s.t==='recap'){
+    html+='<div class="big">'+esc(s.h)+'</div>';
+    if(s.sub) html+='<p class="sub">'+esc(s.sub)+'</p>';
+  } else {
+    html+='<h1>'+esc(s.h)+'</h1>';
+    if(s.who && s.t==='who') html+='<div class="who">'+esc(s.who)+'</div>';
+    if(s.sub) html+='<p class="sub">'+esc(s.sub)+'</p>';
+    if(s.lede) html+='<p class="lede">'+esc(s.lede)+'</p>';
+    if(s.list){html+='<ul>';s.list.forEach(x=>html+='<li>'+esc(x)+'</li>');html+='</ul>';}
+    if(s.step) html+='<div class="cta-step">'+esc(s.step)+'</div>';
+    if(s.disc) html+='<p class="disc">'+esc(s.disc)+'</p>';
+  }
+  d.innerHTML=html;
+  stage.appendChild(d);
+  page.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=(n+S.length)%S.length;render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+render();
+</script>
+</body>
+</html>
