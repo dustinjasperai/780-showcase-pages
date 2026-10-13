@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Inner Song — Strings of Hope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ec;      /* parchment cream — their dominant ground */
+    --panel:#fbf9f4;   /* lighter cream tier */
+    --accent:#012e47;  /* Galilee navy-teal — their deep brand ink */
+    --ink:#0c1a27;     /* near-black text */
+    --muted:#4a5a63;
+    --rule:#012e47;
+    --head:"EB Garamond", Georgia, serif;
+    --body:"Lato", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--accent);font-family:var(--body);color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,96vw);aspect-ratio:16/10;position:relative}
+  .slide{position:absolute;inset:0;background:var(--bg);border-radius:14px;
+    padding:7% 8%;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 24px 60px rgba(1,46,71,.35);overflow:hidden}
+  .slide.on{display:flex}
+  .slide::before{content:"";position:absolute;top:0;left:0;bottom:0;width:6px;background:var(--accent)}
+  /* harp-string motif: faint vertical rules */
+  .slide::after{content:"";position:absolute;top:12%;bottom:12%;right:7%;width:88px;
+    background-image:repeating-linear-gradient(90deg,rgba(1,46,71,.12) 0 1px,transparent 1px 15px);
+    opacity:.6;pointer-events:none}
+  .kick{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:1.1rem}
+  h1{font-family:var(--head);font-weight:700;color:var(--accent);line-height:1.05;font-size:clamp(2.1rem,5.6vw,3.6rem)}
+  h2{font-family:var(--head);font-weight:700;color:var(--accent);line-height:1.08;font-size:clamp(1.7rem,4.2vw,2.6rem)}
+  .sub{font-family:var(--head);font-style:italic;color:var(--muted);font-size:clamp(1.1rem,2.6vw,1.5rem);margin-top:1rem}
+  p.body{font-size:clamp(1.05rem,2.3vw,1.35rem);color:var(--ink);line-height:1.5;margin-top:1.1rem;max-width:40ch}
+  .lead{font-size:clamp(1.5rem,3.6vw,2.2rem);font-family:var(--head);color:var(--ink);line-height:1.25;max-width:24ch}
+  ul{margin-top:1.3rem;list-style:none;max-width:40ch}
+  li{position:relative;padding-left:1.6rem;margin:.7rem 0;font-size:clamp(1.02rem,2.2vw,1.25rem);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.7rem;height:.7rem;border:2px solid var(--accent);border-radius:50%}
+  .foot{position:absolute;bottom:5%;left:8%;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .part{font-family:var(--head);font-size:clamp(.95rem,2vw,1.15rem);letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:.6rem}
+  .disc{margin-top:1.4rem;font-size:.82rem;color:var(--muted);line-height:1.5;max-width:52ch}
+  .pillar{font-family:var(--head);color:var(--accent);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700}
+  .nav{position:fixed;bottom:16px;right:20px;color:#cfe0ea;font-size:.8rem;letter-spacing:.1em;font-family:var(--body)}
+  .cta-card{background:var(--panel);border:1.5px solid var(--accent);border-radius:12px;padding:1.4rem 1.6rem;margin-top:1.4rem;max-width:42ch}
+  .cta-card b{color:var(--accent)}
+  @media (max-width:640px){.slide::after{display:none}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass', h:'Find Your Inner Song',
+   sub:'Playing Soulful, Meditative Harp by Ear', foot:'Strings of Hope · with Simcha Tzuf'},
+
+  {t:'promise', kick:'What this hour gives you',
+   lead:'By the end of this hour, you will play a melody by ear, and improvise something that is truly yours. No sheet music.'},
+
+  {t:'who', kick:'Who this is for',
+   lead:'For the harpist who feels the music, but freezes at the page.'},
+
+  {t:'trap', kick:'The trap',
+   body:'You were told the notes come first. So you practice reading, and the playing never quite feels like it belongs to you.'},
+
+  {t:'hook', kick:'A different way in',
+   lead:'The page is not the music. The music was always in your hands.'},
+
+  {t:'part', part:'Part One', h:'Why reading first keeps you locked out'},
+
+  {t:'point', part:'Part One',
+   h:'Notation became a wall',
+   body:'Sheet music is a map of someone else’s journey. When it stands between you and the strings, you play the map, not the music.'},
+
+  {t:'point', part:'Part One',
+   h:'Your ear came first',
+   body:'You learned to speak long before you read. Music works the same way. Lead with the ear, and the hands follow, soulfully and without fear.'},
+
+  {t:'part', part:'Part Two', h:'The Inner Song method'},
+
+  {t:'pillar', part:'Part Two · Pillar 1', pill:'Hear it, then find it',
+   body:'Start from a melody you already love. We find it on the strings by listening, one phrase at a time, until your hands know the shape of it.'},
+
+  {t:'pillar', part:'Part Two · Pillar 2', pill:'The modes that sound soulful',
+   body:'A small handful of modes gives the harp its meditative, ancient colour. You do not need theory headaches, just the few that make it sing.'},
+
+  {t:'pillar', part:'Part Two · Pillar 3', pill:'Let the harp breathe',
+   body:'Improvisation is not advanced. It is play. We leave space, repeat, and let the music unfold in the moment, the way a story is told.'},
+
+  {t:'pillar', part:'Part Two · Pillar 4', pill:'The harp as healing',
+   body:'In the tradition of King David, the harp was medicine. Played slowly and from the heart, it calms, it prays, it heals. That is meditative harp.'},
+
+  {t:'part', part:'Part Three', h:'What it sounds like when it is yours'},
+
+  {t:'point', part:'Part Three',
+   h:'Built live, by ear',
+   body:'We take one short, sacred melody and build it together in real time, so you feel exactly how the method works inside a single living piece.'},
+
+  {t:'why', kick:'Why me',
+   h:'From a small room in the Galilee',
+   body:'I am Simcha Tzuf. I built my first harp in 2014 in the Old City of Safed, inspired by the healing harp of King David. I had trouble reading music, so I learned to play from the heart, and now I teach harpists all over the world to do the same.'},
+
+  {t:'point', kick:'Where the path leads',
+   h:'The Nine Learning Paths',
+   body:'Inside the Strings of Hope Membership, these pillars become a sequence: modes, world music, improvisation, theory and technique, with two live group workshops every month.'},
+
+  {t:'recap', kick:'What you can do now',
+   h:'You have everything you need',
+   list:['Hear a melody and find it on the strings','Use a soulful mode to colour it','Leave space and let it breathe','Play from your heart, not the page']},
+
+  {t:'cta', kick:'Your next step', h:'Keep playing with us',
+   body:'Join the Strings of Hope Membership and bring your inner song to life, one live workshop at a time.',
+   cta:'Join the Strings of Hope Membership at stringsofhope.com',
+   disc:'This masterclass is for educational purposes only. Progress varies from player to player; no specific result or outcome is promised or guaranteed.',
+   foot:'Strings of Hope · with Simcha Tzuf'}
+];
+
+const stage = document.getElementById('stage');
+stage.innerHTML = S.map((s,i)=>{
+  let inner = '';
+  if(s.kick) inner += `<div class="kick">${s.kick}</div>`;
+  if(s.part && s.t!=='part') inner += `<div class="part">${s.part}</div>`;
+  if(s.t==='title'){ inner += `<h1>${s.h}</h1><div class="sub">${s.sub}</div>`; }
+  else if(s.t==='part'){ inner = `<div class="part">${s.part}</div><h2>${s.h}</h2>`; }
+  else if(s.t==='pillar'){ inner += `<div class="pillar">${s.pill}</div><p class="body">${s.body}</p>`; }
+  else if(s.lead){ inner += `<div class="lead">${s.lead}</div>`; }
+  else { if(s.h) inner += `<h2>${s.h}</h2>`; if(s.body) inner += `<p class="body">${s.body}</p>`; }
+  if(s.list){ inner += '<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>'; }
+  if(s.t==='cta' && s.cta){ inner += `<div class="cta-card"><b>${s.cta}</b></div>`; }
+  if(s.disc) inner += `<div class="disc">${s.disc}</div>`;
+  if(s.foot) inner += `<div class="foot">${s.foot}</div>`;
+  return `<section class="slide${i===0?' on':''}" data-i="${i}">${inner}</section>`;
+}).join('');
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const nav = document.getElementById('nav');
+function show(n){ cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('on',i===cur));
+  nav.textContent = (cur+1)+' / '+slides.length; }
+show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+stage.addEventListener('click',e=>{ show(cur + (e.clientX < window.innerWidth/2 ? -1 : 1)); });
+</script>
+</body>
+</html>
