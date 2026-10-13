@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Deliberate Job Search, James Gunaca</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;      /* ground: his light site */
+    --panel:#f3f5fb;   /* pale blue panel, from #d5dfec family */
+    --rule:#d5dfec;    /* hairline */
+    --accent:#1b2cc2;  /* his dominant electric blue (brand.json, 49 uses) */
+    --gold:#fed488;    /* his sparing warm highlight */
+    --ink:#2b2d35;     /* his near-black ink */
+    --muted:#5a5e6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--panel);color:var(--ink);font-family:"Figtree",system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:40px 16px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 56px;margin:0 0 26px;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .kick{font-family:"Plus Jakarta Sans";font-weight:700;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:"Plus Jakarta Sans";font-weight:800;font-size:46px;line-height:1.05;
+    letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:"Plus Jakarta Sans";font-weight:800;font-size:34px;line-height:1.1;
+    letter-spacing:-.01em;color:var(--ink)}
+  p{font-size:19px;line-height:1.5;color:var(--muted);margin-top:16px;max-width:60ch}
+  .big{font-size:26px;color:var(--ink);font-weight:500}
+  .promise{display:inline-block;margin-top:24px;font-family:"Plus Jakarta Sans";font-weight:700;
+    font-size:20px;color:var(--accent)}
+  ul{margin:22px 0 0 0;list-style:none}
+  li{font-size:20px;line-height:1.5;color:var(--ink);padding:10px 0 10px 30px;position:relative}
+  li:before{content:"";position:absolute;left:0;top:19px;width:14px;height:3px;background:var(--accent)}
+  .ladder li:before{width:var(--w,14px)}
+  .quote{font-family:"Plus Jakarta Sans";font-weight:700;font-size:30px;line-height:1.25;
+    color:var(--ink);letter-spacing:-.01em}
+  .tier{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
+  .tier div{flex:1;min-width:170px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:10px;padding:18px}
+  .tier b{font-family:"Plus Jakarta Sans";display:block;color:var(--accent);font-size:15px;
+    letter-spacing:.04em;margin-bottom:6px}
+  .tier span{font-size:16px;color:var(--muted)}
+  .stats{display:flex;gap:30px;margin-top:26px;flex-wrap:wrap}
+  .stats div b{font-family:"Plus Jakarta Sans";font-size:40px;color:var(--accent);display:block}
+  .stats div span{font-size:15px;color:var(--muted)}
+  .rail{position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--accent)}
+  .goldbar{height:5px;width:62px;background:var(--gold);margin-top:22px;border-radius:3px}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:70ch;line-height:1.5}
+  .n{position:absolute;right:24px;bottom:18px;font-size:13px;color:var(--rule);
+    font-family:"Plus Jakarta Sans";font-weight:700}
+  .cta h1{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title',kick:'A live masterclass with James Gunaca',
+   h:'The Deliberate Job Search',
+   p:'How experienced Product Managers land their next role in 90 days without applying to everything and hoping.',
+   promise:'Fewer, better applications. More callbacks.'},
+
+  {t:'who',kick:'Who this is for',
+   h:'You have shipped real product. The search still stalls.',
+   p:'This is for experienced PMs targeting roles at top tech and Fortune 500 companies, who are sending applications into the void and are not sure why the replies are not coming.'},
+
+  {t:'trap',kick:'The trap',
+   h:'You are applying to everything.',
+   p:'Sixty roles a month. A resume you keep tweaking. A growing feeling that the market is broken. Most PM job searches do not fail on qualifications. They fail on aim.'},
+
+  {t:'reframe',kick:'The reframe',
+   big:true,
+   h:'Your search is not slow because you are underqualified.',
+   p:'It is slow because it is wide. The fastest job searches are the most selective ones. Clarity is not the same as being picky.'},
+
+  {t:'p1',kick:'Part one: the real problem',
+   h:'Starting from "what am I a fit for?"',
+   p:'That question optimizes for familiarity, not for what you actually want. So you chase roles that look reachable, interview without conviction, and the search drags on for months.'},
+
+  {t:'cost',kick:'What it costs',
+   h:'Months you do not get back.',
+   p:'Every unfocused application is fifteen minutes and a little more confidence. Do that across the wrong roles for a quarter and the search owns you, instead of the other way around.'},
+
+  {t:'p2',kick:'Part two: the method',
+   h:'The Role Clarity System',
+   p:'Decide what "good" looks like before you apply to anything. Two moves: Yes / No / North Star, then the Priority Ladder.'},
+
+  {t:'yesno',kick:'Role Clarity, move one',
+   h:'Yes / No / North Star',
+   list:['Yes: the work that actually energizes you',
+         'No: what you refuse to repeat, the conditions to avoid',
+         'North Star: the destination each move should serve']},
+
+  {t:'ladder',kick:'Role Clarity, move two',
+   h:'The Priority Ladder',
+   p:'List up to ten attributes of the role you want. Then rank them into three tiers so a job either clears the bar or it does not.',
+   tier:[['Rungs 1 to 3','Non-negotiables'],['Rungs 4 to 7','Differentiators'],['Rungs 8 to 10','Nice to haves']]},
+
+  {t:'quote',kick:'Why it works',
+   quote:'If you cannot say what good looks like, you will not recognize it when it shows up.'},
+
+  {t:'p3',kick:'Part three: when to apply',
+   h:'The Fit Calibration System',
+   p:'Clarity tells you which roles. Calibration tells you whether to apply to the one in front of you, in under a minute, without the emotional second-guessing.'},
+
+  {t:'seven',kick:'The rule',
+   h:'A 7 out of 10 is a yes.',
+   list:['Apply when you meet the top 2 to 3 real requirements',
+         'Roughly 3 of 5, or 5 of 7, stated qualifications is enough',
+         'Skip only on a true disqualifier: a never-touched core domain, a hard years screen']},
+
+  {t:'quote',kick:'The mindset shift',
+   quote:'Most people over-index on their own gaps and under-index on how forgiving hiring processes actually are at the screening stage.'},
+
+  {t:'p4',kick:'Part four: the interview',
+   h:'From the other side of the table',
+   p:'You targeted well and you got the call. Now you interview the way the person deciding actually decides, not the way the question banks tell you to.'},
+
+  {t:'screen',kick:'What the hiring manager screens for',
+   h:'The criteria a question bank cannot teach you.',
+   list:['Signal in the first few seconds of the resume',
+         'A story, not a list of bullet points',
+         'Evidence of fit for this role, not any role',
+         'Judgement under ambiguity, shown not claimed']},
+
+  {t:'stories',kick:'The interview move',
+   h:'Tell your stories by heart.',
+   p:'Build your core stories from prompts and rehearse them until you can tell them naturally under pressure. Rehearsed, not recited. That is what turns a screening call into an offer.'},
+
+  {t:'why',kick:'Why me',
+   h:'I have read this from the hiring side for twenty years.',
+   stats:[['2,500+','candidates screened'],['50+','PM hires made'],['300+','interviews run']],
+   p:'Group PM at Amazon, Head of Product for Growth at ExpressVPN. Clients hired at Apple, Google, Meta, Stripe, Uber, Adobe and more.'},
+
+  {t:'look',kick:'Your next 90 days',
+   h:'90 days, run deliberately.',
+   p:'Clear on what you want, applying only where you fit, interviewing from the decision-maker’s side. That is how you land the right PM role and add to the offer instead of settling for the first yes.'},
+
+  {t:'recap',kick:'The whole method',
+   h:'Clarity, calibration, the insider lens.',
+   list:['Role Clarity: decide what good looks like first',
+         'Fit Calibration: apply at a 7 out of 10, skip only real disqualifiers',
+         'The hiring-manager lens: interview the way the decision gets made']},
+
+  {t:'cta',kick:'Your next step',
+   h:'Run your next search deliberately.',
+   p:'If you want the full system and help applying it to your search, the Product Manager Job Search Accelerator is where we do it together: a new PM role in 90 days or less.',
+   disc:'Educational only. No income, offer, or hiring outcome is guaranteed; results vary with your experience, market conditions, and effort. Nothing here is a promise of employment or compensation.'}
+];
+
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+const deck=document.getElementById('deck');
+S.forEach(function(s,i){
+  var sl=el('div','slide'+(s.t==='cta'?' cta':''));
+  if(s.t==='p1'||s.t==='p2'||s.t==='p3'||s.t==='p4'){sl.appendChild(el('div','rail'));}
+  if(s.kick)sl.appendChild(el('div','kick',s.kick));
+  if(s.quote){sl.appendChild(el('div','quote','“'+s.quote+'”'));}
+  if(s.h){sl.appendChild(el(s.t==='title'?'h1':(s.t==='cta'?'h1':'h2'),null,s.h));}
+  if(s.p){sl.appendChild(el('p',s.big?'big':null,s.p));}
+  if(s.promise){sl.appendChild(el('div','promise',s.promise));sl.appendChild(el('div','goldbar'));}
+  if(s.list){var ul=el('ul',s.t==='ladder'?'ladder':null);s.list.forEach(function(x){ul.appendChild(el('li',null,x));});sl.appendChild(ul);}
+  if(s.tier){var tw=el('div','tier');s.tier.forEach(function(x){var d=el('div');d.appendChild(el('b',null,x[0]));d.appendChild(el('span',null,x[1]));tw.appendChild(d);});sl.appendChild(tw);}
+  if(s.stats){var st=el('div','stats');s.stats.forEach(function(x){var d=el('div');d.appendChild(el('b',null,x[0]));d.appendChild(el('span',null,x[1]));st.appendChild(d);});sl.appendChild(st);}
+  if(s.disc){sl.appendChild(el('div','disc',s.disc));}
+  sl.appendChild(el('div','n',(i+1)+' / '+S.length));
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
