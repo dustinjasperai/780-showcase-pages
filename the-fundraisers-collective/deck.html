@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Connected Fundraiser — a masterclass with JR Roberts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140b30;        /* darkened from site ground #180e3a */
+    --panel:#241858;     /* tinted up from site panel #211450 */
+    --rule:#33277d;      /* lightened deep indigo (site #2c256f) */
+    --accent:#4855bf;    /* site periwinkle primary */
+    --accent-soft:#8491e4;
+    --ink:#f4f5fb;        /* near-white text */
+    --muted:#bcc0dd;      /* muted light */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{
+    width:min(100vw,1180px);aspect-ratio:16/9;max-height:100vh;
+    position:relative;padding:min(6vh,64px) min(7vw,84px);
+    display:flex;flex-direction:column;justify-content:center;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(72,85,191,.30), transparent 60%),
+      linear-gradient(180deg,#1a1046 0%, var(--bg) 72%);
+  }
+  .kicker{font-family:'Bricolage Grotesque';font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:clamp(11px,1.3vw,14px);color:var(--accent-soft)}
+  h1{font-family:'Bricolage Grotesque';font-weight:700;line-height:1.02;
+    font-size:clamp(30px,5.4vw,64px);margin:.28em 0 .34em;letter-spacing:-.015em}
+  h2{font-family:'Bricolage Grotesque';font-weight:700;line-height:1.06;
+    font-size:clamp(24px,3.9vw,46px);margin:.1em 0 .5em;letter-spacing:-.01em}
+  .sub{font-size:clamp(15px,1.9vw,23px);color:var(--muted);max-width:44ch;line-height:1.5}
+  .note{margin-top:1.05em;font-size:clamp(13px,1.5vw,17px);color:var(--muted);max-width:54ch;line-height:1.55}
+  ul{list-style:none;margin-top:.7em;display:flex;flex-direction:column;gap:.6em;max-width:52ch}
+  li{position:relative;padding-left:1.7em;font-size:clamp(15px,1.95vw,22px);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.52em;width:.62em;height:.62em;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px rgba(72,85,191,.22)}
+  li b{font-weight:600;color:var(--ink)}
+  .big{font-family:'Bricolage Grotesque';font-weight:700;font-size:clamp(26px,4.4vw,52px);line-height:1.08;max-width:21ch}
+  .accent{color:var(--accent-soft)}
+  .pill{display:inline-block;font-family:'Bricolage Grotesque';font-weight:600;font-size:clamp(11px,1.3vw,14px);
+    color:var(--accent-soft);border:1px solid var(--rule);border-radius:999px;padding:.4em .9em;margin-bottom:.3em}
+  .disc{margin-top:1.3em;font-size:clamp(11px,1.25vw,14px);color:#9397bd;max-width:62ch;line-height:1.5}
+  .dots{position:absolute;right:min(7vw,84px);bottom:min(6vh,60px);display:flex;gap:.5em;opacity:.85}
+  .dots i{width:.5em;height:.5em;border-radius:50%;background:var(--rule);display:block}
+  .dots i:nth-child(2){background:var(--accent)}
+  footer{position:absolute;left:min(7vw,84px);bottom:min(6vh,54px);
+    font-family:'Bricolage Grotesque';font-weight:600;font-size:clamp(11px,1.3vw,14px);color:#9397bd;letter-spacing:.04em}
+  #count{position:absolute;right:min(7vw,84px);top:min(6vh,54px);
+    font-family:'Bricolage Grotesque';font-size:13px;color:#9397bd;letter-spacing:.08em}
+  .hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+    font-size:12px;color:#6a6e95;font-family:'Bricolage Grotesque'}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="hint">arrows or space to move</div>
+<script>
+const S=[
+  {t:'title',
+   k:'A live masterclass for nonprofit fundraisers',
+   h:'The Connected Fundraiser',
+   sub:'Why relationships raise more than tactics, and how to build them on purpose. With JR Roberts, The Fundraisers Collective.'},
+
+  {t:'for',
+   k:'Who this is for',
+   h:'If you carry the number by yourself',
+   list:[
+     "You are the whole development shop, or close to it.",
+     "You are great with donors and stretched too thin to plan.",
+     "You have tried the tactics and the templates and still feel behind.",
+     "You do not want more hacks. You want a way of working that lasts."],
+   note:"If that is you, you are exactly who this hour is built for."},
+
+  {t:'promise',
+   k:'What you will leave with',
+   h:'A simpler way to raise more',
+   list:[
+     "One connection habit you can start this week.",
+     "A way to stop solving every ask alone.",
+     "A method for turning donor stories into gifts.",
+     "Language for the ask that feels like a yes, not a pitch."]},
+
+  {t:'trap',
+   k:'The trap',
+   h:'We were handed a tactics list, not a way to connect',
+   sub:'Grant deadlines, appeal calendars, event logistics, the year-end push. The to-do list never ends, and none of it was the reason you got into this work.'},
+
+  {t:'hook',
+   k:'The reframe',
+   big:'Donors do not give to the best-run campaign. They give to the people and the mission they feel connected to.',
+   note:'Fundraising is a connection problem first and a tactics problem second. Flip that order and almost everything else gets easier.'},
+
+  {t:'problem',
+   k:'Part one, the real problem',
+   h:'The lonely fundraiser raises less',
+   list:[
+     "Isolation makes you react to whatever is loudest this week.",
+     "No one to pressure-test the ask, so the ask stays safe and small.",
+     "Donor stories stay buried in your inbox instead of moving people.",
+     "Burnout, then turnover, then the relationships leave with you."],
+   note:"Every one of these is a connection gap, not a skill gap."},
+
+  {t:'cost',
+   k:'What it costs',
+   big:'The best fundraiser in the building is often the one most likely to quit.',
+   note:'When the work is lonely, the person who holds the donor relationships is the person who burns out first. The mission pays for that twice.'},
+
+  {t:'framework',
+   k:'Part two, the method',
+   h:'Connection, built on purpose',
+   sub:'Three habits that turn connection from a lucky accident into how you work every week.',
+   list:[
+     "Fund(Ed)15: small reps, not big overhauls.",
+     "The Roundtable: never solve it alone.",
+     "Known Profits: make the work known."]},
+
+  {t:'pillar',
+   pill:'Habit 1',
+   k:'Fund(Ed)15',
+   h:'Small reps, not big overhauls',
+   sub:'You will not fix your fundraising in one heroic weekend. You will fix it in fifteen focused minutes you can actually repeat.',
+   list:[
+     "Pick one skill a week: the thank-you call, the first paragraph, the second ask.",
+     "Practice it small, use it that same week, keep what works.",
+     "Consistency compounds where crash projects collapse."]},
+
+  {t:'example',
+   k:'Fund(Ed)15 in practice',
+   h:'One rep, this week',
+   sub:'Take the thank-you call. Fifteen minutes, three donors, no ask. Just the story of what their last gift did.',
+   note:'Do it for a month and watch what happens to your renewal rate. Small, repeatable, connected.'},
+
+  {t:'pillar',
+   pill:'Habit 2',
+   k:'The Roundtable',
+   h:'Never solve it alone',
+   sub:'The fastest way past a stuck ask is someone who has already made it. Peers in your seat, not a consultant above it.',
+   list:[
+     "Bring the real problem to people who do the same job.",
+     "Borrow the script, the cadence, the exact words that worked.",
+     "Leave with a next step, not just sympathy."]},
+
+  {t:'pillar',
+   pill:'Habit 3',
+   k:'Known Profits',
+   h:'Make the work known',
+   sub:'The story under your numbers is the thing donors give to. Most of it never leaves the building.',
+   list:[
+     "Find the one moment your mission changed a life this month.",
+     "Tell it plainly, before the ask, in the donor's words not yours.",
+     "Let the story do the asking, so the ask feels like a yes."]},
+
+  {t:'together',
+   k:'How they fit',
+   h:'A loop, not a checklist',
+   sub:'A small rep gives you something to bring to the room. The room sharpens it. The story you gather makes the next ask land. Then you do it again.',
+   note:'Connection is not one more task. It is the thread that holds the others together.'},
+
+  {t:'picture',
+   k:'Part three, a connected quarter',
+   h:'Ninety days of connected fundraising',
+   list:[
+     "Week by week: one small rep, shipped and kept.",
+     "A standing room of peers who know your donors by name.",
+     "A library of real stories you reach for instead of writing cold.",
+     "An ask that lands because the relationship was there first."],
+   note:"Not more hours. A better order of operations."},
+
+  {t:'objection',
+   k:'The honest objection',
+   h:'But I have no time for one more thing',
+   sub:'Right. That is the point of fifteen-minute reps and a room that hands you the answer instead of making you hunt for it.',
+   note:'Connection done on purpose gives you time back. The lonely version is the one that eats your evenings.'},
+
+  {t:'why',
+   k:'Why listen to me',
+   h:'I built the room I wished I had',
+   sub:'I am JR Roberts. I have raised money inside nonprofits, and I host Known Profits, where I sit across from nonprofit leaders and listen. The Fundraisers Collective is the peer community I built so no fundraiser has to do this alone.',
+   note:'Advancing philanthropy through connection is not a slogan here. It is the whole method.'},
+
+  {t:'recap',
+   k:'The whole thing in three lines',
+   h:'Remember this',
+   list:[
+     "Small reps beat big overhauls.",
+     "Never solve the ask alone.",
+     "Let the story do the asking."]},
+
+  {t:'cta',
+   k:'Your next step',
+   h:'Come do the work with people who get it',
+   sub:'Start a free two-week trial of The Fundraisers Collective: the roundtables, the Fund(Ed)15 trainings, the resource library, and a room of peers ready when you are.',
+   note:'Bring one stuck ask to your first roundtable. See what connection does to it.',
+   disc:'This masterclass is educational. No fundraising result or revenue outcome is guaranteed. Results vary with your mission, your donors, and the work you put in.'}
+];
+
+let i=0;
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  const s=S[i];
+  let html='';
+  if(s.pill) html+=`<span class="pill">${esc(s.pill)}</span>`;
+  if(s.k) html+=`<div class="kicker">${esc(s.k)}</div>`;
+  if(s.big){
+    html+=`<p class="big">${esc(s.big)}</p>`;
+  }else if(s.t==='title'){
+    html+=`<h1>${esc(s.h)}</h1>`;
+  }else if(s.h){
+    html+=`<h2>${esc(s.h)}</h2>`;
+  }
+  if(s.sub) html+=`<p class="sub">${esc(s.sub)}</p>`;
+  if(s.list){
+    html+='<ul>'+s.list.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';
+  }
+  if(s.note) html+=`<p class="note">${esc(s.note)}</p>`;
+  if(s.disc) html+=`<p class="disc">${esc(s.disc)}</p>`;
+  html+=`<div id="count">${i+1} / ${S.length}</div>`;
+  html+=`<footer>The Fundraisers Collective</footer>`;
+  html+=`<div class="dots"><i></i><i></i><i></i></div>`;
+  stage.innerHTML=html;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,n));render();}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){go(i+1);e.preventDefault();}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){go(i-1);e.preventDefault();}
+  if(e.key==='Home')go(0); if(e.key==='End')go(S.length-1);
+});
+stage.addEventListener('click',()=>go(i+1));
+render();
+</script>
+</body>
+</html>
