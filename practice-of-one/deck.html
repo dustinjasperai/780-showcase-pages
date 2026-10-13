@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lean Lifestyle Practice — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121212; --panel:#1b1b1b; --rule:rgba(254,255,250,0.12);
+    --ink:#fefffa; --muted:#b7b7ad; --accent:#eeed85;
+    --head:'Bricolage Grotesque',sans-serif; --body:'Hanken Grotesk',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#0b0b0b;color:var(--ink);font-family:var(--body);}
+  #stage{max-width:1040px;margin:0 auto;padding:28px 20px 72px;}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:16px;
+    min-height:560px;padding:58px 60px;margin:22px 0;display:none;
+    flex-direction:column;justify-content:center;position:relative;
+  }
+  .slide.on{display:flex}
+  .kick{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:38px;line-height:1.08;letter-spacing:-.01em}
+  .lede{font-size:20px;color:var(--muted);margin-top:22px;max-width:60ch;line-height:1.5}
+  .big{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.12;max-width:20ch}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:18px;max-width:64ch}
+  li{position:relative;padding-left:34px;font-size:20px;line-height:1.45}
+  li b{font-family:var(--head)}
+  li:before{content:"";position:absolute;left:0;top:11px;width:14px;height:3px;background:var(--accent)}
+  .num{font-family:var(--head);color:var(--accent);font-weight:700;font-size:15px;letter-spacing:.14em}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:26px 28px;margin-top:26px;max-width:66ch}
+  .panel p{color:var(--muted);font-size:18px;line-height:1.5}
+  .disc{color:var(--muted);font-size:13px;line-height:1.5;margin-top:26px;max-width:62ch}
+  .foot{position:absolute;bottom:22px;left:60px;right:60px;display:flex;justify-content:space-between;
+    font-size:12px;color:var(--muted);font-family:var(--head);letter-spacing:.08em;text-transform:uppercase}
+  .cta-line{font-family:var(--head);font-weight:700;font-size:22px;color:var(--accent);margin-top:26px}
+  #nav{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:center;gap:16px;
+    font-family:var(--head);font-size:13px;color:var(--muted)}
+  #nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:8px;padding:7px 14px;cursor:pointer;font-family:var(--head)}
+  @media(max-width:720px){.slide{padding:40px 26px}h1{font-size:36px}h2{font-size:28px}.big{font-size:30px}.foot{left:26px;right:26px}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Buzz', h:'The Lean Lifestyle Practice',
+    lede:"How to grow your allied health practice revenue and get your hours back, without fancy ads, 60 hour weeks, or a bloated team."},
+
+  {t:'who', kick:'Who this is for', h:'You did not open a clinic to work more',
+    lede:"You are an allied health owner who is genuinely good at the work. The practice grew. And somewhere along the way the reward for being busy became being busier."},
+
+  {t:'who', kick:'Sound familiar', h:'The diary is full and so are you',
+    lede:"You are the best clinician in the building, the owner, the manager, and the one who stays late. When you are off the floor, revenue drops. The practice depends on you being in the room."},
+
+  {t:'reframe', kick:'The trap', big:'Booked solid. Still <span class="a">tired and broke.</span>',
+    lede:"More patients meant more hours. More hours meant more staff. More staff meant more overhead. You scaled the work, not the freedom."},
+
+  {t:'reframe', kick:'The hard truth', big:'A bigger clinic is not a <span class="a">better business.</span>',
+    lede:"Growth the usual way just buys you a harder job. The goal was never a bigger clinic. It was a practice that serves your life."},
+
+  {t:'part', num:'Part One', h:'The problem is the model, not your effort',
+    lede:"The standard growth playbook, more ads, more volume, more team, is built to scale a clinic. It is not built to give the owner their life back. You cannot out-work a model that is pointed the wrong way."},
+
+  {t:'list', kick:'What the usual playbook costs', h:'Scaling the clinic, not the freedom',
+    items:[
+      "Every new patient is another slot you personally have to cover or hire for.",
+      "Every hire adds cost, management, and risk before it adds profit.",
+      "Growth becomes a treadmill that speeds up the harder you run."]},
+
+  {t:'reframe', kick:'The shift', big:'Grow on <span class="a">leverage</span>, not hustle.',
+    lede:"Leverage means each hour, each patient, and each team member is worth more, so the practice can grow while your hours come down."},
+
+  {t:'part', num:'Part Two', h:'The Lean Lifestyle Practice, in three moves'},
+
+  {t:'list', kick:'Move one', h:'Become the category of one',
+    items:[
+      "Stop competing on price, speed, and volume with the clinic down the road.",
+      "Make your practice the obvious choice for the patients you actually want.",
+      "When you are the only real option, you stop discounting and start choosing."]},
+
+  {t:'panel', kick:'Why category of one matters', h:'Different beats cheaper',
+    p:"A practice that competes on being cheaper or faster is always one new clinic away from losing. A practice that is genuinely the only option for its patients sets its own price and keeps its people."},
+
+  {t:'list', kick:'Move two', h:'Pull the levers that add revenue without hours',
+    items:[
+      "Of the 15 levers, a handful move money without adding a single clinical hour.",
+      "Pricing and offer design, so each hour you already work is worth more.",
+      "Retention and referral, so growth does not depend on constant new volume."]},
+
+  {t:'list', kick:'Move three', h:'Build the lean team that runs without you',
+    items:[
+      "A small, un-bloated team beats a big one you have to carry.",
+      "Systems do the repeating work, so the practice does not live in your head.",
+      "You step off the floor on purpose, not because you burned out."]},
+
+  {t:'panel', kick:'What lean really means', h:'Less, done better',
+    p:"Lean is not cheap and it is not small for its own sake. It is the deliberate choice to grow revenue and freedom at the same time, by removing what does not serve the practice or the owner."},
+
+  {t:'part', num:'Part Three', h:'A week in the lean practice',
+    lede:"Fewer hours in the diary and the same or more coming in. A practice that holds its position in the market without you running ads every month. A team that handles the day. Evenings and weekends that are actually yours again."},
+
+  {t:'list', kick:'What changes', h:'From owner-operator to owner',
+    items:[
+      "You choose which clients and hours you keep, instead of taking everything.",
+      "The practice keeps earning on the days you are not on the floor.",
+      "Growth decisions are about margin and fit, not just filling the diary."]},
+
+  {t:'credibility', kick:'Why this method', h:'Built from inside the chair',
+    lede:"Practice Of One is the coaching community where allied health owners build a category-of-one Lean Lifestyle Practice. The method is the 15 levers and the lean-team systems, taught by someone who has walked owners through it, not theory from the outside."},
+
+  {t:'list', kick:'What you leave with', h:'Three things to put in place',
+    items:[
+      "A clear category-of-one position for your practice.",
+      "The two or three levers that will move revenue first, without more hours.",
+      "The first system to take off your own plate this month."]},
+
+  {t:'cta', kick:'Your next step', h:'Build your Lean Lifestyle Practice',
+    lede:"If you want the full method, the levers, the positioning, and the lean-team systems, the next step is inside the Practice Of One community.",
+    cta:"Join Practice Of One at po1.so",
+    disc:"This masterclass is educational. No income or result is guaranteed. Results vary and depend on your own practice, effort, and market. The member outcomes mentioned are individual experiences, not typical or promised results."}
+];
+
+function render(s){
+  let inner='';
+  if(s.kick) inner+=`<div class="kick">${s.kick}</div>`;
+  if(s.num) inner+=`<div class="num">${s.num}</div>`;
+  if(s.big) inner+=`<div class="big">${s.big}</div>`;
+  else if(s.h && s.t==='title') inner+=`<h1>${s.h}</h1>`;
+  else if(s.h) inner+=`<h2>${s.h}</h2>`;
+  if(s.lede) inner+=`<div class="lede">${s.lede}</div>`;
+  if(s.items){inner+='<ul>'+s.items.map(i=>`<li>${i}</li>`).join('')+'</ul>';}
+  if(s.p) inner+=`<div class="panel"><p>${s.p}</p></div>`;
+  if(s.cta) inner+=`<div class="cta-line">${s.cta}</div>`;
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  inner+=`<div class="foot"><span>Practice Of One</span><span>Lean Lifestyle Practice</span></div>`;
+  return inner;
+}
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('section');d.className='slide'+(i===0?' on':'');d.innerHTML=render(s);stage.appendChild(d);});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(){slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+slides.length;}
+function go(d){cur=Math.max(0,Math.min(slides.length-1,cur+d));show();window.scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
