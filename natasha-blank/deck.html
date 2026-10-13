@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Move a Whole Room | Powerhouse DJ School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4f3e8; --panel:#ece9d9; --ink:#020302; --ink-soft:#33322b;
+    --rule:#d8d4c2; --accent:#ebfc72;
+  }
+  html,body{height:100%}
+  body{font-family:'Epilogue',system-ui,sans-serif;background:#cfccbd;color:var(--ink);
+    -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(1120px,96vw);aspect-ratio:16/9;position:relative;background:var(--bg);
+    box-shadow:0 24px 70px rgba(0,0,0,.28);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:68px 80px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:'Epilogue';font-weight:700;text-transform:uppercase;letter-spacing:.16em;
+    font-size:13px;color:var(--ink-soft);margin-bottom:22px}
+  .kick .dot{background:var(--accent);padding:2px 8px;color:var(--ink);border-radius:2px}
+  h1{font-family:'Anton';font-weight:400;font-size:84px;line-height:.98;letter-spacing:.01em;text-transform:uppercase}
+  h2{font-family:'Anton';font-weight:400;font-size:58px;line-height:1.02;text-transform:uppercase;margin-bottom:20px}
+  .sub{font-size:25px;line-height:1.4;color:var(--ink-soft);margin-top:24px;max-width:46ch}
+  .big{font-family:'Anton';font-size:62px;line-height:1.04;text-transform:uppercase;max-width:20ch}
+  .hl{background:var(--accent);padding:1px 10px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  p.body{font-size:24px;line-height:1.5;color:var(--ink-soft);max-width:44ch;margin-top:8px}
+  ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:16px;max-width:46ch}
+  li{font-size:23px;line-height:1.35;padding-left:30px;position:relative;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:11px;width:14px;height:14px;background:var(--accent)}
+  .pillar-n{font-family:'Anton';font-size:22px;color:var(--ink);background:var(--accent);
+    display:inline-block;padding:4px 14px;margin-bottom:18px}
+  .lead{font-family:'Anton';font-size:30px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  .disc{font-size:15px;line-height:1.5;color:var(--ink-soft);margin-top:26px;max-width:60ch;border-top:1px solid var(--rule);padding-top:16px}
+  .num{display:flex;gap:46px;margin-top:26px;flex-wrap:wrap}
+  .num div{font-family:'Anton';font-size:52px;line-height:1}
+  .num span{display:block;font-family:'Epilogue';font-weight:600;font-size:15px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:8px}
+  footer{position:absolute;bottom:26px;left:80px;right:80px;display:flex;justify-content:space-between;
+    font-family:'Epilogue';font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .count{font-family:'Epilogue'}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
+  .nav button{font-family:'Epilogue';font-size:13px;border:1px solid #9a9686;background:#f4f3e8;color:#020302;
+    padding:7px 16px;cursor:pointer;border-radius:3px}
+  @media(max-width:700px){.slide{padding:40px}h1{font-size:46px}h2{font-size:34px}.big{font-size:38px}.sub,p.body,li{font-size:18px}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',kick:'A masterclass with Natasha Blank',h:'How to Move a Whole Room',sub:'The invisible skills of a Powerhouse DJ: the ones no gear tutorial will ever teach you.'},
+ {t:'promise',kick:'What you will leave with',h:'Three shifts',sub:'By the end of this hour you will know why rooms move, what your real instrument is, and the first invisible skill to practice this week.'},
+ {t:'list',kick:'Who this is for',h:'You feel it. You freeze at the decks.',list:["You already move people as a dancer, teacher or facilitator","You bought the controller and learned the buttons","And the floor still will not move the way you know it could"]},
+ {t:'big',kick:'The trap',big:'You mastered the <span class="hl">gear</span>. The floor still is not moving.'},
+ {t:'reframe',kick:'The reframe',lead:'Here is the uncomfortable part',h:'The gear was never the skill.',body:'A room does not respond to buttons. It responds to you: your timing, your attention, your nervous system. Most DJs are never taught this, so they stall the moment the equipment stops being the problem.'},
+ {t:'part',kick:'Part one',h:'The core problem'},
+ {t:'reframe',kick:'The core problem',lead:'DJing is taught backwards',h:'Gear first, humans never.',body:'Courses drill you on jog wheels, sync and genre rules, then send you to a real floor with no idea how to read it, hold it, or change its state on purpose. The technical part is the easy 20 percent. The human part is the job.'},
+ {t:'big',kick:'The core problem',big:'When you DJ you are not dropping beats. You are shifting <span class="hl">human physiology</span>.'},
+ {t:'part',kick:'Part two',h:'The invisible skills'},
+ {t:'pillar',kick:'The method',n:'01',h:'Read the room',body:'Learn to read a floor in real time: energy, breath, where the crowd actually is, not where your setlist assumed they would be. The track is a response, not a plan.'},
+ {t:'pillar',kick:'The method',n:'02',h:'Regulate yourself',body:'Your own state is the instrument. Ground under pressure so your calm, not your panic, is what the room picks up. The calmest person in the room is the one running it.'},
+ {t:'pillar',kick:'The method',n:'03',h:'Craft the set',body:'Build a set that tells a story, where the transitions do the emotional work, not just the tracks. Move energy on purpose: tension, release, belonging.'},
+ {t:'pillar',kick:'The method',n:'04',h:'Lead the floor',body:'Presence, ritual and command: the leadership that turns an audience into a congregation and a dance floor into a house of healing. This is the part that books you again and again.'},
+ {t:'part',kick:'Part three',h:'On the floor, for real'},
+ {t:'list',kick:'What becomes possible',h:'A floor that moves with you',list:["You read the room and respond instead of guessing","You stay grounded when it matters most","Dancers write you love notes for days after","You get asked back, and you know exactly why"]},
+ {t:'why',kick:'Why me',h:'Barefoot dancer to in-demand DJ',body:'I came to the decks terrified, through conscious dance, not through tech. I built Powerhouse DJ School to teach the thing that actually changed everything for me and my students: the invisible skills.',num:[["150+","DJs trained"],["23","countries"],["5 yrs","running PhDJ"]]},
+ {t:'reframe',kick:'The path',lead:'If this is your work',h:'The 8-month PhDJ initiation',body:'Powerhouse DJ School is a holistic initiation that integrates all of it: the tech, the somatics, the set craft and the leadership, with a global community of transformational artists. Today was one hour of it.'},
+ {t:'cta',kick:'Your next step',h:'Come move a room',body:'If something in this hour landed, the next step is simple: apply to Powerhouse DJ School and we will see if this is your moment.',cta:'Apply at phdj.dance',disc:'This masterclass is educational. No income or result is guaranteed. Results vary based on effort, experience, practice and the rooms you play. Powerhouse DJ School teaches skills, not outcomes.'}
+];
+const stage=document.getElementById('stage');let i=0;
+function esc(x){return x||''}
+function render(){
+ stage.innerHTML='';
+ S.forEach((s,idx)=>{
+  const d=document.createElement('div');d.className='slide'+(idx===i?' on':'');
+  let inner='';
+  if(s.kick)inner+='<div class="kick"><span class="dot">PhDJ</span>&nbsp;&nbsp;'+esc(s.kick)+'</div>';
+  if(s.t==='title'){inner+='<h1>'+s.h+'</h1>'+(s.sub?'<div class="sub">'+s.sub+'</div>':'')}
+  else if(s.t==='promise'||s.t==='part'){inner+='<h1>'+s.h+'</h1>'+(s.sub?'<div class="sub">'+s.sub+'</div>':'')}
+  else if(s.t==='big'){inner+='<div class="big">'+s.big+'</div>'}
+  else if(s.t==='list'){inner+='<h2>'+s.h+'</h2><ul>'+s.list.map(x=>'<li>'+x+'</li>').join('')+'</ul>'}
+  else if(s.t==='reframe'){inner+=(s.lead?'<div class="lead">'+s.lead+'</div>':'')+'<h2>'+s.h+'</h2>'+(s.body?'<p class="body">'+s.body+'</p>':'')}
+  else if(s.t==='pillar'){inner+='<div class="pillar-n">'+s.n+'</div><h2>'+s.h+'</h2><p class="body">'+s.body+'</p>'}
+  else if(s.t==='why'){inner+='<h2>'+s.h+'</h2><p class="body">'+s.body+'</p>';if(s.num){inner+='<div class="num">'+s.num.map(n=>'<div>'+n[0]+'<span>'+n[1]+'</span></div>').join('')+'</div>'}}
+  else if(s.t==='cta'){inner+='<h2>'+s.h+'</h2><p class="body">'+s.body+'</p><div class="pillar-n" style="margin-top:22px">'+s.cta+'</div><div class="disc">'+s.disc+'</div>'}
+  inner+='<footer><span>Powerhouse DJ School</span><span class="count">'+(idx+1)+' / '+S.length+'</span></footer>';
+  d.innerHTML=inner;stage.appendChild(d);
+ });
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1)});
+render();
+</script>
+</body>
+</html>
