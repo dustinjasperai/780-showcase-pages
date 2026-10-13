@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Web Design Business That Pays You Every Month — Josh Hall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1B1A;
+    --panel:#15302E;
+    --rule:#244B47;
+    --accent:#1FBFB4;
+    --ink:#EAF4F2;
+    --muted:#9FBFBB;
+    --head:'Outfit',system-ui,sans-serif;
+    --body:'Source Sans 3',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#07100F;color:var(--ink);font-family:var(--body);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:min(960px,94vw)}
+  .slide{
+    background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+    padding:64px 64px 56px;aspect-ratio:16/9;display:none;flex-direction:column;
+    position:relative;overflow:hidden;
+  }
+  .slide.on{display:flex}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .kick{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-.01em;margin-bottom:16px}
+  p{font-size:21px;line-height:1.5;color:var(--ink);max-width:48ch}
+  p.sub{color:var(--muted);font-size:20px}
+  .big{font-size:23px;line-height:1.55}
+  ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+  li{font-size:21px;line-height:1.4;padding-left:28px;position:relative;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .spacer{flex:1}
+  .foot{font-family:var(--head);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .steps{display:flex;gap:18px;margin-top:20px;flex-wrap:wrap}
+  .step{flex:1;min-width:200px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:22px}
+  .step .n{font-family:var(--head);font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+  .step h3{font-family:var(--head);font-weight:600;font-size:22px;margin:8px 0 6px}
+  .step p{font-size:16px;color:var(--muted)}
+  .disc{font-size:14px;color:var(--muted);max-width:60ch;margin-top:18px;line-height:1.5}
+  .cta-line{font-family:var(--head);font-weight:600;font-size:26px;color:var(--accent);margin-top:10px}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-family:var(--head);font-size:13px;color:var(--muted)}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 14px;cursor:pointer;font-family:var(--head)}
+  .count{min-width:60px;text-align:center}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span class="count" id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Josh Hall', h:'The Web Design Business That Pays You Every Month', p:'How to turn one-off website projects into predictable monthly recurring revenue, and scale the business the way that fits your life.', foot:'Web Designer Pro'},
+  {t:'content', kick:'Who this is for', h:'You are great at the work. You are tired of starting from zero.', p:'This is for the freelance or studio web designer who can build a beautiful site but whose income still rides entirely on landing the next project.'},
+  {t:'content', kick:'The trap', h:'Feast, then famine.', p:'A strong month, then three quiet weeks. The work is excellent, but the income is a roller coaster, because every dollar depends on signing the next new client.'},
+  {t:'content', kick:'The real problem', h:'It was never your design skills.', p:'The reason the income swings is structural. You sell one-off projects, so your revenue resets to zero the day a site goes live. More talent does not fix a business model that keeps restarting.'},
+  {t:'content', kick:'Part one', h:'The one-off treadmill', p:'When every project is a one-time fee, you are only ever as stable as your next lead. You can be fully booked and still have no idea what next month looks like.'},
+  {t:'content', kick:'Part one', h:'Chasing the next three grand, forever.', p:'Five good clients this quarter does nothing for next quarter. The treadmill never ends, because nothing you built keeps paying you after launch.'},
+  {t:'content', kick:'Part two', h:'The fix is recurring revenue.', p:'The web designers who get off the roller coaster add income that arrives every month whether or not a new project signed. Here is the framework for building it.'},
+  {t:'framework', kick:'Part two · the framework', h:'Build. Support. Grow.', steps:[
+     {n:'01', t:'Build', p:'Deliver the site on a repeatable process so every project ships faster and feels premium.'},
+     {n:'02', t:'Support', p:'Keep the site cared for with a monthly plan, and your client keeps paying you.'},
+     {n:'03', t:'Grow', p:'Layer on ongoing improvements and growth work as a retainer, not a favour.'}
+  ]},
+  {t:'content', kick:'Build', h:'A process, not a scramble.', p:'A proven step by step process for planning, building, and launching a site is what lets you raise your rates. Systemized delivery feels premium and frees your time for the recurring side.'},
+  {t:'content', kick:'Support', h:'The care plan is the engine.', p:'A website is never finished. Hosting, updates, security, and small fixes are ongoing needs you are uniquely positioned to own, as a monthly plan rather than a one-time handoff.'},
+  {t:'list', kick:'Support', h:'What a care plan includes', items:['Managed hosting','Core and plugin updates','Basic security and backups','Monthly support hours','Simple monthly reporting']},
+  {t:'content', kick:'Support', h:'When to offer it.', p:'Offer the plan too early and it feels pushy. Wait until the site is live and the client is thrilled, and the plan becomes the obvious next step for protecting what you just built together.'},
+  {t:'content', kick:'The compounding part', h:'Every plan stacks.', p:'One care plan is nice. Thirty is a business. Recurring income compounds quietly in the background while you keep designing, so a slow month for new projects is no longer a crisis.'},
+  {t:'content', kick:'Part three', h:'Now scale it your way.', p:'Recurring revenue buys you a choice most designers never get: how big do you actually want this to be?'},
+  {t:'framework', kick:'Part three · Scale Your Way', h:'Three honest paths.', steps:[
+     {n:'A', t:'Stay solo', p:'Raise your rates, keep your overhead near zero, and keep the lifestyle you built this for.'},
+     {n:'B', t:'Lean team', p:'Add one or two people to take the work off your plate without becoming a manager.'},
+     {n:'C', t:'Agency', p:'Build the team and systems to grow past yourself, with eyes open about what that costs.'}
+  ]},
+  {t:'content', kick:'Part three', h:'There is no single right size.', p:'The goal is not to become an agency because someone said you should. The goal is a business that fits the life you want, funded by income that shows up every month.'},
+  {t:'content', kick:'Why listen to me', h:'I built this, then sold it.', p:'I ran my own web design studio for about a decade and sold it in 2020. Build, Support, Grow and scaling my way are the exact decisions that got me there. Now I teach them full time.'},
+  {t:'content', kick:'What changes', h:'Twelve months from now.', p:'Picture a recurring base that covers your core costs before a single new project signs. New work becomes upside, not survival. That is what a recurring-revenue web design business feels like.'},
+  {t:'content', kick:'Your move', h:'Start building the recurring side this month.', p:'You do not need a bigger audience or a rebrand. You need a process, a care plan, and a scaling path you actually chose. That is exactly what we work on together inside Web Designer Pro.'},
+  {t:'cta', kick:'Your recurring-revenue start', h:'Join Web Designer Pro.', cta:'webdesignerpro.com', p:'Courses, community, and coaching to build, grow, and scale a lifestyle web design business with recurring revenue at its core.', disc:'No income or result is guaranteed. Results vary and depend on your effort, your market, and your execution. This masterclass is educational only.', foot:'Web Designer Pro with Josh Hall'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide' + (i === 0 ? ' on' : '');
+  let html = '';
+  if (s.kick) html += `<div class="kick">${s.kick}</div>`;
+  if (s.t === 'title') {
+    html += `<div class="spacer"></div><h1>${s.h}</h1><p class="big">${s.p}</p><div class="spacer"></div>`;
+    if (s.foot) html += `<div class="foot">${s.foot}</div>`;
+  } else if (s.t === 'framework') {
+    html += `<h2>${s.h}</h2><div class="steps">`;
+    s.steps.forEach(st => { html += `<div class="step"><div class="n">${st.n}</div><h3>${st.t}</h3><p>${st.p}</p></div>`; });
+    html += `</div><div class="spacer"></div>`;
+  } else if (s.t === 'list') {
+    html += `<h2>${s.h}</h2><ul>`;
+    s.items.forEach(it => { html += `<li>${it}</li>`; });
+    html += `</ul><div class="spacer"></div>`;
+  } else if (s.t === 'cta') {
+    html += `<div class="spacer"></div><h1>${s.h}</h1><p class="big">${s.p}</p><div class="cta-line">${s.cta}</div>`;
+    html += `<p class="disc">${s.disc}</p>`;
+    html += `<div class="spacer"></div>`;
+    if (s.foot) html += `<div class="foot">${s.foot}</div>`;
+  } else {
+    html += `<h2>${s.h}</h2><p>${s.p}</p><div class="spacer"></div>`;
+  }
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+
+let cur = 0;
+const slides = () => document.querySelectorAll('.slide');
+const count = document.getElementById('count');
+function show(n){ const el = slides(); el.forEach(s => s.classList.remove('on')); cur = Math.max(0, Math.min(n, el.length - 1)); el[cur].classList.add('on'); count.textContent = (cur+1) + ' / ' + el.length; }
+function go(d){ show(cur + d); }
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); });
+show(0);
+</script>
+</body>
+</html>
