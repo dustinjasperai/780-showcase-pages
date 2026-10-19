@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get It All Done Without Doing More — The T.I.M.E. Method for Working Moms</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf6ef; --panel:#f3e9dd; --rule:#e4d3c0; --ink:#2a211b; --muted:#6a5c4e;
+    --accent:#a14a0c; --deep:#7a3408;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:52px 48px;margin:0 0 20px;min-height:430px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide.cover{background:var(--panel)}
+  .kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:52px;line-height:1.06;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:38px;line-height:1.12;margin-bottom:16px}
+  p{font-size:19px;color:var(--ink);max-width:62ch;margin-bottom:12px}
+  p.sub{color:var(--muted);font-size:18px}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:19px;padding:11px 0 11px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:19px;width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .big{font-family:'Cormorant Garamond',serif;font-size:60px;line-height:1.02;font-weight:700}
+  .letter{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--accent);margin-right:14px}
+  .row{display:flex;align-items:baseline;margin-bottom:6px}
+  .foot{position:absolute;bottom:20px;left:48px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:70ch;line-height:1.5}
+  .cta-note{font-size:20px;color:var(--accent);font-weight:600;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', kick:'A live masterclass for working moms', h:'Get It All Done Without Doing More',
+   p:'The T.I.M.E. Method for building a week you can actually trust, from Katelyn Denning, Mother Nurture.'},
+
+  {t:'promise', kick:'What you will walk away with', h:'In the next hour, the plan comes out of your head',
+   list:['A clear picture of where your week actually goes','The three decisions that give you your time back','A simple way to stop carrying it all in your head','A week built around what matters to you, not everyone else']},
+
+  {t:'audience', kick:'Who this is for', h:'You are a working mom doing it all, and still feel behind',
+   list:['You love your kids and you love your work, both at once','Your calendar is full but the important things keep slipping','You are the one who remembers everything, for everyone','You are tired of being told to just do more, earlier, faster']},
+
+  {t:'trap', kick:'The trap', h:'The more you carry, the more you are expected to carry',
+   p:'Every time you catch the thing that almost got dropped, you quietly become the only one who can. The reward for holding it all in your head is being handed more of it.'},
+
+  {t:'reframe', kick:'The honest reframe', h:'You do not feel behind because you are disorganized',
+   p:'You feel behind because you are carrying the entire plan in your head, all day, as the only one who holds it. More effort will not fix that. Getting it out of your head will.'},
+
+  {t:'problem', kick:'Part one: the real problem', h:'More productivity advice is the wrong tool',
+   p:'Most time advice adds: another app, another system, another thing to keep up with. For a working mom that is just more weight on an already full plate.',
+   p2:'The goal is not to fit more in. It is to get clear on what matters and build your days around that instead of around everyone else’s expectations.'},
+
+  {t:'cost', kick:'What the old way costs', h:'The cost is not just time, it is presence',
+   list:['You are half-gone at dinner, running tomorrow in your head','You lie awake at 2am re-checking the open loops','The things that matter most are the ones that slip','You keep waiting for a calmer season that never arrives']},
+
+  {t:'intro', kick:'Part two: the method', h:'The T.I.M.E. Method',
+   p:'Four steps that take the plan out of your head and onto the page, so you stop re-deciding the same things every single day.',
+   list:['T: Track Your Time','I: Implement Smart Systems','M: Map Your Priorities','E: Execute with Confidence']},
+
+  {t:'pillar', letter:'T', kick:'Step one', h:'Track Your Time',
+   p:'Find where the hours actually go before you try to change anything. Most moms are shocked by the losses hiding in a normal week.',
+   list:['See the week as it really is, not as you hope it is','Name the recurring time leaks','Spot the pockets you did not know you had']},
+
+  {t:'pillar', letter:'I', kick:'Step two', h:'Implement Smart Systems',
+   p:'Build the small, repeatable systems that stop you re-deciding the same things. Decide once, then let the system carry it.',
+   list:['Templates for the decisions you make every week','Routines that run without your constant attention','Less kept in your head, more you can trust on paper']},
+
+  {t:'pillar', letter:'M', kick:'Step three', h:'Map Your Priorities',
+   p:'A simple three-step planning protocol: what actually matters, what you are saying yes to, and what you are opting out of.',
+   list:['Put what matters on the calendar first','Make the hard yes-and-no calls ahead of time','Close the open loops before they wake you at 2am']},
+
+  {t:'pillar', letter:'E', kick:'Step four', h:'Execute with Confidence',
+   p:'Protect consistent time for work, family, and yourself, and move through the week knowing the plan already has your back.',
+   list:['Consistent blocks for the things that count','Room to adapt when life does what life does','A week that feels intentional instead of reactive']},
+
+  {t:'together', kick:'How the four fit together', h:'Track, implement, map, execute, and repeat',
+   p:'It is not a one-time fix. You run the loop each week: notice what the last week taught you, adjust the systems, remap what matters, and execute again. The plan gets lighter every time.'},
+
+  {t:'mistake', kick:'What to avoid', h:'Do not start by cramming the calendar',
+   p:'The instinct is to fill every empty slot. That is the quickest way back to overwhelmed. Start by deciding what you are opting out of, so there is room for what you said mattered.'},
+
+  {t:'picture', kick:'Part three: what changes', h:'What a planned week actually feels like',
+   list:['You walk into the week already knowing what matters','The mental load is on the page, not in your head','You are more present with your kids because you are not half-gone','You have space to enjoy the month instead of surviving it']},
+
+  {t:'why', kick:'Who is teaching this', h:'I am Katelyn, and I built this from my own real life',
+   p:'I am a certified life and executive coach and a Fair Play Method Facilitator, and a full-time working mom of three in a dual-career household.',
+   p2:'I stayed in my corporate career through three maternity leaves, determined to create the balance I knew I deserved. Today I coach working moms to own their time and enjoy their days. I host The Life Coach for Working Moms podcast and have been featured in Motherly, Parent.com, and PsychCentral.'},
+
+  {t:'proof', kick:'How I work with moms', h:'The same method, two ways to go deeper',
+   list:['Beyond Balance: a 12-week group program that walks through T.I.M.E. together','1:1 private coaching: six months of personalized support, biweekly sessions, and On-the-Go Coaching','Both start by getting the plan out of your head and onto the page']},
+
+  {t:'belief', kick:'What I believe', h:'You can love your kids and love working',
+   p:'You are the only one who can give your kids a happy mom who loves her life. A real plan is how you get her back.'},
+
+  {t:'recap', kick:'Before you go', h:'You do not need to do more. You need a plan you trust',
+   list:['Track where your time really goes','Implement systems so you decide once','Map what matters and opt out of the rest','Execute with room to breathe']},
+
+  {t:'cta', kick:'Your next step', h:'Ready to build a week you can trust?',
+   p:'If this is the way you want to work on your time, here is how to go further with me.',
+   cta:'Apply for 1:1 private coaching, or join the next Beyond Balance group at Mother Nurture.',
+   disc:'No income or result is guaranteed. Results vary and depend on your own effort and circumstances. This masterclass is educational and is not a substitute for medical, legal, or mental-health advice.'}
+];
+
+function esc(x){return x;}
+function render(){
+  const deck=document.getElementById('deck');
+  S.forEach((s,i)=>{
+    const el=document.createElement('section');
+    el.className='slide'+(s.t==='cover'?' cover':'');
+    let html='';
+    if(s.kick) html+='<div class="kick">'+s.kick+'</div>';
+    if(s.t==='cover'){ html+='<h1>'+s.h+'</h1>'; }
+    else if(s.t==='belief'||s.t==='reframe'){ html+='<h2 class="big">'+s.h+'</h2>'; }
+    else { html+='<h2>'+s.h+'</h2>'; }
+    if(s.t==='pillar'){ html+='<div class="row"><span class="letter">'+s.letter+'</span></div>'; }
+    if(s.p) html+='<p>'+s.p+'</p>';
+    if(s.p2) html+='<p class="sub">'+s.p2+'</p>';
+    if(s.list){ html+='<ul>'; s.list.forEach(x=>html+='<li>'+x+'</li>'); html+='</ul>'; }
+    if(s.cta) html+='<p class="cta-note">'+s.cta+'</p>';
+    if(s.disc) html+='<p class="disc">'+s.disc+'</p>';
+    html+='<div class="foot">Mother Nurture &middot; The T.I.M.E. Method &middot; '+(i+1)+' / '+S.length+'</div>';
+    el.innerHTML=html;
+    deck.appendChild(el);
+  });
+}
+render();
+</script>
+</body>
+</html>
