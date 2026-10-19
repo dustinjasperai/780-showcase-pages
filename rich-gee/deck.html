@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Performance Ceiling | A Masterclass with Rich Gee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#011537;        /* richgee.com body background (brand.json) */
+    --panel:#051637;     /* richgee.com navy panel */
+    --ink:#fbfffa;       /* richgee.com off-white */
+    --ink-soft:#c3ccd9;
+    --ink-mute:#7f8ca3;
+    --accent:#fabb02;    /* richgee.com amber */
+    --green:#6aad15;     /* richgee.com olive, progress mark only */
+    --rule:#17284a;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif;overflow:hidden}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.1rem,6vw,4.2rem);
+    line-height:1.04;letter-spacing:-.02em}
+  h2{font-family:'Inter',sans-serif;font-weight:700;font-size:clamp(1.7rem,4.4vw,3rem);
+    line-height:1.1;letter-spacing:-.015em}
+  .sub{font-size:clamp(1.05rem,2vw,1.5rem);color:var(--ink-soft);margin-top:26px;max-width:60ch;line-height:1.5}
+  .lead{font-size:clamp(1.15rem,2.1vw,1.6rem);color:var(--ink);margin-top:8px;max-width:58ch;line-height:1.45}
+  .big{font-family:'Inter',sans-serif;font-weight:800;color:var(--accent);
+    font-size:clamp(2.4rem,7vw,5rem);line-height:1;letter-spacing:-.02em}
+  ul{margin-top:30px;max-width:62ch;list-style:none}
+  li{position:relative;padding-left:34px;margin:16px 0;font-size:clamp(1rem,1.9vw,1.4rem);
+    color:var(--ink-soft);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent)}
+  .step{display:flex;align-items:baseline;gap:20px;margin-top:10px}
+  .step .n{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);color:var(--accent);min-width:1.4em}
+  .note{color:var(--ink-mute);font-size:.95rem;margin-top:30px;max-width:60ch;line-height:1.5}
+  .disc{color:var(--ink-mute);font-size:.82rem;margin-top:26px;max-width:66ch;line-height:1.5;
+    border-top:1px solid var(--rule);padding-top:16px}
+  .cite{color:var(--ink-mute);font-size:.9rem;margin-top:22px}
+  /* rising ceiling motif */
+  #ceiling{position:fixed;left:9vw;right:9vw;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);
+    transition:bottom .4s ease;opacity:.55;z-index:5}
+  #nav{position:fixed;bottom:18px;right:26px;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--ink-mute);z-index:6}
+  #nav b{color:var(--ink)}
+  .brandmark{position:fixed;bottom:16px;left:26px;font-family:'Inter',sans-serif;font-size:.78rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);z-index:6}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ceiling"></div>
+<div class="brandmark">Rich Gee Group</div>
+<div id="nav"><b id="cur">1</b> / <span id="tot">1</span></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Rich Gee',
+    h:'The Performance Ceiling',
+    sub:'Why your $1M to $10M business stopped growing, and the one owner habit quietly holding it down.' },
+
+  {t:'who', k:'Who this is for',
+    h:'You run a $1M to $10M business and it has stalled.',
+    sub:'Revenue flattened. The team is busy. You are working more hours than ever, and the number will not move. You have tried the obvious fixes and the business still feels stuck.' },
+
+  {t:'trap', k:'The trap',
+    h:'So you do the one thing that feels right. You push harder.',
+    sub:'More hours, more involvement, more decisions routed through you. For a while it works. Then it stops working, because effort was never the thing that was capped.' },
+
+  {t:'hook', k:'The reframe',
+    h:'Your business is not stuck. It has hit a ceiling.',
+    lead:'And most of the time, the person holding that ceiling in place is the owner. That is uncomfortable. It is also the best news you will get this quarter, because it is the one variable you control.' },
+
+  {t:'part', k:'Part one', h:'The invisible ceiling',
+    sub:'Every business has a level it rises to and then holds at, set not by the market but by how the owner operates. Find the ceiling and you find the growth.' },
+
+  {t:'big', k:'The diagnostic', h:'Ceiling Math',
+    big:'Where you are vs. where you should be.',
+    sub:'Before you fix anything, you measure the gap. Three numbers tell you everything.' },
+
+  {t:'steps', k:'Ceiling Math', h:'Three questions, answered honestly',
+    steps:[
+      ['1','The gap. Where is the business today versus where it genuinely should be by now?'],
+      ['2','The cost. What is that gap costing you every single month it stays open?'],
+      ['3','The cause. What specifically is in the way, and how much of it runs through you?']
+    ] },
+
+  {t:'note', k:'Why the cost matters', h:'The gap has a monthly price.',
+    sub:'Owners tolerate a stalled business because the pain is spread thin. Put a monthly number on the gap and the decision to act stops being optional. Most owners find the gap is many times the cost of fixing it.' },
+
+  {t:'reframe', k:'The hard part', h:'You are usually the ceiling.',
+    lead:'Not your market, not your team, not the economy. The decisions only you can make, the approvals only you sign, the work you have never let go of. The bottleneck has your name on it, and that means you can move it.' },
+
+  {t:'part', k:'Part two', h:'The Performance Ceiling loop',
+    sub:'Breaking a ceiling is not a one-time push. It is a repeatable four-step cycle you run on every constraint until the business climbs past it.' },
+
+  {t:'step1', k:'Step one', h:'Assess',
+    sub:'Name the real constraint, not the symptom. Revenue is a symptom. The constraint is upstream, usually in how decisions and ownership flow.' },
+
+  {t:'step1', k:'Step two', h:'Plan',
+    sub:'Design the smallest change that moves the constraint, with a clear owner who is not you and a date it is done by.' },
+
+  {t:'step1', k:'Step three', h:'Launch',
+    sub:'Put the change into the business fast and in the open. Speed beats polish here. You are gathering data, not chasing perfect.' },
+
+  {t:'step1', k:'Step four', h:'Evaluate',
+    sub:'Measure what moved, keep what worked, cut what did not, and run the loop again on the next ceiling. Agility compounds.' },
+
+  {t:'part', k:'Part three', h:'The Breakthrough move',
+    sub:'The fastest way through the ceiling is almost always the same move: get the work out of your hands so the business can scale past you.' },
+
+  {t:'steps', k:'Diagnose. Design. Delegate. Dominate.', h:'Delegate out of the bottleneck',
+    steps:[
+      ['D','Diagnose which decisions and tasks only run because you are the one running them.'],
+      ['D','Design the system and the owner that replaces you on each one.'],
+      ['D','Delegate it fully, with the authority attached, not just the task.'],
+      ['D','Dominate the time you free up on the work only the owner can do.']
+    ] },
+
+  {t:'note', k:'What it buys you', h:'Ten-plus hours a week, back.',
+    sub:'Owners who run this well reclaim ten or more hours a week and spend them on the handful of moves that actually raise the ceiling, instead of being the busiest employee in their own company.' },
+
+  {t:'note', k:'The first 90 days', h:'What breaking the ceiling looks like',
+    sub:'Month one you measure the gap and name the constraint. Months two to five you run the loop and delegate out of the bottleneck. By month six the business is running at a level you used to have to force, without forcing it.' },
+
+  {t:'cred', k:'Why listen to me', h:'Rich Gee',
+    list:[
+      'Twenty-plus years inside Fortune 500 companies before coaching.',
+      'Twenty thousand coaching hours with more than 425 business owners and executives.',
+      'Author of Catalyst Leadership, the foundation for the Performance Ceiling work.',
+      'Co-host of The Best Small Business Show, 450-plus episodes.'
+    ],
+    note:'I am not a therapist and I am not here to make you feel good. I am the person owners call when they have tried everything and the business still will not move.' },
+
+  {t:'cta', k:'Your next move', h:'Ready to find your ceiling?',
+    sub:'If this is the conversation you have been needing to have, the next step is a short call with me to run your Ceiling Math on your actual numbers.',
+    cta:'Book a call with Rich Gee at richgee.com',
+    disc:'This masterclass is educational. No income, revenue, or business result is guaranteed. Results vary by business, market, and how the work is executed. Nothing here is financial, legal, or tax advice.' }
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s,i)=>{
+  const sec=document.createElement('section');
+  sec.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.k) html+='<div class="kicker">'+esc(s.k)+'</div>';
+  if(s.t==='title'){ html+='<h1>'+esc(s.h)+'</h1>'; if(s.sub)html+='<p class="sub">'+esc(s.sub)+'</p>'; }
+  else if(s.t==='big'){ html+='<h2>'+esc(s.h)+'</h2>'; if(s.big)html+='<p class="big" style="margin-top:22px">'+esc(s.big)+'</p>'; if(s.sub)html+='<p class="sub">'+esc(s.sub)+'</p>'; }
+  else if(s.t==='steps'){ html+='<h2>'+esc(s.h)+'</h2>'; s.steps.forEach(st=>{ html+='<div class="step"><span class="n">'+esc(st[0])+'</span><span class="lead" style="margin-top:0">'+esc(st[1])+'</span></div>'; }); }
+  else if(s.t==='cred'){ html+='<h2>'+esc(s.h)+'</h2><ul>'; s.list.forEach(l=>html+='<li>'+esc(l)+'</li>'); html+='</ul>'; if(s.note)html+='<p class="note">'+esc(s.note)+'</p>'; }
+  else if(s.t==='cta'){ html+='<h1>'+esc(s.h)+'</h1>'; if(s.sub)html+='<p class="sub">'+esc(s.sub)+'</p>'; if(s.cta)html+='<p class="big" style="font-size:clamp(1.3rem,3vw,2rem);margin-top:26px">'+esc(s.cta)+'</p>'; if(s.disc)html+='<p class="disc">'+esc(s.disc)+'</p>'; }
+  else { html+='<h2>'+esc(s.h)+'</h2>'; if(s.lead)html+='<p class="lead">'+esc(s.lead)+'</p>'; if(s.sub)html+='<p class="sub">'+esc(s.sub)+'</p>'; }
+  sec.innerHTML=html;
+  stage.appendChild(sec);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+const ceiling=document.getElementById('ceiling');
+function show(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((el,i)=>el.classList.toggle('on',i===cur));
+  document.getElementById('cur').textContent=cur+1;
+  const pct=cur/(slides.length-1);
+  ceiling.style.bottom=(10+pct*80)+'vh';
+}
+show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')show(cur-1);
+});
+document.addEventListener('click',e=>{ if(e.clientX < window.innerWidth*0.3) show(cur-1); else show(cur+1); });
+</script>
+</body>
+</html>
