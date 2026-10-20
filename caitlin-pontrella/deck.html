@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greater Governance — The Board That Governs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf2ec; --panel:#fffaf6; --rule:#ecdfd6; --ink:#1c1a17;
+    --muted:#6b645b; --accent:#ec5c39; --deep:#c9472a;
+    --head:'Space Grotesk',system-ui,sans-serif; --body:'Raleway',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:44px 48px;margin:0 0 20px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .slide.cover{background:var(--ink);color:#f7f3ee;border-color:var(--ink)}
+  .slide.cover .kick,.slide.cover .foot{color:#d8b3a6}
+  .slide.divider{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .slide.divider .kick{color:#ffe4da}
+  .kick{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:33px;line-height:1.14;letter-spacing:-.01em}
+  h3{font-family:var(--head);font-weight:600;font-size:21px;margin-bottom:6px}
+  p{font-size:18px;color:var(--ink);margin-top:14px;max-width:62ch}
+  p.lead{font-size:21px}
+  .muted{color:var(--muted)}
+  ul{margin:18px 0 0 0;padding:0;list-style:none}
+  li{font-size:18px;padding:11px 0 11px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:last-child{border-bottom:0}
+  li:before{content:"";position:absolute;left:0;top:19px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .mark{color:var(--deep);font-weight:600}
+  .big{font-size:60px;font-family:var(--head);font-weight:700;color:var(--accent);line-height:1}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  .card{border:1px solid var(--rule);border-radius:10px;padding:18px 20px;background:#fdfbf8}
+  .card .n{font-family:var(--head);font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.08em}
+  .foot{margin-top:26px;font-family:var(--head);font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted)}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:70ch}
+</style>
+</head>
+<body>
+<main class="deck" id="deck"></main>
+<script>
+const S = [
+  {t:'cover', cls:'cover', html:`
+    <div class="kick">A live masterclass for nonprofit leaders</div>
+    <h1>The Board That Governs</h1>
+    <p class="lead">The four things that separate a board that leads from a board that just meets, approves, and adjourns.</p>
+    <div class="foot">Greater Governance &nbsp;&bull;&nbsp; with Caitlin Pontrella</div>`},
+
+  {t:'promise', cls:'', html:`
+    <div class="kick">What you will leave with</div>
+    <h2>By the end of this hour</h2>
+    <ul>
+      <li>A name for the dysfunction you feel but cannot quite describe</li>
+      <li>The one diagnostic that tells you how your board actually operates</li>
+      <li>The four pillars every thriving board is built on</li>
+      <li>A first move you can take to your next meeting</li>
+    </ul>`},
+
+  {t:'who', cls:'', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You lead, chair, or sit on a nonprofit board</h2>
+    <p>You care about the mission. You show up prepared. And still, meeting after meeting, the board reviews, nods, and approves, while the real decisions quietly get made somewhere else.</p>
+    <p class="muted">If that sounds familiar, you are in the right room.</p>`},
+
+  {t:'trap', cls:'', html:`
+    <div class="kick">The trap</div>
+    <h2>A full agenda is not the same as governance</h2>
+    <p>Most boards measure themselves by activity. Packets read. Reports heard. Motions passed. It feels productive. But a board can do all of that for years and never once actually govern.</p>
+    <p>Busy is easy. Governing is the hard part almost nobody was taught.</p>`},
+
+  {t:'reframe', cls:'cover', html:`
+    <div class="kick">The reframe</div>
+    <h1>Your board is not broken.</h1>
+    <p class="lead">It is governing in the wrong mode, or not governing at all. And once you can see the mode, you can change it.</p>`},
+
+  {t:'divider', cls:'divider', html:`
+    <div class="kick">Part one</div>
+    <h2>Why good boards go bad</h2>`},
+
+  {t:'compliance', cls:'', html:`
+    <div class="kick">The first misread</div>
+    <h2>Compliance is the floor, not the job</h2>
+    <p>Filing on time, meeting quorum, approving the budget: this keeps you legal. It is the floor you stand on. Too many boards treat the floor as the ceiling and call it good governance.</p>
+    <p>Governance begins where compliance ends: in the questions nobody is required to ask.</p>`},
+
+  {t:'modes-intro', cls:'', html:`
+    <div class="kick">The diagnostic</div>
+    <h2>The four modes of nonprofit governance</h2>
+    <p>Every board operates in one of four modes. They are not a ranking, and no single mode is right for every organization. The dysfunction shows up when a board is in one mode but acts like it is in another.</p>`},
+
+  {t:'mode1', cls:'', html:`
+    <div class="kick">Mode one</div>
+    <h2>Following</h2>
+    <p>Authority flows through, and defers to, a single person, usually a founder or a long-tenured executive. The board follows. On paper it governs. In the room, it ratifies.</p>
+    <p class="muted">The risk: when that one person is gone, nothing underneath has been built to hold the weight.</p>`},
+
+  {t:'mode2', cls:'', html:`
+    <div class="kick">Mode two</div>
+    <h2>Working</h2>
+    <p>The board is the operational capacity of the organization. Members run the programs, keep the books, and staff the events. Common, and often necessary, in young or small nonprofits.</p>
+    <p class="muted">The risk: there is no one left at altitude to steer, because everyone is rowing.</p>`},
+
+  {t:'mode3', cls:'', html:`
+    <div class="kick">Mode three</div>
+    <h2>Governing</h2>
+    <p>Board and staff hold separate roles and negotiate a shared power structure, with varying degrees of success. This is the mode most boards think they are in.</p>
+    <p class="muted">The risk: the line between oversight and interference gets blurry, and trust is what holds it.</p>`},
+
+  {t:'mode4', cls:'', html:`
+    <div class="kick">Mode four</div>
+    <h2>Enterprise</h2>
+    <p>The board governs at arm's length, trusts professional staff, and focuses on risk, resources, and reputation. Formal structures, institutional scale, real distance from operations.</p>
+    <p class="muted">The risk: distance becomes detachment, and the board stops feeling the mission it governs.</p>`},
+
+  {t:'mode-q', cls:'', html:`
+    <div class="kick">The honest question</div>
+    <h2>Which mode is your board actually in?</h2>
+    <p>Not the mode in your bylaws. The mode in your last three meetings. Naming it honestly is the single most clarifying thing a board can do, because almost every recurring conflict traces back to a mode mismatch.</p>`},
+
+  {t:'divider2', cls:'divider', html:`
+    <div class="kick">Part two</div>
+    <h2>The four pillars of greater governance</h2>`},
+
+  {t:'pillar1', cls:'', html:`
+    <div class="kick">Pillar one</div>
+    <h2>Ethical</h2>
+    <p>Doing the right thing even when it is inconvenient, and keeping decisions and finances transparent. A board's first job is to be the organization's conscience, especially when no one is watching.</p>`},
+
+  {t:'pillar2', cls:'', html:`
+    <div class="kick">Pillar two</div>
+    <h2>Excellent</h2>
+    <p>Setting high but realistic expectations and improving on purpose. Excellent boards ask hard questions about real impact, invest in their own development, and protect what works while they innovate.</p>`},
+
+  {t:'pillar3', cls:'', html:`
+    <div class="kick">Pillar three</div>
+    <h2>Enduring</h2>
+    <p>Keeping the mission relevant over decades, not just years. Reserves set aside, succession planned before it is urgent, and long-term trends watched while the day-to-day gets handled.</p>`},
+
+  {t:'pillar4', cls:'', html:`
+    <div class="kick">Pillar four</div>
+    <h2>Equitable</h2>
+    <p>Inclusion and shared ownership, because diverse perspectives make better decisions and more resilient organizations. Intentional recruitment, accessible meetings, and leadership that is actually distributed.</p>`},
+
+  {t:'picture', cls:'', html:`
+    <div class="kick">The board you are building</div>
+    <h2>Guardians of the mission's future</h2>
+    <p>A board that governs stops being a room of decision-makers and becomes something steadier: a group that leads with integrity, holds a high bar, plans for the long haul, and shares power on purpose.</p>
+    <p>That is the board your mission deserves, and it is built, not inherited.</p>`},
+
+  {t:'whyme', cls:'', html:`
+    <div class="kick">Why listen to me</div>
+    <h2>I have sat in the chair</h2>
+    <ul>
+      <li>Nine times an interim chief executive, four times a board president</li>
+      <li>Author of Nonprofit Boards for Dummies (Wiley)</li>
+      <li>Adjunct professor of governance, Seattle University Arts Leadership MFA</li>
+      <li>Case files written from real boardrooms, no theory, no fluff</li>
+    </ul>`},
+
+  {t:'cta', cls:'cover', html:`
+    <div class="kick">Where to go from here</div>
+    <h1>Bring Greater Governance to your board</h1>
+    <p class="lead">If this hour named something you have been feeling, the full Greater Governance program walks your board through all of it, with hands-on activities and tools you can use the same week.</p>
+    <p class="muted">Reach out at caitlinpontrella.com to start the conversation.</p>
+    <p class="disc">Educational content only. Nothing here is legal, financial, or tax advice. No specific outcome, impact, or result is guaranteed; every board and organization is different and results vary.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide ' + (s.cls || '');
+  el.innerHTML = s.html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
