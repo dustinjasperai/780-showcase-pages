@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Break Through to Executive — a masterclass with Ethan Evans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4fbff;
+    --panel:#ffffff;
+    --ink:#1e3040;
+    --muted:#55637a;
+    --rule:#dbe6f0;
+    --accent:#1c4367;
+    --accent-soft:#eaf4fb;
+    --head:"Sora",system-ui,sans-serif;
+    --body:"Inter",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:920px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(34px,6vw,62px);line-height:1.04;letter-spacing:-.02em}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(26px,4vw,42px);line-height:1.1;letter-spacing:-.01em;margin-bottom:18px}
+  .lead{font-size:clamp(17px,2.1vw,22px);color:var(--muted);line-height:1.5;margin-top:22px;max-width:40ch}
+  p.big{font-size:clamp(20px,2.6vw,30px);line-height:1.4;max-width:34ch}
+  ul{list-style:none;margin-top:10px}
+  li{position:relative;padding-left:30px;margin:16px 0;font-size:clamp(16px,2vw,21px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .steps{display:grid;gap:14px;margin-top:8px}
+  .step{display:flex;gap:18px;align-items:flex-start;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 22px}
+  .step .n{font-family:var(--head);font-weight:700;color:var(--accent);font-size:24px;min-width:34px}
+  .step .t{font-weight:600;font-size:clamp(16px,2vw,20px)}
+  .step .d{color:var(--muted);font-size:15px;margin-top:3px;line-height:1.4}
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;align-items:center}
+  .chip{font-family:var(--head);font-weight:600;background:var(--accent-soft);border:1px solid var(--rule);color:var(--accent);border-radius:999px;padding:12px 20px;font-size:clamp(15px,1.8vw,19px)}
+  .arrow{color:var(--muted);font-weight:700}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:10px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--accent);border-radius:14px;padding:22px}
+  .card h3{font-family:var(--head);font-size:19px;margin-bottom:10px}
+  .card p{color:var(--muted);font-size:14.5px;line-height:1.45}
+  .stat{display:flex;gap:40px;flex-wrap:wrap;margin-top:28px}
+  .stat b{font-family:var(--head);font-weight:700;font-size:clamp(30px,5vw,52px);color:var(--accent);display:block}
+  .stat span{color:var(--muted);font-size:15px}
+  .disc{margin-top:30px;font-size:12.5px;color:var(--muted);max-width:62ch;line-height:1.5}
+  .by{margin-top:34px;font-family:var(--head);font-weight:600;font-size:16px}
+  .by span{color:var(--muted);font-weight:400;display:block;font-family:var(--body);margin-top:4px;font-size:14px}
+  .nav{position:fixed;bottom:20px;right:24px;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);font-family:var(--head)}
+  .nav button{font-family:var(--head);border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:16px}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s}
+  @media(max-width:640px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">‹</button><span id="count"></span><button onclick="go(1)">›</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'A live masterclass',h:'Break Through to Executive',lead:'What actually earns the promotion from Senior Manager to the executive level, from the person who sat on the committees that decided it.',by:'Ethan Evans',bysub:'Retired Amazon Vice President. 15+ years, teams of 800+, 70+ patents.'},
+  {t:'content',kicker:'What you will leave with',h:'Three things, by the end',list:['A clear read on why your work is strong and your title has not moved.','The Magic Loop: a repeatable way to earn the next level, not wait for it.','How to earn an executive sponsor who will say your name in the room.']},
+  {t:'content',kicker:'Who this is for',h:'You are good at your job',big:'You ship. You are trusted with hard problems. Your reviews are strong. And you have been a Senior Manager for longer than you planned to be.'},
+  {t:'content',kicker:'The trap',h:'So you do more good work',list:['You take on more scope and deliver it well.','You assume the next promotion follows the same rule the last ones did.','It does not. And nobody has told you why.']},
+  {t:'hook',kicker:'The hard reframe',h:'You are being measured against a bar no one has shown you.',lead:'The executive promotion is not graded on effort or output. It is graded on a different standard entirely, and the people applying it are not in the room with you.'},
+  {t:'section',kicker:'Part one',h:'Why good work stalls at Senior Manager'},
+  {t:'content',kicker:'The plateau',h:'Great work is the entry fee',big:'At the senior-manager level, excellent execution is assumed. It is what qualifies you to be considered. It is not what gets you promoted.'},
+  {t:'content',kicker:'The quiet gap',h:'Two things are usually missing',list:['Visibility: the executives who decide promotions cannot see your scope, so they cannot vouch for it.','Altitude: your impact reads as team-level, not company-level, to the people scoring it.']},
+  {t:'section',kicker:'Part two',h:'The Magic Loop'},
+  {t:'content',kicker:'The idea',h:'Stop waiting to be noticed',big:'The Magic Loop is the tool I used to reach VP, and the one I used to promote hundreds of people. It turns extra work into earned advancement, on repeat.'},
+  {t:'steps',kicker:'The Magic Loop',h:'Five steps, run on a loop',steps:[
+    {n:'1',t:'Master your current job',d:'Earn the right to ask by being excellent at what you already own.'},
+    {n:'2',t:'Ask your manager how to help',d:'Not for more tasks. For the high-impact work that matters to them.'},
+    {n:'3',t:'Actually do it',d:'Ideas do not get you promoted. Execution does.'},
+    {n:'4',t:'Align it to your long-term goal',d:'Choose the extra work that builds the record you want to be promoted on.'},
+    {n:'5',t:'Repeat',d:'Each loop compounds trust, scope, and advocates. Advancement becomes the by-product.'}
+  ]},
+  {t:'section',kicker:'Part two, continued',h:'Earning an executive sponsor'},
+  {t:'content',kicker:'Why it matters',h:'Promotions are argued for, not announced',big:'At the executive line, someone senior has to make the case for you when you are not there. That person is a sponsor. Sponsors are earned in a specific order.'},
+  {t:'chips',kicker:'The sponsorship path',h:'In this order, never skipped',chips:['Visibility','Trust','Respect','Sponsorship']},
+  {t:'content',kicker:'Where people stall',h:'Most stop at visibility',list:['They get seen, then assume the rest follows. It does not.','Trust is built by doing what you said, on work the executive cares about.','Respect and then sponsorship come from repeated, aligned delivery, the Magic Loop again.']},
+  {t:'section',kicker:'Part three',h:'The bar the committee actually scores'},
+  {t:'cards',kicker:'The three performance standards',h:'What executives are promoted on',cards:[
+    {h:'Personal',p:'A scaled leader and a change agent who invents and solves. A trusted decision maker others rely on.'},
+    {h:'Team',p:'Results delivered with minimal oversight. Calculated risks taken. Meaningful outcomes, not activity.'},
+    {h:'Company',p:'Strategy and influence beyond your own org. Thinking and communicating at the company-wide level.'}
+  ]},
+  {t:'content',kicker:'Putting it together',h:'The next 90 days',list:['Pick one executive-level problem that matters to a leader above you.','Run the Magic Loop on it, deliberately, in the open.','Build the visibility-to-sponsorship path as you go, so the case for you writes itself.']},
+  {t:'credibility',kicker:'Why learn this from me',h:'I was in the room',lead:'This is not theory. It is the standard I applied as a VP, and the path I watched work for the people I promoted.',stats:[['8','Senior Managers I promoted to Director'],['25+','Director promotions I contributed to'],['800+','the size of the teams I led at Amazon']]},
+  {t:'cta',kicker:'Your next step',h:'Go deeper in Break Through to Executive',lead:'If this is the jump you are working toward, my course and coaching walk the Magic Loop, the sponsorship path, and the three performance standards in full, with your real situation.',disc:'Educational content only. No outcome, promotion, title, or income result is promised or guaranteed; results depend on your own role, effort, and circumstances.'}
+];
+let i=0;
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const d=document.createElement('div');d.className='slide on';
+  let h='';
+  if(s.kicker)h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'){h+=`<h1>${s.h}</h1>`;if(s.lead)h+=`<p class="lead">${s.lead}</p>`;if(s.by)h+=`<div class="by">${s.by}<span>${s.bysub||''}</span></div>`;}
+  else if(s.t==='section'){h+=`<h1>${s.h}</h1>`;}
+  else if(s.t==='hook'){h+=`<h2>${s.h}</h2>`;if(s.lead)h+=`<p class="lead">${s.lead}</p>`;}
+  else{
+    if(s.h)h+=`<h2>${s.h}</h2>`;
+    if(s.big)h+=`<p class="big">${s.big}</p>`;
+    if(s.lead)h+=`<p class="lead">${s.lead}</p>`;
+    if(s.list){h+='<ul>';s.list.forEach(x=>h+=`<li>${x}</li>`);h+='</ul>';}
+    if(s.steps){h+='<div class="steps">';s.steps.forEach(x=>h+=`<div class="step"><div class="n">${x.n}</div><div><div class="t">${x.t}</div><div class="d">${x.d}</div></div></div>`);h+='</div>';}
+    if(s.chips){h+='<div class="chips">';s.chips.forEach((x,k)=>{h+=`<span class="chip">${x}</span>`;if(k<s.chips.length-1)h+='<span class="arrow">→</span>';});h+='</div>';}
+    if(s.cards){h+='<div class="cards">';s.cards.forEach(x=>h+=`<div class="card"><h3>${x.h}</h3><p>${x.p}</p></div>`);h+='</div>';}
+    if(s.stats){h+='<div class="stat">';s.stats.forEach(x=>h+=`<div><b>${x[0]}</b><span>${x[1]}</span></div>`);h+='</div>';}
+    if(s.disc)h+=`<div class="disc">${s.disc}</div>`;
+  }
+  d.innerHTML=h;stage.appendChild(d);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+  document.getElementById('prog').style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
