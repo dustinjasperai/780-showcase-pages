@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taking the Leap — a masterclass with Lisa Dy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ECF1EF;
+    --panel:#F9FBFA;
+    --rule:#CFDAD6;
+    --ink:#1E2232;
+    --mut:#595F70;
+    --accent:#15726B;
+    --head:"IBM Plex Serif",Georgia,serif;
+    --body:"IBM Plex Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 6vw}
+  .slide{display:none;width:min(960px,92vw);background:var(--panel);border:1px solid var(--rule);
+    border-radius:14px;padding:clamp(28px,5vw,64px);box-shadow:0 1px 0 var(--rule)}
+  .slide.on{display:block;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .kick{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:600;font-size:clamp(1.9rem,5.2vw,3.4rem);line-height:1.08;
+    letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(1.5rem,3.8vw,2.3rem);line-height:1.14}
+  .sub{color:var(--mut);font-size:clamp(1.02rem,1.9vw,1.25rem);line-height:1.55;margin-top:18px;max-width:40ch}
+  .big{font-family:var(--head);font-weight:600;font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.18}
+  .big .a{color:var(--accent)}
+  ul{margin-top:22px;list-style:none;display:grid;gap:14px}
+  li{position:relative;padding-left:26px;font-size:clamp(1rem,1.8vw,1.18rem);line-height:1.5}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:2px;background:var(--accent)}
+  .n{font-family:var(--head);color:var(--accent);font-size:1.1rem;font-weight:600}
+  .disc{margin-top:26px;font-size:.82rem;color:var(--mut);line-height:1.5;border-top:1px solid var(--rule);padding-top:16px}
+  .foot{position:fixed;bottom:16px;left:0;right:0;display:flex;justify-content:space-between;
+    padding:0 22px;font-size:.74rem;color:var(--mut)}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;max-width:60vw;justify-content:flex-end}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+  .dot.on{background:var(--accent)}
+  .nav{position:fixed;inset:0;display:flex;justify-content:space-between;pointer-events:none}
+  .nav button{pointer-events:auto;border:0;background:transparent;width:16vw;cursor:pointer}
+  .brand{font-family:var(--head);color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev" aria-label="previous"></button><button id="next" aria-label="next"></button></div>
+<div class="foot"><span class="brand">Boundless Potential Coaching</span><span class="dots" id="dots"></span></div>
+<script>
+const S=[
+  {t:'title',kick:'A live masterclass with Lisa Dy, CPA',h:'Taking the Leap',
+   sub:'How analytical professionals stop over-thinking the move and finally make it.'},
+
+  {t:'who',kick:'Who this is for',h:'The most capable person in the room, still waiting.',
+   sub:'Finance, accounting, engineering and tech leaders who are excellent at the work and quietly stuck on the move: the promotion, the role, the pivot they keep analyzing.'},
+
+  {t:'trap',kick:'The trap',h:'You call it being thorough.',
+   sub:'Run the numbers again. Wait until you feel ready. Make sure there is no risk you missed. It feels responsible. It has also been three years.'},
+
+  {t:'hook',big:'The analysis was never the problem. <span class="a">The waiting is.</span>',
+   sub:'Nobody taught you that the skill that made you great at the work is the same skill keeping you small.'},
+
+  {t:'part',n:'Part One',h:'Why smart people stay stuck',
+   sub:'The mechanics of over-analysis, and why willpower never fixes it.'},
+
+  {t:'body',kick:'The loop',h:'Self-doubt wearing a lab coat.',
+   sub:'For a numbers person, doubt does not show up as fear. It shows up as one more spreadsheet, one more scenario, one more reason it is not quite the right time. The rigor is real. So is the cost.'},
+
+  {t:'body',kick:'The cost',h:'What the waiting quietly takes.',
+   list:['The role goes to someone less qualified who simply asked','The idea stays a note you never pitched','The fulfillment you expected from the title never arrives']},
+
+  {t:'part',n:'Part Two',h:'The method',
+   sub:'Not motivation. A practical, repeatable way through, built for people who think in numbers.'},
+
+  {t:'body',kick:'Pillar one',h:'Reframe the thought loop.',
+   sub:'Learn to catch the over-analytical story in the moment and name it for what it is, then replace it with a truer read of the actual risk. The goal is not to think less. It is to stop mistaking caution for data.'},
+
+  {t:'body',kick:'Pillar two',h:'Build the habits that hold.',
+   sub:'Insight fades by Monday. We install the small, specific routines that keep a decision moving when the motivation is gone, so confidence becomes something you practice, not something you wait to feel.'},
+
+  {t:'body',kick:'Pillar three',h:'Navigate the change without burning out.',
+   sub:'A structured way to move through a big transition, a new role, a reorg, a pivot, that protects your energy and your judgment instead of spending both on worry.'},
+
+  {t:'body',kick:'The through-line',h:'Taking the leap is a process, not a personality.',
+   sub:'Confident people are not a different species. They have a reframe, a habit, and a next step. You can build all three.'},
+
+  {t:'part',n:'Part Three',h:'The same mind, pointed forward',
+   sub:'The rigor you already have, aimed at deciding instead of circling.'},
+
+  {t:'body',kick:'The shift',h:'From re-checking to deciding.',
+   list:['You make the call with the information you have, on time','You ask for the thing instead of hoping it is offered','You carry presence into the high-stakes conversation, not dread']},
+
+  {t:'why',kick:'Why Lisa',h:'A CPA who left the spreadsheets to coach the people still behind them.',
+   sub:'Lisa Dy spent 25 years in corporate accounting and finance leadership before becoming a mindset coach. She has educated and inspired 30,000-plus professionals, speaks the language of numbers people, and treats their over-analysis as the specific thing to work on, not a character flaw.'},
+
+  {t:'recap',kick:'In one hour',h:'What you leave with.',
+   list:['The reframe for the loop that reads as caution','The first habit that makes a decision move','A clear picture of the move you have been analyzing']},
+
+  {t:'cta',kick:'Your next step',h:'Ready to take the leap?',
+   sub:'If this is the year you stop waiting to feel ready, work with Lisa through Boundless Potential Coaching. Start with a conversation and the free leadership roundtable.',
+   disc:'This masterclass is educational. No income, promotion, or specific result is guaranteed. Outcomes vary by individual and depend on your own effort and circumstances.'}
+];
+
+const stage=document.getElementById('stage');
+const dotsEl=document.getElementById('dots');
+let i=0;
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function build(){
+  S.forEach((s,idx)=>{
+    const d=el('div','slide'+(idx===0?' on':''));
+    if(s.kick)d.appendChild(el('div','kick',s.kick));
+    if(s.n)d.appendChild(el('div','n',s.n));
+    if(s.h)d.appendChild(el(s.t==='title'?'h1':'h2',null,s.h));
+    if(s.big)d.appendChild(el('div','big',s.big));
+    if(s.sub)d.appendChild(el('div','sub',s.sub));
+    if(s.list){const ul=el('ul');s.list.forEach(x=>ul.appendChild(el('li',null,x)));d.appendChild(ul);}
+    if(s.disc)d.appendChild(el('div','disc',s.disc));
+    stage.appendChild(d);
+    const dot=el('span','dot'+(idx===0?' on':''));dotsEl.appendChild(dot);
+  });
+}
+function show(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  document.querySelectorAll('.slide').forEach((s,x)=>s.classList.toggle('on',x===i));
+  document.querySelectorAll('.dot').forEach((s,x)=>s.classList.toggle('on',x===i));
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+build();
+</script>
+</body>
+</html>
