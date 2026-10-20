@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Sacred 6 — JB Glossinger, MorningCoach®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f3;          /* warm off-white (light-scheme brand) */
+    --ink:#1c1b19;
+    --panel:#f1ece2;
+    --rule:#e0d8c9;
+    --muted:#6b645a;
+    --accent:#f29c1f;       /* MorningCoach brand button amber */
+    --display:"Satoshi",system-ui,sans-serif;
+    --body:"Raleway",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:48px 24px 96px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+    padding:56px 56px;margin:0 0 28px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide .kicker{font-family:var(--display);font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  .slide h1{font-family:var(--display);font-weight:900;font-size:52px;line-height:1.05;
+    letter-spacing:-.01em;margin-bottom:18px}
+  .slide h2{font-family:var(--display);font-weight:700;font-size:34px;line-height:1.12;
+    margin-bottom:16px}
+  .slide p{font-size:19px;color:var(--ink);max-width:62ch;margin-bottom:14px}
+  .slide p.sub{color:var(--muted);font-size:21px}
+  .slide ul{list-style:none;margin:10px 0 0}
+  .slide li{font-size:19px;padding:10px 0 10px 34px;position:relative;border-bottom:1px solid var(--rule)}
+  .slide li:last-child{border-bottom:0}
+  .slide li::before{content:"";position:absolute;left:4px;top:19px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent)}
+  .six{display:flex;gap:10px;margin-top:8px}
+  .six span{width:14px;height:14px;border-radius:50%;background:var(--accent);opacity:.9}
+  .horizon{position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--accent)}
+  .title-slide{background:linear-gradient(180deg,var(--panel),var(--bg))}
+  .cta-slide{background:var(--panel)}
+  .disclaimer{color:var(--muted);font-size:13px;margin-top:26px;max-width:70ch}
+  @media(max-width:640px){.slide{padding:34px 26px}.slide h1{font-size:36px}.slide h2{font-size:26px}}
+</style>
+</head>
+<body>
+<main class="deck" id="deck"></main>
+<script>
+const S = [
+  {t:'title', kicker:"A MorningCoach® Masterclass", title:"The Sacred 6",
+   sub:"The six-task morning system that moves your life. With JB Glossinger, 21 years of the daily CoachCast."},
+
+  {t:'promise', kicker:"What you'll walk away with",
+   h2:"One page. Six tasks. A morning you actually run.",
+   bullets:["Why doing more each day quietly moves your life less",
+            "The six-task structure that keeps your real priorities in front of you",
+            "How to build it into a morning ritual you keep for years, not weeks"]},
+
+  {t:'who', kicker:"Who this is for",
+   h2:"Driven people, a few years in.",
+   p:"Founders, physicians, attorneys and builders who are already productive and still feel like the things that matter most keep slipping to next week. You do not need more motivation. You need a structure that holds."},
+
+  {t:'trap', kicker:"The trap",
+   h2:"Your days look productive. Your year does not move.",
+   p:"You clear the inbox, attend the calls, check the boxes. The calendar is full and honest. And yet the handful of things that would actually change your life keep getting pushed, because urgent noise always arrives first and quietly wins the day."},
+
+  {t:'reframe', kicker:"The reframe",
+   h2:"More hustle is not the answer. Fewer, chosen things are.",
+   p:"The problem was never effort. It is that twenty open priorities mean zero real ones. When everything is important, the day defaults to whatever shouts loudest. The fix is to decide, before the noise starts, what the day is actually for."},
+
+  {t:'part', kicker:"Part One", h2:"The scattered day",
+   p:"Most planning systems ask you to manage more: longer lists, more tags, more apps. That is the disease wearing the costume of the cure. A longer list does not create focus. It hides the few things that matter inside the many that do not."},
+
+  {t:'cost', kicker:"The cost of scatter",
+   h2:"Scatter does not feel like failure. That is why it is dangerous.",
+   p:"A scattered day feels busy and even satisfying. Stack 300 of them and you get a drifted year that you cannot quite explain. Nothing broke. You were working the whole time. The direction was just never chosen on purpose."},
+
+  {t:'framework', kicker:"Part Two", h2:"The Sacred 6",
+   p:"A simple, repeatable way to choose the few things that move you and run only those each day.",
+   six:true},
+
+  {t:'pillar', kicker:"Sacred 6 · Pillar 1", h2:"Start from mission, values and goals.",
+   p:"Before you choose tasks, you choose direction. Your mission, your values and your real goals sit at the top and everything below has to serve them. Most people pick tasks with no north. The Sacred 6 picks the north first, then the tasks."},
+
+  {t:'pillar', kicker:"Sacred 6 · Pillar 2", h2:"Six is the number.",
+   p:"Not three, which is too few to hold a real life, and not twenty, which is just the scattered list again. Six is the amount a person can actually carry in a day and still finish. The constraint is the point. Six forces the choice that focus requires.",
+   six:true},
+
+  {t:'pillar', kicker:"Sacred 6 · Pillar 3", h2:"Choose from the Observer, not the ego.",
+   p:"The ego picks what feels urgent, impressive or safe. The Observer, the quieter true self, picks what actually matters. Learning to choose your six from that calmer place is the difference between a day that performs and a day that counts."},
+
+  {t:'pillar', kicker:"Sacred 6 · Pillar 4", h2:"Anchor it with a keystone habit.",
+   p:"The six do not survive on willpower. They survive on a keystone: a fixed morning moment where you set them before the world gets a vote. One small anchor, done daily, is what turns a good idea into a practice you still have in a year."},
+
+  {t:'ritual', kicker:"The daily mechanism", h2:"Get It Done NOW.",
+   p:"This is the Sacred 6 made physical: one page, one morning ritual. You write your six, you run the day against them, you check them off. On paper or on any tablet, it is the same single page every morning. One page, one ritual, run for years."},
+
+  {t:'structure', kicker:"A supporting tool", h2:"3Becomes9: decide in three minutes.",
+   p:"When one of your six is a hard decision or a message you have to get right, structure it fast: one point, three supporting points, nine supports underneath. It keeps big thinking from sprawling, so a Sacred 6 task does not quietly become a Sacred 60."},
+
+  {t:'day', kicker:"Part Three", h2:"A day run on the Sacred 6.",
+   bullets:["Morning: set the six from the Observer, before the inbox",
+            "Midday: the noise arrives and the six hold the line",
+            "Evening: check the six, close the day on purpose, not on exhaustion"]},
+
+  {t:'year', kicker:"What it compounds into",
+   h2:"The same six, most mornings, for a year.",
+   p:"One disciplined morning is a nice day. Repeated, it becomes the only reliable way a life actually changes direction. Not a breakthrough weekend. A quiet page, run most mornings, until the person running it is different."},
+
+  {t:'why', kicker:"Why me", h2:"21 years of mornings.",
+   p:"I have recorded a new MorningCoach CoachCast every single morning for 21 years, more than 5,600 episodes and 17 million downloads, and wrote The Sacred 6 for Hay House. I am not teaching you a theory I read. I am teaching you the practice I have run every day since 2005."},
+
+  {t:'objection', kicker:"If you are thinking it won't stick",
+   h2:"You have tried systems before. This is smaller on purpose.",
+   p:"Every system you abandoned asked you to do more. This asks you to do less, chosen better, anchored to one morning moment. Small enough to keep on your worst day is exactly why it survives long enough to work."},
+
+  {t:'recap', kicker:"Your next step", h2:"Pick six. Run tomorrow morning.",
+   bullets:["Choose your mission, values and goals as the north",
+            "Pick the six tasks that actually serve them",
+            "Anchor them to one fixed morning moment and start tomorrow"]},
+
+  {t:'cta', kicker:"Begin", h2:"Start your Sacred 6 practice tomorrow morning.",
+   p:"Come run the daily practice with me. The MorningCoach CoachCast, the Get It Done system and the full Sacred 6 method live inside MorningCoach. Begin at MorningCoach.com and run your first six tomorrow.",
+   disclaimer:"This masterclass is for educational purposes only. It is not a guarantee of any specific income, business, health or life result. Outcomes depend on your own effort, situation and consistency."}
+];
+
+const deck = document.getElementById("deck");
+for (const s of S){
+  const el = document.createElement("section");
+  el.className = "slide" + (s.t==="title"?" title-slide":"") + (s.t==="cta"?" cta-slide":"");
+  let html = "";
+  if (s.kicker) html += `<div class="kicker">${s.kicker}</div>`;
+  if (s.title) html += `<h1>${s.title}</h1>`;
+  if (s.h2) html += `<h2>${s.h2}</h2>`;
+  if (s.sub) html += `<p class="sub">${s.sub}</p>`;
+  if (s.p) html += `<p>${s.p}</p>`;
+  if (s.six) html += `<div class="six"><span></span><span></span><span></span><span></span><span></span><span></span></div>`;
+  if (s.bullets){ html += "<ul>"; for (const b of s.bullets) html += `<li>${b}</li>`; html += "</ul>"; }
+  if (s.disclaimer) html += `<div class="disclaimer">${s.disclaimer}</div>`;
+  html += `<div class="horizon"></div>`;
+  el.innerHTML = html;
+  deck.appendChild(el);
+}
+</script>
+</body>
+</html>
