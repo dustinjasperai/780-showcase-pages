@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Your Next Chapter — Second Harvest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eceae2;      /* brand dominant cream (#eceae2, 13 uses) */
+    --panel:#f6f4ee;   /* lighter tint of the cream ground */
+    --ink:#250e09;     /* brand dark ember (#250e09) */
+    --rule:#6f6e6b;    /* brand muted warm gray */
+    --accent:#250e09;  /* single accent: brand dark ember */
+    --mut:#5c524c;
+    --serif:"Newsreader",Georgia,serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--serif)}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--panel);border:1px solid rgba(37,14,9,.12);border-radius:14px;
+    padding:54px 54px;margin:0 0 22px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:attr(data-n);position:absolute;top:20px;right:26px;font-family:var(--mono);
+    font-size:12px;letter-spacing:.12em;color:var(--rule)}
+  .k{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:20px}
+  h1{font-size:60px;line-height:1.02;font-weight:500;letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-size:40px;line-height:1.08;font-weight:500;letter-spacing:-.01em;margin-bottom:18px}
+  .b{font-size:22px;line-height:1.5;color:var(--mut);max-width:40ch;font-weight:300}
+  .b.big{font-size:27px;color:var(--ink)}
+  ul{list-style:none;margin-top:10px;max-width:46ch}
+  li{font-size:21px;line-height:1.45;padding:14px 0 14px 30px;border-bottom:1px solid rgba(37,14,9,.1);
+    position:relative;font-weight:300}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:23px;width:12px;height:12px;border:2px solid var(--accent);
+    border-radius:50%}
+  .q{font-size:34px;line-height:1.25;font-weight:400;font-style:italic;max-width:30ch}
+  .q .src{display:block;font-style:normal;font-family:var(--mono);font-size:13px;letter-spacing:.1em;
+    color:var(--rule);margin-top:24px;text-transform:uppercase}
+  .title h1{font-size:72px}
+  .title .meta{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-top:34px}
+  .part{background:var(--ink);color:var(--bg)}
+  .part .k{color:var(--bg);opacity:.7}
+  .part h2{color:var(--bg);font-size:46px}
+  .part .b{color:rgba(236,234,226,.78)}
+  .cta{background:var(--ink);color:var(--bg);text-align:left}
+  .cta .k{color:var(--bg);opacity:.7}
+  .cta h2{color:var(--bg)}
+  .cta .b{color:rgba(236,234,226,.82)}
+  .cta .step{font-family:var(--mono);font-size:19px;letter-spacing:.04em;margin-top:24px;color:var(--bg)}
+  .disc{font-size:13px;line-height:1.5;color:rgba(236,234,226,.55);margin-top:30px;max-width:60ch;font-weight:300}
+  @media(max-width:640px){.slide{padding:34px 26px;min-height:340px}h1{font-size:40px}.title h1{font-size:46px}h2{font-size:30px}.q{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', k:"A live session with Richard Banfield", h:"Design Your Next Chapter",
+    b:"Running small experiments to find your second act, instead of betting everything on one dramatic leap.",
+    meta:"Second Harvest"},
+
+  {t:'who', k:"Who this is for", h:"You won the first game.",
+    b:"Rich resume, real wins, the title you chased. And a quiet restlessness the scoreboard can no longer answer."},
+
+  {t:'hook', k:"The honest part", h:"The problem is not that you need a new goal.",
+    b:"It is that you are standing at the edge trying to leap, when the work is to prototype."},
+
+  {t:'part', cls:'part', k:"Part One", h:"The trap of the one big leap",
+    b:"Why accomplished people freeze at exactly the moment they most want to move."},
+
+  {t:'idea', k:"Why we stall", h:"Three assumptions keep you stuck",
+    list:["Money: that any change means losing everything you built.",
+          "Identity: that you are the title, so leaving it erases you.",
+          "Time: that it is too late to start something that matters."]},
+
+  {t:'idea', k:"The real cost", h:"Waiting feels safe. It is not.",
+    b:"Another year of doing the thing that stopped fitting is the most expensive choice on the table, and the only one nobody puts a number on."},
+
+  {t:'part', cls:'part', k:"Part Two", h:"A method, not a leap",
+    b:"Three principles that turn a vague itch into a calm, repeatable practice."},
+
+  {t:'idea', k:"Principle one", h:"Pause",
+    b:"Step away from the noise and the endless loop of doing. You cannot hear a new direction over the old momentum."},
+
+  {t:'idea', k:"Principle two", h:"Connect",
+    b:"With yourself, with others, and with the natural world. Direction is found in conversation and in quiet, not on a whiteboard alone."},
+
+  {t:'idea', k:"Principle three", h:"Reimagine",
+    b:"Craft the next chapter with curiosity and care. The goal is not a dramatic reinvention. It is clarity, steadiness, and a grounded sense of direction."},
+
+  {t:'part', cls:'part', k:"Part Three", h:"Design your life like a product",
+    b:"The same toolbox used to build great products, turned on the story arc of a life."},
+
+  {t:'list', k:"The experiment loop", h:"You do not decide your next chapter. You test it.",
+    list:["Map the assumptions you are quietly treating as facts.",
+          "Turn one into a small, honest hypothesis.",
+          "Run a cheap, reversible experiment this month.",
+          "Keep what gives energy, kill what does not.",
+          "Prototype the next chapter before you commit to it."]},
+
+  {t:'quote', q:"Vision without action is merely a dream. Action without vision just passes the time.",
+    src:"A line we open the room with"},
+
+  {t:'idea', k:"The reset", h:"Analog on purpose",
+    b:"No screens, handwritten notes, slow meals. The experiments are small, but the space to see them has to be real."},
+
+  {t:'idea', k:"What you leave with", h:"Not a five-year plan. A next step.",
+    b:"One assumption named, one experiment running, and a grounded sense of where the second act actually wants to go."},
+
+  {t:'why', k:"Why listen to me", h:"Richard Banfield",
+    b:"Co-founder and CEO of Fresh Tilled Soil, a design firm that shipped work for more than 700 companies. Author of Design Sprint, Design Leadership, and Product Leadership.",
+    list:["Two decades helping teams prototype their way to better products.",
+          "After losing my wife and closing a business, I ran the same method on my own life.",
+          "Second Harvest is where I teach it now, as a student alongside you."]},
+
+  {t:'idea', k:"The room", h:"A classroom where everyone is the student",
+    b:"No gurus, no masters. Just curious people navigating life after the first season, in small circles and on the retreats, in good company."},
+
+  {t:'cta', cls:'cta', k:"Your next step", h:"Start the conversation",
+    b:"If any of this landed, the next move is a short call to see whether a Second Harvest circle or retreat fits where you are.",
+    step:"Book a call at secondharvest.co",
+    disc:"No income, role, outcome, or result is guaranteed. Results vary and depend on your own circumstances, choices, and effort. This session is educational and reflective in nature, not financial, legal, or medical advice."}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide '+(s.cls||'');
+  d.setAttribute('data-n', String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0'));
+  let h='';
+  if(s.k) h+='<div class="k">'+s.k+'</div>';
+  if(s.t==='title'){
+    h+='<h1>'+s.h+'</h1><div class="b big">'+s.b+'</div><div class="meta">'+s.meta+'</div>';
+  } else if(s.t==='quote'){
+    h+='<div class="q">'+s.q+'<span class="src">'+s.src+'</span></div>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h+'</h2><div class="b">'+s.b+'</div><div class="step">'+s.step+'</div><div class="disc">'+s.disc+'</div>';
+  } else {
+    h+='<h2>'+s.h+'</h2>';
+    if(s.b) h+='<div class="b">'+s.b+'</div>';
+  }
+  if(s.list){ let u='<ul>'; s.list.forEach(x=>u+='<li>'+x+'</li>'); u+='</ul>'; h+=u; }
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
