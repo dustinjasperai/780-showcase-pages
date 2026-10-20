@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Success Gap — a masterclass with Ruchi Parekh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F9F8F4;        /* her warm off-white ground (brand.json dominant) */
+    --panel:#FFFFFF;     /* clean cards on cream */
+    --ink:#1b1b1b;
+    --muted:#414141;     /* her dark neutral */
+    --rule:#dcd9cf;
+    --accent:#364C85;    /* her brand navy (brand.json, 24 uses) */
+    --accent-soft:#eaedf4;
+    --serif:"DM Serif Display",Georgia,serif;
+    --sans:"Geist",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;animation:fade .45s ease}
+  .slide.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .k{font-family:var(--sans);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;
+    margin:0 0 1.2rem;color:var(--ink)}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.08;
+    margin:0 0 1.1rem;color:var(--ink)}
+  p.sub{font-size:clamp(1.05rem,1.7vw,1.4rem);line-height:1.5;color:var(--muted);max-width:40ch;margin:.2rem 0}
+  .rule{width:64px;height:3px;background:var(--accent);margin:0 0 1.8rem;border-radius:2px}
+  ul{list-style:none;padding:0;margin:1.2rem 0 0;max-width:46ch}
+  li{position:relative;padding-left:1.6rem;margin:.7rem 0;font-size:clamp(1rem,1.5vw,1.25rem);
+    line-height:1.45;color:var(--muted)}
+  li:before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;background:var(--accent);
+    border-radius:50%}
+  .big{font-family:var(--serif);font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.1;color:var(--ink);max-width:22ch}
+  .accent{color:var(--accent)}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:2.2rem 2.4rem;
+    max-width:52ch;box-shadow:0 18px 40px -28px rgba(54,76,133,.4)}
+  .who{display:flex;gap:1.5rem;flex-wrap:wrap}
+  .who .card{flex:1 1 240px}
+  .step{font-family:var(--serif);font-size:1.3rem;color:var(--accent)}
+  .cred{font-size:1rem;color:var(--muted);line-height:1.6;max-width:50ch}
+  .disc{margin-top:2rem;font-size:.8rem;color:#8a877e;max-width:52ch;line-height:1.5}
+  .cta-btn{display:inline-block;margin-top:1.6rem;background:var(--accent);color:#fff;
+    font-family:var(--sans);font-weight:600;padding:.9rem 1.6rem;border-radius:10px;font-size:1.05rem}
+  .nav{position:absolute;bottom:2.2vh;right:3vw;display:flex;align-items:center;gap:1rem;
+    font-family:var(--sans);font-size:.85rem;color:var(--muted);z-index:5}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--muted);
+    width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.1rem}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{font-variant-numeric:tabular-nums}
+  .brandline{position:absolute;top:2.4vh;left:9vw;font-family:var(--sans);font-size:.78rem;
+    letter-spacing:.14em;text-transform:uppercase;color:#a7a498}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">1</span></span>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
+<script>
+const S = [
+  {t:'title', k:'A masterclass with Ruchi Parekh', h:'The Success Gap', sub:'Why accomplished people still feel like impostors, and the first move that closes the gap.'},
+  {t:'promise', k:'What you will leave with', h:'You will name the gap, and take one real step.', list:['A clear picture of why more achievement has not fixed the feeling','The pattern underneath imposter syndrome and quiet burnout','One decision you can act on this week']},
+  {t:'who', k:'Who this is for', h:'You look like you have it all together.', cards:[{s:'You are',b:'High-functioning on the outside, exhausted underneath.'},{s:'You have',b:'Hit the goals, and the fulfilment never arrived.'},{s:'You keep',b:'Overthinking decisions you used to make in your sleep.'}]},
+  {t:'trap', k:'The trap', h:'A career people admire. A life you are not sure you chose.', sub:'If any of that sounds familiar, you are not broken and you are not alone. You are in the gap.'},
+  {t:'reframe', k:'The hard truth', big:'The gap does not close by <span class="accent">achieving more.</span> More is what opened it.'},
+  {t:'section', k:'Part one', h:'Why success widens the gap', sub:'Every win raises the bar and quiets the question. The question does not go away. It just waits.'},
+  {t:'list', k:'Part one', h:'What is actually happening', list:['Imposter syndrome no promotion can fix, because it was never about competence','Burnout dressed up as high performance, so it looks like dedication','A built life that no longer fits the person you have become']},
+  {t:'list', k:'Part one', h:'Why push-harder fails', list:['It treats a meaning problem as an effort problem','It rewards the exact pattern that created the exhaustion','It keeps you solving alone the one thing you cannot see alone']},
+  {t:'section', k:'Part two', h:'The way through: Clarity, Partnership, Momentum', sub:'This is the arc I use with clients. It is not advice. It is a way to see and to move.'},
+  {t:'step', k:'Part two . one', h:'Clarity', sub:'See yourself, your patterns, and your possibilities more clearly than you can alone. Name the gap precisely instead of carrying it vaguely.'},
+  {t:'step', k:'Part two . two', h:'Partnership', sub:'Stop solving it by yourself. The point is not more willpower. It is an honest mirror and a thinking partner who does not flinch.'},
+  {t:'step', k:'Part two . three', h:'Momentum', sub:'Turn insight into one concrete decision, action, or examined belief. Small, real, this week. Momentum is built, not summoned.'},
+  {t:'list', k:'Part two', h:'The pattern work underneath', list:['We work at the level of thinking patterns and beliefs, not surface tactics','We separate the goals you actually chose from the ones you inherited','We make room for the version of success that feels like yours']},
+  {t:'section', k:'Part three', h:'The same life, finally fitting', sub:'Not a different life bolted on. The one you already built, finally fitting the person you have become.'},
+  {t:'list', k:'Part three', h:'What clients describe', list:['Decisions get lighter, because the real question has a name','Confidence that holds under pressure, not just on the good days','A clear sense of what matters, and permission to act on it']},
+  {t:'why', k:'Why me', h:'I know the gap from the inside.', cred:'I am an executive, career and life coach in Singapore, a former lawyer, an ICF certified coach, an NLP practitioner and a keynote speaker. For over a decade I have coached senior professionals across four continents, including leaders at Google, JP Morgan, HSBC and DBS. When I sit across from someone who looks like they have it all together, I am not guessing.'},
+  {t:'recap', k:'The one idea', big:'A career people admire is not the finish line. <span class="accent">A life that fits you is.</span>'},
+  {t:'cta', k:'Your next step', h:'Close the gap, with a thinking partner.', sub:'If this landed, the next step is a conversation. Book a free call and we will see, together, where your gap actually is and what the first move could be.', btn:'Book a free call with Ruchi', disc:'This masterclass is educational. Coaching outcomes depend on your own effort and circumstances, and no specific result, income, or outcome is guaranteed. Results vary from person to person.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x||''}
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (i===0?' on':'');
+  let inner = '';
+  if(s.k) inner += `<div class="k">${esc(s.k)}</div>`;
+  if(s.t==='title'){ inner += `<h1>${esc(s.h)}</h1><div class="rule"></div><p class="sub">${esc(s.sub)}</p>`; }
+  else if(s.t==='reframe'||s.t==='recap'){ inner += `<div class="rule"></div><div class="big">${esc(s.big)}</div>`; }
+  else if(s.t==='who'){ inner += `<h2>${esc(s.h)}</h2><div class="rule"></div><div class="who">` + s.cards.map(c=>`<div class="card"><div class="step">${esc(c.s)}</div><p class="sub">${esc(c.b)}</p></div>`).join('') + `</div>`; }
+  else if(s.t==='why'){ inner += `<h2>${esc(s.h)}</h2><div class="rule"></div><p class="cred">${esc(s.cred)}</p>`; }
+  else if(s.t==='cta'){ inner += `<h2>${esc(s.h)}</h2><div class="rule"></div><p class="sub">${esc(s.sub)}</p><div class="cta-btn">${esc(s.btn)}</div><p class="disc">${esc(s.disc)}</p>`; }
+  else { inner += `<h2>${esc(s.h)}</h2><div class="rule"></div>`; if(s.sub) inner += `<p class="sub">${esc(s.sub)}</p>`; if(s.list) inner += `<ul>` + s.list.map(x=>`<li>${esc(x)}</li>`).join('') + `</ul>`; }
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+
+let cur = 0; const slides = [...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent = slides.length;
+function show(n){ cur = Math.max(0, Math.min(slides.length-1, n)); slides.forEach((s,i)=>s.classList.toggle('on', i===cur)); document.getElementById('cur').textContent = cur+1; }
+document.getElementById('next').onclick = ()=>show(cur+1);
+document.getElementById('prev').onclick = ()=>show(cur-1);
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'||e.key===' ') show(cur+1); if(e.key==='ArrowLeft') show(cur-1); });
+deck.addEventListener('click', e=>{ if(e.target.closest('.nav')) return; const x = e.clientX / window.innerWidth; show(x>0.5?cur+1:cur-1); });
+</script>
+</body>
+</html>
