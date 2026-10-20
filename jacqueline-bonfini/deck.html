@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leading From Alignment — Jacqueline Bonfini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f4;
+    --panel:#ece4d7;
+    --accent:#526b51;
+    --rule:#526b51;
+    --ink:#2b2b2b;
+    --dim:#6c6a63;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--dim);font-family:'Jost',system-ui,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(96vw,980px);aspect-ratio:16/10;background:var(--bg);
+    position:relative;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.35);border-radius:4px}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;
+    justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    font-weight:500;margin-bottom:1.1rem}
+  h1{font-family:'Playfair Display',serif;font-weight:600;line-height:1.04;
+    font-size:clamp(2rem,5.4vw,3.6rem);letter-spacing:-.01em}
+  h2{font-family:'Playfair Display',serif;font-weight:600;line-height:1.08;
+    font-size:clamp(1.5rem,3.8vw,2.5rem)}
+  p{font-size:clamp(1rem,1.7vw,1.22rem);line-height:1.5;color:#3b3a35;max-width:40ch;margin-top:1rem}
+  p.lead{font-size:clamp(1.1rem,2vw,1.4rem);max-width:34ch}
+  .rule{width:64px;height:3px;background:var(--rule);margin:1.4rem 0}
+  ul{margin:1.2rem 0 0 0;max-width:42ch}
+  li{list-style:none;font-size:clamp(1rem,1.7vw,1.2rem);line-height:1.4;padding:.5rem 0 .5rem 1.4rem;
+    position:relative;border-bottom:1px solid #ddd4c6;color:#3b3a35}
+  li:before{content:'';position:absolute;left:0;top:1rem;width:7px;height:7px;background:var(--accent);
+    border-radius:50%}
+  li b{font-family:'Playfair Display',serif;font-weight:600;color:var(--ink)}
+  .part{font-family:'Playfair Display',serif;font-size:clamp(3rem,9vw,6rem);color:var(--accent);
+    opacity:.9;font-weight:600}
+  .panel{background:var(--panel);border-radius:4px;padding:6% 7%;display:flex;flex-direction:column;
+    justify-content:center;position:absolute;inset:0;margin:4%}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--dim)}
+  .big{font-family:'Playfair Display',serif;font-weight:500;font-style:italic;
+    font-size:clamp(1.6rem,4.2vw,2.8rem);line-height:1.12;max-width:22ch}
+  .foot{position:absolute;left:8%;bottom:5%;font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--dim)}
+  .disc{font-size:.8rem;color:var(--dim);max-width:52ch;margin-top:1.4rem;line-height:1.4}
+  #nav{position:fixed;bottom:16px;right:20px;color:#fff;font-size:.8rem;letter-spacing:.1em;
+    opacity:.8;font-family:'Jost'}
+  .cta-line{font-family:'Playfair Display',serif;font-weight:500;color:var(--accent);
+    font-size:clamp(1.1rem,2.2vw,1.5rem);margin-top:1.2rem}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title', html:`<div class="kick">A live masterclass with Jacqueline Bonfini</div>
+   <h1>Leading From Alignment</h1>
+   <div class="rule"></div>
+   <p class="lead">How fashion and retail leaders stop performing a version of themselves that no longer fits.</p>
+   <div class="foot">Bonfini Coaching</div>`},
+
+ {t:'promise', html:`<div class="kick">What you will leave with</div>
+   <h2>Four shifts, one honest hour.</h2>
+   <p>You will walk out able to name what is actually driving your decisions, picture the version of success that is yours, and leave with a plan you can use on Monday. Not a template. Yours.</p>`},
+
+ {t:'who', html:`<div class="kick">Who this is for</div>
+   <h2>You have hit the marks. And felt almost nothing.</h2>
+   <ul>
+     <li><b>The Unfulfilled Achiever</b> successful on paper, hollow underneath.</li>
+     <li><b>The Architect of What is Next</b> rebuilding a career on your own terms.</li>
+     <li><b>The Modern Parent</b> a leader whose identity used to be only the job.</li>
+   </ul>`},
+
+ {t:'trap', html:`<div class="kick">The trap</div>
+   <h2>The industry rewards the exact behavior that is costing you.</h2>
+   <p>Say yes faster. Hold more. Never drop the ball. It gets you promoted, and it quietly turns you into someone you do not recognise at 6pm.</p>`},
+
+ {t:'reframe', html:`<div class="panel">
+     <div class="big">What fashion calls <span class="strike">resilience</span>, I call over-functioning.</div>
+     <p>Resilience has a floor. Over-functioning does not. It just keeps asking for more of you until there is nothing left to perform with.</p>
+   </div>`},
+
+ {t:'part', html:`<div class="part">One</div><h2>The core problem</h2>
+   <p>It is not that you lack drive. It is that the drive is pointed at a version of you that stopped fitting a while ago.</p>`},
+
+ {t:'problem', html:`<div class="kick">The core problem</div>
+   <h2>You are performing a role you have outgrown.</h2>
+   <p>The role was real once. You earned it. But the person who earned it has changed, and the gap between who you are and how you lead is where the exhaustion lives.</p>`},
+
+ {t:'problem2', html:`<div class="kick">The pattern underneath</div>
+   <h2>You are not indecisive. You are permission shopping.</h2>
+   <p>Waiting for a boss, a peer, a title, a tidier moment to allow the change you already know you want. The permission you are shopping for is yours to give.</p>`},
+
+ {t:'part', html:`<div class="part">Two</div><h2>The method</h2>
+   <p>The Aligned Leader moves through four pillars, in order. Each one answers a question the last one opens.</p>`},
+
+ {t:'pillar', html:`<div class="kick">Pillar one</div>
+   <h2>Energy</h2>
+   <p>Surface what is actually driving your decisions, especially under pressure. We read it directly with the Energy Leadership Index, so it stops being a feeling and becomes information.</p>`},
+
+ {t:'pillar', html:`<div class="kick">Pillar two</div>
+   <h2>Vision</h2>
+   <p>Get honest about what you actually want. Not what looks good on paper. The real version, led from who you actually are.</p>`},
+
+ {t:'pillar', html:`<div class="kick">Pillar three</div>
+   <h2>Permission</h2>
+   <p>Surface the beliefs that have quietly been running your decisions and challenge them directly. This is where the permission shopping ends.</p>`},
+
+ {t:'pillar', html:`<div class="kick">Pillar four</div>
+   <h2>Strategy</h2>
+   <p>Build a specific, actionable roadmap around your real life, not a template. Clarity without a next step is just a feeling.</p>`},
+
+ {t:'method', html:`<div class="kick">The four pillars together</div>
+   <ul>
+     <li><b>Energy</b> what is really driving you</li>
+     <li><b>Vision</b> the version that is actually yours</li>
+     <li><b>Permission</b> the beliefs you let go of</li>
+     <li><b>Strategy</b> the plan you leave with</li>
+   </ul>`},
+
+ {t:'part', html:`<div class="part">Three</div><h2>On the other side</h2>`},
+
+ {t:'looks', html:`<div class="kick">What alignment looks like</div>
+   <h2>Same ambition. Different engine.</h2>
+   <p>You still perform at a high level. The difference is that it is coming from a decision you own, not a role you are afraid to drop. The work gets lighter because it finally fits.</p>`},
+
+ {t:'whyme', html:`<div class="kick">Why me</div>
+   <h2>I ran the life you are in.</h2>
+   <p>Twenty years as an executive in luxury fashion and retail, including Valentino and Saint Laurent. I know the version of yourself the industry rewards, because I performed it too. I am an iPEC Certified Professional Coach and an Energy Leadership Index Master Practitioner.</p>`},
+
+ {t:'decision', html:`<div class="panel">
+     <div class="big">The alignment is not a someday. It is a decision you can start this week.</div>
+   </div>`},
+
+ {t:'recap', html:`<div class="kick">The one line</div>
+   <h2>Stop performing. Start leading from who you actually are.</h2>
+   <p>Energy, Vision, Permission, Strategy. Four shifts, built around your real life.</p>`},
+
+ {t:'cta', html:`<div class="kick">Your next step</div>
+   <h1>Book your discovery call.</h1>
+   <div class="rule"></div>
+   <div class="cta-line">bonfinicoaching.com</div>
+   <p>If The Aligned Leader sounds like the work you are ready for, let us talk through where you are and whether it fits.</p>
+   <p class="disc">This masterclass is educational. No specific outcome or result is guaranteed. Results vary by person and circumstance.</p>
+   <div class="foot">Bonfini Coaching</div>`}
+];
+let i=0;const stage=document.getElementById('stage'),nav=document.getElementById('nav');
+function render(){stage.innerHTML='';const s=S[i];const d=document.createElement('div');
+  d.className='slide on';d.innerHTML=s.html;stage.appendChild(d);
+  nav.textContent=(i+1)+' / '+S.length;}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);});
+stage.addEventListener('click',e=>{go(e.clientX<window.innerWidth/2?-1:1);});
+render();
+</script>
+</body>
+</html>
