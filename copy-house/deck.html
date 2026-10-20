@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CopyThinking - Masterclass Copy House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f9f9f2;        /* brand cream ground (brand.json, 40 uses) */
+    --panel:#ffffff;
+    --rule:#e6e1d4;      /* low-chroma tint of the cream ground */
+    --ink:#212121;       /* brand dominant ink (brand.json, 91 uses) */
+    --muted:#6b675f;
+    --accent:#9a5f3e;    /* brand sienna accent (brand.json ranked_colors) */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{width:min(1120px,94vw);height:min(630px,92vh);position:relative}
+  .slide{
+    position:absolute;inset:0;
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:14px;
+    padding:64px 72px;
+    display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 24px 60px -32px rgba(33,33,33,.28);
+  }
+  .slide.on{display:flex}
+  .kick{
+    font-size:13px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:22px;
+  }
+  h1{font-family:'Bodoni Moda',Georgia,serif;font-weight:400;
+     font-size:76px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:'Bodoni Moda',Georgia,serif;font-weight:400;
+     font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  .sub{font-size:21px;color:var(--muted);margin-top:20px;max-width:40ch;line-height:1.4}
+  .body{font-size:25px;line-height:1.5;margin-top:8px;max-width:30ch}
+  .foot{position:absolute;left:72px;bottom:46px;font-size:14px;color:var(--muted);
+        letter-spacing:.02em}
+  .mark{display:inline-block;width:58px;height:5px;background:var(--accent);
+        border-radius:3px;margin-bottom:30px}
+  ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:16px}
+  li{font-size:24px;line-height:1.3;padding-left:30px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:13px;width:14px;height:3px;
+             background:var(--accent);border-radius:2px}
+  .pill{display:flex;align-items:baseline;gap:26px}
+  .pill .n{font-family:'Bodoni Moda',Georgia,serif;font-size:72px;color:var(--accent);
+           line-height:1;min-width:92px}
+  .disc{margin-top:30px;font-size:13.5px;color:var(--muted);max-width:60ch;line-height:1.5;
+        border-top:1px solid var(--rule);padding-top:16px}
+  .count{position:absolute;right:72px;bottom:46px;font-size:13px;color:var(--muted);
+         font-variant-numeric:tabular-nums}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+       display:flex;gap:10px;z-index:5}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);
+    width:40px;height:34px;border-radius:8px;cursor:pointer;font-size:16px}
+  @media (max-width:640px){
+    .slide{padding:34px 30px}h1{font-size:42px}h2{font-size:30px}
+    .body{font-size:19px}.pill .n{font-size:46px;min-width:60px}
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev" aria-label="précédent">&#8249;</button><button id="next" aria-label="suivant">&#8250;</button></div>
+<script>
+const S=[
+  {t:'title',h:'CopyThinking',sub:'Pourquoi le copywriting se gagne sur l’angle, pas sur les mots.',foot:'Une masterclass en direct avec Charles Baras · Copy House'},
+  {t:'who',k:'Pour qui',h:'À qui s’adresse cette session',list:['Copywriters qui veulent passer un cap','Marketeurs qui écrivent leurs propres tunnels','Coachs et infopreneurs qui vendent par l’écrit']},
+  {t:'point',k:'Le piège',h:'Vous réécrivez, et ça ne convertit toujours pas',b:'Vous changez les mots, le ton, l’accroche. Dix versions plus tard, le texte ne vend pas davantage.'},
+  {t:'point',k:'Le vrai problème',h:'Le problème n’a jamais été les mots',b:'C’était l’angle. Celui que vous avez choisi, souvent sans y penser, avant d’écrire la première ligne.'},
+  {t:'part',k:'Partie 1',h:'Pourquoi les mots ne sauvent pas un mauvais angle'},
+  {t:'point',h:'Un bon texte, c’est 80% de décisions prises avant d’écrire',b:'Quel angle. Quelle promesse. Pour qui. Dans quel ordre. Le reste, c’est de l’exécution.'},
+  {t:'point',h:'La plupart des copywriters travaillent à l’envers',b:'Ils écrivent d’abord, puis cherchent à sauver le texte. CopyThinking inverse l’ordre : on décide, puis on écrit.'},
+  {t:'part',k:'Partie 2',h:'CopyThinking : la méthode',sub:'Quatre décisions, toujours dans cet ordre.'},
+  {t:'pillar',n:'01',h:'L’angle',b:'L’entrée unique dans la tête du lecteur. Avant la promesse, avant la preuve. Le choix qui commande tout le reste.'},
+  {t:'pillar',n:'02',h:'La promesse',b:'Rule of One : une seule grande promesse par texte. Dès qu’on en ajoute une deuxième, on dilue la première.'},
+  {t:'pillar',n:'03',h:'La preuve',b:'Ce qui rend la promesse croyable. Le neuromarketing au service d’une seule chose : lever le doute du lecteur.'},
+  {t:'pillar',n:'04',h:'L’ordre des arguments',b:'Le bon argument au mauvais moment ne convertit pas. L’ordre, c’est la moitié de la vente.'},
+  {t:'point',k:'En direct',h:'De la page blanche à la VSL',b:'On prend une offre réelle et on la fait passer par les quatre décisions, jusqu’au squelette d’une VSL qui tient debout.'},
+  {t:'part',k:'Partie 3',h:'Pourquoi la méthode tient dans le temps'},
+  {t:'point',h:'Une méthode ne colle pas toute seule',b:'On ne devient pas bon en copywriting seul, en regardant des vidéos. On le devient en écrivant, corrigé ligne par ligne.'},
+  {t:'point',h:'Le groupe et la relecture Copy Chief',b:'Un coaching par jour, vos textes relus ligne par ligne par des Copy Chiefs en activité. C’est là que l’angle devient un réflexe.'},
+  {t:'whyme',k:'Qui vous parle',h:'Charles Baras',b:'Ancien copy chief chez Agora France. Des années à décider des angles sur des promotions à fort enjeu, puis à former des copywriters que plus de 500 entreprises ont recrutés.'},
+  {t:'recap',k:'Récapitulatif',h:'Ce que vous repartez savoir faire',list:['Choisir un angle avant d’écrire','Tenir une seule promesse','Ordonner vos arguments pour convertir','Construire une VSL de A à Z']},
+  {t:'cta',k:'La suite',h:'Apprendre CopyThinking en groupe',b:'Si vous voulez travailler la méthode en groupe, avec des relectures ligne par ligne, la prochaine étape est le mastermind Copy House. Réservez un bilan offert pour voir si c’est fait pour vous.',disc:'Contenu éducatif. No income or result is guaranteed : aucun revenu ni résultat n’est garanti. Les résultats varient selon votre travail et votre marché.'}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function slideHTML(s,idx){
+  let inner='';
+  const kick=s.k?`<div class="kick">${esc(s.k)}</div>`:'';
+  if(s.t==='title'){
+    inner=`<div class="mark"></div><h1>${esc(s.h)}</h1>`+(s.sub?`<p class="sub">${esc(s.sub)}</p>`:'')+(s.foot?`<div class="foot">${esc(s.foot)}</div>`:'');
+  }else if(s.t==='part'){
+    inner=`${kick}<div class="mark"></div><h2>${esc(s.h)}</h2>`+(s.sub?`<p class="sub">${esc(s.sub)}</p>`:'');
+  }else if(s.t==='pillar'){
+    inner=`${kick}<div class="pill"><div class="n">${esc(s.n)}</div><div><h2>${esc(s.h)}</h2><p class="body">${esc(s.b)}</p></div></div>`;
+  }else if(s.t==='who'||s.t==='recap'){
+    inner=`${kick}<h2>${esc(s.h)}</h2><ul>${s.list.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  }else if(s.t==='whyme'){
+    inner=`${kick}<h2>${esc(s.h)}</h2><p class="body">${esc(s.b)}</p>`;
+  }else if(s.t==='cta'){
+    inner=`${kick}<h2>${esc(s.h)}</h2><p class="body">${esc(s.b)}</p><div class="disc">${esc(s.disc)}</div>`;
+  }else{
+    inner=`${kick}<h2>${esc(s.h)}</h2>`+(s.b?`<p class="body">${esc(s.b)}</p>`:'');
+  }
+  return `<section class="slide" data-i="${idx}">${inner}<div class="count">${idx+1} / ${S.length}</div></section>`;
+}
+stage.innerHTML=S.map(slideHTML).join('');
+const slides=[...document.querySelectorAll('.slide')];
+function show(n){i=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,x)=>el.classList.toggle('on',x===i))}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1)});
+stage.addEventListener('click',e=>{if(!e.target.closest('.nav'))show(i+1)});
+show(0);
+</script>
+</body>
+</html>
