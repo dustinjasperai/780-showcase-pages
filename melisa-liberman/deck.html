@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Predictable Pipeline — Melisa Liberman</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d3d63;      /* her dominant navy */
+    --panel:#0a3252;   /* deeper navy panel */
+    --rule:#2a5c86;    /* hairline */
+    --accent:#f3c685;  /* her warm gold */
+    --ink:#eef3f8;     /* off-white text */
+    --dim:#aec4d8;     /* muted */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,sans-serif;line-height:1.55}
+  .deck{width:100%}
+  section.slide{
+    min-height:100vh;width:100%;padding:8vh 9vw;display:flex;flex-direction:column;
+    justify-content:center;border-bottom:1px solid var(--rule);position:relative;
+  }
+  .kicker{font-size:.82rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;font-weight:600}
+  h1{font-family:"Spectral",Georgia,serif;font-weight:700;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.12}
+  p.lead{font-size:clamp(1.05rem,1.8vw,1.4rem);color:var(--dim);margin-top:1.6rem;max-width:40ch}
+  p.body{font-size:clamp(1rem,1.5vw,1.2rem);margin-top:1.2rem;max-width:46ch;color:var(--ink)}
+  .num{font-family:"Spectral",serif;font-size:clamp(3rem,8vw,6rem);color:var(--accent);font-weight:700;line-height:1}
+  ul.pts{margin-top:1.8rem;list-style:none;max-width:48ch}
+  ul.pts li{padding:.55rem 0 .55rem 1.6rem;position:relative;color:var(--dim);font-size:clamp(1rem,1.5vw,1.2rem)}
+  ul.pts li::before{content:"";position:absolute;left:0;top:1.15rem;width:.55rem;height:.55rem;background:var(--accent);border-radius:1px}
+  .tag{display:inline-block;margin-bottom:1rem;color:var(--accent);font-family:"Spectral",serif;font-size:1.1rem;font-weight:600}
+  .step{display:flex;gap:1.6rem;align-items:flex-start}
+  .step .num{min-width:2ch}
+  .disc{margin-top:2rem;font-size:.82rem;color:var(--dim);max-width:52ch;line-height:1.5}
+  .cta-note{margin-top:1.4rem;font-size:1.15rem;color:var(--accent);font-family:"Spectral",serif}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:2rem 2.2rem;max-width:52ch;margin-top:1.8rem}
+  .foot{position:absolute;bottom:3vh;left:9vw;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title',kicker:'A live masterclass for independent consultants',h:'The Predictable Pipeline',lead:'How to build demand you can forecast, so your consulting business stops living on referral luck.'},
+  {t:'forwho',kicker:'Who this is for',h:'The consultant who is great at the work.',body:'You deliver brilliantly. Clients love you. And yet the pipeline swings from booked-solid to a quiet quarter that arrives with no warning. This hour is for you.'},
+  {t:'trap',kicker:'The trap',h:'Your demand is borrowed, not built.',body:'Referrals and word of mouth got you here. But they are other people deciding when you get work. That is not a pipeline. That is weather.'},
+  {t:'reframe',kicker:'The reframe',h:'A thin quarter is not a verdict on your worth.',body:'It is a gap in a system nobody taught you to run. Being an excellent consultant was never the missing piece. Demand was.'},
+  {t:'part',tag:'Part One',h:'Why demand feels random.'},
+  {t:'point',kicker:'Feast or famine',h:'The swing has a cause.',body:'When you are busy you stop doing business development. When the work ends you scramble. The famine is baked into the feast. The cycle repeats because nothing fills the gap while you are heads-down delivering.'},
+  {t:'point',kicker:'The hidden cost',h:'A thin pipeline quietly sets your price.',body:'When you are not sure where the next client comes from, you discount, you over-scope, and you say yes to work you should decline. Demand and pricing power are the same problem.'},
+  {t:'part',tag:'Part Two',h:'The IC-Grow Method.'},
+  {t:'step',n:'1',kicker:'Diagnose',h:'Find the real constraint.',body:'Not the symptom. The one bottleneck actually holding growth back, before you change anything else.'},
+  {t:'step',n:'2',kicker:'Design',h:'Build a model that fits your life.',body:'An intentional business model aligned to your revenue goal and the way you actually want to work, not the default you fell into.'},
+  {t:'step',n:'3',kicker:'Build',h:'Install a repeatable lead system.',body:'Map the contact-to-client journey, set the pipeline math, and make lead generation something that runs whether or not you feel like it that week.'},
+  {t:'step',n:'4',kicker:'Convert',h:'Win work at higher value.',body:'Refine the offer and the conversation so the right clients say yes at the right price, without discounting to close.'},
+  {t:'step',n:'5',kicker:'Strengthen',h:'Decide like an owner.',body:'Shift from delivery practitioner to business owner. The identity is what makes the system stick when you get busy again.'},
+  {t:'step',n:'6',kicker:'Install',h:'Keep the rhythm.',body:'Sustainable operating routines so the business does not rely on willpower or a good mood. The system outlasts the motivation.'},
+  {t:'part',tag:'Part Three',h:'A quarter you can predict.'},
+  {t:'math',kicker:'The BD math',h:'Start from the number, work backward.',body:'Take your revenue goal for the quarter. Work back to the clients, then the conversations, then the conversations you need to start this week. The pipeline stops being a mystery and becomes arithmetic.'},
+  {t:'example',kicker:'What changes',h:'From winging it to forecasting it.',body:'Instead of hoping a referral lands, you know how many conversations are in motion, which stage each one is in, and what the quarter will likely close. You plan your life around a number you trust.'},
+  {t:'why',kicker:'Why I teach this',h:'I built my own business the hard way first.',body:'I spent my early independent years taking the work that came to me, overworking, and one day discovering I had badly undercharged. I decided to get as good at running the business as I was at the work. This method is what I built, and what I now use with consultants every day.'},
+  {t:'recap',kicker:'The one idea',h:'Demand is engineered, not awaited.',body:'Diagnose the constraint, design the model, build the system, convert at value, strengthen the owner, install the rhythm. That is a pipeline you own.'},
+  {t:'cta',kicker:'Your next step',h:'Build your predictable pipeline.',body:'If you want the full method applied to your business, the next step is to join the Lead Gen Sprint or book an exploratory coaching call with me.',cta:'Join the Lead Gen Sprint, or book an exploratory call at melisaliberman.com',disc:'This masterclass is educational. No specific result or income is guaranteed. Results vary based on your business, effort, and market.'}
+];
+const deck=document.getElementById('deck');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+for(const s of S){
+  const el=document.createElement('section');
+  el.className='slide';
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${esc(s.kicker)}</div>`;
+  if(s.tag) h+=`<div class="tag">${esc(s.tag)}</div>`;
+  if(s.t==='step'){
+    h+=`<div class="step"><div class="num">${esc(s.n)}</div><div><h2>${esc(s.h)}</h2>`;
+    if(s.body) h+=`<p class="body">${esc(s.body)}</p>`;
+    h+=`</div></div>`;
+  } else if(s.t==='title'){
+    h+=`<h1>${esc(s.h)}</h1>`;
+    if(s.lead) h+=`<p class="lead">${esc(s.lead)}</p>`;
+  } else {
+    h+=`<h2>${esc(s.h)}</h2>`;
+    if(s.body) h+=`<p class="body">${esc(s.body)}</p>`;
+    if(s.lead) h+=`<p class="lead">${esc(s.lead)}</p>`;
+  }
+  if(s.cta) h+=`<div class="cta-note">${esc(s.cta)}</div>`;
+  if(s.disc) h+=`<div class="disc">${esc(s.disc)}</div>`;
+  h+=`<div class="foot">Melisa Liberman · Grow Your Independent Consulting Business</div>`;
+  el.innerHTML=h;
+  deck.appendChild(el);
+}
+</script>
+</body>
+</html>
