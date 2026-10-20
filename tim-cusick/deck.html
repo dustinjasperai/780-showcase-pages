@@ -1,122 +1,218 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Train Your Own Power Curve — BaseCamp</title>
+<title>The Data-Driven Rider — a BaseCamp masterclass with Tim Cusick</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#071a28; --panel:#0f2c42; --rule:#20455f; --accent:#90dfe2;
-    --ink:#eaf6f7; --muted:#9fc0cf;
+    --bg:#0b2033;        /* ground: deepened BaseCamp navy (#013150 / #1a3a53 family) */
+    --panel:#14314a;     /* their brand navy #1a3a53, one step up */
+    --rule:#3a5a74;      /* hairline from the #8098a8 steel family */
+    --accent:#90dfe2;    /* brand bright-aqua link color, verbatim from brand.json */
+    --ink:#eaf1f6;       /* headline on navy */
+    --body:#b9c7d2;      /* body, their pale-grey family */
+    --muted:#7f93a3;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif}
-  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
-  .slide{
-    background:linear-gradient(180deg,var(--panel),#0b2234);
-    border:1px solid var(--rule); border-radius:16px;
-    padding:52px 48px; margin:0 0 22px; min-height:420px;
-    display:flex; flex-direction:column; justify-content:center;
-    position:relative; overflow:hidden;
-  }
-  .curve{position:absolute;right:-40px;bottom:-30px;width:360px;height:220px;opacity:.5;pointer-events:none}
-  .kick{font-family:"Oswald";letter-spacing:.22em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
-  h1{font-family:"Oswald";font-weight:700;font-size:54px;line-height:1.02;letter-spacing:.01em}
-  h2{font-family:"Oswald";font-weight:600;font-size:38px;line-height:1.08}
-  .part{font-family:"Oswald";font-weight:700;font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
-  .promise{font-size:20px;color:var(--muted);margin-top:22px;max-width:36ch;line-height:1.5}
-  p.body{font-size:21px;line-height:1.55;color:var(--ink);margin-top:20px;max-width:46ch}
-  .big{font-family:"Oswald";font-weight:600;font-size:40px;line-height:1.12;max-width:24ch}
-  ul{margin-top:24px;list-style:none;display:grid;gap:14px;max-width:48ch}
-  li{position:relative;padding-left:30px;font-size:19px;line-height:1.45;color:var(--ink)}
-  li:before{content:"";position:absolute;left:0;top:10px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
-  .metric{font-family:"Oswald";color:var(--accent);font-weight:600}
-  .foot{position:absolute;left:48px;bottom:22px;font-family:"Oswald";letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:var(--muted)}
-  .disc{margin-top:26px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.5}
-  .cta-step{margin-top:22px;font-size:22px;color:var(--accent);font-family:"Oswald";font-weight:600}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--body);font-family:"Source Sans 3",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  #deck{max-width:1040px;margin:0 auto}
+  .slide{min-height:88vh;display:flex;flex-direction:column;justify-content:center;padding:7vh 6.2vw;border-bottom:1px solid var(--rule);position:relative}
+  .kicker{font-family:"Oswald",sans-serif;font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:"Oswald",sans-serif;font-weight:700;color:var(--ink);font-size:clamp(34px,5.6vw,66px);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:"Oswald",sans-serif;font-weight:600;color:var(--ink);font-size:clamp(26px,3.8vw,42px);line-height:1.08;margin-bottom:18px}
+  p.lead{font-size:clamp(17px,2vw,22px);max-width:42ch;margin-top:20px;color:var(--body)}
+  p.big{font-size:clamp(20px,2.6vw,30px);max-width:32ch;color:var(--ink);font-weight:500}
+  .sub{color:var(--muted);font-size:14px;margin-top:26px;font-family:"Oswald",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+  ul{list-style:none;margin-top:26px;max-width:48ch}
+  li{position:relative;padding-left:30px;margin-bottom:16px;font-size:clamp(16px,1.8vw,19px)}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:2px;background:var(--accent)}
+  .num{font-family:"Oswald",sans-serif;font-weight:700;color:var(--accent);font-size:clamp(44px,7vw,92px);line-height:1}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:30px;max-width:62ch}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:22px}
+  .card h3{font-family:"Oswald",sans-serif;font-weight:600;color:var(--accent);font-size:17px;letter-spacing:.04em;margin-bottom:8px}
+  .card p{font-size:15px;color:var(--body)}
+  .curve{margin-top:34px;max-width:560px}
+  .curve svg{width:100%;height:auto;display:block}
+  .bars{display:flex;gap:18px;align-items:flex-end;margin-top:34px;height:190px;max-width:520px}
+  .bars .b{flex:1;background:var(--panel);border:1px solid var(--rule);border-top:3px solid var(--accent);position:relative;display:flex;align-items:flex-end;justify-content:center}
+  .bars .b span{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:8px 4px;text-align:center}
+  .cta h1{margin-bottom:10px}
+  .disclaimer{color:var(--muted);font-size:12.5px;max-width:64ch;margin-top:30px;line-height:1.55;border-top:1px solid var(--rule);padding-top:18px}
+  .foot{position:absolute;bottom:22px;left:6.2vw;color:var(--muted);font-size:12px;font-family:"Oswald",sans-serif;letter-spacing:.14em;text-transform:uppercase}
 </style>
 </head>
 <body>
-<div class="deck" id="deck"></div>
-<svg width="0" height="0"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
-<stop offset="0" stop-color="#90dfe2" stop-opacity="0"/><stop offset="1" stop-color="#90dfe2"/></linearGradient></defs></svg>
+<div id="deck"></div>
 <script>
-const CURVE='<svg class="curve" viewBox="0 0 360 220"><path d="M8 200 C60 180 110 120 150 96 C210 62 270 46 352 38" fill="none" stroke="url(#g)" stroke-width="3"/></svg>';
 const S=[
- {t:'title', kick:'A BaseCamp Masterclass', h:'Train Your Own Power Curve',
-  promise:'Why the riders who stop chasing a single FTP number, and start training to their own data, are the ones who finally break through.'},
+  {t:'title',
+   kicker:'A BaseCamp Masterclass',
+   h1:'The Data-Driven Rider',
+   lead:'How to read your own power numbers and build the season you actually want, without just riding more hours.',
+   sub:'With Tim Cusick, Founder & Head Coach, BaseCamp'},
 
- {t:'who', kick:'Who this is for', h:'For the rider who does everything right, and still plateaus',
-  body:'You ride consistently. You test your FTP. You add hours when progress stalls. And somewhere around mid-season, the gains quietly stop coming.'},
+  {t:'who',
+   kicker:'Who this is for',
+   h2:'You ride a lot. You are not getting much faster.',
+   bullets:[
+     'You train most weeks and still plateau every spring.',
+     'You have power data from your head unit and no idea what to do with it.',
+     'You are time-crunched, 6 to 18 hours a week, and cannot afford junk miles.',
+     'You want to peak for one or two events, not just survive the group ride.']},
 
- {t:'trap', kick:'The trap', big:'You have been handed someone else’s zones and told they are yours.',
-  body:'Percent-of-FTP training zones are one formula applied to every rider on earth. They were never built from your physiology.'},
+  {t:'trap',
+   kicker:'The trap',
+   h2:'Three things riders do when they want to get faster.',
+   bullets:[
+     'Ride more miles and hope volume does the work.',
+     'Copy a pro plan built for a body and a calendar that are not yours.',
+     'Train by feel, so the hard days are too easy and the easy days are too hard.'],
+   lead:'All three ignore the one thing already sitting in your files: your own numbers.'},
 
- {t:'reframe', kick:'The real problem', big:'The problem was never your effort. It was training to an average that is not yours.',
-  body:'Two riders with the same FTP can need completely different training. The number you have been optimizing hides that.'},
+  {t:'reframe',
+   kicker:'The reframe',
+   big:'More hours is not the lever. Training to your own power profile is.',
+   lead:'The data already tells you what to do. Most riders have simply never been shown how to read it.'},
 
- {t:'part', part:'Part One', h:'Why generic zones fail you'},
+  {t:'part',num:'01',
+   kicker:'Part one',
+   h2:'Why "just ride more" stops working',
+   bullets:[
+     'Volume with no structure builds fatigue faster than fitness.',
+     'Averages hide the truth about where you are strong and where you leak time.',
+     'Without a baseline you cannot tell real progress from a good day.']},
 
- {t:'c', kick:'One number, every rider', h:'FTP is a single dot',
-  body:'A threshold test tells you one point on a line. It says nothing about your sprint, your repeatability, or how long you can hold the efforts your events actually demand.'},
+  {t:'engines',
+   kicker:'Part one',
+   h2:'You are not training one engine. You are training three.',
+   lead:'Your short, medium and long power each come from a different system. Lump them together and you train none of them well.',
+   bars:[
+     {label:'5 sec sprint'},
+     {label:'5 min VO2'},
+     {label:'20 min threshold'},
+     {label:'3 hour endurance'}]},
 
- {t:'c', kick:'The hidden cost', h:'Training the wrong system',
-  body:'When your zones are not yours, you spend months building the engine you already have and starving the one your goal event needs. Effort goes in. The specific fitness does not come out.'},
+  {t:'curve',
+   kicker:'The idea that changes everything',
+   h2:'Your Power Duration Curve is your fingerprint',
+   lead:'Plot your best power from a few seconds to a few hours and you see exactly where you are strong, where you fade, and which system to train next.'},
 
- {t:'part', part:'Part Two', h:'The power-duration curve'},
+  {t:'part',num:'02',
+   kicker:'Part two: the method',
+   h2:'DataSmart: train to your numbers, not someone else’s',
+   lead:'The approach I built from leading the WKO power-analysis software the sport’s coaches use. Four moves, in order.'},
 
- {t:'c', kick:'The whole picture', h:'Your best efforts, across every duration',
-  body:'The power-duration curve models your maximal power from a few seconds to several hours, from your own ride data. It is the difference between one dot and the entire shape of your fitness.'},
+  {t:'framework',
+   kicker:'The DataSmart method',
+   cards:[
+     {h:'1. Find your rider type',p:'Your curve tells us whether you are a sprinter, an all-rounder, or a time-trial diesel. Training follows the truth, not a label.'},
+     {h:'2. Set the real numbers',p:'Modeled FTP and the full curve, re-tested as you change, so every zone is yours and not a guess.'},
+     {h:'3. Match the periodization',p:'Base 1, Base 2, then Build, scaled to your weekly hours and your one goal event.'},
+     {h:'4. Read and adjust',p:'We review the completed session and how you felt, not just the file. The number starts the conversation; the rider finishes it.'}]},
 
- {t:'list', kick:'iLevels', h:'Zones built from your curve, not a formula',
-  items:['Training levels calculated from your actual power-duration curve','They move as your fitness moves, so the prescription stays individual','No more riding someone else’s percentage of someone else’s threshold']},
+  {t:'periodization',
+   kicker:'Part two: the season',
+   h2:'Base, base, build, peak',
+   bullets:[
+     'Base 1 and Base 2 grow the aerobic engine that carries everything else.',
+     'Build turns that base into the specific power your event demands.',
+     'For time-crunched riders we use undulating weeks, so short hours still progress.',
+     'Everything is planned backward from the one day that matters to you.']},
 
- {t:'list', kick:'Read the shape', h:'Three numbers that actually describe you',
-  items:['mFTP: your modeled threshold, from all your data, not one painful test','FRC: your Functional Reserve Capacity, the work you can do above threshold','Pmax: your peak neuromuscular power, the top of your sprint']},
+  {t:'ecosystem',
+   kicker:'Part two: the whole athlete',
+   h2:'The engine is only one system',
+   lead:'A power plan on its own leaves watts on the table. BaseCamp trains four systems together.',
+   cards:[
+     {h:'Training',p:'Structured, progressive, matched to your data and your calendar.'},
+     {h:'Nutrition',p:'Fuelling the work so the adaptations actually stick.'},
+     {h:'Strength',p:'Cycling-specific work that protects the body and the power.'},
+     {h:'Mental',p:'The skills to show up, hold the plan, and race your season.'}]},
 
- {t:'list', kick:'Rider type', h:'The curve names your phenotype',
-  items:['Sprinter, pursuiter, time-trialist, or climber','Your shape tells us what you are built to do, and what to develop','We train toward your event, not a generic fitness ideal']},
+  {t:'part',num:'03',
+   kicker:'Part three: your winter, mapped',
+   h2:'A season built around your own data',
+   bullets:[
+     'A baseline test and a curve you can actually read.',
+     'A plan that changes when your numbers change, not on a fixed template.',
+     'Weekly live coach-led workouts with a team of riders at your level.',
+     'One clear peak, planned back from the event that matters to you.']},
 
- {t:'c', kick:'Match work to limiter', h:'Train the system your goal demands',
-  body:'Once the curve shows where you are strong and where you are losing watts, every workout has a job. You stop guessing which efforts matter and start spending training time where it changes the result.'},
+  {t:'belong',
+   kicker:'Part three: the room you train in',
+   big:'Train Where You Belong.',
+   lead:'The typical BaseCamp rider is 54, rides for life, and still wants to get faster. You train alongside people at your level, not against pros you will never be.'},
 
- {t:'part', part:'Part Three', h:'A season built on your curve'},
+  {t:'mistake',
+   kicker:'One thing to avoid',
+   h2:'Do not chase someone else’s FTP',
+   lead:'The fastest way to stall is to borrow a number off the internet and train to it. Your curve, re-tested as you grow, is the only number that moves you forward.'},
 
- {t:'c', kick:'A season, not a template', h:'Roadmap, adapt, peak',
-  body:'We build a season around your curve, translate your goals into daily training, review the data as it comes in, adjust for real life, and bring you to your key events sharp instead of cooked.'},
+  {t:'why',
+   kicker:'Why trust this',
+   h2:'Where the method comes from',
+   bullets:[
+     'I co-developed WKO5, the power-analysis software used across endurance sport.',
+     'Athletes I have coached hold world and national titles, and world bests.',
+     'BaseCamp runs 35+ certified coaches and one shared idea about how people get faster.']},
 
- {t:'list', kick:'The whole athlete', h:'One plan, every lever',
-  items:['Nutrition that fuels the training, not fights it','Strength work that protects the watts you build','Mental performance and recovery held inside the same plan']},
+  {t:'recap',
+   kicker:'What you now know',
+   h2:'The whole method in one breath',
+   bullets:[
+     'Volume is not the lever. Your power profile is.',
+     'Your curve shows which of your three engines to train next.',
+     'A season matched to your numbers, fuelled, strengthened, and backed by a team.']},
 
- {t:'why', kick:'Why trust this method', h:'Built by the person who built the tool',
-  body:'Tim Cusick is the product leader for TrainingPeaks WKO and co-built its power-duration model, the analysis engine coaches across the sport rely on. His athletes include world and national champions. BaseCamp exists to put that same analysis in the hands of everyday riders.'},
-
- {t:'recap', kick:'The method in one line', big:'Stop training to an average. Start training to your own curve.',
-  body:'That single shift is what separates the riders who keep plateauing from the ones who finally move.'},
-
- {t:'cta', kick:'Your next step', h:'See what your own curve says',
-  cta:'Book a free, no-obligation conversation with Coach Kathy at BaseCamp. No payment, no credit card. Just a look at where your training could go.',
-  disc:'Educational only. No income, result, or performance outcome is guaranteed; individual results vary with history, health, consistency, and circumstances.'}
+  {t:'cta',
+   kicker:'Your next step',
+   h1:'Build your season around your numbers',
+   lead:'Start with a free 20-minute consult. We look at your data, map one goal, and show you where your time is best spent this winter.',
+   sub:'BaseCamp Endurance Coaching: Train Where You Belong',
+   disclaimer:'This masterclass is for education only. Training outcomes vary by rider, history, health, consistency and available time; no specific performance result is promised or guaranteed. Always consult a qualified medical professional before starting or changing a training program.'}
 ];
-const el=document.getElementById('deck');
-S.forEach(s=>{
-  const d=document.createElement('section'); d.className='slide';
+
+const deck=document.getElementById('deck');
+function curveSVG(){
+  return '<div class="curve"><svg viewBox="0 0 560 230" role="img" aria-label="Power duration curve">'
+   +'<line x1="40" y1="190" x2="540" y2="190" stroke="#3a5a74" stroke-width="1.5"/>'
+   +'<line x1="40" y1="20" x2="40" y2="190" stroke="#3a5a74" stroke-width="1.5"/>'
+   +'<path d="M48 40 C140 46, 180 120, 300 150 S 480 182, 536 185" fill="none" stroke="#90dfe2" stroke-width="3"/>'
+   +'<circle cx="48" cy="40" r="4" fill="#90dfe2"/><circle cx="300" cy="150" r="4" fill="#90dfe2"/><circle cx="536" cy="185" r="4" fill="#90dfe2"/>'
+   +'<text x="48" y="212" fill="#7f93a3" font-family="Oswald" font-size="11" letter-spacing="1">5 SEC</text>'
+   +'<text x="270" y="212" fill="#7f93a3" font-family="Oswald" font-size="11" letter-spacing="1">5 MIN</text>'
+   +'<text x="486" y="212" fill="#7f93a3" font-family="Oswald" font-size="11" letter-spacing="1">1 HOUR</text>'
+   +'<text x="8" y="36" fill="#7f93a3" font-family="Oswald" font-size="11" letter-spacing="1" transform="rotate(-90 14 110)">WATTS</text>'
+   +'</svg></div>';
+}
+function barsHTML(items){
+  const hs=[88,64,52,38];
+  return '<div class="bars">'+items.map((it,k)=>'<div class="b" style="height:'+hs[k%hs.length]+'%"><span>'+it.label+'</span></div>').join('')+'</div>';
+}
+S.forEach((s,i)=>{
+  const sec=document.createElement('section');
+  sec.className='slide'+(s.t==='cta'?' cta':'');
   let h='';
-  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
-  if(s.part) h+='<div class="part">'+s.part+'</div>';
-  if(s.h) h+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
-  if(s.big) h+='<div class="big">'+s.big+'</div>';
-  if(s.promise) h+='<div class="promise">'+s.promise+'</div>';
-  if(s.body) h+='<p class="body">'+s.body+'</p>';
-  if(s.items){h+='<ul>';s.items.forEach(i=>h+='<li>'+i+'</li>');h+='</ul>';}
-  if(s.cta) h+='<div class="cta-step">'+s.cta+'</div>';
-  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
-  h+='<div class="foot">BaseCamp · joinbasecamp.com</div>';
-  if(s.t==='title'||s.t==='reframe'||s.t==='recap'||s.t==='cta') h+=CURVE;
-  d.innerHTML=h; el.appendChild(d);
+  if(s.kicker) h+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.h1) h+='<h1>'+s.h1+'</h1>';
+  if(s.h2) h+='<h2>'+s.h2+'</h2>';
+  if(s.big) h+='<p class="big">'+s.big+'</p>';
+  if(s.num) h+='<div class="num">'+s.num+'</div>';
+  if(s.bullets){h+='<ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';}
+  if(s.t==='curve') h+=curveSVG();
+  if(s.bars) h+=barsHTML(s.bars);
+  if(s.cards){h+='<div class="grid">'+s.cards.map(c=>'<div class="card"><h3>'+c.h+'</h3><p>'+c.p+'</p></div>').join('')+'</div>';}
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.sub) h+='<div class="sub">'+s.sub+'</div>';
+  if(s.disclaimer) h+='<div class="disclaimer">'+s.disclaimer+'</div>';
+  h+='<div class="foot">BaseCamp · The Data-Driven Rider · '+(i+1)+' / '+S.length+'</div>';
+  sec.innerHTML=h;
+  deck.appendChild(sec);
 });
 </script>
 </body>
