@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pass the CKA in 90 Days — KubeSkills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1220;
+  --panel:#0f172a;
+  --rule:#1e293b;
+  --accent:#0d6efd;
+  --ink:#e2e8f0;
+  --muted:#94a3b8;
+  --head:'Red Hat Display',system-ui,sans-serif;
+  --body:'Red Hat Text',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+.deck{max-width:960px;margin:0 auto;padding:32px 20px}
+.slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:48px 44px;margin:0 0 22px;min-height:360px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.kick{font-family:var(--head);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:600}
+.mono{font-family:var(--head);letter-spacing:.12em}
+h1{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.08;letter-spacing:-.02em;margin-bottom:18px}
+h2{font-family:var(--head);font-weight:600;font-size:32px;line-height:1.12;letter-spacing:-.01em;margin-bottom:16px}
+.lead{font-size:20px;color:var(--ink)}
+.sub{font-size:19px;color:var(--muted);max-width:60ch}
+p.body{font-size:18px;color:var(--ink);max-width:62ch;margin-top:10px}
+.big{font-size:40px;font-family:var(--head);font-weight:700;line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.pillar{border-left:3px solid var(--accent);padding:6px 0 6px 18px;margin:16px 0}
+.pillar .t{font-family:var(--head);font-weight:600;font-size:22px;margin-bottom:6px}
+.pillar .d{font-size:17px;color:var(--muted);max-width:64ch}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.step{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:16px}
+.step .n{font-family:var(--head);color:var(--accent);font-weight:700;font-size:14px;letter-spacing:.1em}
+.step .s{font-size:15px;margin-top:8px;color:var(--ink)}
+.list{margin-top:14px}
+.list .li{font-size:18px;color:var(--ink);padding:8px 0 8px 20px;border-left:2px solid var(--rule);margin-bottom:8px;max-width:62ch}
+.section h1{font-size:54px}
+.section .kick{font-size:13px}
+.cred{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+.badge{background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:8px 16px;font-size:15px;color:var(--ink)}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:26px;max-width:62ch}
+.cta h1{font-size:48px}
+.cta .go{display:inline-block;margin-top:20px;font-family:var(--head);font-weight:600;font-size:20px;color:var(--accent)}
+em{font-style:normal;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<footer class="disclaimer" style="max-width:960px;margin:0 auto 32px;padding:0 20px;font-size:13px;color:#94a3b8">Educational content only. No income, outcome, or result is guaranteed, and results vary by individual effort, background, and experience.</footer>
+<script>
+const S=[
+ {t:'title',kick:'KubeSkills · Live Masterclass',h:'Pass the CKA in 90 Days',sub:'The hands-on path to the Certified Kubernetes Administrator exam, taught by Chad Crowell.'},
+ {t:'point',kick:'Who this is for',h:'You already know Kubernetes. The exam is the part that keeps slipping.',body:'For SREs, platform engineers, and developers who can run clusters at work but keep putting off, or failing, the CKA.'},
+ {t:'point',kick:'The trap',h:'40 hours of video. Still frozen under the clock.',body:'Most people prepare by watching. Then they sit a two-hour, hands-on exam and discover that watching Kubernetes and performing Kubernetes under a timer are two different skills.'},
+ {t:'big',kick:'The reframe',big:'The CKA is not a knowledge test. It is a performance test.'},
+ {t:'section',kick:'Part one',h:'Why most first attempts fail'},
+ {t:'point',kick:'The gap',h:'Tutorial knowledge does not transfer to the terminal under pressure.',body:'You can follow along with a video and feel ready. The exam gives you broken clusters, a clock, and no narrator. The gap between those two states is where attempts are lost.'},
+ {t:'list',kick:'What the two hours test',h:'A dozen live tasks across the real syllabus.',items:['Cluster architecture, install, and configuration','Workloads and scheduling','Services and networking','Storage','Troubleshooting a broken cluster, fast']},
+ {t:'point',kick:'The clock',h:'Speed and muscle memory, not just understanding.',body:'The exam rewards fast kubectl, imperative commands, and knowing which task to skip and come back to. None of that is built by watching someone else type.'},
+ {t:'section',kick:'Part two',h:'The KubeSkills method'},
+ {t:'point',kick:'The core idea',h:'You get good at the exam by doing the exam.',body:'Every part of the method points at one thing: hours in a real terminal, under real constraints, with someone who has sat the exam reviewing what you missed.'},
+ {t:'pillars',kick:'How you actually get ready',items:[
+   {t:'Hands-on scenario drills',d:'You practise in realistic command-line scenarios that mirror the exam, in Killercoda, not in a slideshow. Reps, not playlists.'},
+   {t:'Exam-room performance strategy',d:'kubectl speed, imperative commands, and time-boxing so the two-hour clock stops being the thing that beats you.'},
+   {t:'A structured 90-day path',d:'A tailored study plan, study blocks, and weekly live mentoring in a small cohort, so scattered self-study becomes a finished certification.'},
+   {t:'A community that answers',d:'The KubeSkills community is the support system: ask a question the moment you are stuck instead of losing a weekend to a forum.'}
+ ]},
+ {t:'section',kick:'Part three',h:'What the 90 days look like'},
+ {t:'steps',kick:'The path',steps:[
+   {n:'Weeks 1-3',s:'Core objects, drilled until automatic.'},
+   {n:'Weeks 4-6',s:'Troubleshooting, networking, storage.'},
+   {n:'Weeks 7-11',s:'Full timed exam scenarios, weekly.'},
+   {n:'Exam day',s:'Certified, on a plan.'}
+ ]},
+ {t:'point',kick:'A week in the cohort',h:'Drill, review with Chad, drill again.',body:'Each week you work exam-style scenarios on your own, then meet live to review the ones that hurt. Small class size means the review is about your mistakes, not a generic lecture.'},
+ {t:'point',kick:'Exam day',h:'Nothing on the screen is a surprise.',body:'By the time you sit the real thing, you have done the motions so many times that the clock feels like any other working afternoon. That is the whole point of drilling.'},
+ {t:'point',kick:'The difference',h:'From re-studying forever to booking the test with a plan.',body:'The engineers who finish are rarely the ones who knew the most going in. They are the ones who stopped collecting courses and started doing timed reps with feedback.'},
+ {t:'cred',kick:'Who is teaching this',h:'Chad Crowell',body:'Principal SRE, CNCF Ambassador, and author of Acing the Certified Kubernetes Administrator Exam (Manning). He has taught Kubernetes to thousands of engineers and founded KubeSkills to build the support system he wished he had.',badges:['Principal SRE','CNCF Ambassador','Manning author','Founder, KubeSkills']},
+ {t:'cta',kick:'Your next step',h:'Ready to stop re-studying and start drilling?',go:'Book a call with Chad to see if the KubeSkills 90-day path is right for you.',disc:'Educational content only. No income, outcome, or result is guaranteed. Results vary by individual effort, background, and experience.'}
+];
+const deck=document.getElementById('deck');
+S.forEach(s=>{
+  const d=document.createElement('div');
+  d.className='slide '+s.t;
+  let h='';
+  if(s.kick)h+='<div class="kick mono">'+s.kick+'</div>';
+  if(s.t==='title'){h+='<h1>'+s.h+'</h1><p class="sub">'+s.sub+'</p>';}
+  else if(s.t==='section'){h+='<h1>'+s.h+'</h1>';}
+  else if(s.t==='big'){h+='<div class="big">'+s.big+'</div>';}
+  else if(s.t==='point'){h+='<h2>'+s.h+'</h2><p class="body">'+s.body+'</p>';}
+  else if(s.t==='list'){h+='<h2>'+s.h+'</h2><div class="list">';s.items.forEach(i=>{h+='<div class="li">'+i+'</div>';});h+='</div>';}
+  else if(s.t==='pillars'){h+='<h2>How you actually get ready</h2>';s.items.forEach(i=>{h+='<div class="pillar"><div class="t">'+i.t+'</div><div class="d">'+i.d+'</div></div>';});}
+  else if(s.t==='steps'){h+='<h2>The path</h2><div class="steps">';s.steps.forEach(st=>{h+='<div class="step"><div class="n mono">'+st.n+'</div><div class="s">'+st.s+'</div></div>';});h+='</div>';}
+  else if(s.t==='cred'){h+='<h2>'+s.h+'</h2><p class="body">'+s.body+'</p><div class="cred">';s.badges.forEach(b=>{h+='<span class="badge">'+b+'</span>';});h+='</div>';}
+  else if(s.t==='cta'){h+='<h1>'+s.h+'</h1><div class="go mono">'+s.go+'</div><div class="disclaimer">'+s.disc+'</div>';}
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
