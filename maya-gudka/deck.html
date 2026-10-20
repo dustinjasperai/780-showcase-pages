@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Unwritten Rules of C-Suite Success | Maya Gudka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f3efe6;
+    --panel:#fcfbf7;
+    --ink:#1c2b30;
+    --ink-soft:#44555b;
+    --ink-muted:#7d8a8f;
+    --rule:#d8d2c6;
+    --accent:#417586;
+    --accent-2:#ff8593;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Nunito Sans',-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:48px;}
+  .slide{
+    display:none;width:100%;max-width:960px;background:var(--panel);
+    border:1px solid var(--rule);border-radius:4px;
+    padding:68px 72px;min-height:62vh;box-shadow:0 1px 0 rgba(28,43,48,.04);
+    position:relative;
+  }
+  .slide.active{display:block;}
+  .kicker{font-family:'Nunito Sans';font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;color:var(--ink);margin-bottom:22px;}
+  h2{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:38px;line-height:1.14;color:var(--ink);margin-bottom:20px;}
+  .sub{font-size:22px;line-height:1.5;color:var(--ink-soft);max-width:40ch;}
+  p{font-size:20px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px;max-width:56ch;}
+  ul{list-style:none;margin-top:8px;}
+  li{font-size:20px;line-height:1.5;color:var(--ink-soft);margin-bottom:16px;padding-left:28px;position:relative;max-width:58ch;}
+  li::before{content:"";position:absolute;left:0;top:13px;width:10px;height:2px;background:var(--accent);}
+  .numeral{font-family:'Playfair Display',serif;font-weight:700;font-size:72px;color:var(--accent);line-height:1;margin-bottom:12px;}
+  .numeral span{color:var(--accent-2);}
+  .big{font-family:'Playfair Display',serif;font-weight:600;font-size:34px;line-height:1.2;color:var(--ink);max-width:24ch;}
+  .em{color:var(--accent);font-weight:700;}
+  .foot{position:absolute;bottom:26px;left:72px;right:72px;display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink-muted);border-top:1px solid var(--rule);padding-top:12px;}
+  .disc{font-size:14px;color:var(--ink-muted);margin-top:22px;max-width:60ch;line-height:1.5;}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-size:13px;color:var(--ink-muted);font-weight:600;}
+  .nav button{font:inherit;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:3px;padding:6px 14px;cursor:pointer;}
+  @media(max-width:680px){.slide{padding:40px 30px;}h1{font-size:34px;}h2{font-size:27px;}.sub{font-size:18px;}p,li{font-size:17px;}.foot{left:30px;right:30px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', k:'A Masterclass with Maya Gudka', h:'The Unwritten Rules of C-Suite Success', sub:'How high-performing leaders reach the top table through authentic influence, not a heavier workload.'},
+  {t:'who', k:'Who this is for', h:'You do the work. You get the results. You are still overlooked.', body:['Senior leaders and specialists in financial and professional services.','Trusted with the hardest problems, passed over when the big title is handed out.','Ready for the C-suite, quietly unsure what is actually standing in the way.']},
+  {t:'trap', k:'The hard-work trap', big:'You were told that excellence would speak for itself. It does not. It needs a translator.'},
+  {t:'reframe', k:'An uncomfortable truth', h:'The people promoted past you are rarely better at the job.', body:['They are better understood at the level above them.','They are backed in rooms they are not sitting in.','They have learned a second skill nobody put on the job description.']},
+  {t:'part', k:'Part One', h:'Why the best performer is rarely the one promoted.'},
+  {t:'problem', k:'The three invisible ceilings', body:['Authority: your judgement is sound, but it is not read as senior yet.','Access: the decisions about you happen in rooms you never enter.','Advocacy: nobody with power is making your case when you leave the meeting.']},
+  {t:'reframe2', k:'The real gap', big:'None of this is a competence gap. It is an influence gap, and influence can be learned.'},
+  {t:'part', k:'Part Two', h:'The three unwritten rules of C-suite success.'},
+  {t:'pillar', n:'I', k:'The first rule', h:'Convey authority as yourself.', body:['Boardroom presence is not a louder voice or a borrowed persona.','It is clarity, brevity, and owning the point of view you already hold.','This works for the quietest person in the room, by design.']},
+  {t:'pillar', n:'II', k:'The second rule', h:'Win the room before the room.', body:['High-stakes meetings, negotiations and interviews are decided beforehand.','Understand the psychology of the moment that only a few leaders ever study.','Make the yes feel inevitable before the question is even asked.']},
+  {t:'pillar', n:'III', k:'The third rule', h:'Build the relationships that advocate for you.', body:['Sponsors, not just mentors: people who spend their capital on your name.','Grow them deliberately, in a way that never feels transactional.','When the promotion conversation happens, you are already in the room through them.']},
+  {t:'framework', k:'The multiplier', h:'Visibility raises your negotiating power.', body:['A clear, visible point of view inside and outside your company compounds.','The right profile means the next role, and the next number, come to you.','Thought leadership is not self-promotion. It is making your judgement findable.']},
+  {t:'part', k:'Part Three', h:'What the next ninety days can look like.'},
+  {t:'example', k:'A quarter, applied', body:['Month one: name your authentic influencing style and put it to work in one real meeting.','Month two: map your personal boardroom and open two advocacy relationships.','Month three: a visible point of view, a high-stakes conversation handled on your terms.']},
+  {t:'vision', k:'The longer arc', h:'A ten-year vision, working like a personal sat nav.', body:['The unwritten rules get you the next grade. A vision decides which grade is worth it.','Vision Code turns a vague ambition into a clear ten-year direction and a doable three-year plan.','Every promotion then moves you toward a life you actually chose.']},
+  {t:'lifework', k:'Without the cost', big:'The goal is the top table on fewer hours, not at the price of everything else.'},
+  {t:'credibility', k:'Why learn this from me', h:'I have lived both sides of the table.', body:['First-class Economics, Cambridge. Economist at Goldman Sachs, PwC and KPMG.','One of KPMG’s youngest managers at 25, later selected for Director while still a Manager.','Director of Leadership and Strategy Executive Education at London Business School.','EMCC Master Practitioner, the highest coaching accreditation.']},
+  {t:'proof', k:'Grounded in research', h:'This is not opinion. It is peer-reviewed.', body:['The three-pillar method comes from my published, peer-reviewed research.','Featured in the Harvard Business Review and taught to leaders in blue-chip companies.','Refined across hundreds of leaders, from first-time managers to the C-suite.']},
+  {t:'recap', k:'The three rules, together', body:['Convey authority as yourself.','Win the room before the room.','Build the relationships that advocate for you.']},
+  {t:'cta', k:'Your next step', h:'Let us write your path to the C-suite.', body:['If you are ready to turn strong performance into a senior title, the next step is a conversation.','Bring the role you want. We will map the influence gap between you and it.'], disc:'This masterclass is educational. No specific promotion, title, salary or career result is guaranteed. Results vary based on individual effort, context and circumstances.'}
+];
+let i=0;
+const stage=document.getElementById('stage');
+function render(){
+  const s=S[i];
+  let inner='<div class="kicker">'+(s.k||'')+'</div>';
+  if(s.n) inner+='<div class="numeral">'+(s.n==='II'?'I<span>I</span>':s.n==='III'?'II<span>I</span>':'<span>I</span>')+'</div>';
+  if(s.t==='title'){ inner+='<h1>'+s.h+'</h1><div class="sub">'+s.sub+'</div>'; }
+  else if(s.big){ inner+='<div class="big">'+s.big+'</div>'; }
+  else { if(s.h) inner+='<h2>'+s.h+'</h2>'; if(s.body){ inner+='<ul>'+s.body.map(b=>'<li>'+b+'</li>').join('')+'</ul>'; } }
+  if(s.disc) inner+='<div class="disc">'+s.disc+'</div>';
+  inner+='<div class="foot"><span>Maya Gudka &middot; Refreshing Leadership</span><span>'+(i+1)+' / '+S.length+'</span></div>';
+  stage.innerHTML='<div class="slide active">'+inner+'</div>';
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
