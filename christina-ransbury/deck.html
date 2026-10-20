@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Your Own Resilient Home — a masterclass with Christina Ransbury</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f0e5d6;        /* warm sand ground (brand, 9 uses) */
+    --panel:#e8e4da;     /* warm panel (brand, 15 uses) */
+    --rule:#cbbfab;      /* mid-sand hairline (brand family) */
+    --ink:#3b4132;       /* deep olive text (from #4a5240) */
+    --muted:#6b6f5e;     /* muted olive */
+    --accent:#935c48;    /* clay terracotta (brand button, 23 uses) */
+    --accent2:#4a5240;   /* olive (brand) */
+    --head:'Cinzel', Georgia, serif;
+    --body:'Raleway', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--panel);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);
+    border-radius:14px;padding:58px 56px;margin:0 0 26px;min-height:505px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(59,65,50,.04);overflow:hidden;
+  }
+  .slide::after{ /* horizon / land line motif */
+    content:"";position:absolute;left:0;right:0;bottom:46px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--rule) 12%,var(--rule) 88%,transparent);
+    opacity:.8;
+  }
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:20px}
+  .num{position:absolute;top:26px;right:30px;font-family:var(--head);font-size:13px;color:var(--muted);opacity:.7}
+  h1{font-family:var(--head);font-weight:600;font-size:52px;line-height:1.08;color:var(--ink);margin-bottom:22px}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.12;color:var(--ink);margin-bottom:20px}
+  h3{font-family:var(--head);font-weight:500;font-size:25px;color:var(--accent2);margin-bottom:14px}
+  p{font-size:20px;line-height:1.55;color:var(--ink);max-width:62ch;margin-bottom:14px}
+  p.lede{font-size:23px;color:var(--muted)}
+  .big{font-size:30px;line-height:1.3;font-weight:600;color:var(--ink);max-width:24ch}
+  ul{list-style:none;margin:8px 0 0}
+  li{position:relative;padding-left:30px;font-size:20px;line-height:1.5;margin-bottom:14px;max-width:56ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:3px;
+    background:var(--accent)}
+  .phase{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .phase .n{font-family:var(--head);font-size:30px;color:var(--accent)}
+  .from-to{font-family:var(--body);font-size:19px;color:var(--muted);font-style:italic;margin-top:4px;margin-bottom:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+  .chip{border:1px solid var(--rule);border-radius:999px;padding:9px 16px;font-size:16px;color:var(--accent2);background:var(--panel)}
+  .road{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .road .step{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:16px}
+  .road .step b{font-family:var(--head);color:var(--accent);display:block;margin-bottom:6px;font-weight:600}
+  .road .step span{font-size:15px;color:var(--muted)}
+  .presenter{margin-top:26px;font-size:18px;color:var(--muted);font-family:var(--body)}
+  .presenter b{color:var(--ink);font-weight:600}
+  .disclaimer{margin-top:22px;font-size:13px;color:var(--muted);line-height:1.5;max-width:66ch;border-top:1px solid var(--rule);padding-top:14px}
+  .slide.dark{background:var(--accent2);border-color:var(--accent2)}
+  .slide.dark h1,.slide.dark h2,.slide.dark p,.slide.dark .big{color:#f3efe6}
+  .slide.dark .kicker{color:#e0c3b2}
+  .slide.dark::after{background:linear-gradient(90deg,transparent,rgba(240,229,214,.3) 12%,rgba(240,229,214,.3) 88%,transparent)}
+  .slide.clay{background:var(--accent);border-color:var(--accent)}
+  .slide.clay h2,.slide.clay p,.slide.clay .big,.slide.clay h3{color:#f7efe8}
+  .slide.clay .kicker{color:#f0d8cb}
+  .slide.clay::after{background:linear-gradient(90deg,transparent,rgba(247,239,232,.35) 12%,rgba(247,239,232,.35) 88%,transparent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+/* Masterclass slide deck — Christina Ransbury, Resilient by Design.
+   Her masterclass to her own audience; her CTA at the end. */
+const S = [
+  {t:'title', kicker:'A free masterclass with Resilient by Design',
+   h:'Design Your Own Resilient Home',
+   lede:'A first-time builder’s path from raw land to a natural, climate-fit home you will actually want to live in.',
+   presenter:'with <b>Christina Ransbury</b>, founder of Resilient by Design'},
+
+  {t:'who', kicker:'Who this is for', h:'If you are about to build your first home',
+   bullets:[
+     'You are building on raw land, for the first time, and it feels bigger than you expected.',
+     'You care about natural, healthy, non-toxic materials and a home that fits its climate.',
+     'You want to lead the design yourself, not hand your vision to someone who does not share it.']},
+
+  {t:'trap', kicker:'The trap', h:'Most first-time builders start in the wrong place',
+   body:'You open a Pinterest board, fall for a floor plan, and start pricing finishes. It feels like progress. Then the land, the climate, the budget, and the permits all push back at once, and the dream starts shrinking.'},
+
+  {t:'hook', cls:'dark', kicker:'The reframe',
+   big:'You do not need more inspiration. You need a plan. A resilient home starts long before the floor plan.'},
+
+  {t:'part', kicker:'Part one', h:'Why first builds go sideways',
+   lede:'Three things quietly derail a first home, and they all trace back to designing out of order.'},
+
+  {t:'problem', kicker:'The three derailers', h:'Overwhelm, override, overspend',
+   bullets:[
+     '<b>Overwhelm.</b> Thousands of choices with no sequence, so nothing feels decided.',
+     '<b>Override.</b> Professionals steer the design toward what is easy for them, and the home stops feeling like yours.',
+     '<b>Overspend.</b> Money goes to finishes and fixes instead of the decisions that actually make a home resilient.']},
+
+  {t:'cost', kicker:'What it costs', h:'A house that fights its site',
+   body:'Build before you design, and you get a home that ignores the sun, the wind, and the land it sits on. You pay for it twice: once to build it, and again every month to heat, cool, and repair it.'},
+
+  {t:'idea', cls:'clay', kicker:'The core idea',
+   big:'Design is a sequence, not a shopping spree. Observe the land. Design around your life. Detail the materials.'},
+
+  {t:'part', kicker:'Part two', h:'The Resilient by Design method',
+   lede:'Three phases that take you from a dream to construction-ready plans, with you in the lead.'},
+
+  {t:'phase', phase:'01', h3:'Observe', fromto:'From a dream to realistic parameters.',
+   body:'Before a single floor plan, you read your site: the land, the climate, the budget, and the legal and zoning limits. This is where a resilient home is really decided.'},
+
+  {t:'detail', kicker:'Observe, in practice', h:'Let the land and climate design first',
+   body:'Sun path, prevailing wind, thermal mass, shading, and cross-ventilation are design inputs, not afterthoughts. Get these right and the home stays comfortable with far less mechanical help.',
+   chips:['Sun and shade','Prevailing wind','Thermal mass','Budget reality','Zoning and code']},
+
+  {t:'phase', phase:'02', h3:'Design', fromto:'From what is possible to what is personal.',
+   body:'Now you shape the home around your actual routines and values, turning what the land and budget allow into a plan that is unmistakably yours.'},
+
+  {t:'detail', kicker:'Design, in practice', h:'You lead, the experts support',
+   body:'You stay in the driver’s seat while designers and engineers pressure-test your choices. The result reflects how you live, not what was easiest to draw.'},
+
+  {t:'phase', phase:'03', h3:'Detail', fromto:'From overwhelming options to confident choices.',
+   body:'Finally you choose materials, methods, and systems with cost and construction guidance, so every decision is informed instead of guessed.'},
+
+  {t:'detail', kicker:'Detail, in practice', h:'Natural materials, chosen for your climate',
+   body:'Strawbale, rammed earth, compressed earth block, and bamboo are not a style choice. They are matched to your climate and budget, so the home is healthy, durable, and affordable to run.',
+   chips:['Strawbale','Rammed earth','Compressed earth block','Bamboo','Reclaimed wood']},
+
+  {t:'part', kicker:'Part three', h:'Your path, and who stands behind it',
+   lede:'A clear sequence, a team pressure-testing your choices, and a home that fits how you want to live.'},
+
+  {t:'road', kicker:'The path', h:'Raw land to move-in',
+   road:[
+     {b:'Observe', span:'Land, climate, budget, and code before anything else.'},
+     {b:'Design', span:'A plan shaped around your life, with you leading.'},
+     {b:'Detail', span:'Confident material, method, and system choices.'},
+     {b:'Move in', span:'A realistic path into your home within about two years.'}]},
+
+  {t:'cost', kicker:'Why work with me', h:'A decade of natural homes, and a team behind you',
+   body:'I have spent over ten years designing custom homes with natural materials across very different climates. Inside Resilient by Design you also get a team: an architectural designer, a natural-building foreman, and structural, HVAC, and solar engineers, all supporting decisions you make.'},
+
+  {t:'cost', kicker:'Honest fit', h:'This is not for everyone',
+   body:'It is not a fast, plug-and-play plan set. It is not for developers building cookie-cutter properties or for vacation and investment-only homes. It is for people building a home they intend to live in, who want to do it with intention.'},
+
+  {t:'cta', cls:'clay', kicker:'Your next step',
+   h:'Design the home that fits your land, your life, and your values',
+   body:'Join the free masterclass to see the four steps in full. When you are ready to build your own plan with guidance, start the conversation about Resilient by Design.',
+   disclaimer:'Educational only. This masterclass shares a design approach, not professional engineering, architectural, or legal advice for your specific project. Building timelines, costs, and outcomes vary with your site, climate, budget, and local requirements. No specific result is guaranteed.'}
+];
+
+function esc(x){return x==null?'':x;}
+function render(){
+  const deck=document.getElementById('deck');
+  S.forEach(function(s,i){
+    const sec=document.createElement('section');
+    sec.className='slide'+(s.cls?(' '+s.cls):'');
+    sec.setAttribute('data-t', s.t);
+    let html='';
+    if(s.kicker) html+='<div class="kicker">'+esc(s.kicker)+'</div>';
+    if(s.t==='title'){
+      html+='<h1>'+esc(s.h)+'</h1>';
+      if(s.lede) html+='<p class="lede">'+esc(s.lede)+'</p>';
+      if(s.presenter) html+='<div class="presenter">'+s.presenter+'</div>';
+    } else if(s.t==='phase'){
+      html+='<div class="phase"><span class="n">'+esc(s.phase)+'</span><h3>'+esc(s.h3)+'</h3></div>';
+      if(s.fromto) html+='<div class="from-to">'+esc(s.fromto)+'</div>';
+      if(s.body) html+='<p>'+esc(s.body)+'</p>';
+    } else {
+      if(s.big) html+='<p class="big">'+esc(s.big)+'</p>';
+      if(s.h) html+='<h2>'+esc(s.h)+'</h2>';
+      if(s.lede) html+='<p class="lede">'+esc(s.lede)+'</p>';
+      if(s.body) html+='<p>'+esc(s.body)+'</p>';
+      if(s.bullets){html+='<ul>';s.bullets.forEach(function(b){html+='<li>'+b+'</li>';});html+='</ul>';}
+      if(s.road){html+='<div class="road">';s.road.forEach(function(r){html+='<div class="step"><b>'+esc(r.b)+'</b><span>'+esc(r.span)+'</span></div>';});html+='</div>';}
+      if(s.chips){html+='<div class="chips">';s.chips.forEach(function(c){html+='<span class="chip">'+esc(c)+'</span>';});html+='</div>';}
+      if(s.disclaimer) html+='<div class="disclaimer">'+esc(s.disclaimer)+'</div>';
+    }
+    html+='<div class="num">'+(i+1)+' / '+S.length+'</div>';
+    sec.innerHTML=html;
+    deck.appendChild(sec);
+  });
+}
+render();
+</script>
+</body>
+</html>
