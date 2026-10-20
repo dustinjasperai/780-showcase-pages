@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Aesthetic Era Blueprint — Alex Eubank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0C0C0E;        /* near-black, from Elysium merch ground */
+    --panel:#17161A;     /* lifted panel */
+    --rule:#2A2832;      /* hairline */
+    --ink:#EDEAE2;       /* marble off-white */
+    --muted:#A49C8E;     /* muted stone */
+    --accent:#C8A24B;    /* antique gold, from black/gold merch */
+    --head:'Cormorant Garamond', Georgia, serif;
+    --body:'Archivo', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+       display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;
+         justify-content:center;padding:8vh 10vw;opacity:0;transition:opacity .4s}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:var(--body);font-weight:600;letter-spacing:.22em;
+          text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(34px,6vw,76px);
+     line-height:1.04;letter-spacing:.3px}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(28px,4.6vw,52px);
+     line-height:1.1}
+  .sub{font-size:clamp(16px,1.6vw,21px);color:var(--muted);margin-top:22px;max-width:40ch;
+       line-height:1.5}
+  .lead{font-size:clamp(17px,1.7vw,22px);line-height:1.6;max-width:46ch;margin-top:14px}
+  .rule{width:64px;height:2px;background:var(--accent);margin:26px 0}
+  ul{margin-top:22px;max-width:48ch;list-style:none}
+  li{font-size:clamp(16px,1.5vw,20px);line-height:1.5;padding-left:26px;position:relative;
+     margin-bottom:16px;color:var(--ink)}
+  li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;
+            background:var(--accent);transform:rotate(45deg)}
+  .byline{margin-top:34px;font-size:15px;color:var(--muted)}
+  .part{font-family:var(--head);font-size:clamp(20px,2vw,26px);color:var(--accent);
+        margin-bottom:10px}
+  .big{font-family:var(--head);font-weight:700;font-size:clamp(40px,7vw,92px);
+       line-height:1}
+  .stat{display:flex;gap:46px;margin-top:30px;flex-wrap:wrap}
+  .stat b{font-family:var(--head);font-size:clamp(30px,3.4vw,46px);color:var(--accent);
+          display:block}
+  .stat span{font-size:14px;color:var(--muted)}
+  .disc{font-size:12.5px;color:var(--muted);margin-top:30px;max-width:54ch;line-height:1.5}
+  .nav{position:fixed;bottom:18px;right:24px;font-size:12px;color:var(--muted);
+       font-family:var(--body);letter-spacing:.08em}
+  .frame{position:fixed;inset:18px;border:1px solid var(--rule);pointer-events:none}
+</style>
+</head>
+<body>
+<div class="frame"></div>
+<div id="stage"></div>
+<div class="nav"><span id="pos">1</span> / <span id="tot">1</span> &nbsp; use arrow keys</div>
+<script>
+const S=[
+  {t:'title',kicker:'A Live Masterclass with Alex Eubank',
+   h:'The Aesthetic Era Blueprint',
+   sub:'How to build a classic, natural physique when the whole feed is selling you shortcuts.',
+   by:'Alex Eubank  ·  The Inner Circle'},
+
+  {t:'who',kicker:'Who this is for',
+   h:'The natural lifter who wants the classic look',
+   lead:'You train hard, you are drug free, and you want a lean, proportioned, golden era physique. Not mass at any cost. A body that looks built, not inflated.'},
+
+  {t:'lead',kicker:'The trap',
+   h:'More of everything is not the answer',
+   lead:'Most guys chase more volume, more supplements, more programs, and compare themselves to physiques that are chemically assisted. The result is burnout, stalled progress, and a routine that only works while motivation lasts.'},
+
+  {t:'hook',kicker:'The reframe',
+   big:'The classic natural physique has gone rare.',
+   lead:'Which is exactly why it stands out. When everyone is chasing the same shortcuts, discipline becomes the real edge.'},
+
+  {t:'part',part:'Part One',h:'Why natural lifters stall'},
+
+  {t:'lead',kicker:'The core problem',
+   h:'Training without a standard',
+   lead:'A split you copied, a diet you guessed at, and a goal borrowed from someone on a completely different protocol. Without your own standard, every setback feels like proof it is not working.'},
+
+  {t:'lead',kicker:'The comparison trap',
+   h:'Measuring natural effort against enhanced results',
+   lead:'The physiques setting the bar in your feed are often not natural. Chasing them is how good training gets abandoned. The fix is a method built for how a natural body actually grows.'},
+
+  {t:'part',part:'Part Two',h:'The method: the Greek God structure'},
+
+  {t:'list',kicker:'The split',
+   h:'Five days, built around proportion',
+   items:['Shoulders and arms','Chest and back','Legs, never skipped','Shoulders and chest','Arms, plus active recovery on the weekend']},
+
+  {t:'lead',kicker:'Proportion over size',
+   h:'Avoid the lollipop',
+   lead:'A big torso on skinny legs is not aesthetic. Classic proportion means training the whole body to balance, with legs prioritized, not an afterthought.'},
+
+  {t:'list',kicker:'Eat for the physique',
+   h:'Fuel the look, not the scale',
+   items:['Track intake so growth is deliberate, not accidental','Enough to build, controlled enough to stay lean','Hold conditioning through a bulk with steady cardio']},
+
+  {t:'lead',kicker:'Natural, on record',
+   h:'Build it drug free, and say so',
+   lead:'Honesty about being natural is not a limitation, it is the whole point. The expectations change, the patience changes, and the result is something you actually own.'},
+
+  {t:'part',part:'Part Three',h:'The standard that keeps it going'},
+
+  {t:'list',kicker:'The three pillars',
+   h:'Faith. Fitness. Freedom.',
+   items:['Faith, training as discipline and stewardship','Fitness, a classic and natural physique','Freedom, the standard holds when motivation does not']},
+
+  {t:'why',kicker:'Why me',
+   h:'I built this the long way',
+   lead:'I started as a skinny sixteen year old and built an aesthetic physique naturally, in public, year after year. That journey became a community.',
+   stats:[['3M+','following on Instagram'],['1.3M+','subscribers on YouTube'],['Natural','every step, on record']]},
+
+  {t:'lead',kicker:'The payoff',
+   h:'A physique you earned, and can keep',
+   lead:'Not a six week spike that fades. A standard you live by, a method you understand, and a body that reflects the discipline behind it.'},
+
+  {t:'cta',kicker:'Your next step',
+   h:'Join the Inner Circle',
+   lead:'Run the full method with personalized coaching, the Elysium community, and the faith, fitness and freedom standard behind it.',
+   by:'alexeubankcoaching.com  ·  The Inner Circle',
+   disc:'For education only. Results depend on individual effort, consistency, and starting point, and are not guaranteed. This is not medical advice; consult a qualified professional before changing training or nutrition.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+  if(s.part) h+='<div class="part">'+esc(s.part)+'</div>';
+  if(s.big) h+='<div class="big">'+esc(s.big)+'</div>';
+  if(s.h) h+='<h'+(s.t==='title'?'1':'2')+'>'+esc(s.h)+'</h'+(s.t==='title'?'1':'2')+'>';
+  if(s.t==='title'||s.t==='hook') h+='<div class="rule"></div>';
+  if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+  if(s.lead) h+='<div class="lead">'+esc(s.lead)+'</div>';
+  if(s.items){h+='<ul>';s.items.forEach(x=>h+='<li>'+esc(x)+'</li>');h+='</ul>';}
+  if(s.stats){h+='<div class="stat">';s.stats.forEach(p=>h+='<div><b>'+esc(p[0])+'</b><span>'+esc(p[1])+'</span></div>');h+='</div>';}
+  if(s.by) h+='<div class="byline">'+esc(s.by)+'</div>';
+  if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+  d.innerHTML=h;
+  stage.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function go(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('on');document.getElementById('pos').textContent=cur+1;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);});
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
