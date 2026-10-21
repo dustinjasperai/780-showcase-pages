@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale Without Sacrifice — The ManagementOS Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#050507; --panel:#0b0b10; --rule:#2a2d34;
+    --ink:#f7f6f6; --ink-soft:#d7dce2; --muted:#929ba6;
+    --accent:#51c5dd; --warn:#f04c63;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{display:none;width:100%;height:100%;padding:7vh 9vw;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(34px,6vw,68px);line-height:1.04;letter-spacing:-.02em}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,4.4vw,46px);line-height:1.1;letter-spacing:-.01em}
+  .lead{color:var(--ink-soft);font-size:clamp(17px,2.1vw,23px);line-height:1.5;max-width:60ch;margin-top:22px}
+  .lead.small{font-size:clamp(15px,1.7vw,19px)}
+  .accent{color:var(--accent)}
+  .warn{color:var(--warn)}
+  .rule{height:1px;background:var(--rule);width:72px;margin:26px 0}
+  ul{list-style:none;margin-top:26px;max-width:62ch}
+  li{position:relative;padding-left:26px;margin-bottom:16px;color:var(--ink-soft);font-size:clamp(16px,1.9vw,20px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.6em;width:9px;height:9px;background:var(--accent);border-radius:1px}
+  .pillarno{font-family:'Space Grotesk',sans-serif;color:var(--muted);font-size:14px;letter-spacing:.2em;margin-bottom:14px}
+  .part{font-family:'Space Grotesk',sans-serif;color:var(--muted);font-size:clamp(15px,1.8vw,18px);letter-spacing:.24em;text-transform:uppercase}
+  .part b{color:var(--accent);font-weight:700}
+  .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,5.2vw,60px);line-height:1.08;letter-spacing:-.02em}
+  .cta-steps{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .chip{border:1px solid var(--rule);border-radius:3px;padding:10px 16px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--ink-soft)}
+  .disc{color:var(--muted);font-size:13px;line-height:1.5;margin-top:30px;max-width:66ch}
+  .credit{color:var(--muted);font-size:14px;margin-top:20px}
+  #bar{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);width:0;transition:width .25s}
+  #nav{position:fixed;right:18px;bottom:16px;font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--muted);letter-spacing:.1em}
+  .brandmark{position:fixed;left:22px;bottom:14px;font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+  .seq{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;max-width:70ch}
+  .seq span{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--ink-soft);border:1px solid var(--rule);border-radius:3px;padding:8px 13px}
+  .seq span.k{color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="bar"></div>
+<div id="nav"></div>
+<div class="brandmark">CEOMasterMind</div>
+<script>
+const S = [
+  {t:'title', html:`<div class="kick">The ManagementOS Masterclass</div><h1>Scale Without <span class="accent">Sacrifice</span></h1><p class="lead">How founders and CEOs of 7 to 9 figure companies grow the business without breaking the person running it. A live working session with Davide Viola.</p>`},
+
+  {t:'who', html:`<div class="kick">Who this is for</div><h2>You carry real weight.</h2><ul><li>You are a founder, CEO, president or GM accountable for a 7 to 9 figure company, division or portfolio.</li><li>The company has grown faster than the systems holding it together.</li><li>You are still the person every hard decision routes through.</li></ul>`},
+
+  {t:'trap', html:`<div class="kick">The trap</div><h2>Growth quietly made you the bottleneck.</h2><p class="lead">Every new client, hire and location added complexity, and most of that complexity still resolves inside your head. Revenue is up. Your calendar is full. The weekend disappeared somewhere around the last growth stage, and nobody handed you a system for that part.</p>`},
+
+  {t:'reframe', html:`<div class="kick">The reframe</div><p class="big">Most operating systems scale the company and quietly <span class="warn">break</span> the person running it.</p><p class="lead">A real system has to do both at once. That is the whole idea behind what we are about to walk through.</p>`},
+
+  {t:'part', html:`<p class="part">Part One <b>/ The core problem</b></p><h2 style="margin-top:22px">Why working harder stops working.</h2>`},
+
+  {t:'problem', html:`<div class="kick">The core problem</div><h2>You cannot out hustle structure.</h2><ul><li>Hiring more people adds coordination load faster than it removes work.</li><li>Another late night buys a day, not a system.</li><li>The company keeps asking the one question only you can answer, so you never get to leave the floor.</li></ul>`},
+
+  {t:'problem2', html:`<div class="kick">The core problem</div><h2>Capacity is the ceiling nobody designs for.</h2><p class="lead">Strategy, hiring and tooling all get planned. The leader's own attention and endurance, the thing the entire company draws from, gets treated as unlimited. It is not. When it runs out, growth stalls or the person does.</p>`},
+
+  {t:'part', html:`<p class="part">Part Two <b>/ The system</b></p><h2 style="margin-top:22px">ManagementOS: five pillars that hold.</h2><p class="lead small">A whole system operating framework, installed into the rhythms you already run.</p>`},
+
+  {t:'pillar', html:`<div class="pillarno">PILLAR 01</div><h2 class="accent">Strategy</h2><p class="lead">Reduce the mandate to the priorities, choices and trade offs that actually matter, so the company stops spending energy on everything at once.</p>`},
+
+  {t:'pillar', html:`<div class="pillarno">PILLAR 02</div><h2 class="accent">Operating Rhythm</h2><p class="lead">Convert recurring chaos into decision rights, cadence, workflows, scorecards and accountability loops. The business runs on a beat instead of on your memory.</p>`},
+
+  {t:'pillar', html:`<div class="pillarno">PILLAR 03</div><h2 class="accent">Talent Wiring</h2><p class="lead">Align work to role fit, capacity, ownership and how people naturally perform, so the right work sits with the right person by design, not by default.</p>`},
+
+  {t:'pillar', html:`<div class="pillarno">PILLAR 04</div><h2 class="accent">Executive Capacity</h2><p class="lead">Design cognitive load, recovery rhythm and leadership endurance as strategic infrastructure. This is the pillar almost every other framework leaves out, and it is the one that keeps the other four alive.</p>`},
+
+  {t:'pillar', html:`<div class="pillarno">PILLAR 05</div><h2 class="accent">AI-Enabled Execution</h2><p class="lead">Embed AI into how work actually flows, so technology removes friction instead of adding another layer of noise. Leverage, not another dashboard to babysit.</p>`},
+
+  {t:'model', html:`<div class="kick">The 2% Opportunity Model</div><h2>Growth hides in the compounding small gains.</h2><p class="lead">You do not need one heroic bet. Roughly two percent better across a handful of independent levers compounds into a different company over a few years. The system is how you find those levers and hold the gains.</p>`},
+
+  {t:'part', html:`<p class="part">Part Three <b>/ What it looks like</b></p><h2 style="margin-top:22px">Installed, not handed over.</h2>`},
+
+  {t:'sequence', html:`<div class="kick">How it installs</div><h2>Six steps, inside your existing rhythm.</h2><div class="seq"><span class="k">Diagnose the constraint</span><span>Design the system</span><span>Install within existing rhythms</span><span>Align accountable people</span><span>Embed for sustainability</span><span class="k">Measure outcomes</span></div><p class="lead small">Bespoke to the company and the teams inside it, not a binder on a shelf.</p>`},
+
+  {t:'why', html:`<div class="kick">Why me</div><h2>Built in the room, not the abstract.</h2><ul><li>Twenty five years of operating experience across Fortune 500 brands and national networks.</li><li>Nine figure profit and loss accountability in retail, CPG and healthcare.</li><li>Employee engagement lifted from 38 to 80 over three years, because people and performance are the same problem.</li></ul>`},
+
+  {t:'thesis', html:`<div class="kick">The point of all of it</div><p class="big">Business longevity and <span class="accent">human longevity</span> are one problem.</p><p class="lead">Growth should not destroy the business or the people running it. Build a company that lasts and a leader who does too.</p>`},
+
+  {t:'cta', html:`<div class="kick">Your next step</div><h2>Start with the constraint.</h2><p class="lead">The fastest way in is to see where your company actually sits against the five pillars. Run the ManagementOS Growth Audit, then request a diagnostic conversation to walk through what it surfaces.</p><div class="cta-steps"><span class="chip">Run the ManagementOS Growth Audit</span><span class="chip">Request a diagnostic conversation</span></div><p class="credit">Davide Viola, Chairman and System Architect, CEOMasterMind</p><p class="disc">This masterclass is educational. It is not financial, legal or business advice, and no income, role, valuation or result is guaranteed. Results vary by company, market and execution. Figures such as the 2% Opportunity Model are directional illustrations, not projections of your outcome.</p>`}
+];
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<section class="slide ${s.cls||''} ${i===0?'on':''}" data-i="${i}">${s.html}</section>`).join('');
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const bar=document.getElementById('bar'), nav=document.getElementById('nav');
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));bar.style.width=((cur+1)/slides.length*100)+'%';nav.textContent=(cur+1)+' / '+slides.length;}
+function next(){show(cur+1)} function prev(){show(cur-1)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')next();else if(e.key==='ArrowLeft')prev();});
+stage.addEventListener('click',e=>{const w=window.innerWidth;(e.clientX> w*0.5)?next():prev();});
+show(0);
+</script>
+</body>
+</html>
