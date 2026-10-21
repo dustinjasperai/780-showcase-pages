@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managing Up Without Sucking Up — Wes Kao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Newsreader:ital,opt@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7F4;        /* warm white ground, her light scheme */
+    --panel:#FFFFFF;     /* panel */
+    --ink:#111111;       /* her near-black (brand.json) */
+    --accent:#111111;    /* single bold ink against the ground — monochrome by design */
+    --rule:#E5E7EB;      /* her gray (brand.json) */
+    --mut:#6b6b6b;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Newsreader',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  #deck{max-width:1040px;margin:0 auto}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 7vw;border-bottom:1px solid var(--rule);position:relative}
+  .num{position:absolute;top:5vh;left:7vw;font-family:var(--display);font-weight:700;
+    font-size:14px;letter-spacing:.14em;color:var(--mut)}
+  .kick{position:absolute;top:5vh;right:7vw;font-family:var(--display);font-weight:500;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6.4vw,74px);
+    line-height:1.02;letter-spacing:-.02em}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.4vw,46px);
+    line-height:1.06;letter-spacing:-.01em}
+  .lead{font-size:clamp(19px,2.3vw,27px);line-height:1.42;max-width:30ch;color:var(--ink)}
+  .lead.wide{max-width:42ch}
+  .sub{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--mut);margin-bottom:26px}
+  .rule{width:64px;height:2px;background:var(--accent);margin:28px 0}
+  .big{font-family:var(--display);font-weight:700;font-size:clamp(70px,12vw,150px);
+    line-height:.9;letter-spacing:-.03em}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:clamp(18px,2.1vw,25px);line-height:1.4;padding:16px 0;
+    border-top:1px solid var(--rule);display:flex;gap:18px}
+  li .mk{font-family:var(--display);font-weight:700;color:var(--accent);min-width:1.6em}
+  .strike{text-decoration:line-through;color:var(--mut)}
+  .solid{font-family:var(--display);font-weight:700}
+  .quote{font-size:clamp(24px,3.6vw,42px);line-height:1.18;max-width:24ch;
+    font-family:var(--display);font-weight:500;letter-spacing:-.01em}
+  .note{font-size:17px;line-height:1.5;color:var(--mut);max-width:48ch;margin-top:22px}
+  .proofgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:18px;
+    border-top:1px solid var(--rule)}
+  .proofgrid div{padding:22px 0;border-bottom:1px solid var(--rule)}
+  .proofgrid b{font-family:var(--display);font-weight:700;font-size:clamp(30px,4vw,44px);display:block}
+  .proofgrid span{font-size:15px;color:var(--mut)}
+  .disc{font-size:13px;color:var(--mut);max-width:52ch;margin-top:26px;line-height:1.5}
+  .cta-steps{font-size:clamp(19px,2.2vw,26px);line-height:1.5;margin-top:10px;max-width:34ch}
+  .foot{position:absolute;bottom:5vh;left:7vw;font-family:var(--display);font-size:12px;
+    letter-spacing:.16em;color:var(--mut)}
+  @media(max-width:640px){.proofgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:"A live masterclass with Wes Kao", h:"Managing Up Without Sucking Up",
+   lead:"How to get a yes from the people above you, without a longer deck or a louder voice.", foot:"weskao.com"},
+
+  {t:'who', kick:"Who this is for", h:"For the operator who does great work and still gets talked over.",
+   lead:"Senior ICs, product managers, engineers, and new managers at tech companies who have to influence people more senior than them."},
+
+  {t:'trap', kick:"The trap", h:"Your idea was right. It still died in the review.",
+   lead:"You walked in prepared, shared the plan, and watched a vague objection sink it in ninety seconds. You assumed the work would speak for itself. It never does."},
+
+  {t:'reframe', kick:"The reframe", quote:"The problem was never your idea. It is the thirty seconds before it.",
+   note:"Executives decide in the framing, not the detail. If the first thing they hear is logistics, you have already lost the room."},
+
+  {t:'part', num:"Part One", h:"How executives actually listen.",
+   lead:"They are pattern-matching for the decision and the risk. Everything else is noise until those two land."},
+
+  {t:'list', kick:"Public speaking vs executive communication", h:"Two different games.",
+   items:[["1","Public speaking rewards performance. Executive communication rewards precision."],
+          ["2","They do not want the journey. They want the recommendation and the one risk."],
+          ["3","Seniority is not volume. It is saying the accurate thing in the fewest words."]]},
+
+  {t:'part', num:"Part Two", h:"Three moves you can use in your next meeting."},
+
+  {t:'move', num:"Move 1", kick:"Sales, then logistics", h:"Sell why it matters before how it works.",
+   lead:"Give thirty to sixty seconds of why this decision matters, then the plan. Lead with logistics and busy people tune out before you reach the point."},
+
+  {t:'move', num:"Move 2", kick:"MOO, the Most Obvious Objection", h:"Name the pushback before they do.",
+   lead:"Spend a few seconds anticipating the most obvious objection, then address it inside your ask. You remove the reflex that kills good ideas, and you look like you have already thought it through."},
+
+  {t:'move', num:"Move 3", kick:"Managing up", h:"Bring a point of view, not a question.",
+   lead:"Do not ask your manager what to do. Present your recommendation with the reasoning and the one risk. It lowers their load and reads as judgment. Managing up is not sucking up."},
+
+  {t:'editorial', kick:"The one-line rewrite", h:"Watch a move in action.",
+   before:["Don't open with", "the logistics."], after:["Open with", "why it matters."]},
+
+  {t:'move', num:"For managers", kick:"The CEDAF method", h:"Delegate without lowering your bar.",
+   items:[["C","Comprehension: they understand the task."],
+          ["E","Excitement: it is meaningful, not just assigned."],
+          ["D","De-risk: name what could go wrong first."],
+          ["A","Align: one shared definition of done."],
+          ["F","Feedback: fast loops, not a surprise at the end."]]},
+
+  {t:'quote', kick:"Executive presence", quote:"Presence is accuracy, not volume.",
+   note:"Do not overstate a hypothesis as fact, or understate a strong recommendation. Say the true thing at the right strength and people trust you with bigger decisions."},
+
+  {t:'part', num:"Part Three", h:"What changes when you do this.",
+   lead:"Fewer rounds of back and forth. Faster yeses. A reputation for being the person who makes the room smarter, not longer."},
+
+  {t:'proof', kick:"Why me", h:"I have taught this to the people in your inbox.",
+   stats:[["80,000+","operators and managers read the weekly newsletter"],
+          ["1,500+","tech operators have taken the course"],
+          ["altMBA","co-created with Seth Godin; co-founded Maven"],
+          ["Meta to Anthropic","coaching clients across the best teams in tech"]]},
+
+  {t:'recap', kick:"Keep these three", h:"The whole session in three lines.",
+   items:[["1","Sales, then logistics."],["2","Name the most obvious objection first."],["3","Bring a point of view, not a question."]]},
+
+  {t:'cta', kick:"Join the next cohort", h:"Come do this live.",
+   steps:"Join the next live cohort of Executive Communication and Influence, or start with the free weekly newsletter at weskao.com.",
+   disc:"No income, role, promotion, or result is guaranteed. Results vary and depend on your own practice and context. This session is educational.",
+   foot:"weskao.com"}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sec=document.createElement('section');
+  sec.className='slide';
+  let inner='';
+  inner += `<div class="num">${s.num?s.num:String(i+1).padStart(2,'0')}</div>`;
+  if(s.kick) inner += `<div class="kick">${s.kick}</div>`;
+  if(s.t==='title'){
+    inner += `<div class="sub">${s.kick||''}</div><h1>${s.h}</h1><div class="rule"></div><p class="lead wide">${s.lead}</p>`;
+  } else if(s.t==='reframe' || (s.t==='quote')){
+    inner += `<p class="quote">${s.quote}</p>${s.note?`<p class="note">${s.note}</p>`:''}`;
+  } else if(s.t==='editorial'){
+    inner += `<h2>${s.h}</h2><div class="rule"></div>`+
+      `<p class="quote"><span class="strike">${s.before[0]} ${s.before[1]}</span></p>`+
+      `<p class="quote"><span class="solid">${s.after[0]} ${s.after[1]}</span></p>`;
+  } else if(s.t==='proof'){
+    inner += `<h2>${s.h}</h2><div class="proofgrid">`+
+      s.stats.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')+`</div>`;
+  } else if(s.t==='cta'){
+    inner += `<h2>${s.h}</h2><div class="rule"></div><p class="cta-steps">${s.steps}</p>`+
+      `<p class="disc">${s.disc}</p>`;
+  } else if(s.items){
+    inner += `<h2>${s.h}</h2><ul>`+
+      s.items.map(x=>`<li><span class="mk">${x[0]}</span><span>${x[1]}</span></li>`).join('')+`</ul>`;
+  } else {
+    if(s.h) inner += `<h2>${s.h}</h2>`;
+    if(s.lead){inner += `<div class="rule"></div><p class="lead">${s.lead}</p>`;}
+    if(s.note) inner += `<p class="note">${s.note}</p>`;
+  }
+  if(s.foot) inner += `<div class="foot">${s.foot}</div>`;
+  sec.innerHTML=inner;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
