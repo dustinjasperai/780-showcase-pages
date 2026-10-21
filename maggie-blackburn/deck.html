@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designing a Portfolio Career — a masterclass with Maggie Blackburn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#371d11;        /* her dominant espresso ground */
+    --panel:#4a2c1b;     /* lifted espresso */
+    --ink:#f4f1ed;       /* her cream */
+    --muted:#c9b4a4;     /* cream-brown */
+    --accent:#623e2a;    /* her third brand brown */
+    --accent-cream:#f4f1ed;
+    --rule:rgba(244,241,237,0.16);
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Overpass',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .stage{width:100%;max-width:1000px;aspect-ratio:16/9;position:relative;margin:0 auto;}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7% 8%;
+  }
+  .slide.on{display:flex;}
+  .kicker{font-family:'Overpass';font-size:13px;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent-cream);opacity:.72;margin-bottom:22px;}
+  h1{font-family:'Spectral';font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.01em;}
+  h2{font-family:'Spectral';font-weight:600;font-size:34px;line-height:1.14;margin-bottom:18px;}
+  .sub{font-size:20px;color:var(--muted);margin-top:20px;max-width:30em;line-height:1.5;}
+  .lead{font-size:21px;line-height:1.55;color:var(--ink);max-width:32em;}
+  .lead + .lead{margin-top:16px;}
+  .part-num{font-family:'Spectral';font-style:italic;font-size:19px;color:var(--accent-cream);opacity:.7;margin-bottom:10px;}
+  ul{list-style:none;margin-top:14px;max-width:34em;}
+  li{font-size:19px;line-height:1.5;padding:11px 0 11px 26px;position:relative;border-bottom:1px solid var(--rule);color:var(--ink);}
+  li:last-child{border-bottom:none;}
+  li::before{content:"";position:absolute;left:0;top:20px;width:10px;height:10px;background:var(--accent-cream);border-radius:2px;opacity:.85;}
+  .pill{display:inline-block;font-family:'Overpass';font-size:12px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--bg);background:var(--accent-cream);padding:6px 12px;border-radius:3px;margin-bottom:20px;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px;}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 16px;}
+  .card .n{font-family:'Spectral';font-style:italic;color:var(--accent-cream);opacity:.7;font-size:15px;}
+  .card .h{font-family:'Spectral';font-weight:600;font-size:18px;margin:6px 0 6px;}
+  .card .d{font-size:14px;color:var(--muted);line-height:1.4;}
+  .hook{font-family:'Spectral';font-weight:500;font-size:40px;line-height:1.14;max-width:22em;}
+  .hook .em{color:var(--accent-cream);font-style:italic;}
+  .credit{font-size:18px;color:var(--muted);line-height:1.55;max-width:32em;}
+  .credit strong{color:var(--ink);font-weight:600;}
+  .disclaimer{position:absolute;left:8%;right:8%;bottom:5%;font-size:12px;color:var(--muted);opacity:.7;line-height:1.4;font-family:'Overpass';}
+  .cta-step{font-size:20px;color:var(--ink);margin-top:14px;padding-left:24px;position:relative;}
+  .cta-step::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:50%;background:var(--accent-cream);}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;
+    font-family:'Overpass';font-size:13px;color:var(--muted);z-index:10;}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;
+    padding:7px 13px;font-size:13px;cursor:pointer;font-family:'Overpass';}
+  .nav button:hover{background:var(--accent);}
+  .count{min-width:52px;text-align:center;}
+  @media (max-width:640px){
+    h1{font-size:30px;}h2{font-size:24px;}.hook{font-size:26px;}.sub,.lead{font-size:16px;}
+    .grid4{grid-template-columns:repeat(2,1fr);} li{font-size:15px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev">&larr;</button>
+  <span class="count" id="count"></span>
+  <button id="next">&rarr;</button>
+</div>
+<script>
+const S = [
+  {t:'title',
+   kicker:'A live masterclass with Maggie Blackburn',
+   h1:'Designing a Portfolio Career',
+   sub:'How multi-passionate women build a working life of several aligned income streams, without betting everything on one job, and without quitting cold.'},
+
+  {t:'who',
+   kicker:'Who this is for',
+   h2:'You are in the right room if',
+   items:[
+     'You are a curious, multi-dimensional woman who has never fit neatly into one career box.',
+     'You have 7 or more years of real expertise and a quiet feeling that one job is too fragile a plan.',
+     'You have been dreaming about working for yourself, but your nervous system is scared of quitting right away.',
+     'You are tired of waiting for clarity and ready to create it.'
+   ]},
+
+  {t:'trap',
+   kicker:'The trap',
+   h2:'You were handed one script',
+   lead:['Go to school, get the job, climb the ladder, and stay on it. Pour everything you are into one employer, one title, one identity.',
+         'It feels safe right up until a layoff, a burnout, or a quiet Sunday night when you realize you built a whole life around something you would not choose again.']},
+
+  {t:'hook',
+   kicker:'The reframe',
+   hook:'You were told to climb. Nobody told you the ladder only goes <span class="em">one place.</span>'},
+
+  {t:'part', num:'Part One', h2:'Why one job is the risky plan'},
+
+  {t:'body',
+   kicker:'The real problem',
+   h2:'A single point of failure',
+   lead:['One job means one income, one boss, one decision-maker standing between you and your mortgage. We call that stable. It is actually concentrated risk.',
+         'A portfolio career spreads that risk across several aligned streams, so no single no can end your month.']},
+
+  {t:'body',
+   kicker:'The real problem',
+   h2:'The multi-passionate tax',
+   lead:['You have been told your range is a flaw. Pick one thing. Niche down. Stop being so scattered.',
+         'But the women who build durable, interesting careers do the opposite. They stop apologizing for the range and start packaging it.']},
+
+  {t:'part', num:'Part Two', h2:'The Portfolio Career Method'},
+
+  {t:'body',
+   kicker:'The method',
+   h2:'Six moves, in order',
+   lead:['This is the path I walk women through inside the Portfolio Career Circle. It is not a leap. It is six small, sequenced moves, each one making the next one safe.']},
+
+  {t:'cards',
+   kicker:'The method',
+   h2:'The six-week journey',
+   cards:[
+     {n:'01',h:'Audit your expertise',d:'Inventory the skills, experience and interests you already own.'},
+     {n:'02',h:'Nail your story',d:'Position the many things you do into one story that holds together.'},
+     {n:'03',h:'Craft your offer',d:'Define the audience, the transformation, and the price.'},
+     {n:'04',h:'Reach out',d:'Write the messages and pitch real people, not a faceless market.'}
+   ]},
+
+  {t:'cards',
+   kicker:'The method',
+   h2:'and the last two',
+   cards:[
+     {n:'05',h:'Build visibility',d:'Create on one platform until the right people start finding you.'},
+     {n:'06',h:'Make the roadmap',d:'A 90-day plan with real income targets, not vague hope.'},
+     {n:'+',h:'Money and stability',d:'Map several streams so your income stops depending on one yes.'},
+     {n:'=',h:'A career that is yours',d:'Several aligned streams, designed on purpose.'}
+   ]},
+
+  {t:'body',
+   kicker:'The safe part',
+   h2:'Run the experiment before you leap',
+   lead:['The reason most women never start is the all-or-nothing story: quit everything, or stay forever.',
+         'There is a third way. Design one small career experiment. Gather real data from real conversations. Make a tiny first offer while the paycheck is still landing. You learn whether the pivot is real before you ever risk the rent.']},
+
+  {t:'part', num:'Part Three', h2:'A portfolio career, in real life'},
+
+  {t:'cards',
+   kicker:'The four-month arc',
+   h2:'How Reimagine runs',
+   cards:[
+     {n:'Mo 1',h:'Discovery',d:'What aligns, what does not, and what you are actually for.'},
+     {n:'Mo 2',h:'Positioning',d:'Your services, your message, your personal brand.'},
+     {n:'Mo 3',h:'Money',d:'Revenue streams, earning targets, offers that fit.'},
+     {n:'Mo 4',h:'Momentum',d:'Test with first clients, build a plan that outlasts coaching.'}
+   ]},
+
+  {t:'body',
+   kicker:'A week in it',
+   h2:'What a portfolio week feels like',
+   lead:['Mornings on the work that pays well and drains you least. An afternoon on the stream you are still growing. A client call that you actually chose.',
+         'No one voluntells you into a meeting before 10am. The shape of the week is yours, because you designed it.']},
+
+  {t:'credit',
+   kicker:'Why me',
+   h2:'I built the thing I teach',
+   credit:'I spent over a decade in tech as a product marketer, at <strong>Deloitte, Slack and Asana</strong>, climbing the exact ladder I just described. In 2024 I left my six-figure corporate job and built a portfolio career of my own: coaching, corporate-event freelancing, retreat planning, community building and the <strong>feeling free</strong> newsletter. This method is the one I used on myself first.'},
+
+  {t:'body',
+   kicker:'The shift',
+   h2:'From climbing to building',
+   lead:['Climbing asks: how do I rise inside someone else’s structure? Building asks: what structure would I design if it were mine to design?',
+         'That one question is the whole masterclass. Everything else is just the order of the moves.']},
+
+  {t:'cta',
+   kicker:'Make your first bolder move',
+   h2:'Ready to design yours?',
+   steps:[
+     'Book a free career strategy call with me to map your first portfolio move.',
+     'If it is a fit, we go deeper together inside Reimagine or the Portfolio Career Circle.',
+     'You leave with a plan you could start this week, whether or not we work together.'
+   ],
+   disclaimer:'Educational content only. Building a portfolio career involves effort, time and individual circumstances; results vary and no specific income or outcome is promised or guaranteed.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return s;}
+function render(slide){
+  let h='';
+  if(slide.kicker) h+=`<div class="kicker">${slide.kicker}</div>`;
+  if(slide.t==='title'){ h+=`<h1>${slide.h1}</h1><p class="sub">${slide.sub}</p>`; }
+  else if(slide.t==='who'){ h+=`<h2>${slide.h2}</h2><ul>`+slide.items.map(i=>`<li>${i}</li>`).join('')+`</ul>`; }
+  else if(slide.t==='trap'||slide.t==='body'){ h+=`<h2>${slide.h2}</h2>`+slide.lead.map(p=>`<p class="lead">${p}</p>`).join(''); }
+  else if(slide.t==='hook'){ h+=`<p class="hook">${slide.hook}</p>`; }
+  else if(slide.t==='part'){ h+=`<div class="part-num">${slide.num}</div><h2>${slide.h2}</h2>`; }
+  else if(slide.t==='cards'){ h+=`<h2>${slide.h2}</h2><div class="grid4">`+slide.cards.map(c=>`<div class="card"><div class="n">${c.n}</div><div class="h">${c.h}</div><div class="d">${c.d}</div></div>`).join('')+`</div>`; }
+  else if(slide.t==='credit'){ h+=`<h2>${slide.h2}</h2><p class="credit">${slide.credit}</p>`; }
+  else if(slide.t==='cta'){ h+=`<h2>${slide.h2}</h2>`+slide.steps.map(s=>`<div class="cta-step">${s}</div>`).join('')+`<div class="disclaimer">${slide.disclaimer}</div>`; }
+  return `<div class="slide on">${h}</div>`;
+}
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  stage.innerHTML=render(S[i]);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+document.getElementById('prev').onclick=()=>show(i-1);
+document.getElementById('next').onclick=()=>show(i+1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft')show(i-1);
+});
+show(0);
+</script>
+</body>
+</html>
