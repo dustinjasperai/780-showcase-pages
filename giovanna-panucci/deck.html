@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masterclass dal vivo — Giuristi AI — Giovanna Panucci</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#111827; --panel:#1f2634; --rule:#313744; --accent:#ea318c;
+    --ink:#f0f0f0; --mut:#a7adba;
+    --head:'Lora',Georgia,serif; --body:'Figtree',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0b0f17;color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .deckwrap{max-width:1040px;margin:0 auto;padding:28px 18px 60px}
+  .slide{position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    aspect-ratio:16/9;margin:0 0 22px;padding:52px 58px;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .k{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:600;font-size:40px;line-height:1.12;margin-bottom:16px}
+  .s{font-size:22px;color:var(--ink);max-width:40ch}
+  .mut{color:var(--mut)}
+  .note{margin-top:20px;font-size:17px;color:var(--mut)}
+  ul{list-style:none;margin-top:14px;max-width:46ch}
+  li{position:relative;padding-left:26px;font-size:21px;margin:12px 0}
+  li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .em{color:var(--accent)}
+  .big{font-size:60px;font-family:var(--head);font-weight:700;line-height:1.05}
+  .struck{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .num{position:absolute;right:26px;bottom:20px;font-size:13px;color:var(--mut);font-weight:600;letter-spacing:.1em}
+  .brand{position:absolute;right:26px;top:24px;font-size:12px;color:var(--mut);letter-spacing:.14em;text-transform:uppercase}
+  .disc{margin-top:22px;font-size:14px;color:var(--mut);max-width:60ch;border-top:1px solid var(--rule);padding-top:14px}
+  .cta h1{font-size:50px}
+</style>
+</head>
+<body>
+<div class="deckwrap" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`<div class="k">Masterclass dal vivo · Giuristi AI</div>
+    <h1>Dall'AI che risponde<br>all'AI che <span class="em">lavora</span></h1>
+    <div class="s">Il metodo per trasformare l'AI in un collaboratore che lavora sui tuoi atti, non in un chatbot che risponde.</div>
+    <div class="note">con Giovanna Panucci</div>`},
+
+  {t:'who', cls:'', html:`<div class="k">Per chi</div>
+    <h2>Per chi è questa masterclass</h2>
+    <ul>
+      <li>Avvocati e praticanti che usano già ChatGPT o Claude ma ottengono risposte generiche</li>
+      <li>Studi che vogliono un metodo ripetibile, non l'ennesimo corso sulle basi</li>
+      <li>Chi vuole che l'AI faccia davvero il lavoro: ricerca, bozze, atti</li>
+    </ul>`},
+
+  {t:'trap', cls:'', html:`<div class="k">La trappola</div>
+    <h2>Apri l'AI, fai una domanda, ottieni un testo plausibile</h2>
+    <div class="s">Lo correggi per venti minuti. La volta dopo ricominci da zero. Non è un problema di strumento.</div>
+    <div class="note">È un problema di metodo.</div>`},
+
+  {t:'cost', cls:'', html:`<div class="k">Il costo nascosto</div>
+    <h2>Cosa costa davvero</h2>
+    <ul>
+      <li>Ore perse a riscrivere quello che l'AI ha prodotto a metà</li>
+      <li>Diffidenza verso lo strumento, quindi lo usi sempre meno</li>
+      <li>Il rischio concreto di una citazione inventata che finisce in un atto</li>
+    </ul>`},
+
+  {t:'reframe', cls:'', html:`<div class="k">Il ribaltamento</div>
+    <h2>L'AI non è un motore di ricerca</h2>
+    <div class="s">È un collaboratore junior bravissimo e senza memoria. Rende esattamente quanto il contesto e il metodo che gli dai.</div>`},
+
+  {t:'example', cls:'', html:`<div class="k">Un esempio</div>
+    <h2>Due risposte alla stessa domanda</h2>
+    <div class="s">Prompt generico: un testo plausibile da rifare. Stessa domanda con un file di contesto: la tua posizione, il tuo stile, fonti da verificare.</div>
+    <div class="note">La differenza non è lo strumento. È quello che gli metti davanti.</div>`},
+
+  {t:'part', cls:'', html:`<div class="k">Parte uno</div>
+    <h2>Perché "chiedere" non basta</h2>
+    <ul>
+      <li>Domande generiche producono risposte generiche</li>
+      <li>Senza contesto l'AI inventa, anche le sentenze</li>
+      <li>Ogni sessione riparte da zero, senza il tuo caso</li>
+    </ul>`},
+
+  {t:'part', cls:'', html:`<div class="k">Parte due · Il metodo</div>
+    <h2>Tre mosse</h2>
+    <div class="s">Le tre mosse che trasformano l'AI che risponde nell'AI che lavora. Le costruiamo dal vivo, su un caso vero.</div>`},
+
+  {t:'pillar', cls:'', html:`<div class="k">Mossa 1</div>
+    <h2>Il file di contesto</h2>
+    <div class="s">Un singolo file che dà all'AI il tuo caso, il tuo stile e le tue fonti. Batte qualsiasi prompt.</div>
+    <ul>
+      <li>Cosa mettere nel file, e cosa no</li>
+      <li>Come riusarlo su ogni nuovo incarico</li>
+    </ul>`},
+
+  {t:'pillar', cls:'', html:`<div class="k">Mossa 2</div>
+    <h2>Legal prompting avanzato</h2>
+    <div class="s">Strutturare i prompt per una ricerca e un drafting affidabili, con citazioni verificabili.</div>
+    <ul>
+      <li>Il prompt in quattro parti</li>
+      <li>Come chiudere la porta alle allucinazioni</li>
+    </ul>`},
+
+  {t:'pillar', cls:'', html:`<div class="k">Mossa 3</div>
+    <h2>Il tuo primo agente</h2>
+    <div class="s">Una piccola automazione che svolge dall'inizio alla fine un compito ripetitivo dello studio.</div>
+    <ul>
+      <li>Scegliere il compito giusto da cui partire</li>
+      <li>Dalla prova al flusso quotidiano</li>
+    </ul>`},
+
+  {t:'recap', cls:'', html:`<div class="k">Il metodo in una pagina</div>
+    <h2>Le tre mosse, insieme</h2>
+    <ul>
+      <li>Contesto: l'AI sa di cosa parli</li>
+      <li>Prompting: chiedi in modo che la risposta sia verificabile</li>
+      <li>Agente: il lavoro ripetitivo lo fa da solo</li>
+    </ul>`},
+
+  {t:'demo', cls:'', html:`<div class="k">Dal vivo</div>
+    <h2>Come appare in pratica</h2>
+    <div class="s">Un caso reale, dal vivo: file di contesto, prompt, verifica. Dalla domanda a una bozza utilizzabile in pochi minuti.</div>`},
+
+  {t:'arena', cls:'', html:`<div class="k">Gladiatori Digitali</div>
+    <h2>L'Arena: allenarsi, non provare</h2>
+    <div class="s">Non si impara l'AI guardandola. Si impara allenandosi, un caso alla volta, con metodo e costanza.</div>`},
+
+  {t:'outcome', cls:'', html:`<div class="k">Cosa cambia</div>
+    <h2>Dall'AI che risponde all'AI che <span class="em">lavora</span></h2>
+    <div class="big"><span class="struck">risponde</span> &nbsp;lavora</div>
+    <div class="note">Stesso strumento. Metodo diverso. Risultato diverso.</div>`},
+
+  {t:'why', cls:'', html:`<div class="k">Perché con me</div>
+    <h2>Chi tiene la masterclass</h2>
+    <ul>
+      <li>Oltre 10.000 professionisti formati nell'ultimo anno</li>
+      <li>Autrice di "Intelligenza Artificiale Generativa per Professionisti" (Maggioli), bestseller Amazon in Diritto</li>
+      <li>Fondatrice di Gladiatori Digitali e co-fondatrice di Giuristi AI</li>
+    </ul>`},
+
+  {t:'invite', cls:'', html:`<div class="k">La prossima lezione</div>
+    <h2>Si lavora insieme, dal vivo</h2>
+    <div class="s">Ogni mese una lezione in diretta su un tema concreto, con domande, casi e risorse che porti a casa. Non una registrazione da guardare.</div>`},
+
+  {t:'cta', cls:'cta', html:`<div class="k">Il passo successivo</div>
+    <h1>Entra in Giuristi AI</h1>
+    <div class="s">La community dove costruiamo il metodo insieme, su casi veri, con una lezione dal vivo al mese.</div>
+    <ul>
+      <li>10 lezioni dal vivo più le registrazioni</li>
+      <li>Libreria di prompt e risorse operative</li>
+      <li>Sessioni live mensili con i membri</li>
+    </ul>
+    <div class="disc">A scopo esclusivamente formativo. No income, role, or result is guaranteed; i risultati variano in base al caso concreto e all'impegno individuale.</div>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const sec = document.createElement('section');
+  sec.className = 'slide ' + (s.cls || '');
+  sec.innerHTML = s.html +
+    '<div class="brand">Giuristi AI</div>' +
+    '<div class="num">' + (i+1) + ' / ' + S.length + '</div>';
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
