@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mental Game, a live masterclass with Jared Tendler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10151C;
+    --panel:#1A2432;
+    --rule:#2C3A4C;
+    --accent:#E0A43B;
+    --ink:#F3EEE4;
+    --muted:#A8B3C2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"Karla",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto}
+  section.slide{
+    min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+    padding:7vh 8vw;border-bottom:1px solid var(--rule);position:relative;
+  }
+  .kicker{font-family:"Karla";font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.1rem}
+  h1{font-family:"Zilla Slab";font-weight:700;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:"Zilla Slab";font-weight:600;font-size:clamp(1.8rem,4.2vw,2.9rem);line-height:1.08;letter-spacing:-.01em}
+  .sub{font-size:clamp(1.05rem,2.1vw,1.4rem);color:var(--muted);margin-top:1.4rem;max-width:34ch}
+  .body{font-size:clamp(1.02rem,1.7vw,1.22rem);margin-top:1.3rem;max-width:52ch;color:#E7ECF2}
+  ul{margin:1.6rem 0 0;padding:0;list-style:none;max-width:52ch}
+  ul li{position:relative;padding:.55rem 0 .55rem 1.6rem;border-top:1px solid var(--rule);font-size:1.06rem}
+  ul li:before{content:"";position:absolute;left:0;top:1.15rem;width:.6rem;height:.6rem;background:var(--accent);border-radius:50%}
+  .part{text-align:center;align-items:center}
+  .part h2{font-size:clamp(2.2rem,5.5vw,3.6rem)}
+  .part .kicker{color:var(--accent)}
+  .num{position:absolute;top:5vh;right:8vw;font-family:"Zilla Slab";font-weight:600;color:var(--rule);font-size:1rem}
+  .cta{background:linear-gradient(180deg,#141C26 0%,#0B0F15 100%)}
+  .cta h2{color:var(--ink)}
+  .cta .go{display:inline-block;margin-top:1.8rem;background:var(--accent);color:#131313;font-weight:700;
+    font-family:"Zilla Slab";padding:.85rem 1.6rem;border-radius:6px;font-size:1.1rem}
+  .disc{margin-top:2.4rem;font-size:.82rem;color:var(--muted);max-width:60ch;line-height:1.5}
+  .mark{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', kicker:'A live masterclass with Jared Tendler', h:'The Mental Game', sub:'How to permanently fix tilt, fear and greed at the root, so you perform when it counts.'},
+  {t:'who', h:'Who this is for', body:'Traders, poker players and competitors who already know the strategy, put in the work, and still watch emotion undo their best decisions under pressure.', list:['You give back your best days', 'You know what to do and still do not do it when it matters', 'Discipline, journaling and willpower help for a while, then the same leaks return']},
+  {t:'trap', kicker:'The trap', h:'You have been told it is a discipline problem', body:'So you try harder. More rules, more willpower, more pre-game hype. It works for a stretch, then the same pattern returns at the worst possible moment.'},
+  {t:'reframe', kicker:'The reframe', h:'Tilt is a symptom, not the problem', body:'Fear, greed, FOMO, revenge and tilt are signals. Each one points to a deeper flaw, bias or false belief. Manage the symptom and it comes back. Resolve the cause and it is gone for good.'},
+  {t:'part', cls:'part', kicker:'Part one', h:'Why knowing better is not enough'},
+  {t:'mech', kicker:'The mechanism', h:'Your brain under pressure', body:'As emotion climbs past a certain point, the thinking part of your brain gives way to the reactive part. The plan is still in your head. You just cannot reach it. That is mechanical, not a character flaw.'},
+  {t:'mech', kicker:'The mechanism', h:'The four stages of competence', body:'Real skill moves through four stages. Most performers are stuck between stage two and stage three: they know it, but it is not yet automatic when the pressure is on.', list:['Unconscious incompetence', 'Conscious incompetence', 'Conscious competence', 'Unconscious competence']},
+  {t:'part', cls:'part', kicker:'Part two', h:'The Mental Game system'},
+  {t:'frame', kicker:'Framework', h:'Find the root cause', body:'Every emotional reaction traces back to a specific flaw, bias or false belief. We map the exact thought and situation that triggers it, then follow it down to the cause the symptom was hiding.'},
+  {t:'frame', kicker:'Framework', h:'The A to C game', body:'Your A game is your sharpest self. Your C game is your worst, under pressure. The gap between them is the real leak. You do not climb by pushing your A game higher. You climb by raising the floor.'},
+  {t:'frame', kicker:'Framework', h:'The Inchworm', body:'Improvement moves like an inchworm. The front edge reaches forward, then the back has to follow. When you cut your worst performances, your whole range shifts up, and the results follow it.'},
+  {t:'frame', kicker:'The tools', h:'Mental Hand History and the Data Collection Worksheet', body:'Two simple tools turn vague frustration into data. You capture the trigger in real time, grade the decision independently of the result, and build the correction so the fix holds the next time pressure hits.'},
+  {t:'part', cls:'part', kicker:'Part three', h:'When the cause is gone'},
+  {t:'after', kicker:'The shift', h:'You stop reacting', body:'The early warning signs become visible before they take over. You catch the pattern, run the correction, and keep executing your edge, on your best days and your worst ones.'},
+  {t:'after', kicker:'The shift', h:'Graded on process, not the scoreboard', body:'You judge a session by how well you executed, not only by the result. That is what makes the improvement stick, because you are training the one thing you can actually control.'},
+  {t:'why', kicker:'Why me', h:'Jared Tendler, MS, LMHC', body:'Twenty years coaching the mental game across poker, trading, golf and esports. Author of The Mental Game of Poker, The Mental Game of Trading and Everyday Golf Psychology. Clients in 45 countries, including world champions, PGA and LPGA Tour winners, and institutional and retail traders. Former Head of Sport Psychology for Team Liquid.'},
+  {t:'recap', kicker:'In one line', h:'The method', body:'Stop managing symptoms. Find the cause, close the gap between your A game and your C game, and perform when it counts.'},
+  {t:'cta', cls:'cta', kicker:'Your next step', h:'Keep going with The Mental Game', body:'Join the next live session of The Mental Game of Trading LIVE and start resolving the causes behind your biggest leaks.', disc:'Educational only. No income, result, or performance outcome is guaranteed. Results vary and depend on many factors outside any coach’s control. Trading involves substantial risk of loss and is not suitable for everyone.'}
+];
+
+function esc(x){return (x||'')}
+const deck = document.getElementById('deck');
+S.forEach(function(s, i){
+  const sec = document.createElement('section');
+  sec.className = 'slide ' + (s.cls || s.t);
+  let html = '<div class="num">' + (i+1) + ' / ' + S.length + '</div>';
+  if (s.kicker) html += '<div class="kicker">' + esc(s.kicker) + '</div>';
+  if (s.t === 'title' || (s.cls === 'part')) {
+    html += '<h1>' + esc(s.h) + '</h1>';
+  } else {
+    html += '<h2>' + esc(s.h) + '</h2>';
+  }
+  if (s.sub) html += '<p class="sub">' + esc(s.sub) + '</p>';
+  if (s.body) html += '<p class="body">' + esc(s.body) + '</p>';
+  if (s.list) {
+    html += '<ul>';
+    s.list.forEach(function(li){ html += '<li>' + esc(li) + '</li>'; });
+    html += '</ul>';
+  }
+  if (s.t === 'cta') html += '<div class="go">Reserve your seat</div>';
+  if (s.disc) html += '<p class="disc">' + esc(s.disc) + '</p>';
+  sec.innerHTML = html;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
