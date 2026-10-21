@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Margin First | ShiftChange Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#19191a; --panel:#242320; --rule:#3a3734;
+    --ink:#f8f8f8; --ink-soft:#cfccc6; --ink-mute:#8f8b84;
+    --accent:#0073b7; --warm:#d58765;
+    --head:'Montserrat',system-ui,sans-serif; --body:'Mulish',system-ui,sans-serif;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;}
+  .slide.on{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  .kicker.warm{color:var(--warm);}
+  h1{font-family:var(--head);font-weight:800;font-size:clamp(30px,5.6vw,58px);line-height:1.08;letter-spacing:-.01em;margin-bottom:22px;}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(24px,4vw,40px);line-height:1.15;margin-bottom:20px;}
+  p{font-size:clamp(16px,2vw,21px);color:var(--ink-soft);margin-bottom:16px;max-width:42ch;}
+  p.lead{font-size:clamp(18px,2.4vw,25px);color:var(--ink);}
+  .big{color:var(--ink);font-weight:600;}
+  ul{list-style:none;margin:14px 0 0;}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,2vw,21px);color:var(--ink-soft);margin-bottom:14px;max-width:46ch;}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent);}
+  .pillar{font-family:var(--head);font-weight:800;font-size:clamp(26px,4.4vw,46px);color:var(--ink);}
+  .pillar .n{color:var(--accent);}
+  .meta{font-family:var(--head);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--ink-mute);margin-top:30px;}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:30px 32px;margin-top:8px;}
+  .disc{font-size:14px;color:var(--ink-mute);max-width:60ch;margin-top:22px;line-height:1.5;}
+  .cta-line{display:inline-block;font-family:var(--head);font-weight:700;color:var(--bg);background:var(--accent);padding:14px 26px;border-radius:10px;margin-top:10px;font-size:clamp(15px,2vw,19px);}
+  .nav{position:fixed;bottom:22px;right:26px;font-family:var(--head);font-size:12px;letter-spacing:.08em;color:var(--ink-mute);z-index:10;}
+  .bar{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);transition:width .3s;z-index:10;}
+  .hint{position:fixed;bottom:22px;left:26px;font-family:var(--head);font-size:11px;letter-spacing:.1em;color:var(--ink-mute);z-index:10;text-transform:uppercase;}
+  .warm-ink{color:var(--warm);}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="bar" id="bar"></div>
+<div class="hint">Arrow keys to navigate</div>
+<div class="nav" id="nav"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="kicker">A ShiftChange Masterclass with Dr. Patrick O'Malley</div>
+    <h1>Margin First</h1>
+    <p class="lead">How ER and urgent care clinicians build real side income without picking up more shifts.</p>
+    <div class="meta">Emergency medicine physician, 20+ years in the ER. Founder of ShiftChange.</div>
+  `},
+  {t:'who', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You love the work. You are also running on empty.</h2>
+    <p class="lead">This is for emergency and urgent care clinicians, physicians, PAs and NPs, who want another way to earn that does not depend on the next shift.</p>
+    <ul>
+      <li>You have thought about building something of your own for years.</li>
+      <li>You do not want to leave medicine. You want options inside it.</li>
+      <li>Every plan you have made has lost to a string of night shifts.</li>
+    </ul>
+  `},
+  {t:'trap', html:`
+    <div class="kicker warm">The trap</div>
+    <h2>More money has only ever meant one thing: more shifts.</h2>
+    <p>So you pick up another block. The income goes up and the margin in your life goes to zero. There is nothing left over to build with, so the side project never starts, or it starts and quietly dies.</p>
+    <p class="big">The problem was never your effort. You have plenty of effort. You have no margin.</p>
+  `},
+  {t:'reframe', html:`
+    <div class="kicker">The reframe</div>
+    <h2>You do not have an idea problem. You have a margin problem.</h2>
+    <p class="lead">Most clinicians try to monetize first, from a place of total depletion, and burn out twice. The order is backwards.</p>
+    <p>Free up the time, energy and headspace first. Then the business has somewhere to live.</p>
+  `},
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part One</div>
+    <h1>Why side gigs fail for clinicians</h1>
+  `},
+  {t:'problem', html:`
+    <div class="kicker">Part One</div>
+    <h2>You are starting every attempt from debt.</h2>
+    <p>Not money debt. Time, energy and attention debt. A business started from depletion inherits the depletion. It feels like one more shift, so your nervous system treats it like one, and you stop.</p>
+    <ul>
+      <li>No time blocked that a shift cannot eat.</li>
+      <li>No energy left after charting at 2am.</li>
+      <li>No headspace to think past the next clinical day.</li>
+    </ul>
+  `},
+  {t:'failed', html:`
+    <div class="kicker warm">What I learned the hard way</div>
+    <h2>I failed at this more than once before it worked.</h2>
+    <p>Laser tattoo removal. Botox. Hospice. Real estate. Consulting. Medical devices. Online products. Each one taught me the same lesson from a different angle.</p>
+    <p class="big">The ones that failed, I started with no margin. The one that worked, I built the margin first.</p>
+  `},
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part Two</div>
+    <h1>The 3 M's</h1>
+    <p class="lead">The sequence that let me sell six figures of my own work while still working full clinical shifts.</p>
+  `},
+  {t:'margin', html:`
+    <div class="pillar"><span class="n">M1.</span> Margin</div>
+    <h2>Free up the time, energy and headspace before anything else.</h2>
+    <p>Margin comes first on purpose. We find the hours a shift cannot touch, protect the energy, and clear the mental room to work on something that is yours. Nothing else in the method works until this does.</p>
+  `},
+  {t:'movement', html:`
+    <div class="pillar"><span class="n">M2.</span> Movement</div>
+    <h2>Turn stuck into momentum with a clear next step.</h2>
+    <p>A roadmap with next step action items that line up with your actual skillset and goals, not a generic start a business checklist. The point of movement is to break the uncertainty that keeps smart clinicians frozen for years.</p>
+  `},
+  {t:'monetize', html:`
+    <div class="pillar"><span class="n">M3.</span> Monetize</div>
+    <h2>Build flexible income that does not require more shifts.</h2>
+    <p>Now, and only now, we clarify the offer and start generating income. Because the margin and the movement are already in place, the money is additive. It does not cost you another night in the department.</p>
+  `},
+  {t:'order', html:`
+    <div class="kicker">Why the order matters</div>
+    <h2>Margin, then Movement, then Monetize. Always that order.</h2>
+    <p>Most programs sell you Monetize on day one. That is why most clinicians quit in month two. Sequenced correctly, each M makes the next one possible instead of impossible.</p>
+  `},
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part Three</div>
+    <h1>What it actually looks like</h1>
+  `},
+  {t:'week', html:`
+    <div class="kicker">A real week</div>
+    <h2>Fewer heroics, more compounding.</h2>
+    <ul>
+      <li>A few protected blocks that your schedule respects like a shift.</li>
+      <li>One clear next action per block, aligned to the roadmap.</li>
+      <li>An offer that grows whether or not you were in the department that day.</li>
+    </ul>
+    <p class="big">The goal is not to work more. It is to make the work you already do go further.</p>
+  `},
+  {t:'whyme', html:`
+    <div class="kicker warm">Why listen to me</div>
+    <h2>I built this while still working the floor.</h2>
+    <ul>
+      <li>Emergency medicine physician, 20+ years in the ER.</li>
+      <li>Over $800,000 in my own digital course sales, earned while working full clinical shifts.</li>
+      <li>50+ clinicians coached through this same margin first path.</li>
+    </ul>
+    <p>I am not telling you to quit medicine. I am showing you the path I actually walked while I stayed in it.</p>
+  `},
+  {t:'objections', html:`
+    <div class="kicker">The three things you are thinking</div>
+    <h2>"No time. Not techy. Not an entrepreneur."</h2>
+    <ul>
+      <li>No time is a margin problem, and margin is M1. We solve it first.</li>
+      <li>Not techy is fine. Clarity of offer beats tooling every time.</li>
+      <li>Not an entrepreneur yet. Neither was I. That is what the roadmap is for.</li>
+    </ul>
+  `},
+  {t:'cta', cls:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h1>Start with Margin.</h1>
+    <p class="lead">If you want the roadmap and a room full of clinicians walking the same path, come inside ShiftChange.</p>
+    <div class="card">
+      <p style="margin:0 0 10px;color:var(--ink);font-weight:600;">Two ways in:</p>
+      <ul style="margin-top:4px;">
+        <li>Join the ShiftChange Community and get the trainings, the weekly calls and the network.</li>
+        <li>Or book a free 15-minute discovery call and we will map your first M together.</li>
+      </ul>
+      <span class="cta-line">Come build your margin first.</span>
+    </div>
+    <p class="disc">Educational content only. Nothing here is medical, financial, legal or tax advice. No income, role, or result is guaranteed, and results are not typical. Your outcome depends on your own effort, situation and decisions. Individual experiences vary.</p>
+  `}
+];
+const stage=document.getElementById('stage');
+const bar=document.getElementById('bar');
+const nav=document.getElementById('nav');
+stage.innerHTML=S.map((s,i)=>`<div class="slide ${s.cls||''}" data-i="${i}">${s.html}</div>`).join('');
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,i)=>el.classList.toggle('on',i===cur));bar.style.width=((cur+1)/S.length*100)+'%';nav.textContent=(cur+1)+' / '+S.length;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft'||e.key==='PageUp')show(cur-1);});
+document.addEventListener('click',e=>{if(e.clientX<window.innerWidth*0.3)show(cur-1);else show(cur+1);});
+show(0);
+</script>
+</body>
+</html>
