@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Smart People Give Forgettable Presentations — David D. Doerrier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Francois+One&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f223a;      /* their dominant navy */
+    --panel:#13302e;   /* their deep teal-green */
+    --rule:#1c7c5a;    /* their teal */
+    --accent:#cb9f49;  /* their brass/gold */
+    --ink:#f6f3ed;     /* their warm off-white */
+    --muted:#9fb0bf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#071122;color:var(--ink);font-family:"Figtree",system-ui,sans-serif;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px}
+  .slide{background:var(--bg);border:1px solid rgba(28,124,90,.35);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:attr(data-n);position:absolute;top:22px;right:30px;font-family:"Francois One";
+    font-size:14px;letter-spacing:.18em;color:var(--accent);opacity:.65}
+  h1,h2,.kick{font-family:"Francois One",sans-serif;font-weight:400}
+  h1{font-size:46px;line-height:1.08;letter-spacing:.01em}
+  h2{font-size:32px;line-height:1.12;margin-bottom:18px}
+  .kick{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  p{font-size:19px;color:#e7ecf1;margin-top:14px;max-width:62ch}
+  .lede{font-size:22px;color:#f6f3ed}
+  .sub{font-size:20px;color:var(--muted);margin-top:18px}
+  ul{margin:20px 0 0 0;padding:0;list-style:none}
+  li{font-size:19px;color:#e7ecf1;padding:12px 0 12px 34px;position:relative;border-top:1px solid rgba(28,124,90,.25)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:19px;width:14px;height:14px;background:var(--accent);
+    border-radius:3px;transform:rotate(45deg)}
+  .num{display:inline-block;font-family:"Francois One";color:var(--accent);margin-right:10px}
+  .panel{background:var(--panel);border-left:4px solid var(--accent);padding:24px 28px;border-radius:8px;margin-top:22px}
+  .big{font-family:"Francois One";font-size:40px;color:var(--ink);line-height:1.1}
+  .foot{position:absolute;bottom:20px;left:56px;font-size:13px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .title h1{max-width:20ch}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:70ch}
+  .steps{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+  .step{flex:1 1 180px;background:var(--panel);border-radius:10px;padding:20px}
+  .step .s{font-family:"Francois One";color:var(--accent);font-size:15px;letter-spacing:.12em}
+  .step h3{font-family:"Francois One";font-weight:400;font-size:21px;margin:8px 0 6px}
+  .step p{font-size:15px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:"title", cls:"title", html:`
+    <div class="kick">A Live Masterclass with David D. Doerrier</div>
+    <h1>Why Smart People Give Forgettable Presentations</h1>
+    <p class="sub">And the engagement principles that make a message land, stick, and move people to act.</p>
+    <div class="foot">Present Your Way To Success</div>`},
+
+  {t:"audience", html:`
+    <div class="kick">Who this is for</div>
+    <h2>You know your work. The room still drifts.</h2>
+    <ul>
+      <li>Business owners and executives who present to win trust</li>
+      <li>Sales professionals and consultants who pitch for a living</li>
+      <li>Trainers, technical experts, and subject-matter experts who have to be understood</li>
+    </ul>
+    <p class="sub">If your job is explaining ideas and moving people to act, this is for you.</p>`},
+
+  {t:"trap", html:`
+    <div class="kick">The trap</div>
+    <h2>Accurate. Polished. Professionally delivered. And still forgettable.</h2>
+    <p class="lede">Your facts are right. Your slides are clean. You rehearsed. And somewhere around slide three, the room quietly checks out.</p>
+    <p>It is not a confidence problem. You are confident. It is an engagement problem, and almost nobody names it.</p>`},
+
+  {t:"hook", html:`
+    <div class="kick">The reframe</div>
+    <div class="panel"><div class="big">Talking and telling ain't training or selling.</div></div>
+    <p>Delivering information is not the same as teaching it, and it is not the same as selling with it. Information lands only when it is built around how people actually take it in.</p>`},
+
+  {t:"part1", cls:"title", html:`
+    <div class="kick">Part One</div>
+    <h1>The problem is not you. It is the format.</h1>`},
+
+  {t:"why", html:`
+    <div class="kick">How attention really works</div>
+    <h2>Adults do not absorb information the way slides deliver it.</h2>
+    <p>Adults filter for relevance, hold only a few ideas at once, and disengage the moment effort outruns payoff. A dense, linear data-dump fights every one of those instincts.</p>
+    <p>So the important idea gets buried under too much information, attention drops, confidence in you drops with it, and the action you hoped to inspire never happens.</p>`},
+
+  {t:"cost", html:`
+    <div class="kick">What it costs</div>
+    <h2>A buried message is a lost decision.</h2>
+    <ul>
+      <li>The deal that stalls because the value never got through</li>
+      <li>The team that nods, then does it the old way anyway</li>
+      <li>The expertise that is real but never believed, because it was never felt</li>
+    </ul>`},
+
+  {t:"part2", cls:"title", html:`
+    <div class="kick">Part Two</div>
+    <h1>The Eight Principles of Engagement</h1>
+    <p class="sub">A practical framework built on how adults naturally learn, process information, and stay engaged.</p>`},
+
+  {t:"pone", html:`
+    <div class="kick"><span class="num">01</span> Presence over polish</div>
+    <h2>Your body speaks before your slides do.</h2>
+    <p>Nonverbal communication, how you stand, pause, and hold a gaze, decides whether a room leans in or tunes out. We make the nonverbals deliberate instead of accidental.</p>`},
+
+  {t:"ptwo", html:`
+    <div class="kick"><span class="num">02</span> Story carries meaning</div>
+    <h2>People remember the story, not the stat.</h2>
+    <p>A number is evidence; a story is why anyone cares about the number. We build the message so the point rides on something human, not a bullet list.</p>`},
+
+  {t:"pthree", html:`
+    <div class="kick"><span class="num">03</span> Transitions keep the thread</div>
+    <h2>You lose the room in the gaps.</h2>
+    <p>Attention leaks between points. Clean transitions tell the audience why the next idea matters now, so the thread never drops and the argument stays whole.</p>`},
+
+  {t:"pfour", html:`
+    <div class="kick"><span class="num">04</span> Structure that sells the idea</div>
+    <h2>A clear pitch beats a complete one.</h2>
+    <p>Say less, land more. We shape the opening, the one idea that matters, and the ask, so the audience always knows what to do with what they just heard.</p>`},
+
+  {t:"pfive", html:`
+    <div class="kick"><span class="num">05</span> Hold the room on any stage</div>
+    <h2>In person or on a Zoom grid, the principles hold.</h2>
+    <p>Virtual communication strips away the easy cues, so engagement has to be designed in. The same principles work boardroom, conference, and camera.</p>`},
+
+  {t:"method", html:`
+    <div class="kick">How we work the skill in</div>
+    <h2>Discover, Develop, Apply, Grow.</h2>
+    <div class="steps">
+      <div class="step"><div class="s">DISCOVER</div><h3>Find the gap</h3><p>Pinpoint what is really keeping your message from landing.</p></div>
+      <div class="step"><div class="s">DEVELOP</div><h3>Build the skill</h3><p>Shape the message and the delivery around the principles.</p></div>
+      <div class="step"><div class="s">APPLY</div><h3>Use it for real</h3><p>Put it to work on an actual upcoming presentation.</p></div>
+      <div class="step"><div class="s">GROW</div><h3>Make it stick</h3><p>Practice and feedback until it is simply how you communicate.</p></div>
+    </div>`},
+
+  {t:"part3", cls:"title", html:`
+    <div class="kick">Part Three</div>
+    <h1>When the room comes back to you</h1>`},
+
+  {t:"picture", html:`
+    <div class="kick">The difference in the room</div>
+    <h2>Same expertise. A room that is with you.</h2>
+    <p>Eyes up instead of on phones. Questions that mean they are thinking with you, not waiting for you to finish. A decision that moves because the idea actually arrived.</p>
+    <p class="sub">That is engagement doing the work confidence alone never could.</p>`},
+
+  {t:"whyme", html:`
+    <div class="kick">Why David</div>
+    <h2>Thirty years of making people understood.</h2>
+    <ul>
+      <li>Retired USAF non-commissioned officer; broadcaster and performer</li>
+      <li>Decades in instructional design, corporate training, and live facilitation</li>
+      <li>Creator of the Eight Principles of Engagement and the Speak With Impact Network</li>
+    </ul>`},
+
+  {t:"practice", html:`
+    <div class="kick">Where you keep it sharp</div>
+    <h2>Learn it. Apply it. Practice it. Make it your own.</h2>
+    <p>The Speak With Impact Network is a live virtual community where professionals bring a real pitch, introduction, or presentation and practice it with coaching and peer feedback, twice a month.</p>`},
+
+  {t:"cta", cls:"cta", html:`
+    <div class="kick">Your next step</div>
+    <h1>Bring one talk that matters.</h1>
+    <p class="lede">Book a free discovery call with David, or come experience a live session and bring a message you want to land.</p>
+    <p class="sub">Present Your Way To Success. Visit pywtsuccess.com</p>
+    <p class="disc">Educational content only. Outcomes depend on your own effort, audience, and circumstances; no specific result, response, or business outcome is guaranteed. Results vary.</p>`}
+];
+
+const deck = document.getElementById("deck");
+S.forEach((s,i)=>{
+  const d = document.createElement("section");
+  d.className = "slide " + (s.cls||"");
+  d.setAttribute("data-n", String(i+1).padStart(2,"0") + " / " + String(S.length).padStart(2,"0"));
+  d.innerHTML = s.html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
