@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Class Basics, A Masterclass with Joel Filliol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfdfd;        /* Joel's near-white ground */
+    --panel:#ededed;     /* his light-grey rule block */
+    --rule:#999999;      /* his mid-grey hairline */
+    --ink:#272727;       /* his near-black body ink */
+    --ink2:#666666;      /* his secondary grey */
+    --accent:#111111;    /* near-black accent, from his #000/#272727/#333 + black CTA */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:36px 18px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:2px;
+    padding:54px 56px;margin:0 0 26px;min-height:460px;position:relative;
+    display:flex;flex-direction:column;justify-content:center}
+  .slide .num{position:absolute;top:22px;right:26px;font-family:'Oswald';font-weight:600;
+    font-size:13px;letter-spacing:.14em;color:var(--rule)}
+  .kicker{font-family:'Oswald';font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:20px}
+  h1{font-family:'Oswald';font-weight:700;font-size:62px;line-height:1.02;letter-spacing:-.01em;
+    text-transform:uppercase;color:var(--accent)}
+  h2{font-family:'Oswald';font-weight:600;font-size:40px;line-height:1.06;text-transform:uppercase;
+    color:var(--ink);letter-spacing:-.005em}
+  .sub{font-size:20px;line-height:1.5;color:var(--ink2);margin-top:22px;max-width:60ch;font-weight:400}
+  p.body{font-size:19px;line-height:1.6;color:var(--ink);margin-top:18px;max-width:62ch}
+  .big{font-family:'Oswald';font-weight:500;font-size:34px;line-height:1.18;color:var(--ink);
+    max-width:24ch}
+  .quote{font-family:'Oswald';font-weight:500;font-size:30px;line-height:1.2;color:var(--accent);
+    border-left:4px solid var(--accent);padding-left:22px;margin-top:10px;max-width:26ch}
+  ul{list-style:none;margin-top:26px}
+  ul li{font-size:19px;line-height:1.5;padding:14px 0 14px 46px;border-bottom:1px solid var(--panel);
+    position:relative;color:var(--ink)}
+  ul li:last-child{border-bottom:none}
+  ul li .n{position:absolute;left:0;top:13px;font-family:'Oswald';font-weight:700;font-size:20px;
+    color:var(--accent)}
+  ul li b{font-weight:600}
+  .part h1{font-size:72px}
+  .part .kicker{color:var(--ink2)}
+  .cta{background:var(--panel)}
+  .cta h2{color:var(--accent)}
+  .disc{font-size:13px;line-height:1.5;color:var(--ink2);margin-top:30px;max-width:66ch}
+  .foot{font-family:'Oswald';letter-spacing:.14em;text-transform:uppercase;font-size:13px;
+    color:var(--rule);margin-top:26px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:"title", html:`
+    <div class="kicker">A Masterclass with Joel Filliol</div>
+    <h1>World Class Basics</h1>
+    <div class="sub">How ambitious age-group triathletes train like the pros, minus the complexity. The same fundamentals that built 6 world champions, applied to a season with a job and a family in it.</div>
+    <div class="foot">Real Coaching &middot; JFTcrew</div>`},
+
+  {t:"who", html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You are serious, and you are busy</h2>
+    <p class="body">You have a job, a family, and a limited number of hours in the week. You are chasing a real goal: a PR, a Kona slot, a first podium. You do not need more motivation. You need to know that the hours you do have are being spent on the things that actually move performance.</p>`},
+
+  {t:"twoways", html:`
+    <div class="kicker">The two failure modes</div>
+    <h2>Busy athletes go wrong in two directions</h2>
+    <ul>
+      <li><span class="n">1</span><b>Too much, too random.</b> Cramming hard sessions into the few hours available, then breaking down and restarting.</li>
+      <li><span class="n">2</span><b>Too little, too scattered.</b> Training when it is convenient, with no plan the week is actually built around.</li>
+    </ul>
+    <p class="body">Both feel like effort. Neither builds the engine.</p>`},
+
+  {t:"trap", html:`
+    <div class="kicker">The trap</div>
+    <h2>The sport keeps overcomplicating what is already complex</h2>
+    <p class="body">Every week there is a new gadget, a new metric, a new protocol, a new plan that contradicts the last one. It feels like progress. Most of it is noise, and the noise is what keeps you busy while your actual engine stays exactly where it was.</p>`},
+
+  {t:"hook", html:`
+    <div class="kicker">The reframe</div>
+    <div class="quote">It was never talent, and it was never the biggest training weeks.</div>
+    <p class="body">The ceiling you keep hitting is a fundamentals problem wearing a talent mask. Fix the fundamentals and the ceiling moves.</p>`},
+
+  {t:"myth", html:`
+    <div class="kicker">The common shortcut</div>
+    <h2>More intensity is not the answer</h2>
+    <p class="body">When progress stalls, the instinct is to add intensity: harder intervals, more threshold, another test. It buys a few weeks, then the same ceiling returns, usually with a niggle attached. Intensity spends the engine. It does not build it.</p>`},
+
+  {t:"part part", html:`
+    <div class="kicker">Part One</div>
+    <h1>Why you plateau</h1>`},
+
+  {t:"rushing", html:`
+    <div class="kicker">The three forms of rushing</div>
+    <h2>Plateaus are built, not inherited</h2>
+    <ul>
+      <li><span class="n">1</span><b>Advancing too fast.</b> Chasing competition levels before the body is ready to hold them.</li>
+      <li><span class="n">2</span><b>Skipping capacity.</b> Never building the training load the next level actually requires.</li>
+      <li><span class="n">3</span><b>Protocols too early.</b> Altitude camps and lactate testing stacked on before the base exists.</li>
+    </ul>`},
+
+  {t:"consequence", html:`
+    <div class="kicker">The cost</div>
+    <h2>A ceiling that looks like a limit</h2>
+    <p class="body">Athletes who rush hit their ceiling earlier, pick up more injuries, and plateau well below their potential. It gets filed as a talent limitation. Almost always it is a developmental error, and developmental errors can be corrected.</p>`},
+
+  {t:"part part", html:`
+    <div class="kicker">Part Two</div>
+    <h1>The four fundamentals</h1>`},
+
+  {t:"p1", html:`
+    <div class="kicker">Fundamental One</div>
+    <h2>Build the engine first</h2>
+    <p class="body">The aerobic system takes years to develop to its full potential. It responds to volume and frequency, built progressively over time, not to a clever six-week block. Everything else, speed, racing, sharpening, is built on top of it.</p>
+    <div class="quote">Build the engine first. The rest follows.</div>`},
+
+  {t:"p2", html:`
+    <div class="kicker">Fundamental Two</div>
+    <h2>Train to train</h2>
+    <p class="body">Before you train to compete, you train to train: you build the capacity and the habits that let you absorb real work. It runs across the whole development path, from learning to train, to training to compete, to training to win.</p>
+    <div class="quote">Train to train is not a phase. It is a mindset for how you process improvement.</div>`},
+
+  {t:"p3", html:`
+    <div class="kicker">Fundamental Three</div>
+    <h2>Do less, better</h2>
+    <p class="body">Consistency, aerobic depth, patience, and the discipline to do less, better. The athletes who improve for years are not doing the most. They are doing the few things that matter, repeatedly, without breaking the chain.</p>`},
+
+  {t:"p4", html:`
+    <div class="kicker">Fundamental Four</div>
+    <h2>It wasn't talent</h2>
+    <p class="body">Across four world champions the common thread was not genetics or huge loads. It was four things anyone can develop.</p>
+    <ul>
+      <li><span class="n">1</span><b>Coachability and trust.</b> Open to coaching inside a strong relationship.</li>
+      <li><span class="n">2</span><b>Self-discipline.</b> Managing behaviour and response, day after day.</li>
+      <li><span class="n">3</span><b>Ownership.</b> Taking responsibility for the outcome.</li>
+      <li><span class="n">4</span><b>High commitment.</b> Sustained, not seasonal.</li>
+    </ul>`},
+
+  {t:"talent", html:`
+    <div class="kicker">The point</div>
+    <div class="quote">Talent is table stakes.</div>
+    <p class="body">It is necessary, and it is nowhere near sufficient. The qualities that separate the champions are the ones you can choose to build, starting this week.</p>`},
+
+  {t:"part part", html:`
+    <div class="kicker">Part Three</div>
+    <h1>Putting it to work</h1>`},
+
+  {t:"week", html:`
+    <div class="kicker">A week that works</div>
+    <h2>Fewer decisions, more consistency</h2>
+    <p class="body">A strong aerobic base, a small number of key sessions you actually complete, recovery that is planned rather than hoped for, and a season that is designed backwards from the races that matter. Simple to describe, hard to hold, and that is the whole game.</p>`},
+
+  {t:"environment", html:`
+    <div class="kicker">How the pros actually live</div>
+    <h2>The boring parts are the point</h2>
+    <p class="body">The daily environment of a top triathlete is not exotic. It is sleep, fuelling, easy aerobic work done honestly easy, a few sharp key sessions, and showing up tomorrow. The amateur who copies the hard sessions and ignores the boring parts gets the injuries without the gains.</p>`},
+
+  {t:"compound", html:`
+    <div class="kicker">Why it works</div>
+    <h2>Consistency compounds</h2>
+    <p class="body">One great week does nothing. Fifty consistent weeks change what you are capable of. The reason the pros look like they have a secret is that they have simply strung together far more of these weeks than anyone else, without the stops and restarts.</p>`},
+
+  {t:"patience", html:`
+    <div class="kicker">The hardest fundamental</div>
+    <h2>Patience is a training quality</h2>
+    <p class="body">The engine is built over years, not blocks, so the athletes who win are the ones who can keep doing the simple things long after it stops feeling clever. Patience is not passivity. It is the discipline to trust the process while everyone around you chases the next shortcut.</p>`},
+
+  {t:"why", html:`
+    <div class="kicker">Why me</div>
+    <h2>Lydiard's principle, applied</h2>
+    <p class="body">Six elite world champions. More than thirty World Series wins. National and Olympic programs with Triathlon Canada and British Triathlon, and now the independent JFTcrew squad. The principle underneath all of it is simple.</p>
+    <div class="quote">Champions are everywhere. All you have to do is train them properly.</div>`},
+
+  {t:"bridge", html:`
+    <div class="kicker">The bridge</div>
+    <div class="big">The same fundamentals that built champions work on your season too, job, family, and limited hours included.</div>
+    <p class="body">Nothing here is reserved for the professional. The fundamentals do not care how many hours you have. They care that the hours you do have are spent on the right things, consistently.</p>`},
+
+  {t:"cta", html:`
+    <div class="kicker">Next step</div>
+    <h2>Ready to train like the pros?</h2>
+    <p class="body">If you want world-class fundamentals applied to your racing, the next step is a short application and a discovery call. We work out whether we are a fit, and what a season built on these principles looks like for you.</p>
+    <div class="foot">Apply for coaching &middot; joelfilliol.com</div>
+    <div class="disc">Educational content only. Individual results vary and depend on training history, health, consistency, and many factors outside any coach's control. No specific performance, race result, qualification, or outcome is promised or guaranteed.</div>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sec = document.createElement('section');
+  sec.className = 'slide ' + (s.t||'');
+  sec.innerHTML = '<div class="num">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>' + s.html;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
