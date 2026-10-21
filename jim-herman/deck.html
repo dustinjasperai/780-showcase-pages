@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leading Through Conflict: a restorative-leadership masterclass with Jim Herman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f6f6;        /* light ocean ground (evidenced: HonuLei Community site_scheme light, #f7f9fa) */
+    --panel:#ffffff;
+    --rule:#d3e0dd;
+    --ink:#191b1f;       /* verbatim from the HonuLei Community probe */
+    --muted:#565f5c;
+    --accent:#0F8B84;    /* deep ocean teal, traceable to the HonuLei honu/ocean brand accent */
+    --accent-soft:#e3f1ef;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  .stage{width:min(960px,94vw);aspect-ratio:16/10;position:relative}
+  .slide{
+    position:absolute;inset:0;background:var(--panel);
+    border:1px solid var(--rule);border-radius:18px;
+    padding:56px 60px;display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 18px 50px rgba(20,40,38,.08);overflow:hidden;
+  }
+  .slide.on{display:flex}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  h1{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:40px;line-height:1.12;letter-spacing:-.01em}
+  h2{font-family:"Newsreader",Georgia,serif;font-weight:600;font-size:30px;line-height:1.16;margin-bottom:14px}
+  .kicker{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .sub{font-size:19px;color:var(--muted);margin-top:16px;line-height:1.5;max-width:46ch}
+  p{font-size:19px;line-height:1.55;color:var(--ink);max-width:54ch}
+  p + p{margin-top:14px}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:19px;line-height:1.45;padding-left:28px;position:relative;margin:12px 0;max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent)}
+  .big{font-family:"Newsreader",Georgia,serif;font-size:34px;line-height:1.2;font-weight:600;max-width:40ch}
+  .cite{font-size:15px;color:var(--muted);margin-top:22px;line-height:1.5}
+  .disc{font-size:14px;color:var(--muted);margin-top:20px;line-height:1.5;max-width:60ch}
+  .wave{position:absolute;right:-40px;bottom:-40px;width:220px;height:220px;opacity:.10}
+  .brandline{position:absolute;right:28px;top:26px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav button{font:inherit;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+  .count{min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button id="prev">&larr;</button><span class="count" id="count"></span><button id="next">&rarr;</button></div>
+<svg class="wave" id="wavedef" viewBox="0 0 100 100" aria-hidden="true" style="display:none"><path d="M5 60 Q 25 40 45 60 T 85 60" fill="none" stroke="#0F8B84" stroke-width="3"/><path d="M5 72 Q 25 52 45 72 T 85 72" fill="none" stroke="#0F8B84" stroke-width="3"/></svg>
+<script>
+const WAVE = '<svg class="wave" viewBox="0 0 100 100" aria-hidden="true"><path d="M5 58 Q 25 38 45 58 T 85 58" fill="none" stroke="#0F8B84" stroke-width="3"/><path d="M5 72 Q 25 52 45 72 T 85 72" fill="none" stroke="#0F8B84" stroke-width="3"/></svg>';
+const S = [
+  {t:'title', html:`<div class="brandline">HonuLei Connection</div>
+    <div class="kicker">A restorative-leadership masterclass</div>
+    <h1>Leading Through the Conflicts You Were Trained to Avoid</h1>
+    <p class="sub">How leaders repair trust and move people through conflict and transition, instead of managing around them. With Jim Herman, HonuLei Connection.</p>${WAVE}`},
+
+  {t:'agenda', html:`<div class="kicker">Who this is for</div>
+    <h2>If you lead people, you inherit their conflicts</h2>
+    <ul>
+      <li>New leaders stepping into a team that still carries old wounds.</li>
+      <li>Executives steering an organization through change, merger, or loss.</li>
+      <li>Managers who sense the tension in the room but were never taught what to do with it.</li>
+    </ul>
+    <p class="sub">You were trained to hit targets and keep the peace. You were rarely taught what to do when the peace breaks.</p>`},
+
+  {t:'problem', html:`<div class="kicker">The trap</div>
+    <h2>The instinct is to contain conflict. Containment is not repair.</h2>
+    <p>When something goes wrong between people, most leaders do one of two things: push it down so the work can continue, or hand out a consequence and move on.</p>
+    <p>Both feel like leadership in the moment. Both leave the actual rupture exactly where it was.</p>`},
+
+  {t:'hook', html:`<div class="kicker">The hard truth</div>
+    <p class="big">Avoided conflict does not disappear. It goes quiet, compounds, and comes back as attrition, disengagement, and the people you most wanted to keep.</p>${WAVE}`},
+
+  {t:'part', html:`<div class="kicker">Part one</div>
+    <h1>The real cost of unaddressed conflict</h1>
+    <p class="sub">Before the method, the honest accounting of what unrepaired trust actually costs an organization.</p>`},
+
+  {t:'body', html:`<h2>What a broken thread really costs</h2>
+    <ul>
+      <li>Talent that stops contributing long before it leaves, and leaves anyway.</li>
+      <li>Meetings where the real conversation happens afterward, in smaller rooms.</li>
+      <li>A culture that learns harm is survivable as long as you stay quiet about it.</li>
+    </ul>
+    <p class="sub">None of this shows up on a dashboard until it is already expensive.</p>`},
+
+  {t:'body', html:`<h2>Punishment and avoidance share one blind spot</h2>
+    <p>Punitive responses ask: what rule was broken, and who pays. Avoidant responses ask: how do we get past this quickly.</p>
+    <p>Neither asks the question that actually restores a team: what was harmed, and what would it take to make it right.</p>`},
+
+  {t:'part', html:`<div class="kicker">Part two</div>
+    <h1>Restorative leadership</h1>
+    <p class="sub">The practice at the center of HonuLei Connection, drawn from restorative justice and conflict transformation.</p>`},
+
+  {t:'body', html:`<h2>Restorative justice, inside an organization</h2>
+    <p>Restorative practice shifts the question from blame to repair. It brings the people affected into the same conversation, names the harm plainly, and builds a concrete path back to trust.</p>
+    <p class="cite">Jim taught a graduate course on Restorative Justice for Organizations at the University of Hawaii at Manoa, and co-taught workshops on it for the Matsunaga Institute for Peace.</p>`},
+
+  {t:'body', html:`<h2>The three moves of a restorative conversation</h2>
+    <ul>
+      <li>Name the harm, in the words of the people who felt it, without rushing to defend it.</li>
+      <li>Hold accountability and dignity at the same time, so no one has to be disposable.</li>
+      <li>Agree on the repair, out loud, so trust has something specific to rebuild on.</li>
+    </ul>`},
+
+  {t:'body', html:`<h2>From resolving conflict to transforming it</h2>
+    <p>Resolution tries to make a conflict stop. Transformation asks what the conflict is trying to change, and lets the relationship come out stronger than before it started.</p>
+    <p class="cite">This is the frame of conflict transformation, the field Jim studied for his Master's degree in the discipline.</p>`},
+
+  {t:'hook', html:`<div class="kicker">The reframe</div>
+    <p class="big">A conflict handled restoratively is not a fire to put out. It is the moment a team finds out whether its trust is real.</p>${WAVE}`},
+
+  {t:'part', html:`<div class="kicker">Part three</div>
+    <h1>Leading through transition</h1>
+    <p class="sub">Conflict and change travel together. The same practice that repairs trust is what carries people across a transition.</p>`},
+
+  {t:'body', html:`<h2>Why transitions break good leaders</h2>
+    <ul>
+      <li>They demand that you let go of an identity that was working for you.</li>
+      <li>They surface every unspoken tension a team had been carrying quietly.</li>
+      <li>They reward the inner steadiness almost no one is coached on beforehand.</li>
+    </ul>`},
+
+  {t:'body', html:`<h2>The steadiness that holds a team</h2>
+    <p>People do not take their cue from the plan on the wall. They take it from whether the person leading them seems grounded when the ground is moving.</p>
+    <p>That steadiness is a practice, not a personality trait. It can be learned, and it can be coached.</p>`},
+
+  {t:'credibility', html:`<div class="kicker">Why Jim</div>
+    <h2>A diplomat's training, turned toward your organization</h2>
+    <ul>
+      <li>28 years as a US diplomat; 17 postings across 8 countries, ending as Consul General in Frankfurt, the largest US consulate in the world.</li>
+      <li>Master's in Conflict Transformation; Certified Professional Co-Active Coach and ICF Associate Certified Coach.</li>
+      <li>Board member, ICF Hawaii; founder of HonuLei Connection in Honolulu.</li>
+    </ul>`},
+
+  {t:'body', html:`<h2>How your team feels the difference</h2>
+    <p>Not a policy and not a one-time workshop. A way of leading that your team can feel: harm gets named early, repair is expected, and transition is walked with people rather than announced at them.</p>
+    <p class="cite">Honu, the Hawaiian sea turtle, moves steadily through currents that would exhaust anything fighting them. That is the posture this teaches.</p>`},
+
+  {t:'recap', html:`<div class="kicker">The through-line</div>
+    <h2>Three practices, one leader</h2>
+    <ul>
+      <li>Count the real cost of the conflict you have been containing.</li>
+      <li>Repair trust restoratively, so accountability and dignity hold together.</li>
+      <li>Carry your people through transition with a steadiness you can actually practice.</li>
+    </ul>`},
+
+  {t:'cta', cls:'cta', html:`<div class="kicker">Where to go from here</div>
+    <h1>Lead the way honu moves</h1>
+    <p class="sub">If this is the kind of leadership you want to build, the next step is to go deeper with Jim inside HonuLei Connection and the HonuLei Community.</p>
+    <p class="disc">Educational content only. No income, role, outcome, or result is guaranteed; results vary with each leader and organization. Jim Herman, HonuLei Connection, Honolulu.</p>${WAVE}`}
+];
+const stage=document.getElementById('stage');
+stage.innerHTML = S.map((s,i)=>`<section class="slide ${s.cls||''}" data-i="${i}">${s.html}</section>`).join('');
+let cur=0;const slides=[...document.querySelectorAll('.slide')];const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,i)=>el.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
