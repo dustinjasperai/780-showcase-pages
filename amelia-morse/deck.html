@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditioning as Your Type | The Morse Actors Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#1d2023;
+    --panel:#2e2e2f;
+    --rule:#3a3f45;
+    --ink:#f4f3ef;
+    --ink-soft:#c4c6c9;
+    --ink-muted:#8a8e93;
+    --accent:#43597a;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Lato',-apple-system,sans-serif;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .deck{max-width:960px;margin:0 auto;}
+  .slide{min-height:100vh;display:none;flex-direction:column;justify-content:center;padding:72px 64px;border-bottom:1px solid var(--rule);}
+  .slide.active{display:flex;}
+  .kicker{font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px;}
+  h1{font-family:'Gilda Display',Georgia,serif;font-weight:400;font-size:clamp(34px,6vw,62px);line-height:1.1;margin-bottom:24px;}
+  h2{font-family:'Gilda Display',Georgia,serif;font-weight:400;font-size:clamp(26px,4vw,40px);line-height:1.18;margin-bottom:20px;}
+  .sub{font-size:clamp(17px,2.2vw,22px);color:var(--ink-soft);max-width:40ch;}
+  p.body{font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:48ch;margin-bottom:16px;}
+  ul{list-style:none;max-width:46ch;}
+  li{font-size:clamp(16px,2vw,20px);color:var(--ink-soft);padding-left:26px;position:relative;margin-bottom:14px;}
+  li::before{content:"";position:absolute;left:0;top:13px;width:10px;height:10px;background:var(--accent);}
+  .label-slide h2{color:var(--accent);}
+  .quote{font-family:'Gilda Display',Georgia,serif;font-size:clamp(24px,3.4vw,38px);line-height:1.3;max-width:24ch;}
+  .disc{font-size:13px;color:var(--ink-muted);max-width:52ch;margin-top:28px;line-height:1.5;}
+  .cta h1{margin-bottom:18px;}
+  .nav{position:fixed;bottom:22px;right:26px;font-family:'Lato';font-size:13px;color:var(--ink-muted);letter-spacing:0.04em;display:flex;gap:16px;align-items:center;z-index:10;}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);padding:8px 14px;font-size:13px;cursor:pointer;font-family:'Lato';}
+  .nav button:hover{border-color:var(--accent);}
+  @media(max-width:640px){.slide{padding:52px 28px;}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><button onclick="prev()">Prev</button><span id="count"></span><button onclick="next()">Next</button></div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`<div class="kicker">The Morse Actors Studio</div><h1>Auditioning as Your Type</h1><p class="sub">How to walk into a BFA or MFA audition and leave unmistakably yourself, and get in.</p>`},
+  {t:'promise', cls:'', html:`<div class="kicker">The next hour</div><h2>What this masterclass gives you</h2><ul><li>A clear way to decide which programs and auditions are actually right for you.</li><li>A method for choosing material that makes you stand out instead of blend in.</li><li>A repeatable prep system so audition day feels handled, not frantic.</li></ul>`},
+  {t:'who', cls:'', html:`<div class="kicker">Who this is for</div><h2>This is for you if</h2><ul><li>You are a high-school junior or senior eyeing a BFA acting program.</li><li>You are an actor applying to MFA theatre programs in the US.</li><li>You are tired of performing a generic version of your "type".</li></ul>`},
+  {t:'trap', cls:'', html:`<div class="kicker">The trap</div><h2>The mistake most applicants make</h2><p class="body">They pick the most impressive piece they can find and try to become whatever they think the school wants to see.</p><p class="body">So they walk in sounding like the last forty people who walked in. Polished, capable, and completely forgettable.</p>`},
+  {t:'reframe', cls:'label-slide', html:`<div class="kicker">The reframe</div><p class="quote">The panel is not casting a role. They are choosing who to spend the next two to four years training.</p>`},
+  {t:'reframe2', cls:'', html:`<div class="kicker">Why sameness is invisible</div><p class="body">A panel has seen your monologue hundreds of times. Technique that is merely good is the price of entry, not the thing that gets you in.</p><p class="body">What they remember is the person who was unmistakably themselves in the room.</p>`},
+  {t:'part1', cls:'label-slide', html:`<div class="kicker">Part one</div><h2>Why "good" is not getting you in</h2>`},
+  {t:'p1body', cls:'', html:`<div class="kicker">The real bar</div><h2>Good technique is the baseline</h2><p class="body">Everyone auditioning has worked on their craft. If strong technique were enough, the acceptance rate would not be in the single digits.</p><p class="body">The edge is fit. The right person, with the right material, applying to the right programs.</p>`},
+  {t:'part2', cls:'label-slide', html:`<div class="kicker">Part two</div><h2>The method</h2>`},
+  {t:'pillar1', cls:'', html:`<div class="kicker">Pillar one</div><h2>"Is this audition for me?"</h2><p class="body">Before you prepare anything, you decide whether an audition truly fits your goals, your type, and the material on offer.</p><p class="body">Chasing every call burns you out and scatters your prep. Choosing the right rooms is the first real advantage.</p>`},
+  {t:'pillar2', cls:'', html:`<div class="kicker">Pillar two</div><h2>Your most unique special skill is you</h2><p class="body">We look past your headshot and resume to find which monologues and song cuts actually fit who you are, and which roles genuinely suit you.</p><p class="body">The goal is never a generic "type". It is you, cast well.</p>`},
+  {t:'pillar2b', cls:'', html:`<div class="kicker">Material that fits</div><h2>Material does the work before you speak</h2><p class="body">The right contemporary piece, the right classical piece, and the right song cut tell the panel who you are in the first ten seconds.</p><p class="body">The wrong piece makes you spend the whole audition climbing out of a hole.</p>`},
+  {t:'pillar3', cls:'', html:`<div class="kicker">Pillar three</div><h2>A prep system, not a scramble</h2><ul><li>A pre-audition checklist built two or more days out, so nothing is left to the morning.</li><li>A running inventory of your material by genre, type, and source.</li><li>Monthly priorities: prepare in audition season, discover new pieces in the off months.</li></ul>`},
+  {t:'pillar3b', cls:'', html:`<div class="kicker">What you can control</div><p class="quote">You cannot control the panel. You can control that you walked in fully prepared as yourself.</p>`},
+  {t:'interview', cls:'', html:`<div class="kicker">The other half</div><h2>The interview is part of the audition</h2><p class="body">For most BFA and MFA programs, the conversation matters as much as the pieces. Panels want to know how you think and whether you are ready to be trained.</p><p class="body">We prepare that conversation the same way we prepare a monologue.</p>`},
+  {t:'part3', cls:'label-slide', html:`<div class="kicker">Part three</div><h2>Audition day, done as you</h2>`},
+  {t:'walkthrough', cls:'', html:`<div class="kicker">Audition day</div><h2>A prepared applicant walks in</h2><p class="body">Right programs on the list. Material that fits like it was written for them. A checklist already handled. An interview they have practiced.</p><p class="body">They are not hoping it goes well. They know who they are in the room.</p>`},
+  {t:'whyme', cls:'', html:`<div class="kicker">Who is teaching you</div><h2>Amelia Morse</h2><p class="body">Acting and audition-prep coach, founder of The Morse Actors Studio. MA and MFA, faculty at the University of Northern Colorado, and a working intimacy director and coordinator.</p><p class="body">She coaches actors one to one, from first BFA audition to professional callback.</p>`},
+  {t:'recap', cls:'', html:`<div class="kicker">The method, in one view</div><h2>Three pillars</h2><ul><li>Decide if the audition is for you.</li><li>Choose material that is unmistakably you.</li><li>Run a prep system so the day is handled.</li></ul>`},
+  {t:'cta', cls:'cta', html:`<div class="kicker">Your next step</div><h1>Work with The Morse Actors Studio</h1><p class="sub">Book a complimentary consultation and get your free Audition Checklist, then map out your BFA or MFA audition with a plan built around you.</p><p class="disc">Educational content only. No admission, role, casting, or result is guaranteed. Outcomes vary by applicant, program, material, and audition.</p>`}
+];
+let i=0;
+const deck=document.getElementById('deck');
+deck.innerHTML=S.map((s,n)=>`<section class="slide ${s.cls||''}" data-n="${n}">${s.html}</section>`).join('');
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){i=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,n2)=>el.classList.toggle('active',n2===i));count.textContent=(i+1)+' / '+S.length;}
+function next(){show(i+1);}
+function prev(){show(i-1);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')next();if(e.key==='ArrowLeft')prev();});
+show(0);
+</script>
+</body>
+</html>
