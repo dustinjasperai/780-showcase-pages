@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Micro-Leader: a live masterclass with Haydn Bratt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;800&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f2a30; --panel:#16383f; --rule:#2b4c54; --accent:#eb3e2c;
+    --ink:#f4f1ec; --muted:#a9c0c4;
+    --display:'Montserrat',system-ui,sans-serif; --body:'Spectral',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;
+    justify-content:center;padding:9vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  .kick{font-family:var(--display);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4.4vw,3.1rem);line-height:1.08;letter-spacing:-.01em}
+  .lead{font-size:clamp(1.15rem,2.4vw,1.6rem);color:var(--muted);max-width:40ch;margin-top:1.6rem}
+  .big{font-size:clamp(1.3rem,2.8vw,2rem);max-width:30ch;margin-top:1.6rem}
+  .num{font-family:var(--display);font-weight:800;font-size:clamp(3rem,9vw,7rem);color:var(--accent);line-height:1}
+  .a{color:var(--accent)}
+  .strike{position:relative;color:var(--muted)}
+  .strike:after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:3px;background:var(--accent);transform:rotate(-3deg)}
+  ul{list-style:none;margin-top:1.8rem;max-width:44ch}
+  li{font-size:clamp(1.05rem,2.2vw,1.35rem);padding:.7rem 0 .7rem 1.6rem;border-top:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:1.15rem;width:.55rem;height:.55rem;background:var(--accent)}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(1.4rem,3vw,2.4rem);max-width:52ch}
+  .quote{font-size:clamp(1.4rem,3.2vw,2.3rem);font-style:italic;max-width:30ch;line-height:1.25}
+  .foot{position:absolute;bottom:3.4vh;left:8vw;font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .ticks{display:flex;gap:.4rem;margin-top:2rem}
+  .ticks i{width:.5rem;height:2.4rem;background:var(--rule);display:block}
+  .ticks i.on{background:var(--accent)}
+  .disc{font-size:.95rem;color:var(--muted);max-width:52ch;margin-top:1.6rem;font-style:italic}
+  .cta-contact{font-family:var(--display);font-weight:600;color:var(--ink);margin-top:1.4rem;font-size:1.1rem}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'cover', kick:'A live masterclass with Haydn Bratt',
+    h:'The Micro-Leader',
+    lead:'How small daily habits build a team that performs without you in the room.',
+    foot:'Mindset Leadership' },
+
+  {t:'trap', kick:'Who this is for',
+    h:'You have become the ceiling.',
+    big:"You have read the books. You run the offsites. And yet the business still stalls at your own bandwidth, because every decision routes back through you." },
+
+  {t:'hook', kick:'The uncomfortable part',
+    h:'The problem was never your effort.',
+    big:'It is that leadership was sold to you as an event. A course, a retreat, a big push. Then Monday comes and everyone reverts.' },
+
+  {t:'section', num:'01', kick:'Part one', h:'Big-bang leadership does not stick.' },
+
+  {t:'point', kick:'Why transformations fade',
+    h:'Behaviour is not changed in a room.',
+    big:'A one-off intervention lifts energy for a week. Without a daily practice to hold it, the team drifts back to the old defaults by Friday.' },
+
+  {t:'point', kick:'What actually moves a team',
+    h:'Small. Repeated. Deliberate.',
+    big:'Teams are built by the dozens of tiny leadership moments nobody frames as leadership. Those compound. Grand gestures do not.' },
+
+  {t:'section', num:'02', kick:'Part two', h:'MicroLeadership: leadership as a daily practice.' },
+
+  {t:'point', kick:'The core idea',
+    h:'Leadership is a set of habits, not a title.',
+    big:'MicroLeadership is the small, consistent daily behaviours that quietly build trust, focus, and performance. You already do some of them. The work is making them deliberate.' },
+
+  {t:'habit', num:'1', kick:'The habits', h:'Be a connector.',
+    big:'Build trust and relationships across the team on purpose, not by accident. Connection is the quiet infrastructure every other result sits on.' },
+
+  {t:'habit', num:'2', kick:'The habits', h:'Spot and maximise opportunity.',
+    big:'Train the team to see the commercial opening, not only the risk. A proactive, opportunity-focused culture starts as a leader habit before it is a company trait.' },
+
+  {t:'habit', num:'3', kick:'The habits', h:'Lead through influence, not authority.',
+    big:'The org chart gives you authority. Influence is earned in the small moments. People follow the leader they trust, not the one with the title.' },
+
+  {t:'habit', num:'4', kick:'The habits', h:'Coach the mindset, not just the task.',
+    big:'The task gets done once. The mindset gets repeated forever. Spend your attention on how your people think, and the tasks start taking care of themselves.' },
+
+  {t:'quote', kick:'MindFLOW',
+    q:'Your own state is the ceiling on the business.',
+    big:'From The M-Powered Business. The owner’s inner operating state sets the performance ceiling for everyone they lead. The mindset and the business are one system, so we coach them together.' },
+
+  {t:'compound', kick:'The effect',
+    h:'From small to mighty.',
+    big:'One small habit, run every day, by every leader, compounds. That is how a business moves from small to mighty: not one leap, but a thousand repetitions.' },
+
+  {t:'section', num:'03', kick:'Part three', h:'Ninety days of small habits.' },
+
+  {t:'point', kick:'The picture',
+    h:'A team that does not wait for you.',
+    big:'Decisions get made at the right level. Trust is assumed, not negotiated. You spend your week on the business, not inside every problem in it. The 9pm message reads: we have got it.' },
+
+  {t:'why', kick:'Why me',
+    h:'Haydn Bratt',
+    big:'Coaching Director of Mindset Leadership. I have coached leaders inside Formula 1, finance, manufacturing and hospitality, and I wrote MicroLeadership and The M-Powered Business. This is the method, not a theory.' },
+
+  {t:'myth', kick:'The common objection',
+    h:'"I do not have time for more leadership work."',
+    big:'You do not need more time. Micro-habits cost minutes, not days. That is the whole point: the practice fits inside the week you already have.' },
+
+  {t:'cta', kick:'Your next step',
+    h:'Build your leadership as a daily practice.',
+    big:'If you want help installing these habits across your team, that is exactly what the Mindset Coaching programme does. Let us close the gap between where your people are today and where the business needs them tomorrow.',
+    contact:'mindsetleadership.co.uk',
+    disc:'No income, role, or result is guaranteed. Results vary and depend on your own effort and context. This session is educational and is not a promise of any specific outcome.' }
+];
+
+function esc(x){return x?x:''}
+function slide(s){
+  const foot = s.foot ? '<div class="foot">'+esc(s.foot)+'</div>' : '';
+  let inner = '';
+  if(s.t==='cover'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><h1>'+esc(s.h)+'</h1><p class="lead">'+esc(s.lead)+'</p>';
+  } else if(s.t==='section'){
+    inner = '<div class="num">'+esc(s.num)+'</div><div class="kick" style="margin-top:1rem">'+esc(s.kick)+'</div><h2>'+esc(s.h)+'</h2>';
+  } else if(s.t==='habit'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><div style="display:flex;align-items:baseline;gap:1.2rem"><span class="num">'+esc(s.num)+'</span><h2>'+esc(s.h)+'</h2></div><p class="big">'+esc(s.big)+'</p>';
+  } else if(s.t==='quote'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><p class="quote">“'+esc(s.q)+'”</p><p class="big">'+esc(s.big)+'</p>';
+  } else if(s.t==='compound'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><h2>'+esc(s.h)+'</h2><div class="ticks"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><p class="big">'+esc(s.big)+'</p>';
+  } else if(s.t==='why'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><h2>'+esc(s.h)+'</h2><p class="big">'+esc(s.big)+'</p>';
+  } else if(s.t==='cta'){
+    inner = '<div class="kick">'+esc(s.kick)+'</div><h2>'+esc(s.h)+'</h2><div class="panel" style="margin-top:1.8rem"><p class="big" style="margin-top:0">'+esc(s.big)+'</p><div class="cta-contact">'+esc(s.contact)+'</div></div><p class="disc">'+esc(s.disc)+'</p>';
+  } else { // trap, hook, point, myth
+    inner = '<div class="kick">'+esc(s.kick)+'</div><h2>'+esc(s.h)+'</h2><p class="big">'+esc(s.big)+'</p>';
+  }
+  return '<section class="slide">'+inner+foot+'</section>';
+}
+document.getElementById('deck').innerHTML = S.map(slide).join('');
+</script>
+</body>
+</html>
