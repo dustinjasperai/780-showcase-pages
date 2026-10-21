@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Podcourse Method | Lisa Mustard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#fbfbfa; --panel:#ffffff; --rule:#e3e6e8;
+    --ink:#12173f; --ink-soft:#3b4258; --ink-muted:#7b8294;
+    --accent:#00929b; --deep:#175989;
+  }
+  html{ -webkit-font-smoothing:antialiased; }
+  body{ font-family:'Poppins',system-ui,sans-serif; background:var(--deep); color:var(--ink); }
+  #deck{ max-width:1040px; margin:0 auto; }
+  .slide{
+    position:relative; background:var(--bg); min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:84px 72px; border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .kicker{ font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-family:'Raleway',sans-serif; font-weight:800; font-size:52px; line-height:1.08; letter-spacing:-.01em; color:var(--ink); margin-bottom:22px; }
+  h2{ font-family:'Raleway',sans-serif; font-weight:700; font-size:34px; line-height:1.15; color:var(--ink); margin-bottom:20px; }
+  h3{ font-family:'Raleway',sans-serif; font-weight:700; font-size:22px; color:var(--deep); margin-bottom:10px; }
+  p{ font-size:19px; line-height:1.6; color:var(--ink-soft); max-width:40ch; margin-bottom:16px; }
+  p.lead{ font-size:22px; color:var(--ink); max-width:44ch; }
+  .big{ font-family:'Raleway',sans-serif; font-weight:800; font-size:64px; color:var(--accent); line-height:1; }
+  ul{ list-style:none; margin-top:8px; }
+  li{ font-size:19px; line-height:1.5; color:var(--ink-soft); padding-left:30px; position:relative; margin-bottom:14px; max-width:46ch; }
+  li::before{ content:""; position:absolute; left:0; top:11px; width:12px; height:12px; border-radius:50%; background:var(--accent); }
+  .steps li{ counter-increment:s; padding-left:46px; }
+  .steps{ counter-reset:s; }
+  .steps li::before{ content:counter(s); width:30px; height:30px; border-radius:50%; background:var(--deep); color:#fff; font-family:'Raleway'; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; top:2px; left:0; }
+  .panel{ background:var(--panel); border:1px solid var(--rule); border-left:4px solid var(--accent); padding:28px 32px; border-radius:4px; max-width:50ch; }
+  .pagenum{ position:absolute; right:40px; bottom:28px; font-size:12px; color:var(--ink-muted); letter-spacing:.08em; }
+  .brandline{ position:absolute; left:72px; bottom:28px; font-size:12px; color:var(--ink-muted); letter-spacing:.08em; }
+  .cover{ background:linear-gradient(160deg,#0d3a54 0%, #175989 60%, #00929b 140%); }
+  .cover .kicker{ color:#8fe3e8; }
+  .cover h1{ color:#ffffff; font-size:60px; max-width:18ch; }
+  .cover p{ color:#d6e6ee; max-width:40ch; }
+  .cover .brandline{ color:#bcd4df; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .disc{ font-size:13px; color:var(--ink-muted); max-width:60ch; margin-top:18px; line-height:1.5; }
+  @media(max-width:720px){ .slide{ padding:56px 30px; } h1{ font-size:38px; } .cover h1{ font-size:40px; } h2{ font-size:26px; } .two{ grid-template-columns:1fr; } p,li{ font-size:17px; } }
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'cover', cls:'cover', html:`
+    <div class="kicker">A live masterclass for therapists</div>
+    <h1>The Podcourse Method</h1>
+    <p class="lead" style="color:#eaf4f8">How to turn what you already know into NBCC-approved continuing education, and a new income stream that doesn't cost you another client hour.</p>
+    <p style="color:#bcd4df; font-size:15px; margin-top:28px; margin-bottom:0">Lisa Mustard, MPH, EdS, LMFT &nbsp;&middot;&nbsp; Mustard Consulting</p>`},
+
+  {t:'promise', html:`
+    <div class="kicker">What you'll walk away with</div>
+    <h2>By the end of the hour</h2>
+    <ul>
+      <li>A clear picture of how audio continuing education actually works, and why clinicians finish it.</li>
+      <li>The exact path from "I know a lot about this" to an NBCC-approved course people can buy.</li>
+      <li>A first topic you could build from, drawn from the work you already do every day.</li>
+    </ul>`},
+
+  {t:'forwho', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>If you're a licensed therapist and your income has a ceiling</h2>
+    <p class="lead">You can only see so many clients in a week. The calendar fills, the income plateaus, and the only lever anyone offers you is "see more clients."</p>
+    <p>This is for the clinician who senses there's another way to use their expertise, and doesn't want to leave the field to find it.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">The trap</div>
+    <h2>Trading hours for dollars has a hard limit</h2>
+    <p class="lead">Every dollar you earn is tied to an hour you were in the room. Take a week off and the income stops. Burnout isn't a personality flaw here, it's built into the model.</p>`},
+
+  {t:'reframe', html:`
+    <div class="kicker">The reframe</div>
+    <h2>More clients was never the answer. Leverage is.</h2>
+    <p class="lead">The expertise in your head can be recorded once and keep earning while you sleep, walk the dog, or sit with the next client. The question isn't how to work more. It's how to make what you already know work harder.</p>`},
+
+  {t:'partone', html:`
+    <div class="kicker">Part one</div>
+    <h1 style="font-size:46px">The core problem</h1>
+    <p class="lead">Most clinicians have the knowledge to teach. What they don't have is a format their peers will actually finish, and a credential that makes it count.</p>`},
+
+  {t:'audio', html:`
+    <div class="kicker">Why audio</div>
+    <h2>Continuing education that fits into a real life</h2>
+    <div class="two">
+      <div>
+        <p>Webinars and screen-heavy trainings compete with everything else on the screen. They get bought and abandoned.</p>
+        <p>Audio is different. It rides along with the commute, the gym, the dog walk. That's why people finish it, and finishing is what earns the contact hour.</p>
+      </div>
+      <div class="panel">
+        <h3>The format advantage</h3>
+        <p style="margin:0">A therapist with 45 minutes in the car has no hands and no screen. Audio is the one format that meets them there.</p>
+      </div>
+    </div>`},
+
+  {t:'credential', html:`
+    <div class="kicker">Why the credential matters</div>
+    <h2>"Helpful" is nice. "NBCC-approved" is a purchase.</h2>
+    <p class="lead">Therapists have to earn continuing education hours to keep their license. When your course carries approved contact hours, you stop competing with free content and start meeting a requirement they must fill anyway.</p>`},
+
+  {t:'parttwo', cls:'cover', html:`
+    <div class="kicker">Part two</div>
+    <h1 style="color:#fff">The Podcourse model, step by step</h1>
+    <p style="color:#eaf4f8">The same path I walked to turn a podcast into an NBCC-approved continuing education library.</p>`},
+
+  {t:'what', html:`
+    <div class="kicker">What a Podcourse is</div>
+    <h2>One idea, four simple parts</h2>
+    <ul>
+      <li>A focused audio lesson on a topic you know cold.</li>
+      <li>A short self-study knowledge check.</li>
+      <li>A course evaluation.</li>
+      <li>A completion certificate for the contact hours earned.</li>
+    </ul>
+    <div class="panel" style="margin-top:14px"><p style="margin:0"><strong>The rule of thumb:</strong> 60 minutes of audio equals one continuing education contact hour.</p></div>`},
+
+  {t:'stepsa', html:`
+    <div class="kicker">The build, part one</div>
+    <h2>From idea to a course that's ready</h2>
+    <ul class="steps">
+      <li>Pick the platform you'll host on, starting lean rather than over-buying tools.</li>
+      <li>Choose your format: audio, video, or a hybrid, recorded simply.</li>
+      <li>Learn the NBCC approval pathway before you build, so you build to the standard.</li>
+      <li>Build the complete course first: lessons, landing page, and materials.</li>
+    </ul>`},
+
+  {t:'stepsb', html:`
+    <div class="kicker">The build, part two</div>
+    <h2>From ready to approved and selling</h2>
+    <ul class="steps" style="counter-reset:s 4">
+      <li>Meet the content requirements: learning objectives, a knowledge assessment, an evaluation, and a certificate.</li>
+      <li>Hit the duration spec: 60 minutes of content for each contact hour.</li>
+      <li>Upload, test, and submit your paperwork for approval.</li>
+      <li>Market it to the peers who need those hours every renewal cycle.</li>
+    </ul>`},
+
+  {t:'topic', html:`
+    <div class="kicker">Choosing the first one</div>
+    <h2>Build on topics every therapist needs</h2>
+    <p class="lead">The best first Podcourse isn't the most impressive one. It's the one your peers are required to learn and would rather learn from you. Start where your expertise and their requirement overlap.</p>`},
+
+  {t:'partthree', html:`
+    <div class="kicker">Part three</div>
+    <h1 style="font-size:46px">A product line beside your practice</h1>
+    <p class="lead">Expertise that compounds, built once and sold again and again, earning alongside the clients you already see.</p>`},
+
+  {t:'stream', html:`
+    <div class="kicker">The shift</div>
+    <h2>From "all sessions" to "sessions plus a product line"</h2>
+    <div class="two">
+      <div class="panel"><h3>Before</h3><p style="margin:0">Income capped at the hours you can sit in the room.</p></div>
+      <div class="panel"><h3>After</h3><p style="margin:0">The same expertise earning in the background, every time a colleague needs their hours.</p></div>
+    </div>`},
+
+  {t:'whyme', html:`
+    <div class="kicker">Why listen to me on this</div>
+    <h2>I built the thing I'm describing</h2>
+    <p>I'm Lisa Mustard, a Licensed Marriage and Family Therapist in South Carolina with more than fifteen years in the field. I turned The Therapy Show into an NBCC-approved continuing education library (Approved Continuing Education Provider No. 7061).</p>
+    <p>At around forty, outwardly successful and quietly unfulfilled, I rebuilt my career around work that fit my values. Helping other clinicians do the same is the work I do now.</p>`},
+
+  {t:'beliefs', html:`
+    <div class="kicker">What I believe</div>
+    <h2>Three things that guide the work</h2>
+    <ul>
+      <li>Meaningful work has to be aligned with your values, not just your resume.</li>
+      <li>Failure isn't a dead end. It's feedback.</li>
+      <li>Flexibility matters, as long as you keep a clear direction.</li>
+    </ul>`},
+
+  {t:'recap', html:`
+    <div class="kicker">The whole idea, in one line</div>
+    <h2>You already have the expertise. This is the format and the credential that turn it into income.</h2>
+    <p class="lead">Record it once. Let it earn while you keep doing the work you love, on your terms.</p>`},
+
+  {t:'cta', cls:'cover', html:`
+    <div class="kicker">Your next step</div>
+    <h1 style="color:#fff; font-size:46px">Let's map your first Podcourse</h1>
+    <p style="color:#eaf4f8">If you'd like help turning your expertise into an approved course and a non-clinical income stream, book a call and we'll sketch your first one together.</p>
+    <p style="color:#eaf4f8; font-weight:600">lisamustard.com &nbsp;&middot;&nbsp; hello@lisamustard.com</p>
+    <p class="disc" style="color:#bcd4df">This masterclass is educational. No income, role, or result is guaranteed; outcomes vary and depend on your own effort, topic, and market. NBCC approval is determined solely by NBCC under its current provider policies.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sec = document.createElement('section');
+  sec.className = 'slide' + (s.cls ? ' '+s.cls : '');
+  sec.innerHTML = s.html
+    + '<div class="brandline">The Podcourse Method</div>'
+    + '<div class="pagenum">'+(i+1)+' / '+S.length+'</div>';
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
