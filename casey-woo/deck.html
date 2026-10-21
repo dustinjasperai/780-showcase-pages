@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Operator Discipline — a live masterclass with Casey Woo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#002020;        /* operators-guild.com body background */
+    --panel:#012d33;     /* their #1 ranked brand hex */
+    --rule:#1d4348;      /* brand hairline */
+    --accent:#ff5c1b;    /* their warm orange accent */
+    --ink:#f8f4eb;       /* their warm cream text */
+    --muted:#9fb7b6;     /* derived desaturated teal tint */
+    --head:'Spectral', Georgia, serif;
+    --body:'Manrope', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vmin 9vmin;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    font-size:clamp(11px,1.5vmin,15px);color:var(--accent);margin-bottom:3.2vmin}
+  h1{font-family:var(--head);font-weight:700;line-height:1.02;letter-spacing:-.01em;
+    font-size:clamp(30px,8.4vmin,88px)}
+  h2{font-family:var(--head);font-weight:600;line-height:1.06;letter-spacing:-.01em;
+    font-size:clamp(26px,6.4vmin,62px)}
+  .sub{font-size:clamp(16px,2.5vmin,26px);color:var(--muted);margin-top:3.4vmin;max-width:46ch;line-height:1.45}
+  .lead{font-size:clamp(18px,2.9vmin,30px);line-height:1.4;max-width:40ch;margin-top:1vmin}
+  .accent{color:var(--accent)}
+  .strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .span{display:block;height:2px;width:100%;background:linear-gradient(90deg,var(--accent),var(--rule));margin:5vmin 0;border:0}
+  .stack{display:flex;gap:0;flex-wrap:wrap;margin-top:4vmin}
+  .stack .fn{font-family:var(--head);font-size:clamp(18px,3.4vmin,34px);padding:1.4vmin 2.6vmin;
+    border-top:2px solid var(--accent);color:var(--ink);flex:1;min-width:120px}
+  .stack .fn.last{color:var(--muted);font-style:italic;font-family:var(--body);font-size:clamp(13px,2vmin,20px);border-top:2px solid var(--rule)}
+  ul.items{list-style:none;margin-top:3.6vmin;display:grid;gap:2.2vmin;max-width:50ch}
+  ul.items li{font-size:clamp(16px,2.5vmin,26px);line-height:1.4;padding-left:3.4vmin;position:relative}
+  ul.items li:before{content:"";position:absolute;left:0;top:.75em;width:1.7vmin;height:1.7vmin;
+    background:var(--accent);border-radius:2px}
+  ul.items li b{font-family:var(--head);font-weight:600}
+  .part-num{font-family:var(--head);font-size:clamp(40px,11vmin,120px);color:var(--panel);
+    -webkit-text-stroke:1px var(--rule);line-height:1;margin-bottom:1vmin}
+  .whyme{display:grid;gap:1.8vmin;margin-top:3.4vmin;max-width:52ch}
+  .whyme div{font-size:clamp(15px,2.3vmin,23px);color:var(--ink);line-height:1.4}
+  .whyme b{color:var(--accent);font-weight:700}
+  .cta-line{font-size:clamp(18px,2.8vmin,28px);margin-top:3.6vmin;color:var(--ink)}
+  .cta-url{font-family:var(--head);font-size:clamp(22px,4.4vmin,46px);color:var(--accent);margin-top:1.4vmin}
+  .disc{position:absolute;left:9vmin;right:9vmin;bottom:5vmin;font-size:clamp(10px,1.4vmin,13px);
+    color:var(--muted);line-height:1.5;max-width:70ch}
+  .nav{position:fixed;bottom:2.4vmin;right:3vmin;display:flex;gap:1.4vmin;align-items:center;z-index:9}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;
+    font-family:var(--body);font-size:14px;padding:6px 12px;cursor:pointer}
+  .count{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+  .foot{position:absolute;left:9vmin;bottom:5vmin;font-size:clamp(11px,1.5vmin,14px);color:var(--muted);letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav"><button id="prev">Prev</button><span class="count" id="count"></span><button id="next">Next</button></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Casey Woo',
+   h:'Specialists optimize.<br><span class="accent">Operators build companies.</span>',
+   sub:'A live hour on the operator discipline: how to become the person a company cannot scale without.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'The generalists who run across everything.',
+   sub:'COOs, CFOs, Chiefs of Staff, Heads of Operations, and the people who keep getting pulled into every function and expected to make it all work.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'The work you actually do has no name.',
+   sub:'You get boxed as the finance person or the ops person, while the real job, connecting every function so the company moves, stays invisible. Invisible work is underpriced work, and it is lonely.'},
+
+  {t:'reframe', kicker:'The reframe',
+   h:'Depth is getting commoditized. Breadth is becoming the whole game.',
+   sub:'AI is making narrow specialist depth cheaper every quarter. The person who can read across finance, ops, strategy and people, and sequence them, is becoming the rarest hire in the company.'},
+
+  {t:'lead', kicker:'What this hour covers',
+   h:'Three parts, one discipline.',
+   lead:'One: why the operator has no definition, and why that costs you. Two: the four things that separate operators from specialists. Three: what the discipline looks like when the company is on fire, and where the room comes in.'},
+
+  {t:'part', num:'01', kicker:'Part one', h:'The operator has no definition, and that is the problem.'},
+
+  {t:'lead', kicker:'The core problem',
+   h:'Your title is a filler word.',
+   lead:'CFO, COO, Chief of Staff: early on these are all filler words for one real job, horizontal scaling. The market has no clean definition for it, so it has no ladder, no price, and no room. That is what we fix in this hour.'},
+
+  {t:'part', num:'02', kicker:'Part two', h:'The operator discipline.'},
+
+  {t:'pillars', kicker:'Four things that separate operators from specialists',
+   items:[
+     '<b>Horizontal scope.</b> Know a little about every function and sequence them together. The value is in the connections between functions, not the depth inside one.',
+     '<b>Ambiguity into execution.</b> Specialists wait for defined parameters. Operators turn ambiguity into a decision and a shipped outcome. Judgment beats specialization early.',
+     '<b>Eating glass.</b> Execution is learned by reps across real companies, SaaS, marketplaces, hardware, eCommerce, not by theory. The scar tissue is the curriculum.',
+     '<b>AI raises the operator.</b> As AI commoditizes specialist depth, operator judgment and taste become the durable edge, not the thing that gets automated.'
+   ]},
+
+  {t:'stack', kicker:'The operator stack',
+   h:'Specialists go deep. Operators go across.',
+   fns:['Finance','Operations','Strategy','People'],
+   last:'and the judgment to sequence them under pressure'},
+
+  {t:'lead', kicker:'The specialist ceiling',
+   h:'Depth has a ceiling. Breadth does not.',
+   lead:'A specialist gets promoted until the job turns horizontal, and then the very thing that made them great stops being the thing the role needs. The operators who keep rising learned to run across functions before they were forced to.'},
+
+  {t:'lead', kicker:'The shift',
+   h:'Stop optimizing a box. Start building the system.',
+   lead:'A specialist asks how do I make my function better. An operator asks what does the company need next, and then builds across whatever that touches. That single change in the question is the whole discipline.'},
+
+  {t:'lead', kicker:'The repricing',
+   h:'The market is starting to pay for breadth.',
+   lead:'Founders and investors used to hire for deep functional resumes. Now they hire for the operator who can hold finance, ops and strategy at once, because that is the person who turns a plan into a company. I think that shift only accelerates from here.'},
+
+  {t:'part', num:'03', kicker:'Part three', h:'Inside the first 90 days of chaos.'},
+
+  {t:'lead', kicker:'The first 90 days of chaos',
+   h:'The operator is the one holding the whole board.',
+   lead:'Numbers are off, the plan is stale, two teams are blocked, and nobody owns the gap. The specialist escalates. The operator sees the whole board, sets the sequence, and gets the company moving again by Friday.'},
+
+  {t:'whyme', kicker:'Why learn this from Casey',
+   h:'Two decades of eating glass.',
+   rows:[
+     'Six times a <b>CFO</b>, twice a <b>COO</b>, across SaaS, hardware, marketplaces and eCommerce.',
+     'Global Head of Strategic Finance at <b>WeWork</b>, then CFO at <b>Landing</b>. Raised over <b>$600M</b> in debt and equity.',
+     'Founder of <b>Operators Guild</b>, now 1,000+ vetted operators from companies like Stripe, Airbnb, OpenAI and Figma.'
+   ]},
+
+  {t:'lead', kicker:'The last piece',
+   h:'Operators do not scale alone.',
+   lead:'Horizontal scope is lonely by design, you are the only one who sees all of it. The discipline compounds fastest in a vetted room of operators who have run the same gauntlet. That room is the next step, not the lesson.'},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Join the room where the discipline compounds.',
+   ctaLine:'If this is how you already think, apply to Operators Guild.',
+   url:'operators-guild.com/apply',
+   disc:'This masterclass is educational. It shares frameworks and experience from building and operating high-growth companies. It is not financial, legal, or career advice, and it is not a guarantee of any specific outcome, title, compensation, or result. Outcomes vary with individual circumstances and effort.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide';
+  let html='';
+  if(s.kicker) html+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'){html+=`<h1>${s.h}</h1>`; if(s.sub)html+=`<div class="span"></div><p class="sub">${s.sub}</p>`;}
+  else if(s.t==='part'){html=`<div class="kicker">${s.kicker}</div><div class="part-num">${s.num}</div><h2>${s.h}</h2>`;}
+  else if(s.t==='pillars'){html+=`<ul class="items">${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`;}
+  else if(s.t==='stack'){html+=`<h2>${s.h}</h2><div class="stack">${s.fns.map(f=>`<div class="fn">${f}</div>`).join('')}<div class="fn last">${s.last}</div></div>`;}
+  else if(s.t==='whyme'){html+=`<h2>${s.h}</h2><div class="whyme">${s.rows.map(r=>`<div>${r}</div>`).join('')}</div>`;}
+  else if(s.t==='cta'){html+=`<h2>${s.h}</h2><p class="cta-line">${s.ctaLine}</p><div class="cta-url">${s.url}</div><div class="disc">${s.disc}</div>`;}
+  else {html+=`<h2>${s.h}</h2>`; if(s.lead)html+=`<p class="lead">${s.lead}</p>`; if(s.sub)html+=`<p class="sub">${s.sub}</p>`;}
+  if(s.t!=='cta' && s.t!=='title') html+=`<div class="foot">The Operator Discipline · Operators Guild</div>`;
+  el.innerHTML=html;
+  deck.appendChild(el);
+});
+
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
