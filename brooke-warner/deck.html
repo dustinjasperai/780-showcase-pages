@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finish the Memoir You Keep Starting, a live masterclass with Brooke Warner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#f6f1e7;
+    --panel:#fbf7ef;
+    --rule:#e2d8c4;
+    --ink:#241f1a;
+    --ink-soft:#4a4038;
+    --ink-muted:#857666;
+    --accent:#b2503a;
+  }
+  html, body { height:100%; }
+  body {
+    background:var(--bg); color:var(--ink);
+    font-family:'Hanken Grotesk', -apple-system, system-ui, sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage { width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; }
+  .slide {
+    width:min(1040px, 92vw); height:min(640px, 90vh);
+    background:var(--panel); border:1px solid var(--rule);
+    padding:72px 76px; position:relative;
+    display:none; flex-direction:column; justify-content:center;
+    box-shadow:0 1px 0 rgba(36,31,26,0.03);
+  }
+  .slide.on { display:flex; }
+  .kicker { font-size:12px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1 { font-family:'Newsreader', Georgia, serif; font-weight:700; font-size:52px; line-height:1.1; letter-spacing:-0.01em; margin-bottom:20px; }
+  h2 { font-family:'Newsreader', Georgia, serif; font-weight:600; font-size:38px; line-height:1.15; margin-bottom:24px; }
+  .sub { font-size:21px; line-height:1.55; color:var(--ink-soft); max-width:30em; }
+  .foot { margin-top:28px; font-size:17px; color:var(--ink-muted); font-style:italic; }
+  ul { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+  li { font-size:20px; line-height:1.5; color:var(--ink-soft); padding-left:26px; position:relative; max-width:34em; }
+  li::before { content:''; position:absolute; left:0; top:13px; width:9px; height:9px; background:var(--accent); }
+  blockquote { font-family:'Newsreader', Georgia, serif; font-style:italic; font-size:40px; line-height:1.2; color:var(--ink); max-width:24em; border-left:3px solid var(--accent); padding-left:28px; }
+  .who { font-size:14px; color:var(--ink-muted); margin-top:22px; letter-spacing:0.04em; }
+  .step { margin-top:24px; font-size:19px; color:var(--ink); font-weight:500; }
+  .disc { margin-top:30px; font-size:13px; line-height:1.55; color:var(--ink-muted); max-width:40em; }
+  .pg { position:absolute; bottom:26px; right:34px; font-size:12px; color:var(--ink-muted); letter-spacing:0.08em; }
+  .brandmark { position:absolute; bottom:26px; left:34px; font-size:12px; color:var(--ink-muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .nav { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--ink-muted); font-family:'Hanken Grotesk',sans-serif; }
+  @media (max-width:720px){ .slide{ padding:40px 32px; } h1{ font-size:34px; } h2{ font-size:27px; } blockquote{ font-size:27px; } .sub{ font-size:17px; } li{ font-size:16px; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">Use the arrow keys to move through the slides</div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Brooke Warner', h:'Finish the Memoir You Keep Starting', sub:'Aboutness, structure, and the five essentials that get a draft done.'},
+  {t:'who', h:'If this is you', list:['You have the story, and you have pages, maybe a lot of them.','You have started three times and stalled three times.','You are not sure what your book is actually about.','You wonder if you have the discipline, or the talent.'], foot:'You are in the right room.'},
+  {t:'reframe', kicker:'The hard truth', h:'You do not have a writing problem.', sub:'You have an aboutness problem and a structure problem. Those are solvable. Talent is not the thing standing between you and a finished memoir.'},
+  {t:'section', kicker:'Part one', h:'Why memoirs stall', sub:'The four places almost every memoir gets stuck.'},
+  {t:'list', h:'The four places memoirs stall', list:['Scope: you do not know what the book is, so it keeps growing.','Fear: you are writing around the people and truths that scare you.','Process: you have no map, so chronology swallows the story.','Paralysis: the inner critic disguised as writer’s block.'], foot:'None of these is a talent problem. Each one has a method.'},
+  {t:'section', kicker:'Part two', h:'Aboutness', sub:'The single idea that unlocks scope.'},
+  {t:'quote', q:'A memoir is not a record of what happened. It is a story about what it means.', who:'The aboutness principle'},
+  {t:'content', h:'What aboutness does', list:['It tells you what to keep and what to cut.','It turns twenty years of life into one clear throughline.','It gives every scene a job.'], foot:'Find your aboutness and the scope problem dissolves.'},
+  {t:'section', kicker:'Part two', h:'Structure', sub:'Map the life before you drown in the chronology.'},
+  {t:'list', h:'Three shapes a memoir can take', list:['Linear: the story walks forward in time.','Braided: two or more threads woven together.','Framed: a present-day frame holding the past.'], foot:'Pick the wrong one and you will rewrite for a year. Pick on purpose.'},
+  {t:'content', h:'The joy of mapping', list:['Turning points first, then scaffolding.','Content buckets, so every memory has a home.','Scenes as the anchor, reflection as the meaning.'], foot:'Structure is not a cage. It is the thing that lets you finish.'},
+  {t:'section', kicker:'Part two', h:'Scene and reflection', sub:'Where memory becomes meaning.'},
+  {t:'list', h:'Write it like a movie', list:['Show the moment in scene, do not summarize it.','Use the trinity of narrators: then-you, now-you, and the guide for the reader.','Let reflection carry the takeaway the scene has earned.'], foot:'Scene plus reflection is the engine of memoir.'},
+  {t:'section', kicker:'Part two', h:'The five essentials', sub:'Finishing is a practice, not a personality.'},
+  {t:'list', h:'What actually gets a draft done', list:['Consistency: your body in the chair, regularly.','Accountability: someone expecting your pages.','Goals: so you know when you have arrived.','Guts: the nerve to write the true thing.','Patience: one sentence at a time, for as long as it takes.'], foot:'This is the difference between talking about a memoir and holding one.'},
+  {t:'section', kicker:'Part three', h:'What six months looks like', sub:'From everything that happened to the book it is about.'},
+  {t:'content', h:'The path', list:['A draft with a clear aboutness and a deliberate structure.','Scenes that land and reflection that means something.','A cohort and a mentor, so you do not do it alone.'], foot:'A finished early draft in your hands, not in your head.'},
+  {t:'why', kicker:'Why me', h:'Brooke Warner', list:['Publisher of She Writes Press and SparkPress.','Cofounder of Memoir Nation.','Author of Breaking Ground on Your Memoir and Write On, Sisters!','Fifteen years coaching memoirists to finished manuscripts.'], foot:'I have walked hundreds of writers across this exact finish line.'},
+  {t:'cta', h:'Write your memoir in six months', sub:'Join the next live cohort and bring your story home.', step:'Come to the next free live masterclass, then enroll in Write Your Memoir in Six Months.', disc:'Educational only. No income, publication, or result is guaranteed. Every writer’s outcome varies with the work they put in.'}
+];
+
+const stage = document.getElementById('stage');
+function esc(x){ return x; }
+function render(){
+  stage.innerHTML = '';
+  S.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'slide' + (i===cur ? ' on':'');
+    let html = '';
+    if (s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+    if (s.t==='quote'){
+      html += '<blockquote>'+s.q+'</blockquote>';
+      if (s.who) html += '<div class="who">'+s.who+'</div>';
+    } else {
+      if (s.h) html += (s.t==='title' ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>');
+      if (s.sub) html += '<div class="sub">'+s.sub+'</div>';
+      if (s.list){ html += '<ul>'; s.list.forEach(it => html += '<li>'+it+'</li>'); html += '</ul>'; }
+      if (s.step) html += '<div class="step">'+s.step+'</div>';
+      if (s.foot) html += '<div class="foot">'+s.foot+'</div>';
+      if (s.disc) html += '<div class="disc">'+s.disc+'</div>';
+    }
+    html += '<div class="brandmark">Brooke Warner</div>';
+    html += '<div class="pg">'+(i+1)+' / '+S.length+'</div>';
+    d.innerHTML = html;
+    stage.appendChild(d);
+  });
+}
+let cur = 0;
+function show(n){ cur = Math.max(0, Math.min(S.length-1, n)); render(); }
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight' || e.key===' ') show(cur+1);
+  else if (e.key==='ArrowLeft') show(cur-1);
+});
+document.addEventListener('click', () => show(cur+1));
+render();
+</script>
+</body>
+</html>
