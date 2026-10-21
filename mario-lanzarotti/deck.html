@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bottleneck Is You — a masterclass with Mario Lanzarotti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf7f0; --panel:#f6efe3; --card:#f4ecdd;
+    --ink:#1a1714; --muted:#6b6358; --rule:#e3d8c4; --accent:#c69842;
+    --head:"Playfair Display",serif; --body:"Lato",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;border-bottom:1px solid var(--rule);position:relative}
+  .kick{font-family:var(--body);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.08;margin-bottom:1.1rem}
+  p{font-size:clamp(1.05rem,1.7vw,1.35rem);max-width:40ch;color:var(--ink)}
+  p.lead{max-width:46ch}
+  .muted{color:var(--muted)}
+  .big{font-family:var(--head);font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.1;max-width:20ch}
+  ul{list-style:none;margin-top:1.4rem;display:grid;gap:.9rem;max-width:44ch}
+  li{position:relative;padding-left:1.6rem;font-size:clamp(1.02rem,1.6vw,1.25rem)}
+  li::before{content:"";position:absolute;left:0;top:.6em;width:.55rem;height:.55rem;background:var(--accent);border-radius:50%}
+  .num{font-family:var(--head);color:var(--accent);font-size:1.1rem;font-weight:700;margin-bottom:.6rem;display:block}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:2.2rem 2.4rem;max-width:48ch}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;max-width:60ch}
+  .state{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:1.6rem}
+  .state.ex{border-color:var(--accent);box-shadow:0 1px 0 var(--accent) inset}
+  .state h3{font-family:var(--head);font-weight:600;font-size:1.3rem;margin-bottom:.5rem}
+  .foot{position:absolute;bottom:3.4vh;left:9vw;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .cta{background:var(--ink);color:var(--bg)}
+  .cta .kick{color:var(--accent)}
+  .cta h1{color:var(--bg)}
+  .cta p{color:#e9e1d4}
+  .btn{display:inline-block;margin-top:2rem;background:var(--accent);color:#1a1409;font-weight:700;
+    padding:1rem 2rem;border-radius:999px;font-size:1.05rem;letter-spacing:.02em}
+  .disc{margin-top:2.4rem;font-size:.82rem;color:#b9ad99;max-width:48ch;line-height:1.5}
+  .accent{color:var(--accent)}
+  .strike{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+</style>
+</head>
+<body>
+<main id="deck"></main>
+<script>
+const S = [
+  {t:'title', cls:'', html:`
+    <div class="kick">A live masterclass with Mario Lanzarotti</div>
+    <h1>The bottleneck<br>is you.</h1>
+    <p class="lead muted" style="margin-top:1.6rem">Why the business you built now runs you, and how to step out of the middle of it without it falling apart.</p>
+    <div class="foot">The Aligned Founder</div>`},
+
+  {t:'who', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You built something real. And now you cannot get out of it.</h2>
+    <p>You are past $500k. The business works. But it works because you are in every decision, every approval, every fire. Take a week off and you feel it wobble.</p>`},
+
+  {t:'trap', html:`
+    <div class="kick">The trap</div>
+    <h2>You are the most expensive employee in your own company.</h2>
+    <p class="lead">Half your week goes to work that someone earning $50 an hour could do. The $500 an hour work, the proposals, the partnerships, the one strategic hire, sits and waits for a version of you that has time.</p>`},
+
+  {t:'cost', html:`
+    <div class="kick">What it is quietly costing you</div>
+    <h2>The bottleneck has a price, even when revenue looks fine.</h2>
+    <ul>
+      <li>10 to 20 percent of margin lost to scope creep nobody was told to stop.</li>
+      <li>$12,000 to $18,000 for one wrong hire tolerated for ninety days.</li>
+      <li>15 to 20 hours a week re-deciding things that were already decided.</li>
+    </ul>`},
+
+  {t:'reframe', cls:'', html:`
+    <div class="kick">The reframe</div>
+    <div class="big">It is not a <span class="strike">strategy</span> problem.<br>It never was.</div>
+    <p style="margin-top:1.6rem" class="muted">You have read the books. Hired the people. Built the systems. And you are still the bottleneck. More strategy built by the same person just gives you more to be the bottleneck of.</p>`},
+
+  {t:'part', html:`
+    <span class="num">Part One</span>
+    <h2>The real ceiling is the founder's identity.</h2>
+    <p>The identity that built this business, the one who does it all, catches everything, carries it, is the exact identity that now caps it. You cannot delegate your way out of who you have decided you need to be.</p>`},
+
+  {t:'two-states', html:`
+    <div class="kick">The shift this masterclass is about</div>
+    <h2>From executor to executive.</h2>
+    <div class="grid2" style="margin-top:1.4rem">
+      <div class="state"><h3>The executor</h3><p class="muted" style="font-size:1rem">In everything. Trusted by no process. The business cannot breathe without them in the room.</p></div>
+      <div class="state ex"><h3>The executive</h3><p class="muted" style="font-size:1rem">Sets the standard, then holds people to it. The business runs on decisions they no longer have to be present for.</p></div>
+    </div>`},
+
+  {t:'part', html:`
+    <span class="num">Part Two</span>
+    <h2>The ZenPreneur Method.</h2>
+    <p>How you make the shift without burning out doing it. Three pieces of inner work that change what you are capable of letting go of. This is the part strategy alone cannot reach.</p>`},
+
+  {t:'pillar', html:`
+    <span class="num">Pillar One</span>
+    <h2>The Law of Open Cycles.</h2>
+    <p class="lead">Every unfinished decision, unspoken conversation, and unresolved loop stays open in your head and quietly eats your attention. We inventory them and close them. A founder with a clear head makes faster, cleaner calls, and stops needing to be consulted on all of them.</p>`},
+
+  {t:'pillar', html:`
+    <span class="num">Pillar Two</span>
+    <h2>The Thought, Feeling, Action loop.</h2>
+    <p class="lead">What you do is downstream of what you feel, which is downstream of what you think. Trying to change the action alone, delegate more, work less, never holds. We intervene one level up, at the thought that keeps you reaching for control.</p>`},
+
+  {t:'pillar', html:`
+    <span class="num">Pillar Three</span>
+    <h2>Conscious creation over conditioning.</h2>
+    <p class="lead">Most of how a founder runs is inherited and reactive, patterns picked up long before this company existed. We name the conditioning that keeps you in the middle, and choose, on purpose, how the business gets built from here.</p>`},
+
+  {t:'together', html:`
+    <div class="kick">How they work together</div>
+    <h2>A clear head, a changed pattern, a deliberate choice.</h2>
+    <p>Close the open cycles so the mind is quiet. Change the loop so letting go stops feeling like losing control. Create consciously so the next version of the company is designed, not defaulted into.</p>`},
+
+  {t:'part', html:`
+    <span class="num">Part Three</span>
+    <h2>On the other side of the shift.</h2>
+    <p>Not a founder who disappears. A founder whose time finally lands on the work only they can do.</p>`},
+
+  {t:'after', html:`
+    <div class="kick">The executive's week</div>
+    <h2>The week the business used to steal.</h2>
+    <ul>
+      <li>Decisions happen without you because the standard is clear.</li>
+      <li>You take a week off and the team closes without you in the room.</li>
+      <li>The $500 an hour work finally gets your hours, because the $50 work has an owner who is not you.</li>
+    </ul>`},
+
+  {t:'why', html:`
+    <div class="kick">Why me</div>
+    <h2>I was the bottleneck first.</h2>
+    <p class="lead">I co-founded and ran a custom footwear company in New York, and I was the single point everything ran through until I exited in 2019. Since then I have advised more than 2,000 founders across 15 countries on making this exact shift, and spoken about it on a TEDx stage watched a few million times.</p>`},
+
+  {t:'diagnostic', html:`
+    <div class="kick">How I work</div>
+    <h2>I do not ask you what you need. I tell you what I see.</h2>
+    <p>The first conversation is a diagnostic. In one session we find the specific place you are the bottleneck, and the pattern underneath it, so the work is aimed, not general.</p>`},
+
+  {t:'fit', html:`
+    <div class="kick">Who this is for, and who it is not</div>
+    <h2>This is for the founder ready to stop being needed.</h2>
+    <ul>
+      <li>For you if the business is healthy and you are the ceiling.</li>
+      <li>Not for you if you want one more tactic to run yourself harder.</li>
+      <li>Not a quick fix. A change in who is running the company, starting with how you run.</li>
+    </ul>`},
+
+  {t:'recap', html:`
+    <div class="kick">The one idea</div>
+    <div class="big">Stop fixing the business.<br><span class="accent">Change the founder.</span></div>
+    <p style="margin-top:1.6rem" class="muted">The business will only ever be as free as the person at the center of it.</p>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">Your next step</div>
+    <h1>Apply for a Diagnostic Session.</h1>
+    <p style="margin-top:1.4rem">One conversation. We find where you are the bottleneck and what the shift to executive actually looks like for your company. If it is a fit, we talk about working together. If it is not, you leave with the diagnosis.</p>
+    <a class="btn" href="https://www.mariolanzarotti.com/">Apply for a Diagnostic Session</a>
+    <div class="disc">This masterclass is educational. No income, role, revenue, or result is guaranteed. Outcomes vary and depend on your own circumstances, decisions, and work. Mario Lanzarotti, The Aligned Founder.</div>`}
+];
+
+const deck = document.getElementById('deck');
+for (const s of S){
+  const sec = document.createElement('section');
+  sec.className = 'slide' + (s.cls ? ' ' + s.cls : '');
+  sec.innerHTML = s.html;
+  deck.appendChild(sec);
+}
+</script>
+</body>
+</html>
