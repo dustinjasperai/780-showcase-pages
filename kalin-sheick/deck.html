@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Profitable Florist — A Live Masterclass with Kalin Sheick</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EF;
+    --panel:#F1E9DA;
+    --accent:#202555;
+    --ink:#202555;
+    --muted:#5a5f7a;
+    --line:#d9cfbc;
+    --head:"Newsreader",Georgia,serif;
+    --body:"Mulish",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 64px}
+  .slide{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:56px 52px;margin:22px 0;min-height:460px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide.fill{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  .slide.panel{background:var(--panel)}
+  .petal{position:absolute;top:26px;right:30px;width:26px;height:26px;opacity:.5}
+  .petal.light{opacity:.6}
+  .k{font-family:var(--body);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:18px}
+  .slide.fill .k{color:#cdd0e6}
+  h1{font-family:var(--head);font-weight:700;font-size:54px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-.01em}
+  .sub{font-family:var(--head);font-style:italic;font-weight:500;font-size:22px;color:var(--muted);margin-top:18px}
+  .slide.fill .sub{color:#dfe1f0}
+  p.body{font-size:20px;margin-top:20px;max-width:62ch;color:var(--ink)}
+  .slide.fill p.body{color:#eef0fa}
+  ul{margin-top:24px;list-style:none;display:grid;gap:14px}
+  li{font-size:19px;padding-left:28px;position:relative}
+  li:before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+  .slide.fill li:before{background:var(--bg)}
+  .big{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  .num{font-family:var(--head);font-weight:700;font-size:30px;color:var(--accent)}
+  .slide.fill .num{color:#fff}
+  .disc{margin-top:28px;font-size:13px;color:var(--muted);max-width:66ch}
+  .foot{position:absolute;bottom:22px;left:52px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .slide.fill .foot{color:#b9bdd8}
+  @media(max-width:640px){.slide{padding:38px 26px;min-height:380px}h1{font-size:38px}h2{font-size:28px}.big{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const PETAL = '<svg class="petal" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c2 4 6 6 6 10a6 6 0 11-12 0c0-4 4-6 6-10z" fill="#202555"/></svg>';
+const S = [
+  {t:'title', cls:'fill', k:'A live masterclass with Kalin Sheick', h:'The Profitable Florist',
+   sub:'What the real numbers actually look like inside a seven-figure flower shop.'},
+
+  {t:'who', k:'Who this is for', h:'You can design anything. Explaining where the money goes is the hard part.',
+   body:'This hour is for the working florist who is talented, busy, and still not sure the business is paying her back the way it should.'},
+
+  {t:'trap', cls:'panel', k:'The trap', h:'Fully booked. Fully exhausted. And the bank account still does not match the calendar.',
+   body:'You are not short on orders. You are short on a way to see which work makes money, and which work just makes you tired.'},
+
+  {t:'reframe', cls:'fill', k:'The real reason', h:'Most florists do not struggle because they lack talent.',
+   sub:'They struggle because no one ever taught them how to run the business.'},
+
+  {t:'part', k:'Part one', h:'The profit problem is a pricing problem.',
+   body:'Before we touch marketing, hiring, or growth, we start where the money leaks: how the work is priced and how the year is planned.'},
+
+  {t:'body', k:'Part one', h:'Pricing by gut is the most expensive habit in flowers.',
+   list:['A wedding that looks profitable on the quote but loses money by delivery day',
+         'Retail margins that were set years ago and never revisited',
+         'Workshops priced to fill seats instead of priced to pay you']},
+
+  {t:'body', cls:'panel', k:'Part one', h:'And then there is the calendar.',
+   body:'Weddings cluster. Retail spikes and stalls. January and February go quiet. When the slow months are a surprise every year, they quietly set your income ceiling.'},
+
+  {t:'part', cls:'fill', k:'Part two', h:'The Sweetwater Way.',
+   sub:'Three parts, the same way we build a design: focal, filler, and flair.'},
+
+  {t:'pillar', k:'Part two, pillar one', h:'Focal: your core revenue engine.',
+   body:'Name the one stream that pays the bills and deserves the best of your time, then price it so it actually carries the business, not just fills the calendar.'},
+
+  {t:'pillar', cls:'panel', k:'Part two, pillar two', h:'Filler: the streams that fill the gaps.',
+   list:['A retail presence that earns between the big bookings',
+         'Workshops that turn a quiet week into a paid room',
+         'Wreath season, built to pull real revenue in the slowest stretch of the year']},
+
+  {t:'pillar', k:'Part two, pillar three', h:'Flair: the hospitality that makes it repeat.',
+   body:'Northern Michigan hospitality is not decoration. The experience is what turns a one-time order into a client who comes back and refers her friends, which is cheaper than finding a new one.'},
+
+  {t:'method', cls:'fill', k:'A worked example', h:'Wreath Math.',
+   body:'Materials, seats, and price set against each other so a holiday workshop pulls strong revenue in the quietest weeks instead of breaking even. One named method, run the same way every season.'},
+
+  {t:'part', k:'Part three', h:'A year where every season earns.',
+   body:'The goal is not more hours. It is a year where every season pays, because every season was priced and planned to.'},
+
+  {t:'body', cls:'panel', k:'Part three', h:'Four streams, stacked across the year.',
+   list:['Weddings and events as the focal',
+         'The retail shop earning between bookings',
+         'Workshops filling the quiet weeks',
+         'Wreath season carrying the slow stretch']},
+
+  {t:'body', k:'Part three', h:'Real numbers. No gatekeeping.',
+   body:'The florists who get the most out of this see the actual figures from a working shop, not a theory. That is the whole point: decisions made on real numbers, not on hope.'},
+
+  {t:'why', cls:'fill', k:'Why me', h:'I built this from a $500 start.',
+   body:'I started Sweetwater Floral with a $500 investment off a hand-me-down ping pong table, with zero floral experience. It grew into a seven-figure business with a full team, a retail shop, and more than 500 weddings. I still run it today.'},
+
+  {t:'shift', k:'The shift', h:'From booked and broke to priced for profit.',
+   body:'When you can see which work pays and plan a year where the slow months are already handled, the business finally works as hard for you as you work for it.'},
+
+  {t:'cta', cls:'fill', k:'Your next step', h:'Ready to see your own numbers?',
+   body:'If you want help pricing your work and planning your year, start with a Bloom Strategy Session, or apply for the Bloom Private Experience to spend two days inside the real shop.',
+   disc:'Educational only. No income, role, or result is guaranteed. Results vary with your market, effort, and pricing. This masterclass teaches an approach to running a floral business; it is not financial advice.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.cls ? ' '+s.cls : '');
+  let html = PETAL;
+  if(s.k) html += '<div class="k">'+s.k+'</div>';
+  if(s.t==='title'){ html += '<h1>'+s.h+'</h1>'; if(s.sub) html += '<div class="sub">'+s.sub+'</div>'; }
+  else { html += '<h2>'+s.h+'</h2>'; if(s.sub) html += '<div class="sub">'+s.sub+'</div>'; }
+  if(s.body) html += '<p class="body">'+s.body+'</p>';
+  if(s.list){ html += '<ul>'; s.list.forEach(i=> html += '<li>'+i+'</li>'); html += '</ul>'; }
+  if(s.disc) html += '<div class="disc">'+s.disc+'</div>';
+  html += '<div class="foot">Kalin Sheick, Sweetwater Floral</div>';
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
