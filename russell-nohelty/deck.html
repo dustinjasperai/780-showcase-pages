@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Author Ecosystem — a masterclass with Russell Nohelty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfdfc;
+    --panel:#eaf4f0;
+    --ink:#0f1a17;
+    --muted:#52635d;
+    --accent:#2bb89a;
+    --deep:#157a66;
+    --rule:#cfe4dd;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink);color:var(--ink)}
+  body{font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px}
+  .slide{background:var(--bg);border-radius:18px;padding:56px 56px;margin:0 0 26px;
+    min-height:420px;display:flex;flex-direction:column;justify-content:center;
+    border:1px solid var(--rule);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .kick{font-family:"Permanent Marker",cursive;color:var(--deep);font-size:20px;
+    letter-spacing:.5px;margin:0 0 14px}
+  h1{font-family:"Permanent Marker",cursive;font-weight:400;font-size:52px;line-height:1.05;
+    margin:0 0 18px;color:var(--ink)}
+  h2{font-family:"Permanent Marker",cursive;font-weight:400;font-size:38px;line-height:1.08;
+    margin:0 0 16px;color:var(--ink)}
+  p{font-size:21px;margin:0 0 14px;color:var(--ink);max-width:40ch}
+  .lead{font-size:24px;color:var(--muted);max-width:46ch}
+  .big{font-size:30px;max-width:30ch}
+  ul{font-size:21px;margin:8px 0 0;padding-left:0;list-style:none}
+  li{margin:0 0 12px;padding-left:34px;position:relative;max-width:44ch}
+  li::before{content:"";position:absolute;left:0;top:10px;width:16px;height:16px;
+    border-radius:5px;background:var(--accent)}
+  .steps li::before{content:counter(step);counter-increment:step;background:var(--accent);
+    color:#042019;font-family:"Permanent Marker",cursive;font-size:13px;width:24px;height:24px;
+    border-radius:7px;display:flex;align-items:center;justify-content:center;top:4px;left:0}
+  .steps{counter-reset:step}
+  .compass{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+  .compass div{background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:18px 20px}
+  .compass b{font-family:"Permanent Marker",cursive;color:var(--deep);font-weight:400;
+    font-size:22px;display:block;margin-bottom:4px}
+  .accent{color:var(--deep)}
+  .num{font-family:"Permanent Marker",cursive;color:var(--accent);font-size:60px;line-height:1}
+  .foot{font-size:15px;color:var(--muted);margin-top:26px}
+  .cta .lead{color:var(--ink)}
+  .disc{font-size:14px;color:var(--muted);margin-top:22px;max-width:58ch}
+  .pg{font-size:14px;color:var(--muted);text-align:right;margin:-8px 8px 2px 0}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`
+    <div class="kick">A live masterclass with Russell Nohelty · Hapitalist</div>
+    <h1>The Author Ecosystem</h1>
+    <p class="lead">How working creators build a business that pays them every month, without chasing the algorithm or burning out.</p>
+  `},
+  {t:'intro', cls:'', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You already make the work</h2>
+    <p>You have a catalog. Books, comics, a newsletter, a body of creative work people love.</p>
+    <p class="lead">What you don't have yet is a steady way for that work to pay you back month after month.</p>
+  `},
+  {t:'trap', cls:'', html:`
+    <div class="kick">The trap</div>
+    <h2>The launch-and-crickets cycle</h2>
+    <p>Launch. A spike. Then silence. So you launch again, faster, louder, and hope this one sticks.</p>
+    <p class="lead">It feels like the only gear you have. It is also the fastest road to burnout.</p>
+  `},
+  {t:'reframe', cls:'', html:`
+    <div class="kick">The real problem</div>
+    <h2 class="accent">You're not failing for lack of information.</h2>
+    <p class="big">You're stuck on the power-law treadmill: retailer algorithms, page reads, and high-volume releases in a system built for a tiny percentage of winners.</p>
+  `},
+  {t:'part', cls:'', html:`
+    <div class="kick">Part one</div>
+    <h2>Why the treadmill quietly works against you</h2>
+    <p>Every platform keeps the relationship with your reader, takes the bigger cut, and resets your reach to zero the day you stop feeding it.</p>
+    <p class="lead">You rent attention you never get to keep.</p>
+  `},
+  {t:'list', cls:'', html:`
+    <div class="kick">What that costs you</div>
+    <h2>Three hidden taxes</h2>
+    <ul>
+      <li>You keep 30 to 70 percent, not 90, of what you earn.</li>
+      <li>You guess who your readers are instead of knowing them.</li>
+      <li>You discount to compete instead of charging what the work is worth.</li>
+    </ul>
+  `},
+  {t:'part', cls:'', html:`
+    <div class="kick">Part two</div>
+    <h2>The fix is an order, not more tactics</h2>
+    <p class="big">You don't need more things to do. You need your pieces in the right sequence, so each one feeds the next.</p>
+  `},
+  {t:'framework', cls:'', html:`
+    <div class="kick">The framework</div>
+    <h2>The Author Ecosystem, in six moves</h2>
+    <ul class="steps">
+      <li><b>Subscriptions</b> turn casual readers into a direct, owned audience.</li>
+      <li><b>Retailers</b> become discovery, not your whole income.</li>
+      <li><b>Kickstarter</b> funds the next project before you make it.</li>
+      <li><b>Your catalog</b> sells itself once people know where to look.</li>
+      <li><b>Direct sales</b> let you keep the margin and the reader.</li>
+      <li><b>Continuity</b> turns one-time buyers into monthly support.</li>
+    </ul>
+  `},
+  {t:'step', cls:'', html:`
+    <div class="kick">Move three, up close</div>
+    <h2>Kickstarter as your cash engine</h2>
+    <p>Keep 90 percent of what you earn. Know exactly who bought. Charge a premium instead of slashing prices to give people a deal.</p>
+    <p class="lead">Crowdfunding is how you get paid for the work before you spend a year making it.</p>
+  `},
+  {t:'step', cls:'', html:`
+    <div class="kick">Move six, up close</div>
+    <h2>Continuity is the quiet winner</h2>
+    <p>A small, steady base of readers who support you every month changes everything about how you plan, price, and create.</p>
+    <p class="lead">Predictable beats viral, every time, for a career you can live inside.</p>
+  `},
+  {t:'compass', cls:'', html:`
+    <div class="kick">The diagnostic</div>
+    <h2>Run your business through the HAPI Compass</h2>
+    <p class="lead">Most people aren't failing because they lack information. They're failing because they're fixing the wrong thing first.</p>
+    <div class="compass">
+      <div><b>Heart</b>Is this built the way you're actually built?</div>
+      <div><b>Audience</b>Do you own the relationship, or rent it?</div>
+      <div><b>Prioritization</b>What is the one friction to fix first?</div>
+      <div><b>Income</b>Which move actually turns into money?</div>
+    </div>
+  `},
+  {t:'friction', cls:'', html:`
+    <div class="kick">The method</div>
+    <h2>Frictionless growth</h2>
+    <p>Build on the strengths you already have. Find the single piece of friction that's really blocking the money, and fix that one.</p>
+    <p class="lead">Grow the way you're built, so you grow without burning everything down.</p>
+  `},
+  {t:'part', cls:'', html:`
+    <div class="kick">Part three</div>
+    <h2>When your income gets boring</h2>
+    <p>Launches stop being make-or-break. Income gets boring, in the best way. You create from a place of choice instead of panic.</p>
+    <p class="lead">Joy first, because success follows joy, not the other way around.</p>
+  `},
+  {t:'proof', cls:'', html:`
+    <div class="kick">Why listen to me</div>
+    <h2>I built my career this way</h2>
+    <p class="big">USA Today bestselling author. Over $650,000 raised across 50 plus crowdfunding campaigns. Dozens of books, comics, and courses, all feeding one ecosystem.</p>
+  `},
+  {t:'recap', cls:'', html:`
+    <div class="kick">The takeaway</div>
+    <h2>One system, the right order</h2>
+    <ul>
+      <li>Own your audience with subscriptions and direct sales.</li>
+      <li>Use Kickstarter to fund the work up front.</li>
+      <li>Fix the one friction the HAPI Compass points to.</li>
+    </ul>
+  `},
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">Your next step</div>
+    <h1>Let's map your ecosystem</h1>
+    <p class="lead">Book a free clarity call and we'll find the one move that turns your catalog into steady income.</p>
+    <p class="accent" style="font-family:'Permanent Marker',cursive;font-size:26px">hapitalist.com · Book a clarity call</p>
+    <p class="disc">For education only. No income, role, or result is guaranteed. Results vary and depend on your work, your market, and your effort.</p>
+  `}
+];
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide '+(s.cls||'');
+  el.innerHTML='<div class="pg">'+(i+1)+' / '+S.length+'</div>'+s.html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
