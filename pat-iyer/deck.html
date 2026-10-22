@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing to Get Business | A masterclass with Pat Iyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Actor&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#eef1f7;
+    --panel:#ffffff;
+    --rule:#d8ddea;
+    --ink:#2a2a2a;
+    --ink-muted:#6f6a60;
+    --accent:#304998;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Actor',-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:900px;}
+  .slide.on{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:22px;}
+  h1{font-family:'Aboreto',serif;font-weight:400;font-size:clamp(34px,6vw,62px);line-height:1.08;color:var(--ink);letter-spacing:.01em;}
+  h2{font-family:'Aboreto',serif;font-weight:400;font-size:clamp(26px,4.4vw,44px);line-height:1.15;color:var(--ink);margin-bottom:20px;}
+  .sub{font-size:clamp(18px,2.4vw,24px);color:var(--ink-muted);margin-top:22px;line-height:1.5;}
+  .body{font-size:clamp(17px,2.1vw,21px);color:var(--ink);line-height:1.6;max-width:720px;}
+  .sectionmark{font-family:'Aboreto',serif;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+  ul{list-style:none;margin-top:10px;}
+  ul li{font-size:clamp(17px,2.2vw,22px);line-height:1.45;padding:16px 0 16px 46px;border-bottom:1px solid var(--rule);position:relative;color:var(--ink);}
+  ul li:last-child{border-bottom:none;}
+  ul li .n{position:absolute;left:0;top:16px;font-family:'Aboreto',serif;color:var(--accent);font-size:20px;}
+  .phase{display:inline-block;font-family:'Aboreto',serif;color:var(--accent);font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;}
+  .disc{margin-top:30px;font-size:13px;color:var(--ink-muted);line-height:1.5;max-width:640px;border-top:1px solid var(--rule);padding-top:16px;}
+  .by{margin-top:26px;font-size:15px;color:var(--ink-muted);}
+  #nav{position:fixed;bottom:20px;right:24px;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-muted);font-family:'Actor',sans-serif;}
+  #nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;}
+  #nav button:hover{border-color:var(--accent);color:var(--accent);}
+  #count{min-width:52px;text-align:center;}
+  .pill{display:inline-block;padding:6px 14px;border:1px solid var(--accent);color:var(--accent);border-radius:999px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">&#8249;</button><span id="count"></span><button id="next">&#8250;</button></div>
+<script>
+const S = [
+  {t:'title', kicker:"A masterclass with Pat Iyer", h:"Writing to Get Business", sub:"How experts turn a book into booked clients."},
+  {t:'who', pill:"Who this is for", h:"You know your field cold.", body:"You're a coach, consultant, speaker, attorney, or professional with hard-won expertise. The trouble isn't what you know. It's that the people who need you most have never heard your name."},
+  {t:'trap', h:"The expert's trap", body:"You trade time for visibility. A talk here, a referral there. The moment you stop hustling, the pipeline goes quiet. Your expertise is real. Your reach is not."},
+  {t:'reframe', pill:"The reframe", h:"Nobody hires the best-kept secret.", body:"The most-booked expert in any field is rarely the most skilled. They are the most known. A book is the fastest way to become the person people already trust before they ever meet you."},
+  {t:'section', mark:"Part One", h:"Why most expert books never pay off"},
+  {t:'point', h:"A book is not one job. It's four.", body:"Most would-be authors stall because they treat a book as a single mountain. It isn't. It is four separate jobs, and each one stops a different person cold."},
+  {t:'list', h:"The four jobs", list:["Write it: get the expertise out of your head","Finish it: the job most people never complete","Publish it: choose the path on purpose","Put it to work: turn the book into clients"]},
+  {t:'point', h:"Where the payoff is lost", body:"Even the experts who publish usually stop at job three. The book exists. It just sits there. The fourth job, putting it to work, is the one that actually brings in business, and it is the one nobody teaches."},
+  {t:'section', mark:"Part Two", h:"The method behind 70 plus books"},
+  {t:'pillar', phase:"Phase One", h:"Write", body:"We start from your expertise, not a blank page. A structured outline turns what you already know into chapters, so writing becomes filling in rather than inventing."},
+  {t:'pillar', phase:"Phase Two", h:"Finish", body:"Deadlines, accountability, and a clear path through the messy middle. This is where a coach matters most: the difference between a finished manuscript and a folder of good intentions."},
+  {t:'pillar', phase:"Phase Three", h:"Publish", body:"Traditional, self, or hybrid. Each has real pros, real costs, and real trade-offs. You choose deliberately, by what the book is for, not by default and not out of fear."},
+  {t:'pillar', phase:"Phase Four", h:"Put it to work", body:"The book becomes the front of your business: the thing that opens doors, earns speaking spots, warms leads, and lets you charge what you are worth. This is writing to get business."},
+  {t:'section', mark:"Part Three", h:"What a working book does for you"},
+  {t:'outcome', h:"Your best salesperson", body:"A reader who finishes your book already believes you can help them. The first conversation begins at trust, not at convincing. You stop chasing and start choosing who you work with."},
+  {t:'outcome', h:"One asset, many doors", body:"Credibility with prospects. Authority from the stage. A reason for the press to call. A gift that outsells any brochure. A book goes to work while you sleep."},
+  {t:'why', pill:"Why me", h:"Pat Iyer", body:"I have written or coauthored more than 70 books and I host the Writing to Get Business podcast. I built and later sold a business on the strength of my own writing, and I have guided experts through this exact four-phase method."},
+  {t:'how', pill:"How we work", h:"From concept to finish", body:"A five-month guided path: the full process, recorded lessons, one-on-one sessions with me, a private group, and an accountability partner. You walk out with a finished, published book that earns its keep."},
+  {t:'cta', pill:"Your next step", h:"Let's get the book out of your head.", body:"If you have carried a book in your head for years, let's bring it into the world and put it to work. Book a free brainstorming session and we will map your first chapter together.", disc:"This masterclass is educational. No income, role, or result is guaranteed. Results vary and depend on the work you put in."}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  const s=S[i];
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+  if(s.pill) h+='<div class="pill">'+esc(s.pill)+'</div>';
+  if(s.mark) h+='<div class="sectionmark">'+esc(s.mark)+'</div>';
+  if(s.phase) h+='<div class="phase">'+esc(s.phase)+'</div>';
+  if(s.t==='title'){ h+='<h1>'+esc(s.h)+'</h1>'; if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>'; }
+  else if(s.t==='section'){ h+='<h1>'+esc(s.h)+'</h1>'; }
+  else { if(s.h) h+='<h2>'+esc(s.h)+'</h2>'; }
+  if(s.body) h+='<div class="body">'+esc(s.body)+'</div>';
+  if(s.list){ h+='<ul>'; s.list.forEach(function(it,ix){ h+='<li><span class="n">'+(ix+1)+'</span>'+esc(it)+'</li>'; }); h+='</ul>'; }
+  if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+  stage.innerHTML='<div class="slide on">'+h+'</div>';
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+document.getElementById('prev').onclick=function(){go(-1);};
+document.getElementById('next').onclick=function(){go(1);};
+document.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
