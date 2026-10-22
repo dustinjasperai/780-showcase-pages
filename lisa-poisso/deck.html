@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Under the Hood — a masterclass with Lisa Poisso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfaf7;
+    --panel:#f1ece2;
+    --ink:#2a2622;
+    --rule:#2a2622;
+    --muted:#6f685f;
+    --accent:#c8922f;
+    --head:'Abril Fatface',Georgia,serif;
+    --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--ink);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:28px 16px}
+  .slide{
+    background:var(--bg);
+    border:1px solid #e4dccb;
+    border-radius:14px;
+    padding:64px 60px;
+    margin:0 0 22px;
+    min-height:440px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(0,0,0,.03);
+  }
+  .kick{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:400;font-size:52px;line-height:1.05;letter-spacing:.01em;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:400;font-size:38px;line-height:1.1;margin-bottom:16px}
+  h3{font-family:var(--head);font-weight:400;font-size:26px;margin-bottom:10px;color:var(--accent)}
+  p{font-size:19px;line-height:1.55;color:var(--ink);margin-bottom:14px;max-width:62ch}
+  p.lead{font-size:22px}
+  .muted{color:var(--muted)}
+  .rule{width:64px;height:3px;background:var(--accent);margin:4px 0 24px;border-radius:2px}
+  ul{list-style:none;margin:8px 0 0}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 42px;position:relative;border-top:1px solid #e4dccb}
+  li:first-child{border-top:none}
+  li .n{position:absolute;left:0;top:12px;font-family:var(--head);color:var(--accent);font-size:20px}
+  .big{font-family:var(--head);font-size:40px;line-height:1.1}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+  .box{background:var(--panel);border-radius:10px;padding:22px 24px}
+  .box h4{font-family:var(--body);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .box p{font-size:18px;margin:0}
+  .pres{margin-top:26px;font-size:16px;color:var(--muted)}
+  .pres b{color:var(--ink);font-weight:700}
+  blockquote{font-family:var(--head);font-size:34px;line-height:1.2;color:var(--ink)}
+  .disc{font-size:14px;color:var(--muted);margin-top:20px;max-width:70ch;line-height:1.5}
+  .cta .rule{margin-top:6px}
+  @media(max-width:680px){.slide{padding:40px 26px;min-height:0}h1{font-size:38px}h2{font-size:30px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="kick">A live masterclass for novelists</div>
+    <h1>Under the Hood</h1>
+    <div class="rule"></div>
+    <p class="lead">How to write the novel readers will actually buy, before you ever pay for edits.</p>
+    <div class="pres"><b>Lisa Poisso</b> &nbsp;·&nbsp; Book Coach &amp; Developmental Editor &nbsp;·&nbsp; Writes of Fiction</div>
+  `},
+  {t:'who', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You've written a book. Now it's quiet.</h2>
+    <div class="rule"></div>
+    <p>You're an emerging novelist getting ready to query agents or self-publish. You've done the hard, lonely part: you finished a draft.</p>
+    <p>But the fulls aren't converting, or the beta readers come back warm but vague, and you can't tell what's actually wrong.</p>
+  `},
+  {t:'trap', html:`
+    <div class="kick">The trap</div>
+    <blockquote>Writing a novel shouldn't feel like throwing darts wearing a blindfold.</blockquote>
+    <div class="rule" style="margin-top:22px"></div>
+    <p>Most of us learned to write by feel. That gets you a draft. It rarely gets you a story a stranger will pay to finish.</p>
+  `},
+  {t:'reframe', cls:'reframe', html:`
+    <div class="kick">The reframe</div>
+    <h2>Your novel doesn't have a writing problem.</h2>
+    <p class="big" style="color:var(--accent)">It has a story problem.</p>
+    <div class="rule" style="margin-top:22px"></div>
+    <p>Prose polish is the last 10%. What keeps readers turning pages lives underneath it, in the machinery most writers never learn to see.</p>
+  `},
+  {t:'part', cls:'part', html:`
+    <div class="kick">Part one</div>
+    <h2>Why "write what you love" stalls a debut.</h2>
+    <div class="rule"></div>
+    <p>When you write only for yourself, the story makes perfect sense in your head and nowhere else. The reader can't feel what you never put on the page.</p>
+  `},
+  {t:'cost', html:`
+    <div class="kick">What it costs</div>
+    <h2>The expensive way to find out.</h2>
+    <div class="rule"></div>
+    <ul>
+      <li><span class="n">1</span>Agents pass on the full with no reason you can use.</li>
+      <li><span class="n">2</span>Beta readers say they were "confused" but can't point to where.</li>
+      <li><span class="n">3</span>You pay for a developmental edit to be told what the story needed all along.</li>
+    </ul>
+  `},
+  {t:'method', cls:'part', html:`
+    <div class="kick">Part two · the method</div>
+    <blockquote>Learn the rules like a pro so you can break them like an artist.</blockquote>
+    <div class="rule" style="margin-top:22px"></div>
+    <p>Structure isn't the enemy of creativity. It's the thing that earns you the freedom to break it on purpose. First you learn to see under the hood.</p>
+  `},
+  {t:'hood', html:`
+    <div class="kick">Under the hood</div>
+    <h2>The five things readers feel.</h2>
+    <div class="rule"></div>
+    <ul>
+      <li><span class="n">1</span>A character arc that actually moves.</li>
+      <li><span class="n">2</span>A point of view that earns the reader's trust.</li>
+      <li><span class="n">3</span>Goal, motivation and conflict in every scene.</li>
+      <li><span class="n">4</span>Structure a reader can feel without naming.</li>
+      <li><span class="n">5</span>A payoff that makes them buy the next book.</li>
+    </ul>
+  `},
+  {t:'f1', html:`
+    <div class="kick">Foundation one</div>
+    <h3>Character arc</h3>
+    <h2>Change the reader can track.</h2>
+    <div class="rule"></div>
+    <p>A character who ends where they began has no story. We'll map the internal shift that gives your plot its meaning, so every chapter earns its place.</p>
+  `},
+  {t:'f2', html:`
+    <div class="kick">Foundation two</div>
+    <h3>Point of view</h3>
+    <h2>Whose head, and why it matters.</h2>
+    <div class="rule"></div>
+    <p>POV is a trust contract with the reader. Wobble it and the spell breaks. We'll find the lens that lets your reader feel the story from the inside.</p>
+  `},
+  {t:'f3', html:`
+    <div class="kick">Foundation three</div>
+    <h3>Goal · motivation · conflict</h3>
+    <h2>The engine of every scene.</h2>
+    <div class="rule"></div>
+    <p>A scene without a want is a scene without tension. We'll pressure-test what each character wants, why now, and what stands in the way, line by line.</p>
+  `},
+  {t:'f4', html:`
+    <div class="kick">Foundation four</div>
+    <h3>Structure</h3>
+    <h2>The shape readers feel.</h2>
+    <div class="rule"></div>
+    <p>Structure isn't a formula you paste on top. It's the rhythm that tells a reader the story is in control. We'll find yours and reinforce the beats that carry it.</p>
+  `},
+  {t:'f5', html:`
+    <div class="kick">Foundation five</div>
+    <h3>Write for the reader</h3>
+    <h2>Stop writing for yourself.</h2>
+    <div class="rule"></div>
+    <p>The goal isn't a book you love alone. It's a book the readers you want will buy and finish. Reader investment is a craft decision, made on purpose, scene by scene.</p>
+  `},
+  {t:'expert', cls:'reframe', html:`
+    <div class="kick">The outcome</div>
+    <h2>Become your own story expert.</h2>
+    <div class="rule"></div>
+    <p>Once you can see under the hood, you stop guessing. You diagnose your own manuscript, you fix the right thing, and you walk into an edit knowing exactly what you built.</p>
+  `},
+  {t:'before', html:`
+    <div class="kick">On the page</div>
+    <h2>Same scene, seen two ways.</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="box"><h4>Before</h4><p>"She walked into the room and felt nervous." Nothing wants anything; the reader waits.</p></div>
+      <div class="box"><h4>After</h4><p>She needs the letter on his desk before he turns around. Now every sentence has stakes.</p></div>
+    </div>
+  `},
+  {t:'why', html:`
+    <div class="kick">Why me</div>
+    <h2>Thirty years reading stories for a living.</h2>
+    <div class="rule"></div>
+    <p>I'm a book coach and developmental editor for emerging novelists, with a background in journalism and classical ballet, a Developmental Editing Specialist certificate, and a seat as a Resident Writing Coach at Writers Helping Writers.</p>
+    <p class="muted">My Romance Beat Sheet has been downloaded more than 80,000 times by writers learning to see their stories this way.</p>
+  `},
+  {t:'recap', html:`
+    <div class="kick">The recap</div>
+    <h2>Learn the rules. Then break them.</h2>
+    <div class="rule"></div>
+    <p>See the five things readers feel, diagnose your own manuscript, and write the novel readers will actually buy, before you spend a dollar on edits.</p>
+  `},
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">Your next step</div>
+    <h2>Let's go under the hood of your book.</h2>
+    <div class="rule"></div>
+    <p>If you want a developmental editor in your corner, the Story Accelerator is eight weeks of one-on-one coaching on your manuscript. Not ready for that yet? Start with a Manuscript Strategy Session.</p>
+    <p class="muted">Find both at lisapoisso.com.</p>
+    <p class="disc">This masterclass is educational. No publishing outcome, agent offer, or sales result is guaranteed. Results vary by writer and manuscript.</p>
+  `}
+];
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.cls ? ' ' + s.cls : '');
+  d.innerHTML = s.html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
