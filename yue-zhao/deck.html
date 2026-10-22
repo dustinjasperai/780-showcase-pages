@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outsmart the Room | The Uncommon Executive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f5f5f6;
+    --panel:#ffffff;
+    --rule:#cbe1e6;
+    --ink:#192e34;
+    --ink-soft:#325d68;
+    --accent:#002253;
+    --accent-2:#325d68;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{width:100vw;height:100vh;position:relative;}
+  .slide{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;justify-content:center;
+    padding:8vh 9vw;
+    opacity:0;transition:opacity .3s ease;
+  }
+  .slide.on{display:flex;opacity:1;}
+  .kicker{font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin-bottom:22px;}
+  h1{font-family:'Petrona',Georgia,serif;font-weight:600;font-size:clamp(34px,6vw,76px);line-height:1.04;letter-spacing:-.01em;color:var(--accent);}
+  h2{font-family:'Petrona',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,52px);line-height:1.1;color:var(--accent);margin-bottom:18px;}
+  .sub{font-family:'Petrona',Georgia,serif;font-weight:400;font-style:italic;font-size:clamp(18px,2.4vw,30px);color:var(--ink-soft);margin-top:20px;max-width:24ch;}
+  p.body{font-size:clamp(17px,2vw,26px);line-height:1.5;color:var(--ink);max-width:30ch;margin-top:6px;}
+  .part{font-family:'Petrona',Georgia,serif;font-weight:600;font-size:clamp(40px,7vw,92px);color:var(--accent);line-height:1.02;}
+  .part small{display:block;font-family:'Inter';font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin-bottom:18px;}
+  ul.pillars{list-style:none;margin-top:10px;max-width:34ch;}
+  ul.pillars li{font-size:clamp(16px,1.9vw,24px);line-height:1.4;padding:14px 0 14px 26px;border-bottom:1px solid var(--rule);position:relative;color:var(--ink);}
+  ul.pillars li:before{content:"";position:absolute;left:0;top:24px;width:10px;height:10px;border-radius:50%;background:var(--accent);}
+  ul.pillars li:last-child{border-bottom:none;}
+  .stats{display:flex;flex-wrap:wrap;gap:40px;margin-top:28px;}
+  .stat .n{font-family:'Petrona',serif;font-weight:700;font-size:clamp(30px,4vw,56px);color:var(--accent);line-height:1;}
+  .stat .l{font-size:14px;color:var(--ink-soft);margin-top:8px;max-width:16ch;}
+  .cta-box{margin-top:30px;padding:26px 30px;background:var(--panel);border:1px solid var(--rule);border-left:5px solid var(--accent);max-width:40ch;}
+  .cta-box .step{font-size:clamp(17px,2vw,24px);font-weight:600;color:var(--accent);}
+  .cta-box .note{font-size:15px;color:var(--ink-soft);margin-top:10px;line-height:1.45;}
+  .disclaimer{font-size:12px;color:#7a8e94;margin-top:26px;max-width:52ch;line-height:1.5;}
+  .nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--ink-soft);font-weight:500;letter-spacing:.04em;}
+  .brandline{position:fixed;bottom:20px;left:26px;font-size:13px;color:var(--ink-soft);font-weight:600;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="brandline">The Uncommon Executive</div>
+<div class="nav"><span id="cur">1</span> / <span id="tot">1</span></div>
+<script>
+const S = [
+  {t:'title',
+   kicker:'The Uncommon Executive with Yue Zhao',
+   h1:'Outsmart the Room',
+   sub:'Executive presence and influence, in the age of AI.'},
+
+  {t:'content',
+   kicker:'The next hour',
+   h2:'Why strong leaders get passed over, and the system that fixes it.',
+   body:'You will leave with the three biases working against you, the counter-moves, and how AI compresses the reps it takes to be read as ready.'},
+
+  {t:'content',
+   kicker:'Who this is for',
+   h2:'You are mid-career, highly rated, and still stuck below the executive level.',
+   body:'A woman or a minority leader who has done the work, earned the reviews, and watched the next seat go to someone with less of a track record.'},
+
+  {t:'content',
+   kicker:'The trap',
+   h2:'You were told to do great work and get noticed.',
+   body:'You did both. It did not move you up. More output and more visibility are not the thing standing between you and the C-suite.'},
+
+  {t:'reframe',
+   kicker:'The reframe',
+   h1:'You are not being passed over for lack of competence.',
+   sub:'You are being misread. And a mis-read is fixable.'},
+
+  {t:'part', small:'Part One', part:'Why you get misread.'},
+
+  {t:'content',
+   kicker:'The Trifecta, bias one',
+   h2:'Affinity bias',
+   body:'Decision-makers advocate hardest for the people who remind them of themselves. When the room does not look like you, that advocacy has to be built on purpose, not assumed.'},
+
+  {t:'content',
+   kicker:'The Trifecta, bias two',
+   h2:'Confirmation bias',
+   body:'A first impression hardens into a story. Once a room decides who you are, every later data point gets filed to fit it, including the ones that should change their mind.'},
+
+  {t:'content',
+   kicker:'The Trifecta, bias three',
+   h2:'Negativity bias',
+   body:'One stumble outweighs ten wins in memory. For an underrepresented leader that math is steeper, so the margin for a visible miss is thinner than it is for your peers.'},
+
+  {t:'part', small:'Part Two', part:'The counter-system.'},
+
+  {t:'framework',
+   kicker:'Counter-move one',
+   h2:'The Bias Counterbalancing Playbook',
+   pillars:['Pre-empt the mis-read before the room forms its story.',
+            'Build the evidence trail so your wins cannot be filed away.',
+            'Reset a hardened impression with a deliberate, repeatable move.']},
+
+  {t:'framework',
+   kicker:'Counter-move two',
+   h2:'Stakeholder Mapping',
+   pillars:['Map who actually holds the decision, not just who is in the room.',
+            'Name what each stakeholder needs to hear to say yes.',
+            'Tailor one message per audience instead of one pitch for everyone.']},
+
+  {t:'framework',
+   kicker:'Counter-move three',
+   h2:'The SCR On-the-Spot Responder',
+   pillars:['Situation: name the context in one calm line.',
+            'Complication: state the real tension without flinching.',
+            'Resolution: land on a decision, not an apology or a ramble.']},
+
+  {t:'content',
+   kicker:'The multiplier',
+   h2:'AI-amplified executive communication',
+   body:'AI will not build your presence for you. It will compress the reps: turn a voice note into an executive update, pressure-test an answer before the meeting, and rehearse the room until calm is your default.'},
+
+  {t:'part', small:'Part Three', part:'What presence looks like.'},
+
+  {t:'content',
+   kicker:'The outcome',
+   h2:'Read as ready before you say a word.',
+   body:'Calm, decided, and clearly senior. Not louder, not more. The same competence, finally landing the way it should with the people who decide.'},
+
+  {t:'why',
+   kicker:'Why learn this from me',
+   h2:'I built this from the inside.',
+   body:'Chief Product and Technology Officer, first PM at Thumbtack, product lead at Instagram, Harvard MBA. I have coached hundreds of leaders into the rooms that passed them over before.',
+   stats:[['300+','leaders coached since 2016'],['1,300+','hours coaching and teaching'],['6 to 9 mo','average time to the next level']]},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h2:'Make the room read you right.',
+   step:'Book an intro call, or join the next live Outsmart the Room cohort.',
+   note:'We map your real rooms, find where the mis-read is happening, and build your counter-system together.',
+   disclaimer:'Educational content only. Coaching outcomes depend on your own effort, role, and circumstances; no specific promotion, compensation, or career result is guaranteed. Results vary.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+esc(s.kicker)+'</div>';
+  if(s.t==='title'||s.t==='reframe'){
+    h+='<h1>'+esc(s.h1)+'</h1>';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+  } else if(s.t==='part'){
+    h+='<div class="part"><small>'+esc(s.small)+'</small>'+esc(s.part)+'</div>';
+  } else if(s.t==='framework'){
+    h+='<h2>'+esc(s.h2)+'</h2><ul class="pillars">';
+    s.pillars.forEach(p=>h+='<li>'+esc(p)+'</li>');
+    h+='</ul>';
+  } else if(s.t==='why'){
+    h+='<h2>'+esc(s.h2)+'</h2><p class="body">'+esc(s.body)+'</p><div class="stats">';
+    s.stats.forEach(st=>h+='<div class="stat"><div class="n">'+esc(st[0])+'</div><div class="l">'+esc(st[1])+'</div></div>');
+    h+='</div>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+esc(s.h2)+'</h2><div class="cta-box"><div class="step">'+esc(s.step)+'</div><div class="note">'+esc(s.note)+'</div></div>';
+    h+='<div class="disclaimer">'+esc(s.disclaimer)+'</div>';
+  } else {
+    h+='<h2>'+esc(s.h2)+'</h2>';
+    if(s.body) h+='<p class="body">'+esc(s.body)+'</p>';
+  }
+  d.innerHTML=h;
+  stage.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function go(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;slides[cur].classList.add('on');document.getElementById('cur').textContent=cur+1;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
