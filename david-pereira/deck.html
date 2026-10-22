@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managing Isn't Leading — a masterclass with David Pereira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0f13; --panel:#131318; --rule:#2a2620;
+    --ink:#ece7df; --muted:#c3bfb7; --accent:#bf6a34; --deep:#1a0f06;
+    --display:"Spectral",Georgia,serif; --body:"Hanken Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--deep);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:64px 60px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide.title{background:linear-gradient(160deg,#0e0f13 0%,#1a0f06 100%);min-height:560px}
+  .slide.divider{background:#0b0c0f;min-height:360px}
+  .num{position:absolute;top:22px;right:28px;font-size:13px;color:var(--muted);letter-spacing:.14em}
+  .kick{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:500;font-size:60px;line-height:1.04;letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-family:var(--display);font-weight:500;font-size:42px;line-height:1.1;margin-bottom:20px}
+  h3{font-family:var(--display);font-weight:500;font-size:27px;line-height:1.2;margin-bottom:12px}
+  p{font-size:20px;line-height:1.55;color:var(--muted);max-width:40ch}
+  p.lead{font-size:23px;color:var(--ink);max-width:44ch}
+  .big{font-family:var(--display);font-size:46px;line-height:1.12;color:var(--ink);max-width:22ch}
+  .accent{color:var(--accent)}
+  .rule{width:64px;height:3px;background:var(--accent);margin:8px 0 26px;border:0}
+  .meta{margin-top:40px;font-size:17px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:20px;line-height:1.5;color:var(--muted);padding:12px 0;border-top:1px solid var(--rule);
+    display:flex;gap:16px;align-items:baseline}
+  li:first-child{border-top:0}
+  li .t{font-family:var(--display);color:var(--accent);font-size:18px;min-width:30px}
+  li b{color:var(--ink);font-weight:600}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    border-radius:10px;padding:22px 24px}
+  .box h3{font-size:22px;margin-bottom:6px}
+  .box p{font-size:17px;max-width:none}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+  .two .col p{max-width:34ch}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);
+    text-decoration-thickness:2px;color:var(--muted)}
+  .disc{font-size:14px;color:#8d887f;margin-top:34px;max-width:62ch;line-height:1.5}
+  .cta-line{font-size:22px;color:var(--ink);margin-top:10px}
+  @media(max-width:720px){
+    .slide{padding:44px 28px;min-height:auto}
+    h1{font-size:40px}h2{font-size:32px}.big{font-size:32px}.two,.grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap"></div>
+<script>
+const S = [
+  {t:"title", cls:"title", html:`
+    <div class="kick">A live masterclass for product managers</div>
+    <h1>Managing Isn't <span class="accent">Leading</span></h1>
+    <p class="lead">How capable product managers escape the Four Traps and start leading the product, not the backlog.</p>
+    <div class="meta">Presented live by <b>David Pereira</b><br>Author of <b>Untrapping Product Teams</b> · 100X PM</div>
+  `},
+  {t:"who", html:`
+    <div class="kick">Who this is for</div>
+    <h2>The most capable PM in the room, who keeps getting passed over.</h2>
+    <p class="lead">You know the product better than anyone. You ship. You manage the backlog. And somehow the person with more visibility and less depth gets the leadership title.</p>
+  `},
+  {t:"trap", html:`
+    <div class="kick">The pattern</div>
+    <h2>You were told to work harder inside the system.</h2>
+    <p>More frameworks. Tighter sprints. A cleaner backlog. A prettier roadmap. You do all of it, and the ceiling stays exactly where it was.</p>
+    <p style="margin-top:18px">So you assume the problem is you. It isn't.</p>
+  `},
+  {t:"hook", cls:"divider", html:`
+    <div class="big">You don't have a skill problem.<br>You have a <span class="accent">system</span> problem.</div>
+    <p style="margin-top:26px">And no amount of personal effort fixes a broken system. First you have to see it.</p>
+  `},
+  {t:"part", cls:"divider", html:`
+    <div class="kick">Part one</div>
+    <h2>The Four Traps</h2>
+    <p class="lead">Four system-level patterns that quietly keep product people stuck in execution mode.</p>
+  `},
+  {t:"trap1", html:`
+    <div class="kick">Trap 01</div>
+    <h3 class="accent">The Strategy Illusion</h3>
+    <hr class="rule">
+    <p class="lead">Everyone nods at "the strategy," but nobody can say what you are deliberately choosing not to do. A list of goals is not a strategy. Without real choices, every request looks equally urgent.</p>
+  `},
+  {t:"trap2", html:`
+    <div class="kick">Trap 02</div>
+    <h3 class="accent">Roadmap Theater</h3>
+    <hr class="rule">
+    <p class="lead">The roadmap exists to reassure stakeholders, not to create value. It is a calendar of features nobody has validated, defended in meetings instead of in the market.</p>
+  `},
+  {t:"trap3", html:`
+    <div class="kick">Trap 03</div>
+    <h3 class="accent">Discovery Is a Forbidden Word</h3>
+    <hr class="rule">
+    <p class="lead">Asking "should we build this?" reads as slowing the team down. So discovery gets skipped, assumptions ship as features, and the team learns the truth only after the code is live.</p>
+  `},
+  {t:"trap4", html:`
+    <div class="kick">Trap 04</div>
+    <h3 class="accent">Delivery = Feature Factory</h3>
+    <hr class="rule">
+    <p class="lead">Success gets measured in things shipped, not value created. The team becomes a factory, the PM becomes a backlog manager, and output replaces outcomes as the scoreboard.</p>
+  `},
+  {t:"synth", cls:"divider", html:`
+    <div class="big">All four are <span class="accent">system problems</span>, not personal failings.</div>
+    <p style="margin-top:24px">Which is good news. Systems can be redesigned. That is the rest of this session.</p>
+  `},
+  {t:"part2", cls:"divider", html:`
+    <div class="kick">Part two</div>
+    <h2>The way out starts with outcomes</h2>
+    <p class="lead">Three shifts move a product manager from managing work to leading the product.</p>
+  `},
+  {t:"idea", html:`
+    <div class="kick">Shift one · own the outcome</div>
+    <h3>IDEA</h3>
+    <hr class="rule">
+    <ul>
+      <li><span class="t">I</span><span><b>Identify</b> the outcome that actually matters, before any feature.</span></li>
+      <li><span class="t">D</span><span><b>Dare</b> to say no to the work that does not serve it.</span></li>
+      <li><span class="t">E</span><span><b>Evaluate</b> with evidence, not opinion or hierarchy.</span></li>
+      <li><span class="t">A</span><span><b>Amplify</b> what works and cut what does not.</span></li>
+    </ul>
+  `},
+  {t:"prodfit", html:`
+    <div class="kick">Shift two · discovery and roadmap ownership</div>
+    <h3>PROD FIT</h3>
+    <hr class="rule">
+    <p>Breaking the build, ship, repeat loop means owning the whole picture, not just the backlog:</p>
+    <div class="grid">
+      <div class="box"><h3>People &amp; Organization</h3><p>Align the humans before the plan.</p></div>
+      <div class="box"><h3>Roadmapping</h3><p>A roadmap of bets and outcomes, not dated features.</p></div>
+      <div class="box"><h3>Development &amp; Feedback</h3><p>Short loops that turn into learning.</p></div>
+      <div class="box"><h3>Initiatives &amp; Trade-Offs</h3><p>Choose on purpose, in the open.</p></div>
+    </div>
+  `},
+  {t:"claim", html:`
+    <div class="kick">Shift three · the part nobody teaches</div>
+    <h3>CLAIM: lead before the title arrives</h3>
+    <hr class="rule">
+    <ul>
+      <li><span class="t">C</span><span><b>Communication</b> that lands with executives and engineers alike.</span></li>
+      <li><span class="t">L</span><span><b>Leadership</b> you exercise with no formal authority.</span></li>
+      <li><span class="t">A</span><span><b>Alignment</b> built on purpose, not won in arguments.</span></li>
+      <li><span class="t">I</span><span><b>Impact</b> that others can see and name.</span></li>
+      <li><span class="t">M</span><span><b>Methods</b> chosen for the context, never worshipped.</span></li>
+    </ul>
+  `},
+  {t:"part3", cls:"divider", html:`
+    <div class="kick">Part three</div>
+    <h2>The same PM, one reframe later</h2>
+    <p class="lead">Nothing about your talent changes. What changes is the system you operate inside.</p>
+  `},
+  {t:"beforeafter", html:`
+    <div class="two">
+      <div class="col">
+        <div class="kick">Before</div>
+        <p class="lead"><span class="strike">Guards the backlog. Defends the roadmap. Waits for the title. Measured by features shipped.</span></p>
+      </div>
+      <div class="col">
+        <div class="kick accent">After</div>
+        <p class="lead">Owns the outcome. Leads the room. Makes the call. Measured by value created.</p>
+      </div>
+    </div>
+  `},
+  {t:"whyme", html:`
+    <div class="kick">Why listen to me on this</div>
+    <h3>David Pereira</h3>
+    <hr class="rule">
+    <p class="lead">Nineteen-plus years in product, from engineer to CEO and CPO. Author of <b>Untrapping Product Teams</b>. I have led teams overseeing a 200M dollar business and grown a marketplace to 45M in yearly revenue. I write for 20,000-plus product people across 130-plus countries, every week.</p>
+  `},
+  {t:"principle", cls:"divider", html:`
+    <div class="big">Principles over <span class="accent">frameworks</span>.</div>
+    <p style="margin-top:24px">Scrum won't save you. Kanban won't either. Judgment will. That is what a product leader brings that a backlog manager cannot.</p>
+  `},
+  {t:"cta", cls:"cta title", html:`
+    <div class="kick">Your next step</div>
+    <h2>Ready to lead the product, not the backlog?</h2>
+    <p class="cta-line">Book an intro call with me, or join the next <b>100X PM</b> cohort, and we will put the Four Traps work to your reality directly.</p>
+    <div class="meta">David Pereira · <b>d-pereira.com</b> · Simplifying the product game</div>
+    <p class="disc">This masterclass is educational. It shares frameworks and judgment from real product work; it is not a promise of a promotion, a title, a salary, or any specific career outcome. No income, role, or result is guaranteed. Results vary with your context, team, and effort.</p>
+  `}
+];
+const wrap = document.getElementById("wrap");
+S.forEach((s,i)=>{
+  const el = document.createElement("section");
+  el.className = "slide" + (s.cls ? " " + s.cls : "");
+  el.innerHTML = `<div class="num">${String(i+1).padStart(2,"0")} / ${String(S.length).padStart(2,"0")}</div>` + s.html;
+  wrap.appendChild(el);
+});
+</script>
+</body>
+</html>
