@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 1-2-5 System — a masterclass with Dean Bokhari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f4f4f3; --rule:#e3e3e1;
+    --ink:#232525; --muted:#5b5e5e; --accent:#cc0000;
+    --head:'Poppins',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:48px 46px;margin:0 0 22px;min-height:360px;display:flex;flex-direction:column;
+    justify-content:center}
+  .slide.accent{background:var(--panel)}
+  .slide.dark{background:var(--ink);color:#f6f6f5;border-color:var(--ink)}
+  .slide.dark .muted{color:#b9bbbb}
+  .slide.cover{background:var(--ink);color:#f6f6f5;border-color:var(--ink);min-height:440px}
+  .kick{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin:0 0 18px}
+  .slide.dark .kick,.slide.cover .kick{color:#ff6b6b}
+  h1{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.05;margin:0 0 18px}
+  h2{font-family:var(--head);font-weight:600;font-size:30px;line-height:1.12;margin:0 0 16px}
+  p{font-size:19px;line-height:1.55;color:var(--muted);margin:0 0 14px;max-width:62ch}
+  .slide.dark p,.slide.cover p{color:#d8d9d9}
+  .lede{font-size:22px;color:var(--ink)}
+  .slide.dark .lede,.slide.cover .lede{color:#f6f6f5}
+  ul{margin:8px 0 0;padding:0;list-style:none}
+  li{font-size:19px;line-height:1.5;color:var(--ink);padding:12px 0 12px 40px;position:relative;
+    border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li .n{position:absolute;left:0;top:11px;font-family:var(--head);font-weight:700;color:var(--accent);
+    font-size:20px}
+  .slide.dark li{color:#eceded;border-color:#393b3b}
+  .big125{font-family:var(--head);font-weight:700;font-size:112px;color:var(--accent);line-height:1;margin:0 0 10px}
+  .foot{font-family:var(--head);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin-top:26px}
+  .disc{font-size:14px;color:var(--muted);margin-top:22px;max-width:70ch}
+  .cta-btn{display:inline-block;font-family:var(--head);font-weight:600;background:var(--accent);
+    color:#fff;padding:14px 26px;border-radius:9px;margin-top:8px;font-size:17px}
+  .tag{font-family:var(--head);font-weight:600;color:var(--accent);font-size:15px;letter-spacing:.04em;margin:0 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', cls:'cover', kick:'A masterclass with Dean Bokhari', h:'The 1-2-5 System',
+   lede:'One simple daily method for running your whole life, instead of chasing one more habit.',
+   foot:'Research-based. BS-free.'},
+
+  {t:'who', cls:'accent', kick:'Who this is for', h:'For high-performers who are busy, not productive',
+   body:'You read the books. You know the frameworks. You start strong on Monday and lose the thread by Thursday. This is for the ambitious person who has plenty of information and still ends most days wondering where the time went.'},
+
+  {t:'trap', cls:'', kick:'The trap', h:'The productivity treadmill',
+   body:'Every few months a new app, a new morning routine, a new habit promises it will finally click. You add it on top of the last one. For a week it feels like progress. Then it fades, and you go looking for the next thing. The stack keeps growing. The results do not.'},
+
+  {t:'reframe', cls:'dark', kick:'The real problem', h:'You do not have a discipline problem. You have a system problem.',
+   body:'Discipline is what people blame when there is no system to carry the weight. Willpower is a terrible daily operating system. The people who get the important things done are not grinding harder than you. They are running a simpler process.'},
+
+  {t:'part', cls:'', tag:'Part One', h:'Why more habits make it worse',
+   body:'Your life is not one thing. It is a dozen things at once: work, health, money, relationships, focus, purpose. Each new habit speaks to only one of them, in isolation, with no way to decide what actually matters today. More inputs, no priority. That is why the stack keeps collapsing.'},
+
+  {t:'cost', cls:'accent', kick:'The cost', h:'What scattered really costs',
+   body:'It is not just lost hours. It is the low hum of always feeling behind, the big goals that never get a real run at them, and the quiet erosion of trust in yourself every time another plan fizzles. Scattered is expensive in a currency that compounds.'},
+
+  {t:'part', cls:'dark', tag:'Part Two', h:'The 1-2-5 Method',
+   body:'One method, run every single day. It is small enough to actually keep and strong enough to carry your whole life. Here is the whole thing.'},
+
+  {t:'one', cls:'', kick:'The 1', h:'One outcome',
+   big:'1',
+   body:'Before anything else, you name the single outcome that would make today a win. Not a list. One. This is the decision most people never make, which is why their days get spent for them instead of by them.'},
+
+  {t:'two', cls:'accent', kick:'The 2', h:'Two priorities',
+   big:'2',
+   body:'The two moves that most directly serve that outcome. These get your best energy and your protected time, before the inbox and everyone else gets a vote. Two is the number that survives contact with a real day.'},
+
+  {t:'five', cls:'', kick:'The 5', h:'Five tasks',
+   big:'5',
+   body:'Everything else that genuinely needs doing, capped at five. The cap is the point. When the list cannot grow past five, you are forced to choose, and choosing is the whole skill. Anything beyond five is tomorrow.'},
+
+  {t:'why', cls:'dark', kick:'Why it works', h:'Why 1-2-5 beats a to-do list',
+   list:[
+     {n:'>',x:'A to-do list has no priority. 1-2-5 is priority, by design.'},
+     {n:'>',x:'A to-do list grows without limit. The cap forces the hard call.'},
+     {n:'>',x:'A to-do list is reactive. You set your 1-2-5 before the day sets you.'}
+   ]},
+
+  {t:'part', cls:'', tag:'Part Three', h:'Club 12: the whole life, one system',
+   body:'The method is daily. The map is Club 12 - the twelve areas of a full life. You do not run all twelve at once. You run the one daily method, pointed at whichever area needs you most this season.'},
+
+  {t:'twelve', cls:'accent', kick:'The twelve', h:'The areas 1-2-5 runs across',
+   list:[
+     {n:'·',x:'Goals, Productivity, Habits, Focus'},
+     {n:'·',x:'Health, Energy, Mental strength'},
+     {n:'·',x:'Relationships, Communication, Work-life harmony'},
+     {n:'·',x:'Money, Purpose'}
+   ]},
+
+  {t:'across', cls:'', kick:'How it travels', h:'Same method, any area',
+   body:'A health season and a career season look completely different from the outside. Inside, the move is identical: one outcome, two priorities, five tasks, today. You stop learning a new system for every part of your life and start running one you already trust.'},
+
+  {t:'research', cls:'dark', kick:'Research-based', h:'Built on evidence, not hype',
+   body:'Everything in this method is drawn from the research on attention, habit formation, and goal-setting, stripped of the hustle theatre. The rule is simple: if it does not hold up and it does not work in a real week, it does not make it into the system.'},
+
+  {t:'week', cls:'accent', kick:'What it looks like', h:'Your first week',
+   body:'Five minutes each morning to set your 1-2-5. A thirty-second check at night. By Friday you have five clear wins behind you instead of a vague sense of busyness, and for the first time in a while you can see exactly where your effort went.'},
+
+  {t:'ninety', cls:'', kick:'The compounding', h:'Ninety days in',
+   body:'One good outcome a day is roughly sixty a quarter. Stacked against the right priorities, that is the difference between another year that blurs past and a year you actually designed. Small daily, large yearly. That is the whole bet.'},
+
+  {t:'why-me', cls:'dark', kick:'Why me', h:'I teach this because I needed it',
+   body:'I am Dean Bokhari. I have spent years turning the best personal-development research into plain, usable systems - the 1-2-5 Method, the Club 12 community of 33,000+ people, and courses that more than 30,000 customers have taken. I built 1-2-5 because I needed something I would actually keep. It is the thing I come back to.'},
+
+  {t:'objections', cls:'accent', kick:'The honest part', h:'"I have tried systems before"',
+   body:'So have I, and most of them failed for the same reason: they were too big to keep on a hard day. 1-2-5 is built for the hard days. If you can name one outcome and protect two priorities, you can run it. That is a low enough bar to survive real life, which is the only bar that matters.'},
+
+  {t:'recap', cls:'', kick:'In one line', h:'Stop collecting habits. Run one system.',
+   body:'One outcome. Two priorities. Five tasks. Every day, pointed wherever your life needs you most. That is 1-2-5, and that is the entire idea.'},
+
+  {t:'cta', cls:'cover', kick:'Where to start', h:'Run your first 1-2-5 day',
+   body:'Join Club 12 to get the method, the daily cards, and the live trainings, or apply to work with me one-on-one if you want it built around your life directly.',
+   cta:'Start with Club 12',
+   disc:'Educational content only. No income, role, outcome, or specific result is guaranteed; results vary with effort, circumstances, and consistency.'}
+];
+
+const el = document.getElementById('deck');
+S.forEach(s => {
+  const d = document.createElement('section');
+  d.className = 'slide ' + (s.cls || '');
+  let h = '';
+  if (s.kick) h += '<p class="kick">'+s.kick+'</p>';
+  if (s.tag) h += '<p class="tag">'+s.tag+'</p>';
+  if (s.big) h += '<div class="big125">'+s.big+'</div>';
+  if (s.h) h += (s.t==='cover'||s.t==='cta') ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>';
+  if (s.lede) h += '<p class="lede">'+s.lede+'</p>';
+  if (s.body) h += '<p>'+s.body+'</p>';
+  if (s.list) { h += '<ul>'; s.list.forEach(i => h += '<li><span class="n">'+i.n+'</span>'+i.x+'</li>'); h += '</ul>'; }
+  if (s.cta) h += '<div><span class="cta-btn">'+s.cta+'</span></div>';
+  if (s.foot) h += '<p class="foot">'+s.foot+'</p>';
+  if (s.disc) h += '<p class="disc">'+s.disc+'</p>';
+  d.innerHTML = h;
+  el.appendChild(d);
+});
+</script>
+</body>
+</html>
