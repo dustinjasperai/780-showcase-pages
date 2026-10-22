@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidy First?: A Live Masterclass with Kent Beck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f0e4;      /* warm ivory ground, derived from brand #fafaf8 + gold undertone */
+    --panel:#fffdf8;
+    --rule:#e7dfcd;
+    --ink:#1c1c1e;     /* harvested near-black */
+    --muted:#5c564a;
+    --accent:#b8904a;  /* harvested warm gold */
+    --head:'Lexend',system-ui,sans-serif;
+    --body:'Spectral',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;
+    justify-content:center;padding:8vh 9vw;position:relative;border-bottom:1px solid var(--rule)}
+  .kick{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:.74rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.6rem,7vw,5rem);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.08;letter-spacing:-.01em}
+  .lede{font-size:clamp(1.15rem,2.1vw,1.5rem);color:var(--muted);margin-top:1.5rem;max-width:40ch}
+  p.body{font-size:clamp(1.1rem,1.9vw,1.4rem);margin-top:1.1rem;max-width:44ch}
+  ul{list-style:none;margin-top:1.8rem;display:grid;gap:1rem;max-width:48ch}
+  li{position:relative;padding-left:1.8rem;font-size:clamp(1.05rem,1.8vw,1.3rem)}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:.7rem;height:.7rem;
+    background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  li b{font-family:var(--head);font-weight:600}
+  .sun{position:absolute;top:7vh;right:9vw;width:30px;height:30px;color:var(--accent);opacity:.9}
+  .num{position:absolute;bottom:4vh;right:9vw;font-family:var(--head);font-size:.8rem;color:var(--muted)}
+  .part{font-family:var(--head);font-weight:300;font-size:clamp(3rem,9vw,7rem);color:var(--accent);line-height:1}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(1.4rem,3vw,2.6rem);
+    margin-top:1.8rem;max-width:52ch;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--muted)}
+  .big{font-family:var(--head);font-weight:700;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.12;max-width:30ch}
+  .cite{font-family:var(--head);font-weight:600;margin-top:1.6rem;color:var(--ink)}
+  .disc{font-size:.95rem;color:var(--muted);margin-top:1.6rem;max-width:52ch;line-height:1.5}
+  .cta-btn{display:inline-block;margin-top:2rem;font-family:var(--head);font-weight:600;
+    background:var(--accent);color:#fff;padding:.9rem 1.6rem;border-radius:10px;font-size:1.05rem}
+  .signline{font-family:var(--head);color:var(--muted);margin-top:1.2rem}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="kick">A live masterclass with Kent Beck</div>
+    <h1>Tidy First?</h1>
+    <div class="lede">Deciding when a design change is worth it, and when to just ship.</div>`},
+
+  {t:'who', cls:'who', html:`
+    <div class="kick">Who this is for</div>
+    <h2>Engineers and leaders who care how software gets built</h2>
+    <ul>
+      <li>Senior engineers and tech leads making daily change-or-ship calls</li>
+      <li>Engineering managers, VPs, and CTOs watching the roadmap slip</li>
+      <li>Founders who still code and feel the cost of every shortcut</li>
+    </ul>`},
+
+  {t:'trap', cls:'trap', html:`
+    <div class="kick">The trap</div>
+    <h2>Two ways to be wrong about cleanup</h2>
+    <p class="body">One team ships fast and leaves a mess that slows every future change. The next team polishes forever and never ships. Both are guessing. Neither has a rule for <b>when</b> a change to the design is actually worth it.</p>`},
+
+  {t:'hook', cls:'hook', html:`
+    <div class="kick">An uncomfortable idea</div>
+    <div class="big">Most "clean code" advice makes your code more <span style="color:var(--accent)">expensive</span> to change, not less.</div>
+    <p class="body">Cleanliness is a feeling. Cost is a number. This session is about the number.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="part">Part One</div>
+    <h2 style="margin-top:1rem">The real problem: you are guessing</h2>`},
+
+  {t:'p1a', cls:'p1a', html:`
+    <div class="kick">The core mistake</div>
+    <h2>Mixing two different kinds of change</h2>
+    <ul>
+      <li><b>Structural change</b> moves code around without changing what it does</li>
+      <li><b>Behavioral change</b> changes what the software does for a user</li>
+      <li>Do them in the same commit and nobody, including you, can tell which one broke things</li>
+    </ul>`},
+
+  {t:'p1b', cls:'p1b', html:`
+    <div class="kick">Where the cost hides</div>
+    <h2>The bill arrives later</h2>
+    <p class="body">A tangled design does not slow you down today. It slows down the change you have not thought of yet. That is why it feels free to skip the tidy-up, and why the roadmap keeps slipping anyway.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="part">Part Two</div>
+    <h2 style="margin-top:1rem">Tidy First: a way to decide</h2>`},
+
+  {t:'f1', cls:'f1', html:`
+    <div class="kick">Pillar one</div>
+    <h2>Tidyings</h2>
+    <p class="body">Small, safe, reversible structural changes. Rename the thing. Pull out the helper. Reorder the code so it reads top to bottom. Each one is tiny enough to do without permission and to undo without fear.</p>`},
+
+  {t:'f2', cls:'f2', html:`
+    <div class="kick">Pillar two</div>
+    <h2>Tidy first, then change behavior</h2>
+    <p class="body">Separate the two kinds of change into separate steps. First make the change easy with a tidying. Then make the easy change. The history stays honest and every step stays safe.</p>`},
+
+  {t:'f3', cls:'f3', html:`
+    <div class="kick">Pillar three</div>
+    <h2>Coupling and cohesion are the real cost</h2>
+    <p class="body">Code is expensive to change when a single decision is smeared across many places. Cohesion pulls the related parts together; reducing coupling is how a tidy-up actually pays for itself.</p>`},
+
+  {t:'f4', cls:'f4', html:`
+    <div class="kick">Pillar four</div>
+    <h2>Design is a series of reversible bets</h2>
+    <p class="body">A structural change is an option, not a commitment. Small and reversible means you can take the bet now, learn, and change your mind cheaply. That is empirical design: decisions weighed by value and cost, not by taste.</p>`},
+
+  {t:'rule', cls:'rule-s', html:`
+    <div class="kick">The decision rule</div>
+    <div class="panel">
+      <div class="big" style="font-size:clamp(1.4rem,2.8vw,2rem)">Tidy first when the tidy-up makes the very next change easier than the tidy-up costs. If it does not, ship as it is.</div>
+    </div>
+    <p class="body">No dogma. No gold-plating. A rule you can say out loud in a code review.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="part">Part Three</div>
+    <h2 style="margin-top:1rem">Two clean commits, on a real team</h2>`},
+
+  {t:'prac', cls:'prac', html:`
+    <div class="kick">In practice</div>
+    <h2>One pull request, two clean steps</h2>
+    <ul>
+      <li>Open a tidying step: no behavior changes, trivially reviewable</li>
+      <li>Open the behavior step on top: now small, because the ground is level</li>
+      <li>Reviewers see exactly what changed and why; reverts become surgical</li>
+    </ul>`},
+
+  {t:'aug', cls:'aug', html:`
+    <div class="kick">And with AI in the loop</div>
+    <h2>Augmented coding, not abandoned design</h2>
+    <p class="body">Agents will happily write a lot of code fast. The separation matters more, not less: let the tools tidy and propose, keep the human holding the design decisions, and let the tests decide what stays.</p>`},
+
+  {t:'why', cls:'why', html:`
+    <div class="kick">Why listen to me</div>
+    <h2>I have been testing these ideas for 40 years</h2>
+    <p class="body">I created Test-Driven Development and Extreme Programming, wrote "Tidy First?", and I think out loud every week with 123,000 engineers who read the newsletter. I am still, after all this time, mostly trying to help geeks feel safe doing good work.</p>
+    <div class="cite">Kent Beck</div>`},
+
+  {t:'recap', cls:'recap', html:`
+    <div class="kick">The whole thing in two lines</div>
+    <ul>
+      <li><b>Separate</b> structural change from behavioral change</li>
+      <li><b>Tidy first</b> only when it makes the next change cheaper than the tidy-up costs</li>
+    </ul>
+    <p class="body">Everything else is detail.</p>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">Keep this on your own code</div>
+    <h2>Work through this on your own codebase</h2>
+    <p class="body">If you want to apply the tidy-first decision rule to the design calls your team is making right now, I take on a small number of people for one-on-one coaching.</p>
+    <a class="cta-btn" href="https://kentbeck.com/coaching">Start a coaching conversation</a>
+    <div class="signline">kentbeck.com/coaching</div>
+    <p class="disc">This masterclass is educational. No income, role, promotion, or engineering result is guaranteed; outcomes vary with your team, codebase, and context. The frameworks shown are tools for making your own decisions, not promises.</p>`}
+];
+
+const deck = document.getElementById('deck');
+const sun = `<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3.2"/><g stroke-linecap="round"><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9L19 19M19 5l-2.1 2.1M7.1 16.9L5 19"/></g></svg>`;
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide '+(s.cls||'');
+  el.innerHTML=(i>0?sun:'')+s.html+`<div class="num">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>`;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
