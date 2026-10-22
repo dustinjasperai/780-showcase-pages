@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designing for Wonder - A Masterclass with Jeffrey Davis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fffbf9; --panel:#fef9f4; --ink:#312d2f; --rule:#e7ded6;
+    --accent:#f26622; --teal:#42867e; --muted:#7a716c;
+    --display:'Playfair Display',Georgia,serif; --body:'Manrope',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 56px;margin:0 0 22px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);
+    font-weight:700;margin-bottom:16px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:36px;line-height:1.12;margin-bottom:14px}
+  h3{font-family:var(--display);font-weight:600;font-size:25px;margin-bottom:6px}
+  p{font-size:19px;color:#4b4340;margin-top:12px;max-width:62ch}
+  .lead{font-size:22px;color:var(--ink)}
+  .big{font-size:40px;font-family:var(--display);color:var(--ink);line-height:1.15}
+  .accent{color:var(--accent)}
+  .strike{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+  ul{margin:18px 0 0 0;list-style:none}
+  li{font-size:19px;color:#4b4340;padding:9px 0 9px 26px;position:relative;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:18px;width:9px;height:9px;border-radius:50%;
+    background:var(--accent)}
+  li b{color:var(--ink);font-weight:700}
+  .facets{display:flex;gap:8px;margin-bottom:18px}
+  .facets span{width:11px;height:11px;border-radius:50%;background:var(--accent);opacity:.9}
+  .facets span:nth-child(2){background:var(--teal)}
+  .facets span:nth-child(4){background:var(--teal)}
+  .facets span:nth-child(6){background:var(--teal)}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:20px}
+  .pair .cell{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:22px}
+  .cell .lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  .who{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .who span{background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:9px 18px;font-size:16px;font-weight:600}
+  .cta-box{background:var(--bg);border:1px solid var(--accent);border-radius:12px;padding:22px 24px;margin-top:22px}
+  .cta-box .step{font-size:20px;font-weight:700;color:var(--ink)}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:70ch;line-height:1.5}
+  .pg{position:absolute;right:22px;bottom:16px;font-size:12px;color:var(--muted);letter-spacing:.08em}
+  .brandline{position:absolute;left:56px;bottom:16px;font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+  @media(max-width:640px){.slide{padding:34px 26px}h1{font-size:34px}h2{font-size:27px}.pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="facets"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="kick">A live masterclass with Jeffrey Davis</div>
+    <h1>Designing for <span class="accent">Wonder</span>.</h1>
+    <p class="lead">How to build a business and a life around possibility, curiosity, and meaning, instead of grinding yourself empty on productivity.</p>`},
+
+  {t:'audience', cls:'audience', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You make things that matter. And you are tired.</h2>
+    <p>This hour is for the creatives, entrepreneurs, and leaders who built something real and now feel the spark getting faint under the weight of the to-do list.</p>
+    <div class="who"><span>Founders and business owners</span><span>Authors and creatives</span><span>Leaders and change-makers</span></div>`},
+
+  {t:'trap', cls:'trap', html:`
+    <div class="kick">The trap</div>
+    <h2>When the work gets heavy, we do one of two things.</h2>
+    <ul>
+      <li><b>Flight.</b> Chase the next fix. Another launch, another tool, another vacation, another reinvention.</li>
+      <li><b>Fight.</b> Power through the list until the power runs out and you are left flat.</li>
+    </ul>
+    <p>Both burn the same fuel. Neither gives it back.</p>`},
+
+  {t:'hook', cls:'hook', html:`
+    <div class="kick">A harder truth</div>
+    <p class="big"><span class="strike">Productivity</span> was never the thing that made your best work possible.</p>
+    <p class="lead" style="margin-top:22px"><span class="accent">Wonder</span> was. And wonder, it turns out, is not an accident.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kick">Part one</div>
+    <h1>You optimized wonder out.</h1>
+    <p class="lead">The core problem, and why working harder makes it worse.</p>`},
+
+  {t:'problem', cls:'problem', html:`
+    <div class="kick">The core problem</div>
+    <h2>Hustle culture treats wonder as a luxury.</h2>
+    <p>So we schedule it last and lose it first. But wonder is the state that momentarily dissolves our habits and biases so we can see what is real, true, and possible right now. Lose it and every decision narrows. The work still gets done. It just stops being yours.</p>`},
+
+  {t:'reframe', cls:'reframe', html:`
+    <div class="kick">The third way</div>
+    <h2>Wonder is designable.</h2>
+    <p>Not a mood you wait for. A set of trainable qualities you can practice on purpose, in a normal workday, with real deadlines. After 25 years researching exemplary creatives and leaders, the pattern is clear: they design for it.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kick">Part two</div>
+    <div class="facets"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h1>The 6 Facets of Wonder.</h1>
+    <p class="lead">The framework, in three pairs you can actually practice.</p>`},
+
+  {t:'facet', cls:'facet', html:`
+    <div class="kick">The wide facet</div>
+    <h2>Openness and Curiosity.</h2>
+    <div class="pair">
+      <div class="cell"><div class="lbl">Openness</div><h3>Widen the aperture.</h3><p>Let more of the world in before you decide what it means.</p></div>
+      <div class="cell"><div class="lbl">Curiosity</div><h3>Follow the pull.</h3><p>Treat the interesting question as data, not a distraction.</p></div>
+    </div>`},
+
+  {t:'facet', cls:'facet', html:`
+    <div class="kick">The deep woods and the rainbow</div>
+    <h2>Bewilderment and Hope.</h2>
+    <div class="pair">
+      <div class="cell"><div class="lbl">Bewilderment</div><h3>Stay in the not-knowing.</h3><p>The lost feeling is where the next idea lives. Do not rush out of it.</p></div>
+      <div class="cell"><div class="lbl">Hope</div><h3>Act as if it is workable.</h3><p>Hope is not a feeling here. It is a practice of moving toward the possible.</p></div>
+    </div>`},
+
+  {t:'facet', cls:'facet', html:`
+    <div class="kick">The flock facet</div>
+    <h2>Connection and Admiration.</h2>
+    <div class="pair">
+      <div class="cell"><div class="lbl">Connection</div><h3>Belong to something larger.</h3><p>The longing to be part of a bigger whole is a creative force, not a weakness.</p></div>
+      <div class="cell"><div class="lbl">Admiration</div><h3>Let others expand you.</h3><p>Admiration without envy opens room for your own best work.</p></div>
+    </div>`},
+
+  {t:'intervention', cls:'intervention', html:`
+    <div class="kick">Try one now</div>
+    <h2>A Wonder Intervention.</h2>
+    <p>Pick the heaviest task on your list today. Before you touch it, ask one genuinely curious question about it that you do not know the answer to. That small act of openness changes the neurochemistry of the next 20 minutes. Do it daily and the ratio shifts.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kick">Part three</div>
+    <h1>What a designed week looks like.</h1>
+    <p class="lead">From one good practice to a way of working.</p>`},
+
+  {t:'picture', cls:'picture', html:`
+    <div class="kick">The shift</div>
+    <h2>You stop managing your energy and start designing for it.</h2>
+    <ul>
+      <li>One wonder interval built into the day, on purpose, not by accident.</li>
+      <li>Decisions made from a wider aperture, so the work stays yours.</li>
+      <li>A team or community that convenes around possibility, not pressure.</li>
+    </ul>`},
+
+  {t:'canvas', cls:'canvas', html:`
+    <div class="kick">The bridge</div>
+    <h2>The Vision Canvas.</h2>
+    <p>Most plans are rigid and brittle. The Vision Canvas is a flexible, living map of what you are moving toward, designed to bend without breaking. It is how a year built on possibility actually holds up against a real calendar.</p>`},
+
+  {t:'why', cls:'why', html:`
+    <div class="kick">Why listen to me</div>
+    <h2>Jeffrey Davis.</h2>
+    <p>Researcher, author of <em>Tracking Wonder: Reclaiming a Life of Meaning and Possibility</em>, Psychology Today columnist on the psychology of creativity, and founder of Tracking Wonder. For 25 years I have interviewed and taught thousands of change-makers, leaders, and creatives, and synthesized the research into a practice anyone can learn.</p>`},
+
+  {t:'recap', cls:'recap', html:`
+    <div class="kick">What you leave with</div>
+    <h2>A practice, not a pep talk.</h2>
+    <ul>
+      <li>The 6 Facets of Wonder as a trainable framework.</li>
+      <li>One Wonder Intervention you can run tomorrow.</li>
+      <li>A first look at the Vision Canvas for the season ahead.</li>
+    </ul>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">Keep practicing wonder</div>
+    <h2>Go deeper on the practice.</h2>
+    <p>If this hour opened something, the next step is to practice it in good company. Apply for the Tracking Wonder Inner Circle, or join the next live Wonder Lab to build your Vision Canvas with me.</p>
+    <div class="cta-box"><div class="step">Your next step: apply for the Tracking Wonder Inner Circle, or register for the next live Wonder Lab at trackingwonder.com.</div></div>
+    <p class="disc">This masterclass is educational. It shares a practice and a framework, not a promise. No income, outcome, or result is guaranteed, and individual results vary with effort and circumstance.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide ' + (s.cls||'');
+  el.innerHTML = s.html + '<div class="brandline">Tracking Wonder</div><div class="pg">'+(i+1)+' / '+S.length+'</div>';
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
