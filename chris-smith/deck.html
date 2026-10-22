@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Personal Writing System - Written Academy masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1ebdd;        /* warm manuscript paper (brand: light site) */
+    --panel:#fbfaf6;
+    --rule:#e6dec9;
+    --ink:#1f1d1a;       /* near-black body (brand Times body) */
+    --muted:#595959;     /* brand gray, from brand.json ranked hexes */
+    --accent:#0051c3;    /* brand link/button blue, from brand.json */
+    --head:'Spectral', Georgia, serif;
+    --body:'Figtree', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 26px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin:0 0 18px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.08;margin:0 0 18px;
+    letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.12;margin:0 0 16px;
+    letter-spacing:-.01em}
+  .s{font-family:var(--head);font-style:italic;font-weight:400;font-size:23px;color:var(--muted);
+    margin:0 0 20px}
+  p{font-size:20px;margin:0 0 14px;max-width:46ch}
+  .big{font-family:var(--head);font-weight:600;font-size:34px;line-height:1.2;max-width:22ch}
+  ul{margin:14px 0 0;padding:0;list-style:none;max-width:48ch}
+  li{font-size:20px;padding:14px 0 14px 34px;border-top:1px solid var(--rule);position:relative}
+  li:first-child{border-top:none}
+  li .t{font-family:var(--head);font-weight:600;color:var(--accent)}
+  li::before{content:"";position:absolute;left:4px;top:22px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent)}
+  .cta h2{font-size:42px}
+  .step{display:flex;gap:16px;align-items:baseline;font-size:22px;margin:10px 0}
+  .step b{font-family:var(--head);color:var(--accent);font-size:26px;min-width:42px}
+  .cal{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .cal div{width:96px;height:78px;border:1px solid var(--rule);border-radius:10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);
+    font-size:15px}
+  .cal div.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+  .cal div.on small{color:#dbe6ff}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:60ch}
+  .cred{font-size:19px;color:var(--ink)}
+  .num{font-family:var(--head);font-weight:700;color:var(--accent)}
+  @media(max-width:620px){.slide{padding:36px 26px}h1{font-size:36px}h2{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'',
+    k:'A live masterclass with Written Academy',
+    h:'The Personal Writing System',
+    s:'How to keep writing, and finish, when the motivation runs out.',
+    p:'With Chris Smith and Bec Evans, authors of Written.'},
+
+  {t:'who', k:'Who this is for',
+    h:'You have a project on the go.',
+    p:'A book, a thesis, a body of work you believe in. You started. Then life got loud, the momentum went, and the document has sat untouched for weeks.',
+    p2:'This session is for the writer who is stuck, not the writer who is lazy. There is a difference, and it changes everything.'},
+
+  {t:'trap', k:'The trap',
+    h:'You tried writing every day.',
+    p:'It worked for about a week. Then you missed a day, then three, and the guilt arrived. "I should be writing" became the loudest sentence in your head, and the loudest sentences rarely get books finished.',
+    p2:'So you went looking for more discipline. That was the wrong thing to look for.'},
+
+  {t:'hook', cls:'',
+    k:'The reframe',
+    big:'The blank page is not a discipline problem. It is a system problem. And the system has to be yours.'},
+
+  {t:'part', k:'Part one', h:'Why "just write every day" fails most writers.'},
+
+  {t:'body', k:'Productivity is personal',
+    h:'There is no one right way to write.',
+    p:'We have spent fifteen years and coached more than ten thousand writers, and surveyed thousands more. The single clearest finding: the habit that works is the one that fits the writer, and it changes over time.',
+    p2:'"Write every day" is one pattern. It is not the pattern. Built for someone else, it mostly produces guilt.'},
+
+  {t:'body', k:'The core challenges',
+    h:'First, name what actually stops you.',
+    p:'Before any plan, we get clear on the real block. For most writers it is one of four: no protected time, constant distraction, a loss of momentum after a setback, or a goal so big it is paralysing.',
+    p2:'You cannot fix a problem you have not named. This is where we start.'},
+
+  {t:'part', k:'Part two', h:'Find your way in.'},
+
+  {t:'list', k:'The four ways writers make time',
+    h:'Pick the one that fits your life.',
+    sub:'From a survey of thousands of writers, four patterns show up again and again:',
+    li:[
+      ['Binge','long, immersive sessions when the space opens up.'],
+      ['Daily','small and consistent, a little every day.'],
+      ['Time-boxing','fixed blocks booked into the week like meetings.'],
+      ['Spontaneous','writing in the gaps, whenever they appear.']
+    ]},
+
+  {t:'body', k:'The diagnosis', h:'Which one are you?',
+    p:'Most advice assumes you are the daily type. Most writers are not. When you match the pattern to how your life and your mind actually work, the friction drops and the pages start to move.',
+    p2:'We will help you spot yours in the room.'},
+
+  {t:'body', k:'Accountability styles',
+    h:'Then match how you keep going.',
+    p:'Some writers thrive in community, in groups and shared sessions. Others do their best work alone and lose energy in a group. Neither is right. Copying the wrong one is the quiet reason a lot of writers stall.',
+    p2:'Your system is your time-pattern plus your accountability style. That pairing is personal.'},
+
+  {t:'part', k:'Part three', h:'Keep going.'},
+
+  {t:'steps', k:'The habit that lasts',
+    h:'Starting is easy. Keeping going is the craft.',
+    steps:[
+      ['1','Start small enough that a bad day cannot stop you.'],
+      ['2','Expect the setback. Plan the return before you need it.'],
+      ['3','Protect the next session, not the whole finish line.']
+    ],
+    note:'A habit that survives a bad week is worth more than a burst that burns out.'},
+
+  {t:'cal', k:'What a real week looks like',
+    h:'Consistency is not daily.',
+    sub:'You do not need seven days you will never keep. You need a handful that fit, protected on purpose.',
+    cells:[['Mon','',0],['Tue','90 min',1],['Wed','',0],['Thu','',0],['Fri','2 hrs',1],['Sat','',0],['Sun','flow',1]]},
+
+  {t:'cred', k:'Why listen to us',
+    h:'We have spent a career on this one question.',
+    p:'Chris Smith and Bec Evans are the authors of Written: How to Keep Writing and Build a Habit that Lasts, with an introduction by Oliver Burkeman. We founded Written Academy, write the Breakthroughs and Blocks newsletter, and make the This Might Work podcast.',
+    p2:'Fifteen years. Ten thousand writers. One finding: the system has to be yours.'},
+
+  {t:'recap', k:'The whole system, in one line',
+    h:'Your time-pattern, plus your accountability, plus a keep-going habit.',
+    p:'That is the personal writing system. Not more willpower. Not someone else’s routine. The way of working that finally fits you, so the project gets finished.'},
+
+  {t:'cta', cls:'cta', k:'Your next step',
+    h:'Find your writing system.',
+    p:'If you want help building yours, book a free chemistry call with Written Academy. We will look at where your project is stuck and map the system that fits how you actually work. No obligation.',
+    disc:'Educational session only. No income, role, or writing outcome is guaranteed. Results vary and depend on your own work and circumstances.'}
+];
+
+const deck = document.getElementById('deck');
+for(const s of S){
+  const sec = document.createElement('section');
+  sec.className = 'slide ' + (s.cls||'');
+  let h = '';
+  if(s.k) h += '<div class="k">'+s.k+'</div>';
+  if(s.big){ h += '<div class="big">'+s.big+'</div>'; }
+  if(s.h && s.t==='title') h += '<h1>'+s.h+'</h1>';
+  else if(s.h && s.t==='part') h += '<h2>'+s.h+'</h2>';
+  else if(s.h) h += '<h2>'+s.h+'</h2>';
+  if(s.s) h += '<div class="s">'+s.s+'</div>';
+  if(s.sub) h += '<p>'+s.sub+'</p>';
+  if(s.p) h += '<p>'+s.p+'</p>';
+  if(s.p2) h += '<p>'+s.p2+'</p>';
+  if(s.li){ h += '<ul>'; for(const r of s.li){ h += '<li><span class="t">'+r[0]+'.</span> '+r[1]+'</li>'; } h += '</ul>'; }
+  if(s.steps){ for(const r of s.steps){ h += '<div class="step"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>'; } }
+  if(s.note) h += '<p class="disc">'+s.note+'</p>';
+  if(s.cells){ h += '<div class="cal">'; for(const c of s.cells){ h += '<div class="'+(c[2]?'on':'')+'">'+c[0]+(c[1]?'<small>'+c[1]+'</small>':'')+'</div>'; } h += '</div>'; }
+  if(s.disc) h += '<div class="disc">'+s.disc+'</div>';
+  sec.innerHTML = h;
+  deck.appendChild(sec);
+}
+</script>
+</body>
+</html>
