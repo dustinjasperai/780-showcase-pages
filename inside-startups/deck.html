@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond Referrals — a masterclass with Ben Sheppard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0c; --panel:#161616; --rule:#2a2a2a;
+    --accent:#b6ff3d; --ink:#f5f4f0; --muted:#9a9a90;
+    --display:'Fraunces',Georgia,serif; --body:'Outfit',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#050505;color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,94vw)}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+    aspect-ratio:16/9;padding:56px 60px;display:none;flex-direction:column;
+    position:relative;overflow:hidden}
+  .slide.on{display:flex}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6vw,72px);
+    line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,44px);
+    line-height:1.08;margin-bottom:18px}
+  .sub{font-size:clamp(17px,2.2vw,24px);color:var(--ink);opacity:.92;
+    margin-top:20px;max-width:30ch;line-height:1.4;font-weight:300}
+  p.body{font-size:clamp(16px,1.9vw,21px);color:var(--muted);line-height:1.5;
+    max-width:42ch;margin-top:10px;font-weight:300}
+  .label{font-family:var(--display);font-size:15px;color:var(--muted);
+    letter-spacing:.04em;margin-bottom:10px}
+  .big-num{font-family:var(--display);font-size:clamp(30px,5vw,56px);
+    color:var(--accent);font-weight:600}
+  ul{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:14px}
+  ul.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px 40px}
+  li{font-size:clamp(15px,1.8vw,20px);line-height:1.35;padding-left:26px;
+    position:relative;color:var(--ink);font-weight:300}
+  li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:2px;
+    background:var(--accent)}
+  li b{font-weight:600;color:var(--ink)}
+  .step{color:var(--accent);font-family:var(--display);font-weight:600;
+    margin-right:8px}
+  .belts{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+  .belt{border:1px solid var(--rule);border-radius:12px;padding:22px 20px}
+  .belt h3{font-family:var(--display);font-size:20px;color:var(--accent);
+    font-weight:600;margin-bottom:12px}
+  .belt span{display:block;color:var(--muted);font-size:15px;line-height:1.7;
+    font-weight:300}
+  .credits{display:flex;gap:46px;margin-top:30px;flex-wrap:wrap}
+  .credits div span{display:block;font-size:14px;color:var(--muted);
+    margin-top:4px;max-width:16ch;font-weight:300}
+  .spacer{flex:1}
+  .disc{font-size:12.5px;color:#6f6f68;line-height:1.5;max-width:60ch;
+    margin-top:26px;font-weight:300}
+  .foot{position:absolute;bottom:22px;right:28px;font-size:12px;color:#5a5a54;
+    letter-spacing:.05em}
+  .cta-line{font-family:var(--display);font-size:clamp(20px,2.6vw,30px);
+    color:var(--ink);margin-top:14px;font-weight:600}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;gap:14px;align-items:center;color:#777;font-size:13px;
+    font-family:var(--body)}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:8px;padding:6px 14px;cursor:pointer;font-family:var(--body);
+    font-size:13px}
+  em{color:var(--accent);font-style:normal}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`
+    <div class="kicker">A live masterclass with Ben Sheppard &middot; Inside Startups</div>
+    <h1>Beyond Referrals</h1>
+    <div class="sub">The customer engine your team can run, so you stop being the bottleneck.</div>
+    <div class="spacer"></div>
+    <p class="body">Sixty minutes on turning referral and network growth into a repeatable pipeline your own people operate.</p>`},
+
+  {t:'who', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You have a product and paying customers.</h2>
+    <p class="body">And most of that business still comes from referrals, intros, or your own network. You want the next market, bigger clients, or a second offer, but every new deal still runs through you.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The hard truth</div>
+    <h2>Referrals are a ceiling, not a strategy.</h2>
+    <p class="body">A network is finite. It got you here, and one day it quietly runs out. The founders who break through are not the ones with the biggest address book. They are the ones who built a way in for people who have never heard of them.</p>`},
+
+  {t:'part', html:`
+    <div class="label">Part One</div>
+    <h1>You are the pipeline.</h1>
+    <div class="sub">And that is the single biggest risk in your business.</div>`},
+
+  {t:'problem', html:`
+    <div class="kicker">The core problem</div>
+    <h2>Everything good flows through one person.</h2>
+    <ul>
+      <li>The warm intros come to <b>you</b>.</li>
+      <li>The discovery calls are taken by <b>you</b>.</li>
+      <li>The proposal that actually closes is written by <b>you</b>.</li>
+    </ul>
+    <p class="body">When growth depends on the founder being in every conversation, growth stops the moment you do.</p>`},
+
+  {t:'cost', html:`
+    <div class="kicker">What it costs you</div>
+    <h2>A business that cannot run without you is not an asset yet.</h2>
+    <p class="body">You cannot step back, you cannot scale past your own calendar, and the plateau feels like a people problem when it is really a system problem.</p>`},
+
+  {t:'part', html:`
+    <div class="label">Part Two</div>
+    <h1>The Second Mile.</h1>
+    <div class="sub">A repeatable engine, built once, then handed to your team.</div>`},
+
+  {t:'engine', html:`
+    <div class="kicker">The method</div>
+    <h2>Six steps from referrals to a repeatable pipeline.</h2>
+    <ul>
+      <li><span class="step">01</span><b>Audit.</b> Read the real numbers of your business.</li>
+      <li><span class="step">02</span><b>Baseline.</b> Define who you sell to and what you offer.</li>
+      <li><span class="step">03</span><b>Set up.</b> Build the channels and the pipeline.</li>
+      <li><span class="step">04</span><b>Run.</b> Daily content and lead qualification.</li>
+      <li><span class="step">05</span><b>Hand over.</b> Train two of your own people to run it.</li>
+      <li><span class="step">06</span><b>Coach.</b> Support them until it runs without you.</li>
+    </ul>`},
+
+  {t:'detail', html:`
+    <div class="kicker">Steps one and two</div>
+    <h2>Start with the truth, then aim it.</h2>
+    <p class="body"><b>Audit</b> looks at what your numbers actually say, not what you hope they say. <b>Baseline</b> turns that into a sharp ICP and a clear set of offers, so every later step points at the right buyer.</p>`},
+
+  {t:'detail', html:`
+    <div class="kicker">Steps three and four</div>
+    <h2>Build it, then run it daily.</h2>
+    <p class="body"><b>Set up</b> stands up the channels and the pipeline so nothing lives in your head. <b>Run</b> is the daily rhythm, content going out and leads being qualified, so the top of the pipeline is never empty.</p>`},
+
+  {t:'detail', html:`
+    <div class="kicker">Steps five and six, the whole point</div>
+    <h2>The engine is not yours to run forever.</h2>
+    <p class="body"><b>Hand over</b> trains two of your own people to operate it. <b>Coach</b> keeps them sharp until it runs on its own. The goal was never to make you work harder. It was to take you out of the loop.</p>`},
+
+  {t:'belts', html:`
+    <div class="kicker">How it is built</div>
+    <h2>Two belts, running in parallel.</h2>
+    <div class="belts">
+      <div class="belt"><h3>Marketing belt</h3><span>ICP<br>Content<br>Amplification<br>Offers and lead magnets<br>Website and forms</span></div>
+      <div class="belt"><h3>Sales belt</h3><span>Pipeline<br>Qualification call<br>Offer<br>Proposal</span></div>
+    </div>
+    <p class="body">A vague idea of a sales engine becomes two concrete tracks a small team can actually operate.</p>`},
+
+  {t:'playbooks', html:`
+    <div class="kicker">The founder playbooks</div>
+    <h2>Four moves you can start this month.</h2>
+    <ul class="grid2">
+      <li><b>Find your constraint.</b> The one bottleneck throttling growth.</li>
+      <li><b>Build your ICP.</b> Who you actually sell to.</li>
+      <li><b>Your voice.</b> How your point of view becomes content.</li>
+      <li><b>Thirty days of content.</b> A cadence that creates visible demand.</li>
+    </ul>`},
+
+  {t:'part', html:`
+    <div class="label">Part Three</div>
+    <h1>The engine, running without you.</h1>
+    <div class="sub">What a week looks like when you are out of every conversation.</div>`},
+
+  {t:'running', html:`
+    <div class="kicker">A month in the engine</div>
+    <h2>Demand you can already see.</h2>
+    <p class="body">Content goes out on a cadence. Leads arrive and get qualified before they reach a call. Your two people run the belts. You review once a week and spend the rest of your time on the work only a founder can do.</p>`},
+
+  {t:'why', html:`
+    <div class="kicker">Why listen to me</div>
+    <h2>I have built this and run it, not just taught it.</h2>
+    <div class="credits">
+      <div><span class="big-num">200+</span><span>founders coached across 25 countries</span></div>
+      <div><span class="big-num">70</span><span>scale-ups advised</span></div>
+      <div><span class="big-num">4</span><span>of my own companies to $1M ARR within 16 months</span></div>
+    </div>`},
+
+  {t:'outcome', html:`
+    <div class="kicker">What good looks like</div>
+    <h2>Sixteen qualified leads a month, run by two people, not you.</h2>
+    <p class="body">That is the shape of a working engine. The numbers that matter are the operational ones, the leads that keep arriving whether or not you are in the room.</p>`},
+
+  {t:'recap', html:`
+    <div class="kicker">In one line</div>
+    <h2>Stop being the pipeline. Build the engine. Hand it over.</h2>
+    <p class="body">Find the constraint, baseline the ICP, build the two belts, run the cadence, and train your team to own it.</p>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Want help building your engine?</h2>
+    <div class="cta-line">Book a coaching call with me at inside-startups.com</div>
+    <p class="body">Bring your numbers and your constraint. We will map the first mile of your Second Mile together.</p>
+    <p class="disc">Educational content only. This masterclass shares a method and results from past work. No income, role, or business result is guaranteed, and outcomes vary with your market, offer, and effort. Nothing here is financial, legal, or investment advice.</p>
+    <div class="foot">Inside Startups &middot; Ben Sheppard</div>`}
+];
+
+const stage = document.getElementById('stage');
+stage.innerHTML = S.map((s,i)=>`<section class="slide ${s.cls||''} ${i===0?'on':''}" data-i="${i}">${s.html}</section>`).join('');
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const count = document.getElementById('count');
+function show(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('on');count.textContent=(cur+1)+' / '+slides.length;}
+function go(d){show(cur+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);});
+count.textContent='1 / '+slides.length;
+</script>
+</body>
+</html>
