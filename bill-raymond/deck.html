@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reviewable Brief | Bill Talks AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f6f8fc; --panel:#ffffff; --rule:#e2e8f0;
+    --ink:#0f172a; --ink-soft:#334155; --ink-muted:#64748b;
+    --accent:#2563eb; --accent-deep:#1e40af;
+  }
+  html{-webkit-font-smoothing:antialiased;}
+  body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);}
+  #deck{position:fixed;inset:0;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;}
+  .slide.active{display:flex;}
+  .kick{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(34px,6vw,68px);line-height:1.04;letter-spacing:-.02em;margin-bottom:20px;}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(26px,4vw,44px);line-height:1.1;letter-spacing:-.01em;margin-bottom:22px;}
+  .lead{font-size:clamp(17px,2vw,23px);color:var(--ink-soft);line-height:1.55;max-width:60ch;}
+  .sub{font-size:clamp(15px,1.5vw,19px);color:var(--ink-muted);margin-top:14px;}
+  ul{list-style:none;margin-top:10px;max-width:60ch;}
+  li{font-size:clamp(16px,1.8vw,21px);color:var(--ink-soft);padding:11px 0 11px 30px;position:relative;border-bottom:1px solid var(--rule);line-height:1.45;}
+  li:before{content:"";position:absolute;left:0;top:19px;width:11px;height:11px;border-radius:3px;background:var(--accent);}
+  li b{color:var(--ink);font-weight:600;}
+  .cards{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;}
+  .card{flex:1 1 220px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:22px 20px;}
+  .card .n{font-family:'Sora',sans-serif;font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.1em;}
+  .card h3{font-family:'Sora',sans-serif;font-size:19px;font-weight:600;margin:8px 0 8px;}
+  .card p{font-size:15px;color:var(--ink-muted);line-height:1.5;}
+  .big{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(30px,5vw,56px);line-height:1.1;letter-spacing:-.015em;max-width:20ch;}
+  .em{color:var(--accent);}
+  .rail{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+  .pill{background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;color:var(--ink-soft);}
+  .pill.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .disc{font-size:13px;color:var(--ink-muted);margin-top:26px;max-width:62ch;line-height:1.5;}
+  .foot{position:fixed;bottom:20px;left:9vw;font-size:12px;color:var(--ink-muted);letter-spacing:.04em;}
+  .nav{position:fixed;bottom:18px;right:9vw;font-size:12px;color:var(--ink-muted);}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .25s;}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:12px;padding:24px 26px;margin-top:8px;max-width:58ch;}
+  .cta-box b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div id="deck"></div>
+<div class="foot">Bill Talks AI &middot; AI Agility in Action</div>
+<div class="nav" id="nav"></div>
+<script>
+const S = [
+  {t:'title', html:`<div class="kick">A live masterclass with Bill Raymond</div>
+    <h1>The Reviewable Brief</h1>
+    <p class="lead">How business leaders put AI to work without the hype, or the risk.</p>
+    <p class="sub">Bill Talks AI &middot; Cambermast</p>`},
+
+  {t:'promise', html:`<div class="kick">What you will leave with</div>
+    <h2>A repeatable way to get work-ready output from AI</h2>
+    <ul>
+      <li>A simple method to turn any task into a <b>reviewable brief</b></li>
+      <li>A decision for <b>which AI surface</b> fits the job, instead of defaulting to one chat box</li>
+      <li>A way to add AI to real workflows with <b>human oversight</b>, not a black box</li>
+    </ul>`},
+
+  {t:'who', html:`<div class="kick">Who this is for</div>
+    <h2>Leaders and teams who have to make AI actually work</h2>
+    <p class="lead">Operations, HR, finance, product, and founders who are past the demo and now
+    have to put AI into real work, and stand behind the output.</p>`},
+
+  {t:'trap', html:`<div class="kick">The trap</div>
+    <h2>You have tried AI. It did not stick.</h2>
+    <ul>
+      <li>A weekend of prompt tips that changed nothing by Tuesday</li>
+      <li>A pilot that impressed everyone and then quietly died</li>
+      <li>Output you could not trust enough to send without rewriting it</li>
+    </ul>`},
+
+  {t:'hook', html:`<div class="kick">The reframe</div>
+    <p class="big">The problem was never the model. <span class="em">It was the brief.</span></p>`},
+
+  {t:'part', html:`<div class="kick">Part one</div><h1>Why AI adoption stalls</h1>`},
+
+  {t:'problem', html:`<div class="kick">The core problem</div>
+    <h2>Two ways leaders get AI wrong</h2>
+    <div class="cards">
+      <div class="card"><div class="n">01</div><h3>Endless experimenting</h3>
+        <p>Chasing prompt tricks and new tools, never shipping a result the business can use.</p></div>
+      <div class="card"><div class="n">02</div><h3>Black-box automation</h3>
+        <p>Handing a workflow to AI with no checkpoints, then losing trust the first time it is wrong.</p></div>
+    </div>
+    <p class="sub">The missing piece in both is delivery discipline, the thing that turns a tool into a result.</p>`},
+
+  {t:'part', html:`<div class="kick">Part two</div><h1>AI Agility in Action</h1>
+    <p class="lead">The method I use with teams: borrow the discipline that ships software, and point it at AI.</p>`},
+
+  {t:'pillars', html:`<div class="kick">Three pillars</div>
+    <h2>How the method works</h2>
+    <div class="cards">
+      <div class="card"><div class="n">Pillar 1</div><h3>The reviewable brief</h3>
+        <p>Say what you want, give the context, decide where you will review it, before you prompt.</p></div>
+      <div class="card"><div class="n">Pillar 2</div><h3>Prompt anatomy</h3>
+        <p>Four prompt types and a clear structure, so the output is reliable instead of lucky.</p></div>
+      <div class="card"><div class="n">Pillar 3</div><h3>Human in the loop</h3>
+        <p>Agents as teammates, with guardrails and checkpoints, that escalate to a person when needed.</p></div>
+    </div>`},
+
+  {t:'brief', html:`<div class="kick">Pillar one, in practice</div>
+    <h2>Three questions before you prompt</h2>
+    <ul>
+      <li><b>What am I trying to accomplish?</b> Name the real deliverable, not a vague ask.</li>
+      <li><b>What context does it need?</b> The inputs, constraints, and the audience.</li>
+      <li><b>Where will I review the result?</b> Decide the surface before you start.</li>
+    </ul>
+    <div class="rail">
+      <span class="pill on">Chat</span><span class="pill on">Work</span><span class="pill on">Codex</span><span class="pill">Plugins</span>
+    </div>
+    <p class="sub">Choose the surface that fits the task, instead of forcing everything through one window.</p>`},
+
+  {t:'prompts', html:`<div class="kick">Pillar two, in practice</div>
+    <h2>Reliable output is a structure, not a trick</h2>
+    <ul>
+      <li><b>Zero-shot and few-shot</b> for when to show examples, and when not to</li>
+      <li><b>Chain of thought</b> for work that needs reasoning you can follow</li>
+      <li><b>Clarity and context</b> as the anatomy of every prompt, with a plan for hallucinations</li>
+    </ul>`},
+
+  {t:'agents', html:`<div class="kick">Pillar three, in practice</div>
+    <h2>Automation you can actually trust</h2>
+    <ul>
+      <li>Map the workflow and pick one high-value step to automate</li>
+      <li>Build the core loop, then add <b>guardrails and escalation routing</b></li>
+      <li>Watch it with observability, and keep a person in the loop at the checkpoints</li>
+    </ul>`},
+
+  {t:'part', html:`<div class="kick">Part three</div><h1>What this looks like in 30 days</h1>`},
+
+  {t:'thirty', html:`<div class="kick">The capstone</div>
+    <h2>One workflow, shipped</h2>
+    <p class="lead">We pick one real task in your work, run it through the method, and finish with a
+    result you can use and a brief you can reuse. Strategy connected to hands-on practice, every session.</p>`},
+
+  {t:'shift', html:`<div class="kick">The shift</div>
+    <h2>From busy with AI, to better because of it</h2>
+    <div class="cards">
+      <div class="card"><div class="n">Before</div><p>Rewriting everything the model gives you, unsure what to trust.</p></div>
+      <div class="card"><div class="n">After</div><p>A brief that gets work-ready output, and automation you can stand behind.</p></div>
+    </div>`},
+
+  {t:'why', html:`<div class="kick">Why me</div>
+    <h2>Delivery first, hype never</h2>
+    <p class="lead">I spent years leading enterprise delivery, agile adoption, ERP, and product work,
+    before AI. I host the Agile in Action podcast and write Bill Talks AI for business leaders. I teach
+    AI the way serious teams ship anything else: with discipline and a human in the loop.</p>`},
+
+  {t:'recap', html:`<div class="kick">The whole idea</div>
+    <p class="big">Start from a <span class="em">reviewable brief</span>. Choose the right surface.
+    Keep a person in the loop.</p>`},
+
+  {t:'cta', html:`<div class="kick">Next step</div>
+    <h2>Put the method to work with me</h2>
+    <p class="lead">Join the next live cohort workshop, or book time to talk through an executive
+    coaching engagement for you and your team.</p>
+    <div class="cta-box"><b>Register for the next live session at billtalksai.com, or reply to the
+    Bill Talks AI newsletter to start a conversation.</b></div>
+    <p class="disc">Educational content only. Nothing here is professional, legal, or financial advice.
+    No specific income, role, result, or outcome is guaranteed. Results vary with your context,
+    effort, and the work you put in.</p>`}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' active':'');d.innerHTML=s.html;deck.appendChild(d);});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const prog=document.getElementById('prog');const nav=document.getElementById('nav');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  prog.style.width=((cur+1)/S.length*100)+'%';nav.textContent=(cur+1)+' / '+S.length;}
+document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){show(cur+1);e.preventDefault();}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){show(cur-1);e.preventDefault();}});
+deck.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
