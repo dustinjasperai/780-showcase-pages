@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acceptance Tests First: a masterclass by Valentina Jemuović, Optivem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e8eff7; --panel:#fbfdff; --rule:#cddcea;
+    --ink:#002246; --muted:#4a6076; --accent:#0a67b2;
+    --red:#c0392b; --green:#1f8a52;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(0,34,70,.03)}
+  .slide.title{background:var(--ink);color:#eef4fa;border-color:var(--ink)}
+  .slide.part{background:#eef4fa}
+  .k{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  .slide.title .k{color:#8fc0e8}
+  .k .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  h1{font-size:52px;line-height:1.04;font-weight:700;letter-spacing:-.02em}
+  h2{font-size:34px;line-height:1.12;font-weight:600;letter-spacing:-.01em;max-width:24ch}
+  .sub{font-size:20px;color:var(--muted);margin-top:20px;max-width:40ch;line-height:1.45}
+  .slide.title .sub{color:#b9d4ec;max-width:46ch}
+  .lede{font-size:23px;line-height:1.5;max-width:40ch;margin-top:8px}
+  ul{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  li{font-size:19px;line-height:1.4;padding-left:26px;position:relative;max-width:46ch;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:2px;
+    background:var(--accent)}
+  .states{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:14px;padding:9px 16px;border-radius:999px;
+    border:1px solid var(--rule);background:#fff}
+  .chip.red{color:var(--red);border-color:#e7c3bd}
+  .chip.green{color:var(--green);border-color:#bfe0cd}
+  .chip.blue{color:var(--accent);border-color:#bcd7ec}
+  .road{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+  .step{display:flex;align-items:center;gap:16px;border:1px solid var(--rule);border-radius:10px;
+    padding:16px 20px;background:#fbfdff}
+  .step .n{font-family:var(--mono);font-size:14px;color:var(--accent);min-width:28px}
+  .step .t{font-size:19px;font-weight:600}
+  .step .d{font-size:16px;color:var(--muted);margin-left:auto;text-align:right;max-width:30ch}
+  .cred{font-size:19px;line-height:1.55;max-width:48ch;margin-top:10px;color:var(--ink)}
+  .note{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:30px;
+    border-top:1px solid var(--rule);padding-top:16px;max-width:60ch;line-height:1.5}
+  .pg{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;margin-top:18px}
+  .slide.title .pg{color:#6f93b4}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:"A LIVE MASTERCLASS", h:"Acceptance Tests First",
+    sub:"How engineering teams modernize legacy code without stopping delivery. Taught live by Valentina Jemuović, Optivem." },
+
+  {t:'content', k:"Who this is for", h:"You lead an engineering team.",
+    items:[
+      "You are a CTO, head of engineering, or engineering manager.",
+      "Releases are still slowed down by manual testing.",
+      "Your team tried test automation and it did not deliver what was promised."
+    ] },
+
+  {t:'content', k:"The setup", h:"You did everything you were told to do.",
+    lede:"You invested in end-to-end test automation. You expected faster releases and fewer bugs. On paper, that was the right call." },
+
+  {t:'content', k:"The trap", h:"What you got instead.",
+    items:[
+      "A test suite that breaks with every UI change.",
+      "A team that quietly stopped trusting it.",
+      "A manual regression pass that still sits between done and released."
+    ] },
+
+  {t:'content', k:"And now AI", h:"The queue only gets longer.",
+    lede:"AI helps your developers write code faster. So more code arrives at the same gate, and the line in front of QA grows. Speeding up the writing did not speed up the releasing." },
+
+  {t:'part', k:"The reframe", h:"This is not a people problem, and more automation of the same kind will not fix it. It comes down to how the tests are designed." },
+
+  {t:'part', k:"Part one", h:"Why end-to-end automation rarely replaces manual QA." },
+
+  {t:'content', k:"Design decision 1", h:"The tests check the screen, not the behaviour.",
+    lede:"When a test is tied to buttons and page structure, moving a button breaks the test even though nothing about the behaviour changed. So the suite screams on every UI edit, and the team learns to ignore it." },
+
+  {t:'content', k:"Design decision 2", h:"Only developers can read them.",
+    lede:"If the one person who can say what correct means cannot read the test, the test cannot be the shared definition of correct. QA still re-checks by hand, because the automated check never earned their trust." },
+
+  {t:'content', k:"Design decision 3", h:"They assume a rewrite.",
+    lede:"Most TDD advice starts with a clean unit and a greenfield codebase. On a real legacy system that advice reads as stop everything and rewrite, so the team never starts at all." },
+
+  {t:'part', k:"Part two", h:"The method: acceptance tests first." },
+
+  {t:'content', k:"Business-language tests", h:"Write the test in the language of the behaviour.",
+    items:[
+      "Your product owner can read it, so it becomes the shared definition of correct.",
+      "QA can trust it, so the manual regression pass shrinks.",
+      "It describes behaviour, not screens, so UI changes stop breaking it."
+    ] },
+
+  {t:'content', k:"The loop", h:"Red, green, refactor, on behaviour you can name.",
+    lede:"The same discipline teams know from unit tests, moved up to the level a leader and a product owner both care about: does the system still do the thing it promised?",
+    states:[{c:"red",x:"RED  failing"},{c:"green",x:"GREEN  passing"},{c:"blue",x:"REFACTOR  safely"}] },
+
+  {t:'road', k:"The roadmap", h:"Introduce TDD into legacy code in the right order.",
+    steps:[
+      {n:"01",t:"Acceptance TDD",d:"tests in business language, first"},
+      {n:"02",t:"Component TDD",d:"behaviour at the seams"},
+      {n:"03",t:"Unit TDD",d:"fast feedback, last"}
+    ] },
+
+  {t:'road', k:"How each phase runs", h:"Three stages, so the team actually adopts it.",
+    steps:[
+      {n:"1",t:"Training",d:"learn the pattern on a known example"},
+      {n:"2",t:"Sandbox project",d:"practice with feedback, off the hot path"},
+      {n:"3",t:"Real-life project",d:"apply it to your own code, with coaching"}
+    ] },
+
+  {t:'part', k:"Part three", h:"Inside your own codebase." },
+
+  {t:'content', k:"Start small", h:"One critical use case.",
+    lede:"You do not stop delivery and you do not rewrite everything. You pick one use case that matters, write the acceptance test first, and let it pull the design behind it. One green test the whole team trusts is the beachhead." },
+
+  {t:'content', k:"Get it funded", h:"Make the case your CEO already cares about.",
+    items:[
+      "Release speed: how much sooner the work ships.",
+      "Cost of bugs: what the escapes are costing now.",
+      "Repeat work: the hours lost to manual regression, every release."
+    ] },
+
+  {t:'content', k:"Why me", h:"I have done this inside real teams.",
+    cred:"I am Valentina Jemuović, a technical coach and the founder of Optivem. I have helped engineering teams across Europe and North America introduce TDD into legacy code in regulated industries, working in Java, .NET and TypeScript, and I share this work with around 30,000 engineers. Coaching is advisory: your engineers implement between sessions, on your real codebase." },
+
+  {t:'content', k:"The shift", h:"Where this leaves your team.",
+    items:[
+      "From tests nobody trusts to a green check the team believes.",
+      "From unit-first theory to acceptance-first on real code.",
+      "From QA as the gate to QA as a partner you freed up."
+    ] },
+
+  {t:'cta', k:"Work with Optivem", h:"Bring this into your codebase.",
+    lede:"Optivem Teams is weekly live coaching for your team only, applied to your real, proprietary codebase. The courses carry the theory so the live sessions are spent entirely on your code. If your releases are waiting on QA, this is the fastest way to change that.",
+    note:"Educational content only. Outcomes depend on your team, your codebase, and your execution; no specific result, revenue, or timeline is guaranteed." }
+];
+
+const chip = s => `<div class="states">${s.map(c=>`<span class="chip ${c.c}">${c.x}</span>`).join("")}</div>`;
+const steps = st => `<div class="road">${st.map(s=>`<div class="step"><span class="n">${s.n}</span><span class="t">${s.t}</span><span class="d">${s.d}</span></div>`).join("")}</div>`;
+const list = it => `<ul>${it.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+
+const deck = document.getElementById("deck");
+S.forEach((s,i)=>{
+  const el = document.createElement("section");
+  el.className = "slide " + (s.t==="title"?"title":s.t==="part"?"part":s.t==="cta"?"cta":"");
+  let inner = "";
+  if(s.k) inner += `<div class="k"><span class="dot"></span>${s.k}</div>`;
+  inner += s.t==="title" ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+  if(s.sub) inner += `<div class="sub">${s.sub}</div>`;
+  if(s.lede) inner += `<div class="lede">${s.lede}</div>`;
+  if(s.items) inner += list(s.items);
+  if(s.steps) inner += steps(s.steps);
+  if(s.states) inner += chip(s.states);
+  if(s.cred) inner += `<div class="cred">${s.cred}</div>`;
+  if(s.note) inner += `<div class="note">${s.note}</div>`;
+  inner += `<div class="pg">${String(i+1).padStart(2,"0")} / ${String(S.length).padStart(2,"0")}  ·  optivem.com</div>`;
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
