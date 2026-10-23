@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Habits: a live masterclass with Charlie Gilkey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f0;        /* their body paper */
+    --panel:#f2ede4;     /* cream panel */
+    --rule:#6f6a5f;      /* warm grey */
+    --ink:#2b2a26;       /* warm near-black */
+    --muted:#6f6a5f;
+    --accent:#c26d4b;    /* terracotta, from brand.json */
+    --deep:#1e1d1a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--deep);color:var(--ink)}
+  body{font-family:"Spectral",Georgia,serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px 72px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid #e4dccd;
+    border-radius:14px;padding:64px 60px;margin:0 0 26px;min-height:520px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(0,0,0,.04);
+  }
+  .slide::before{content:'';position:absolute;left:0;top:28px;bottom:28px;width:5px;background:var(--accent);border-radius:0 4px 4px 0}
+  .k{font-family:"Archivo",sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:20px}
+  h1{font-family:"Archivo",sans-serif;font-weight:800;font-size:60px;line-height:1.02;letter-spacing:-.01em;color:var(--ink);margin-bottom:18px}
+  h2{font-family:"Archivo",sans-serif;font-weight:700;font-size:40px;line-height:1.08;letter-spacing:-.01em;color:var(--ink);margin-bottom:16px}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink);max-width:62ch}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);max-width:62ch;margin-top:6px}
+  .big{font-family:"Spectral",serif;font-weight:500;font-size:40px;line-height:1.22;color:var(--ink);max-width:24ch}
+  .big .a{color:var(--accent);font-weight:600}
+  .strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--accent)}
+  ul{list-style:none;margin-top:22px;max-width:60ch}
+  li{position:relative;padding:14px 0 14px 40px;font-size:20px;line-height:1.4;border-top:1px solid #e4dccd}
+  li:first-child{border-top:none}
+  li::before{content:'';position:absolute;left:4px;top:20px;width:14px;height:8px;border-left:3px solid var(--accent);border-bottom:3px solid var(--accent);transform:rotate(-45deg)}
+  li b{font-family:"Archivo",sans-serif;font-weight:700;color:var(--ink)}
+  .divider{background:var(--panel)}
+  .divider h2{font-size:46px}
+  .part{font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .present{margin-top:34px;font-family:"Archivo",sans-serif;font-size:16px;letter-spacing:.04em;color:var(--muted)}
+  .present b{color:var(--ink);font-weight:700}
+  .cta{background:var(--deep);border-color:#000}
+  .cta .k{color:#e6b89f}
+  .cta h2{color:#faf6f0}
+  .cta .sub{color:#d9d2c6}
+  .cta .step{margin-top:22px;font-family:"Archivo",sans-serif;font-weight:700;font-size:22px;color:#faf6f0}
+  .cta .step .a{color:#e6b89f}
+  .disc{margin-top:30px;font-size:13px;line-height:1.5;color:#9d978b;max-width:60ch}
+  .n{font-family:"Archivo",sans-serif;position:absolute;right:26px;bottom:18px;font-size:12px;letter-spacing:.1em;color:#b9b1a2}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:"",
+    k:"A live masterclass",
+    h:"Team Habits",
+    lead:"How small, repeatable actions build a team you would actually want to work on.",
+    present:"Presented live by <b>Charlie Gilkey</b>, Productive Flourishing" },
+
+  {t:'audience', cls:"",
+    k:"Who this is for",
+    h:"The accidental executive",
+    lead:"You got promoted because you were excellent at the work. Then you were handed a team, and nobody ever taught you how a team actually works.",
+    sub:"If you are leading people and quietly wondering why it feels harder than it should, this hour is for you." },
+
+  {t:'trap', cls:"",
+    k:"The trap",
+    h:"You think it is a talent problem",
+    lead:"So you try to hire better, fire faster, and push harder. You bring in strong people and the team still feels slow, busy, and a little stuck.",
+    sub:"The strong people are not the problem. What they are walking into is." },
+
+  {t:'reframe', cls:"divider",
+    part:"The reframe",
+    big:"Your team doesn't rise to the level of its <span class=\"strike\">talent</span>. It falls to the level of its <span class=\"a\">habits</span>." },
+
+  {t:'part', cls:"divider",
+    part:"Part One",
+    h:"The real problem: habits nobody chose" },
+
+  {t:'content', cls:"",
+    k:"Unchosen habits",
+    h:"Most team habits were never decided on purpose",
+    lead:"They accumulated. A workaround became a norm. A one-time meeting became a standing one. Over months, those defaults quietly decide how the whole team works.",
+    sub:"Good news: a habit that was never chosen can be changed on purpose." },
+
+  {t:'vocab', cls:"",
+    k:"Name the pattern",
+    h:"The things you keep working around",
+    list:[
+      "<b>Broken printers.</b> The known problems a team tolerates instead of fixing, until the workaround becomes the habit.",
+      "<b>Bumps.</b> Small structural friction, not personal conflict, that everyone absorbs and nobody names.",
+      "<b>Ghost plans.</b> Plans that live in one person's head or one side channel, so half the team is steering blind."
+    ] },
+
+  {t:'content', cls:"",
+    k:"The core move",
+    h:"You cannot out-hire a bad habit",
+    lead:"When the work keeps stalling, the instinct is to change the people. Almost always, the faster fix is to change the habit the people are stuck inside.",
+    sub:"Change the habits, not the people." },
+
+  {t:'part', cls:"divider",
+    part:"Part Two",
+    h:"The five arenas where teams win or lose" },
+
+  {t:'content', cls:"",
+    k:"Arena 1: Meetings",
+    h:"Do the meeting math",
+    lead:"A one-hour meeting with eight people is a full workday spent. Most teams never count it, so crutch meetings pile up to paper over a broken process.",
+    sub:"Keep the meetings that decide and connect. Retire the ones that only report." },
+
+  {t:'content', cls:"",
+    k:"Arena 2: Communication",
+    h:"Separate what is urgent from what is just loud",
+    lead:"Not everything needs an answer in nine minutes. When a team never agrees on what is immediate versus what can wait, the loudest channel wins and the real work gets interrupted.",
+    sub:"Decide, out loud, what gets a fast reply and what does not." },
+
+  {t:'content', cls:"",
+    k:"Arena 3: Decisions",
+    h:"Make decisions where they belong",
+    lead:"Teams slow down when every call routes back up to one person. Clarify which decisions are whose, and you get both better quality and more speed, with fewer decisions clogging the top.",
+    sub:"Push the decision to the person closest to the work who can own it." },
+
+  {t:'content', cls:"",
+    k:"Arena 4: Friction",
+    h:"Handle the bump before it becomes conflict",
+    lead:"Most team conflict starts as a small, unaddressed bump. Named early, it is a five-minute fix. Left alone, it hardens into a story people tell about each other.",
+    sub:"Treat friction as structural first, personal last." },
+
+  {t:'content', cls:"",
+    k:"Arena 5: Belonging",
+    h:"Belonging is load-bearing",
+    lead:"When people trust that teammates follow through, support each other, and share credit, every other habit gets easier. That is functional trust, and it carries the weight of everything else.",
+    sub:"It is built in small, repeatable practices, not in one offsite a year." },
+
+  {t:'content', cls:"",
+    k:"The keystone",
+    h:"Subtract before you add",
+    lead:"Before installing a single new habit, remove an outdated one. And measure your team's real capacity in focus blocks, the uninterrupted time they actually have, not in headcount.",
+    list:[
+      "<b>The 85 percent rule.</b> Plan to about 85 percent of capacity so the team keeps 15 percent of slack for the unexpected.",
+      "<b>Focus blocks.</b> The true unit of what your team can take on this week."
+    ] },
+
+  {t:'part', cls:"divider",
+    part:"Part Three",
+    h:"What changes when you change one habit" },
+
+  {t:'content', cls:"",
+    k:"Start with one",
+    h:"Pick one arena. Change one habit. Run it a month.",
+    lead:"You do not overhaul the culture. You choose the single habit causing the most drag, redesign it with the team, and hold it for four weeks. The team feels the difference before the quarter is out.",
+    sub:"Small actions, repeated, are what compound into an extraordinary team." },
+
+  {t:'why', cls:"",
+    k:"Why listen to me",
+    h:"I have spent years helping leaders fix the work itself",
+    lead:"I am Charlie Gilkey, founder of Productive Flourishing and author of Team Habits and Start Finishing. Former Army officer, near-PhD in philosophy, and someone who has spent a career helping leaders turn good intentions into how the team actually operates.",
+    sub:"This masterclass is the method in miniature." },
+
+  {t:'recap', cls:"",
+    k:"The whole thing in one view",
+    h:"Change the habits, not the people",
+    list:[
+      "<b>Meetings.</b> Do the meeting math.",
+      "<b>Communication.</b> Urgent is not the same as loud.",
+      "<b>Decisions.</b> Make them where they belong.",
+      "<b>Friction.</b> Handle the bump early.",
+      "<b>Belonging.</b> It is load-bearing. Build it on purpose."
+    ] },
+
+  {t:'cta', cls:"cta",
+    k:"Your next step",
+    h:"Ready to change one habit with your team?",
+    sub:"If you want help choosing the keystone habit and redesigning it with your team, this is where we begin working together.",
+    step:"Start with a <span class=\"a\">Catalyst Session</span>, or explore working with the Productive Flourishing team.",
+    disc:"Educational session only. No income, role, or outcome is guaranteed. Results vary and depend on your team and your own effort. Nothing here is professional, legal, or financial advice." }
+];
+
+const deck = document.getElementById("deck");
+S.forEach((s, i) => {
+  const el = document.createElement("section");
+  el.className = "slide " + (s.cls || "");
+  let html = "";
+  if (s.part) html += `<div class="part">${s.part}</div>`;
+  if (s.k) html += `<div class="k">${s.k}</div>`;
+  if (s.h) html += (s.t === "title") ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+  if (s.big) html += `<p class="big">${s.big}</p>`;
+  if (s.lead) html += `<p class="lead">${s.lead}</p>`;
+  if (s.list) html += "<ul>" + s.list.map(x => `<li>${x}</li>`).join("") + "</ul>";
+  if (s.sub) html += `<p class="sub">${s.sub}</p>`;
+  if (s.step) html += `<p class="step">${s.step}</p>`;
+  if (s.present) html += `<p class="present">${s.present}</p>`;
+  if (s.disc) html += `<p class="disc">${s.disc}</p>`;
+  html += `<span class="n">${String(i + 1).padStart(2, "0")} / ${String(S.length).padStart(2, "0")}</span>`;
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
