@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Second Act Method — a masterclass with Dan Rollman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faf4e8; --panel:#fffcf4; --ink:#2a2620; --ink-soft:#5a5046;
+    --rule:#d8c7a6; --accent:#b5482e;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  #stage{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;}
+  .slide{display:none;width:100%;height:100%;padding:7vh 9vw;flex-direction:column;justify-content:center;position:relative;}
+  .slide.active{display:flex;}
+  .kick{font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;letter-spacing:-.015em;margin-bottom:1.6rem;}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.1;letter-spacing:-.01em;margin-bottom:1.4rem;}
+  p.lead{font-size:clamp(1.1rem,2vw,1.5rem);line-height:1.5;color:var(--ink-soft);max-width:30ch;}
+  p.body{font-size:clamp(1rem,1.7vw,1.35rem);line-height:1.6;color:var(--ink-soft);max-width:46ch;margin-top:.4rem;}
+  .big{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(1.6rem,3.3vw,2.6rem);line-height:1.22;max-width:24ch;color:var(--ink);}
+  .accent{color:var(--accent);}
+  ul{list-style:none;margin-top:1rem;max-width:40ch;}
+  ul li{font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.45;color:var(--ink-soft);padding-left:1.4rem;position:relative;margin-bottom:.95rem;}
+  ul li::before{content:"";position:absolute;left:0;top:.6em;width:.5rem;height:.5rem;background:var(--accent);border-radius:2px;}
+  ul li b{color:var(--ink);font-weight:600;}
+  .num{font-family:'Fraunces',Georgia,serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:600;color:var(--rule);line-height:1;margin-bottom:.6rem;}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(1.4rem,3vw,2.6rem);max-width:52ch;}
+  .cite{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--ink-soft);font-size:clamp(1rem,1.6vw,1.2rem);margin-top:1.2rem;}
+  .foot{position:absolute;left:9vw;bottom:4vh;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);opacity:.7;}
+  .disc{font-size:.9rem;line-height:1.5;color:var(--ink-soft);max-width:52ch;margin-top:1.6rem;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:60ch;margin-top:.6rem;}
+  .mini{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:1.2rem 1.3rem;}
+  .mini .t{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);font-size:1.15rem;margin-bottom:.35rem;}
+  .mini .d{font-size:.98rem;color:var(--ink-soft);line-height:1.4;}
+  #nav{position:fixed;bottom:3.4vh;right:9vw;display:flex;gap:.6rem;align-items:center;z-index:10;}
+  #nav button{font-family:'Hanken Grotesk',sans-serif;border:1px solid var(--rule);background:var(--panel);color:var(--ink);width:38px;height:38px;border-radius:9px;cursor:pointer;font-size:1.1rem;}
+  #nav button:hover{border-color:var(--accent);color:var(--accent);}
+  #count{font-size:.8rem;color:var(--ink-soft);min-width:3ch;text-align:center;}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:2px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button><span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+  {t:"title", cls:"title", html:`
+    <div class="kick">A live masterclass with Dan Rollman</div>
+    <h1>The Second Act Method</h1>
+    <p class="lead">How accomplished professionals design their next chapter without starting over, and build the AI support system to carry it.</p>
+    <div class="foot">Second Act Shift</div>`},
+
+  {t:"audience", cls:"audience", html:`
+    <div class="kick">Who this hour is for</div>
+    <h2>You've had a real career.</h2>
+    <p class="body">You've accomplished things. And now you're at a moment where the old map doesn't quite fit anymore. You're not lost. You're between chapters. This hour is for you.</p>`},
+
+  {t:"trap", cls:"trap", html:`
+    <div class="kick">The two bad options</div>
+    <h2>Start over, or stand still.</h2>
+    <p class="body">Most mid-career advice offers one of two dead ends: blow it all up and begin again from zero, or quietly stay put and call it stability. Both waste the one thing you've spent decades building.</p>`},
+
+  {t:"reframe", cls:"reframe", html:`
+    <div class="kick">The real cost</div>
+    <p class="big">The risk isn't changing too late. It's letting <span class="accent">twenty years of hard-won judgment</span> sit idle because nobody showed you how to carry it forward.</p>`},
+
+  {t:"part", cls:"part", html:`
+    <div class="num">01</div>
+    <h2>Why experience starts to feel like baggage</h2>
+    <p class="body">Somewhere in your forties, the skills that made you valuable stop feeling like leverage and start feeling like a cage. Here's why that happens, and why it's a story problem, not a value problem.</p>`},
+
+  {t:"asset", cls:"asset", html:`
+    <div class="kick">The reframe that changes everything</div>
+    <p class="big">Your experience isn't baggage. It's <span class="accent">starting capital.</span></p>
+    <p class="body">A second act built on decades of pattern recognition isn't a gamble. It's the lowest-risk move you'll ever make, once you know how to position it.</p>`},
+
+  {t:"framework", cls:"framework", html:`
+    <div class="kick">The Second Act Framework</div>
+    <h2>Three moves, in order.</h2>
+    <ul>
+      <li><b>Clarify</b> what actually lights you up now.</li>
+      <li><b>Articulate</b> the value of your experience in a new context.</li>
+      <li><b>Build</b> the AI support system that carries it day to day.</li>
+    </ul>
+    <p class="body">We'll walk the first and third live today.</p>`},
+
+  {t:"clarify", cls:"clarify", html:`
+    <div class="num">Move 1</div>
+    <h2>Clarify: your Purpose Statement</h2>
+    <p class="body">Not a mission statement for a wall. A single line, pulled from a values-based exercise, that tells you which doors to walk through and which to leave shut. Most people have never written theirs down.</p>`},
+
+  {t:"todont", cls:"todont", html:`
+    <div class="kick">The counter-intuitive tool</div>
+    <h2>The To-Don't List</h2>
+    <p class="body">Everyone keeps a to-do list. Almost nobody keeps the list that matters more at this stage: the things you are <span class="accent">done</span> carrying into the next chapter. Naming them is how a second act stops being a louder version of the last one.</p>`},
+
+  {t:"articulate", cls:"articulate", html:`
+    <div class="num">Move 2</div>
+    <h2>Articulate: translate your value</h2>
+    <p class="body">The same experience reads as "overqualified" in one framing and "exactly who we needed" in another. The work is learning to say what you carry in the language of where you're going.</p>`},
+
+  {t:"calendar", cls:"calendar", html:`
+    <div class="kick">Where purpose meets the week</div>
+    <h2>The Purpose-Driven Calendar</h2>
+    <p class="body">Clarity dies on contact with a calendar full of inherited obligations. This is how you re-tile the week so your time and energy line up with the purpose statement instead of fighting it.</p>`},
+
+  {t:"build", cls:"build", html:`
+    <div class="num">Move 3</div>
+    <h2>Build: your AI support system</h2>
+    <p class="body">This is what separates a second act in 2026 from one in 2006. You don't just plan the next chapter. You staff it, with AI agents you build and keep.</p>`},
+
+  {t:"cos", cls:"cos", html:`
+    <div class="kick">The centerpiece</div>
+    <h2>Your Chief of Staff</h2>
+    <p class="body">One agent that remembers your context, sees your calendar and notes, and gives you continuity between every conversation. It's the difference between starting from scratch each morning and picking up where you left off.</p>`},
+
+  {t:"agents", cls:"agents", html:`
+    <div class="kick">And the team around it</div>
+    <h2>Agents that work while you don't</h2>
+    <div class="grid2">
+      <div class="mini"><div class="t">Morning Brief</div><div class="d">Runs on its own, hands you the day before it starts.</div></div>
+      <div class="mini"><div class="t">Networking</div><div class="d">Drafts the outreach you keep meaning to send.</div></div>
+      <div class="mini"><div class="t">Research</div><div class="d">Ramps you on a new field before the call.</div></div>
+      <div class="mini"><div class="t">Prototype</div><div class="d">Helps you build the real thing, live.</div></div>
+    </div>`},
+
+  {t:"part3", cls:"part3", html:`
+    <div class="num">03</div>
+    <h2>What a week in your second act looks like</h2>
+    <p class="body">Purpose on the calendar. The To-Don't List doing its job. A Chief of Staff carrying the thread. The point was never the tools. The point is a chapter that finally fits.</p>`},
+
+  {t:"whyme", cls:"whyme", html:`
+    <div class="kick">Why I teach this</div>
+    <p class="big">I've started over the hard way more than once. This is the method I wish I'd had.</p>
+    <p class="body">Twenty-five years across advertising, a venture-backed company, burnout, and the climb back. Over 200 professionals coached through their own transitions. The Second Act Framework is what I pulled out of all of it.</p>`},
+
+  {t:"shape", cls:"shape", html:`
+    <div class="kick">How the full work runs</div>
+    <h2>A sprint, then a network.</h2>
+    <ul>
+      <li><b>The Second Act Sprint:</b> two weeks, live, to clarify and build.</li>
+      <li><b>The Shift Network:</b> twelve weeks of weekly sessions and a cohort beside you.</li>
+      <li>A certified coach and a senior AI strategist, in the same live room.</li>
+    </ul>`},
+
+  {t:"forwho", cls:"forwho", html:`
+    <div class="kick">An honest filter</div>
+    <h2>Who this is, and isn't, for</h2>
+    <ul>
+      <li><b>For</b> the professional between chapters who wants to carry their experience forward, not abandon it.</li>
+      <li><b>Not for</b> anyone looking for a quick certificate or a hack. This is real work on a real second act.</li>
+    </ul>`},
+
+  {t:"cta", cls:"cta", html:`
+    <div class="kick">Your next step</div>
+    <h2>Design your second act.</h2>
+    <p class="body">If this is the chapter you're in, the next move is a short application for the upcoming Second Act Shift cohort. We keep each one to twelve people so the room stays real.</p>
+    <p class="cite">"You're too experienced to start over. Too ambitious to stand still."</p>
+    <p class="disc">Educational content only. Nothing here is financial, career, or legal advice, and no income, role, placement, or result is guaranteed. Outcomes vary with each person's effort and circumstances.</p>
+    <div class="foot">Second Act Shift &middot; secondactshift.com</div>`}
+];
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<section class="slide ${s.cls||''}" data-i="${i}">${s.html}</section>`).join('');
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('active',i===cur));count.textContent=(cur+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(e.target.closest('#nav'))return;show(cur+1);});
+show(0);
+</script>
+</body>
+</html>
