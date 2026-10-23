@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 7 Stages to Health and Transformation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fdfaf6; --ink:#211c17; --ink-soft:#4a4239; --ink-muted:#7a6f61;
+    --panel:#efe7db; --rule:#e6ddce; --accent:#6b4c3b;
+  }
+  html,body{height:100%}
+  body{font-family:'Instrument Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:8vh 9vw;background:var(--bg)}
+  .slide.on{display:flex}
+  .kick{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(34px,6vw,70px);line-height:1.05;letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(28px,4.2vw,48px);line-height:1.12;letter-spacing:-.01em;color:var(--ink);margin-bottom:18px}
+  .lead{font-size:clamp(18px,2.1vw,25px);line-height:1.5;color:var(--ink-soft);max-width:42ch;margin-top:22px}
+  .sub{font-size:clamp(16px,1.6vw,20px);line-height:1.55;color:var(--ink-muted);max-width:50ch;margin-top:14px}
+  ul{list-style:none;margin-top:26px;max-width:46ch}
+  li{font-size:clamp(16px,1.7vw,21px);line-height:1.4;color:var(--ink-soft);padding:13px 0 13px 30px;position:relative;border-bottom:1px solid var(--rule)}
+  li:before{content:"";position:absolute;left:0;top:22px;width:11px;height:11px;background:var(--accent);border-radius:2px}
+  li:last-child{border-bottom:none}
+  .stage-no{font-family:'Fraunces',serif;font-size:clamp(60px,12vw,150px);font-weight:400;color:var(--accent);line-height:.9;opacity:.9}
+  .stage-wrap{display:flex;gap:6vw;align-items:center;flex-wrap:wrap}
+  .pill{display:inline-block;background:var(--panel);color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.04em;padding:7px 15px;border-radius:999px;margin-bottom:22px}
+  .big{font-family:'Fraunces',serif;font-size:clamp(30px,4.6vw,56px);line-height:1.08;color:var(--ink);max-width:20ch}
+  .quote{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(24px,3.4vw,42px);line-height:1.25;color:var(--ink);max-width:24ch}
+  .cta-box{margin-top:30px;padding:22px 26px;background:var(--panel);border-left:4px solid var(--accent);max-width:48ch;font-size:clamp(16px,1.7vw,20px);color:var(--ink-soft)}
+  .disc{margin-top:30px;font-size:13px;line-height:1.5;color:var(--ink-muted);max-width:60ch}
+  .layers{margin-top:26px;max-width:52ch}
+  .layer{display:flex;align-items:baseline;gap:14px;padding:8px 0;border-bottom:1px solid var(--rule)}
+  .layer .n{font-family:'Fraunces',serif;color:var(--accent);font-weight:600;width:26px}
+  .layer .t{font-size:clamp(15px,1.5vw,18px);color:var(--ink-soft)}
+  .nav{position:fixed;bottom:22px;right:28px;font-size:13px;color:var(--ink-muted);letter-spacing:.05em;z-index:10}
+  .brandmark{position:fixed;bottom:22px;left:28px;font-family:'Fraunces',serif;font-size:14px;color:var(--ink-muted);letter-spacing:.02em;z-index:10}
+  @media(max-width:640px){.slide{padding:7vh 8vw}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="brandmark">Dr. Bruce Hoffman</div>
+<div class="nav"><span id="cur">1</span> / <span id="tot">1</span> &nbsp; (arrows)</div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="kick">A masterclass for practitioners</div>
+    <h1>The 7 Stages to Health and Transformation</h1>
+    <p class="lead">A structured roadmap for the complex, multi-system patients who have tried everything and are still sick.</p>
+    <p class="sub">With Dr. Bruce Hoffman, MBChB, IFMCP. Thirty years of the hardest cases in integrative medicine, organized into a map you can use Monday morning.</p>
+  `},
+  {t:'who', cls:'who', html:`
+    <div class="kick">Who this is for</div>
+    <h2>You already have the training. You still don't have the map.</h2>
+    <ul>
+      <li>You are a medical doctor, naturopath, or functional practitioner seeing complex patients</li>
+      <li>You have done IFM, A4M, Shoemaker, Nathan, and still feel lost with your hardest cases</li>
+      <li>Your patients have tried functional medicine, peptides, mold remediation, and are still symptomatic</li>
+      <li>You want a systematic order of operations, not one more isolated protocol</li>
+    </ul>
+  `},
+  {t:'trap', cls:'trap', html:`
+    <div class="kick">The patient in front of you</div>
+    <p class="big">A file several inches thick. Ten diagnoses across ten specialists. Lyme on one band, mold on one marker, IBS, hives, anxiety. Competent care in every silo, and still no resolution.</p>
+  `},
+  {t:'reframe', cls:'reframe', html:`
+    <div class="kick">The real problem</div>
+    <p class="quote">"The issue was never the protocols. It is that medicine has no map for the whole person."</p>
+    <p class="sub">The system we inherited was built for naming a disease and naming a drug. It isolates symptoms from systems, mind from body, biochemistry from biography. Complex illness does not fit that shape.</p>
+  `},
+  {t:'part1', cls:'part', html:`
+    <div class="pill">Part One</div>
+    <h2>Why every training you have done still leaves you stuck</h2>
+    <p class="sub">Functional medicine asks better upstream questions about diet, toxins, infections and the microbiome. Then it stops at biochemistry, and still runs on linear causation. You cannot treat a multi-system illness one system at a time.</p>
+  `},
+  {t:'missing', cls:'missing', html:`
+    <div class="kick">What has been missing</div>
+    <p class="big">No curriculum has ever organized all the layers and levels of a human being into one hierarchy. No map that says: here is where you begin, here is what you treat next, here is where to go when nothing is working.</p>
+  `},
+  {t:'part2', cls:'part', html:`
+    <div class="pill">Part Two</div>
+    <h2>The 7 Stages: a hierarchy, not a checklist</h2>
+    <p class="sub">Seven layers of the human experience, from environmental toxicity to the spiritual body. Each stage tells you where to start and what to prioritize when everything seems equally urgent and nothing is resolving.</p>
+    <div class="layers">
+      <div class="layer"><span class="n">1</span><span class="t">Environmental Body: toxicology</span></div>
+      <div class="layer"><span class="n">2</span><span class="t">Physical Body: biochemistry and structure</span></div>
+      <div class="layer"><span class="n">3</span><span class="t">Electromagnetic Body: physics and quantum biology</span></div>
+      <div class="layer"><span class="n">4</span><span class="t">Emotional Body: trauma and the HPA axis</span></div>
+      <div class="layer"><span class="n">5</span><span class="t">Intellectual Body: personality and belief</span></div>
+      <div class="layer"><span class="n">6</span><span class="t">Soul Body: the family unconscious</span></div>
+      <div class="layer"><span class="n">7</span><span class="t">Spirit Body: meaning and purpose</span></div>
+    </div>
+  `},
+  {t:'cycle', cls:'cycle', html:`
+    <div class="kick">The foundation under all seven</div>
+    <h2>Restore the health cycle before you reach for therapeutics</h2>
+    <p class="sub">Light, water, magnetism, circadian rhythm, the Cell Danger Response. Many patients improve substantially just by restoring the health cycle, before a single protocol is added. It is where the hierarchy begins.</p>
+  `},
+  {t:'s1', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">1</div><div>
+      <h2>Environmental Medicine and Toxicology</h2>
+      <p class="sub">Mercury fillings, mold exposure, tick bites, organophosphates, heavy metals. Where environmental burden sits in the hierarchy, and how to diagnose and clear it systematically before anything built on top of it can hold.</p>
+    </div></div>
+  `},
+  {t:'s2', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">2</div><div>
+      <h2>Physical Body, Biochemistry and Structure</h2>
+      <p class="sub">MCAS, hypermobility, autoimmunity, hormones. You already know the conditions. This stage is about sequencing them, so treatment lands in the order the body can actually use.</p>
+    </div></div>
+  `},
+  {t:'s3', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">3</div><div>
+      <h2>Electromagnetic Body, Physics and Quantum Biology</h2>
+      <p class="sub">Circadian biology, nonnative EMFs, the Cell Danger Response. Where biophysics meets biochemistry, and where most practitioners have a blind spot. Diagnostics with QEEG and HRV, treatment with neurobiofeedback.</p>
+    </div></div>
+  `},
+  {t:'s4', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">4</div><div>
+      <h2>Emotional Body</h2>
+      <p class="sub">Unresolved and inherited trauma alters HPA axis signaling and drives inflammation. How to recognize the emotional charge that keeps a patient stuck, and the somatic and family-systems work that moves it.</p>
+    </div></div>
+  `},
+  {t:'s5', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">5</div><div>
+      <h2>Intellectual Body</h2>
+      <p class="sub">Personality structure, defense mechanisms, core beliefs and constitutional subtypes. How to take a history that reaches the most defended patients, and where cognitive approaches belong in the hierarchy.</p>
+    </div></div>
+  `},
+  {t:'s6', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">6</div><div>
+      <h2>Soul Body</h2>
+      <p class="sub">The personal and family unconscious, epigenetic patterns, and the dynamics a patient cannot tell you themselves. Family constellation work and Jungian frameworks for what silently drives chronic disease.</p>
+    </div></div>
+  `},
+  {t:'s7', cls:'stage', html:`
+    <div class="stage-wrap"><div class="stage-no">7</div><div>
+      <h2>Spirit Body</h2>
+      <p class="sub">Meaning, purpose, and what transcends personal suffering. The final stage addresses why some patients heal fully and others plateau despite doing everything right.</p>
+    </div></div>
+  `},
+  {t:'part3', cls:'part', html:`
+    <div class="pill">Part Three</div>
+    <h2>Every layer in play, in one patient</h2>
+    <p class="sub">A real patient, placed stage by stage, from her fillings and fatty-acid panel to the ancestral burdens she was carrying. Intake to resolution, so you can see exactly how the hierarchy decides what you treat first.</p>
+  `},
+  {t:'case', cls:'case', html:`
+    <div class="kick">A worked case</div>
+    <p class="big">A woman of fifty who reacts to everything and eats only four foods. Seven stages, one order of operations, and a map for where to begin when every layer looks equally broken.</p>
+  `},
+  {t:'why', cls:'why', html:`
+    <div class="kick">Why this map exists</div>
+    <h2>Thirty years of the cases no one else would take</h2>
+    <p class="sub">University of Cape Town. IFM certification. A fellowship in anti-aging medicine. Shoemaker's mold protocol, Klinghardt's neural therapy, a master's in nutrition, ILADS Lyme training, a year of traditional Chinese medicine, QEEG and neurofeedback, and co-author on a global consensus paper on MCAS. Not a collection of credentials. One problem, solved over decades.</p>
+  `},
+  {t:'cta', cls:'cta', html:`
+    <div class="kick">For your hardest patients</div>
+    <h2>Bring the map back to your practice</h2>
+    <p class="lead">The full 7 Stages curriculum is forty hours of clinical teaching, case studies, and treatment-sequencing tools you can apply the moment you finish each module.</p>
+    <div class="cta-box">Explore the 7 Stages to Health and Transformation at drbrucehoffman.com, and navigate the complexity that used to feel impossible.</div>
+    <p class="disc">This masterclass is for professional education and information only. It is not medical advice, diagnosis, or treatment, and it does not create a doctor-patient relationship. No income, role, or clinical result is guaranteed. Results vary and depend on many factors outside any curriculum.</p>
+  `}
+];
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{const d=document.createElement('section');d.className='slide '+(s.cls||'')+(i===0?' on':'');d.innerHTML=s.html;deck.appendChild(d);});
+let i=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function go(n){slides[i].classList.remove('on');i=Math.max(0,Math.min(slides.length-1,n));slides[i].classList.add('on');document.getElementById('cur').textContent=i+1;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')go(i+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);});
+document.addEventListener('click',e=>{if(e.clientX<window.innerWidth*0.25)go(i-1);else go(i+1);});
+</script>
+</body>
+</html>
