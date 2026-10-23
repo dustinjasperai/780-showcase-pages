@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Architecture of Ease — a masterclass with Milicent Johnson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Assistant:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f2f0; --panel:#fffdfb; --rule:#e4dcd8;
+    --ink:#3c232c; --muted:#7a6670; --accent:#7c4a52; --deep:#2a181e;
+    --head:"Newsreader",Georgia,serif; --body:"Assistant",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--deep);font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 64px}
+  .slide{background:var(--bg);border-radius:14px;padding:64px 60px;margin:0 0 22px;
+    min-height:540px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(0,0,0,.04);position:relative;overflow:hidden}
+  .slide::after{content:"";position:absolute;left:60px;right:60px;bottom:30px;height:1px;background:var(--rule);opacity:.7}
+  .kicker{font-family:var(--body);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:500;font-size:60px;line-height:1.04;letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:var(--head);font-weight:500;font-size:40px;line-height:1.1;color:var(--ink);margin-bottom:18px}
+  .lead{font-family:var(--head);font-weight:400;font-size:27px;line-height:1.4;color:var(--ink)}
+  p{font-size:20px;line-height:1.6;color:var(--muted);max-width:60ch;margin-top:14px}
+  .big{font-family:var(--head);font-weight:500;font-size:46px;line-height:1.12;color:var(--ink);max-width:22ch}
+  .em{color:var(--accent)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:21px;line-height:1.5;color:var(--ink);padding:14px 0 14px 34px;border-bottom:1px solid var(--rule);position:relative;max-width:60ch}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:4px;top:24px;width:12px;height:2px;background:var(--accent)}
+  .num{font-family:var(--head);font-size:20px;color:var(--accent);font-weight:600;margin-right:6px}
+  .foot{position:absolute;right:60px;bottom:26px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .title h1{font-size:68px}
+  .title .sub{font-family:var(--head);font-weight:400;font-size:26px;color:var(--muted);margin-top:22px;max-width:30ch}
+  .pres{margin-top:40px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .part .kicker{color:var(--muted)}
+  .part h1{font-size:56px}
+  .disc{font-size:15px;color:var(--muted);margin-top:26px;max-width:66ch;line-height:1.6}
+  .cta h1{font-size:52px}
+  .cta .step{font-size:22px;color:var(--ink);margin-top:20px;font-weight:600}
+  @media(max-width:640px){.slide{padding:40px 26px;min-height:440px}h1{font-size:40px}.title h1{font-size:44px}.big{font-size:32px}h2{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:"title", cls:"title", html:`<div class="kicker">A live masterclass</div><h1>The Architecture of Ease</h1><div class="sub">How high-capacity women build a life where rest is the foundation, not the reward.</div><div class="pres">With Milicent Johnson &middot; The Easeful Path</div>`},
+  {t:"who", html:`<div class="kicker">If this is you</div><div class="big">You are the one who holds it all together. And you are quietly exhausted by it.</div><p>You lead, you care, you deliver. You have built a life that looks right from the outside. And most nights you fall into bed with nothing left for yourself.</p>`},
+  {t:"trap", html:`<div class="kicker">The trap</div><div class="big">So you promise yourself rest. Later. Once everything is handled.</div><p>But everything is never handled. The to-do list regenerates overnight. Rest stays a someday thing, and the depletion keeps compounding.</p>`},
+  {t:"hook", html:`<div class="lead">Here is what I have learned after a decade of my own burnout, and five years guiding women through theirs:</div><div class="big" style="margin-top:22px">You do not have a time problem. You have an <span class="em">architecture</span> problem.</div>`},
+  {t:"part", cls:"part", html:`<div class="kicker">Part One</div><h1>Why rest keeps failing you</h1>`},
+  {t:"content", html:`<h2>Rest as a reward is a broken model</h2><p>We are taught that rest is what you get after you have earned it. So rest becomes the smallest, last, most negotiable thing in the week. The first to be cut, the first to feel indulgent.</p><p>A reward can always be postponed. That is why yours always is.</p>`},
+  {t:"content", html:`<h2>The cost of the reward model</h2><ul><li>You run on urgency, then crash on the weekends you meant to enjoy.</li><li>Your best thinking never arrives, because it needs space you never give it.</li><li>You start to resent the life you worked so hard to build.</li></ul>`},
+  {t:"part", cls:"part", html:`<div class="kicker">Part Two</div><h1>The Architecture of Ease</h1><p style="margin-top:16px">Rest stops failing you when you stop treating it as a reward and start building it in as structure. Four pieces.</p>`},
+  {t:"pillar", html:`<div class="kicker"><span class="num">01</span> Name it</div><h2>Name what is quietly depleting you</h2><p>Not the obvious big things. The invisible ones: the over-functioning, the saying yes a beat too fast, the roles you have outgrown. You cannot redesign what you have not named.</p>`},
+  {t:"pillar", html:`<div class="kicker"><span class="num">02</span> Reclaim it</div><h2>Rest is power, not a pause</h2><p>Rest is strategic, not passive. It clarifies your thinking, steadies your voice, and reconnects you with your own sufficiency, the sense that you are already enough before you produce anything. This is where easeful leadership comes from.</p>`},
+  {t:"pillar", html:`<div class="kicker"><span class="num">03</span> Practice it</div><h2>The Ease Audit</h2><p>A daily practice. At the end of each day, pause and ask one question: how can I let it be easy tomorrow? Choose one area to simplify. Then notice what opens up when you stop making it hard.</p>`},
+  {t:"pillar", html:`<div class="kicker"><span class="num">04</span> Keep it</div><h2>Build rhythms you can actually keep</h2><p>Not a rigid routine you will abandon by Thursday. Rhythms. Sustaining patterns matched to your real capacity and your real life, so rest holds even in a full season.</p>`},
+  {t:"content", html:`<h2>The Easeful Path, in three steps</h2><ul><li><span class="num">1</span> Take the first step: see clearly what has been depleting you.</li><li><span class="num">2</span> Map your journey: design the rhythms that fit your actual life.</li><li><span class="num">3</span> Walk the easeful path: integrate it until ease becomes a way of being.</li></ul>`},
+  {t:"part", cls:"part", html:`<div class="kicker">Part Three</div><h1>The life on the other side of proving</h1>`},
+  {t:"content", html:`<h2>A week, re-architected</h2><p>Rest is no longer squeezed into the cracks. It has its own place on the calendar, protected the way your meetings are. The week bends around what restores you, not only around what demands you.</p><p>You move at your body's pace. Decisions come from a steadier place. You stop proving and start living.</p>`},
+  {t:"practice", html:`<div class="kicker">A practice to take with you</div><h2>Gather. Name. Savor.</h2><ul><li><strong>Gather</strong> the images of how you want this season to feel.</li><li><strong>Name</strong> the feeling underneath them, one guiding word.</li><li><strong>Savor</strong> it by building small, real opportunities to live it.</li></ul>`},
+  {t:"why", html:`<div class="kicker">Why me</div><div class="lead">For twenty years I worked in philanthropy and social change. Then a decade with chronic illness and burnout taught me what no title could: transformation begins when we slow down enough to listen.</div><p>Over the last five years I have walked more than one hundred women down this path. I am a rest and transformation coach and a trauma-informed teacher, and this is the work of my life.</p>`},
+  {t:"cta", cls:"cta", html:`<div class="kicker">Your next step</div><h1>Ready to build your own architecture of ease?</h1><div class="step">If today opened something, let's keep going. Schedule a session with me, or explore the Easeful Reset, my twelve-week one-to-one coaching for women ready to trade burnout for rhythms that restore them.</div><p class="disc">This masterclass is educational. It is not therapy or medical advice. No specific income, outcome, or result is guaranteed; every woman's path and results vary. Rest well.</p><div class="foot">The Easeful Path &middot; Milicent Johnson</div>`}
+];
+const deck = document.getElementById("deck");
+S.forEach(s => {
+  const el = document.createElement("section");
+  el.className = "slide" + (s.cls ? " " + s.cls : "");
+  el.innerHTML = s.html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
