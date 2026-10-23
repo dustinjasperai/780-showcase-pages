@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Does What By How Much — a masterclass with Jeff Gothelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f9faf0;
+    --panel:#eef1e6;
+    --ink:#345c60;
+    --muted:#5f7b7e;
+    --accent:#038a98;
+    --spark:#c0d72f;
+    --head:'Barlow Condensed',sans-serif;
+    --body:'Source Sans 3',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px}
+  .slide{background:var(--bg);border:1px solid rgba(52,92,96,.14);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(52,92,96,.06)}
+  .slide.alt{background:var(--panel)}
+  .slide.accent{background:var(--accent);color:#f4fbfb;border-color:transparent}
+  .slide.accent .kick,.slide.accent .muted{color:rgba(244,251,251,.82)}
+  .kick{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:14px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:58px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:40px;line-height:1.06;margin-bottom:14px}
+  h3{font-family:var(--head);font-weight:500;font-size:26px;line-height:1.1;margin-bottom:10px}
+  p{font-size:20px;margin-bottom:14px;max-width:40ch}
+  p.lead{font-size:24px;color:var(--ink)}
+  .muted{color:var(--muted);font-size:18px}
+  ul{list-style:none;margin:10px 0}
+  li{font-size:21px;padding:10px 0 10px 30px;position:relative;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:19px;width:12px;height:12px;border-radius:3px;
+    background:var(--spark)}
+  .big{font-size:72px;font-family:var(--head);font-weight:700;color:var(--accent);line-height:1}
+  .tag{display:inline-block;font-family:var(--head);font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;font-size:13px;background:var(--spark);color:#243c3f;
+    padding:6px 12px;border-radius:999px;margin-bottom:20px}
+  .formula{font-family:var(--head);font-weight:600;font-size:34px;line-height:1.25;margin:10px 0}
+  .who{color:var(--accent)} .what{color:#1f6f4f} .how{color:#8a6b00}
+  .strike{text-decoration:line-through;color:var(--muted)}
+  .grid{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap}
+  .box{flex:1;min-width:200px;background:var(--bg);border:1px solid rgba(52,92,96,.18);
+    border-radius:10px;padding:20px}
+  .slide.alt .box{background:#fff}
+  .box h3{font-size:20px;color:var(--accent);margin-bottom:6px}
+  .box p{font-size:16px;color:var(--muted);margin:0}
+  .disc{font-size:14px;color:var(--muted);margin-top:22px;max-width:60ch;line-height:1.5}
+  .n{font-family:var(--head);color:var(--spark);font-weight:700;margin-right:10px}
+  @media(max-width:620px){h1{font-size:40px}h2{font-size:30px}.slide{padding:34px 26px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'accent', html:`
+    <div class="kick">A live masterclass with Jeff Gothelf</div>
+    <h1>Who Does What<br>By How Much?</h1>
+    <p class="lead" style="color:#eafafa;margin-top:18px">Running your product team on outcomes, not output.</p>
+    <p class="muted" style="margin-top:8px">60 minutes. The method behind Lean UX, Sense and Respond, and customer-centric OKRs.</p>`},
+
+  {t:'who', cls:'alt', html:`
+    <div class="kick">If this is your team</div>
+    <h2>You ship on time. The numbers still don't move.</h2>
+    <ul>
+      <li>The roadmap is a list of features with dates on it.</li>
+      <li>Every sprint closes, and customer behavior looks the same.</li>
+      <li>A leader asks "why are we building this?" and the room goes quiet.</li>
+    </ul>
+    <p class="muted">If any of those land, this hour is for you.</p>`},
+
+  {t:'hook', cls:'', html:`
+    <div class="kick">The uncomfortable part</div>
+    <h2>Shipping more features is not the same as making progress.</h2>
+    <p class="lead">Most teams are busy, on schedule, and going nowhere that matters to a customer.</p>`},
+
+  {t:'part', cls:'accent', html:`
+    <div class="tag">Part one</div>
+    <h1>The output trap</h1>
+    <p class="lead" style="color:#eafafa">Why "we shipped it" became the wrong finish line.</p>`},
+
+  {t:'problem', cls:'', html:`
+    <h2>Output is everything you make.</h2>
+    <p>Features, releases, pages, pull requests. It is easy to count, easy to plan, and easy to celebrate.</p>
+    <p class="lead">So it quietly becomes the unit of progress. The roadmap turns into a backlog with quarters attached.</p>`},
+
+  {t:'cost', cls:'alt', html:`
+    <div class="kick">What it costs you</div>
+    <h2>Busy teams, unchanged customers.</h2>
+    <ul>
+      <li>Effort is visible, impact is not.</li>
+      <li>Priorities are argued by opinion, because there is no shared measure.</li>
+      <li>Nobody can say which of the last ten things you shipped actually mattered.</li>
+    </ul>`},
+
+  {t:'question', cls:'', html:`
+    <div class="kick">The question to sit with</div>
+    <h2>Which of the last ten features changed what a customer does?</h2>
+    <p class="lead">If the honest answer is "I'm not sure," it is not a people problem. It is an operating-system problem.</p>`},
+
+  {t:'part', cls:'accent', html:`
+    <div class="tag">Part two</div>
+    <h1>A different operating system</h1>
+    <p class="lead" style="color:#eafafa">Four moves that put customer behavior back at the center.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="kick"><span class="n">01</span>Outcomes over output</div>
+    <h2>An outcome is a measurable change in customer behavior.</h2>
+    <p>Not "launched the dashboard." Instead, "more customers complete setup in their first week."</p>
+    <p class="lead">When the outcome is the target, the feature becomes a bet you can be right or wrong about.</p>`},
+
+  {t:'pillar', cls:'alt', html:`
+    <div class="kick"><span class="n">02</span>The Lean UX Canvas</div>
+    <h2>Frame the work as a problem, not a solution.</h2>
+    <p>Eight boxes your team fills in together. Start with the business problem and the outcome you want, name who it is for, then list what you are assuming must be true.</p>
+    <p class="muted">The canvas turns a vague brief into a set of claims you can actually test.</p>`},
+
+  {t:'hypo', cls:'', html:`
+    <div class="kick">The box that changes the conversation</div>
+    <h3>Turn each risky assumption into a hypothesis:</h3>
+    <p class="formula">"We believe <span class="who">[this outcome]</span> will be achieved if <span class="what">[this user]</span> attains <span class="how">[this benefit]</span> with <span class="who">[this feature]</span>."</p>
+    <p class="muted">Now the feature has a job, and a way to be judged.</p>`},
+
+  {t:'pillar', cls:'alt', html:`
+    <div class="kick"><span class="n">03</span>Assumption mapping</div>
+    <h2>Most of what you build is a guess. Test the guesses that matter.</h2>
+    <p>Plot every assumption on two axes: how risky it is, and how much value rides on it.</p>
+    <ul>
+      <li>High risk, high value: test it first, cheaply.</li>
+      <li>Low risk, low value: stop arguing about it.</li>
+    </ul>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="kick"><span class="n">04</span>Customer-centric OKRs</div>
+    <h2>A Key Result answers three things.</h2>
+    <p class="formula"><span class="who">Who</span> does <span class="what">What</span> by <span class="how">How Much</span>?</p>
+    <p>Which customer, doing which behavior, changing by how much. If a Key Result does not name a human behavior, it is a task in disguise.</p>`},
+
+  {t:'levels', cls:'alt', html:`
+    <div class="kick">The distinction most teams miss</div>
+    <h2>Impact, outcome, output.</h2>
+    <div class="grid">
+      <div class="box"><h3>Impact</h3><p>The business result: revenue, retention, cost.</p></div>
+      <div class="box"><h3>Outcome</h3><p>The customer behavior that drives it.</p></div>
+      <div class="box"><h3>Output</h3><p>The thing you build to change the behavior.</p></div>
+    </div>
+    <p class="muted" style="margin-top:16px">You manage impact by choosing the right outcomes. You choose outputs to serve them.</p>`},
+
+  {t:'part', cls:'accent', html:`
+    <div class="tag">Part three</div>
+    <h1>The same team,<br>new targets</h1>
+    <p class="lead" style="color:#eafafa">Nothing about the people changes. Only what you point them at.</p>`},
+
+  {t:'roadmap', cls:'', html:`
+    <div class="kick">The roadmap, rewritten</div>
+    <h2>Quarters become outcomes, not feature lists.</h2>
+    <ul>
+      <li>Q1: more new users reach their first real result.</li>
+      <li>Q2: more active teams invite a second seat.</li>
+      <li>Q3: fewer customers churn in month two.</li>
+    </ul>
+    <p class="muted">Features live underneath each outcome as bets, and they change as you learn.</p>`},
+
+  {t:'example', cls:'alt', html:`
+    <div class="kick">A Key Result, written properly</div>
+    <p class="formula"><span class="who">New trial users</span> <span class="what">complete onboarding</span> <span class="how">up from 40% to 60%</span>.</p>
+    <p>Who, what, how much. Now any feature idea can be weighed against it, and the team knows what "done" means.</p>`},
+
+  {t:'why', cls:'', html:`
+    <div class="kick">Why listen to me on this</div>
+    <h2>Jeff Gothelf</h2>
+    <p>Co-author of Lean UX (now in its third edition) and Sense and Respond, published by Harvard Business Review Press, and of Who Does What By How Much, a practical guide to customer-centric OKRs.</p>
+    <p class="lead">Through Sense and Respond Learning, over 15,000 people have trained on these methods, and about 42,000 read the weekly Continuous Learning newsletter.</p>`},
+
+  {t:'recap', cls:'alt', html:`
+    <div class="kick">What you can use tomorrow</div>
+    <h2>Three artifacts from one hour.</h2>
+    <div class="grid">
+      <div class="box"><h3>The Canvas</h3><p>Frame the next piece of work as a problem.</p></div>
+      <div class="box"><h3>The hypothesis</h3><p>Give each risky feature a job and a test.</p></div>
+      <div class="box"><h3>The Key Result</h3><p>Who does what by how much.</p></div>
+    </div>`},
+
+  {t:'cta', cls:'accent', html:`
+    <div class="kick">Go further</div>
+    <h1>Put it to work<br>with your team.</h1>
+    <p class="lead" style="color:#eafafa">If today was useful, the full training goes deep on discovery, OKRs, and outcome-based roadmaps, as a public workshop, a self-paced course, or in-house with your team.</p>
+    <p class="muted" style="margin-top:10px">Explore the next session and the certification at senseandrespond.co.</p>
+    <p class="disc">Educational session only. Nothing here is a promise of a specific business result, and no outcome, metric, or result is guaranteed. Results vary with your market, team, and execution.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(s => {
+  const el = document.createElement('section');
+  el.className = 'slide ' + (s.cls || '');
+  el.innerHTML = s.html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
