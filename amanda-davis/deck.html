@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patterns, Not Points — The CGM Masterclass | BioFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2f3a33;        /* deep sage ground (brand.json rank, #4a594f darkened) */
+    --panel:#4a594f;     /* sage panel (brand.json #4a594f) */
+    --accent:#e4c584;    /* warm gold (brand.json #e4c584) */
+    --accent2:#6b806d;   /* sage (brand.json #6b806d) */
+    --ink:#f6f2e9;       /* cream (brand.json #f6f2e9) */
+    --muted:#c9cabf;
+    --rule:rgba(228,197,132,.35);
+    --display:"Hedvig Letters Serif",Georgia,serif;
+    --body:"Montserrat",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#1c231e;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:56px 54px;margin:0 0 22px;
+         min-height:430px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide.title{background:linear-gradient(135deg,#242d26 0%,#2f3a33 55%,#3b4a3f 100%)}
+  .slide.section{background:#273029}
+  .slide.cta{background:linear-gradient(135deg,#2f3a33,#4a594f)}
+  .k{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:400;font-size:52px;line-height:1.06;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:400;font-size:38px;line-height:1.12;margin-bottom:14px}
+  .lead{font-size:20px;line-height:1.5;color:var(--ink);max-width:40ch}
+  .sub{font-size:17px;line-height:1.6;color:var(--muted);margin-top:16px;max-width:52ch}
+  .big{font-family:var(--display);font-size:46px;line-height:1.1;color:var(--ink)}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:22px;display:grid;gap:14px;max-width:60ch}
+  li{position:relative;padding-left:30px;font-size:17px;line-height:1.5}
+  li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:50%;
+             background:var(--accent);box-shadow:0 0 0 4px rgba(228,197,132,.15)}
+  .layers{display:grid;gap:12px;margin-top:20px}
+  .layer{display:flex;gap:16px;align-items:flex-start;background:rgba(246,242,233,.04);border:1px solid var(--rule);
+          border-radius:10px;padding:16px 18px}
+  .layer .n{font-family:var(--display);font-size:26px;color:var(--accent);min-width:34px}
+  .layer .t{font-weight:600;font-size:16px}
+  .layer .d{font-size:14.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+  .trace{position:absolute;right:0;bottom:0;width:100%;height:120px;opacity:.5}
+  .pageno{position:absolute;right:22px;bottom:16px;font-size:12px;color:var(--muted);letter-spacing:.1em}
+  .brandmark{position:absolute;left:54px;bottom:20px;font-size:12px;letter-spacing:.14em;color:var(--accent2);text-transform:uppercase}
+  .arc{font-family:var(--display);font-size:30px;color:var(--ink);margin-top:10px;line-height:1.3}
+  .arc .sep{color:var(--accent);margin:0 8px}
+  .disc{font-size:13px;color:var(--muted);line-height:1.5;margin-top:22px;max-width:60ch;border-top:1px solid var(--rule);padding-top:16px}
+  .quote{font-family:var(--display);font-size:30px;line-height:1.3;max-width:46ch}
+  @media(max-width:640px){.slide{padding:38px 26px}h1{font-size:36px}h2{font-size:28px}.big{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const TRACE = '<svg class="trace" viewBox="0 0 960 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,80 L120,78 L170,40 Q200,18 240,34 L300,62 Q340,80 380,74 L470,70 L520,30 Q560,10 600,30 L660,66 L720,64 L770,44 Q810,30 860,50 L960,58" fill="none" stroke="#e4c584" stroke-width="2.5" opacity="0.8"/></svg>';
+const S = [
+  {t:"title", cls:"title", k:"A CGM masterclass for health and wellness professionals",
+   h:"Your clients are wearing a new language.", sub:"Become fluent in it. A working session on reading continuous glucose data as patterns, not points, within your coaching scope.", trace:true},
+
+  {t:"who", k:"Who this is for",
+   h:"You trained for the body. Nobody trained you for the data.",
+   sub:"Personal trainers, health coaches, physical therapists, chiropractors, and dietitians are all seeing the same thing: clients showing up with a glucose monitor on their arm and a screen full of numbers nobody taught them to read."},
+
+  {t:"trap", k:"The trap",
+   h:"A monitor hands you a thousand readings and no method.",
+   sub:"So most of us do the natural thing. We react to the scary number. The 180 after lunch. The dip at 3am. We chase points, one at a time, and the client leaves with a worry instead of a plan."},
+
+  {t:"cost", k:"The cost of point-reading",
+   h:"Chasing points burns out the client and the coach.",
+   list:[
+     "The client learns to fear foods instead of understanding responses.",
+     "You end up reacting to every alert instead of coaching the trend.",
+     "Nothing compounds, because a point you fixed on Tuesday tells you nothing about Friday."
+   ]},
+
+  {t:"reframe", cls:"section", k:"The reframe", big:'A single reading is noise. <span class="a">A repeated shape is a signal.</span>',
+   sub:"The number that matters is almost never the one you are staring at. What matters is whether it happens again, at the same time, in the same way.", trace:true},
+
+  {t:"section", cls:"section", k:"Part one", h:"The problem is not the data. It is how we read it.",
+   sub:"Point-reading asks: is this number good or bad? Pattern-reading asks a better question: what shape keeps showing up, and what is the body responding to?"},
+
+  {t:"gprm", k:"The method",
+   h:"The Glucose Pattern Recognition Methodology",
+   arc:'Data <span class="sep">to</span> Pattern <span class="sep">to</span> Context <span class="sep">to</span> Better Questions',
+   sub:"Four moves that turn a wall of readings into something you can actually coach on. You will use all four today."},
+
+  {t:"moves", k:"The four moves",
+   h:"What each move actually asks.",
+   layers:[
+     ["1","Data","Capture the trace without judging it. No good numbers, no bad numbers yet, just the shape of the day."],
+     ["2","Pattern","Find what repeats. Same time, same climb, same dip, across several days."],
+     ["3","Context","Lay sleep, stress, timing, and movement over the pattern until it means something."],
+     ["4","Better Questions","Ask the one thing that would move the shape, instead of ten things that would scare the client."]
+   ]},
+
+  {t:"section", cls:"section", k:"Part two", h:"Five layers of a single glucose trace.",
+   sub:"You do not read a whole day at once. You read it in layers, and the layers are where the patterns live."},
+
+  {t:"layers", k:"The reading layers",
+   h:"What to look at, in order.",
+   layers:[
+     ["01","Overnight baseline","Is glucose steady and low while they sleep? The quietest hours tell you the most about the starting point."],
+     ["02","Post-meal response","Not just the peak. The rise, how fast it climbs, how fast it comes back down, and where it lands after."],
+     ["03","Day-over-day repetition","The same shape at the same time on different days. Repetition is what separates a pattern from a one-off."],
+     ["04","Response to movement","What a walk, a lift, or a hard session does to the curve, and how long the effect lasts."]
+   ]},
+
+  {t:"layerfull", k:"The reading layers",
+   h:"And the layer that makes the rest make sense.",
+   layers:[
+     ["05","Contextual integration","Sleep, stress, meal timing, and food choices are what turn a shape into a story. A spike is data. A spike after a short night and a late meal is a pattern you can coach."]
+   ],
+   sub:"This is the move that keeps you in your lane: you are reading lifestyle context, not diagnosing."},
+
+  {t:"example", k:"One reading, two conversations",
+   h:"Same 180. Two completely different conversations.",
+   list:[
+     "Point-reading: that 180 after lunch is high, try to avoid that meal.",
+     "Pattern-reading: that 180 shows up every day after a quick lunch on a short-sleep night, and it settles when the walk comes first. Now you have something to change."
+   ]},
+
+  {t:"question", cls:"section", k:"The payoff", quote:'"Better questions beat better data. Every time."',
+   sub:"When you can see the pattern, you stop guessing and start asking the client the one question that moves the shape. That is the whole skill."},
+
+  {t:"scope", k:"Staying in scope",
+   h:"Within your scope. On purpose.",
+   list:[
+     "What you read: lifestyle patterns, timing, movement, and food context that you already coach.",
+     "What you refer: anything clinical, diagnostic, or medication-related goes to a physician.",
+     "The method is built around that line, so you can charge for this with confidence."
+   ]},
+
+  {t:"why", k:"Why this method exists",
+   h:"From space telemetry to glucose telemetry.",
+   sub:"I spent nearly 30 years living with Type 1 Diabetes and over 20 years reading continuous glucose data, long before it was a consumer product. As a NASA payload operations controller I read telemetry for a living: never one number, always the pattern. Glucose is the same signal. This method is how I was already reading mine, written down so you can read your clients'."},
+
+  {t:"outcomes", cls:"section", k:"What changes",
+   h:"When you can read the pattern, the whole relationship changes.",
+   list:[
+     "Clients stop fearing their monitor and start bringing you their trace on purpose.",
+     "You become the professional who explains what the device cannot, which is what the reading means.",
+     "CGM coaching becomes a service you can package and charge for, not a favour you do on the side."
+   ]},
+
+  {t:"next", k:"Where you can go next",
+   h:"Learn the method on your own data first.",
+   list:[
+     "Start free: the live CGM masterclass walks the whole Data to Pattern to Context to Better Questions arc.",
+     "Go deeper: read your own trace in the Human Data Lab before you ever read a client's.",
+     "Get certified: the Certified Glucose Pattern Specialist cohort is where the full method becomes a credential."
+   ]},
+
+  {t:"cta", cls:"cta", k:"Your next step",
+   h:"Become fluent in the language on their arm.",
+   sub:"Your clients are already wearing it. The future does not need more data. It needs more people who know what it means.",
+   disc:"Educational content for health and wellness professionals. BioFit does not expand professional scope or authorize diagnosis or treatment. No income, outcome, or result is guaranteed, and results vary by practitioner and client.", trace:true}
+];
+
+function slideHTML(s,i,n){
+  let body="";
+  if(s.h) body+='<h1 style="font-size:'+(s.t==="title"?52:38)+'px">'+s.h+'</h1>';
+  if(s.big) body+='<div class="big">'+s.big+'</div>';
+  if(s.arc) body+='<div class="arc">'+s.arc+'</div>';
+  if(s.quote) body+='<div class="quote">'+s.quote+'</div>';
+  if(s.layers){
+    body+='<div class="layers">';
+    for(const L of s.layers){ body+='<div class="layer"><div class="n">'+L[0]+'</div><div><div class="t">'+L[1]+'</div><div class="d">'+L[2]+'</div></div></div>'; }
+    body+='</div>';
+  }
+  if(s.list){ body+='<ul>'; for(const it of s.list){ body+='<li>'+it+'</li>'; } body+='</ul>'; }
+  if(s.sub) body+='<div class="sub">'+s.sub+'</div>';
+  if(s.disc) body+='<div class="disc">'+s.disc+'</div>';
+  const k = s.k?('<div class="k">'+s.k+'</div>'):'';
+  const tr = s.trace?TRACE:'';
+  const cls = s.cls?(' '+s.cls):'';
+  return '<section class="slide'+cls+'">'+k+body+tr+'<div class="brandmark">BioFit</div><div class="pageno">'+(i+1)+' / '+n+'</div></section>';
+}
+const deck=document.getElementById("deck");
+deck.innerHTML=S.map((s,i)=>slideHTML(s,i,S.length)).join("");
+</script>
+</body>
+</html>
