@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Chatting to Automating: Build Your First AI SOP — Dave Talas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f2ed; --panel:#ffffff; --ink:#162767; --rule:#162767; --accent:#c3a05a;
+    --muted:#55607f; --head:'Libre Baskerville',Georgia,serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--panel);border:1px solid rgba(22,39,103,.12);border-radius:14px;
+    padding:54px 56px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(22,39,103,.04)}
+  .slide.title{background:var(--ink);color:var(--bg)}
+  .slide.title .kicker,.slide.title .foot{color:var(--accent)}
+  .slide.cta{background:var(--ink);color:var(--bg)}
+  .kicker{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.1;margin-bottom:16px}
+  h2{font-family:var(--head);font-weight:700;font-size:32px;line-height:1.18;margin-bottom:14px}
+  .lede{font-size:20px;color:var(--muted);max-width:60ch}
+  .slide.title .lede,.slide.cta .lede{color:rgba(244,242,237,.85)}
+  p{font-size:18px;margin-bottom:12px;max-width:64ch}
+  .big{font-size:26px;font-family:var(--head);line-height:1.3}
+  ul{list-style:none;margin:10px 0 0}
+  li{position:relative;padding-left:26px;font-size:18px;margin-bottom:12px;max-width:62ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent)}
+  .hair{height:2px;width:60px;background:var(--accent);margin:0 0 20px}
+  .foot{margin-top:26px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .num{font-family:var(--head);font-size:15px;color:var(--accent);margin-bottom:10px;font-weight:700}
+  .disc{font-size:13px;color:rgba(244,242,237,.7);margin-top:22px;max-width:70ch;line-height:1.5}
+  .pillar{display:flex;gap:16px;align-items:baseline}
+  .pillar .k{font-family:var(--head);font-weight:700;color:var(--accent);font-size:22px;min-width:48px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'slide title', html:`
+    <div class="kicker">The Paladin Guild • Live Masterclass</div>
+    <h1>From Chatting to Automating</h1>
+    <div class="lede">Build your first AI SOP: one repeatable task in your business, turned into a system that runs the same way every time.</div>
+    <div class="foot">A live session with Dave Talas • for non-technical business owners</div>`},
+
+  {t:'promise', cls:'slide', html:`
+    <div class="kicker">What you leave with</div>
+    <div class="hair"></div>
+    <h2>One working AI SOP, not a folder of notes</h2>
+    <p>By the end of this hour you will have picked a real task, written it down the way you would hand it to a new hire, and seen exactly how AI runs it for you.</p>
+    <p class="big">You came in chatting with AI. You leave automating with it.</p>`},
+
+  {t:'who', cls:'slide', html:`
+    <div class="kicker">Who this is for</div>
+    <div class="hair"></div>
+    <h2>Owners who are busy, not technical</h2>
+    <ul>
+      <li>Consultants, creators, and agency owners already using AI to answer questions</li>
+      <li>People who have tried the tools and thought, "this is cool, but nothing actually runs itself"</li>
+      <li>Owners who want their business to do more without hiring more</li>
+    </ul>
+    <p>You do not need to code. You need one task worth getting off your plate.</p>`},
+
+  {t:'trap', cls:'slide', html:`
+    <div class="kicker">The trap</div>
+    <div class="hair"></div>
+    <h2>You have been chatting, not building</h2>
+    <p>Most owners open an AI tool, ask it something, copy the answer, and close the tab. It feels productive. It is a smarter search bar.</p>
+    <p>A month later the work is exactly as manual as it was before, because you never turned any of those answers into something that runs on its own.</p>`},
+
+  {t:'reframe', cls:'slide', html:`
+    <div class="kicker">The reframe</div>
+    <div class="hair"></div>
+    <h2>AI is labor you can deploy, not an assistant you talk to</h2>
+    <p>The owners pulling ahead are not better at prompts. They stopped treating AI as a conversation and started treating it as a worker that follows a documented process.</p>
+    <p class="big">The skill that matters is not prompting. It is writing the procedure.</p>`},
+
+  {t:'p1', cls:'slide', html:`
+    <div class="num">Part One</div>
+    <h2>The chatting ceiling</h2>
+    <p>Chatting with AI scales to exactly one person: you, at the keyboard, every time. It cannot run while you sleep, it cannot be handed to your team, and it forgets the context the moment you leave.</p>
+    <p>Anything you do by re-typing the same kind of request over and over is a task that is begging to become a system.</p>`},
+
+  {t:'p1b', cls:'slide', html:`
+    <div class="kicker">The real gap</div>
+    <div class="hair"></div>
+    <h2>Between asking and doing</h2>
+    <p>Asking is a one-off. Doing is repeatable. The jump from one to the other is not a better model or a secret prompt. It is a decision to capture the task once, properly, so it can be run without you.</p>
+    <p>That captured task has a name. We call it an AI SOP.</p>`},
+
+  {t:'p2', cls:'slide', html:`
+    <div class="num">Part Two</div>
+    <h2>The AI SOP</h2>
+    <div class="hair"></div>
+    <p>An AI SOP is a standard operating procedure written for AI to run: the task, the steps, the inputs, the rules, and what a good result looks like. Four moves build one.</p>`},
+
+  {t:'pick', cls:'slide', html:`
+    <div class="pillar"><div class="k">01</div><div><h2>Pick</h2></div></div>
+    <div class="hair"></div>
+    <p>Choose one task you repeat every week that drains time but does not need your judgment every time: onboarding a client, drafting a proposal, triaging the inbox, turning a call into notes.</p>
+    <p>Start with the boring, high-frequency one. Not the clever one.</p>`},
+
+  {t:'document', cls:'slide', html:`
+    <div class="pillar"><div class="k">02</div><div><h2>Document</h2></div></div>
+    <div class="hair"></div>
+    <p>Write the task down the way you would hand it to a sharp new hire: what triggers it, the exact steps, the inputs it needs, the rules it must follow, and an example of a result you would sign off on.</p>
+    <p>This is the whole job. If you can describe it clearly, AI can run it.</p>`},
+
+  {t:'automate', cls:'slide', html:`
+    <div class="pillar"><div class="k">03</div><div><h2>Automate</h2></div></div>
+    <div class="hair"></div>
+    <p>Hand the procedure to the tools. A Claude Skill packages the instructions so the AI follows them the same way every time. A Make.com scenario connects your apps so the work starts and finishes on its own, not in a chat window.</p>
+    <p>Build it once. It runs forever.</p>`},
+
+  {t:'guardrails', cls:'slide', html:`
+    <div class="pillar"><div class="k">04</div><div><h2>Guardrails</h2></div></div>
+    <div class="hair"></div>
+    <p>Before it touches anything live, you set the rules: what it is allowed to do, what it must never do, where a human checks it, and how it flags when it is unsure.</p>
+    <p>Safety is not the thing that slows adoption down. It is the thing that lets a non-technical owner deploy AI without fear.</p>`},
+
+  {t:'example', cls:'slide', html:`
+    <div class="kicker">A worked example</div>
+    <div class="hair"></div>
+    <h2>Client onboarding, off your plate</h2>
+    <ul>
+      <li>Trigger: a new client signs</li>
+      <li>The SOP collects their details, drafts the welcome, sets up the folder, and books the kickoff</li>
+      <li>It follows your tone and your rules, and pauses for your yes before anything goes out</li>
+    </ul>
+    <p>The same hour of work you used to do by hand now happens the moment someone signs.</p>`},
+
+  {t:'p3', cls:'slide', html:`
+    <div class="num">Part Three</div>
+    <h2>What your week looks like after</h2>
+    <p>The repeatable work runs in the background. You spend your time on the parts that actually need you: the clients, the judgment, the growth.</p>
+    <p>Nothing about your business got more complicated. A few things just stopped needing you.</p>`},
+
+  {t:'whyme', cls:'slide', html:`
+    <div class="kicker">Why listen to me</div>
+    <div class="hair"></div>
+    <h2>I build these for real businesses</h2>
+    <ul>
+      <li>I have taught practical AI implementation to more than 2,000 non-technical owners since 2023</li>
+      <li>Make Academic Alliance Partner, so automation is the center of how I teach, not an afterthought</li>
+      <li>I run The Paladin Guild, a small community where owners build these systems with direct access to me</li>
+    </ul>
+    <p>I am not here to make you an engineer. I am here to get one real thing off your plate today.</p>`},
+
+  {t:'compound', cls:'slide', html:`
+    <div class="kicker">The compounding part</div>
+    <div class="hair"></div>
+    <h2>One SOP becomes ten</h2>
+    <p>The first one is the hard one, because you are learning the shape. The second takes half the time. By the tenth, spotting a task and turning it into a system is just how you think.</p>
+    <p class="big">That is the quiet advantage. Your business keeps getting lighter.</p>`},
+
+  {t:'mistakes', cls:'slide', html:`
+    <div class="kicker">Avoid these</div>
+    <div class="hair"></div>
+    <h2>Three ways owners stall</h2>
+    <ul>
+      <li>Starting with the hardest task instead of the most frequent one</li>
+      <li>Skipping the written procedure and hoping a clever prompt covers it</li>
+      <li>Trying to automate everything at once instead of shipping one clean SOP</li>
+    </ul>`},
+
+  {t:'recap', cls:'slide', html:`
+    <div class="kicker">Recap</div>
+    <div class="hair"></div>
+    <h2>From chatting to automating, in four moves</h2>
+    <ul>
+      <li>Pick one repeatable task</li>
+      <li>Document it like a handoff</li>
+      <li>Automate it with a Claude Skill and a Make.com scenario</li>
+      <li>Set the guardrails and let it run</li>
+    </ul>`},
+
+  {t:'cta', cls:'slide cta', html:`
+    <div class="kicker">Your next step</div>
+    <h1>Build the next ten with me</h1>
+    <div class="lede">The Paladin Guild is where non-technical owners build their AI SOPs together, with templates, Claude Skills, Make.com automations, and direct access to me when you get stuck.</div>
+    <div class="foot">Join The Paladin Guild • paladin.cc</div>
+    <div class="disc">Educational only. No income, business result, or outcome is guaranteed. Results vary and depend on your own effort, your business, and how you apply what you learn. AI tools make mistakes; always keep a human reviewing anything that touches your live business.</div>`}
+];
+const deck=document.getElementById('deck');
+S.forEach(s=>{const d=document.createElement('section');d.className=s.cls||'slide';d.innerHTML=s.html;deck.appendChild(d);});
+</script>
+</body>
+</html>
