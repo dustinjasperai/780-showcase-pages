@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Talent Manager's Operating System — Johanna Voss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2b2b2e;        /* her charcoal ground (#38383b / #2d3748 family) */
+    --panel:#38383b;     /* her literal site bg */
+    --ink:#f7fafc;       /* her off-white */
+    --muted:#a9afba;     /* derived from her #718096 muted gray, lightened for dark */
+    --rule:#4a4a4e;
+    --accent:#f27f6d;    /* her dominant brand coral (29 uses) */
+    --mint:#96e7d6;      /* her secondary mint, used sparingly */
+    --display:'Montserrat',system-ui,sans-serif;
+    --body:'Poppins',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#161618;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto;padding:28px 18px 80px}
+  .slide{position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:16px;
+    padding:64px 60px;min-height:560px;margin:0 0 26px;display:flex;flex-direction:column;
+    justify-content:center;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .kick{font-family:var(--display);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:800;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:700;font-size:38px;line-height:1.1;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:21px;line-height:1.5;margin-top:22px;max-width:42ch;font-weight:300}
+  .lead{font-size:24px;line-height:1.5;margin-top:18px;max-width:46ch;font-weight:400}
+  .big{font-family:var(--display);font-weight:800;font-size:60px;line-height:1.02;letter-spacing:-.02em}
+  .accent{color:var(--accent)}
+  .mint{color:var(--mint)}
+  ul{list-style:none;margin-top:26px;display:grid;gap:16px;max-width:52ch}
+  li{position:relative;padding-left:30px;font-size:21px;line-height:1.45;font-weight:400}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .num{font-family:var(--display);font-weight:800;font-size:15px;color:var(--bg);background:var(--accent);
+    width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:24px 22px}
+  .card .t{font-family:var(--display);font-weight:700;font-size:20px;color:var(--ink)}
+  .card .d{color:var(--muted);font-size:16px;margin-top:8px;line-height:1.45;font-weight:300}
+  .stat{font-family:var(--display);font-weight:800;font-size:44px;color:var(--accent)}
+  .statline{display:flex;gap:40px;flex-wrap:wrap;margin-top:30px}
+  .statlabel{color:var(--muted);font-size:16px;margin-top:4px;font-weight:300}
+  .foot{position:absolute;right:26px;bottom:20px;color:var(--muted);font-size:12px;letter-spacing:.04em}
+  .disc{color:var(--muted);font-size:14px;margin-top:26px;max-width:60ch;line-height:1.5;font-weight:300}
+  .cta-btn{display:inline-block;margin-top:28px;background:var(--accent);color:#1b1b1d;font-family:var(--display);
+    font-weight:700;padding:16px 28px;border-radius:12px;font-size:18px}
+  .strike{text-decoration:line-through;color:var(--muted)}
+  @media(max-width:720px){.slide{padding:40px 26px;min-height:460px}h1{font-size:34px}h2{font-size:27px}.big{font-size:40px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title',
+    kick:'A live masterclass with Johanna Voss',
+    h:'Close Bigger Brand Deals Without Becoming the Bottleneck',
+    sub:'The Talent Manager’s Operating System: the negotiation and the backend that let your roster grow without everything running through you.' },
+
+  {t:'who',
+    kick:'Who this is for',
+    h:'You manage creators. You ARE the agency.',
+    lead:'Boutique talent managers and agency owners who book the deals, answer the DMs, chase the invoices, and make every call. You are good at this. That is exactly the problem.' },
+
+  {t:'trap',
+    kick:'The trap',
+    h:'Every deal still runs through you',
+    bullets:['The pitch, the price, the pushback: all you','The onboarding, the group chats, the ghostwritten emails: all you','One more client does not feel like growth. It feels like more of you.'] },
+
+  {t:'reframe',
+    kick:'The hard part nobody says',
+    h:'Bigger deals don’t fix the bottleneck.',
+    lead:'They make it worse. A $50k deal has more moving parts, more risk, and more of your attention than five small ones. Scaling the revenue without scaling the system is how talent managers burn out at their best year.' },
+
+  {t:'part', num:'Part One', h:'The real problem is a founder-dependent agency',
+    lead:'Not your pricing. Not your hustle. The business only works when you are inside every moment of it. Two things change that: how you negotiate, and the system behind the deal.' },
+
+  {t:'twothings',
+    kick:'The two levers',
+    h:'Deals and systems',
+    bullets:['Negotiation: close bigger, protect better, from the same roster','Operations: a backend that runs the deal so you don’t have to be the backend'] },
+
+  {t:'part', num:'Part Two', h:'Negotiation: Pitch, Price, Protect',
+    lead:'Almost $7M in brand deals closed with a small roster came down to three moves, repeated. None of them are about being the loudest person in the thread.' },
+
+  {t:'step', num:'1', h:'Pitch',
+    lead:'Lead with the creator’s value, not their rate card. A brand that understands what they are buying stops negotiating on price alone.' },
+
+  {t:'step', num:'2', h:'Price',
+    lead:'Separate the deliverable from the usage, the exclusivity, and the term. Most managers leave money on the table because they price one thing and give away three.' },
+
+  {t:'step', num:'3', h:'Protect',
+    lead:'The deal is only as good as what survives the follow-up. Scripts and simple contract language protect the creator, the relationship, and your commission.' },
+
+  {t:'bridge',
+    kick:'The handoff',
+    h:'A closed deal is only as good as the operation behind it',
+    lead:'You can negotiate brilliantly and still drown, because every won deal creates work that lands back on you. That is where the system comes in.' },
+
+  {t:'part', num:'Part Two B', h:'The four pillars of an agency that runs without you',
+    lead:'Not software. Not complexity. Four plain systems, each one a thing you currently hold in your head.' },
+
+  {t:'pillar', num:'1', h:'Onboarding',
+    lead:'A repeatable way to bring on a creator so the first thirty days are not reinvented every time. The chaos of a new signing is a process problem, not a you problem.' },
+
+  {t:'pillar', num:'2', h:'Communication',
+    lead:'One place deals and conversations live, so the business does not run on group chats and memory. Fewer dropped threads, fewer 11pm what-did-I-promise moments.' },
+
+  {t:'pillar', num:'3', h:'Opportunity tracking',
+    lead:'Every inbound inquiry, every open deal, every commission, in a simple tracker you will actually keep using. Deliberately plain beats a tool you abandon in a month.' },
+
+  {t:'pillar', num:'4', h:'Decision-making',
+    lead:'Action gathers the information. A default for the small calls so they stop stacking up and waiting for you, and your attention goes to the ones that matter.' },
+
+  {t:'simple',
+    kick:'The discipline',
+    h:'Systems you’ll actually use',
+    lead:'Spreadsheets before software. Simple before clever. The best system is the boring one you still run in month six, not the beautiful one you quit in week two.' },
+
+  {t:'messy',
+    kick:'The messy middle',
+    h:'Solo manager to agency owner',
+    lead:'The identity shift, the cash-flow swings, the first hires. Scaling is not just more clients. It is becoming the person who leads the business instead of being consumed by it.' },
+
+  {t:'part', num:'Part Three', h:'When the agency runs without you',
+    bullets:['You close bigger deals with the roster you already have','The business keeps moving on a week you step out of it','Your calendar holds the decisions only you can make, and nothing else','Growth stops meaning more hours'] },
+
+  {t:'whyme',
+    kick:'Why me',
+    h:'I built this from the inside',
+    lead:'Ten-plus years as a talent manager. Almost $7M in brand deals closed with a roster of up to twelve. I built the only coaching program made specifically for talent managers, because no one else was.',
+    stats:[['~$7M','in brand deals closed'],['12','max roster, no burnout'],['10+ yrs','running my own agency']] },
+
+  {t:'cta',
+    kick:'Your next step',
+    h:'Build the operating system with me',
+    lead:'If the deals-and-systems approach fits how you want to grow, the Talent Manager Coaching Program is where we build it for your agency, together.',
+    cta:'Book a consultation',
+    disc:'Educational only. Examples and figures reflect past experience. No income, role, or result is guaranteed. Results vary with effort, roster, and market.' }
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x;}
+S.forEach((s,i)=>{
+  const d=document.createElement('section'); d.className='slide';
+  let html='';
+  if(s.kick) html+=`<div class="kick">${s.kick}</div>`;
+  if(s.num && (s.t==='step'||s.t==='pillar')) html=`<div class="num">${s.num}</div>`+html;
+  if(s.t==='part'){ html=`<div class="kick">${s.num}</div>`; }
+  if(s.t==='title'){ html+=`<h1>${s.h}</h1>`; }
+  else { html+=`<h2>${s.h}</h2>`; }
+  if(s.lead) html+=`<p class="lead">${s.lead}</p>`;
+  if(s.sub) html+=`<p class="sub">${s.sub}</p>`;
+  if(s.bullets){ html+='<ul>'+s.bullets.map(b=>`<li>${b}</li>`).join('')+'</ul>'; }
+  if(s.stats){ html+='<div class="statline">'+s.stats.map(p=>`<div><div class="stat">${p[0]}</div><div class="statlabel">${p[1]}</div></div>`).join('')+'</div>'; }
+  if(s.cta) html+=`<span class="cta-btn">${s.cta}</span>`;
+  if(s.disc) html+=`<p class="disc">${s.disc}</p>`;
+  html+=`<div class="foot">Johanna Voss &middot; The Negotiation Notebook &middot; ${i+1}/${S.length}</div>`;
+  d.innerHTML=html; deck.appendChild(d);
+});
+</script>
+</body>
+</html>
