@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build Your Own Season — Joe Friel</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3ede1; --panel:#fcfaf5; --ink:#1b1d21; --muted:#5d5a52;
+    --rule:#d8d2c6; --accent:#9a3324;
+    --head:"Newsreader",Georgia,serif; --body:"Lato",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 20px;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .kick{font-family:var(--body);font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:600;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.12;letter-spacing:-.01em}
+  p{font-size:20px;color:var(--ink);margin-top:18px;max-width:40em}
+  p.lead{font-size:23px;color:var(--muted)}
+  .big{font-size:30px;font-family:var(--head);color:var(--ink);margin-top:14px}
+  ul{margin:22px 0 0 2px;list-style:none}
+  li{font-size:20px;padding:9px 0 9px 26px;position:relative;max-width:40em}
+  li:before{content:"";position:absolute;left:0;top:18px;width:11px;height:3px;background:var(--accent)}
+  .season{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+  .blk{flex:1;min-width:120px;border:1px solid var(--rule);border-radius:9px;padding:16px 14px}
+  .blk b{font-family:var(--head);font-size:21px;display:block}
+  .blk span{font-size:14px;color:var(--muted)}
+  .blk.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .blk.on span{color:#f2d9d3}
+  .foot{position:absolute;bottom:18px;left:54px;font-size:13px;color:var(--muted);letter-spacing:.03em}
+  .n{position:absolute;bottom:18px;right:54px;font-size:13px;color:var(--muted)}
+  .disc{font-size:14px;color:var(--muted);margin-top:22px;max-width:44em;line-height:1.45}
+  .cta h2{font-size:42px}
+  .by{font-family:var(--head);font-size:22px;margin-top:26px}
+  .by span{color:var(--muted);font-size:17px;display:block;font-family:var(--body);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', html:`<div class="kick">A live masterclass with Joe Friel</div>
+    <h1>Build Your Own Season</h1>
+    <p class="lead">How serious endurance athletes plan a year that actually peaks on race day, instead of guessing and hoping.</p>
+    <div class="by">Joe Friel<span>Author of The Triathlete's Training Bible and The Cyclist's Training Bible</span></div>`},
+
+  {t:'who', html:`<div class="kick">Who this is for</div>
+    <h2>For the athlete who is done guessing.</h2>
+    <p>Triathletes, cyclists, and runners who already train hard, and who want to understand why their training works, not just follow a plan handed to them.</p>`},
+
+  {t:'trap', html:`<div class="kick">The trap</div>
+    <h2>More hours. More intensity. More apps.</h2>
+    <p>And somehow, still flat on the day that counts. The fitness showed up in March and was gone by the race in July.</p>`},
+
+  {t:'reframe', html:`<div class="kick">The reframe</div>
+    <h2>The problem was never your effort.</h2>
+    <p class="big">It was the absence of a plan that bends the whole year toward one race.</p>`},
+
+  {t:'part', html:`<div class="kick">Part one</div><h2>Why fitness without a plan fades.</h2>`},
+
+  {t:'problem', html:`<div class="kick">The core problem</div>
+    <h2>Random hard days build random fitness.</h2>
+    <ul>
+      <li>Train by feel and you peak by accident, usually at the wrong time.</li>
+      <li>Stack hard days without recovery and you dig a hole you race from.</li>
+      <li>No goal race in the plan means no reason behind any workout.</li>
+    </ul>`},
+
+  {t:'idea', html:`<div class="kick">The one idea</div>
+    <h2>Periodization.</h2>
+    <p class="big">The closer in time you get to your race, the more like the race your training has to become.</p>
+    <p>Everything in this masterclass hangs off that one sentence.</p>`},
+
+  {t:'part', html:`<div class="kick">Part two</div><h2>The Annual Training Plan.</h2>`},
+
+  {t:'season', html:`<div class="kick">The season, mapped</div>
+    <h2>One goal race. Six periods.</h2>
+    <div class="season">
+      <div class="blk"><b>Prep</b><span>get ready to train</span></div>
+      <div class="blk"><b>Base</b><span>aerobic engine</span></div>
+      <div class="blk on"><b>Build</b><span>race specific</span></div>
+      <div class="blk on"><b>Peak</b><span>sharpen</span></div>
+      <div class="blk on"><b>Race</b><span>deliver</span></div>
+      <div class="blk"><b>Transition</b><span>recover</span></div>
+    </div>
+    <p>You build the year backward from the one race that matters, then fill it in.</p>`},
+
+  {t:'base', html:`<div class="kick">Base</div>
+    <h2>Build the engine and the basics.</h2>
+    <p>The base period grows three basic abilities that everything later rests on:</p>
+    <ul>
+      <li>Endurance: the aerobic engine that carries the whole race.</li>
+      <li>Force: the strength to push the gear and the hill.</li>
+      <li>Speed skills: moving efficiently so effort is not wasted.</li>
+    </ul>`},
+
+  {t:'build', html:`<div class="kick">Build</div>
+    <h2>Make it look like the race.</h2>
+    <p>The build period turns raw fitness into race fitness through the advanced abilities, and it targets your limiters, the race specific weakness you would rather avoid:</p>
+    <ul>
+      <li>Muscular endurance, anaerobic endurance, and power.</li>
+      <li>Train the weakness that will cost you on the day, not the strength you enjoy.</li>
+    </ul>`},
+
+  {t:'peak', html:`<div class="kick">Peak</div>
+    <h2>Shed the fatigue, keep the fitness.</h2>
+    <p>In the peak period volume comes down and quality stays race like. You arrive fresh and sharp rather than tired and hopeful.</p>`},
+
+  {t:'race', html:`<div class="kick">Race and transition</div>
+    <h2>Deliver, then recover on purpose.</h2>
+    <p>The race is the point of the whole plan. The transition that follows is not laziness, it is the rest that lets the next season start from higher ground.</p>`},
+
+  {t:'rhythm', html:`<div class="kick">The rhythm underneath</div>
+    <h2>Stress, then recovery. Always both.</h2>
+    <p>Hard work and rest are alternated at every level of the plan, inside the week, across the month, and over the year. Overtraining is just stress without enough recovery.</p>`},
+
+  {t:'zones', html:`<div class="kick">Measuring effort</div>
+    <h2>Set your zones from a test, not a guess.</h2>
+    <p>Your training zones come off a simple lactate threshold heart rate test, so hard means hard and easy means easy. Most athletes train in a grey middle that is too hard to recover and too easy to improve.</p>`},
+
+  {t:'masters', html:`<div class="kick">Fast after 50</div>
+    <h2>For the aging athlete, recovery is the multiplier.</h2>
+    <p>Speed fades with lost intensity, not with birthdays. Protect the hard efforts, respect the recovery, and the years stop being the thing that slows you down.</p>`},
+
+  {t:'part', html:`<div class="kick">Part three</div><h2>Your season, on one page.</h2>`},
+
+  {t:'onepage', html:`<div class="kick">The one-page plan</div>
+    <h2>The plan fits on a single page.</h2>
+    <ul>
+      <li>Pick the one goal race and its date.</li>
+      <li>Set your zones from an LTHR test.</li>
+      <li>Block the base, then the build, then the peak.</li>
+      <li>Alternate stress and recovery the whole way down.</li>
+    </ul>
+    <p>When the year is on one page, every workout finally has a reason.</p>`},
+
+  {t:'why', html:`<div class="kick">Why listen to me</div>
+    <h2>I wrote the manuals this is built on.</h2>
+    <p>I am Joe Friel, author of The Triathlete's Training Bible and The Cyclist's Training Bible, and Fast After 50. I have spent decades teaching endurance athletes to plan, test, adjust, and race themselves.</p>`},
+
+  {t:'cta', cls:'cta', html:`<div class="kick">Your next step</div>
+    <h2>Build the season you have been missing.</h2>
+    <p>Grab the training plan that matches your race on joefrieltraining.com, and start your year on the Annual Training Plan this masterclass just walked through.</p>
+    <p class="disc">Educational content only. Training carries inherent physical risk, so consult a physician before starting any program. No specific performance, placing, or result is guaranteed. Individual results vary with training history, health, and consistency.</p>`}
+];
+const d=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide '+(s.cls||'');
+  el.innerHTML=s.html+'<div class="foot">Build Your Own Season</div><div class="n">'+(i+1)+' / '+S.length+'</div>';
+  d.appendChild(el);
+});
+</script>
+</body>
+</html>
