@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulate On Demand | A masterclass with Jonny Miller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f7f4ec; --panel:#fffdf7; --rule:#dcd6cb; --ink:#111111; --muted:#8c8f94; --accent:#2537da;
+  }
+  html,body{height:100%}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:8vh 9vw;background:var(--bg)}
+  .slide.on{display:flex}
+  .kicker{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Petrona',Georgia,serif;font-weight:600;font-size:clamp(34px,6vw,68px);line-height:1.04;letter-spacing:-.01em;margin-bottom:24px}
+  h2{font-family:'Petrona',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,48px);line-height:1.08;letter-spacing:-.01em;margin-bottom:20px}
+  .sub{font-size:clamp(17px,2vw,23px);line-height:1.5;color:#2c2c2c;max-width:60ch}
+  .body{font-size:clamp(17px,1.9vw,22px);line-height:1.6;color:#2c2c2c;max-width:58ch}
+  .num{font-family:'Petrona',serif;font-size:clamp(40px,7vw,86px);font-weight:700;color:var(--accent);line-height:1;margin-bottom:12px}
+  .rule{width:64px;height:3px;background:var(--accent);margin:0 0 26px}
+  .tag{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .cta-wrap{display:inline-block;margin-top:30px}
+  .cta{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:18px;padding:15px 30px;border-radius:999px;text-decoration:none}
+  .disc{margin-top:30px;font-size:13px;line-height:1.5;color:var(--muted);max-width:66ch}
+  .brand{position:absolute;left:9vw;bottom:5vh;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .nav{position:absolute;right:9vw;bottom:5vh;font-size:13px;color:var(--muted);user-select:none}
+  .nav b{color:var(--ink)}
+  .title-slide{background:var(--panel);border-top:6px solid var(--accent)}
+  .cta-slide{background:var(--panel)}
+  @media(max-width:640px){.slide{padding:10vh 8vw}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Jonny Miller', h:'Regulate On Demand',
+   sub:'The founder’s nervous system edge: how to shift your state in 90 seconds, on purpose, under pressure.'},
+
+  {t:'plain', tag:'Who this is for', h:'For people who perform under pressure',
+   body:'Founders, operators and high performers who carry real weight and cannot afford to be run by their own stress response in the moments that matter.'},
+
+  {t:'plain', tag:'The trap', h:'You optimized everything except this',
+   body:'You have tuned the calendar, the team and the roadmap. The one system you were never taught to run is the one quietly making every decision: your nervous system.'},
+
+  {t:'plain', tag:'The reframe', h:'Calm is a skill, not a personality',
+   body:'Calm is not something you were or were not born with. It is a trainable state. Your body has controls, and most high performers have never been shown where they are.'},
+
+  {t:'plain', tag:'The promise', h:'What you walk away able to do',
+   body:'By the end you will be able to recognise the state you are in, shift it on purpose, and stay resourced in the moments that used to run you.'},
+
+  {t:'part', kicker:'Part one', h:'The real bottleneck',
+   body:'Under pressure your body drops into a revved or a shut-down state before your mind catches up. You react first and explain it to yourself later. The cost compounds quietly.'},
+
+  {t:'plain', tag:'Concept', h:'Three operating modes',
+   body:'In any moment your system sits in one of three states: resourced and present, revved and reactive, or shut down and flat. Naming the state you are in is the first act of agency.'},
+
+  {t:'plain', tag:'Concept', h:'Emotional debt',
+   body:'Stress you never discharge does not vanish. It accrues like debt, as allostatic load, until small things trigger big reactions and your capacity narrows. This is why high performers burn out on schedule.'},
+
+  {t:'part', kicker:'Part two', h:'The system: RISE out of reactivity',
+   body:'A repeatable way to move from automatic reactivity to a chosen response, built on three levers you can reach in real time.'},
+
+  {t:'lever', num:'01', h:'Top-down',
+   body:'Work through the mind. Attention, framing and meaning, so a spike does not become a story that runs the rest of your day.'},
+
+  {t:'lever', num:'02', h:'Bottom-up',
+   body:'Work through breath and body. A handful of protocols change your physiology in under two minutes, which is faster than any amount of thinking.'},
+
+  {t:'lever', num:'03', h:'Outside-in',
+   body:'Work through your environment and the people around you. The spaces, cues and relationships that hold your state steady, so regulation is not all willpower.'},
+
+  {t:'plain', tag:'Concept', h:'Why breath is the fastest lever',
+   body:'Breath is the one part of the autonomic system you can take manual control of. Change the pattern and you change the chemistry, in real time, with nothing but your own body.'},
+
+  {t:'plain', tag:'Concept', h:'Interoception: feel it early',
+   body:'Before reactivity fires there is a signal in the body. Somatic listening and a simple daily practice train you to feel the spike building, while there is still time to choose.'},
+
+  {t:'plain', tag:'Concept', h:'The three Cs',
+   body:'A short routine for the moments that decide everything: the pitch, the hard conversation, the board call. It keeps you resourced when it matters most, instead of hijacked.'},
+
+  {t:'part', kicker:'Part three', h:'A day, regulated',
+   body:'A morning practice that sets your baseline, a reset you can run before any high-stakes moment, and an evening practice that clears the day so it does not become tomorrow’s debt.'},
+
+  {t:'plain', tag:'The point', h:'Not another thing to manage',
+   body:'Ten minutes a day, a few protocols you actually use, and a growing ability to return to a resourced state on demand. This is a capability you keep, not a task on the list.'},
+
+  {t:'plain', tag:'Why me', h:'Where this comes from',
+   body:'This is the work I have spent a decade on, with more than 1,500 people across over 70 countries, after my own hard lesson that you cannot think your way out of a dysregulated body.'},
+
+  {t:'cta', h:'Your next step',
+   body:'If you want the full system, applications for the next live cohort of Nervous System Mastery are open now.',
+   cta:'Apply to the next cohort',
+   disc:'For education only. Nothing here is medical, psychological or financial advice, and no specific income, performance or health result is guaranteed. Results vary by individual.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (i===0?' on':'') + (s.t==='title'?' title-slide':'') + (s.t==='cta'?' cta-slide':'');
+  let html = '';
+  if (s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if (s.tag) html += '<div class="tag">'+s.tag+'</div>';
+  if (s.num) html += '<div class="num">'+s.num+'</div>';
+  if (s.t==='lever') html += '<div class="rule"></div>';
+  if (s.h) html += (s.t==='title' ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>');
+  if (s.sub) html += '<p class="sub">'+s.sub+'</p>';
+  if (s.body) html += '<p class="body">'+s.body+'</p>';
+  if (s.cta) html += '<span class="cta-wrap"><a class="cta" href="https://nsmastery.com">'+s.cta+'</a></span>';
+  if (s.disc) html += '<p class="disc">'+s.disc+'</p>';
+  html += '<div class="brand">Nervous System Mastery</div>';
+  html += '<div class="nav"><b>'+(i+1)+'</b> / '+S.length+'</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+
+let cur = 0;
+const slides = () => document.querySelectorAll('.slide');
+function go(n){ const a=slides(); a[cur].classList.remove('on'); cur=Math.max(0,Math.min(a.length-1,n)); a[cur].classList.add('on'); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') { e.preventDefault(); go(cur+1); }
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); go(cur-1); }
+});
+deck.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
