@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Closing the First 10 Deals — The Revenue Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ee;
+    --panel:#fbf8f1;
+    --ink:#1a1a1a;
+    --accent:#020617;
+    --rule:#d8d2c4;
+    --dim:#6b665c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif}
+  .deck{max-width:1040px;margin:0 auto;padding:48px 24px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+    padding:56px 56px 52px;margin:0 0 28px;position:relative;min-height:440px;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+  .slide:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .grid{position:absolute;inset:0;background-image:linear-gradient(var(--rule) 1px,transparent 1px),
+    linear-gradient(90deg,var(--rule) 1px,transparent 1px);background-size:38px 38px;opacity:.14;pointer-events:none}
+  .num{position:absolute;right:30px;top:24px;font-size:13px;letter-spacing:.14em;color:var(--dim)}
+  .kicker{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:22px}
+  h1{font-family:"Lora",Georgia,serif;font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:"Lora",Georgia,serif;font-weight:600;font-size:38px;line-height:1.12;letter-spacing:-.01em}
+  .sub{font-size:20px;color:var(--dim);margin-top:20px;max-width:30ch;line-height:1.5}
+  .lead{font-size:23px;line-height:1.5;max-width:40ch;margin-top:8px}
+  .big{font-family:"Lora",Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;max-width:28ch}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px}
+  li{font-size:20px;line-height:1.45;padding-left:30px;position:relative;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent)}
+  .stageno{font-family:"Lora",serif;font-size:15px;letter-spacing:.14em;color:var(--accent);font-weight:700}
+  .note{margin-top:28px;font-size:17px;color:var(--dim);max-width:48ch;line-height:1.5}
+  .foot{position:absolute;left:56px;bottom:22px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--dim)}
+  .cta h2{font-size:44px}
+  .disc{margin-top:30px;font-size:13px;color:var(--dim);max-width:60ch;line-height:1.5}
+  .part h1{font-size:60px}
+  .cred li:before{background:var(--accent);width:16px}
+  @media(max-width:640px){.slide{padding:36px 28px}h1{font-size:36px}h2{font-size:28px}.part h1{font-size:40px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Arnie Gullov-Singh',
+   title:'Closing the First 10 Deals',
+   sub:'Founder-led sales for people who have never sold.'},
+
+  {t:'who', kicker:'Who this is for',
+   big:'You have a working product and you are meeting prospects.',
+   note:'Pre-revenue to Series A founders with teams of 2 to 20. You are getting meetings. They are just not turning into customers yet.'},
+
+  {t:'trap', kicker:'The trap',
+   big:'You think selling is a personality you were not born with.',
+   note:'So you pitch harder, send one more follow up, and quietly hope the good ones close themselves. They do not.'},
+
+  {t:'reframe', kicker:'The reframe',
+   big:'Selling is not charisma. It is a system you can read like a blueprint.',
+   note:'Every deal that stalls, stalls for a reason you can name. Name it, and you can fix it.'},
+
+  {t:'part', kicker:'Part one',
+   title:'Why deals really stall'},
+
+  {t:'point', kicker:'The three silent deal killers',
+   lead:'Almost every stuck deal dies of one of these, and the prospect never says so out loud:',
+   points:['No clear next step, so the deal drifts',
+           'A stakeholder you never met, who quietly says no',
+           'An objection nobody surfaced, so nobody answered it']},
+
+  {t:'framework', kicker:'The diagnostic',
+   title:'Diagnose before you chase',
+   lead:'Before you send another follow up, find out where the deal actually broke.',
+   points:['Use a diagnostic lens (I teach the SPICED framework) to read any deal',
+           'Separate the deals that are stuck from the deals that are dead',
+           'Spend your week on the two that can still move']},
+
+  {t:'part', kicker:'Part two',
+   title:'The frameworks'},
+
+  {t:'framework', kicker:'Framework 1',
+   title:'Design a sales process for your model',
+   lead:'A repeatable process, built for how you actually sell:',
+   points:['Goals and exit criteria for every stage',
+           'The questions and materials each stage needs',
+           'The difference between selling a service and selling a product']},
+
+  {t:'framework', kicker:'Framework 2',
+   title:'The discovery call that does the selling',
+   lead:'Most founders pitch when they should be learning. Flip it:',
+   points:['What to research before you dial',
+           'The questions that surface the real need',
+           'An agenda that keeps you on track, and the mistakes to avoid']},
+
+  {t:'framework', kicker:'Framework 3',
+   title:'Bring every stakeholder in',
+   lead:'The person on the call is rarely the only yes you need.',
+   points:['Find the hidden decision makers early',
+           'Uncover what each of them actually cares about',
+           'Pull them into the process before the deal stalls on a name you never heard']},
+
+  {t:'framework', kicker:'Framework 4',
+   title:'Handle the objections nobody says out loud',
+   lead:'The dangerous objections are the unspoken ones.',
+   points:['Surface both the explicit and the hidden objections',
+           'Address them head on, before they harden into silence',
+           'Build the objection plan for your very next call']},
+
+  {t:'framework', kicker:'Framework 5',
+   title:'The proposal that gets a yes',
+   lead:'A proposal is a decision document, not a brochure.',
+   points:['What to include, and what to leave out',
+           'How to present it so the call ends in a decision',
+           'Why less on the page often closes faster']},
+
+  {t:'part', kicker:'Part three',
+   title:'Putting it to work'},
+
+  {t:'stage', kicker:'A worked example',
+   title:'One deal, moved a stage at a time',
+   points:['Ghosted: diagnosed as no clear next step',
+           'Re-opened: a discovery question surfaced the real blocker',
+           'Unblocked: the hidden stakeholder was named and brought in',
+           'Decided: a tight proposal closed it']},
+
+  {t:'point', kicker:'What changes',
+   lead:'Run this and your pipeline stops being a mystery:',
+   points:['You can tell a stuck deal from a dead one on sight',
+           'You know what to do next on every live deal',
+           'You hire your first salespeople on real data, not hope']},
+
+  {t:'cred', kicker:'Why me',
+   title:'I learned this the hard way',
+   points:['3x startup CRO, and a product and engineering leader before that',
+           'Chief Revenue Officer of Polyvore, which sold for $250M',
+           'Doubled revenue as CRO of Quora; later CRO of Ethena',
+           'Coached 150+ early stage founders through their first deals']},
+
+  {t:'point', kicker:'What to do this week',
+   big:'Pick the one deal that is stuck and diagnose why.',
+   note:'Not dead. Stuck. Find the single reason it stopped moving, and take the one next step that reason points to.'},
+
+  {t:'recap', kicker:'The blueprint, in one view',
+   title:'Diagnose. Discover. De-risk. Decide.',
+   note:'Four stages. Every founder sale, from the first cold conversation to the signed proposal, lives somewhere on this line.'},
+
+  {t:'cta', kicker:'Your next step',
+   title:'Want help closing yours?',
+   lead:'If you want a second set of eyes on your real pipeline, book an intro call and we will diagnose a live deal together.',
+   foot:'The Revenue Architect',
+   disc:'Educational content only. No specific result, revenue, or close rate is guaranteed. Results vary and depend on your product, market, pricing, and effort.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide ' + s.t + (s.t === 'cta' ? ' cta' : '') + (s.t === 'part' ? ' part' : '') + (s.t === 'cred' ? ' cred' : '');
+  let html = '<div class="grid"></div><div class="num">' + String(i + 1).padStart(2, '0') + ' / ' + S.length + '</div>';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.title) html += (s.t === 'title' || s.t === 'part') ? '<h1>' + s.title + '</h1>' : '<h2>' + s.title + '</h2>';
+  if (s.big) html += '<div class="big">' + s.big + '</div>';
+  if (s.sub) html += '<div class="sub">' + s.sub + '</div>';
+  if (s.lead) html += '<div class="lead">' + s.lead + '</div>';
+  if (s.points) { html += '<ul>'; s.points.forEach(p => html += '<li>' + p + '</li>'); html += '</ul>'; }
+  if (s.note) html += '<div class="note">' + s.note + '</div>';
+  if (s.disc) html += '<div class="disc">' + s.disc + '</div>';
+  if (s.foot) html += '<div class="foot">' + s.foot + '</div>';
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
