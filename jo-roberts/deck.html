@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discover the Story in You - Jo Roberts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f1ec; --panel:#fffdfb; --ink:#2a2a2a; --muted:#565656;
+    --accent:#cb958e; --peach:#f8cab7; --rule:#e2d2ca; --deep:#bf8f82;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #deck{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:9vh 11vw;opacity:0;transition:opacity .4s ease}
+  .slide.on{display:flex;opacity:1}
+  h1,h2,.k,.part{font-family:"Josefin Sans","Montserrat",sans-serif}
+  .k{letter-spacing:.22em;text-transform:uppercase;font-size:.78rem;color:var(--accent);
+    font-weight:600;margin-bottom:1.3rem}
+  h1{font-size:clamp(2.2rem,5.4vw,4rem);line-height:1.05;font-weight:700;letter-spacing:-.01em}
+  h2{font-size:clamp(1.6rem,3.6vw,2.7rem);line-height:1.12;font-weight:600;letter-spacing:-.01em}
+  .sub{font-size:clamp(1rem,1.7vw,1.35rem);color:var(--muted);margin-top:1.4rem;max-width:40ch;line-height:1.5}
+  .body{font-size:clamp(1rem,1.55vw,1.25rem);color:var(--ink);margin-top:1.3rem;max-width:46ch;line-height:1.6}
+  ul{margin-top:1.6rem;max-width:44ch;list-style:none}
+  li{font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.5;padding-left:1.5rem;position:relative;
+    margin-bottom:1rem;color:var(--ink)}
+  li:before{content:"";position:absolute;left:0;top:.6em;width:.6rem;height:.6rem;border-radius:50%;
+    background:var(--accent)}
+  .note{margin-top:1.8rem;font-size:.95rem;color:var(--muted);max-width:44ch;line-height:1.5}
+  .part{font-size:clamp(2rem,4.8vw,3.4rem);font-weight:700}
+  .part .n{display:block;font-size:.85rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:1rem;font-weight:600}
+  .slide.divider{background:linear-gradient(135deg,#f3e2db 0%,#f7f1ec 60%)}
+  .slide.title{background:radial-gradient(1200px 600px at 20% 15%,#f6ded6 0%,var(--bg) 55%)}
+  .slide.cta{background:linear-gradient(135deg,#f6ded6 0%,#f7f1ec 70%)}
+  .me{display:flex;gap:2.2rem;align-items:flex-start;flex-wrap:wrap}
+  .me .tag{font-family:"Josefin Sans";font-size:1.05rem;color:var(--deep);font-weight:600}
+  .disc{margin-top:2rem;font-size:.8rem;color:var(--muted);max-width:50ch;line-height:1.5}
+  .stepnum{font-family:"Josefin Sans";font-weight:700;color:var(--peach);font-size:3.4rem;line-height:1}
+  .nav{position:fixed;bottom:2.2vh;right:3vw;display:flex;gap:.6rem;z-index:10}
+  .nav button{font-family:"Montserrat";border:1px solid var(--rule);background:var(--panel);
+    color:var(--ink);width:2.6rem;height:2.6rem;border-radius:50%;cursor:pointer;font-size:1.1rem}
+  .nav button:hover{background:var(--peach)}
+  .dots{position:fixed;bottom:2.6vh;left:3vw;display:flex;gap:.4rem;z-index:10}
+  .dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--rule)}
+  .dot.on{background:var(--accent)}
+  .foot{position:fixed;top:3vh;left:3vw;font-family:"Josefin Sans";font-size:.8rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--deep)}
+</style>
+</head>
+<body>
+<div class="foot">Writing Inside Out</div>
+<div id="deck"></div>
+<div class="dots" id="dots"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8592;</button><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', cls:'title', k:'A live masterclass with Jo Roberts', h:'Discover the Story in You', sub:'How to find and shape the non-fiction book only you can write.'},
+  {t:'list', k:'Who this is for', h:'You already have the story', body:'This hour is for you if any of these feel true:', list:["You carry an experience or an idea you know is a book.","You have started writing it, more than once, and stopped.","You have read the books and taken the courses, and you are still stuck.","You quietly believe everyone else's story matters more than yours."]},
+  {t:'statement', k:'The trap', h:'You keep starting at the wrong end', sub:'A blank page. A blinking cursor. An outline you force and then abandon. So you decide the problem is discipline, or talent, and you put it away again.'},
+  {t:'statement', cls:'divider', k:'The reframe', h:'The block was never the writing', sub:'It is that you have not yet found the story that is already inside you. Once you find it, the writing has somewhere to come from.'},
+  {t:'part', cls:'divider', n:'Part One', h:'Why the story comes first'},
+  {t:'list', k:'Why the usual advice fails', h:'More craft is not the answer', body:'When you have not found your story yet:', list:["\"Just write every day\" produces pages with no centre.","Another outline template organises material you have not surfaced.","More craft advice sharpens sentences that are not yet about anything.","The harder you push at the page, the further the story hides."]},
+  {t:'statement', k:'Writing Inside Out', h:'The book is already in you', sub:'Your thoughts, feelings and lived experience are the raw material. The work is not to invent a book. It is to bring out the one that is already there, from the inside out.'},
+  {t:'part', cls:'divider', n:'Part Two', h:'The Writing Inside Out method'},
+  {t:'list', k:'Inside out', h:'Turning what is in you into what is on the page', body:'We work with what most writing advice skips:', list:["The inner material: the thoughts, feelings and moments that made you.","The courage it takes to show up vulnerable and tell the truth.","A way to move from private feeling to a sentence a reader can hold.","Permission, first, to believe the story is worth telling."]},
+  {t:'statement', k:'Where the story shows up', h:'It rarely shows up at a desk', sub:'The story often arrives while you walk, while you breathe fresh air, while you are moving and not trying. We use that on purpose. Movement and nature are part of the method, not a break from it.'},
+  {t:'part', cls:'divider', n:'Part Three', h:'Explore, Shape and Share'},
+  {t:'step', k:'Step one', num:'1', h:'Explore', sub:'Surface the story and the raw material without judging it. Find the true centre, the thing the book is really about.'},
+  {t:'step', k:'Step two', num:'2', h:'Shape', sub:'Turn what you found into a real structure: a plan for the book, a shape a reader can follow, a path from first page to last.'},
+  {t:'step', k:'Step three', num:'3', h:'Share', sub:'Write it, and bring it to readers, so the story that was inside you lives in someone else.'},
+  {t:'statement', k:'Belief', h:'You finish with someone who believes you can', sub:'Craft I can teach. The part that actually gets a book written is harder to name: being believed in, and held accountable, by someone who does not let you disappear.'},
+  {t:'statement', k:'The environment', h:'The Creative Writer’s Cabin', sub:'A small, warm group of writers who show up for each other, with check-ins, feedback and the steady company that keeps a long project moving.'},
+  {t:'me', k:'Why me', h:'Jo Roberts', body:'I am a certified non-fiction book coach, and before that I spent decades leading and facilitating groups in the outdoors and on adventures. I live on the edge of the Lake District. I bring both of those to the work: the craft of building a book, and the belief and space it takes to actually write one.'},
+  {t:'statement', k:'Where you land', h:'From a story inside you to a plan on the page', sub:'By the end of our work together you do not have a vague intention. You have the true centre of your book, a structure to write into, and the belief to keep going.'},
+  {t:'list', k:'In one breath', h:'What today was really about', body:'If you remember four things:', list:["Find the story before you force the writing.","Write from the inside out, with your real material.","Explore, Shape and Share is the path from idea to plan.","You finish with belief and company, not willpower alone."]},
+  {t:'cta', cls:'cta', k:'Your next step', h:'Let us find the story in you', sub:'Book a free discovery call with me and we will map the Blueprint for your non-fiction book together.', disc:'This masterclass is educational. No income, role, publishing outcome or result is guaranteed. Results vary and depend on your own work and circumstances.'}
+];
+const deck=document.getElementById('deck');
+const dots=document.getElementById('dots');
+function esc(x){return x;}
+function render(){
+  deck.innerHTML='';dots.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');
+    d.className='slide '+(s.cls||'')+(i===0?' on':'');
+    let html='';
+    if(s.k) html+='<div class="k">'+s.k+'</div>';
+    if(s.t==='part'){ html+='<div class="part"><span class="n">'+s.n+'</span>'+s.h+'</div>'; }
+    else if(s.t==='step'){ html+='<div class="stepnum">'+s.num+'</div><h1>'+s.h+'</h1>'; if(s.sub) html+='<div class="sub">'+s.sub+'</div>'; }
+    else if(s.t==='me'){ html+='<div class="me"><div><h1>'+s.h+'</h1></div></div>'; if(s.body) html+='<div class="body">'+s.body+'</div>'; }
+    else { html+='<h1>'+s.h+'</h1>'; }
+    if(s.body && s.t!=='me') html+='<div class="body">'+s.body+'</div>';
+    if(s.sub && s.t!=='step') html+='<div class="sub">'+s.sub+'</div>';
+    if(s.list){ let ul='<ul>'; s.list.forEach(x=>ul+='<li>'+x+'</li>'); ul+='</ul>'; html+=ul; }
+    if(s.disc) html+='<div class="disc">'+s.disc+'</div>';
+    d.innerHTML=html;deck.appendChild(d);
+    const dot=document.createElement('span');dot.className='dot'+(i===0?' on':'');dots.appendChild(dot);
+  });
+}
+let cur=0;
+function show(n){
+  const slides=[...document.querySelectorAll('.slide')];
+  const ds=[...document.querySelectorAll('.dot')];
+  cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((el,i)=>el.classList.toggle('on',i===cur));
+  ds.forEach((el,i)=>el.classList.toggle('on',i===cur));
+}
+render();
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+</script>
+</body>
+</html>
