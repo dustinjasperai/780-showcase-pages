@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Chef Approach to AI | Ravit Dotan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#121016;
+    --panel:#1c1922;
+    --rule:#2e2a35;
+    --accent:#d4085d;
+    --ink:#f2eef4;
+    --muted:#b4acc0;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',-apple-system,sans-serif;overflow:hidden;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;}
+  .slide.on{display:block;animation:fade .45s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-family:'Hanken Grotesk';font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Frank Ruhl Libre';font-weight:600;font-size:clamp(34px,6vw,68px);line-height:1.05;letter-spacing:-.01em;margin-bottom:22px;}
+  h2{font-family:'Frank Ruhl Libre';font-weight:600;font-size:clamp(26px,4.2vw,44px);line-height:1.12;margin-bottom:20px;}
+  p{font-size:clamp(17px,2.1vw,23px);line-height:1.6;color:var(--muted);max-width:40ch;}
+  p.lead{color:var(--ink);}
+  .big{font-family:'Frank Ruhl Libre';font-size:clamp(22px,3vw,30px);color:var(--ink);line-height:1.4;max-width:34ch;}
+  ul{list-style:none;margin-top:10px;}
+  li{font-size:clamp(17px,2.1vw,22px);line-height:1.5;color:var(--muted);padding-left:26px;position:relative;margin-bottom:16px;max-width:40ch;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:2px;background:var(--accent);}
+  .num{font-family:'Frank Ruhl Libre';font-size:clamp(15px,1.8vw,18px);color:var(--accent);margin-bottom:14px;}
+  .rule{width:64px;height:2px;background:var(--accent);margin:26px 0;}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:52ch;line-height:1.5;}
+  .foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;font-family:'Hanken Grotesk';font-size:12px;color:var(--muted);border-top:1px solid var(--rule);background:var(--bg);}
+  .foot .brand{color:var(--ink);font-weight:600;}
+  .bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s;}
+  .nav{display:flex;gap:10px;}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:15px;}
+  .nav button:hover{border-color:var(--accent);}
+  .chef{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px;}
+  .card{flex:1 1 300px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:26px 24px;}
+  .card h3{font-family:'Frank Ruhl Libre';font-size:22px;margin-bottom:10px;color:var(--ink);}
+  .card.accent{border-color:var(--accent);}
+  .card p{font-size:16px;max-width:none;}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div id="stage"></div>
+<div class="foot">
+  <span class="brand">Ravit Dotan &middot; TechBetter</span>
+  <span class="nav"><button onclick="go(-1)">&#8249;</button><button onclick="go(1)">&#8250;</button></span>
+</div>
+<script>
+const S=[
+  {t:'title', k:'A masterclass with Ravit Dotan, PhD', h:'The Chef Approach to AI', p:'How to reinvent your work with AI without handing over your thinking.'},
+  {t:'who', k:'Who this is for', h:'You use AI every day, and something feels off', p:'You are a professional who wants AI to make your work deeper and more yours, not thinner and more generic. This hour is for you.'},
+  {t:'trap', k:'The trap', h:'The takeout habit', p:'Most of us use AI like takeout. We ask for a finished output, an email, a summary, a plan, and we take whatever comes back. Fast, convenient, and quietly hollowing out the work.'},
+  {t:'reframe', k:'The reframe', h:'When you outsource the output, you outsource the thinking that made it yours', big:'The danger is not that AI is bad at your job. It is that it is good enough to make you stop doing the parts that matter.'},
+  {t:'part', num:'Part One', h:'Why faster is not the goal'},
+  {t:'problem', k:'The real cost', h:'Speed for its own sake', p:'The whole AI conversation is pitched on speed. But if the output is generic, you now spend your time fixing it, defending it, or quietly losing the judgment that was your edge.'},
+  {t:'problem', k:'The real cost', h:'Meaning leaks out of the work', p:'Takeout AI removes you from the parts of the work that build skill, reputation, and satisfaction. You get the deliverable and lose the reason you were good at it.'},
+  {t:'part', num:'Part Two', h:'Be the chef, not the customer'},
+  {t:'chef', k:'The core idea', h:'Takeout vs the kitchen', chef:true},
+  {t:'big', k:'The shift', h:'From output to process', big:'A chef does not order the finished dish. A chef designs the process and stays integral at every step. With AI, that means building value-aligned processes, not just collecting outputs.'},
+  {t:'pillar', num:'Pillar 1', h:'Knowledge', p:'Map where AI actually touches your work. Which parts are judgment, which are craft, and which are the repeatable steps that AI can carry inside a process you still own.'},
+  {t:'pillar', num:'Pillar 2', h:'Workflow', p:'Bake your judgment into the process itself. System prompts are the key: they let you define how AI works through a task, step by step, instead of handing it the whole task and hoping.'},
+  {t:'pillar', num:'Pillar 3', h:'Oversight', p:'Keep a human accountable at the points that matter. Oversight is not a compliance checkbox at the end. It is designed into the workflow where the real decisions live.'},
+  {t:'big', k:'The productivity reframe', h:'Goal-oriented productivity', big:'Stop optimizing for speed. Design your work around what matters most, and let AI carry the steps that free you to do more of it, not less.'},
+  {t:'tools', k:'What it produces', h:'A kitchen you built', p:'Worked the chef way, AI stops being a slot machine for outputs and becomes a set of processes you trust. Reusable, value-aligned, and unmistakably yours.'},
+  {t:'part', num:'Part Three', h:'Put the chef approach to work'},
+  {t:'example', k:'A worked example', h:'Reinventing one real workflow', p:'Take a task you do often. We find the judgment inside it, design a chef-style process with the right system prompts around it, and you walk away using AI on that task without losing yourself in it.'},
+  {t:'ba', k:'Before and after', h:'A week in the kitchen', list:['Before: you ask AI for the answer and edit whatever arrives.','After: you run a process you designed, and AI does the steps you chose for it.','Before: generic output, more rework.','After: work that is faster and still clearly yours.']},
+  {t:'why', k:'Why me', h:'I have spent a decade on this question', p:'PhD in philosophy from UC Berkeley, the first AI ethics paper accepted to FAccT, and years advising startups, corporations and governments on adopting AI responsibly. The Chef Approach is how I teach that work to individuals.'},
+  {t:'cta', k:'Your next step', h:'Reinvent your work with me', p:'If you want to bring the Chef Approach into your own work, that is exactly what I coach. Come work with me at TechBetter.', disc:'This masterclass is educational. No specific result or income is guaranteed. Results vary with your work, your effort, and your situation.'}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function render(){
+  const s=S[i];
+  let inner='';
+  if(s.k) inner+=`<div class="kicker">${s.k}</div>`;
+  if(s.num) inner+=`<div class="num">${s.num}</div>`;
+  if(s.h) inner+= (s.t==='title'?`<h1>${s.h}</h1>`:`<h2>${s.h}</h2>`);
+  if(s.t==='part') inner+=`<div class="rule"></div>`;
+  if(s.chef){
+    inner+=`<div class="chef"><div class="card"><h3>Takeout</h3><p>Ask for a finished output. Take what comes. Stay outside the process.</p></div><div class="card accent"><h3>Chef</h3><p>Design the process. Stay integral at every step. Own the judgment.</p></div></div>`;
+  }
+  if(s.big) inner+=`<p class="big">${s.big}</p>`;
+  if(s.p) inner+=`<p class="lead">${s.p}</p>`;
+  if(s.list){inner+='<ul>';s.list.forEach(x=>inner+=`<li>${x}</li>`);inner+='</ul>';}
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  stage.innerHTML=`<div class="slide on">${inner}</div>`;
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+stage.addEventListener('click',()=>go(1));
+render();
+</script>
+</body>
+</html>
