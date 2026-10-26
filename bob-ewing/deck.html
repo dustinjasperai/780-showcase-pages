@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Curse of Knowledge — A Masterclass with Bob Ewing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f1e9;
+    --panel:#fffdf9;
+    --rule:#e2d9ca;
+    --ink:#2e3532;
+    --muted:#5b6360;
+    --accent:#f15a2b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Lora',Georgia,serif}
+  .deck{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:54px 54px;margin:0 0 26px;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(46,53,50,.03)}
+  .kicker{font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12.5px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:'Manrope',sans-serif;font-weight:800;font-size:46px;line-height:1.06;
+    letter-spacing:-.02em;margin-bottom:20px}
+  h2{font-family:'Manrope',sans-serif;font-weight:700;font-size:32px;line-height:1.12;
+    letter-spacing:-.01em;margin-bottom:16px}
+  p{font-size:20px;line-height:1.55;color:var(--ink);margin-bottom:14px;max-width:48ch}
+  p.lead{font-size:23px;color:var(--muted)}
+  .big{font-size:27px;line-height:1.4}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:20px;line-height:1.5;padding-left:30px;position:relative;margin-bottom:14px;max-width:52ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;
+    background:var(--accent);border-radius:3px}
+  .num{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;color:var(--panel);
+    background:var(--accent);width:34px;height:34px;border-radius:50%;display:inline-flex;
+    align-items:center;justify-content:center;margin-bottom:16px}
+  .pillar-tag{font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+  .quote{font-size:28px;line-height:1.4;font-style:italic;color:var(--ink);max-width:40ch}
+  .attrib{font-family:'Manrope',sans-serif;font-weight:600;font-size:16px;color:var(--muted);
+    margin-top:18px;font-style:normal}
+  .foot{font-family:'Manrope',sans-serif;font-size:13px;color:var(--muted);margin-top:26px;letter-spacing:.02em}
+  .cta h1{color:var(--ink)}
+  .disc{font-family:'Manrope',sans-serif;font-size:13.5px;line-height:1.5;color:var(--muted);
+    margin-top:24px;max-width:56ch}
+  .brand{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`
+    <div class="kicker">A Live Masterclass with Bob Ewing &middot; The Ewing School</div>
+    <h1>The Curse of Knowledge</h1>
+    <p class="lead">Why the smartest person in the room is often the hardest to follow, and the five moves that win the room back.</p>
+    <div class="foot">Leadership Training &amp; Public Speaking &middot; ewingschool.com</div>`},
+
+  {t:'who', cls:'', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You know your idea cold. The room does not.</h2>
+    <p>You are a founder, an engineer, an attorney, an economist, an expert. You have a big, hairy, audacious idea. The problem is never that you lack substance.</p>
+    <p>The problem is the gap between what you understand and what the investor, the board, or the policymaker in front of you can follow in the next five minutes.</p>`},
+
+  {t:'trap', cls:'', html:`
+    <div class="kicker">The trap</div>
+    <h2>You have become fluent in your own idea.</h2>
+    <p>You explain it the way you understand it: deep, complete, and dense. You answer the question you find interesting instead of the one they are actually asking.</p>
+    <p>So the pitch runs long, the eyes glaze, and the yes you earned on merit never arrives.</p>`},
+
+  {t:'reframe', cls:'', html:`
+    <div class="kicker">The reframe</div>
+    <p class="quote">"You have a big, hairy, audacious idea. We help you talk about it so that others will understand and care."</p>
+    <p class="attrib">Clarity is not a talent you are born with. It is a skill you build, the way you build any skill: by testing, getting feedback, and iterating.</p>`},
+
+  {t:'part', cls:'', html:`
+    <div class="num">1</div>
+    <div class="pillar-tag">Part One</div>
+    <h2>What the curse of knowledge actually costs you</h2>
+    <p class="lead">Once you know something, you can no longer imagine not knowing it. That single blind spot quietly reshapes every talk you give.</p>`},
+
+  {t:'cost', cls:'', html:`
+    <div class="kicker">The hidden cost</div>
+    <h2>Three ways the curse shows up</h2>
+    <ul>
+      <li>You start in the weeds, because the context feels obvious to you and you forget it is not obvious to them.</li>
+      <li>You defend the idea instead of translating it, so questions feel like attacks rather than openings.</li>
+      <li>You measure the talk by how complete it was, not by what the room did next.</li>
+    </ul>`},
+
+  {t:'turn', cls:'', html:`
+    <div class="kicker">The turning point</div>
+    <h2>Great communicators work backward from the room.</h2>
+    <p>They do not ask "how do I explain everything I know." They ask "what does this specific audience need to understand and feel in order to say yes."</p>
+    <p>That shift is the whole discipline. The next five pillars are how you build it.</p>`},
+
+  {t:'part', cls:'', html:`
+    <div class="num">2</div>
+    <div class="pillar-tag">Part Two</div>
+    <h2>The five pillars of talking about a big idea</h2>
+    <p class="lead">The system we use with founders and executives at the Ewing School. Vision, Audience, Messaging, Delivery, Preparation.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="pillar-tag">Pillar One &middot; Vision</div>
+    <h2>Why your idea changes the world</h2>
+    <p>Before a single slide, get ruthlessly clear on the change your work creates. Vision is the spine every other choice hangs on. If the why is fuzzy, the pitch wanders.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="pillar-tag">Pillar Two &middot; Audience</div>
+    <h2>Build the talk for the people in the room</h2>
+    <p>Map your stakeholders before you write: the investor, the board, the reporter, the staff. Each hears a different idea. The talk is built for them, not for you.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="pillar-tag">Pillar Three &middot; Messaging</div>
+    <h2>Make the complex concrete</h2>
+    <p>This is where the curse is broken. Stories, analogies, and examples translate expert fluency back into language a newcomer can hold. The idea stops being yours and becomes theirs.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="pillar-tag">Pillar Four &middot; Delivery</div>
+    <h2>Carry the idea, do not bury it</h2>
+    <p>Confidence and stage presence are not vanity. A clear idea delivered with nerves still loses the room. Delivery is the vehicle, and it is coachable like everything else.</p>`},
+
+  {t:'pillar', cls:'', html:`
+    <div class="pillar-tag">Pillar Five &middot; Preparation</div>
+    <h2>Be ready for the moment that cannot be redone</h2>
+    <p>The pitch, the testimony, the keynote. High-stakes rooms reward readiness systems, not improvisation. Preparation is how you walk in knowing you have already answered the hard question.</p>`},
+
+  {t:'part', cls:'', html:`
+    <div class="num">3</div>
+    <div class="pillar-tag">Part Three</div>
+    <h2>When the pitch finally lands</h2>
+    <p class="lead">The pillars become an arc: a clear overview pitch, confidence under tough questions, and a formal pitch that lands.</p>`},
+
+  {t:'arc', cls:'', html:`
+    <div class="kicker">The pitch arc</div>
+    <h2>Three weeks, three turns</h2>
+    <ul>
+      <li>Overview pitch: what problem you solve, how you solve it, and why it matters, in language anyone can follow.</li>
+      <li>Q&amp;A under pressure: internalize the five questions you dread, so they become your strongest moments.</li>
+      <li>Formal pitch: the full five-minute version, ready for the room that decides.</li>
+    </ul>`},
+
+  {t:'proof', cls:'', html:`
+    <div class="kicker">Why learn this from the Ewing School</div>
+    <h2>Built in the highest-stakes rooms there are</h2>
+    <p>Bob Ewing pioneered the communications program at the Mercatus Center and led communications at the Institute for Justice. The approach has supported clients through Supreme Court victories, Congressional testimony, and keynotes to thousands.</p>`},
+
+  {t:'result', cls:'', html:`
+    <div class="kicker">What changes for you</div>
+    <h2>The same idea, finally landing</h2>
+    <p>You stop hoping the room keeps up and start building talks it cannot look away from. The investor leans in. The board acts. The idea you always believed in gets the hearing it deserved.</p>`},
+
+  {t:'recap', cls:'', html:`
+    <div class="kicker">In one line</div>
+    <p class="big">Your expertise earns the meeting. The five pillars are how you win it: Vision, Audience, Messaging, Delivery, Preparation.</p>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h1>Talk about your big idea so the room says yes.</h1>
+    <p>If you are a founder or expert with a pitch that has to land, the Ewing School works with you one on one through the pillars, from overview pitch to formal pitch.</p>
+    <p class="brand">Apply for Technical Founder Pitch Coaching or join the Leaders Speaking Mastermind at ewingschool.com</p>
+    <div class="disc">Educational content only. No income, role, funding, or result is guaranteed. Results vary and depend on your own effort, situation, and audience.</div>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d = document.createElement('section');
+  d.className = 'slide ' + (s.cls||'');
+  d.innerHTML = s.html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
