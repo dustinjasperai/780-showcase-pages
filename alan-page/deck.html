@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quality Is Not a Testing Problem — a masterclass with Alan Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f0; --panel:#ffffff; --ink:#1a1814; --muted:#5c564e;
+    --accent:#3c3489; --hi:#afa9ec; --rule:rgba(26,24,20,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:48px 24px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px 52px;margin:0 0 26px;box-shadow:0 1px 0 rgba(26,24,20,.03)}
+  .k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin:0 0 18px}
+  h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:46px;
+    line-height:1.08;margin:0 0 18px;letter-spacing:-.01em}
+  h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:34px;
+    line-height:1.12;margin:0 0 16px}
+  p{font-size:19px;line-height:1.55;color:var(--ink);margin:0 0 14px;max-width:62ch}
+  .sub{font-size:21px;color:var(--muted);line-height:1.5;max-width:60ch}
+  ul{margin:14px 0 0;padding:0;list-style:none}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 30px;position:relative;
+    border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:4px;top:21px;width:9px;height:9px;
+    border-radius:2px;background:var(--accent)}
+  .hi{color:var(--accent);font-weight:700}
+  .big{font-family:"DM Serif Display",Georgia,serif;font-size:40px;line-height:1.14;
+    margin:0;letter-spacing:-.01em}
+  .present{margin-top:26px;font-size:17px;color:var(--muted)}
+  .disc{margin-top:22px;font-size:14px;color:var(--muted);line-height:1.5;max-width:64ch}
+  .pg{height:3px;background:var(--hi);width:64px;border-radius:2px;margin:0 0 26px}
+  @media(max-width:640px){.slide{padding:34px 26px}h1{font-size:34px}h2{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title',
+    k:"A live masterclass for engineering leaders",
+    h:"Quality Is Not a Testing Problem",
+    sub:"Why delivery drift, flaky quality and decision fatigue are system problems, and what leaders actually change to fix them.",
+    present:"With Alan Page. Co-creator of the Modern Testing principles. Former Director of Test Excellence at Microsoft and VP of Engineering at Unity."},
+
+  {t:'promise',
+    k:"What you'll leave with",
+    h:"One hour, three shifts",
+    list:["See why adding more testing keeps failing to move quality",
+          "Learn to read your org as a system of structure, incentives and workflow",
+          "Walk out with the first change you'd make on Monday"]},
+
+  {t:'who',
+    k:"Who this is for",
+    h:"You lead engineers, and quality keeps slipping",
+    sub:"VPs, directors and engineering managers who ship under real pressure, who have tried the obvious fixes, and who suspect the problem is not where everyone keeps pointing."},
+
+  {t:'trap',
+    k:"The reflex",
+    h:"When quality slips, we add inspection",
+    sub:"More QA. More sign-offs. A heavier release gate. It feels responsible, and it buys a little calm. Then the same problems come back, later and more expensive."},
+
+  {t:'hook',
+    big:"You cannot inspect quality in at the end. By the time you are testing for it, the system has already decided what the quality will be."},
+
+  {t:'part',
+    k:"Part one",
+    h:"The core problem: quality is treated as a phase",
+    sub:"We hand quality to a function and a moment, the test pass before release. So the people building the product stop owning it, and the gate becomes the only thing standing between the team and a shaky launch."},
+
+  {t:'cost',
+    k:"What it actually costs",
+    h:"The symptoms you are living with",
+    list:["Delivery drift: dates slip and nobody can say exactly why",
+          "Flaky quality that survives every process you add",
+          "Decision fatigue at the top because every call escalates to you",
+          "A testing bottleneck that the team has learned to route around"]},
+
+  {t:'part',
+    k:"Part two",
+    h:"The shift: quality is a property of the system",
+    sub:"Quality is not produced by the step at the end. It is produced by structure, incentives, workflow and culture, the whole system your engineers work inside. Change the system and the quality changes with it."},
+
+  {t:'mt',
+    k:"The lens",
+    h:"The Modern Testing principles",
+    sub:"Seven principles I co-created with Brent Jensen. They are engineering principles that are barely about testing. For a leader, they read as a way to run the team."},
+
+  {t:'list2',
+    k:"Principles one and two",
+    h:"Start with the business, then accelerate the team",
+    list:["One: the priority is improving the business, not protecting a process",
+          "Two: accelerate the team, using Lean thinking and the theory of constraints to find and clear the real bottleneck"]},
+
+  {t:'list2',
+    k:"Principles three and four",
+    h:"Be a force for improvement, not a safety net",
+    list:["Three: help the team adapt and improve, rather than existing to catch failures at the end",
+          "Four: coach, lead and nurture the team toward a more mature quality culture"]},
+
+  {t:'list2',
+    k:"Principles five, six and seven",
+    h:"The customer judges quality, so spread the ability to build it",
+    list:["Five: the customer is the only one who can judge the quality of the product",
+          "Six: use data to understand real usage and close the gap between what you assumed and what shipped",
+          "Seven: expand testing ability across the whole team, which can reduce or remove the need for a dedicated specialist"]},
+
+  {t:'systems',
+    k:"The engineering-systems lens",
+    h:"Find the friction, not the symptom",
+    sub:"Missed dates and flaky quality are rarely the problem. They are what the system produces. The work is to find the friction in structure and incentives that is quietly shaping how your engineers behave."},
+
+  {t:'part',
+    k:"Part three",
+    h:"What a leader actually changes",
+    list:["Structure: who owns quality, and where the gate really lives",
+          "Incentives: what the team is rewarded for shipping, and when",
+          "Culture: whether raising a risk early is safe or punished",
+          "Data: the signal you watch, instead of the sign-off you wait for"]},
+
+  {t:'ninety',
+    k:"Ninety days in",
+    h:"What it looks like when it works",
+    sub:"Quality stops being a last-minute scramble owned by one team. Risks surface earlier and cheaper. The release gate gets lighter because it is no longer the only thing holding the line. Fewer calls escalate to you."},
+
+  {t:'fail',
+    k:"Where this goes wrong",
+    h:"Two failure modes to avoid",
+    list:["Removing the gate before the team owns quality, so nothing catches the risk",
+          "Treating this as a reorg instead of a change in what the team is rewarded for"]},
+
+  {t:'why',
+    k:"Why listen to me",
+    h:"I have run this at scale",
+    sub:"I spent twenty-two years at Microsoft, including as Director of Test Excellence, led about three hundred fifty people as a VP at Unity, and co-created the Modern Testing principles. I still manage a software team today. I am less interested in frameworks to buy than in what is actually happening in your org."},
+
+  {t:'recap',
+    k:"The one idea",
+    h:"Stop fixing quality at the end",
+    sub:"Quality is a system property. Leaders move it by changing structure, incentives, culture and data, not by adding one more layer of inspection."},
+
+  {t:'cta',
+    k:"If this is your problem",
+    h:"Start a conversation",
+    sub:"The next step is a real conversation about what is actually happening in your organization. No deck required, no framework to buy.",
+    link:"angryweasel.com",
+    disc:"Educational session only. No income, role, business, or result is guaranteed. Results vary with the team, the context and the work that follows."}
+];
+
+const deck = document.getElementById('deck');
+for(const s of S){
+  const el = document.createElement('section');
+  el.className = 'slide';
+  let html = '';
+  if(s.k) html += '<div class="k">'+s.k+'</div>';
+  if(s.big){ html += '<div class="pg"></div><p class="big">'+s.big+'</p>'; }
+  else {
+    if(s.h) html += (s.t==='title' ? '<h1>'+s.h+'</h1>' : '<h2>'+s.h+'</h2>');
+    if(s.sub) html += '<p class="sub">'+s.sub+'</p>';
+    if(s.list){ html += '<ul>'; for(const i of s.list) html += '<li>'+i+'</li>'; html += '</ul>'; }
+    if(s.present) html += '<p class="present">'+s.present+'</p>';
+    if(s.link) html += '<p class="present"><span class="hi">'+s.link+'</span></p>';
+    if(s.disc) html += '<p class="disc">'+s.disc+'</p>';
+  }
+  el.innerHTML = html;
+  deck.appendChild(el);
+}
+</script>
+</body>
+</html>
