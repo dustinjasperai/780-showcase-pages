@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Threshold | A Masterclass with Hope Paterson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#fdfaf6; --panel:#f4efe7; --rule:#e4dccf;
+    --ink:#20232a; --ink-soft:#4b4f57; --ink-muted:#8a8578;
+    --accent:#4d78ae;
+    --head:'Crimson Pro',Georgia,serif;
+    --body:'Hanken Grotesk',-apple-system,sans-serif;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow:hidden;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;}
+  .slide.on{display:block;animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:var(--head);font-weight:600;font-size:clamp(38px,6vw,76px);line-height:1.04;letter-spacing:-.01em;}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.1;margin-bottom:20px;}
+  .lede{font-size:clamp(18px,2.1vw,24px);color:var(--ink-soft);line-height:1.5;margin-top:22px;max-width:40ch;}
+  p{font-size:clamp(17px,1.9vw,21px);color:var(--ink-soft);line-height:1.6;max-width:46ch;margin-top:16px;}
+  .big{font-family:var(--head);font-size:clamp(28px,3.6vw,44px);color:var(--ink);line-height:1.2;max-width:24ch;}
+  ul{list-style:none;margin-top:24px;}
+  li{font-size:clamp(17px,1.9vw,22px);color:var(--ink-soft);padding:14px 0 14px 30px;border-bottom:1px solid var(--rule);position:relative;}
+  li:before{content:"";position:absolute;left:0;top:23px;width:12px;height:12px;border:1.5px solid var(--accent);border-radius:50%;}
+  li b{color:var(--ink);font-weight:600;}
+  .quote{font-family:var(--head);font-size:clamp(30px,4.6vw,56px);line-height:1.18;color:var(--ink);max-width:22ch;}
+  .q-attr{font-family:var(--body);font-size:15px;letter-spacing:.04em;color:var(--ink-muted);margin-top:28px;}
+  .label{display:inline-block;font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);border:1px solid var(--rule);border-radius:999px;padding:7px 16px;margin-bottom:26px;}
+  .phase{font-family:var(--head);color:var(--accent);font-size:clamp(22px,2.6vw,30px);}
+  .disc{font-size:13px;color:var(--ink-muted);line-height:1.6;max-width:52ch;margin-top:30px;}
+  .cta-line{font-size:clamp(18px,2.1vw,24px);color:var(--ink);line-height:1.5;margin-top:18px;max-width:40ch;}
+  footer{position:fixed;left:7vw;bottom:4vh;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);}
+  .nav{position:fixed;right:6vw;bottom:4vh;display:flex;gap:10px;align-items:center;font-family:var(--body);}
+  .nav button{font:inherit;font-size:15px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:999px;width:40px;height:40px;cursor:pointer;}
+  .nav button:hover{border-color:var(--accent);color:var(--accent);}
+  .count{font-size:13px;color:var(--ink-muted);min-width:52px;text-align:center;}
+  @media (max-width:640px){ footer,.nav .count{display:none;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>Hope Paterson &middot; Guide for Big Lives</footer>
+<div class="nav"><button id="prev" aria-label="Previous">&larr;</button><span class="count" id="count"></span><button id="next" aria-label="Next">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`
+    <div class="kicker">A live masterclass with Hope Paterson</div>
+    <h1>The Threshold</h1>
+    <div class="lede">What to do when you have built the big life, and it has quietly stopped fitting.</div>`},
+
+  {t:'who', cls:'who', html:`
+    <div class="label">Who this is for</div>
+    <h2>You already won.</h2>
+    <p>Founders and senior leaders who built something real. The title, the company, the life everyone said to want.</p>
+    <p>And still, under the noise, a question you cannot unhear: is this actually mine?</p>`},
+
+  {t:'trap', cls:'trap', html:`
+    <div class="label">The trap</div>
+    <h2>So you reach for more.</h2>
+    <p>A new goal. A harder sprint. Another optimization. Because effort is the one tool that has always worked.</p>
+    <p>But more of a life that no longer fits does not make it fit. It just makes it bigger.</p>`},
+
+  {t:'reframe', cls:'reframe', html:`
+    <div class="kicker">The reframe</div>
+    <div class="big">The problem was never that you want more. It is that somewhere along the way the life stopped being yours.</div>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="label">Part one</div>
+    <h2>The gap between success and soul</h2>
+    <p>Most advice for high achievers is built to maximize output, not alignment. So you get very good at a life you never fully chose.</p>`},
+
+  {t:'point', cls:'point', html:`
+    <h2>What is yours, and what is theirs</h2>
+    <ul>
+      <li><b>Inherited:</b> the life that looks right from the outside</li>
+      <li><b>Chosen:</b> the life that feels true from the inside</li>
+      <li>The threshold is the moment you can finally feel the difference</li>
+    </ul>`},
+
+  {t:'quote', cls:'quote-s', html:`
+    <div class="quote">I do not hand you answers. I help you see what was already there.</div>
+    <div class="q-attr">Hope Paterson</div>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="label">Part two</div>
+    <h2>P.A.S.S.A.G.E.</h2>
+    <p>Seven phases of identity transformation. Not a rigid program. More like a compass for a crossing, from the first pause through to a new self fully emerged.</p>`},
+
+  {t:'framework', cls:'framework', html:`
+    <div class="label">The compass, not the map</div>
+    <h2>A crossing has a shape</h2>
+    <p>You cannot skip the middle of a threshold any more than you can skip the middle of a bridge. Naming where you are is how you stop white knuckling it.</p>`},
+
+  {t:'phase', cls:'phase-s', html:`
+    <div class="phase">Pause &middot; Presence</div>
+    <h2>Name what stopped fitting</h2>
+    <p>Before any plan, you get still enough to tell the truth about which parts of the life you would not choose again.</p>`},
+
+  {t:'phase', cls:'phase-s', html:`
+    <div class="phase">The middle of the crossing</div>
+    <h2>Separate the inherited from the chosen</h2>
+    <p>Using the Salient Moment Map, we trace the pivotal moments that wrote your script, so you can see which were ever really yours.</p>`},
+
+  {t:'phase', cls:'phase-s', html:`
+    <div class="phase">Embodiment &middot; Emergence</div>
+    <h2>Step into the next version</h2>
+    <p>The new identity is not a declaration. It is a set of small, lived decisions until the life on the outside finally matches the one on the inside.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="label">Part three</div>
+    <h2>Deciding again, as a practice</h2>
+    <p>Change is not a single burst. It is the willingness to meet your life and ask, over and over: if I were choosing this again, would I?</p>`},
+
+  {t:'point', cls:'point', html:`
+    <h2>What tends to shift</h2>
+    <ul>
+      <li>Ambition stops running on restlessness and starts running on knowing</li>
+      <li>You can be deeply content and still want more, at the same time</li>
+      <li>The exit you were quietly planning turns into a crossing you choose</li>
+    </ul>`},
+
+  {t:'whyme', cls:'whyme', html:`
+    <div class="label">Why me</div>
+    <h2>I have made this crossing</h2>
+    <p>Twenty years and many lives: restaurants, kids cooking camps, curricula, catering, an oyster company, a food foundation, built from nothing and handed on.</p>
+    <p>I know the hollow that can live inside a big life, and I know the way through it.</p>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Find out where you are</h2>
+    <div class="cta-line">Start with the Threshold Diagnostic, a free and private fifteen minute guide. If it resonates, book a discovery call and we will map your crossing together.</div>
+    <div class="disc">Educational content only. No income, role, or result is guaranteed. Results vary and depend on the individual. This session is for reflection and is not therapy or medical advice.</div>`}
+];
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<section class="slide ${s.cls||''}" data-i="${i}">${s.html}</section>`).join('');
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+let cur=0;
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((el,i)=>el.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(!e.target.closest('.nav'))show(cur+1);});
+show(0);
+</script>
+</body>
+</html>
