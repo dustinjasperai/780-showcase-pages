@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decisions You Trust — Anna Holbrook</title>
+<link href="https://fonts.googleapis.com/css2?family=Faustina:ital,wght@0,500;0,600;0,700;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f2;      /* her light scheme, warm off-white */
+    --panel:#f3e7df;   /* a lighter wash of her blush */
+    --rule:#e7cbb9;    /* brand blush, from extract_brand.js */
+    --accent:#e7cbb9;  /* brand blush */
+    --deep:#b9876b;    /* deeper blush, for emphasis */
+    --ink:#1a1614;     /* softened near-black, from her #010101 */
+    --muted:#6b625c;
+    --head:'Faustina', Georgia, serif;
+    --body:'Instrument Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#e9e1da;color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 16px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 60px;margin:0 0 22px;min-height:520px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .num{position:absolute;top:26px;right:34px;font-family:var(--head);font-size:14px;
+    letter-spacing:.14em;color:var(--deep)}
+  .kick{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--deep);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:52px;line-height:1.08;margin-bottom:18px}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.14;margin-bottom:16px}
+  .sub{font-size:20px;color:var(--muted);max-width:40ch}
+  .body{font-size:20px;max-width:46ch;margin-top:6px}
+  .lede{font-family:var(--head);font-size:30px;line-height:1.25;max-width:30ch}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:20px;padding:12px 0 12px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:20px;width:12px;height:12px;
+    border-radius:50%;background:var(--accent)}
+  .move{display:flex;gap:22px;align-items:flex-start}
+  .move .mn{font-family:var(--head);font-size:46px;color:var(--deep);line-height:1;min-width:64px}
+  .move .mt{font-family:var(--head);font-size:30px;margin-bottom:8px}
+  .move .md{font-size:19px;color:var(--muted);max-width:40ch}
+  .strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--deep)}
+  .em{color:var(--deep);font-weight:600}
+  .panel{background:var(--panel);border-radius:10px;padding:22px 26px;margin-top:22px;
+    font-size:19px;max-width:48ch}
+  .cred li:before{background:var(--deep)}
+  .foot{position:absolute;bottom:24px;left:60px;font-size:13px;color:var(--muted);
+    letter-spacing:.04em}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:52ch;line-height:1.45}
+  .cta-line{font-family:var(--head);font-size:22px;color:var(--deep);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title',
+   kick:'A live masterclass',
+   h:'Decisions You Trust',
+   sub:'Making confident decisions when your ADHD brain will not stop second-guessing.',
+   foot:'Anna Holbrook, ACC. Personal and professional development coach.'},
+
+  {t:'who',
+   kick:'Who this is for',
+   h:'The capable one who still doubts.',
+   points:[
+     'You are at a career or life crossroads and cannot tell which way is yours.',
+     'You have just recognised your ADHD, and a lot suddenly makes sense.',
+     'You are smart and qualified, and still second-guessing everything.']},
+
+  {t:'trap',
+   kick:'The trap',
+   h:'You are not indecisive. You are overloaded.',
+   body:'Every option has forty tabs open behind it. So the sensible thing feels like waiting until it is clearer. It never gets clearer.'},
+
+  {t:'hook',
+   kick:'A harder truth',
+   lede:'Overthinking is not carefulness. It is fear wearing a sensible coat.'},
+
+  {t:'part', kick:'Part one', h:'Why the ADHD brain stalls on decisions.'},
+
+  {t:'points',
+   h:'Three things happening at once.',
+   points:[
+     'Every option feels permanent, so a small choice carries the weight of a life sentence.',
+     'The volume is up on every voice except your own.',
+     'The reward for deciding is invisible, so the brain keeps reaching for the next tab.']},
+
+  {t:'cost',
+   kick:'The cost',
+   h:'The decision you have rescheduled in your head all month.',
+   body:'It does not go away. It sits there draining confidence and energy, quietly, every single day.'},
+
+  {t:'part', kick:'Part two', h:'The method: six moves to a decision you trust.'},
+
+  {t:'move', mn:'1', mt:'Make the question smaller.',
+   md:'Turn "Should I leave my job?" into "Do I want to explore new options in the next three months?" A smaller question is answerable today.'},
+
+  {t:'move', mn:'2', mt:'Ask whose voice that really is.',
+   md:'Separate your own read from a parent, an old boss, or the person you once thought you should be. Most stuck decisions are a crowd, not a choice.'},
+
+  {t:'move', mn:'3', mt:'Weigh the highs and the lows.',
+   md:'Not a pros-and-cons list. Which mix of outcomes feels energising, and which feels merely safe?'},
+
+  {t:'move', mn:'4', mt:'The wake-up-tomorrow test.',
+   md:'Imagine the decision already made. Do you wake up lighter, or heavier? Your body answers before your spreadsheet does.'},
+
+  {t:'move', mn:'5', mt:'Shrink the stakes.',
+   md:'Ask what the worst outcome really is, and whether you could live with it. Usually you can, and the fear quietly loosens its grip.'},
+
+  {t:'move', mn:'6', mt:'Move first. Clarity follows.',
+   md:'Clarity does not come from waiting. It comes from moving. One small, reversible step tells you more than a month of thinking.'},
+
+  {t:'reframe',
+   kick:'The shift',
+   h:'From pressure to possibility.',
+   body:'Swap permanent words like "start a business" for experimental ones like "test" and "explore." You are not signing your life away. You are running a small experiment.'},
+
+  {t:'principle',
+   kick:'The principle',
+   lede:'You already have more of the answers than you realise. You just need the right space, questions and support to uncover them.'},
+
+  {t:'part', kick:'Part three', h:'Life on the far side of a trusted decision.'},
+
+  {t:'points',
+   h:'A decision made, and lived with.',
+   points:[
+     'You can name the choice in one sentence without a knot in your stomach.',
+     'You stop relitigating it at 2am.',
+     'The next decision is easier, because you trust how you got to this one.']},
+
+  {t:'why',
+   kick:'Why me',
+   h:'I have been where you are sitting.',
+   body:'I built a career on who I thought I should be before I learned to hear my own values, and later recognised my own ADHD. The work is practical, thoughtful and non-judgemental.',
+   cred:[
+     'Associate Certified Coach (ACC), International Coaching Federation',
+     'NTA Certified ADHD Advanced Coach',
+     'Accredited Diploma in Transformative Coaching',
+     'Certified NLP Practitioner']},
+
+  {t:'promise',
+   kick:'How we work',
+   lede:'It is not about being told what to do. It is about making decisions that feel right for you.'},
+
+  {t:'cta',
+   kick:'Your next step',
+   h:'Let us make the next one together.',
+   cta:'Book your free 30-minute introductory call at annaholbrookcoaching.co.uk',
+   disc:'This masterclass is educational. Coaching outcomes vary from person to person, and nothing here is a promise or guarantee of any specific result, income, or diagnosis.'}
+];
+
+function el(tag, cls, html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const sl = el('div','slide');
+  sl.appendChild(el('div','num', String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')));
+  if(s.kick) sl.appendChild(el('div','kick', s.kick));
+  if(s.h) sl.appendChild(el(i===0?'h1':'h2','',s.h));
+  if(s.lede) sl.appendChild(el('div','lede', s.lede));
+  if(s.sub) sl.appendChild(el('div','sub', s.sub));
+  if(s.body) sl.appendChild(el('div','body', s.body));
+  if(s.points){const ul=el('ul'); s.points.forEach(p=>ul.appendChild(el('li','',p))); sl.appendChild(ul);}
+  if(s.t==='move'){
+    const m=el('div','move');
+    m.appendChild(el('div','mn', s.mn));
+    const r=el('div');
+    r.appendChild(el('div','mt', s.mt));
+    r.appendChild(el('div','md', s.md));
+    m.appendChild(r); sl.appendChild(m);
+  }
+  if(s.cred){const p=el('div','panel'); const ul=el('ul','cred'); s.cred.forEach(c=>ul.appendChild(el('li','',c))); p.appendChild(ul); sl.appendChild(p);}
+  if(s.cta) sl.appendChild(el('div','cta-line', s.cta));
+  if(s.disc) sl.appendChild(el('div','disc', s.disc));
+  if(s.foot) sl.appendChild(el('div','foot', s.foot));
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
