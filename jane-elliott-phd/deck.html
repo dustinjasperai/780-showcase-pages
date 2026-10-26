@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decoding Internal Resistance | Jane Elliott PhD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f4efe6;
+    --panel:#fffdf8;
+    --ink:#1f1b16;
+    --ink-soft:#4a4238;
+    --muted:#8a7f6d;
+    --rule:#c9bda8;
+    --accent:#8c2f2a;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'EB Garamond',Georgia,serif;-webkit-font-smoothing:antialiased;}
+  .label{font-family:'Archivo',sans-serif;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+  .muted{color:var(--muted);}
+  #stage{max-width:960px;margin:0 auto;padding:40px 28px 96px;}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:56px 56px 52px;margin:22px 0;min-height:430px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 1px 0 rgba(31,27,22,.03);}
+  .slide.title{background:var(--ink);color:#f4efe6;border-color:var(--ink);}
+  .slide.title .label{color:#e6b8b2;}
+  .slide.part{background:var(--accent);color:#f7ede9;border-color:var(--accent);min-height:300px;}
+  .slide.part .label{color:#f2cfc8;}
+  h1{font-size:52px;font-weight:600;line-height:1.08;letter-spacing:-.01em;margin:16px 0 18px;}
+  h2{font-size:34px;font-weight:600;line-height:1.16;margin:14px 0 18px;}
+  .part h2{font-size:44px;}
+  p{font-size:21px;line-height:1.55;color:var(--ink-soft);margin:10px 0;max-width:40em;}
+  .slide.title p,.slide.part p{color:inherit;opacity:.92;}
+  .big{font-size:27px;line-height:1.4;color:var(--ink);}
+  ul{list-style:none;margin:14px 0;}
+  li{font-size:20px;line-height:1.5;color:var(--ink-soft);padding:9px 0 9px 26px;position:relative;max-width:40em;}
+  li::before{content:"";position:absolute;left:0;top:17px;width:10px;height:2px;background:var(--accent);}
+  .two{display:flex;gap:28px;flex-wrap:wrap;}
+  .two .col{flex:1;min-width:230px;border-top:2px solid var(--accent);padding-top:14px;}
+  .two .col h3{font-size:24px;font-weight:600;margin-bottom:8px;}
+  .kick{font-size:19px;color:var(--muted);}
+  .sign{font-family:'Archivo',sans-serif;font-size:14px;color:var(--muted);margin-top:20px;}
+  .disc{font-family:'Archivo',sans-serif;font-size:13px;line-height:1.5;color:var(--muted);margin-top:22px;border-top:1px solid var(--rule);padding-top:16px;max-width:44em;}
+  .nav{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-family:'Archivo',sans-serif;font-size:12px;color:var(--muted);}
+  @media(max-width:640px){.slide{padding:34px 24px;min-height:360px;}h1{font-size:34px;}h2{font-size:26px;}.part h2{font-size:30px;}p{font-size:18px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">Scroll through the slides</div>
+<script>
+const S = [
+  {t:'title', cls:'title', html:`<div class="label">A live masterclass with Jane Elliott PhD</div><h1>Decoding Internal Resistance</h1><p class="big">Why your brain keeps braking on the work you most want to do, and how to clear the road.</p>`},
+
+  {t:'who', cls:'', html:`<div class="label">Who this is for</div><h2>You are talented, driven, and stuck in a way that makes no sense.</h2><p>You have the degrees, the skills, the track record. And still there is one thing you keep not doing. This hour is for high-achievers who are done being told to just try harder.</p>`},
+
+  {t:'trap', cls:'', html:`<div class="label">The trap</div><h2>Wake up determined. Go to bed knowing you didn't.</h2><p>I know I want to write the book. Or go for the promotion. Or start the thing. So why do I keep steering away from exactly where I want to go? Who is driving this, and why are they so set on thwarting me?</p>`},
+
+  {t:'hook', cls:'', html:`<div class="label">A different starting point</div><h2>You're not lazy, undisciplined, or broken.</h2><p class="big">And trying harder has never once fixed it, because harder was never the problem. Something in you is applying the brakes on purpose, and it has a reason.</p>`},
+
+  {t:'part', cls:'part', html:`<div class="label">Part one</div><h2>The real problem</h2>`},
+
+  {t:'p1a', cls:'', html:`<div class="label">The core idea</div><h2>Resistance is not random. It is logical.</h2><p>Your brain always opts for actions that, by its own logic, seem to protect you. When it refuses to move toward something you want, that refusal makes sense to it, built from a lifetime of experiences about talent, achievement and recognition.</p>`},
+
+  {t:'p1b', cls:'', html:`<div class="label">The metaphor</div><h2>The DANGER: FALLING ROCKS sign.</h2><p>Picture a red hazard sign planted over the road to the thing you want. Your brain put it there for reasons that make sense for you, not for anyone else. The sign is not permanent. Once you read why it is there, you can take it down and clear the road.</p>`},
+
+  {t:'p1c', cls:'', html:`<div class="label">The two shapes it takes</div><h2>Hiding and chasing.</h2><div class="two"><div class="col"><h3>Hiding</h3><p>Avoiding full commitment. Procrastinating. Staying in the unstimulating job. Never quite showing up for the thing that matters most.</p></div><div class="col"><h3>Chasing</h3><p>Pursuing goal after goal without ever letting yourself land, own the result, or feel that any of it counted.</p></div></div>`},
+
+  {t:'p1d', cls:'', html:`<div class="label">Diagnostic</div><h2>Which one is yours?</h2><p>Most of us lean to one. Some flip between them depending on the project. Naming yours is the first move, because hiding and chasing need different interventions, and the generic advice ignores both.</p>`},
+
+  {t:'part', cls:'part', html:`<div class="label">Part two</div><h2>The framework</h2>`},
+
+  {t:'p2a', cls:'', html:`<div class="label">Internal resistance</div><h2>A fingerprint for the brain.</h2><p>Your resistance is made of the unique neural patterns you built across a lifetime. It is as individual as you are. That is good news twice over: it is not nonsensical, and its logic lives inside your own head, not with some expert or in some book.</p>`},
+
+  {t:'p2b', cls:'', html:`<div class="label">The move</div><h2>Find the logic, and you can change it.</h2><p>We use tools from neuroscience, philosophy of mind and cognitive psychology to surface the belief doing the braking, and then to rebuild it. Not to white-knuckle past the sign, but to take it down.</p>`},
+
+  {t:'p2c', cls:'', html:`<div class="label">Your talent fingerprint</div><h2>Your utterly unique way of working.</h2><p>Your blend of skills, passions, taste, history and goals stamps everything, from how you arrange your desk to the shape of your best ideas. The problem is that most of us do not like how we do things, so we fight it.</p>`},
+
+  {t:'p2d', cls:'', html:`<div class="label">The reframe</div><h2>Work with the grain, not against it.</h2><p>The version of you free from resistance is not a filed-down, perfectly productive stranger who never stops punching the clock. It is you with the certainty to work in exactly your way, especially when that looks a little unreasonable.</p>`},
+
+  {t:'p2e', cls:'', html:`<div class="label">What to change</div><h2>Tell the real problem from the idiosyncrasy.</h2><ul><li>Which habits actually cost you, and which just look untidy next to other people's</li><li>Where shame has attached itself to parts of you that were never the issue</li><li>What is genuinely worth changing, and what to defend and keep</li></ul>`},
+
+  {t:'part', cls:'part', html:`<div class="label">Part three</div><h2>What changes</h2>`},
+
+  {t:'p3a', cls:'', html:`<div class="label">The shift</div><h2>Not more disciplined. More yourself.</h2><p>When the road is clear, the work you kept avoiding stops feeling like a fight. You do not become someone else. You stop spending your best energy arguing with your own brain, and spend it on the thing instead.</p>`},
+
+  {t:'p3b', cls:'', html:`<div class="label">Why me</div><h2>Twenty years taming the self-eating brain.</h2><p>I mentored hundreds of people from first degree through PhD, and met the same wall every time: brilliant people unable to use what they had. I built this method, with a leading neuroscientist, for exactly that wall.</p><p class="kick">Jane Elliott PhD, professor, writer, and coach.</p>`},
+
+  {t:'cta', cls:'', html:`<div class="label">Clear your own road</div><h2>Come work on your own resistance.</h2><p>If this is the wall you keep hitting, the next step is a free consultation. We look at what you are trying to do, what keeps braking, and whether my small-group program <strong>Blazing Talents</strong> is the right room for you. No pressure, no sales-y nonsense.</p><p class="sign">Book a consultation at janeelliottphd.com</p><p class="disc">Educational only. This masterclass teaches a method for understanding and working with internal resistance. No specific outcome, income, or result is guaranteed, and individual results vary with effort and circumstance.</p>`}
+];
+const stage = document.getElementById('stage');
+S.forEach(s => {
+  const d = document.createElement('section');
+  d.className = 'slide ' + (s.cls || '');
+  d.innerHTML = s.html;
+  stage.appendChild(d);
+});
+</script>
+</body>
+</html>
