@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Story That Sells You — Anna Vatuone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f2ec;
+    --panel:#efe9dc;
+    --ink:#313b45;
+    --rule:#d9cdb3;
+    --accent:#a98237;
+    --head:'Cormorant Garamond',Georgia,serif;
+    --body:'Newsreader',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#2c2a26;color:var(--ink);font-family:var(--body)}
+  .deck{max-width:960px;margin:0 auto;padding:32px 18px 80px}
+  .slide{
+    background:var(--bg);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    aspect-ratio:16/9;
+    padding:56px 60px;
+    margin:0 0 26px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+  }
+  .slide::after{
+    content:attr(data-n);
+    position:absolute;right:22px;bottom:16px;
+    font-family:var(--body);font-size:12px;color:#9a9385;letter-spacing:.08em;
+  }
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:58px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:40px;line-height:1.08;margin-bottom:10px}
+  .lede{font-size:23px;line-height:1.5;max-width:40ch;color:#45505b}
+  .big{font-family:var(--head);font-weight:600;font-size:46px;line-height:1.12;max-width:20ch}
+  .rule{width:64px;height:3px;background:var(--accent);margin:22px 0}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:22px;line-height:1.4;padding:12px 0 12px 26px;border-top:1px solid var(--rule);position:relative}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:22px;width:10px;height:10px;background:var(--accent);border-radius:50%}
+  li b{font-family:var(--head);font-weight:600}
+  .sub{font-size:19px;color:#6b6456;margin-top:6px;font-style:italic}
+  .meta{font-family:var(--body);font-size:18px;color:#6b6456;margin-top:26px;letter-spacing:.02em}
+  .q{font-family:var(--head);font-weight:600;font-size:40px;line-height:1.15;max-width:24ch}
+  .disc{font-size:15px;color:#7a7465;line-height:1.5;margin-top:20px;max-width:60ch;font-style:italic}
+  .cta-line{font-size:24px;color:var(--accent);font-family:var(--head);font-weight:600;margin-top:16px}
+  @media(max-width:620px){h1{font-size:38px}.big,.q{font-size:30px}h2{font-size:30px}.slide{padding:34px 28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', html:`<div class="kick">A live masterclass with Anna Vatuone</div>
+    <h1>The Story That Sells You</h1>
+    <div class="rule"></div>
+    <p class="lede">How to turn your real story into a personal brand people can't look away from.</p>
+    <div class="meta">Anna Vatuone &middot; Author of Lonely Girl &middot; Personal Brand Strategist</div>`},
+
+  {t:'promise', html:`<div class="kick">What you'll leave with</div>
+    <h2>One story. Told so well a stranger feels like they already know you.</h2>
+    <ul>
+      <li>The exact three-part structure behind every story that travels</li>
+      <li>A content approach you can actually keep up without burning out</li>
+      <li>How to make it land on camera, not just on paper</li>
+    </ul>`},
+
+  {t:'audience', html:`<div class="kick">Who this is for</div>
+    <h2>Founders, creators and authors with something important to say.</h2>
+    <p class="lede">You know your work matters. You just haven't found the words that make other people feel it too.</p>`},
+
+  {t:'trap', html:`<div class="kick">The trap</div>
+    <p class="big">You've optimized the bio, picked the pillars, posted on schedule. And still, it doesn't land.</p>
+    <p class="sub">Being consistent isn't the same as being unforgettable.</p>`},
+
+  {t:'reframe', html:`<div class="kick">A hard reframe</div>
+    <p class="q">Your results don't speak for themselves. Your story does.</p>
+    <div class="rule"></div>
+    <p class="lede">People don't remember what you achieved. They remember what you went through to get there.</p>`},
+
+  {t:'part', html:`<div class="kick">Part One</div>
+    <h1>The real problem</h1>
+    <p class="lede">A personal brand built on tactics is a cage.</p>`},
+
+  {t:'problem', html:`<div class="kick">We're not brands. We're people.</div>
+    <h2>A brand is a wall. A story is a door.</h2>
+    <p class="lede">The more polished the performance, the more invisible the person. The internet rewards the loudest voice, but people follow the truest one.</p>`},
+
+  {t:'part', html:`<div class="kick">Part Two</div>
+    <h1>The method</h1>
+    <p class="lede">Three simple frameworks. All yours to keep.</p>`},
+
+  {t:'framework', html:`<div class="kick">Framework 1 &middot; The shape of a story</div>
+    <h2>Beginning. Pivot. End.</h2>
+    <p class="lede">Great stories show what changed, specifically, how <b>you</b> changed. You used to think one way, then something happened, and now you think differently.</p>`},
+
+  {t:'beginning', html:`<div class="kick">Beginning</div>
+    <p class="big">What did you believe at the start?</p>
+    <p class="sub">The assumptions you carried before anything shifted, the version of you the audience can recognise themselves in.</p>`},
+
+  {t:'pivot', html:`<div class="kick">Pivot</div>
+    <p class="big">What happened that made you do something differently?</p>
+    <p class="sub">The decision that changed your course. This is the moment people lean in for.</p>`},
+
+  {t:'end', html:`<div class="kick">End</div>
+    <p class="big">What do you believe now that you didn't before?</p>
+    <p class="sub">The transformation. Tell the truth and keep it simple.</p>`},
+
+  {t:'pillars', html:`<div class="kick">Framework 2 &middot; A strategy you can keep</div>
+    <h2>The Three Pillars</h2>
+    <ul>
+      <li><b>You have to actually like it.</b> The format has to feel natural, or you won't last.</li>
+      <li><b>People should be genuinely interested.</b> Serve their needs, don't just broadcast yours.</li>
+      <li><b>You can actually keep it up.</b> A rhythm that fits your real life, not a sprint to burnout.</li>
+    </ul>`},
+
+  {t:'trifecta', html:`<div class="kick">Framework 3 &middot; Making it land</div>
+    <h2>The Trifecta</h2>
+    <ul>
+      <li><b>The story itself.</b> Real material from your own experience.</li>
+      <li><b>The footage.</b> Clear, dynamic visuals that match the feeling.</li>
+      <li><b>The music.</b> Sound that reinforces the one thing you want them to take away.</li>
+    </ul>`},
+
+  {t:'visual', html:`<div class="kick">The visual foundation</div>
+    <h2>True to life, not overly filtered.</h2>
+    <p class="lede">Your images are the foundation of everything people see first. Real, unfiltered photography communicates credibility, clarity and personality before a single word is read.</p>`},
+
+  {t:'part', html:`<div class="kick">Part Three</div>
+    <h1>When the true story does the work</h1>`},
+
+  {t:'proof', html:`<div class="kick">My own pivot</div>
+    <p class="q">I stopped performing and started telling the truth, and the world opened to meet me.</p>
+    <p class="lede">A single honest video about loneliness grew my audience past 250k and led to features in Good Morning America, Business Insider and Entrepreneur. The more of myself I shared, the more it worked.</p>`},
+
+  {t:'recap', html:`<div class="kick">The whole thing, in one line</div>
+    <p class="big">Your story is the thing that makes you simply magnetic and unforgettable.</p>
+    <p class="sub">Beginning, Pivot, End. A rhythm you can keep. Told like you mean it.</p>`},
+
+  {t:'cta', cls:'cta', html:`<div class="kick">Work with me</div>
+    <h2>Let's find your story together.</h2>
+    <p class="lede">If you're ready to build a personal brand that sounds like you and brings the right people to you, I work with a small number of founders and creators one on one.</p>
+    <p class="cta-line">Apply to work with me 1:1 &middot; annavatuone.com</p>
+    <p class="disc">This masterclass is educational. No income, audience, or result is guaranteed. Results vary and depend on your own effort, consistency and circumstances.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.cls ? ' '+s.cls : '');
+  d.setAttribute('data-n', (i+1)+' / '+S.length);
+  d.innerHTML = s.html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
