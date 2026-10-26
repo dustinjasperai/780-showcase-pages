@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What to Build — a working session with Nate M. Jones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7fafb; --panel:#ffffff; --panel2:#eef3f5;
+    --ink:#151924; --muted:#565f6e; --rule:#d7e0e4; --accent:#1c6985;
+    --head:'Gloock',Georgia,serif; --body:'Hanken Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--panel2);color:var(--ink);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 60px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 20px;min-height:430px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 2px rgba(21,25,36,.04)}
+  .slide.cover{background:var(--panel);border-top:5px solid var(--accent)}
+  .slide.part{background:var(--accent);color:#f7fafb;border-color:var(--accent)}
+  .slide.part h2{color:#f7fafb}
+  .kicker{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 18px}
+  .slide.part .kicker{color:rgba(247,250,251,.8)}
+  h1{font-family:var(--head);font-weight:700;font-size:48px;line-height:1.05;margin:0 0 16px}
+  h2{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.12;margin:0 0 18px}
+  h3{font-family:var(--head);font-weight:600;font-size:22px;margin:0 0 10px}
+  p{font-size:19px;margin:0 0 14px;max-width:62ch}
+  p.lead{font-size:23px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  .big{font-family:var(--head);font-weight:700;font-size:38px;line-height:1.1;letter-spacing:-.01em}
+  ul{margin:8px 0 0;padding:0;list-style:none}
+  li{font-size:19px;padding:14px 0 14px 22px;border-top:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:22px;width:9px;height:9px;border-radius:2px;
+    background:var(--accent)}
+  .q{font-family:var(--head);font-weight:600;font-size:28px;line-height:1.25;color:var(--ink)}
+  .byline{margin-top:26px;font-size:16px;color:var(--muted)}
+  .frame{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
+  .frame .col{flex:1 1 300px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:10px;padding:22px 24px}
+  .frame .col h3{color:var(--accent)}
+  .tag{display:inline-block;font-family:var(--head);font-weight:600;font-size:13px;
+    letter-spacing:.04em;color:var(--accent);background:var(--panel2);border:1px solid var(--rule);
+    border-radius:999px;padding:5px 12px;margin-bottom:16px}
+  .cta p{max-width:60ch}
+  .disc{margin-top:26px;font-size:14px;color:var(--muted);max-width:70ch}
+  .pagenum{font-family:var(--head);font-size:12px;color:var(--muted);letter-spacing:.1em;
+    text-transform:uppercase;margin-bottom:14px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'cover', html:`
+    <div class="kicker">A working session</div>
+    <h1>What to Build</h1>
+    <p class="lead">Deciding what is worth building with AI, before you spend three weekends building it.</p>
+    <div class="byline">Presented by Nate M. Jones &middot; natemjones.com</div>`},
+
+  {t:'agenda', html:`
+    <div class="kicker">The next 45 minutes</div>
+    <h2>Three questions, one shift</h2>
+    <ul>
+      <li>Why shipping got easy and building got harder</li>
+      <li>The what and the how, and why AI only speeds up one of them</li>
+      <li>Three questions to ask before a single line of code</li>
+      <li>How it plays out on a real problem you were about to build</li>
+    </ul>`},
+
+  {t:'who', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>Experienced people building their first real product with AI</h2>
+    <p>You have shipped things before, or led the people who did. You know your domain cold. What is new is that you can now build the thing yourself, and the tools will say yes to almost anything you ask.</p>`},
+
+  {t:'trap', html:`
+    <div class="tag">The trap</div>
+    <p class="big">You can ship in a weekend now. So you do.</p>
+    <p>And three weekends in, you are maintaining something that works, that you asked for exactly, and that nobody actually needed. The speed was never the hard part.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The reframe</div>
+    <p class="big">AI did not remove the hard part of building. It moved it.</p>
+    <p>The hard part was never the code. It was deciding what the code should do, and for whom. That decision did not get automated. It got louder.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part one</div>
+    <h2>The what and the how</h2>
+    <p style="color:#dce8ec;max-width:60ch">Two different jobs. Only one of them got faster.</p>`},
+
+  {t:'whatvshow', html:`
+    <h2>These are not the same job</h2>
+    <div class="frame">
+      <div class="col"><h3>The what</h3><p class="muted" style="font-size:17px">Shaped by the people who will use it. You find it by watching real work in real contexts, not by imagining it.</p></div>
+      <div class="col"><h3>The how</h3><p class="muted" style="font-size:17px">Execution. Code, architecture, wiring. This is the part AI is genuinely good at, and getting better fast.</p></div>
+    </div>
+    <p style="margin-top:22px">AI is a very fast engineer. Point a fast engineer at the wrong thing and you just arrive at the wrong thing sooner.</p>`},
+
+  {t:'constraint', html:`
+    <div class="kicker">Why it feels different now</div>
+    <p class="q">"The hypothetical world used to be a constraint. Now it is a choice."</p>
+    <p style="margin-top:18px">Building used to be expensive enough that you were forced to pick carefully. That forcing function is gone. Choosing well is now on you, not on the cost of the work.</p>`},
+
+  {t:'twowrong', html:`
+    <h2>Two kinds of wrong</h2>
+    <ul>
+      <li><strong>Slow and wrong.</strong> The old failure. You spent a quarter building the wrong thing.</li>
+      <li><strong>Fast and wrong.</strong> The new one. You spent a weekend building the wrong thing, and shipped it, so now it is real and you are stuck with it.</li>
+    </ul>
+    <p style="margin-top:18px">Fast and wrong is cheaper to make and far more expensive to unwind.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part two</div>
+    <h2>Three questions before a line of code</h2>
+    <p style="color:#dce8ec;max-width:60ch">Not a five-step framework. Three habits that keep you honest.</p>`},
+
+  {t:'rolesgoals', html:`
+    <div class="tag">Roles and Goals</div>
+    <h3>Spec the result, not the mechanics</h3>
+    <p>Map the different hats a person wears, then the specific goal under each hat. Start with the hats you wear yourself, then abstract outward to everyone else. Unstated needs surface before you build on top of them.</p>
+    <p class="q" style="font-size:22px;margin-top:16px">"It did exactly what I asked. That was the problem."</p>`},
+
+  {t:'fiv', html:`
+    <div class="tag">Frequency, Impact, Value</div>
+    <h3>Interrogate the problem before you let anything solve it</h3>
+    <p>How often does this actually happen. What does the manual version cost. How much does the process vary from case to case. Only then ask for solutions, and make the tool surface its assumptions and offer the non-code options you can actually maintain.</p>
+    <p class="muted" style="font-size:17px;margin-top:10px">Ask a code tool for solutions and it will always tell you to write code, unless you tell it not to.</p>`},
+
+  {t:'durability', html:`
+    <div class="tag">Durability</div>
+    <h3>It works until someone else touches it</h3>
+    <p>A thing that only holds up in your hands is not finished. Build so the judgment inside it survives being handed to someone who is not you, and who does not know what you were thinking when you made it.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="kicker">Part three</div>
+    <h2>Run a real problem through it</h2>
+    <p style="color:#dce8ec;max-width:60ch">One problem, run through the three questions.</p>`},
+
+  {t:'worked', html:`
+    <h3>A problem you were about to build</h3>
+    <p>You want a tool that drafts your weekly update. The old reflex is to open a code tool and ask for it. Run it through the questions first.</p>
+    <ul>
+      <li><strong>Roles and Goals:</strong> who reads the update, and what decision do they make from it</li>
+      <li><strong>Frequency, Impact, Value:</strong> once a week, ten minutes, low variance. Is this even worth a build</li>
+      <li><strong>Durability:</strong> if you hand it to the next person, does it still make sense</li>
+    </ul>`},
+
+  {t:'payoff', html:`
+    <div class="kicker">The payoff</div>
+    <p class="big">Most of the time the answer shrinks.</p>
+    <p>You build a smaller, sharper thing, or you realize you do not need to build at all. That is not a loss. That is the whole point of asking before you ship.</p>`},
+
+  {t:'why', html:`
+    <div class="kicker">Why me</div>
+    <h2>Twenty years deciding what to build</h2>
+    <p>I spent two decades in product, including eight years as a VP of Product at Elsevier, across a portfolio north of $500M and twenty-plus products. Now I build with AI myself, and I advise experienced people building their first product with it.</p>
+    <p class="muted" style="font-size:17px">The question has not changed in twenty years. The tools just stopped slowing down the wrong answers.</p>`},
+
+  {t:'stance', html:`
+    <div class="kicker">How I work</div>
+    <p class="q">"I will not sell you a framework with a trademark and a five-step diagram. I will sit on the same side of the table, tease the problem apart with you, and help you see it."</p>`},
+
+  {t:'recap', html:`
+    <div class="kicker">If you remember three things</div>
+    <h2>Before the next build</h2>
+    <ul>
+      <li>Roles and Goals: what result, and for whom</li>
+      <li>Frequency, Impact, Value: is this worth building at all</li>
+      <li>Durability: does it survive leaving your hands</li>
+    </ul>`},
+
+  {t:'cta', cls:'cta', html:`
+    <div class="kicker">Before you build the wrong thing</div>
+    <h2>Bring me the thing you are about to build</h2>
+    <p>If you are building your first real product with AI, tell me what you are building. We will run it through these questions together and you will leave knowing whether, and what, to build.</p>
+    <p class="lead" style="margin-top:8px">Tell me what you are building at <strong>natemjones.com/work-with-me</strong></p>
+    <p class="disc">Educational session only. No income, role, outcome, or result is guaranteed. Results vary and depend on your own work, market, and circumstances.</p>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(function(s, i){
+  const el = document.createElement('section');
+  el.className = 'slide' + (s.cls ? ' ' + s.cls : '');
+  el.innerHTML = '<div class="pagenum">' + (i+1) + ' / ' + S.length + '</div>' + s.html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
