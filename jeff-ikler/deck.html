@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Unstuck | A Masterclass with Jeff Ikler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#faf9f6;
+    --panel:#f1efe9;
+    --rule:#d8d4c8;
+    --ink:#272727;
+    --ink-soft:#4b4a45;
+    --ink-muted:#7d7a70;
+    --accent:#f8c200;
+  }
+  html,body{height:100%;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Rubik',system-ui,sans-serif; line-height:1.6; }
+  .deck{ max-width:1040px; margin:0 auto; padding:48px 24px 96px; }
+  .slide{ background:var(--bg); border:1px solid var(--rule); border-radius:4px; padding:56px 60px; margin:0 0 28px; min-height:520px; display:flex; flex-direction:column; justify-content:center; position:relative; }
+  .slide::before{ content:""; position:absolute; left:0; top:36px; bottom:36px; width:3px; background:var(--accent); }
+  .kicker{ font-family:'Rubik',sans-serif; font-size:13px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:22px; }
+  h1{ font-family:'Spectral',Georgia,serif; font-weight:700; font-size:52px; line-height:1.12; letter-spacing:-.01em; margin-bottom:22px; }
+  h2{ font-family:'Spectral',Georgia,serif; font-weight:600; font-size:38px; line-height:1.18; margin-bottom:20px; }
+  .lead{ font-size:22px; color:var(--ink-soft); max-width:40ch; }
+  .big{ font-family:'Spectral',Georgia,serif; font-weight:500; font-size:34px; line-height:1.3; color:var(--ink); max-width:26ch; }
+  p{ font-size:19px; color:var(--ink-soft); margin-bottom:14px; max-width:58ch; }
+  ul{ list-style:none; margin-top:10px; }
+  li{ font-size:20px; color:var(--ink-soft); padding:12px 0 12px 30px; position:relative; border-bottom:1px solid var(--rule); max-width:54ch; }
+  li:last-child{ border-bottom:none; }
+  li::before{ content:""; position:absolute; left:4px; top:22px; width:9px; height:9px; background:var(--accent); border-radius:50%; }
+  .pillar{ font-family:'Spectral',serif; font-size:60px; font-weight:700; color:var(--accent); line-height:1; margin-bottom:16px; }
+  .panel{ background:var(--panel); border-radius:4px; padding:24px 28px; margin-top:18px; }
+  .panel p{ margin:0; color:var(--ink); }
+  .credit{ font-size:19px; color:var(--ink-soft); }
+  .disc{ font-family:'Rubik',sans-serif; font-size:13px; color:var(--ink-muted); margin-top:26px; max-width:60ch; line-height:1.55; }
+  .page{ position:absolute; right:26px; bottom:18px; font-size:12px; color:var(--ink-muted); font-family:'Rubik',sans-serif; letter-spacing:.05em; }
+  .brandline{ font-size:16px; color:var(--ink-muted); margin-top:28px; font-family:'Rubik',sans-serif; }
+  @media (max-width:700px){ .slide{ padding:40px 28px; min-height:420px; } h1{ font-size:36px; } h2{ font-size:28px; } .big{ font-size:26px; } }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', html:`
+    <div class="kicker">A live masterclass with Jeff Ikler, Quetico Coaching</div>
+    <h1>Getting Unstuck</h1>
+    <p class="lead">The curiosity-first path to a career that actually fits. How to move from stuck to a shift that holds, without pretending you already have all the answers.</p>
+  `},
+  {t:'agenda', html:`
+    <div class="kicker">What we will cover</div>
+    <h2>One hour, three moves</h2>
+    <ul>
+      <li>Why "stuck" is almost never a lack of options</li>
+      <li>The curiosity-first method: Pause, Be curious, Shift</li>
+      <li>Assess, Ready, Change, applied to your own career</li>
+      <li>The first honest question to ask yourself this week</li>
+    </ul>
+  `},
+  {t:'trap', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You are good at your job and still feel stuck</h2>
+    <p>You have built a real career. On paper it works. And still, most mornings, something quietly tells you this is not quite it.</p>
+    <p>You have read the articles. You have updated the resume. Maybe you have even tried a few things. The restlessness is still there.</p>
+  `},
+  {t:'hook', html:`
+    <div class="kicker">The reframe</div>
+    <p class="big">You do not need another answer. You need a better question.</p>
+    <p>Stuck is rarely about running out of options. It is about not being clear on what you actually want, and why.</p>
+  `},
+  {t:'part', html:`
+    <div class="kicker">Part one</div>
+    <h2>Why advice keeps you stuck</h2>
+    <p>Most career advice hands you someone else's playbook. Do these five steps. Take this certification. Follow my path.</p>
+    <p>The trouble is that their path was built on their values, their definition of satisfaction, their life. Borrowed answers rarely fit, so you stall, and you call the stalling "being stuck."</p>
+  `},
+  {t:'cost', html:`
+    <div class="kicker">The cost of waiting</div>
+    <h2>Stuck is not neutral</h2>
+    <p>Every month you stay busy instead of clear, the restlessness compounds. You get more invested in a direction you are not sure about, and the change feels riskier the longer you wait.</p>
+    <p>The goal is not a dramatic leap. It is a shift you can trust.</p>
+  `},
+  {t:'method', html:`
+    <div class="kicker">Part two, the method</div>
+    <p class="big">Pause. Be curious. Shift.</p>
+    <p>This is the spine of the Getting Unstuck approach. Not a hustle plan. A way of paying attention that turns a vague itch into a direction you can act on.</p>
+  `},
+  {t:'inside', html:`
+    <div class="kicker">The core belief</div>
+    <h2>The answers are already inside you</h2>
+    <p>I am not a consultant and I am not a therapist. I will not hand you my answers, because they are mine, not yours.</p>
+    <p>The work is structured questioning: getting you to say out loud what satisfaction, meaning, and a good week actually look like for you. Most people have never been asked.</p>
+  `},
+  {t:'framework', html:`
+    <div class="kicker">The framework</div>
+    <h2>Assess, Ready, Change</h2>
+    <p>The same three-part model from Shifting, the change book I co-wrote for leaders, works just as well on one person's career as it does on a whole organization.</p>
+    <div class="panel"><p>Assess where you are. Get Ready by naming what the change needs. Then Change, in steps small enough to actually take.</p></div>
+  `},
+  {t:'pillar', html:`
+    <div class="pillar">01</div>
+    <div class="kicker">Assess</div>
+    <h2>Name the stuckness</h2>
+    <p>Before anything moves, we get honest about the starting point. What does satisfaction mean to you, specifically? What do you value most in how you spend a day? What is actually holding you back, as opposed to the story you tell about it?</p>
+  `},
+  {t:'pillar', html:`
+    <div class="pillar">02</div>
+    <div class="kicker">Ready</div>
+    <h2>Get curious, not certain</h2>
+    <p>Readiness is not confidence that you have the whole plan. It is a set of better questions and a willingness to sit with them. We surface the limiting beliefs quietly running the show, and we trade "what is wrong with me" for "what is this telling me."</p>
+  `},
+  {t:'pillar', html:`
+    <div class="pillar">03</div>
+    <div class="kicker">Change</div>
+    <h2>Shift in steps you can take</h2>
+    <p>Change happens through small, deliberate moves, not a single leap. Between-session inquiry questions, simple activities, and the occasional challenge that stretches your comfort zone. Momentum, not pressure.</p>
+  `},
+  {t:'shift', html:`
+    <div class="kicker">What a shift looks like</div>
+    <h2>From restless to directed</h2>
+    <ul>
+      <li>You can say, in one sentence, what you are actually optimizing for</li>
+      <li>You stop testing other people's paths and start testing your own questions</li>
+      <li>The next step gets obvious, and small enough to take on a Tuesday</li>
+      <li>The restlessness turns into something you can use</li>
+    </ul>
+  `},
+  {t:'reflect', html:`
+    <div class="kicker">A place of challenge and reflection</div>
+    <p class="big">Quetico is a wilderness you paddle into to think clearly.</p>
+    <p>That is the point of the name, and the point of the work. Step back far enough to hear yourself, then come back with something you can act on.</p>
+  `},
+  {t:'credibility', html:`
+    <div class="kicker">Why listen to me</div>
+    <h2>Three decades of guiding change</h2>
+    <p class="credit">I spent 35 years in educational publishing and taught before that. I am a certified career and leadership coach. I co-wrote Shifting, a book on how leaders create real change, and I host the Getting Unstuck podcast, where I have spent years in conversation about exactly this.</p>
+  `},
+  {t:'forwho', html:`
+    <div class="kicker">This works best for</div>
+    <h2>People ready to ask, not just read</h2>
+    <ul>
+      <li>Mid-career professionals who feel the itch but cannot name it</li>
+      <li>People weighing a change inside their company or a clean break</li>
+      <li>Leaders who want to coach their own people better</li>
+      <li>Anyone tired of borrowed answers that never quite fit</li>
+    </ul>
+  `},
+  {t:'step', html:`
+    <div class="kicker">Start this week</div>
+    <h2>One question to sit with</h2>
+    <p class="big">When was the last time work felt genuinely satisfying, and what was actually true about that moment?</p>
+    <p>Do not rush to an answer. Get curious about it. That is the whole practice in miniature.</p>
+  `},
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Let us find your shift together</h2>
+    <p>If the questions here landed, the real work happens in conversation. I offer a complimentary coaching session: no pitch, just one honest hour on what is keeping you stuck and what a first shift could look like.</p>
+    <p class="brandline">Book a complimentary coaching session at queticocoaching.com</p>
+    <p class="disc">Educational content only. No income, role, career outcome, or result is guaranteed. Results vary from person to person and depend on your own circumstances, choices, and effort.</p>
+  `}
+];
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (s.cls ? ' '+s.cls : '');
+  el.innerHTML = s.html + '<div class="page">'+(i+1)+' / '+S.length+'</div>';
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
