@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Anatomy of a Standout Poetry Manuscript — Radha Marcum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f3eb;        /* brand cream, dominant (brand.json 11 uses) */
+    --panel:#fbfaf4;     /* lifted cream */
+    --ink:#292626;       /* brand charcoal (brand.json 10 uses) */
+    --muted:#6f6a63;
+    --rule:#ddd6c4;
+    --accent:#ebcb44;    /* brand gold (brand.json 6 uses) */
+    --display:"Libre Caslon Display", Georgia, serif;
+    --body:"Spline Sans", -apple-system, system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--ink);font-family:var(--body);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);border-radius:4px}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;color:var(--muted);margin-bottom:1.1rem}
+  .kick .dot{color:var(--accent)}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.4vw,3.6rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,4.4vw,2.9rem);line-height:1.08;margin-bottom:.9rem}
+  .lede{font-family:var(--display);font-size:clamp(1.3rem,3vw,2rem);line-height:1.25;color:var(--ink)}
+  p.big{font-size:clamp(1rem,1.8vw,1.25rem);line-height:1.5;color:var(--ink);max-width:42ch}
+  .sub{font-size:1rem;color:var(--muted);margin-top:1.2rem;line-height:1.5;max-width:46ch}
+  ul{list-style:none;margin-top:1.4rem;display:flex;flex-direction:column;gap:.85rem;max-width:48ch}
+  li{position:relative;padding-left:1.6rem;font-size:clamp(.98rem,1.7vw,1.18rem);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;background:var(--accent);border-radius:2px}
+  .num{font-family:var(--display);font-size:3.4rem;color:var(--accent);font-weight:700;line-height:1;margin-bottom:.6rem}
+  .rule{width:3.2rem;height:3px;background:var(--accent);margin:1.3rem 0}
+  .byline{margin-top:2rem;font-size:.95rem;color:var(--muted)}
+  .byline b{color:var(--ink);font-weight:600}
+  .strike{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--muted)}
+  .gold{color:var(--ink);box-shadow:inset 0 -.5em 0 var(--accent)}
+  .disc{font-size:.82rem;color:var(--muted);line-height:1.5;max-width:52ch;margin-top:1.3rem}
+  .ctaline{font-family:var(--display);font-size:1.3rem;color:var(--ink);margin-top:1.2rem}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;color:#cfc9bd;font-family:var(--body);font-size:.8rem}
+  .nav button{background:none;border:1px solid #574f45;color:#cfc9bd;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:.9rem}
+  .count{position:fixed;top:16px;right:22px;color:#8a8275;font-size:.78rem;font-family:var(--body)}
+  .brandmk{position:absolute;bottom:5%;left:8%;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button id="prev">&larr;</button><span id="pos"></span><button id="next">&rarr;</button></div>
+<script>
+const S=[
+  {t:'cover',
+   title:'The Anatomy of a Standout Poetry Manuscript',
+   lede:'How to turn a stack of poems into a book editors say yes to.',
+   byline:'A live masterclass with <b>Radha Marcum</b> · Poet to Poet'},
+
+  {t:'statement',
+   kick:'Where you are',
+   lede:'You have the poems. You may even have a hundred of them. What you do not have yet is the book.'},
+
+  {t:'statement',
+   kick:'The hard truth',
+   lede:'Most manuscripts are not turned down for a weak poem. They are turned down because the pages do not yet read as one book.'},
+
+  {t:'bullets',
+   kick:'Who this is for',
+   h2:'This masterclass is for you if',
+   items:['You have a folder of finished poems and no clear order',
+          'You cannot tell whether you have a chapbook or a full-length collection',
+          'You have sent work out and heard mostly silence',
+          'You want a real plan to get published, not another prompt']},
+
+  {t:'part', num:'Part One', h2:'A collection is an argument, not an anthology'},
+
+  {t:'bullets',
+   kick:'The core problem',
+   h2:'Good poems, no through-line',
+   items:['Editors read the first five pages before anything else',
+          'A reader needs a reason the book exists, early',
+          'Strong individual poems can still add up to a flat whole',
+          'Order and shape are doing more work than any single poem']},
+
+  {t:'bullets',
+   kick:'Common mistakes',
+   h2:'What quietly sinks a manuscript',
+   items:['Leading with the safest poem instead of the truest',
+          'Sequencing by date written, not by how the book reads',
+          'Padding to a page count instead of cutting to a spine',
+          'Submitting everywhere at once with no fit to the press']},
+
+  {t:'part', num:'Part Two', h2:'The Get Published framework'},
+
+  {t:'framework',
+   kick:'The framework',
+   h2:'Three moves, in order',
+   items:['Find your Zone of Unique Genius',
+          'Shape the work to stand out',
+          'Make a plan to get published']},
+
+  {t:'pillar', num:'01',
+   kick:'Pillar one',
+   h2:'Zone of Unique Genius',
+   big:'Name the one thing only your manuscript can say. Clarify what is essential about your voice inside today’s publishing landscape, so the book has a clear reason to exist for an editor.'},
+
+  {t:'pillar', num:'02',
+   kick:'Pillar two',
+   h2:'Shape the work to stand out',
+   big:'Strengthen the brilliant elements, fill the gaps, and sequence the poems into a more powerful whole. Decide which poems belong, and whether you are building a chapbook or a full-length collection.'},
+
+  {t:'pillar', num:'03',
+   kick:'Pillar three',
+   h2:'Make a plan to get published',
+   big:'Build a targeted submission plan: the right presses and journals for this book, a portfolio of placements, and a path through independent or traditional publishing that fits your work.'},
+
+  {t:'part', num:'Part Three', h2:'Your book, taking shape'},
+
+  {t:'bullets',
+   kick:'Chapbook or full-length',
+   h2:'Choose the right container',
+   items:['A chapbook is a focused gesture: one movement, done well',
+          'A full-length is a sustained argument across sections',
+          'The poems you have usually point to one more than the other',
+          'Pick the container first, then shape the book to fit it']},
+
+  {t:'statement',
+   kick:'From the editor’s desk',
+   lede:'Read your opening sequence the way an editor will: what question does it raise, and does the book answer it by the end?'},
+
+  {t:'bullets',
+   kick:'Why me',
+   h2:'Who is teaching this',
+   items:['Two award-winning collections: Bloodline and Pine Soot Tendon Bone',
+          'Poems in FIELD, West Branch, Pleiades, Gulf Coast and others',
+          'More than 20 years teaching poetry and working in publishing',
+          'Founder of Poet to Poet and The Poets Circle community']},
+
+  {t:'recap',
+   kick:'To recap',
+   h2:'The book is the unit',
+   items:['Find the one thing only your manuscript can say',
+          'Shape and sequence it into a whole that stands out',
+          'Submit with a real plan, to the right presses']},
+
+  {t:'cta',
+   kick:'Work with me',
+   h2:'Let’s get your manuscript published',
+   ctaline:'Get Published coaching: three months of one-on-one manuscript and publishing support.',
+   sub:'Book a conversation at poettopoet.com to see if your manuscript is ready and map the plan to get it out.',
+   disc:'Educational only. Publishing outcomes vary by manuscript, market, and effort, and nothing here is a guarantee of acceptance, publication, or any particular result. The frameworks shared are teaching tools, not promises.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return s;}
+function render(s){
+  let h='';
+  if(s.kick) h+='<div class="kick"><span class="dot">◆</span> '+s.kick+'</div>';
+  if(s.t==='cover'){
+    h+='<h1>'+s.title+'</h1><div class="rule"></div><div class="lede">'+s.lede+'</div><div class="byline">'+s.byline+'</div>';
+  } else if(s.t==='statement'){
+    h+='<div class="lede">'+s.lede+'</div>';
+  } else if(s.t==='part'){
+    h='<div class="kick"><span class="dot">◆</span> '+s.num+'</div><h1>'+s.h2+'</h1><div class="rule"></div>';
+  } else if(s.t==='pillar'){
+    h+='<div class="num">'+s.num+'</div><h2>'+s.h2+'</h2><p class="big">'+s.big+'</p>';
+  } else if(s.t==='framework'||s.t==='bullets'||s.t==='recap'){
+    h+='<h2>'+s.h2+'</h2><ul>'+s.items.map(i=>'<li>'+i+'</li>').join('')+'</ul>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h2+'</h2><div class="ctaline">'+s.ctaline+'</div><div class="sub">'+s.sub+'</div><p class="disc">'+s.disc+'</p>';
+  } else if(s.t==='disclaimer'){
+    h+='<p class="disc">'+s.disc+'</p>';
+  }
+  if(s.t!=='cover' && s.t!=='part') h+='<div class="brandmk">Poet to Poet</div>';
+  return h;
+}
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  stage.innerHTML='<div class="slide on">'+render(S[i])+'</div>';
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+  document.getElementById('pos').textContent=(i+1)+' of '+S.length;
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
