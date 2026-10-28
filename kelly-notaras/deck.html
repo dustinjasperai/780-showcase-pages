@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Book You Were Born to Write | A Masterclass with Kelly Notaras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4ede0; --panel:#eadfca; --ink:#2a241d; --ink-soft:#4a4036;
+    --ink-muted:#857a68; --rule:#d8c9ad; --accent:#b4542f;
+  }
+  html,body{height:100%}
+  body{background:var(--ink);font-family:'Mulish',sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;
+    justify-content:center;padding:8vh 10vw;background:var(--bg)}
+  .slide.on{display:flex}
+  .eyebrow{font-size:0.8rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:'Bitter',serif;font-weight:700;font-size:clamp(2.2rem,5.5vw,4.2rem);
+    line-height:1.08;letter-spacing:-0.015em;color:var(--ink);max-width:16ch}
+  h2{font-family:'Bitter',serif;font-weight:600;font-size:clamp(1.8rem,4vw,3rem);
+    line-height:1.14;color:var(--ink);max-width:18ch;margin-bottom:1.2rem}
+  .lede{font-family:'Bitter',serif;font-size:clamp(1.2rem,2.2vw,1.7rem);
+    line-height:1.5;color:var(--ink-soft);max-width:30ch;margin-top:1.6rem}
+  p{font-size:clamp(1rem,1.5vw,1.25rem);line-height:1.6;color:var(--ink-soft);max-width:34ch}
+  .big{font-family:'Bitter',serif;font-weight:600;font-size:clamp(1.6rem,3vw,2.4rem);
+    line-height:1.3;color:var(--ink);max-width:24ch}
+  ul{list-style:none;margin-top:1.8rem;max-width:40ch}
+  li{font-size:clamp(1.05rem,1.7vw,1.4rem);line-height:1.4;color:var(--ink-soft);
+    padding:0.7rem 0 0.7rem 2.2rem;position:relative;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:none}
+  li::before{content:counter(li);counter-increment:li;position:absolute;left:0;top:0.75rem;
+    font-family:'Bitter',serif;font-weight:600;color:var(--accent);font-size:1.05rem}
+  ul.steps{counter-reset:li}
+  ul.plain li{padding-left:1.6rem}
+  ul.plain li::before{content:'';counter-increment:none;width:7px;height:7px;border-radius:50%;
+    background:var(--accent);top:1.3rem;left:0}
+  .part{background:var(--ink);color:var(--bg)}
+  .part .eyebrow{color:var(--accent)}
+  .part h1{color:var(--bg)}
+  .part p{color:#cfc4b2}
+  .divider-num{font-family:'Bitter',serif;font-size:clamp(3rem,8vw,6rem);
+    color:var(--accent);font-weight:400;line-height:1;margin-bottom:1rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);
+    padding:2rem 2.2rem;max-width:40ch;margin-top:1.4rem}
+  .card .big{font-size:clamp(1.3rem,2.2vw,1.8rem)}
+  .quote{font-family:'Bitter',serif;font-style:italic;font-size:clamp(1.3rem,2.6vw,2rem);
+    line-height:1.4;color:var(--ink);max-width:26ch}
+  .meta{display:flex;gap:2.5rem;margin-top:2.4rem;flex-wrap:wrap}
+  .meta div{min-width:7rem}
+  .meta .n{font-family:'Bitter',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);
+    font-weight:700;color:var(--accent);line-height:1}
+  .meta .l{font-size:0.85rem;color:var(--ink-muted);margin-top:0.4rem;letter-spacing:0.02em}
+  .disc{font-size:0.8rem;color:var(--ink-muted);line-height:1.5;max-width:46ch;margin-top:2.2rem}
+  .byline{font-size:0.95rem;color:var(--ink-muted);margin-top:2rem}
+  .cta-line{font-family:'Bitter',serif;font-weight:600;color:var(--accent);
+    font-size:clamp(1.1rem,1.8vw,1.4rem);margin-top:1.4rem}
+  #nav{position:fixed;bottom:22px;right:26px;font-family:'Mulish',sans-serif;font-size:12px;
+    color:var(--ink-muted);z-index:10;letter-spacing:0.05em}
+  #bar{position:fixed;bottom:0;left:0;height:3px;background:var(--accent);z-index:10;transition:width .3s}
+  .hint{position:fixed;bottom:22px;left:26px;font-size:11px;color:var(--ink-muted);z-index:10}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="bar"></div>
+<div class="hint">Use arrow keys to navigate</div>
+<div id="nav"></div>
+<script>
+const S = [
+  {t:'title', cls:'', html:`
+    <div class="eyebrow">A Masterclass with Kelly Notaras</div>
+    <h1>The Book You Were Born to Write</h1>
+    <div class="lede">Finding the one book only you can write, and getting your wisdom onto the page.</div>`},
+
+  {t:'who', cls:'', html:`
+    <div class="eyebrow">Who this is for</div>
+    <h2>You are carrying a transformational book.</h2>
+    <p>You are a teacher, a healer, a coach, a leader with hard-won wisdom. People keep telling you to write the book. Some part of you has known for years that it is yours to write.</p>`},
+
+  {t:'trap', cls:'', html:`
+    <div class="eyebrow">The honest part</div>
+    <h2>And still it will not come out.</h2>
+    <p>Not because you lack discipline. Not because you have nothing to say. You have pages, notes, false starts, a folder of beginnings. What you do not have is a book that feels like the one you meant.</p>`},
+
+  {t:'reframe', cls:'', html:`
+    <div class="eyebrow">The reframe</div>
+    <div class="quote">"I don't have writer's block. I have book confusion."</div>
+    <p style="margin-top:1.8rem">The problem is almost never willpower. It is that you have not yet decided, precisely, which book this is. And an undecided book cannot be written.</p>`},
+
+  {t:'cost', cls:'', html:`
+    <div class="eyebrow">What it costs to wait</div>
+    <div class="big">Every year the book stays inside you, the people who needed it stay unreached, and someone with half your wisdom publishes first.</div>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="divider-num">I</div>
+    <div class="eyebrow">Part One</div>
+    <h1>Why the book won't come</h1>`},
+
+  {t:'problem', cls:'', html:`
+    <div class="eyebrow">The root</div>
+    <h2>You are trying to write three books at once.</h2>
+    <p>Most transformational books are one of three kinds. Until you name which one is yours, the structure keeps collapsing, because you are pouring one voice into three different shapes.</p>`},
+
+  {t:'types', cls:'', html:`
+    <div class="eyebrow">The three kinds of transformational nonfiction</div>
+    <ul class="plain">
+      <li><strong>Prescriptive nonfiction.</strong> You teach a method, step by step.</li>
+      <li><strong>Inspirational memoir.</strong> Your life carries the lesson by example.</li>
+      <li><strong>Teaching memoir.</strong> Your story and your teaching, braided together.</li>
+    </ul>
+    <p style="margin-top:1.6rem">Pick the wrong one and you will fight your own manuscript for a year. Pick the right one and the chapters start to want to be written.</p>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="divider-num">II</div>
+    <div class="eyebrow">Part Two</div>
+    <h1>The method</h1>`},
+
+  {t:'hook', cls:'', html:`
+    <div class="eyebrow">The Hook</div>
+    <h2>Your whole book, in one or two sentences.</h2>
+    <div class="card"><div class="big">High-concept. Narrowly tailored. Unique. Magnetic. Salable.</div></div>
+    <p style="margin-top:1.4rem">If the hook does these five things, the book has a spine. If it does not, no amount of beautiful writing will save it.</p>`},
+
+  {t:'title-frame', cls:'', html:`
+    <div class="eyebrow">The Why-What-Wow of titling</div>
+    <ul class="plain">
+      <li><strong>What</strong> is this book actually about?</li>
+      <li><strong>Why</strong> should this reader, today, pick it up?</li>
+      <li><strong>Wow.</strong> What makes it magnetic enough to remember?</li>
+    </ul>
+    <p style="margin-top:1.6rem">A title is not decoration you add at the end. It is the promise the whole book has to keep.</p>`},
+
+  {t:'arc', cls:'', html:`
+    <div class="eyebrow">The three-part arc</div>
+    <h2>Pre-writing. Writing. Post-writing.</h2>
+    <p>Most authors skip straight to writing and wonder why they stall. The pre-writing work, deciding the type, the hook, the reader, is not a warm-up. It is where the book is actually built. The writing is just the part everyone sees.</p>`},
+
+  {t:'practice', cls:'', html:`
+    <div class="eyebrow">Writing Practice</div>
+    <h2>A regularly scheduled time when you practice writing.</h2>
+    <p>Not inspiration. A practice. Imperfect writing on schedule beats perfect writing someday, every single time.</p>
+    <div class="cta-line">Seven steps to a personalized writing plan, built around the life you actually have.</div>`},
+
+  {t:'voice', cls:'', html:`
+    <div class="eyebrow">The thing no template gives you</div>
+    <div class="quote">"The goal was never a book. It was your voice, on the page, unmistakably yours."</div>`},
+
+  {t:'part', cls:'part', html:`
+    <div class="divider-num">III</div>
+    <div class="eyebrow">Part Three</div>
+    <h1>What it looks like when it works</h1>`},
+
+  {t:'result', cls:'', html:`
+    <div class="eyebrow">On the other side</div>
+    <ul class="plain">
+      <li>You know exactly which book you are writing, and why.</li>
+      <li>You have a hook and a structure that hold.</li>
+      <li>You write on a schedule that fits your real life.</li>
+      <li>The manuscript sounds like you, not like everyone.</li>
+    </ul>`},
+
+  {t:'why-me', cls:'', html:`
+    <div class="eyebrow">Why learn this from me</div>
+    <h2>I have spent 25 years in the room where books get made.</h2>
+    <div class="meta">
+      <div><div class="n">200+</div><div class="l">books personally edited</div></div>
+      <div><div class="n">25 yrs</div><div class="l">in publishing</div></div>
+      <div><div class="n">NYT</div><div class="l">bestsellers to first-time authors</div></div>
+    </div>
+    <p style="margin-top:1.8rem">I wrote "The Book You Were Born to Write" and founded KN Literary Arts because the authors I love most kept getting stuck in the same three places. This is how we get them unstuck.</p>`},
+
+  {t:'cta', cls:'', html:`
+    <div class="eyebrow">Your next step</div>
+    <h2>Let's write the book you were born to write.</h2>
+    <p>If you are ready to stop circling the book and actually write it, I work with a small number of authors one to one, and run a five-day immersive writing retreat a few times a year.</p>
+    <div class="cta-line">Apply to work with Kelly at kellynotaras.com</div>
+    <div class="disc">Educational content only. No income, outcome, publication, or result is guaranteed. Results vary and depend on your own effort, circumstances, and the work itself.</div>
+    <div class="byline">Kelly Notaras &middot; KN Literary Arts</div>`},
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide '+(s.cls||'');d.innerHTML=s.html;if(i===0)d.classList.add('on');stage.appendChild(d);});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const nav=document.getElementById('nav');const bar=document.getElementById('bar');
+function show(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(slides.length-1,n));slides[cur].classList.add('on');nav.textContent=(cur+1)+' / '+slides.length;bar.style.width=((cur+1)/slides.length*100)+'%';}
+document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(cur+1);}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(cur-1);}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);});
+stage.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
