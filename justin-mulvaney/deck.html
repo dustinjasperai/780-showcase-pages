@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Inner Game of Leadership, Justin Mulvaney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,400&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4ede1;
+    --panel:#fefbf4;
+    --rule:#e9e1d8;
+    --ink:#2b2b2b;
+    --dim:#6f685f;
+    --accent:#ff934f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Sora",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;position:relative;overflow:hidden;
+    box-shadow:0 18px 50px rgba(43,43,43,.08)}
+  .slide{position:absolute;inset:0;padding:clamp(28px,5vw,64px);display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-family:"Sora";font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:"Bitter";font-weight:600;font-size:clamp(30px,5vw,56px);line-height:1.04;
+    letter-spacing:-.01em}
+  h2{font-family:"Bitter";font-weight:600;font-size:clamp(24px,3.6vw,40px);line-height:1.1;
+    margin-bottom:16px}
+  .sub{font-family:"Bitter";font-style:italic;color:var(--dim);
+    font-size:clamp(17px,2.2vw,24px);margin-top:20px;max-width:46ch}
+  p{font-size:clamp(15px,1.8vw,20px);line-height:1.55;color:var(--ink);max-width:54ch;margin-top:12px}
+  .lead{font-size:clamp(18px,2.2vw,26px);line-height:1.4}
+  ul{margin-top:18px;max-width:56ch}
+  li{font-size:clamp(15px,1.75vw,20px);line-height:1.5;margin:10px 0;list-style:none;
+    padding-left:26px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:2px;background:var(--accent)}
+  .cols{display:flex;gap:40px;margin-top:22px;flex-wrap:wrap}
+  .col{flex:1;min-width:220px}
+  .col h3{font-family:"Bitter";font-weight:600;font-size:20px;margin-bottom:6px}
+  .col p{font-size:16px;margin-top:4px;color:var(--dim)}
+  .horizon{height:2px;background:linear-gradient(90deg,var(--accent),transparent);
+    width:120px;margin:22px 0}
+  .pill{display:inline-block;font-weight:600;font-size:13px;color:var(--accent);
+    border:1px solid var(--accent);border-radius:999px;padding:4px 12px;margin-bottom:18px;width:max-content}
+  .big{font-family:"Bitter";font-weight:600;font-size:clamp(28px,4.4vw,50px);line-height:1.08}
+  .quietnote{font-size:13px;color:var(--dim);margin-top:26px;max-width:52ch}
+  .nav{position:fixed;bottom:18px;right:22px;display:flex;gap:10px;align-items:center;
+    font-size:13px;color:var(--dim)}
+  .nav button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);
+    border-radius:8px;padding:6px 12px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+  .count{position:fixed;bottom:22px;left:22px;font-size:12px;color:var(--dim);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Justin Mulvaney',
+   h1:'The Inner Game of Leadership',
+   sub:'How founders perform at their best, and build teams that do too, without burning out.'},
+
+  {t:'who', kicker:'Who this is for',
+   h2:'You already know how to perform.',
+   p:'You are a founder or an operator who got here by being capable. You can run the strategy, raise the round, ship the thing. And lately the hardest problems are not on the roadmap. They are in the room, in the relationships, and in your own head.'},
+
+  {t:'trap', kicker:'The trap',
+   h2:'You optimized everything outside of you.',
+   p:'The product, the org chart, the funnel, the calendar. The one system nobody handed you a playbook for is the one running underneath all of it: your own internal state when the pressure is on.',
+   note:'Most high performers never learn this on purpose. They inherit a default and call it their personality.'},
+
+  {t:'reframe', kicker:'The reframe',
+   big:'The bottleneck is rarely your strategy. It is your state.',
+   p:'The decisions that cost you most are not made from clarity. They are made from reactivity, from a body that is bracing, from a part of you that needs to be right. Change the inner state and the outer choices change with it.'},
+
+  {t:'part', pill:'Part One', h2:'The default: drive and fear.',
+   p:'Under real stakes most founders run on two fuels, drive and fear. They work. They also narrow your vision, shorten your fuse, and quietly teach your team to manage you instead of telling you the truth.',
+   list:['Drama replaces candor in the hard conversations','You react in the meeting, then spend the night rewriting it','Everything feels urgent, so nothing feels chosen']},
+
+  {t:'frame', kicker:'The whole idea in one line',
+   big:'High humanity and high performance are not a trade-off.',
+   p:'Conscious leadership lives at the intersection of the two. You perform at your best precisely when you lead from a connected, aware inner place, not from the bracing. This masterclass is the practice that gets you there.'},
+
+  {t:'part', pill:'Part Two', h2:'The inner game: four moves.',
+   p:'These are the moves I teach founders to make in real time, in the meeting, not in a journal afterward. None of them require you to be a different person. They require you to notice sooner and choose on purpose.'},
+
+  {t:'pillar', kicker:'Move one', h2:'Radical responsibility',
+   p:'Shift from "who did this to me" to "what is my part in this." Not blame of yourself, ownership. The moment you take your side of a dynamic, you get your power back, because your part is the only part you can actually move.'},
+
+  {t:'pillar', kicker:'Move two', h2:'From reactivity to presence',
+   p:'Reactivity shows up in the body first: the tight chest, the held breath, the heat. This is somatic work. You learn to feel the signal early and come back to presence before you speak, so the next sentence is a choice and not a reflex.'},
+
+  {t:'pillar', kicker:'Move three', h2:'Curiosity over righteousness',
+   p:'There is a part of you that would rather be right than connected. Parts work is how you meet it without being run by it. Trading the need to win the point for a real question is what turns a standoff into a decision.'},
+
+  {t:'pillar', kicker:'Move four', h2:'Candor and clean agreements',
+   p:'High-trust teams run on radical candor and impeccable agreements: say the true thing kindly, make clear commitments, and clean them up when they break. This is the operating system a conscious team runs on, and it starts with you.'},
+
+  {t:'attrib', kicker:'Where this comes from',
+   h2:'Standing on good work.',
+   p:'The four moves draw on the 15 Commitments of Conscious Leadership, created by The Conscious Leadership Group, where I did my coach certification, alongside somatics, parts work, and the Enneagram. My job is to make them usable under the real pressure of running a company.'},
+
+  {t:'ownerparent', kicker:'The whole life', h2:'You are the same person at 6pm.',
+   p:'The founders I coach are often owner-parents, at a peak in their work and a peak at home in the same season. The inner game is not a work skill you switch off. The same presence that changes a board meeting changes a dinner table.'},
+
+  {t:'part', pill:'Part Three', h2:'A week in the inner game.',
+   p:'Not a retreat high that fades by Tuesday. Small, repeatable reps that compound.',
+   list:['You catch the bracing in a tense 1:1 and name it instead of pushing through','You say the thing you would normally swallow, cleanly, and the team moves','You leave the hard day with energy instead of a hangover of unsaid things']},
+
+  {t:'antiguru', kicker:'How I hold it', h2:'No clear answers, and that is the point.',
+   p:'I am not a guru with a formula. On the podcast I co-host, No Clear Answers, we take self-help apart on purpose. Leadership is lived in ambiguity. The work is building the capacity to stay present inside it, not to escape it with one more framework.'},
+
+  {t:'whyme', kicker:'Why me', h2:'I have sat in the chair.',
+   p:'I spent nearly a decade in leadership roles inside venture-backed startups before I coached. Since 2020 I have coached more than 100 founders and leadership teams across the YC, NYC, YPO, and Hampton worlds, and I facilitate the offsites where teams actually say the hard things.'},
+
+  {t:'objection', kicker:'The honest objection', h2:'"I do not have time for inner work."',
+   p:'Fair. You also do not have time to redo the decision you made while reactive, or to rebuild the trust a bad meeting cost. The inner game is not more time. It is the same hours, led from a clearer place.'},
+
+  {t:'shift', kicker:'The shift', h2:'Same founder, different state.',
+   cols:[
+     {h3:'Before',p:'Reacts, then manages the fallout. The team edits the truth to manage your mood.'},
+     {h3:'After',p:'Notices early, chooses on purpose. The team tells you the real thing, sooner.'}
+   ]},
+
+  {t:'recap', kicker:'Carry these four', h2:'The inner game, in four moves.',
+   list:['Radical responsibility: take your part','Reactivity to presence: feel it, then choose','Curiosity over righteousness: ask the real question','Candor and clean agreements: say it, keep it, repair it']},
+
+  {t:'cta', kicker:'Where to start',
+   h2:'Let us work side by side.',
+   p:'If this is the leap you are in, from a high-performing individual to a high-performing leader, I would love to talk about what coaching together could look like. We will start with a conversation, not a pitch.',
+   note:'This session is educational. No specific result or outcome is guaranteed; results vary with the person and the work they put in.'}
+];
+
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+let i=0;
+function esc(s){return s}
+function render(s){
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.pill) h+='<span class="pill">'+s.pill+'</span>';
+  if(s.h1) h+='<h1>'+s.h1+'</h1>';
+  if(s.big) h+='<div class="big">'+s.big+'</div>';
+  if(s.h2) h+='<h2>'+s.h2+'</h2>';
+  if(s.sub) h+='<div class="sub">'+s.sub+'</div>';
+  if(s.p) h+='<p'+(s.lead?' class="lead"':'')+'>'+s.p+'</p>';
+  if(s.list){h+='<ul>';s.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+  if(s.cols){h+='<div class="cols">';s.cols.forEach(c=>h+='<div class="col"><h3>'+c.h3+'</h3><p>'+c.p+'</p></div>');h+='</div>';}
+  if(s.t==='title'||s.t==='reframe'||s.t==='frame') h='<div class="horizon"></div>'+h;
+  if(s.note) h+='<div class="quietnote">'+s.note+'</div>';
+  return h;
+}
+function show(){
+  stage.innerHTML='<div class="slide on">'+render(S[i])+'</div>';
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));show();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
