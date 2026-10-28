@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Screen Should Tell the Truth — a masterclass with Tommy Collier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#160026;       /* his header plum ground (brand.json) */
+    --panel:#250a3d;    /* lifted plum for panels */
+    --rule:#4a3a5c;     /* muted plum/mauve hairline, from #a299a8 */
+    --accent:#c9a4e8;   /* orchid: mid of his lavender #e8e2ed and plum #160026 */
+    --ink:#e8e2ed;      /* dominant lavender text (124 uses) */
+    --mute:#a299a8;     /* mauve secondary */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:40px 22px 120px}
+  .slide{
+    background:linear-gradient(180deg,var(--panel),#1b062e);
+    border:1px solid var(--rule);border-radius:18px;
+    padding:54px 48px;margin:22px 0;min-height:430px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .slide::after{content:"";position:absolute;right:-120px;top:-120px;width:320px;height:320px;
+    background:radial-gradient(closest-side,rgba(201,164,232,.22),transparent);pointer-events:none}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:18px}
+  h1{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:46px;line-height:1.08;
+    letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:'Merriweather',Georgia,serif;font-weight:700;font-size:34px;line-height:1.14;
+    margin-bottom:16px}
+  .sub{font-size:21px;line-height:1.5;color:var(--ink);max-width:40ch}
+  .body{font-size:18px;line-height:1.65;color:#d8cfe2;max-width:54ch}
+  .lever{display:flex;align-items:baseline;gap:20px}
+  .lever .num{font-family:'Merriweather',serif;font-weight:900;font-size:64px;color:var(--accent);
+    line-height:1;opacity:.85}
+  ul{margin:14px 0 0 2px;list-style:none}
+  li{font-size:19px;line-height:1.9;padding-left:26px;position:relative;color:#e0d8ea}
+  li::before{content:"";position:absolute;left:0;top:14px;width:9px;height:9px;border-radius:50%;
+    background:var(--accent)}
+  .disc{margin-top:26px;font-size:13px;line-height:1.6;color:var(--mute);max-width:60ch}
+  .big{font-family:'Merriweather',serif;font-weight:900;font-size:40px;line-height:1.1}
+  .big .a{color:var(--accent)}
+  .foot{position:absolute;bottom:20px;left:48px;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--mute)}
+  .title h1{font-size:58px}
+  @media(max-width:640px){.slide{padding:38px 24px}h1{font-size:34px}.title h1{font-size:40px}
+    h2{font-size:26px}.sub{font-size:18px}.body{font-size:16px}.lever .num{font-size:44px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Tommy Collier',
+   h:'The Screen Should Tell the Truth',
+   sub:'How to be seen as the authority you already are, the moment the camera turns on.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'If you show up on camera, this is for you',
+   body:'Coaches, consultants, speakers, authors, course creators. You run the workshop, you go live, you record the podcast, you show up in rooms full of people who have never heard of you. This hour is about what the camera says about you before you say a word.'},
+
+  {t:'trap', kicker:'The quiet moment before you go live',
+   h:'I hope this looks okay',
+   body:'Somewhere between checking your hair and unmuting, a small voice shows up. Not about your content. You know your content. It is the other thing. The camera. The light you were never sure about. The background you stopped seeing months ago that strangers see first, every single time.'},
+
+  {t:'reframe', kicker:'The reframe',
+   h:'You do not have a content problem',
+   sub:'You have a presence problem. And it is costing you more than you know, because your setup is talking before you are.'},
+
+  {t:'part', kicker:'Part One',
+   h:'Every frame is a vote',
+   body:'In the first three seconds a stranger has already decided something about you. Every frame either builds trust or plants a tiny doubt, and tiny doubts compound: on sales calls, on lives, on every video where someone sized you up before you finished your first sentence.'},
+
+  {t:'stat', kicker:'The idea in one line',
+   h:'The 3-Second Authority Check',
+   sub:'Before you speak, your setup has already answered one question for the viewer: is this person the real thing? Most experts never find out what their own answer is.'},
+
+  {t:'part', kicker:'Part Two',
+   h:'The 5 On-Camera Trust Levers',
+   body:'Here is the good news. What the screen says about you is not luck and it is not talent. It comes down to five levers, and every one of them is adjustable once you know it is there.'},
+
+  {t:'lever', n:'01', h:'Light',
+   body:'Color temperature and direction decide whether you look alive or exhausted. One wrong setting makes daylight fight a candle-warm bulb, and you pay for it in every frame without ever knowing why.'},
+
+  {t:'lever', n:'02', h:'Sound',
+   body:'A good mic pointed the wrong way sounds like you are talking from down the street. Aim it, and suddenly you sound like you are hosting your own show. Same gear, opposite impression.'},
+
+  {t:'lever', n:'03', h:'Camera',
+   body:'Height, distance and lens decide whether you read as the authority in the room or the person who wandered into it. The angle speaks before you do.'},
+
+  {t:'lever', n:'04', h:'Background',
+   body:'Strangers read your background first, every single time. A wall color can read green on a webcam and quietly make you look off, and it was never you. It was the room, telling the wrong story.'},
+
+  {t:'lever', n:'05', h:'Presence',
+   body:'The first four levers clear the noise so the fifth can land: you, fully present, with nothing in the frame arguing against you. This is where the screen finally tells the truth about the person in front of it.'},
+
+  {t:'part', kicker:'Part Three',
+   h:'When the screen stops lying about you',
+   body:'You stop guessing. You stop buying gear that does not solve the real problem. You hit go live without the little voice. And the first impression on every call, video and live matches the authority you already carry.'},
+
+  {t:'before', kicker:'The shift',
+   h:'Same person. Same expertise. Different truth.',
+   body:'Nothing about your knowledge changed. What changed is that the screen stopped lying about it. People lean in sooner, trust faster, and decide you are worth listening to before you have even made your case.'},
+
+  {t:'why', kicker:'Why me',
+   h:'Twenty years behind the camera',
+   body:'I have spent twenty years shaping how people are seen on camera, with 4 Emmy Awards and more than 50 Telly Awards. For the final four years of Bob Proctor life I led his creative media, shaping how one of the most recognized voices in personal development showed up to the world. My whole body of work stands on one line: the screen should tell the truth.'},
+
+  {t:'method', kicker:'The arc',
+   h:'Designed, Aligned, and Primed',
+   body:'Designed: your setup engineered as one coherent signal. Aligned: the way you look matches the authority you carry. Primed: you walk in ready, not hoping. That is the whole of this work, in three words.'},
+
+  {t:'recap', kicker:'The five levers, one more time',
+   h:'What we just covered',
+   list:['Light: what your color temperature is saying',
+         'Sound: why a good mic can still sound wrong',
+         'Camera: the angle that reads as authority',
+         'Background: what strangers see first',
+         'Presence: passing the 3-second check']},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Ready to make the screen tell the truth?',
+   body:'If you want my eyes on your exact room, your exact gear and your exact light, the next step is a quick fit call. We talk about your space, your on-camera goals, and whether building your GlamCam Studio is your next right step. No pressure, no pitch marathon.',
+   disc:'Educational only. No income, role, outcome, or result is guaranteed. Results vary and depend on your own effort, market, and circumstances.'}
+];
+
+function render(){
+  const deck = document.getElementById('deck');
+  S.forEach(s=>{
+    const d = document.createElement('section');
+    d.className = 'slide ' + (s.t==='title'?'title':'');
+    let inner = '';
+    if(s.kicker) inner += `<div class="kicker">${s.kicker}</div>`;
+    if(s.t==='lever'){
+      inner += `<div class="lever"><div class="num">${s.n}</div><div><h2>${s.h}</h2><p class="body">${s.body}</p></div></div>`;
+    } else {
+      if(s.h) inner += `<h1>${s.h}</h1>`;
+      if(s.sub) inner += `<p class="sub">${s.sub}</p>`;
+      if(s.body) inner += `<p class="body">${s.body}</p>`;
+      if(s.list){ inner += '<ul>'; s.list.forEach(it=> inner += `<li>${it}</li>`); inner += '</ul>'; }
+    }
+    if(s.disc) inner += `<p class="disc">${s.disc}</p>`;
+    inner += `<div class="foot">The screen should tell the truth</div>`;
+    d.innerHTML = inner;
+    deck.appendChild(d);
+  });
+}
+render();
+</script>
+</body>
+</html>
