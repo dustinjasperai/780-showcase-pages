@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outstanding — the masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4fa; --panel:#efe9f4; --ink:#26212b; --muted:#6c6276;
+    --accent:#6a1485; --rule:#e4dcec;
+    --head:'Zilla Slab',Georgia,serif; --body:'Space Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.74rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.3rem,6vw,4rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:clamp(1.7rem,4vw,2.7rem);line-height:1.1;letter-spacing:-.005em}
+  .lead{font-size:clamp(1.05rem,2vw,1.4rem);color:var(--muted);margin-top:1.3rem;max-width:30ch;line-height:1.5}
+  p.body{font-size:clamp(1rem,1.7vw,1.22rem);line-height:1.6;margin-top:1.1rem;max-width:62ch;color:#3d3832}
+  ul{margin-top:1.4rem;list-style:none;display:grid;gap:.9rem;max-width:64ch}
+  li{position:relative;padding-left:1.7rem;font-size:clamp(1rem,1.7vw,1.18rem);line-height:1.5}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;background:var(--accent);border-radius:50%}
+  li b{font-weight:600}
+  .big{font-family:var(--head);font-size:clamp(2.4rem,7vw,5rem);font-weight:700;line-height:1;color:var(--accent)}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:clamp(1.6rem,3vw,2.6rem)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.6rem}
+  .cardlet{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:1.2rem 1.3rem}
+  .cardlet .n{font-family:var(--head);color:var(--accent);font-weight:700;font-size:1.3rem}
+  .cardlet p{font-size:.98rem;color:#3d3832;margin-top:.4rem;line-height:1.45}
+  .quote{font-family:var(--head);font-style:italic;font-size:clamp(1.5rem,3.4vw,2.3rem);line-height:1.25;max-width:24ch}
+  .disc{font-size:.84rem;color:var(--muted);margin-top:1.6rem;max-width:60ch;line-height:1.5}
+  .cta-step{display:inline-block;margin-top:1.6rem;font-family:var(--head);font-size:clamp(1.2rem,2.4vw,1.7rem);font-weight:600;color:var(--ink);border-bottom:3px solid var(--accent);padding-bottom:.25rem}
+  footer{position:fixed;bottom:2.4vh;left:0;right:0;display:flex;justify-content:space-between;padding:0 7vw;font-size:.76rem;color:var(--muted);letter-spacing:.04em}
+  .brandmark{font-family:var(--head);font-weight:600;color:var(--ink)}
+  .brandmark span{color:var(--accent)}
+  .nav{position:fixed;bottom:2vh;left:50%;transform:translateX(-50%);display:flex;gap:.5rem}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);width:38px;height:30px;border-radius:8px;cursor:pointer;font-size:1rem}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span class="brandmark">Chai<span>Time</span> · Chaitali Narla</span><span id="pg"></span></footer>
+<div class="nav"><button id="prev" aria-label="Previous">‹</button><button id="next" aria-label="Next">›</button></div>
+<script>
+const S=[
+  {t:'title', html:`<div class="kick">A ChaiTime masterclass</div><h1>Outstanding</h1><p class="lead">How under-recognized top performers get seen, sponsored, and promoted, straight from the person who sat in the calibration room.</p>`},
+
+  {t:'promise', html:`<div class="kick">The promise</div><h2>In the next hour</h2><p class="body">You will see exactly how senior-tech ratings and promotions get decided, why your best work keeps getting missed, and the three practices that fix it. No theory. The same system I have used with more than 100 engineers and managers.</p>`},
+
+  {t:'audience', html:`<div class="kick">Who this is for</div><h2>You do the work. Someone else gets the credit.</h2><p class="body">You are a senior engineer, manager, or staff-plus IC who ships the hard things. The migration nobody wanted. The outage you quietly prevented. The team you held together. And yet when ratings land, you hear the same note: "great work, but the impact was not visible enough." This hour is for you.</p>`},
+
+  {t:'trap', html:`<div class="kick">The trap</div><h2>Working harder makes it worse.</h2><p class="body">The instinct, when you get passed over, is to take on more. More tickets, more on-call, more quiet heroics. But more invisible work just deepens the hole. The people getting promoted around you are not working harder than you. They are working more visibly, and most of them learned how on purpose.</p>`},
+
+  {t:'hook', html:`<div class="kick">The uncomfortable truth</div><h2 style="max-width:20ch">Calibration does not reward the best work. It rewards the most visible work.</h2><p class="body">Behind a closed door, a room of leaders decides your rating in a few minutes, mostly from stories other people tell about you. If your work is invisible in that room, your rating is decided by people who never saw it. That is not a talent problem. It is a visibility problem, and it is learnable.</p>`},
+
+  {t:'part', html:`<div class="kick">Part one</div><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Why great work goes unseen</h1><p class="lead">Three invisible forces quietly cap careers that deserve more.</p>`},
+
+  {t:'list', html:`<div class="kick">The three forces</div><h2>Invisible by default</h2><ul>
+    <li><b>Guess culture vs ask culture.</b> Many of us were raised to anticipate needs and never put anyone on the spot. Corporate runs on direct asks, where a "no" costs nothing. If you wait to be noticed, you wait forever.</li>
+    <li><b>Work that leaves no trace.</b> Prevention, glue work, and unblocking others are the most valuable and the least legible. Nobody writes a promo doc about the fire that never started.</li>
+    <li><b>No sponsor in the room.</b> A mentor talks to you. A sponsor talks about you when you are not there. Most top performers have mentors and no sponsors.</li>
+  </ul>`},
+
+  {t:'reframe', html:`<div class="panel"><div class="kick">Reframe</div><p class="quote">Your job is not only to do outstanding work. It is to make sure the right people can see it, in the language they are calibrating in.</p></div><p class="body">That is the whole shift. Not louder self-promotion. Translation, so the value you already create becomes legible to the people who decide.</p>`},
+
+  {t:'part', html:`<div class="kick">Part two</div><h1 style="font-size:clamp(2rem,5vw,3.2rem)">The Outstanding method</h1><p class="lead">Three practices that turn invisible work into visible impact.</p>`},
+
+  {t:'pillar', html:`<div class="kick">Practice one</div><h2>Think like a CEO of your domain</h2><p class="body">Intrapreneurs do not wait for assignments. They follow friction: the repetitive, painful workflow everyone tolerates, and they take it end to end, from the problem through implementation, edge cases, and adoption. A rating follows outcomes you owned, not tasks you completed.</p><div class="grid2">
+    <div class="cardlet"><div class="n">Follow friction</div><p>Find the pain everyone has normalized and run toward it.</p></div>
+    <div class="cardlet"><div class="n">Own it end to end</div><p>Problem, build, edge cases, and getting people to actually adopt it.</p></div>
+  </div>`},
+
+  {t:'pillar', html:`<div class="kick">Practice two</div><h2>Build sponsorship on purpose</h2><p class="body">Sponsorship is not a favor you hope for. It is a set of cross-functional relationships you build before you need them. Answer "what is in it for them" for product, legal, and finance. Become the translator who connects your technical work to what each leader is measured on. Then the stories told about you in the room are told by people who matter.</p><ul>
+    <li><b>Map the room.</b> Know who speaks for your work in calibration.</li>
+    <li><b>Feed your sponsors.</b> Give them the two-line story they can repeat.</li>
+  </ul>`},
+
+  {t:'pillar', html:`<div class="kick">Practice three</div><h2>21 days of asking</h2><p class="body">Asking is a skill you build by reps, not a personality trait. Across three weeks you practice small, specific asks until a "no" stops stinging: a stretch assignment, a visible project, a review from a peer who saw your work, time to present to leadership. People who ask create opportunity. People who wait get overlooked.</p><div class="grid2">
+    <div class="cardlet"><div class="n">Development</div><p>Courses, conferences, speaking, shadowing.</p></div>
+    <div class="cardlet"><div class="n">Advancement</div><p>Promotion signals, transfers, peer reviews, stretch roles.</p></div>
+  </div>`},
+
+  {t:'practice', html:`<div class="kick">The hard part</div><h2>Rehearse the conversation before it counts</h2><p class="body">Most of this fails at the moment of truth: the calibration pitch, the ask for a stretch role, the disagreement with a skip-level. So you practice them out loud first, with an AI partner on the ChaiTime platform, until the words are ready when the room is real. Reps remove the fear.</p>`},
+
+  {t:'day', html:`<div class="kick">Part three</div><h2>A quarter you run on purpose</h2><p class="body">Week one, you map the room and name your sponsors. Week two, you start a friction project you own end to end. Across three weeks, you make one real ask at a time until asking stops feeling like a risk. By review season, the story told about you in calibration is one you helped write.</p>`},
+
+  {t:'proof', html:`<div class="kick">What changes</div><h2>Same work. A different story in the room.</h2><ul>
+    <li>Your prevention and glue work show up as owned outcomes, not footnotes.</li>
+    <li>Two or three sponsors can describe your impact without you present.</li>
+    <li>You ask for the visible project instead of waiting to be handed it.</li>
+    <li>You walk into the review already knowing how your story will land.</li>
+  </ul>`},
+
+  {t:'why', html:`<div class="kick">Why listen to me</div><h2>I sat in the room where ratings are decided.</h2><p class="body">I spent my first decade in tech going from intern to director at Google, and I now lead engineering at Stripe. I have been in the calibration conversations and watched brilliant people get capped for reasons that had nothing to do with their talent. I have coached more than 100 ICs and managers through exactly this, to the ratings, sponsorship, and promotions they had earned.</p>`},
+
+  {t:'recap', html:`<div class="kick">In one line</div><p class="quote">Do outstanding work. Make it visible. Ask for what it has earned.</p><p class="body">That is the method, and every piece of it is a practice you can start this week.</p>`},
+
+  {t:'cta', cls:'cta', html:`<div class="kick">Your next step</div><h2>Come practice this with me.</h2><p class="body">Outstanding is a live cohort where we work through calibration, sponsorship, and the asks that move your career, together, in real time. If you want it tailored to your exact situation, we can talk about 1:1 coaching.</p><a class="cta-step">Join the next live Outstanding cohort at chaitime.ai</a><p class="disc">Educational content only. No income, role, rating, promotion, or result is guaranteed. Results vary by individual, employer, and effort. Nothing here is career, legal, or financial advice.</p>`}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const d=document.createElement('div');
+  d.className='slide on'+(s.cls?' '+s.cls:'');
+  d.innerHTML=s.html;
+  stage.appendChild(d);
+  document.getElementById('pg').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
