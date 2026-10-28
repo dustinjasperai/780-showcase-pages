@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Reputational Risk Briefing by Stephen Waddington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f8f6;
+    --panel:#ffffff;
+    --rule:#dfe4dd;
+    --ink:#23312a;
+    --muted:#4d4d4d;
+    --accent:#26a65b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif;
+    font-size:20px;
+    line-height:1.5;
+    overflow:hidden;
+  }
+  #stage{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+  }
+  .slide{
+    display:none;
+    width:100%;
+    height:100%;
+    padding:6vh 8vw 10vh;
+  }
+  .slide.active{display:flex;flex-direction:column;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:600;
+    font-size:.72rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:1.4rem;
+  }
+  .kicker::before{
+    content:"";
+    display:inline-block;
+    width:26px;
+    height:2px;
+    background:var(--accent);
+    vertical-align:middle;
+    margin-right:.8rem;
+  }
+  h1{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:700;
+    line-height:1.08;
+    letter-spacing:-.01em;
+    font-size:clamp(2.2rem,5.4vw,4.2rem);
+    max-width:16ch;
+  }
+  h2{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:600;
+    line-height:1.14;
+    letter-spacing:-.005em;
+    font-size:clamp(1.7rem,3.6vw,2.9rem);
+    max-width:20ch;
+    margin-bottom:1.8rem;
+  }
+  .sub{
+    font-size:clamp(1.15rem,2vw,1.6rem);
+    color:var(--muted);
+    max-width:34ch;
+    margin-top:1.8rem;
+  }
+  .lead{
+    font-size:clamp(1.25rem,2.3vw,1.9rem);
+    max-width:28ch;
+    line-height:1.32;
+  }
+  .lead .em{color:var(--accent);font-style:italic}
+  .body-wrap{max-width:46ch}
+  ul.body{list-style:none}
+  ul.body li{
+    position:relative;
+    padding-left:1.6rem;
+    margin-bottom:1.05rem;
+    font-size:1.12rem;
+    color:var(--ink);
+    border-top:1px solid var(--rule);
+    padding-top:1.05rem;
+  }
+  ul.body li:first-child{border-top:0}
+  ul.body li::before{
+    content:"";
+    position:absolute;
+    left:0;top:1.45rem;
+    width:8px;height:8px;
+    background:var(--accent);
+  }
+  ul.body li strong{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:600;
+    display:block;
+    font-size:1rem;
+    letter-spacing:.01em;
+    margin-bottom:.2rem;
+  }
+  .cols{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border-top:2px solid var(--ink);
+    margin-top:1rem;
+  }
+  .col{
+    padding:1.6rem 1.4rem 0 0;
+    border-right:1px solid var(--rule);
+  }
+  .col:last-child{border-right:0;padding-right:0}
+  .col .num{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:700;
+    font-size:1.1rem;
+    color:var(--accent);
+    display:block;
+    margin-bottom:.7rem;
+  }
+  .col .ch{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    margin-bottom:.6rem;
+    line-height:1.2;
+  }
+  .col p{font-size:1rem;color:var(--muted)}
+  .quote{
+    font-style:italic;
+    font-size:clamp(1.3rem,2.5vw,2rem);
+    line-height:1.35;
+    max-width:30ch;
+    border-left:3px solid var(--accent);
+    padding-left:1.4rem;
+  }
+  .stat{
+    font-family:"Libre Franklin",sans-serif;
+    font-weight:700;
+    font-size:clamp(3.4rem,10vw,7rem);
+    color:var(--ink);
+    line-height:1;
+  }
+  .stat .pct{color:var(--accent)}
+  .ba{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border-top:2px solid var(--ink);
+    margin-top:1rem;
+    max-width:60ch;
+  }
+  .ba div{padding:1.5rem 1.4rem 0 0;border-right:1px solid var(--rule)}
+  .ba div:last-child{border-right:0;padding-right:0}
+  .ba h4{
+    font-family:"Libre Franklin",sans-serif;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:.8rem;
+  }
+  .ba p{font-size:1.1rem;line-height:1.35}
+  .ba .after h4{color:var(--accent)}
+  .disclaimer{
+    font-size:.92rem;
+    color:var(--muted);
+    max-width:52ch;
+    border-top:1px solid var(--rule);
+    padding-top:1rem;
+    margin-top:2rem;
+    font-style:italic;
+  }
+  .cta-actions{max-width:46ch;margin-top:.6rem}
+  .spacer{flex:1}
+  .meta{
+    font-family:"Libre Franklin",sans-serif;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  footer{
+    position:fixed;
+    left:8vw;right:8vw;bottom:3.2vh;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:"Libre Franklin",sans-serif;
+    font-size:.7rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    border-top:1px solid var(--rule);
+    padding-top:1rem;
+  }
+  footer .brand{color:var(--ink);font-weight:600}
+  .nav-hint{opacity:.7}
+  @media(max-width:720px){
+    .cols{grid-template-columns:1fr}
+    .col{border-right:0;border-top:1px solid var(--rule);padding-right:0}
+    .col:first-child{border-top:0}
+    .ba{grid-template-columns:1fr}
+    .ba div{border-right:0;border-top:1px solid var(--rule)}
+    .ba div:first-child{border-top:0}
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>
+  <span class="brand">Stephen Waddington / Wadds Inc.</span>
+  <span class="nav-hint">Use arrow keys or click to advance &middot; <span id="pageno">1</span></span>
+</footer>
+<script>
+const S=[
+  {t:'title',
+   h:'The Reputational Risk Briefing',
+   sub:'Turning communications from output into a management-grade function. A masterclass for the leaders who own reputation but rarely own the room.'},
+
+  {t:'content',
+   kicker:'Who this is for',
+   h:'You run communications. The business still treats it as overhead.',
+   body:[
+     {s:'Agency founders and principals',p:'You sell counsel, yet you are bought on volume of coverage and cost per hour.'},
+     {s:'In-house heads of comms',p:'You sit outside the room where the decisions that shape reputation are actually taken.'},
+     {s:'The trap',p:'Judged on activity and output. Press releases shipped, monthly reports filed. Treated as a cost line, and the first thing cut when the market turns.'}
+   ]},
+
+  {t:'stat',
+   kicker:'The uncomfortable reframe',
+   stat:'92%',
+   h:'Intangible assets now account for roughly 92 percent of the value of the S&P 500.',
+   sub:'Reputation is no longer soft. It is most of the balance sheet. Yet communications is still managed like a cost centre, and reported on like a print room.'},
+
+  {t:'quote',
+   kicker:'Part One / The core problem',
+   quote:'The monthly communications report tells leadership what you did. It tells them almost nothing they can act on.',
+   sub:'Activity dressed as accountability. Impressions, clips, and sentiment scores that answer a question nobody in the C-suite is asking.'},
+
+  {t:'content',
+   kicker:'Part One / The core problem',
+   h:'Why the C-suite tunes out',
+   body:[
+     {s:'It reports activity, not intelligence',p:'Outputs are counted. The implications for the business are left for someone else to infer.'},
+     {s:'It arrives after the fact',p:'A record of last month cannot inform a decision that has to be taken this week.'},
+     {s:'It buys no seat at the table',p:'A function that reports on itself is never invited into the decisions that actually move reputation and value.'}
+   ]},
+
+  {t:'quote',
+   kicker:'Part Two / The framework',
+   quote:'Stop submitting a monthly communications report and start submitting a reputational risk briefing. It’s the same data, reframed.',
+   sub:'The data you already gather does not change. What changes is the question it answers. Three pillars carry the shift.'},
+
+  {t:'framework',
+   kicker:'Part Two / Pillar one',
+   h:'What has changed externally',
+   items:[
+     {n:'01',ch:'Scan for weak signals',p:'Read the external environment deliberately. Regulation, narrative shifts, competitor moves, platform change, the quiet chatter that precedes a crisis.'},
+     {n:'',ch:'Early, not after',p:'The value is in the lead time. A signal caught at the edge is a choice. A signal caught in the headlines is a scramble.'},
+     {n:'',ch:'Structured, not anecdotal',p:'Replace the clip count with a disciplined read of the landscape your organisation operates inside.'}
+   ]},
+
+  {t:'framework',
+   kicker:'Part Two / Pillar two',
+   h:'What it means for the organisation',
+   items:[
+     {n:'02',ch:'Translate signal into risk',p:'A signal is only useful once it is tied to something the business cares about. Revenue, licence to operate, talent, trust.'},
+     {n:'',ch:'Name the exposure',p:'Say plainly what is at stake, for whom, and on what horizon. Ambiguity is the enemy of counsel.'},
+     {n:'',ch:'Speak the language of the board',p:'Frame the read in the terms a management team already uses to weigh every other risk on its register.'}
+   ]},
+
+  {t:'framework',
+   kicker:'Part Two / Pillar three',
+   h:'What decisions management needs to take',
+   items:[
+     {n:'03',ch:'Convert the read into counsel',p:'End every briefing with options and a recommendation, not a summary. Give leadership something to decide, not something to file.'},
+     {n:'',ch:'Management-grade, not tactical',p:'The question is never which channel to post on. It is what the organisation should do, and what it should stop doing.'},
+     {n:'',ch:'Own the recommendation',p:'Counsel means putting your judgment on the record. That is what earns the seat the function keeps asking for.'}
+   ]},
+
+  {t:'content',
+   kicker:'Part Two / Strategic action one',
+   h:'Audit generative-search visibility',
+   body:[
+     {s:'Run yourself through the models',p:'Put your brand, your leaders, and your top issues through the leading large language models and read what they return.'},
+     {s:'This is the new front page',p:'Audiences increasingly ask a model before they ask a search engine. If the answer is wrong or absent, that is a reputational exposure, not a technical one.'}
+   ]},
+
+  {t:'content',
+   kicker:'Part Two / Strategic action two',
+   h:'Establish AI governance and accountability',
+   body:[
+     {s:'Name who is accountable',p:'When an AI agent speaks or acts for the organisation, someone owns the outcome. Decide who, before the incident, not during it.'},
+     {s:'Build the escalation path',p:'A clear route for when a system gets it wrong is itself a reputational control. Governance is communications work now.'}
+   ]},
+
+  {t:'content',
+   kicker:'Part Two / Strategic action three',
+   h:'Invest in team judgment and critical thinking',
+   body:[
+     {s:'Media and AI literacy',p:'Tools generate fluent output at volume. The scarce skill is knowing what is worth saying and what is wrong.'},
+     {s:'Original thinking and editing as a discipline',p:'Protect the capacity to think from first principles and to edit ruthlessly. That judgment is the product, not the draft.'}
+   ]},
+
+  {t:'content',
+   kicker:'Part Two / Strategic action four',
+   h:'Map relational stakeholder networks',
+   body:[
+     {s:'Map power as it actually is',p:'Influence rarely follows the org chart. Trace who shapes opinion, who grants permission, and who is listened to in a crisis.'},
+     {s:'Relationships are the asset',p:'When a signal becomes a risk, the response runs through people, not channels. Know the network before you need it.'}
+   ]},
+
+  {t:'content',
+   kicker:'Part Two / Strategic action five',
+   h:'Strategic subtraction',
+   body:[
+     {s:'Stop one thing',p:'Pick one report or channel you produce out of habit rather than evidence of impact. End it.'},
+     {s:'Subtraction is a signal',p:'Removing work that serves no one proves the function is led by judgment, not by routine. It also frees the capacity to do the briefing well.'}
+   ]},
+
+  {t:'quote',
+   kicker:'Part Three / In practice',
+   quote:'Communications as an intelligence system. It reads the external environment, and it delivers counsel the business can act on.',
+   sub:'Not a service desk fulfilling requests. A function that senses change early, interprets it, and shapes the decision before it is made.'},
+
+  {t:'beforeafter',
+   kicker:'Part Three / The shift',
+   h:'From report factory to briefing function',
+   before:'Counts outputs. Files a backward-looking summary each month. Waits for the request. Measured on volume. Cut first when budgets tighten.',
+   after:'Reads the environment for weak signals. Translates them into named organisational risk. Arrives with options and a recommendation. Trusted in the room where decisions are taken.'},
+
+  {t:'content',
+   kicker:'Why learn this from me',
+   h:'I have sat on every side of this table',
+   body:[
+     {s:'Former President of the CIPR',p:'I have represented the profession at its most senior level and argued its case to leadership.'},
+     {s:'Built and sold two agencies',p:'Rainier PR and Speed. I know what it costs to be bought on output, and what it takes to be retained for counsel.'},
+     {s:'Visiting professor and researcher',p:'Newcastle University, and PhD research at Leeds Business School. The practice is grounded in the evidence, not just the anecdote.'}
+   ]},
+
+  {t:'cta',
+   kicker:'Where this goes next',
+   h:'Build the briefing function with support',
+   body:[
+     {s:'PRogress',p:'My invite-only peer advisory group for agency founders and communications leaders who want to lead the function rather than service it. Apply for a place.'},
+     {s:'Executive coaching',p:'One to one work with me to move your own practice, and your seat, from output to counsel.'},
+     {s:'Start a conversation',p:'If the briefing resonates, reach out directly and we will talk about which path fits where you are.'}
+   ],
+   disclaimer:'This masterclass is educational. It shares a way of thinking, not a promise of outcomes. Results vary with your market, organisation, and effort. No income, revenue, or business outcome is guaranteed.'}
+];
+
+const stage=document.getElementById('stage');
+const pageno=document.getElementById('pageno');
+let i=0;
+
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const d=document.createElement('section');
+  d.className='slide active';
+  let html='';
+  if(s.kicker) html+='<div class="kicker">'+esc(s.kicker)+'</div>';
+
+  if(s.t==='title'){
+    html+='<div class="spacer"></div>';
+    html+='<h1>'+esc(s.h)+'</h1>';
+    html+='<p class="sub">'+esc(s.sub)+'</p>';
+    html+='<div class="spacer"></div>';
+    html+='<div class="meta">A masterclass by Stephen Waddington</div>';
+  }
+  else if(s.t==='stat'){
+    html+='<div class="spacer"></div>';
+    html+='<div class="stat"><span class="pct">'+esc(s.stat)+'</span></div>';
+    html+='<h2 style="margin-top:1.4rem">'+esc(s.h)+'</h2>';
+    html+='<p class="sub">'+esc(s.sub)+'</p>';
+    html+='<div class="spacer"></div>';
+  }
+  else if(s.t==='quote'){
+    html+='<div class="spacer"></div>';
+    html+='<p class="quote">'+esc(s.quote)+'</p>';
+    html+='<p class="sub">'+esc(s.sub)+'</p>';
+    html+='<div class="spacer"></div>';
+  }
+  else if(s.t==='content'){
+    html+='<h2>'+esc(s.h)+'</h2>';
+    html+='<div class="body-wrap"><ul class="body">';
+    s.body.forEach(function(b){
+      html+='<li><strong>'+esc(b.s)+'</strong>'+esc(b.p)+'</li>';
+    });
+    html+='</ul></div>';
+  }
+  else if(s.t==='framework'){
+    html+='<h2>'+esc(s.h)+'</h2>';
+    html+='<div class="cols">';
+    s.items.forEach(function(it){
+      html+='<div class="col">';
+      if(it.n) html+='<span class="num">'+esc(it.n)+'</span>';
+      html+='<div class="ch">'+esc(it.ch)+'</div><p>'+esc(it.p)+'</p></div>';
+    });
+    html+='</div>';
+  }
+  else if(s.t==='beforeafter'){
+    html+='<h2>'+esc(s.h)+'</h2>';
+    html+='<div class="ba"><div class="before"><h4>Report factory</h4><p>'+esc(s.before)+'</p></div>';
+    html+='<div class="after"><h4>Briefing function</h4><p>'+esc(s.after)+'</p></div></div>';
+  }
+  else if(s.t==='cta'){
+    html+='<h2>'+esc(s.h)+'</h2>';
+    html+='<div class="cta-actions"><ul class="body">';
+    s.body.forEach(function(b){
+      html+='<li><strong>'+esc(b.s)+'</strong>'+esc(b.p)+'</li>';
+    });
+    html+='</ul></div>';
+    html+='<p class="disclaimer">'+esc(s.disclaimer)+'</p>';
+  }
+
+  d.innerHTML=html;
+  stage.appendChild(d);
+  pageno.textContent=(i+1)+' / '+S.length;
+}
+
+function go(n){ i=Math.max(0,Math.min(S.length-1,n)); render(); }
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') go(i+1);
+  else if(e.key==='ArrowLeft'||e.key==='PageUp') go(i-1);
+});
+stage.addEventListener('click',function(e){
+  const w=window.innerWidth;
+  if(e.clientX < w*0.28) go(i-1); else go(i+1);
+});
+render();
+</script>
+</body>
+</html>
