@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet the Hive, a live masterclass with Jane Galloway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#fdfaf2; --panel:#f5eeda; --rule:#e7dcc0;
+    --ink:#3a342c; --ink-soft:#5a5146; --ink-mute:#8a7f6e;
+    --accent:#e8990c; --deep:#c2410c;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Nunito Sans',-apple-system,sans-serif;
+    background:#efe7d4; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; min-height:100vh;
+    padding:24px;
+  }
+  #deck{ width:100%; max-width:960px; }
+  .slide{
+    display:none; background:var(--bg);
+    border:1px solid var(--rule); border-radius:4px;
+    aspect-ratio:16/9; padding:64px 72px;
+    flex-direction:column; justify-content:center;
+    position:relative; overflow:hidden;
+    box-shadow:0 18px 50px rgba(58,52,44,0.10);
+  }
+  .slide.on{ display:flex; }
+  .slide::after{
+    content:""; position:absolute; top:0; left:0; width:100%; height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--deep));
+  }
+  .kick{ font-family:'Nunito Sans'; font-size:12px; font-weight:600; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
+  h1{ font-family:'Bitter'; font-weight:600; font-size:52px; line-height:1.1;
+    letter-spacing:-.01em; color:var(--ink); margin-bottom:18px; }
+  h2{ font-family:'Bitter'; font-weight:600; font-size:38px; line-height:1.18;
+    letter-spacing:-.005em; color:var(--ink); margin-bottom:16px; }
+  .q{ font-family:'Bitter'; font-style:italic; font-weight:500; font-size:40px;
+    line-height:1.25; color:var(--deep); }
+  p.sub{ font-family:'Bitter'; font-weight:400; font-size:23px; line-height:1.4;
+    color:var(--ink-soft); margin-bottom:14px; }
+  p.body{ font-size:19px; line-height:1.6; color:var(--ink-soft); margin-bottom:12px; max-width:40em; }
+  ul{ list-style:none; margin-top:10px; }
+  li{ font-size:19px; line-height:1.5; color:var(--ink-soft); padding:11px 0 11px 30px;
+    position:relative; border-bottom:1px solid var(--rule); max-width:42em; }
+  li:last-child{ border-bottom:none; }
+  li::before{ content:""; position:absolute; left:4px; top:20px; width:9px; height:9px;
+    background:var(--accent); border-radius:50%; }
+  li b{ color:var(--ink); font-weight:600; }
+  .phase{ font-family:'Bitter'; font-size:15px; color:var(--accent); font-weight:600;
+    letter-spacing:.04em; margin-bottom:10px; }
+  .credit{ font-size:16px; color:var(--ink-mute); margin-top:18px; }
+  .disc{ font-size:14px; color:var(--ink-mute); margin-top:22px; max-width:46em; line-height:1.5; }
+  .cta-step{ font-family:'Bitter'; font-size:24px; color:var(--ink); margin-top:8px; font-weight:500; }
+  .nav{ position:fixed; bottom:18px; right:22px; font-family:'Nunito Sans'; font-size:13px;
+    color:var(--ink-mute); background:var(--bg); border:1px solid var(--rule);
+    border-radius:20px; padding:6px 14px; }
+  .nav b{ color:var(--accent); }
+  .hint{ position:fixed; bottom:18px; left:22px; font-family:'Nunito Sans'; font-size:12px; color:var(--ink-mute); }
+  @media (max-width:640px){
+    .slide{ padding:34px 30px; } h1{ font-size:32px; } h2{ font-size:26px; }
+    .q{ font-size:26px; } p.sub{ font-size:18px; } li,p.body{ font-size:16px; }
+  }
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav"><b id="cur">1</b> / <span id="tot">1</span></div>
+<div class="hint">Use arrow keys to move</div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Jane Galloway',
+    h:'Quiet the Hive',
+    sub:'How midlife women turn down the mental noise and start living a life that is actually theirs.' },
+
+  {t:'who', k:'Who this hour is for',
+    h:'You, if any of this lands',
+    list:[
+      'From the outside it all works. You show up, you sort it, you remember the birthdays and who needs collecting from where.',
+      'People know they can rely on you. You are brilliant at looking after everyone else.',
+      'And then someone asks what you fancy, or what you want from the year ahead, and you realise you are not sure.' ] },
+
+  {t:'quote', k:'The honest bit',
+    q:'You have been in the passenger seat of your own life, with everyone else in the driving seat.' },
+
+  {t:'part', k:'Part one', h:'The hive',
+    sub:'The problem is not that you lack drive. It is that there is too much noise to hear yourself over.' },
+
+  {t:'body', k:'What the hive is',
+    h:'Three things, buzzing at once',
+    list:[
+      '<b>The inner critic.</b> The voice that says do not make a fuss, be grateful, who are you to want more.',
+      '<b>The mental load.</b> The invisible list only you are holding, running in the background all day.',
+      '<b>The shoulds.</b> Everyone else’s idea of what your life is supposed to look like.' ] },
+
+  {t:'body', k:'What the noise costs',
+    h:'This is how autopilot happens',
+    p:'When the hive is loud enough for long enough, you stop asking what you want and start running on defaults. Not because you chose them. Because you never got a quiet enough moment to choose anything else.' },
+
+  {t:'quote', k:'The reframe',
+    q:'You do not need to blow your life up. You need to quiet the hive long enough to hear your own voice.' },
+
+  {t:'part', k:'Part two', h:'The method',
+    sub:'A way through, in six moves. This is the arc of the Awaken Your Life journey, walked here in miniature.' },
+
+  {t:'phase', ph:'Move one · Reconnection',
+    h:'Who am I beneath all the roles?',
+    p:'Before we touch goals, we quiet the noise and find the woman underneath the mother, the manager, the friend, the one who copes. She is still there.' },
+
+  {t:'phase', ph:'Move two · Reclaiming',
+    h:'What do I actually want?',
+    p:'Not what is sensible. Not what would make everyone comfortable. We get curious about what you want more of, without needing the whole plan worked out first.' },
+
+  {t:'phase', ph:'Move three · Courage',
+    h:'What is my first brave step?',
+    p:'Change does not arrive in one grand leap. It arrives in one honest, slightly scary step, chosen on purpose and given a date. We call these JFDIs.' },
+
+  {t:'phase', ph:'Move four · Honouring',
+    h:'How do I protect what matters?',
+    p:'This is where you learn to say no without guilt, so the thing you reclaimed does not quietly get given away again the moment someone needs you.' },
+
+  {t:'phase', ph:'Move five · Becoming',
+    h:'Building the new rhythm',
+    p:'A new life is not a single decision, it is a set of small repeated ones. Here the brave choices stop being effortful and start being who you are.' },
+
+  {t:'phase', ph:'Move six · Awakening',
+    h:'Making it last',
+    p:'The work is not finished when the noise is quiet for a week. We build the practice that keeps it quiet, so this holds long after the room goes dark.' },
+
+  {t:'body', k:'Why it works',
+    h:'Science, and a dose of woo',
+    p:'This is not a pep talk. It is grounded in psychology, two degrees of it, and in fifteen years of coaching brilliant women who could not see their own worth. And yes, there is room for an Oracle card. Both are allowed.' },
+
+  {t:'quote', k:'What it is really about',
+    q:'The strength of women together is a driving force. You are not meant to do this one alone.' },
+
+  {t:'part', k:'Part three', h:'What changes',
+    sub:'Not a louder life. A quieter, truer one, that you actually chose.' },
+
+  {t:'body', k:'On the other side of the noise',
+    h:'From passenger to driver',
+    list:[
+      'You stop living like a guest in your own life.',
+      'You make decisions you trust, because you can finally hear yourself make them.',
+      'You live, in Jane’s words, a "Holy Cow, what a ride" kind of life, rather than an "I wish I’d been braver" one.' ] },
+
+  {t:'why', k:'Who is guiding you',
+    h:'Jane Galloway',
+    p:'Award-winning women’s coach and keynote speaker, and the founder of Quiet the Hive. Two psychology degrees, an ILM7 coaching qualification, and a life that has handed her plenty of reasons to learn this work first-hand.',
+    credit:'Women’s Mindset Coach of the Year. Most Empowering Women’s Keynote Speaker. Featured in Fearne Cotton’s Happy Place.' },
+
+  {t:'cta', k:'Your next step',
+    h:'Give it one honest hour',
+    step:'If this is you, the next move is a small one: come and quiet the hive with me, live. All you need is a notebook, a cuppa and a little curiosity.',
+    disc:'This masterclass and the Awaken Your Life programme are educational. No specific outcome, income, or result is guaranteed. Results vary from woman to woman. Nothing here is medical or mental-health treatment.' }
+];
+
+const deck = document.getElementById('deck');
+function esc(x){ return x; }
+S.forEach(function(s,i){
+  const d = document.createElement('div');
+  d.className = 'slide' + (i===0 ? ' on' : '');
+  let html = '';
+  if (s.k) html += '<div class="kick">'+s.k+'</div>';
+  if (s.ph) html += '<div class="phase">'+s.ph+'</div>';
+  if (s.t==='title'){ html += '<h1>'+s.h+'</h1>'; if(s.sub) html+='<p class="sub">'+s.sub+'</p>'; }
+  else if (s.t==='quote'){ html += '<div class="q">'+s.q+'</div>'; }
+  else { if(s.h) html += '<h2>'+s.h+'</h2>';
+    if(s.sub) html += '<p class="sub">'+s.sub+'</p>';
+    if(s.p) html += '<p class="body">'+s.p+'</p>';
+    if(s.list){ html += '<ul>'; s.list.forEach(function(li){ html += '<li>'+li+'</li>'; }); html += '</ul>'; }
+    if(s.step) html += '<div class="cta-step">'+s.step+'</div>';
+    if(s.credit) html += '<div class="credit">'+s.credit+'</div>';
+    if(s.disc) html += '<div class="disc">'+s.disc+'</div>';
+  }
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+document.getElementById('tot').textContent = slides.length;
+function show(n){
+  cur = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach(function(sl,i){ sl.classList.toggle('on', i===cur); });
+  document.getElementById('cur').textContent = cur+1;
+}
+document.addEventListener('keydown', function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') show(cur-1);
+});
+document.addEventListener('click', function(e){
+  const w = window.innerWidth;
+  if(e.clientX > w*0.5) show(cur+1); else show(cur-1);
+});
+</script>
+</body>
+</html>
