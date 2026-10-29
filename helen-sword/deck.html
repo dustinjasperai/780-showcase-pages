@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Writer's Diet · Helen Sword</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#081359; --panel:#122061; --rule:#2a3a86;
+    --acc:#d92688; --ink:#f4f1fb; --body:#c3c8e6; --dim:#7b84b8; --slate:#e8a7cd;
+  }
+  html,body{height:100%}
+  body{background:#050a30;font-family:'Jost',-apple-system,sans-serif;color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050a30}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.4% 8.6%;background:var(--bg)}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Jost',sans-serif;font-size:1.0vw;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:2.6vh}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:.002em}
+  .t-title h1{font-size:6.6vw;max-width:94%}
+  .t-normal h1{font-size:3.9vw;max-width:90%}
+  .t-normal .body{font-family:'Jost',sans-serif;font-size:1.4vw;color:var(--body);margin-top:3.0vh;max-width:76%;line-height:1.66;font-weight:400}
+  .sub{font-family:'Newsreader',serif;font-style:italic;font-size:2.3vw;color:var(--slate);margin-top:3.4vh;max-width:84%;line-height:1.36;font-weight:500}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Jost',sans-serif;font-size:1.1vw;font-weight:600;color:var(--acc);margin-bottom:2.2vh;letter-spacing:.24em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:92%}
+  .t-section .rule{width:15vw;height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:3.6vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 12%,#15256f 0%,#05081f 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.2vw;max-width:90%;color:#f8f3fa;font-weight:600}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#15256f 0%,#05081f 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:88%;color:#f8f3fa;font-weight:600}
+  .t-cta .body{font-family:'Jost',sans-serif;color:#dfe2f3;font-size:1.4vw;margin-top:3vh;max-width:72%;line-height:1.6}
+  .chips{display:flex;gap:1.1vw;margin-top:4.2vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--acc);color:#f8f3fa;border-radius:100px;padding:1.4vh 1.9vw;font-size:1.15vw;font-weight:500}
+  .disc{position:absolute;left:8.6%;right:8.6%;bottom:4.4vh;font-size:.86vw;color:var(--dim);text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .vf-motif{position:absolute;pointer-events:none}
+  .title-vf{right:7.2%;bottom:8.5%;width:19vw;opacity:.9}
+  .corner-vf{right:6.5%;bottom:7.5%;width:9vw;opacity:.5}
+  .brandline{font-family:'Jost',sans-serif;font-size:1.15vw;color:var(--body);margin-top:3.8vh;font-weight:500;letter-spacing:.05em}
+  .brandline b{color:var(--acc);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(244,241,251,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--acc);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-size:12px;letter-spacing:.16em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.1em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:10.4vw}.t-normal h1{font-size:6.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:4.4vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.6vw}
+    .t-cta h1{font-size:7.6vw}.chip{font-size:2.8vw}.t-cta .body{font-size:3vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 19</div>
+<div class="brand-foot">Helen Sword</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a writing-fitness gauge, needle swung toward lean, drawn in magenta -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="vf" viewBox="0 0 120 120">
+  <g fill="none" stroke="#d92688" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 86 A44 44 0 0 1 104 86" opacity="0.85"/>
+    <path d="M28 86 A28 28 0 0 1 92 86" opacity="0.4"/>
+    <line x1="60" y1="86" x2="34" y2="54" opacity="0.95"/>
+    <circle cx="60" cy="86" r="5" fill="#d92688" stroke="none"/>
+    <circle cx="34" cy="54" r="3.2" opacity="0.9"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:"The Writer's Diet",sub:'How a scholar turns dense, flabby academic prose into writing that is lean, lively, and a pleasure to produce.',brand:true,vf:'title'},
+ {t:'normal',k:'Who this is for',title:'Your ideas are strong. So why does the writing feel so heavy to read, and to write?',body:'You are a serious academic or professional writer. The research holds, the argument is sound, the thinking is real. And still the prose comes out dense and hedged, every sentence carrying more weight than it needs, and the page feels like a chore long before anyone else has to read it.'},
+ {t:'dark',title:'The problem was never your intelligence or your topic. It is five habits you can see and fix.'},
+
+ {t:'section',idx:'Part One',title:'The Diagnosis'},
+ {t:'normal',k:'Fit or flabby',title:'Good prose is not a mystery. It is measurable.',body:'Most academic writing is judged by a vague feeling that it reads badly, with no way to say why. The Writer’s Diet makes it concrete. Paste in a sample and five habits light up on a scale from lean and fit to flabby, so for the first time you can see exactly where the life is draining out of your sentences.'},
+ {t:'normal',k:'The signature edit',title:'Zombie nouns are eating your verbs alive.',body:'A zombie noun is a perfectly good verb or adjective turned into an abstract noun: decide becomes decision, able becomes capability. They multiply, they demand more prepositions and padding to prop them up, and they drain the motion out of a sentence. Bring the buried verbs back and the prose stands up and moves again.'},
+ {t:'normal',k:'The rest of the test',title:'Verbs, prepositions, and four small words that quietly bloat everything.',body:'Beyond zombie nouns, the test tracks be-verbs that sit where stronger verbs could work, long prepositional chains that string clauses into fog, and the four waste words it, this, that, and there, which stand in for the precise nouns a sharp sentence names. Each one is visible, countable, and fixable.'},
+ {t:'dark',title:'You cannot fix what you cannot see. The diet turns a vague feeling into a checklist.'},
+
+ {t:'section',idx:'Part Two',title:'The Habits and the Pleasure'},
+ {t:'normal',k:'The BASE model',title:'Successful academics write on four habits, not on willpower.',body:'From interviews with scholars across the disciplines came a simple frame for a writing life that lasts. Behavioral is the discipline of carving out time and space. Artisanal is treating writing as a craft you keep sharpening. Social is community and honest feedback. Emotional is the pleasure and resilience that keep you coming back. Most stuck writers are strong on one and starved on the rest.'},
+ {t:'normal',k:'The SPACE model',title:'Writing you look forward to is writing you actually finish.',body:'Pleasure is not a luxury on top of productivity. It is the engine of it. Writing done with pleasure engages five dimensions: social, physical, aesthetic, creative, and emotional. When even one of them is alive in your practice, the page stops being a threat, the work gets done more often, and the writing itself gets better because you are no longer bracing against it.'},
+ {t:'dark',title:'You do not need more discipline. You need a practice built so the writing is worth returning to.'},
+
+ {t:'section',idx:'Part Three',title:'What Changes'},
+ {t:'normal',k:'What fit writing looks like',title:'The same rigor, in prose a reader moves through instead of wades through.',body:'Nothing here asks you to dumb down your ideas. The argument stays as rigorous as ever. What changes is that the verbs do the work, the clutter is gone, and a reader, a reviewer, an editor, moves through the piece with ease instead of effort. That is the difference between writing that gets admired and writing that gets published and read.'},
+ {t:'dark',title:'Lean, lively, publishable. And, for once, a pleasure to have written.'},
+ {t:'normal',k:'Why Helen Sword',title:'A Princeton PhD and former professor who studies how real academics write.',body:'Helen Sword holds a PhD from Princeton and was a Professor of Humanities at the University of Auckland. She is the author of Stylish Academic Writing, The Writer’s Diet, Air & Light & Time & Space, and Writing with Pleasure, published by Harvard, Chicago, and Princeton. Her Zombie Nouns talk has been watched over a million times, and she has taught this work at more than a hundred universities worldwide.'},
+
+ {t:'section',idx:'Your Next Step',title:'Where You Go From Here'},
+ {t:'normal',k:'Keep going with Helen',title:'Run the test, then put it to work on your own writing.',body:'This masterclass is the overview. The next step is applying it to your real work in progress. Start free with the Writer’s Diet test and the WriteSPACE community, and when you are ready for focused, coached practice, step into the Stylish Writing Intensive, where the diagnosis becomes a habit.'},
+ {t:'cta',title:'Ready to put your writing on a diet?',body:'Take the next step with Helen Sword and the WriteSPACE.',chips:['Run the free Writer’s Diet test','Join the WriteSPACE','Enroll in the Stylish Writing Intensive'],disc:'Educational content for academic and professional writers. No result or publication outcome is guaranteed. Results vary by writer, project, and field.'},
+];
+
+const deck=document.getElementById('deck');
+function vf(kind){return `<svg class="vf-motif ${kind==='title'?'title-vf':'corner-vf'}"><use href="#vf"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Writer’s <b>Diet</b> · Helen Sword</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.vf) h+=vf(s.vf);
+  else if(s.t==='title') h+=vf('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
