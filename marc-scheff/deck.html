@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make a Mess — a masterclass with Marc Scheff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f4f8fb;      /* light lift of his #d5e5ec ground */
+    --panel:#ffffff;
+    --ink:#1e607d;     /* his dominant brand teal (55 uses) */
+    --ink-soft:#33373d;/* his charcoal */
+    --muted:#5f7682;
+    --rule:#d5e5ec;    /* his light-blue */
+    --accent:#fc4337;  /* his coral-red (used verbatim on his site) */
+  }
+  html,body{height:100%;}
+  body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);color:var(--ink-soft);overflow:hidden;}
+  #stage{width:100vw;height:100vh;position:relative;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease;}
+  .slide.on{display:flex;opacity:1;}
+  .kicker{font-family:'League Spartan',sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:.18em;font-size:clamp(11px,1.3vw,15px);color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'League Spartan',sans-serif;font-weight:800;color:var(--ink);
+    font-size:clamp(34px,6.6vw,78px);line-height:1.02;letter-spacing:-.01em;margin-bottom:26px;}
+  h2{font-family:'League Spartan',sans-serif;font-weight:700;color:var(--ink);
+    font-size:clamp(26px,4.4vw,52px);line-height:1.08;margin-bottom:22px;}
+  p{font-size:clamp(16px,2.1vw,26px);line-height:1.5;color:var(--ink-soft);max-width:900px;margin-bottom:16px;}
+  p.lead{font-size:clamp(18px,2.6vw,32px);color:var(--ink);font-weight:400;}
+  ul{list-style:none;max-width:920px;}
+  li{font-size:clamp(16px,2.1vw,26px);line-height:1.45;color:var(--ink-soft);
+    padding-left:34px;position:relative;margin-bottom:18px;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent);}
+  .step{font-family:'League Spartan',sans-serif;font-weight:800;color:var(--accent);
+    font-size:clamp(22px,3vw,40px);margin-bottom:10px;letter-spacing:.02em;}
+  .cred{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 48px;max-width:960px;margin-top:8px;}
+  .cred div{border-left:3px solid var(--accent);padding-left:18px;}
+  .cred b{font-family:'League Spartan',sans-serif;font-weight:800;color:var(--ink);
+    font-size:clamp(22px,3vw,38px);display:block;line-height:1;}
+  .cred span{font-size:clamp(13px,1.5vw,17px);color:var(--muted);}
+  .disclaimer{font-size:clamp(11px,1.3vw,14px);color:var(--muted);margin-top:28px;max-width:840px;line-height:1.55;}
+  .ctaline{font-family:'League Spartan',sans-serif;font-weight:700;color:var(--ink);
+    font-size:clamp(20px,2.6vw,30px);margin-top:12px;}
+  #nav{position:fixed;bottom:22px;right:28px;font-family:'League Spartan',sans-serif;
+    font-weight:600;color:var(--muted);font-size:14px;letter-spacing:.05em;z-index:5;}
+  #hint{position:fixed;bottom:22px;left:28px;font-size:12px;color:var(--muted);z-index:5;}
+  .bar{width:70px;height:5px;background:var(--accent);margin-bottom:28px;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"></div>
+<div id="hint">Use arrow keys to navigate</div>
+<script>
+const S=[
+ {t:'title',kicker:'A masterclass with Marc Scheff',h:'Make a Mess',
+  lead:'How working creatives get from hesitation to finished, shipped work, without waiting to feel ready.'},
+ {t:'content',k:'The promise',h:'Ninety minutes to break the pattern that keeps good work unfinished.',
+  p:['You will leave with a name for what is actually stopping you and a three-move method you can use on the very next thing you are avoiding.']},
+ {t:'content',k:'Who this is for',h:'You are a working creative. The talent was never the question.',
+  p:['You paint, write, compose, design, build. People tell you it is good. And still the work sits half finished, the launch keeps slipping, and the next piece waits for a day that feels right.']},
+ {t:'content',k:'The trap',h:'Waiting feels like thoughtfulness. It is usually avoidance.',
+  p:['You tell yourself you are planning, researching, getting ready. But the plan was finished weeks ago. What is really happening is a quiet retreat to safety at the exact moment action is required.']},
+ {t:'content',k:'The reframe',h:'You do not have a talent problem. You have a waiting problem.',
+  p:['Across more than 1,000 coaching sessions, this is the one thing in the way for most creatives. Not skill. Not ideas. The gap between knowing the next step and taking it.']},
+ {t:'content',k:'Part one',h:'The three things that keep you waiting',
+  p:['Every stall traces back to one of three loops. Name the loop and it loses most of its grip on you.']},
+ {t:'step',step:'Loop 01',h:'"I don’t feel ready."',
+  p:['Readiness is not a feeling that arrives before you act. It is built by acting. Waiting for it is waiting for a bus that does not run.']},
+ {t:'step',step:'Loop 02',h:'"I don’t know how it will go."',
+  p:['Of course you do not. Nobody does. Certainty is not available to anyone making something new, so trading action for certainty is a trade you lose every time.']},
+ {t:'step',step:'Loop 03',h:'"I’m afraid of overcommitting."',
+  p:['So you keep every option open and finish nothing. The smallest honest commitment beats the biggest imagined one.']},
+ {t:'content',k:'Part two',h:'The method: Make a Mess, Keep What Works, Build with Confidence',
+  p:['Three moves, in order. Each one dissolves a different loop. This is the spine of everything I coach.']},
+ {t:'step',step:'Move one',h:'Make a Mess',
+  p:['Lower the stakes until starting is easy. Give yourself permission to make something bad on purpose. A mess has no reputation to protect, so there is nothing to be ready for. Action gets cheap again.']},
+ {t:'step',step:'Move two',h:'Keep What Works',
+  p:['Edit from evidence, not from fear. Once there is a mess on the table you are no longer guessing in your head. You can see what actually resonates and keep it. The judgment moves off you and onto the work.']},
+ {t:'step',step:'Move three',h:'Build with Confidence',
+  p:['Confidence is the output, not the entry fee. You do not wait to feel confident and then act. You act, you keep what works, and confidence shows up as the residue of movement. Then you commit, for real.']},
+ {t:'list',k:'Why it holds',h:'It answers the three real blocks',
+  ul:['Isolation: you do it alongside other creatives, not alone in your head.','Doubt: you build confidence through movement instead of waiting for it.','Wasted effort: you keep what works instead of polishing what does not matter.']},
+ {t:'content',k:'Part three',h:'What the shift feels like',
+  p:['When the waiting ends, five things change. This is the texture of a creative life that actually moves.']},
+ {t:'list',k:'The five',h:'Clarity, Insight, Courage, Practice, Belonging',
+  ul:['Clarity on why the hesitation shows up.','Insight into how you quietly judge yourself.','Courage built before you feel ready.','Practice that compounds week over week.','Belonging: a room where you create without judgment.']},
+ {t:'content',k:'The one shift',h:'Successful creators have a bias toward action.',
+  p:['They are not more certain or more talented than you. They have simply stopped using thinking as a hiding place. That is a skill, and it is trainable.']},
+ {t:'cred',k:'Why me',h:'Fifteen years on both sides of this',
+  cred:[['1,000+','coaching sessions delivered'],['500+','creatives coached and mentored'],['$1M+','of art sold through my gallery, Every Day Original'],['ICF','certified coach, Erickson International']],
+  note:'An award-winning artist and a certified coach. I have made the work and helped hundreds of others get theirs out of the waiting room.'},
+ {t:'content',k:'The one line',h:'Your creative life should support your whole life, not compete with it.',
+  p:['That is the whole aim. Not more hustle. A practice that moves, finishes, and feels like yours.']},
+ {t:'cta',k:'Where to go from here',h:'Ready to stop waiting?',
+  lead:'If this is the work you want to do, come do it with me and a room of other creatives inside the Unleash Creativity Club.',
+  ctaline:'Join the Unleash Creativity Club &rarr; unleashcreativity.club',
+  disclaimer:'This masterclass is for educational purposes only and reflects one coach’s experience and creative-practice method. It is not therapy. No specific creative, professional, or financial result is guaranteed. Results vary with the individual and the work they put in.'}
+];
+
+function render(s){
+  let h='<div class="slide">';
+  if(s.t==='title'){
+    h+='<div class="bar"></div>';
+    if(s.kicker)h+='<div class="kicker">'+s.kicker+'</div>';
+    h+='<h1>'+s.h+'</h1>';
+    if(s.lead)h+='<p class="lead">'+s.lead+'</p>';
+    return h+'</div>';
+  }
+  if(s.k)h+='<div class="kicker">'+s.k+'</div>';
+  if(s.step)h+='<div class="step">'+s.step+'</div>';
+  if(s.h)h+='<h2>'+s.h+'</h2>';
+  if(s.lead)h+='<p class="lead">'+s.lead+'</p>';
+  if(s.p)s.p.forEach(x=>h+='<p>'+x+'</p>');
+  if(s.cred){h+='<div class="cred">';s.cred.forEach(c=>h+='<div><b>'+c[0]+'</b><span>'+c[1]+'</span></div>');h+='</div>';}
+  if(s.note)h+='<p class="disclaimer">'+s.note+'</p>';
+  if(s.ul){h+='<ul>';s.ul.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+  if(s.ctaline)h+='<p class="ctaline">'+s.ctaline+'</p>';
+  if(s.disclaimer)h+='<p class="disclaimer">'+s.disclaimer+'</p>';
+  return h+'</div>';
+}
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map(render).join('');
+const slides=[...document.querySelectorAll('.slide')];
+const nav=document.getElementById('nav');
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((el,idx)=>el.classList.toggle('on',idx===i));
+  nav.textContent=(i+1)+' / '+slides.length;
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')show(i-1);
+});
+stage.addEventListener('click',()=>show(i+1));
+show(0);
+</script>
+</body>
+</html>
