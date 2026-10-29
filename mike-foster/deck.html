@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Seven Primal Questions — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f5f0; --ink:#272727; --accent:#eea78f; --rule:#e4c9bd;
+    --panel:#efeee7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--ink);font-family:'Poppins',sans-serif;}
+  #stage{max-width:1120px;margin:0 auto;}
+  .slide{
+    position:relative;display:none;min-height:100vh;
+    background:var(--bg);padding:9vh 8vw;flex-direction:column;justify-content:center;
+  }
+  .slide.on{display:flex}
+  h1,h2,.q{font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.2px;line-height:1.08;}
+  h1{font-size:clamp(34px,6vw,70px)}
+  h2{font-size:clamp(28px,4.4vw,50px)}
+  .kicker{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:22px}
+  .lede{font-size:clamp(17px,1.9vw,23px);line-height:1.55;max-width:46ch;margin-top:26px;font-weight:400}
+  .small{font-size:15px;line-height:1.6;color:#555;max-width:52ch}
+  .rule{height:2px;width:72px;background:var(--accent);margin:26px 0}
+  ul{list-style:none;margin-top:24px}
+  li{font-size:clamp(16px,1.8vw,21px);line-height:1.5;padding:12px 0 12px 30px;position:relative;border-bottom:1px solid var(--rule);max-width:50ch}
+  li:before{content:"";position:absolute;left:0;top:21px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .q{font-size:clamp(26px,3.4vw,40px);}
+  .grid7 li{border-bottom:1px solid var(--rule)}
+  .num{font-size:clamp(70px,12vw,150px);font-family:'Cormorant Garamond',serif;color:var(--accent);line-height:.8}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:30px}
+  .card{background:var(--panel);border-left:3px solid var(--accent);padding:24px 26px;border-radius:2px}
+  .card h3{font-family:'Poppins';font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#8a6a5d;margin-bottom:10px}
+  .card p{font-size:16px;line-height:1.5}
+  .credit{display:flex;gap:40px;flex-wrap:wrap;margin-top:34px}
+  .credit div{min-width:150px}
+  .credit b{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,54px);color:var(--accent);display:block;line-height:1}
+  .credit span{font-size:14px;color:#555}
+  .disc{font-size:12px;color:#8a8a8a;margin-top:30px;max-width:60ch;line-height:1.5}
+  .cta-line{font-size:clamp(18px,2vw,24px);margin-top:24px;font-weight:500}
+  .foot{position:absolute;bottom:26px;left:8vw;right:8vw;display:flex;justify-content:space-between;font-size:12px;color:#9a9a9a;letter-spacing:1px}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:20}
+  .nav button{background:var(--bg);color:var(--ink);border:1px solid var(--rule);border-radius:30px;padding:8px 16px;font-family:'Poppins';font-size:13px;cursor:pointer}
+  .count{position:fixed;top:18px;right:22px;font-size:12px;color:var(--bg);opacity:.7;letter-spacing:1px;z-index:20}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',k:'A Masterclass with Mike Foster',h:'The Seven Primal Questions',lede:'How to find the one hidden need driving your client, and coach straight to it, often in the very first session.'},
+
+  {t:'who',k:'Who this is for',h:'For coaches and counselors who want to go deeper, faster',lede:'If you help people for a living and you want a simpler, more reliable way to get to what is actually going on, this hour is for you. No extra certifications required to follow along.'},
+
+  {t:'trap',k:'The trap',h:'The venting session',lede:'Your client talks for 50 minutes. You listen well, you care, you offer good ideas. They leave feeling a little better. Next week they are back with the same problem wearing a different outfit. The session wandered because nothing found the root.'},
+
+  {t:'hook',k:'The reframe',h:'Almost everything your client does is driven by one unmet need',lede:'Defensiveness, control, people pleasing, overthinking, burnout. These are not the problem. They are survival strategies protecting one deep question the person is quietly asking. Most coaching treats the strategy and never names the question.'},
+
+  {t:'part',k:'Part one',h:'Why symptoms keep coming back'},
+
+  {t:'body',k:'Part one',h:'You are coaching the strategy, not the need',lede:'When the real need stays hidden, every tool you reach for lands on the surface. The client feels understood but not changed. You work harder each week and the needle barely moves. The fix is not more tools. It is a better diagnosis.'},
+
+  {t:'part',k:'Part two',h:'The Seven Primal Questions'},
+
+  {t:'seven',k:'The model',h:'Seven deep needs. Each person has one that runs the show.',items:[
+    'Am I safe? The need for protection',
+    'Am I secure? The need for stability',
+    'Am I loved? The need to be seen and valued',
+    'Am I wanted? The need to belong and be pursued',
+    'Am I successful? The need for achievement',
+    'Am I good enough? The need for worth',
+    'Do I have purpose? The need for meaning']},
+
+  {t:'body',k:'The core insight',h:'One dominant question becomes the lens',lede:'From years of coaching and more than 150,000 assessments, a pattern held: one of the seven sits underneath the rest for each person. Name that one and the behavior that made no sense suddenly makes complete sense.'},
+
+  {t:'method',k:'The diagnosis',h:'Find the root in about five minutes',cards:[
+    {h:'The 5-Minute Filter',p:'A short set of questions at the top of a session that surfaces the real problem instead of the presenting one.'},
+    {h:'The PCP Framework',p:'Place any client against the three core needs beneath the seven questions, so you are coaching the root, not the symptom.'}]},
+
+  {t:'method',k:'The session',h:'Keep every session moving',cards:[
+    {h:'The PQ Coaching Map',p:'A simple structure that moves a client from presenting problem, to root need, to one concrete action. It is what keeps a session from becoming a vent.'},
+    {h:'High Warmth and High Demand',p:'The posture that makes it work: deep care paired with real accountability. Care without demand comforts. Demand without care wounds.'}]},
+
+  {t:'body',k:'The turn',h:'Interrupt the pattern, then redirect it',lede:'When a Primal Question goes unmet, people run a survival strategy to cope. Naming the strategy out loud, gently, breaks its grip. Then you point the same energy at the need it was trying to protect. That is where change gets fast and sticky.'},
+
+  {t:'part',k:'Part three',h:'Inside a Primal Question session'},
+
+  {t:'two-card',k:'Before and after',h:'Same client, two sessions',cards:[
+    {h:'Without the question',p:'Fifty minutes of talk, a few good tips, and the same loop next week. You both work hard. Little moves.'},
+    {h:'With the question',p:'Five minutes to the root, a named pattern, one clear action tied to the real need. The client leaves changed, not just comforted.'}]},
+
+  {t:'credit',k:'Why learn it from Mike',h:'Built on the work, not on theory',credits:[
+    {b:'20+ yrs',s:'coaching leaders, founders and pastors'},
+    {b:'150,000+',s:'assessment results analyzed'},
+    {b:'300+',s:'coaches trained in the framework'},
+    {b:'250,000+',s:'books sold'}]},
+
+  {t:'body',k:'The takeaway',h:'Stop guessing. Start diagnosing.',lede:'You already have the heart for this work. The Seven Primal Questions give you the map, so the care you already bring lands on the thing that actually drives your client.'},
+
+  {t:'cta',k:'Your next step',h:'Find your own Primal Question first',lede:'The best way to learn the framework is to feel it. Take the free assessment, find the one question running underneath your own patterns, then bring it to the people you coach.',cta:'Take the free assessment at primalquestion.com, then explore the Primal Question certification.',disc:'Educational content only. No specific result is guaranteed. Results vary from person to person. Coaching is not therapy or a substitute for medical or mental health care.'}
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');d.className='slide'+(i===0?' on':'');
+  let inner='';
+  if(s.k)inner+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='part'){inner=`<div class="kicker">${s.k}</div><h1>${s.h}</h1><div class="rule"></div>`;}
+  else if(s.t==='title'){inner+=`<h1>${s.h}</h1><div class="rule"></div><p class="lede">${s.lede}</p>`;}
+  else if(s.t==='seven'){inner+=`<h2>${s.h}</h2><ul class="grid7">${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`;}
+  else if(s.t==='method'||s.t==='two-card'){inner+=`<h2>${s.h}</h2><div class="two">${s.cards.map(c=>`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')}</div>`;}
+  else if(s.t==='credit'){inner+=`<h2>${s.h}</h2><div class="credit">${s.credits.map(c=>`<div><b>${c.b}</b><span>${c.s}</span></div>`).join('')}</div>`;}
+  else if(s.t==='cta'){inner+=`<h1>${s.h}</h1><div class="rule"></div><p class="lede">${s.lede}</p><p class="cta-line">${s.cta}</p><p class="disc">${s.disc}</p>`;}
+  else{inner+=`<h2>${s.h}</h2>${s.lede?`<p class="lede">${s.lede}</p>`:''}`;}
+  d.innerHTML=inner+`<div class="foot"><span>The Seven Primal Questions</span><span>Mike Foster</span></div>`;
+  stage.appendChild(d);
+});
+let i=0;const slides=[...document.querySelectorAll('.slide')];const count=document.getElementById('count');
+function show(){slides.forEach((s,x)=>s.classList.toggle('on',x===i));count.textContent=(i+1)+' / '+slides.length;}
+function go(n){i=Math.max(0,Math.min(slides.length-1,i+n));show();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
