@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bots Do the Boring So You Can Do the Brilliant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f4;
+    --panel:#f2ede6;
+    --rule:#e2dace;
+    --ink:#363737;
+    --muted:#868787;
+    --accent:#eb5f2a;
+    --serif:"Spectral",Georgia,serif;
+    --sans:"Instrument Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{
+    position:fixed;inset:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .slide{
+    display:none;
+    width:min(1040px,92vw);
+    height:min(660px,88vh);
+    background:var(--bg);
+    padding:64px 72px;
+    position:relative;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .slide.active{display:flex;animation:fade .45s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:22px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .kicker::before{content:"";width:28px;height:2px;background:var(--accent);display:inline-block}
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(34px,5.4vw,60px);
+    line-height:1.04;
+    letter-spacing:-.01em;
+    max-width:18ch;
+  }
+  h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(28px,3.9vw,42px);
+    line-height:1.1;
+    letter-spacing:-.01em;
+    max-width:20ch;
+  }
+  .lede{
+    font-family:var(--serif);
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(18px,2.1vw,23px);
+    line-height:1.45;
+    color:var(--muted);
+    margin-top:22px;
+    max-width:40ch;
+  }
+  .body{
+    font-size:clamp(16px,1.6vw,18.5px);
+    line-height:1.6;
+    color:var(--ink);
+    margin-top:20px;
+    max-width:46ch;
+  }
+  .body.muted{color:var(--muted)}
+  ul.points{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px;max-width:48ch}
+  ul.points li{
+    font-size:clamp(15px,1.55vw,18px);
+    line-height:1.5;
+    padding-left:26px;
+    position:relative;
+    color:var(--ink);
+  }
+  ul.points li::before{
+    content:"";
+    position:absolute;left:0;top:.62em;
+    width:9px;height:9px;background:var(--accent);
+  }
+  ul.points li b{font-weight:600}
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+    margin-top:30px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:22px 24px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute;left:0;top:22px;bottom:22px;
+    width:3px;background:var(--accent);
+  }
+  .card .tag{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:8px;
+  }
+  .card h3{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:21px;line-height:1.15;margin-bottom:9px;
+  }
+  .card p{font-size:14.5px;line-height:1.5;color:var(--muted)}
+  .single-card{
+    margin-top:30px;
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:34px 38px;
+    position:relative;
+    max-width:62ch;
+  }
+  .single-card::before{
+    content:"";position:absolute;left:0;top:30px;bottom:30px;width:4px;background:var(--accent);
+  }
+  .single-card .tag{
+    font-family:var(--sans);font-weight:700;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;
+  }
+  .single-card h3{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3vw,32px);line-height:1.12;margin-bottom:14px}
+  .single-card p{font-size:clamp(15px,1.55vw,17.5px);line-height:1.6;color:var(--ink)}
+  .part-num{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(60px,10vw,120px);
+    color:var(--rule);
+    line-height:.9;
+    margin-bottom:8px;
+  }
+  .cta-steps{display:flex;flex-direction:column;gap:14px;margin-top:26px;max-width:46ch}
+  .cta-steps a,.cta-steps span{
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:var(--sans);font-weight:600;font-size:17px;
+    text-decoration:none;color:var(--bg);background:var(--accent);
+    padding:16px 26px;border-radius:4px;width:max-content;
+  }
+  .cta-sub{font-size:16px;line-height:1.55;color:var(--ink);margin-top:20px;max-width:44ch}
+  .disclaimer{
+    font-size:12.5px;line-height:1.5;color:var(--muted);margin-top:34px;max-width:60ch;
+    border-top:1px solid var(--rule);padding-top:16px;
+  }
+  .byline{font-family:var(--sans);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--muted);margin-top:30px}
+  .byline b{color:var(--ink);font-weight:700}
+  footer{
+    position:fixed;left:0;right:0;bottom:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 26px;font-family:var(--sans);font-size:12px;color:var(--muted);
+    letter-spacing:.04em;
+  }
+  footer .brand{font-weight:600;color:var(--ink)}
+  footer .brand span{color:var(--accent)}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .35s ease;z-index:5}
+  .nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:6}
+  .nav button{
+    font-family:var(--sans);border:1px solid var(--rule);background:var(--panel);
+    color:var(--ink);font-size:13px;padding:7px 14px;border-radius:4px;cursor:pointer;
+  }
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div id="stage"></div>
+<footer>
+  <span class="brand">Athenia <span>/</span> Chelle Honiker</span>
+  <span id="count"></span>
+</footer>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <button id="next">Next</button>
+</div>
+<script>
+const S=[
+  {t:'title',
+   kicker:'A live masterclass for indie authors',
+   h:'Bots Do the Boring So You Can Do the Brilliant',
+   lede:'How to run the business behind your books with AI and automation, so the admin stops eating the hours you meant to spend writing.',
+   byline:'with Chelle Honiker, CEO of Athenia Creative'},
+
+  {t:'promise',
+   kicker:'What you will walk away with',
+   h:'A calmer business, not a longer to do list',
+   points:[
+     'A clear map of the repeatable work in your author business, and which parts a system should carry instead of you.',
+     'The four building blocks I use to turn scattered tools into one operating system for your writing life.',
+     'A simple way to start this week without rebuilding anything or learning to code.']},
+
+  {t:'who',
+   kicker:'Who this is for',
+   h:'The author who already ships, and is quietly drowning',
+   body:'You have books out. Readers are finding you. And somewhere between the launch spreadsheets, the newsletter, the social posts and the sales tracking, the actual writing keeps getting pushed to next week.',
+   points:[
+     'You run the whole operation yourself, by hand, in a dozen browser tabs.',
+     'You are not short on ideas. You are short on the hours your busywork keeps stealing.']},
+
+  {t:'reframe',
+   kicker:'The uncomfortable truth',
+   h:'You did not become an author to become an operations department',
+   lede:'Every hour you spend copying links between tools, reformatting posts, and reconciling sales reports is an hour your next book does not get written. The boring work is not a rite of passage. It is a systems problem.'},
+
+  {t:'part',
+   num:'One',
+   kicker:'Part one',
+   h:'The core problem is fragmentation',
+   body:'The trouble is almost never one broken task. It is that your writing, your marketing, your sales numbers and your publishing steps all live in separate places that do not talk to each other.'},
+
+  {t:'detail',
+   kicker:'Why it compounds',
+   h:'Scattered tools quietly tax every single day',
+   points:[
+     '<b>Nothing connects.</b> The launch plan, the manuscript, the reader list and the revenue all sit in different apps.',
+     '<b>You are the integration.</b> You become the human glue, carrying facts from one tab to the next by memory.',
+     '<b>The admin expands.</b> Each new book, platform or promo adds more manual upkeep, and it only ever grows.']},
+
+  {t:'cost',
+   kicker:'What it really costs',
+   h:'The tax is not only time',
+   body:'When the plumbing is manual, the business runs on your attention. Launches slip, posts go out late, good ideas die in a note app, and the part of the work only you can do keeps getting deferred.',
+   lede:'The goal is not to work more hours. It is to build systems that hold the work so you do not have to.'},
+
+  {t:'part',
+   num:'Two',
+   kicker:'Part two',
+   h:'One operating system, four building blocks',
+   body:'Instead of more tools, we assemble a connected system. These are the four pieces I build with, and what each one actually does for your business.'},
+
+  {t:'pillar',
+   kicker:'Building block one',
+   tag:'The operating system',
+   name:'StorytellerOS',
+   desc:'An all in one workspace for the author business. It pulls your writing, your marketing, your sales tracking and your publishing workflows into a single place, so the whole operation lives in one connected system instead of a dozen disconnected tabs.'},
+
+  {t:'pillar',
+   kicker:'Building block two',
+   tag:'Social, on autopilot',
+   name:'Reader Radius and the Social Studio',
+   desc:'A social app built for authors. It batch creates and schedules your social posts using your own AI account, so a week of promotion gets produced in one sitting and goes out on time without you babysitting every platform.'},
+
+  {t:'pillar',
+   kicker:'Building block three',
+   tag:'Your knowledge, captured',
+   name:'The Busy Writer\'s Second Brain',
+   desc:'A Notion based second brain that streamlines your storytelling with technology. Ideas, research, series notes and reusable assets stop living in your head and scattered files, and start living in one searchable knowledge system you can actually find things in.'},
+
+  {t:'pillar',
+   kicker:'Building block four',
+   tag:'The quiet workforce',
+   name:'Agentic AI and Claude workflows',
+   desc:'Claude Code and Claude Cowork workflows that take on the admin, marketing and operations tasks you keep doing by hand. These are the agents that do the boring, repeatable work in the background while you do the brilliant work only you can do.'},
+
+  {t:'fit',
+   kicker:'How the pieces fit',
+   h:'Four blocks, one connected spine',
+   body:'The point is not four more apps. It is that they work together.',
+   points:[
+     'StorytellerOS is the home base where the business lives.',
+     'The Second Brain feeds it everything you know and create.',
+     'The Social Studio turns that into scheduled promotion.',
+     'Agentic AI runs the repeatable work across all of it.']},
+
+  {t:'part',
+   num:'Three',
+   kicker:'Part three',
+   h:'Inside a real author\'s week',
+   body:'Systems only matter in practice. Here is how the week changes once the plumbing carries the load instead of you.'},
+
+  {t:'practice',
+   kicker:'Before and after',
+   h:'Same author, very different Monday',
+   cards:[
+     {tag:'Before',h:'The tab shuffle',p:'Copy the launch dates into three calendars, reformat the same post four times, open the sales dashboards and hope the numbers line up.'},
+     {tag:'After',h:'The quiet system',p:'The week of posts is already scheduled, the numbers roll into one view, and your calendar holds the one thing that matters most: writing time.'}]},
+
+  {t:'detail',
+   kicker:'How to start',
+   h:'You do not rebuild everything at once',
+   points:[
+     '<b>Pick the loudest chore.</b> Choose the one repeatable task that drains you most this month.',
+     '<b>Give it to a system.</b> Capture it once, then let a workflow or agent carry it from now on.',
+     '<b>Add the next block.</b> Connect one more piece only when the last one is running on its own.']},
+
+  {t:'why',
+   kicker:'Why learn this from me',
+   h:'I build these systems for a living',
+   points:[
+     'Automation strategist and tech consultant for indie authors, and CEO of Athenia Creative.',
+     'Co-founded Indie Author Magazine in 2021, writing about the business of being an author.',
+     'Former Programming Director of Author Nation, where I shaped the conversation for working authors.'],
+   lede:'My whole practice is one idea put to work: bots do the boring so you can do the brilliant.'},
+
+  {t:'recap',
+   kicker:'The one thing to remember',
+   h:'The busywork is a systems problem, and systems can be built',
+   body:'You do not need more discipline or longer hours. You need a connected operating system that holds the repeatable work, so your energy goes back to the books only you can write.'},
+
+  {t:'cta',
+   kicker:'Your next step',
+   h:'Join the Author Automations Mastermind',
+   cta:'Join the Author Automations Mastermind',
+   sub:'Come build your own StorytellerOS with me and a room of indie authors who are done being their own operations department. We will set up your first building blocks together.',
+   disclaimer:'This masterclass is educational. No specific income, sales, or business result is guaranteed. Results vary and depend on your own work, market, and circumstances.'}
+];
+
+const stage=document.getElementById('stage');
+const prog=document.getElementById('prog');
+const count=document.getElementById('count');
+let i=0;
+
+function esc(s){return s;}
+
+function render(s){
+  let h='';
+  const k=s.kicker?`<div class="kicker">${s.kicker}</div>`:'';
+  if(s.t==='title'){
+    h=`${k}<h1>${s.h}</h1>${s.lede?`<p class="lede">${s.lede}</p>`:''}${s.byline?`<div class="byline"><b>${s.byline}</b></div>`:''}`;
+  }else if(s.t==='part'){
+    h=`<div class="part-num">${s.num}</div>${k}<h2>${s.h}</h2>${s.body?`<p class="body">${s.body}</p>`:''}`;
+  }else if(s.t==='pillar'){
+    h=`${k}<div class="single-card"><div class="tag">${s.tag}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`;
+  }else if(s.t==='practice'){
+    const c=s.cards.map(c=>`<div class="card"><div class="tag">${c.tag}</div><h3>${c.h}</h3><p>${c.p}</p></div>`).join('');
+    h=`${k}<h2>${s.h}</h2><div class="cards">${c}</div>`;
+  }else if(s.t==='cta'){
+    h=`${k}<h2>${s.h}</h2><div class="cta-steps"><span>${s.cta}</span></div><p class="cta-sub">${s.sub}</p><p class="disclaimer">${s.disclaimer}</p>`;
+  }else{
+    h=`${k}<h2>${s.h}</h2>`;
+    if(s.lede)h+=`<p class="lede">${s.lede}</p>`;
+    if(s.body)h+=`<p class="body">${s.body}</p>`;
+    if(s.points)h+=`<ul class="points">${s.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  }
+  return `<div class="slide active">${h}</div>`;
+}
+
+function show(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  stage.innerHTML=render(S[i]);
+  prog.style.width=((i+1)/S.length*100)+'%';
+  count.textContent=(i+1)+' / '+S.length;
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft')show(i-1);
+});
+show(0);
+</script>
+</body>
+</html>
