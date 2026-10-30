@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Red Thread Method - Tamsen Webster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1c1d1d;        /* derived from brand dominant charcoal #232525 */
+    --panel:#262727;
+    --rule:#3a3b3b;
+    --ink:#f4f2ee;
+    --muted:#a9a6a0;
+    --accent:#d81e2c;    /* refined red from brand signature #ff0000 */
+    --serif:"Libre Baskerville", Georgia, serif;
+    --sans:"Jost", "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--sans);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;overflow:hidden;
+  }
+  /* the red thread: a thin line that runs through every slide */
+  .thread{position:fixed;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--accent) 12%,var(--accent) 88%,transparent);opacity:.5;z-index:1;pointer-events:none}
+  .stage{position:relative;width:100%;max-width:1040px;height:100vh;max-height:720px;z-index:2}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:72px 80px}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--sans);font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;font-size:40px;line-height:1.12;margin-bottom:18px}
+  .sub{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--muted);margin-top:20px}
+  p{font-size:21px;line-height:1.5;color:var(--ink);max-width:40ch}
+  p.lead{font-size:24px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  ul{list-style:none;margin-top:14px}
+  li{font-size:20px;line-height:1.5;padding-left:26px;position:relative;margin-bottom:12px;max-width:44ch}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:2px;background:var(--accent)}
+  .big{font-family:var(--serif);font-size:30px;line-height:1.25;max-width:24ch}
+  .comp{display:flex;gap:16px;align-items:baseline}
+  .num{font-family:var(--serif);font-size:64px;color:var(--accent);line-height:1}
+  .q{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--muted);margin-top:14px;max-width:34ch}
+  .byline{margin-top:34px;font-size:15px;letter-spacing:.04em;color:var(--muted)}
+  .cred{display:grid;grid-template-columns:1fr 1fr;gap:12px 36px;margin-top:8px;max-width:30ch}
+  .cred li{font-size:17px}
+  .disclaimer{margin-top:30px;font-size:13px;color:var(--muted);max-width:52ch;line-height:1.5}
+  .cta-step{font-family:var(--serif);font-size:26px;color:var(--ink);margin-top:10px}
+  .nav{position:fixed;bottom:18px;right:24px;z-index:5;font-size:13px;color:var(--muted);letter-spacing:.05em}
+  .dot{position:fixed;bottom:18px;left:24px;z-index:5;font-size:13px;color:var(--muted)}
+  @media (max-width:720px){.slide{padding:48px 32px}h1{font-size:34px}h2{font-size:28px}p,li{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="thread"></div>
+<div class="stage" id="stage"></div>
+<div class="dot" id="dot"></div>
+<div class="nav">Use arrow keys &rarr;</div>
+<script>
+const S = [
+  {t:'title', kicker:'A Message Design Institute Masterclass',
+   h:'How to Make Your Big Idea Irresistible',
+   sub:'The Red Thread Method',
+   byline:'Tamsen Webster &middot; Founder, Message Design Institute'},
+
+  {t:'promise', kicker:'What you will leave with',
+   h:'One idea, one thread',
+   p:'In the next hour you will take the big idea you care about most and rebuild it as a story your audience tells themselves. Not a pitch they sit through. A thread they pull on their own.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You have the idea. They still are not moving.',
+   list:['You are a leader, founder, expert or speaker with an idea you know is right.',
+         'You have explained it clearly, more than once, to smart people.',
+         'They nod. They agree. And then nothing changes.']},
+
+  {t:'reframe', kicker:'The reframe',
+   big:'Good ideas do not fail because they are wrong. They fail because the people championing them do not understand how belief actually changes.'},
+
+  {t:'part', kicker:'Part one', h:'The core problem',
+   p:'You have been explaining your idea. Explaining builds understanding. But understanding is not belief, and people act on what they believe, not on what they understand.'},
+
+  {t:'mechanism', kicker:'The core problem',
+   h:'People act on the story they tell themselves',
+   p:'Every audience is already telling itself a story about what it wants and why it cannot have it. You do not get to replace that story. You get to design the thread that connects your idea to the one they already believe.'},
+
+  {t:'part', kicker:'Part two', h:'The Red Thread',
+   p:'The Red Thread is the structure that ties your idea to what your audience already wants. Five parts, each a question your audience is quietly asking. Answer them in order and the idea becomes impossible to unhear.'},
+
+  {t:'comp', kicker:'Red Thread &middot; 1 of 5', num:'01', h:'Goal',
+   q:'What does my audience actually want?',
+   p:'Start where they already are. The Goal is the outcome they are actively reaching for, stated as the question they are asking themselves right now.'},
+
+  {t:'comp', kicker:'Red Thread &middot; 2 of 5', num:'02', h:'Problem',
+   q:'So why are they not getting it?',
+   p:'Name the tension in the way. The Problem is the real obstacle between them and the Goal, the one they feel but have not been able to name.'},
+
+  {t:'comp', kicker:'Red Thread &middot; 3 of 5', num:'03', h:'Truth',
+   q:'What makes that problem impossible to ignore?',
+   p:'The Truth is the fundamental belief underneath the Problem. It is the thing they already hold to be true that makes the old way indefensible once they see it.'},
+
+  {t:'comp', kicker:'Red Thread &middot; 4 of 5', num:'04', h:'Change',
+   q:'So what has to shift?',
+   p:'The Change is the new way of thinking or acting your idea proposes. It is the turn the Truth demands, stated so plainly they cannot look away from it.'},
+
+  {t:'comp', kicker:'Red Thread &middot; 5 of 5', num:'05', h:'Action',
+   q:'What do I do about it now?',
+   p:'The Action is the concrete first step that makes the Change real. Small enough to take today, specific enough to prove the thread was true.'},
+
+  {t:'tie', kicker:'The thread, tied',
+   h:'Goal. Problem. Truth. Change. Action.',
+   p:'Read in order, the five parts are a single sentence of logic your audience cannot argue with, because every piece of it is something they already believe. That is the Red Thread.'},
+
+  {t:'mvp', kicker:'From thread to message',
+   h:'The one irresistible sentence',
+   p:'Once the thread holds, you compress it. A sixty second minimum viable case, then a single minimum viable message: one sentence that carries the whole idea. If it cannot survive one sentence, it is not ready for the room.'},
+
+  {t:'part', kicker:'Part three', h:'The room, once the thread holds',
+   list:['Before: you present, they understand, they go back to doing exactly what they did.',
+         'After: you hand them a thread, they finish it in their own words.',
+         'Buy-in you did not have to chase, because they built it themselves.']},
+
+  {t:'why', kicker:'Why trust this method',
+   h:'Twenty years, two books, one thread',
+   cred:['Thinkers50 Radar, 2022','Author, Find Your Red Thread','Author, Say What They Can’t Unhear','Harvard, MIT, Fidelity rooms'],
+   p:'The Red Thread is not a template. It is a method built from behavioral science and twenty years of doing this with leaders who had one shot to be believed.'},
+
+  {t:'mistakes', kicker:'What to avoid',
+   h:'The three ways the thread snaps',
+   list:['Leading with your Change before you have earned it with their Truth.',
+         'Stacking more evidence when the problem is belief, not information.',
+         'Writing for applause instead of for the story they will repeat without you.']},
+
+  {t:'recap', kicker:'Recap', h:'The method, in one breath',
+   p:'Find what they want. Name why they are stuck. Surface the truth they already hold. Show the change it demands. Give them the first action. Tie it into one sentence, and let them pull the thread.'},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Find your Red Thread',
+   step:'Bring your idea to the Message Design Institute and build its thread with Tamsen and her team.',
+   disclaimer:'This masterclass is educational. No business, financial, or persuasion result is guaranteed. Results vary and depend on your own ideas and the work you put in.'}
+];
+
+const stage=document.getElementById('stage');
+const dot=document.getElementById('dot');
+function esc(s){return s||''}
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.kicker) html+='<div class="kicker">'+esc(s.kicker)+'</div>';
+  if(s.t==='title'){
+    html+='<h1>'+esc(s.h)+'</h1><div class="sub">'+esc(s.sub)+'</div><div class="byline">'+esc(s.byline)+'</div>';
+  } else if(s.t==='reframe'){
+    html+='<div class="big">'+esc(s.big)+'</div>';
+  } else if(s.t==='comp'){
+    html+='<div class="comp"><div class="num">'+esc(s.num)+'</div><div><h2>'+esc(s.h)+'</h2><div class="q">'+esc(s.q)+'</div></div></div>';
+    if(s.p) html+='<p style="margin-top:22px">'+esc(s.p)+'</p>';
+  } else {
+    if(s.h) html+='<h2>'+esc(s.h)+'</h2>';
+    if(s.big) html+='<div class="big">'+esc(s.big)+'</div>';
+    if(s.p) html+='<p class="lead">'+esc(s.p)+'</p>';
+    if(s.list){html+='<ul>'+s.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';}
+    if(s.cred){html+='<ul class="cred">'+s.cred.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';}
+    if(s.step) html+='<div class="cta-step">'+esc(s.step)+'</div>';
+    if(s.disclaimer) html+='<div class="disclaimer">'+esc(s.disclaimer)+'</div>';
+  }
+  d.innerHTML=html;
+  stage.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+function show(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(slides.length-1,n));slides[cur].classList.add('on');dot.textContent=(cur+1)+' / '+slides.length;}
+show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(cur+1);e.preventDefault();}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){show(cur-1);e.preventDefault();}
+});
+document.addEventListener('click',e=>{const w=window.innerWidth;show(e.clientX>w/2?cur+1:cur-1);});
+</script>
+</body>
+</html>
