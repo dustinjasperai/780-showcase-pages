@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Beauty of the Ordinary — a masterclass with Huma Qureshi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Catamaran:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f3; --panel:#f4ebe6; --rule:#e2d4cc; --ink:#2a2320; --muted:#6b5d55;
+    --accent:#db423d; --head:"Cormorant Garamond",Georgia,serif; --body:"Catamaran",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:54px 48px;margin:0 0 26px;
+    min-height:420px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide.panel{background:var(--panel)}
+  .kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:600;font-size:54px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:38px;line-height:1.12;margin-bottom:16px}
+  .lead{font-size:21px;color:var(--ink);max-width:42ch}
+  .sub{font-size:18px;color:var(--muted);margin-top:16px;max-width:52ch}
+  .big{font-family:var(--head);font-size:30px;line-height:1.3;max-width:40ch}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:22px;display:grid;gap:14px}
+  li{position:relative;padding-left:30px;font-size:19px;max-width:54ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .num{font-family:var(--head);font-size:20px;color:var(--accent);font-weight:600}
+  .part{font-family:var(--head);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .foot{position:absolute;left:48px;bottom:26px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .disc{font-size:13px;color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.55}
+  .cta h2{font-size:44px}
+  .step{display:inline-block;margin-top:22px;font-size:18px;color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent);padding-bottom:3px}
+  @media(max-width:620px){.slide{padding:38px 26px;min-height:340px}h1{font-size:38px}h2{font-size:30px}.cta h2{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Huma Qureshi', h:'The Beauty of the Ordinary', sub:'How to start writing the life you have already lived.'},
+  {t:'promise', h:'By the end of this hour', list:['You will have written one small, true thing','You will have a gentle way to keep going, around a busy life','You will stop waiting to feel like a real writer and simply begin']},
+  {t:'who', kick:'Who this is for', h:'If you have always wanted to write', sub:'and never quite started, or you started once and drifted away, this is for you. No experience needed. You do not need an idea for a book. You only need your own life and a little permission.'},
+  {t:'trap', kick:'The trap', h:'You are waiting to feel ready', big:'You think real writers sit down to a blank page and a big idea. So you wait to feel like one of them. The waiting becomes the habit, and the writing never comes.'},
+  {t:'reframe', panel:true, kick:'A reframe', h:'The blank, novel shaped page is the problem', sub:'It is too big and too far away to start from. The pressure to produce something finished and important is exactly what keeps most people from writing a single line.'},
+  {t:'part', part:'Part One', h:'Why writing for a finish line stops you writing at all'},
+  {t:'point', h:'Pressure does not sustain a practice', big:'Deadlines and word counts work for a sprint. They do not build the quiet, repeatable habit that a life of writing actually needs. A practice has to be <span class="a">sustaining, not demanding</span>.'},
+  {t:'point', h:'You keep discounting the ordinary', sub:'The smell of a kitchen, a postcard on the fridge, a thing someone said in passing. You skip past all of it looking for something bigger, when the ordinary is the whole of the material.'},
+  {t:'part', part:'Part Two', h:'The Postcards Home method'},
+  {t:'pillar', num:'One', h:'Permission before craft', big:'The first move is not technique. It is permission. <span class="a">You are a writer.</span> You are allowed to write about your own small life, for its own sake, before anyone else ever reads it.'},
+  {t:'pillar', num:'Two', h:'The fragment, in note form', sub:'You do not start with a chapter. You start with mini-memories, jotted like notes. Small, unpolished, true. Gathered first, shaped later. The fragment is the unit, not the finished piece.'},
+  {t:'pillar', num:'Three', h:'The little things', sub:'You learn to notice, and to trust what you notice. The beauty of the ordinary is not a consolation prize. It is where the real writing lives, because it is where your real life lives.'},
+  {t:'pillar', num:'Four', h:'A life lived in pictures', sub:'Memory arrives in images, not in order. You work from the pictures you already carry, letting each one open into a few honest sentences, with no need to connect them yet.'},
+  {t:'pillar', num:'Five', h:'Onwards, with structure but no pressure', big:'Then, and only then, a shape appears. You build structure around what you have gathered, at a pace a real life can hold. <span class="a">Structure without pressure.</span>'},
+  {t:'part', part:'Part Three', h:'When a few true sentences become a body of work'},
+  {t:'practice', kick:'Right now', h:'One small true thing', sub:'Think of a single ordinary moment from this week. Write three sentences about it, in note form, for no one. That is the practice. Done often, around your days, it becomes a body of work.'},
+  {t:'why', kick:'Why listen to me', h:'I write the way I teach', sub:'I am the author of four books, including the memoir How We Met and the novel Playing Games, and I have taught writing through the Arvon Foundation, Guardian Masterclasses and Curtis Brown Creative. I teach gently because it is the only way the writing lasted for me.'},
+  {t:'recap', panel:true, h:'What to take with you', list:['Permission comes first. You are a writer.','Start from fragments and the ordinary, not a finished idea','Build structure at a pace your life can hold']},
+  {t:'cta', kick:'Your next small true thing', h:'Keep writing with me', step:'Begin with Postcards Home, or write alongside me in bespoke mentoring', disc:'This masterclass is for learning and encouragement only. No outcome, publication, income, or result is guaranteed. Writing progress varies from person to person.'}
+];
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.panel?' panel':'')+(s.t==='cta'?' cta':'');
+  let h='';
+  if(s.kick) h+='<div class="kick">'+s.kick+'</div>';
+  if(s.part) h+='<div class="part">'+s.part+'</div>';
+  if(s.num) h+='<div class="num">'+s.num+'</div>';
+  if(s.t==='title'){h+='<h1>'+s.h+'</h1>';}
+  else if(s.h){h+='<h2>'+s.h+'</h2>';}
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.big) h+='<p class="big">'+s.big+'</p>';
+  if(s.sub) h+='<p class="sub">'+s.sub+'</p>';
+  if(s.list){h+='<ul>'+s.list.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  if(s.step) h+='<span class="step">'+s.step+'</span>';
+  if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  h+='<div class="foot">Huma Qureshi &middot; The Beauty of the Ordinary</div>';
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
