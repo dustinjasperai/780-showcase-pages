@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Networking For People Who HATE Networking — Zack Arnold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1f0f9;        /* pale indigo-tint of brand #0e0f6d, brand site_scheme: light */
+    --panel:#fbfbff;     /* near-white with a faint indigo cast, derived from brand indigo */
+    --ink:#201f2b;
+    --muted:#5b5867;
+    --rule:#e6e3dc;
+    --indigo:#0e0f6d;    /* brand dominant (brand.json, 12 uses) */
+    --accent:#1201fe;    /* brand electric-blue pop (brand.json) */
+    --head:'Gabarito',system-ui,sans-serif;
+    --body:'Spectral',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:1080px;margin:0 auto;padding:28px 20px 72px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:52px 56px;margin:0 0 22px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:attr(data-n);position:absolute;top:18px;right:26px;
+    font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.14em;
+    color:var(--rule)}
+  .kick{font-family:var(--head);font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:800;font-size:46px;line-height:1.05;color:var(--indigo);
+    letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.1;color:var(--indigo)}
+  p{font-size:20px;line-height:1.55;color:var(--muted);margin-top:18px;max-width:40ch}
+  .big{font-size:60px;font-weight:800;font-family:var(--head);color:var(--panel);line-height:1.02;
+    letter-spacing:-.02em}
+  .lead{font-size:24px;color:var(--ink)}
+  ul{margin-top:22px;list-style:none;display:flex;flex-direction:column;gap:14px}
+  li{font-size:21px;line-height:1.4;padding-left:26px;position:relative;color:var(--ink);max-width:46ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;border-radius:3px;
+    background:var(--accent)}
+  .pill{font-family:var(--head);font-weight:800;font-size:30px;color:var(--accent);margin-bottom:6px}
+  .rule{height:3px;width:68px;background:var(--accent);margin:4px 0 4px;border-radius:2px}
+  .dark{background:var(--indigo)}
+  .dark .kick{color:#9fb0ff}
+  .dark h1,.dark h2{color:#fff}
+  .dark p,.dark li{color:#d8dcf2}
+  .dark li::before{background:#9fb0ff}
+  .credit{font-size:16px;color:var(--muted);margin-top:26px;font-style:italic}
+  .disc{font-size:14px;color:var(--muted);margin-top:24px;max-width:60ch;line-height:1.5}
+  .cta{font-family:var(--head);font-weight:700;font-size:22px;color:var(--panel);
+    background:var(--accent);display:inline-block;padding:14px 26px;border-radius:10px;margin-top:26px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title',kick:'A free live masterclass with Zack Arnold, ACE',
+  h:'Networking For People Who HATE Networking',
+  p:'How introverted and neurodivergent creatives build genuine relationships, so the right people are excited to help, without schmoozing, spam, or selling your creative soul.'},
+
+ {t:'promise',kick:'The promise',
+  h:'Leave with outreach you will actually send.',
+  p:'By the end of our time together you will have a way to build genuine relationships that fits how you work, a short list of the people who matter, and the words to reach them without feeling like a fraud.'},
+
+ {t:'audience',kick:'Who this is for',
+  h:'You make great work. The right people still do not know you exist.',
+  p:'You are a creative professional who would rather be in the edit, on set, or in the studio than "working the room." You know relationships drive your career. You also quietly dread every part of building them.'},
+
+ {t:'stakes',dark:true,kick:'Why it matters now',
+  h:'The game changed. The rules did too.',
+  p:'The work goes to people who are known and trusted, and the old playbook of cold spam and card collecting works worse every year. In a noisier, more automated industry, a real relationship is the rarest advantage you can build.'},
+
+ {t:'trap',kick:'The trap',
+  h:'You were told networking means being someone you are not.',
+  list:['Collect business cards you never follow up on.','Post into the void and hope the algorithm notices.','Send cold messages that feel slimy, so you send none.','Wait to be discovered, while the gigs go to people who asked.']},
+
+ {t:'reframe',dark:true,kick:'The reframe',
+  big:'Your hatred of networking is the advantage.',
+  p:'The people who feel sliminess most sharply are the people best built for the real version: fewer, deeper, genuinely useful relationships. You do not need to become an extrovert. You need a method that fits how you already work.'},
+
+ {t:'part',kick:'Part one',h:'The real problem is not shyness. It is strategy.',
+  p:'Most creatives treat networking as spray and pray: more messages, more events, more noise. It drains introverts fast and it does not work. A relationship is built on service, not volume. The whole game changes when you give first and target on purpose.'},
+
+ {t:'myth',kick:'What most advice gets wrong',
+  h:'More is not the answer. Better is.',
+  list:['Growth hacks that treat people like a numbers game.','Automations that make you sound like everyone else.','Advice to "just put yourself out there" with no plan.','Tactics built for extroverts who love a crowd.']},
+
+ {t:'part',dark:true,kick:'Part two',h:'The five-pillar method',
+  p:'This is the frame we walk through live. Five questions, in order, that turn networking from a necessary evil into something you actually look forward to.'},
+
+ {t:'pillar',kick:'Pillar one',pill:'WHY',h:'Why networking is creative survival',
+  p:'The quality of your life is dictated by the quality of your relationships. In a career where the work is handed to people who are known and trusted, relationships are not optional. They are the job behind the job.'},
+
+ {t:'pillar',kick:'Pillar two',pill:'WHERE',h:'Where your temperament becomes your edge',
+  p:'Introverts listen, remember, and follow through. Those are the exact traits that make a connection feel human instead of transactional. We find where your natural wiring already does the work.'},
+
+ {t:'pillar',kick:'Pillar three',pill:'WHO',h:'Who to actually target',
+  p:'Stop praying your way to the next job. We get specific about the handful of people whose world you want to be in, and where to find them, so your energy goes to relationships that matter instead of everyone at once.'},
+
+ {t:'pillar',kick:'Pillar four',pill:'HOW',h:'How to reach out so people want to connect',
+  p:'What to say, how to say it, and when. Lead with something useful to them. Done right, an entirely new world of relationships opens up, and people are eager to help rather than annoyed you asked.'},
+
+ {t:'pillar',kick:'Pillar five',pill:'WHEN',h:'When to use the robots, and when not to',
+  p:'AI can help you prepare and never replace the human part. We draw the line so your outreach stands out from the AI slop flooding important inboxes. The humans write the words. The humans do the work.'},
+
+ {t:'recap',dark:true,kick:'The method in one line',
+  big:'Give first. Target on purpose. Stay human.',
+  p:'Five pillars, one idea: be genuinely useful to a few of the right people, and the career follows.'},
+
+ {t:'part',kick:'Part three',h:'Your career, rebuilt on real relationships',
+  list:['Outreach that feels like you, not a script, so you actually send it.','A short list of real relationships instead of a pile of dead contacts.','People who are glad to hear from you, and who open doors.','A career that grows through trust, not through gaming an algorithm.']},
+
+ {t:'proof',dark:true,kick:'Why me',
+  h:'I have lived both sides of this.',
+  p:'I spent almost a decade as a Hollywood film and television editor, running myself into the ground, before I rebuilt my career on relationships instead of burnout. Today I help ambitious creatives do the same through Optimize Yourself and The Arnold Academy.',
+  credit:'Zack Arnold, ACE. Editor (Cobra Kai, Empire, Burn Notice), documentary director, and creator of Optimize Yourself.'},
+
+ {t:'cta',kick:'Your next step',
+  h:'Want help building your dream network?',
+  p:'If this is the kind of career you want to build, the next step is a free Zoom chat. We talk through where you are, where you want to go, and whether working together one on one is the right fit.',
+  cta:'Schedule your free Zoom chat',
+  disc:'This masterclass is for educational purposes only. It shares strategies and perspective, not guarantees. Results depend on your own effort, goals, and circumstances. Nothing here is a promise of any specific outcome, income, or career result.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.dark?' dark':'');
+  d.setAttribute('data-n',String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0'));
+  let html='';
+  if(s.kick) html+='<div class="kick">'+s.kick+'</div>';
+  if(s.pill) html+='<div class="pill">'+s.pill+'</div><div class="rule"></div>';
+  if(s.big) html+='<div class="big">'+s.big+'</div>';
+  if(s.h) html+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+  if(s.p) html+='<p'+(s.t==='title'||s.t==='reframe'?' class="lead"':'')+'>'+s.p+'</p>';
+  if(s.list){html+='<ul>';s.list.forEach(x=>html+='<li>'+x+'</li>');html+='</ul>';}
+  if(s.credit) html+='<div class="credit">'+s.credit+'</div>';
+  if(s.cta) html+='<div class="cta">'+s.cta+'</div>';
+  if(s.disc) html+='<div class="disc">'+s.disc+'</div>';
+  d.innerHTML=html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
