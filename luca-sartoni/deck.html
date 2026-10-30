@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leading Teams You Can't See — Luca Sartoni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15211C;        /* deep beetle-carapace green, editorial night */
+    --panel:#1D2E27;
+    --rule:#2C4639;
+    --text:#EAF0EC;
+    --muted:#9DB2A7;
+    --accent:#C8872E;    /* warm amber owl-eye / lamplight — single focal color */
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Figtree',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;height:100vh;width:100vw;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;opacity:0;transition:opacity .4s ease}
+  .slide.active{display:flex;opacity:1}
+  .kicker{font-family:var(--sans);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem}
+  .kicker::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,5.2vw,4.1rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,3.8vw,3rem);line-height:1.1;margin-bottom:1.2rem}
+  .sub{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:clamp(1.1rem,2vw,1.55rem);margin-top:1.4rem;max-width:42ch}
+  p.body{font-size:clamp(1.05rem,1.7vw,1.4rem);line-height:1.55;color:var(--text);max-width:56ch;margin-top:.4rem}
+  p.body + p.body{margin-top:1rem}
+  .lead{color:var(--muted)}
+  ul{list-style:none;margin-top:1.6rem;display:flex;flex-direction:column;gap:1rem;max-width:60ch}
+  li{position:relative;padding-left:1.8rem;font-size:clamp(1.02rem,1.6vw,1.3rem);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:8px;background:var(--accent);border-radius:50%}
+  li b{font-weight:600;color:#fff}
+  .num{font-family:var(--serif);color:var(--accent);font-size:1rem;letter-spacing:.18em;margin-bottom:.8rem;text-transform:uppercase}
+  .byline{margin-top:3rem;font-family:var(--sans);font-size:.95rem;color:var(--muted);letter-spacing:.02em}
+  .byline b{color:var(--text);font-weight:600}
+  .hr{height:1px;background:var(--rule);width:72px;margin:1.6rem 0}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    padding:2rem 2.2rem;max-width:58ch;margin-top:1.4rem;border-radius:3px}
+  .disclaimer{margin-top:2.4rem;font-size:.78rem;color:var(--muted);max-width:60ch;line-height:1.5;opacity:.85}
+  .nav{position:fixed;bottom:18px;right:24px;font-family:var(--sans);font-size:.8rem;color:var(--muted);
+    display:flex;gap:14px;align-items:center;z-index:5}
+  .nav button{background:transparent;border:1px solid var(--rule);color:var(--muted);width:34px;height:34px;
+    border-radius:4px;cursor:pointer;font-size:1rem}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{position:fixed;bottom:22px;left:24px;font-size:.78rem;color:var(--muted);letter-spacing:.14em}
+  .brandmark{position:fixed;top:22px;left:28px;font-family:var(--serif);font-style:italic;color:var(--muted);font-size:.9rem;z-index:5}
+</style>
+</head>
+<body>
+<div class="brandmark">The Owl and The Beetle</div>
+<div id="deck"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)" aria-label="previous">&#8249;</button><span id="pos"></span><button onclick="go(1)" aria-label="next">&#8250;</button></div>
+<script>
+const S = [
+  {t:'title',
+   h:"Leading Teams You Can't See",
+   sub:"The async-first playbook for leaders of fully distributed teams.",
+   by:"A live masterclass with <b>Luca Sartoni</b> &middot; Remote Leadership Works"},
+
+  {t:'content', k:"Who this is for",
+   h:"You were the best engineer in the room.",
+   p:["So they made you lead. Now your team is spread across cities and time zones that never overlap, and the playbook you were handed quietly assumes everyone is in the same room.",
+      "This hour is for managers and team leads who got promoted into leading people they rarely see at the same hour of the day."]},
+
+  {t:'content', k:"The trap",
+   h:"Remote leadership is not in-person leadership over Zoom.",
+   p:["The instincts that made you a strong manager in an office were built on a room that fed you information all day long.",
+      "Take the room away and those same instincts start working against you, without anyone telling you why."]},
+
+  {t:'content', k:"The reframe",
+   h:"The office was doing half of your job for you.",
+   p:["Hallway context. Ambient awareness of who is stuck. The glance that tells you a decision is being avoided. Fast, cheap feedback.",
+      "When the room goes away, all of that goes with it. Most leaders try to recreate the room with more meetings. That is the wrong move."]},
+
+  {t:'part', n:"Part one", h:"What silently breaks when the room is gone"},
+
+  {t:'content', k:"The three failures",
+   h:"Three things fail quietly, in this order.",
+   list:[["Decisions stall.","People wait for the next meeting instead of moving, so velocity drops and nobody can point to why."],
+         ["Trust erodes.","Without shared context, silence reads as a problem, and leaders reach for surveillance instead of clarity."],
+         ["Feedback arrives too late.","The hard conversation gets postponed until it is a crisis, because it is easier to avoid at a distance."]]},
+
+  {t:'content', k:"The cost",
+   h:"And then everything routes through you.",
+   p:["Your best people drift because they cannot read the plan. You become the single point of coordination, answering the same questions in five time zones.",
+      "You are busier than you have ever been, and the team is slower than it has ever been."]},
+
+  {t:'part', n:"Part two", h:"Remote Leadership Works: lead the system, not the calendar"},
+
+  {t:'content', k:"Pillar one",
+   h:"Asynchronous communication",
+   p:["Decisions move in writing, not in meetings. The default is a clear written proposal that anyone can act on without you in the room.",
+      "Done well, this is faster than real time, not slower. It is the core skill of leading across hours that never overlap."]},
+
+  {t:'content', k:"Pillar two",
+   h:"Trust and context, not surveillance",
+   p:["You cannot watch a distributed team, and you should not try. You replace watching with context: share the why behind every decision so people can act correctly when you are asleep.",
+      "Accountability comes from clear ownership, not from checking in."]},
+
+  {t:'content', k:"Pillar three",
+   h:"Difficult conversations and feedback culture",
+   p:["The conversations you avoid at a distance are the exact ones that compound into attrition.",
+      "A feedback culture is built on purpose: small, frequent, direct, and normal, so the hard talk is never a surprise."]},
+
+  {t:'content', k:"Pillar four",
+   h:"Delegation and managerial accountability",
+   p:["Giving away the task is not delegation. Delegation is giving away the task and the decision, and keeping only the outcome.",
+      "That is how you stop being the bottleneck without losing the thread."]},
+
+  {t:'content', k:"How you build it",
+   h:"Leadership is a practice, not a lecture.",
+   p:["You do not read your way to better delegation any more than you read your way to a better backhand. You drill it.",
+      "The Leadership Dojo is built on exactly this: a small group that practices the real moves, in reps, with feedback, until they hold under pressure."]},
+
+  {t:'content', k:"In practice",
+   h:"A week run the async-first way",
+   list:[["Written-first decisions.","Proposals circulate and resolve without a meeting on the calendar."],
+         ["Context published, not requested.","The plan and the why are visible, so no one waits on you to act."],
+         ["Feedback in small reps.","Direct notes land weekly, so nothing festers into a crisis."]]},
+
+  {t:'part', n:"Part three", h:"Why this, why me"},
+
+  {t:'content', k:"Credibility",
+   h:"I learned this the hard way, at scale.",
+   p:["I led more than thirty people across four continents at Automattic, one of the most fully remote and asynchronous companies in the world. I was promoted into management with no preparation and no safety net.",
+      "Everything here is field-tested: it is the system I wish someone had handed me the day I started leading people I could not see."]},
+
+  {t:'content', k:"The shift",
+   h:"What changes when you lead the system",
+   p:["You stop being the single point of coordination. The team moves while you sleep, because the plan and the context travel without you.",
+      "You get your calendar back, and your best people stop drifting, because they can finally read where the work is going."]},
+
+  {t:'content', k:"Recap",
+   h:"Three shifts to take with you",
+   list:[["From meetings to writing.","Default to a clear written decision anyone can act on."],
+         ["From watching to context.","Replace surveillance with the why behind every call."],
+         ["From doing to practicing.","Treat the hard moves as reps, not reading."]]},
+
+  {t:'cta', k:"Your next step",
+   h:"Ready to lead the team you can't see?",
+   p:["If this is the kind of leadership you want to build, there are two ways to keep going with me.",
+      "Practice it with peers in the next cohort of the Leadership Dojo, or work with me one to one through Remote Leadership Works to apply it to your exact team."],
+   foot:"Educational content only. No specific result, promotion, or income is guaranteed. Results vary with your team, your context, and the work you put in."}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (i===0?' active':'');
+  let html = '';
+  if(s.k) html += '<div class="kicker">'+s.k+'</div>';
+  if(s.t==='title'){
+    html += '<h1>'+s.h+'</h1>';
+    if(s.sub) html += '<div class="sub">'+s.sub+'</div>';
+    if(s.by) html += '<div class="byline">'+s.by+'</div>';
+  } else if(s.t==='part'){
+    html += '<div class="num">'+s.n+'</div><h2>'+s.h+'</h2><div class="hr"></div>';
+  } else {
+    html += '<h2>'+s.h+'</h2>';
+    if(s.p) s.p.forEach(x=> html += '<p class="body">'+x+'</p>');
+    if(s.list){
+      html += '<ul>';
+      s.list.forEach(it=> html += '<li><b>'+it[0]+'</b> '+it[1]+'</li>');
+      html += '</ul>';
+    }
+    if(s.t==='cta') html += '<div class="disclaimer">'+s.foot+'</div>';
+  }
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+const pos = document.getElementById('pos');
+const count = document.getElementById('count');
+function show(i){
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(slides.length-1, i));
+  slides[cur].classList.add('active');
+  pos.textContent = (cur+1)+' / '+slides.length;
+  count.textContent = String(cur+1).padStart(2,'0');
+}
+function go(d){ show(cur+d); }
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+show(0);
+</script>
+</body>
+</html>
