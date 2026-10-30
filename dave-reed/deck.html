@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Antagonist Engine: A Book Shaman Masterclass with Dave Reed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;800&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#081923;        /* brand ground, brand.json rgb(8,25,35) */
+    --panel:#172730;      /* brand.json rgb(23,39,48) */
+    --panel2:#213039;     /* brand.json rgb(33,48,57) */
+    --rule:#213039;
+    --accent:#fe791c;     /* brand.json rgb(254,121,28) — the one warm color, 7 uses */
+    --ink:#e4e9eb;        /* brand.json rgb(228,233,235) */
+    --muted:#9ca3a7;      /* brand.json rgb(156,163,167) */
+    --display:'Roboto Slab',serif;
+    --body:'Spectral',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;animation:fade .4s ease}
+  .slide.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.78rem;color:var(--accent);margin-bottom:1.3rem}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,5.6vw,4.1rem);line-height:1.04;
+    letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,4vw,3rem);line-height:1.08}
+  .lede{font-size:clamp(1.1rem,2.1vw,1.5rem);color:var(--muted);margin-top:1.4rem;max-width:40ch;line-height:1.5}
+  .body{font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.6;max-width:46ch;margin-top:1.5rem}
+  .body strong{color:#fff;font-weight:600}
+  .accent{color:var(--accent)}
+  .partnum{font-family:var(--display);font-weight:800;font-size:clamp(3rem,9vw,7rem);color:var(--panel2);
+    line-height:.9;margin-bottom:.4rem}
+  ul.points{list-style:none;margin-top:1.8rem;max-width:48ch}
+  ul.points li{position:relative;padding-left:1.7rem;margin:.95rem 0;font-size:clamp(1rem,1.7vw,1.25rem);line-height:1.5}
+  ul.points li::before{content:"";position:absolute;left:0;top:.6em;width:.62rem;height:.62rem;
+    background:var(--accent);border-radius:50%}
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.9rem;max-width:62rem}
+  .mode{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    border-radius:10px;padding:1.1rem 1.2rem}
+  .mode h3{font-family:var(--display);font-weight:600;font-size:1.05rem;color:#fff;margin-bottom:.35rem}
+  .mode p{font-size:.95rem;color:var(--muted);line-height:1.45}
+  .flame{font-size:2.2rem;margin-bottom:1rem}
+  .pull{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.12;
+    max-width:20ch}
+  .credit{display:flex;gap:1.5rem;align-items:center;margin-top:1.6rem;flex-wrap:wrap}
+  .credit .who{font-family:var(--display);font-weight:600;color:#fff;font-size:1.2rem}
+  .disc{margin-top:2.2rem;font-size:.82rem;color:var(--muted);max-width:52ch;line-height:1.5}
+  .cta-line{font-family:var(--display);color:var(--accent);font-weight:600;font-size:1.25rem;margin-top:1.4rem}
+  .nav{position:fixed;bottom:18px;right:22px;display:flex;gap:10px;z-index:10}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;font-family:var(--body)}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{position:fixed;bottom:26px;left:24px;color:var(--muted);font-family:var(--display);font-size:.8rem;letter-spacing:.1em}
+  .bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:10;transition:width .3s}
+  .foot{position:absolute;bottom:3.2vh;left:9vw;color:var(--muted);font-family:var(--display);
+    font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div id="deck"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker">A Book Shaman Masterclass &middot; Dave Reed</div>
+    <h1>The Antagonist Engine</h1>
+    <p class="lede">Why every character, even your hero, wants something, and how that one shift makes readers unable to look away.</p>
+    <div class="foot">Better stories make better people</div>`},
+  {t:'forwho', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You have a draft that went quiet.</h2>
+    <div class="body">You know the craft. You have pages. But somewhere in the middle the story slowed down, the scenes started to feel like they were waiting on you, and you are not sure why. <strong>This hour is for the novelist whose draft stalled, not for the beginner looking for permission to start.</strong></div>`},
+  {t:'reframe', html:`
+    <div class="kicker">The reframe</div>
+    <p class="pull">There is no such thing as a <span class="accent">protagonist</span>.</p>
+    <div class="body">The word is quietly killing your story. It tells you one character is the one things happen to. The best stories do the opposite.</div>`},
+  {t:'problem1', html:`
+    <div class="kicker">Part of the problem</div>
+    <h2>The passive-hero trap</h2>
+    <div class="body">A hero who reacts, who waits, who is carried along by the plot, is furniture with a name. Readers do not lean in for furniture. The draft stalls because the lead stopped <strong>wanting</strong> anything badly enough to go take it.</div>`},
+  {t:'problem2', html:`
+    <div class="kicker">The other half</div>
+    <h2>Writing for everyone is writing for no one.</h2>
+    <div class="body">When you try to please every possible reader, you blur every choice: the voice, the stakes, the ending. A story aimed at nobody in particular lands on nobody in particular.</div>`},
+  {t:'part', html:`<div class="partnum">01</div><h2>Everyone is an antagonist</h2>`},
+  {t:'antag1', html:`
+    <div class="kicker">Part One</div>
+    <h2>Everyone is an antagonist.</h2>
+    <div class="body">Every point-of-view character has needs and wants. The moment they chase those wants in a world of scarcity, they push against someone who wants something else. <strong>That friction is the engine.</strong> Your hero is not the exception. Your hero is the one you let the reader root for.</div>`},
+  {t:'antag2', html:`
+    <div class="kicker">Part One</div>
+    <p class="pull"><span class="accent">Antagonists</span> happen to things. They do not wait around for things to happen to them.</p>
+    <div class="body">It is not about aggression. A gentle character and a ruthless one both qualify, as long as they are actively pursuing what they want. That is what gives a character magnetic energy and separates them from the scenery.</div>`},
+  {t:'antag3', html:`
+    <div class="kicker">Part One</div>
+    <h2>The object of desire</h2>
+    <div class="body">Give every character on the page a concrete want and a reason the world will not simply hand it over. Scarcity is the pressure. Pressure is momentum. <strong>Nobody is ever ambivalent about an antagonist,</strong> which is exactly why your reader cannot look away.</div>`},
+  {t:'part', html:`<div class="partnum">02</div><h2>Write for one reader</h2>`},
+  {t:'sam1', html:`
+    <div class="kicker">Part Two</div>
+    <h2>The Single Audience Member</h2>
+    <div class="body">Before the next scene, build one reader. Not a demographic. One person, with a name, a fear, a desire, and a life your book is going to touch. Everything you write is in service of telling <strong>that one reader</strong> a great story.</div>`},
+  {t:'sam2', html:`
+    <div class="kicker">Part Two</div>
+    <h2>Build your reader</h2>
+    <ul class="points">
+      <li>Name them. Make them real in your mind.</li>
+      <li>Map their fears and their desires, the ones your genre already speaks to.</li>
+      <li>Find what they admire and what they are missing in their own life.</li>
+      <li>Decide what they will read your book to feel.</li>
+    </ul>`},
+  {t:'sam3', html:`
+    <div class="kicker">Part Two</div>
+    <p class="pull">What do you want them to do <span class="accent">differently</span> in their life after they read your book?</p>
+    <div class="body">Answer that, and every choice downstream, the voice, the stakes, the ending, has somewhere to aim.</div>`},
+  {t:'part', html:`<div class="partnum">03</div><h2>Finish it on purpose</h2>`},
+  {t:'modes', html:`
+    <div class="kicker">Part Three</div>
+    <h2>Five ways a draft gets finished</h2>
+    <div class="modes">
+      <div class="mode"><h3>Book Mapping</h3><p>Purpose, theme, cast and world at the macro level, before you are lost in the weeds.</p></div>
+      <div class="mode"><h3>Narrative Pathfinding</h3><p>Loglines, synopsis, arcs, and structure that gets more detailed as you go.</p></div>
+      <div class="mode"><h3>Developing a Draft</h3><p>Reading in sections every week, with feedback on the words on the page.</p></div>
+      <div class="mode"><h3>Continuous Feedback</h3><p>A mirror held up to your scenes, to show you what your words are actually doing.</p></div>
+      <div class="mode"><h3>Intentional Practice</h3><p>Targeted assignments for the one skill or scene type standing in your way.</p></div>
+    </div>`},
+  {t:'cadence', html:`
+    <div class="kicker">Part Three</div>
+    <h2>Treat the novel like training</h2>
+    <div class="body">Progress does not come from one big push. It comes from <strong>weekly, consistent pressure</strong>, the same way a body changes. A standing cadence, honest feedback, and someone in the room keeping the momentum are what carry a manuscript across the line.</div>`},
+  {t:'whyme', html:`
+    <div class="flame">&#128367;</div>
+    <h2>Why me</h2>
+    <div class="body">I am Dave Reed, the Book Shaman: a developmental editor and award-winning science-fiction and fantasy author who has coached novelists through their works in progress since 2020. I hold a mirror up to the story you are already trying to tell, and keep you walking until it is finished.</div>
+    <div class="credit"><span class="who">Dave Reed</span><span style="color:var(--muted)">Developmental editor &middot; Novelist &middot; The Book Shaman</span></div>`},
+  {t:'recap', html:`
+    <div class="kicker">What you take with you</div>
+    <h2>Three shifts</h2>
+    <ul class="points">
+      <li>Write every character, even your hero, as an antagonist who wants something.</li>
+      <li>Aim the whole book at one real reader, and know what you want to change in them.</li>
+      <li>Finish it with weekly pressure and an honest mirror, not willpower alone.</li>
+    </ul>`},
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Let's find your story's engine.</h2>
+    <div class="body">If your draft has gone quiet and you want a guide who will walk the whole path with you, the next step is a free, no-pressure conversation to see if we are a fit.</div>
+    <div class="cta-line">Book a free consultation &middot; bookshaman.com</div>
+    <div class="disc">This masterclass is educational. It shares a craft approach and a way of working, not a promise about sales, publication, or any financial result. No specific result is guaranteed. Results vary from writer to writer.</div>`}
+];
+
+const deckEl = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d = document.createElement('section');
+  d.className = 'slide' + (i===0?' on':'');
+  d.innerHTML = s.html;
+  deckEl.appendChild(d);
+});
+
+  let cur = 0;
+  const slides = [...document.querySelectorAll('.slide')];
+  const count = document.getElementById('count');
+  const bar = document.getElementById('bar');
+  function show(){
+    slides.forEach((s,i)=>s.classList.toggle('on', i===cur));
+    count.textContent = (cur+1).toString().padStart(2,'0') + ' / ' + slides.length.toString().padStart(2,'0');
+    bar.style.width = (cur/(slides.length-1)*100) + '%';
+  }
+  function go(d){ cur = Math.max(0, Math.min(slides.length-1, cur+d)); show(); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') go(1);
+    if(e.key==='ArrowLeft') go(-1);
+  });
+  show();
+</script>
+</body>
+</html>
