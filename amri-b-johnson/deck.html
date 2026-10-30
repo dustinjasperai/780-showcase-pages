@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inclusion, by Design — a live masterclass with Amri B. Johnson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C3A3C;
+  --panel:#103F42;
+  --rule:#1E565A;
+  --accent:#3FC1C9;
+  --ink:#EAF4F3;
+  --muted:#A8C6C4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Mulish',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.deck{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+.slide{background:var(--panel);border:1px solid var(--rule);border-radius:18px;padding:60px 62px;margin:22px 0;min-height:540px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide::after{content:attr(data-n);position:absolute;right:30px;bottom:24px;font-size:14px;letter-spacing:.14em;color:var(--muted);opacity:.7}
+.k{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+h1{font-family:'Sora',sans-serif;font-weight:700;font-size:62px;line-height:1.04;letter-spacing:-.01em}
+h2{font-family:'Sora',sans-serif;font-weight:600;font-size:42px;line-height:1.1;letter-spacing:-.005em}
+.lede{font-size:24px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:40ch}
+.body{font-size:22px;line-height:1.56;margin-top:24px;max-width:46ch;color:#DCEAE8}
+.big{font-family:'Sora',sans-serif;font-weight:700;font-size:84px;line-height:1.0;letter-spacing:-.02em}
+.strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:5px}
+.accent{color:var(--accent)}
+ul{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:18px}
+li{font-size:22px;line-height:1.4;padding-left:34px;position:relative;color:#DCEAE8}
+li::before{content:'';position:absolute;left:0;top:10px;width:14px;height:14px;border-radius:4px;background:var(--accent)}
+.num{display:flex;gap:22px;align-items:baseline;margin-top:22px}
+.num .d{font-family:'Sora',sans-serif;font-size:40px;font-weight:700;color:var(--accent);flex-shrink:0;width:52px}
+.num .t{font-size:22px;line-height:1.5;color:#DCEAE8}
+.presenter{margin-top:40px;font-size:19px;color:var(--muted);letter-spacing:.02em}
+.disc{margin-top:34px;font-size:15px;line-height:1.5;color:var(--muted);max-width:60ch}
+.cta-line{font-family:'Sora',sans-serif;font-size:26px;font-weight:600;color:var(--accent);margin-top:28px}
+@media(max-width:720px){.slide{padding:40px 30px;min-height:auto}h1{font-size:42px}h2{font-size:30px}.big{font-size:54px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', k:'A free live masterclass', h:'Inclusion, by <span class="accent">Design</span>', lede:'Building an antifragile inclusion system that thrives under pressure instead of merely surviving it.', presenter:'With Amri B. Johnson, author of Reconstructing Inclusion and founder of Inclusion Wins' },
+  {t:'promise', k:'What you will leave with', h:'A different way to see the work', body:'Not another toolkit. A systems view of inclusion: the conditions that make it normative, the two engines that make it stick, and what it looks like when it gets stronger under pressure.' },
+  {t:'audience', k:'Who this is for', h:'Leaders who own culture', body:'DEI, HR and people leaders who are tired of initiatives that launch with energy and quietly fade, and want inclusion tied to how the business actually performs.' },
+  {t:'trap', k:'The trap', h:'The compliance ceiling', body:'Most inclusion work is run as a program bolted onto the side of the organization. It depends on a few committed people, it competes with everything else for attention, and when pressure rises it is the first thing to be cut.' },
+  {t:'reframe', k:'The reframe', h:'<span class="strike">Performative</span>', big:'<span class="accent">Systemic.</span>', body:'Inclusion is not a campaign to be sustained by willpower. It is a set of conditions to be engineered into how the organization runs.' },
+  {t:'part', k:'Part one', h:'Why good intentions stall' },
+  {t:'point', k:'The core problem', h:'Initiatives do not spread', body:'As an epidemiologist I learned that what spreads is not the thing with the best intentions, it is the thing with the right conditions. Inclusion fails the same way a health message fails: not because people disagree, but because nothing in the system reinforces it.' },
+  {t:'point', k:'The pattern', h:'Reactive, not designed', body:'Compliance DEI reacts to the last incident. It adds training, adds a statement, adds a role. None of it changes the conditions, so the organization drifts back the moment attention moves on.' },
+  {t:'part', k:'Part two', h:'The Inclusion System' },
+  {t:'point', k:'The model', h:'Four conditions make inclusion normative', body:'For inclusion to become the default rather than the exception, four conditions have to be true at once. Miss one and the system leaks.' },
+  {t:'num', k:'Condition one', h:'Accessible', items:[['01','Reachable by everyone in the organization, not owned by a specialist silo. If inclusion lives in one team, it is not a system.']] },
+  {t:'num', k:'Condition two', h:'Actionable', items:[['02','Unambiguously prioritized, with clear next steps people can take inside their real work. Values on a wall are not actionable.']] },
+  {t:'num', k:'Condition three', h:'Sustainable', items:[['03','Self-reinforcing, so it survives beyond the initial enthusiasm and the people who started it. The system should carry the load, not the champions.']] },
+  {t:'num', k:'Condition four', h:'Tied to the mission', body:'Positively contributing to the organizational mission, so inclusion is a driver of the work rather than a tax on it. When it helps the business win, it stops being optional.' },
+  {t:'part', k:'Part two, continued', h:'The two engines' },
+  {t:'point', k:'Engine one', h:'Cultural Intelligence', body:'CQ is the capability to work across difference well. It is learnable and measurable, and it is what lets a diverse group turn its differences into better decisions instead of friction.' },
+  {t:'point', k:'Engine two', h:'Social Capital', body:'The trusted networks that move information, opportunity and belonging through an organization. Build the networks and difference compounds into performance. Ignore them and inclusion stays a slogan.' },
+  {t:'point', k:'The design', h:'Antifragile by design', body:'Wire cultural intelligence and social capital into how the organization runs and inclusion gains from volatility. Pressure becomes a source of adaptability, talent magnetism and performance, not a reason to retreat.' },
+  {t:'part', k:'Part three', h:'Inclusion that gets stronger under pressure' },
+  {t:'point', k:'In practice', h:'From initiative to advantage', body:'Organizations that engineer the conditions see strategic adaptability under change, teams that attract and keep high performers, and inclusion that shows up in outcomes. It stops being a side project and starts being how they win.' },
+  {t:'cred', k:'Why me', h:'Amri B. Johnson', body:'Founder of Inclusion Wins and author of Reconstructing Inclusion. Former Global Head of Cultural Intelligence and Inclusion at Novartis, an epidemiologist and social capitalist who has guided global organizations through systemic change for two decades.' },
+  {t:'cta', k:'Your next step', h:'Build your inclusion system', body:'If you want to design these conditions into your own organization, the Inclusion System cohort is where we do that work together, step by step.', cta:'Join the next Inclusion System cohort', disc:'This masterclass is educational. No specific result or outcome is guaranteed. Results vary by organization, context and effort.' }
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const el = document.createElement('section');
+  el.className = 'slide';
+  el.setAttribute('data-n', String(i+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0'));
+  let html = '';
+  if (s.k) html += '<div class="k">' + s.k + '</div>';
+  if (s.t === 'title') {
+    html += '<h1>' + s.h + '</h1>';
+    if (s.lede) html += '<div class="lede">' + s.lede + '</div>';
+    if (s.presenter) html += '<div class="presenter">' + s.presenter + '</div>';
+  } else if (s.t === 'part') {
+    html += '<h1>' + s.h + '</h1>';
+  } else if (s.t === 'reframe') {
+    html += '<div class="big">' + s.h + '</div>';
+    if (s.big) html += '<div class="big">' + s.big + '</div>';
+    if (s.body) html += '<div class="body">' + s.body + '</div>';
+  } else if (s.t === 'num') {
+    html += '<h2>' + s.h + '</h2>';
+    if (s.items) s.items.forEach(it => { html += '<div class="num"><div class="d">' + it[0] + '</div><div class="t">' + it[1] + '</div></div>'; });
+    if (s.body) html += '<div class="body">' + s.body + '</div>';
+  } else if (s.t === 'cta') {
+    html += '<h1>' + s.h + '</h1>';
+    if (s.body) html += '<div class="body">' + s.body + '</div>';
+    if (s.cta) html += '<div class="cta-line">' + s.cta + '</div>';
+    if (s.disc) html += '<div class="disc">' + s.disc + '</div>';
+  } else {
+    html += '<h2>' + s.h + '</h2>';
+    if (s.lede) html += '<div class="lede">' + s.lede + '</div>';
+    if (s.body) html += '<div class="body">' + s.body + '</div>';
+    if (s.items) { html += '<ul>'; s.items.forEach(it => html += '<li>' + it + '</li>'); html += '</ul>'; }
+  }
+  el.innerHTML = html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
