@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designed, Not Just Built — a masterclass with Tim Slade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e4e7eb;       /* their dominant neutral, ranked #1 at 30 uses (brand.json) */
+    --panel:#f7f9fa;    /* their lighter body ground, as the card */
+    --soft:#d3d8de;     /* a half-step darker neutral for rules/borders */
+    --ink:#191b1f;      /* their darkest ink */
+    --ink2:#404040;     /* secondary text */
+    --accent:#ee4830;   /* brand signature red-orange, 14 uses */
+    --accent2:#2095cf;  /* their minor blue, used sparingly */
+    --head:'Varela Round',system-ui,sans-serif;  /* their H1 face */
+    --body:'Inter',system-ui,sans-serif;          /* their body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--panel);border:1px solid var(--soft);border-radius:18px;
+    padding:56px 56px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide .num{position:absolute;top:22px;right:26px;font-size:13px;color:#9aa1aa;letter-spacing:.04em}
+  .kick{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-size:52px;line-height:1.05;letter-spacing:-.01em;margin-bottom:20px}
+  h2{font-family:var(--head);font-size:34px;line-height:1.12;margin-bottom:22px}
+  .lead{font-size:21px;line-height:1.5;color:var(--ink2);max-width:40ch}
+  .big{font-family:var(--head);font-size:44px;line-height:1.14;max-width:22ch}
+  .big .a{color:var(--accent)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:20px;line-height:1.4;padding:14px 0 14px 40px;position:relative;border-top:1px solid var(--soft)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:6px;top:21px;width:12px;height:12px;
+    border-radius:3px;background:var(--accent)}
+  .steps li::before{content:counter(step);counter-increment:step;background:var(--accent);
+    color:#fff;width:26px;height:26px;border-radius:7px;left:0;top:13px;font-family:var(--head);
+    font-size:14px;display:flex;align-items:center;justify-content:center}
+  .steps{counter-reset:step}
+  .sub{font-size:16px;color:var(--ink2);display:block;margin-top:3px}
+  .divider h1{font-size:60px}
+  .divider{background:var(--ink);color:#fff}
+  .divider .kick{color:#ff8a76}
+  .divider h1{color:#fff}
+  .divider .lead{color:#c7ccd2}
+  .chips{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+  .chip{flex:1;min-width:150px;border-radius:14px;padding:26px 18px;color:#fff;font-weight:600;
+    font-family:var(--head);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .chip small{display:block;font-family:var(--body);font-weight:500;opacity:.9;margin-top:6px;font-size:13px}
+  .cred{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:10px}
+  .cred div{background:var(--bg);border:1px solid var(--soft);border-radius:14px;padding:22px}
+  .cred b{font-family:var(--head);font-size:30px;display:block;color:var(--accent)}
+  .cred span{font-size:15px;color:var(--ink2)}
+  .cta{background:var(--ink);color:#fff}
+  .cta h1{color:#fff}
+  .cta .kick{color:#ff8a76}
+  .cta .lead{color:#d4d8dd}
+  .pill{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;font-family:var(--head);
+    font-size:21px;padding:16px 30px;border-radius:12px}
+  .disc{margin-top:26px;font-size:12.5px;color:#8a919a;max-width:60ch;line-height:1.5}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .two .box{background:var(--bg);border:1px solid var(--soft);border-radius:14px;padding:24px}
+  .two .box h3{font-family:var(--head);font-size:19px;margin-bottom:8px}
+  .two .box.bad h3{color:#8a919a}
+  .two .box.good h3{color:var(--accent)}
+  .two p{font-size:15.5px;color:var(--ink2);line-height:1.45}
+  @media(max-width:720px){.slide{padding:34px 24px}h1{font-size:36px}.big,.divider h1{font-size:32px}.cred{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<p style="max-width:1040px;margin:0 auto;padding:0 22px 44px;font-size:12.5px;color:#8a919a;line-height:1.55;text-align:center">Educational content only. No specific income, hiring, or career result is guaranteed. Results vary and depend on your own effort, background, and market conditions.</p>
+<script>
+const S=[
+ {t:'title'},
+ {t:'who'},
+ {t:'statement', kick:'The trap', html:'You learned the tools. Your courses still look <span class="a">amateur</span>. And no one can tell you why.'},
+ {t:'statement', kick:'The reframe', html:'It is not a content problem. It is a <span class="a">design and process</span> problem.'},
+ {t:'content', kick:'Part one', h:'Why most new eLearning falls flat',
+   lead:'The pattern is almost always the same.',
+   items:['You open the authoring tool before you have a plan','There is no real process, so every project feels like starting over','Slides get filled with text because that feels like progress','No design system, so nothing looks intentional']},
+ {t:'content', kick:'Part one', h:'What that costs you',
+   items:['Learners click Next to escape, not to learn','Stakeholders ask for endless revisions they cannot name','Your portfolio looks like everyone else applying for the same job','You start to wonder if you are even cut out for this']},
+ {t:'divider', kick:'Part two', h:'The eLearning Development Process',
+   lead:'A repeatable path from kickoff to a finished course. Follow it and the guesswork disappears.'},
+ {t:'steps', kick:'The process', h:'Plan before you build',
+   items:['Kickoff and needs analysis<span class="sub">Agree the real problem and recommend a training solution</span>','Project plan and timeline<span class="sub">Scope, milestones, and who owns what</span>','Learning objectives<span class="sub">What a learner can do differently when they finish</span>']},
+ {t:'steps', kick:'The process', h:'Design on paper first',
+   items:['Design document<span class="sub">Collect and organize all the content in one place</span>','Course outline and storyboard<span class="sub">Decide the flow and the screens before you touch the tool</span>','Prototype and build<span class="sub">Only now do you open the authoring tool</span>']},
+ {t:'divider', kick:'Part two', h:'Now make it look designed',
+   lead:'A clear process gets the course built. Visual design is what makes it look like a professional built it.'},
+ {t:'content', kick:'Visual design', h:'Every screen is four decisions',
+   lead:'Master these four and your courses stop looking like a slide dump.',
+   items:['Text, and how little of it belongs on screen','Color, chosen on purpose','Imagery that carries meaning, not decoration','Layout, so the eye knows where to go']},
+ {t:'chips'},
+ {t:'content', kick:'Visual design', h:'Hierarchy and consistency',
+   items:['One type pairing, used the same way on every screen','Alignment to an invisible grid so nothing floats','Contrast that meets accessibility, not just taste','Repeat the system until the course feels like one thing']},
+ {t:'twobox'},
+ {t:'divider', kick:'Part three', h:'Build a portfolio that gets callbacks',
+   lead:'Nobody hires a certificate. They hire the samples they can click through.'},
+ {t:'content', kick:'The method', h:'Learn by building real samples',
+   lead:'Not practice for its own sake. Real, finished pieces you can show.',
+   items:['Take a real-world case and build it end to end','Apply the process and the design system to it','Get feedback, revise, and ship a sample you are proud of','Do it again until your portfolio speaks for you']},
+ {t:'cred'},
+ {t:'content', kick:'Recap', h:'Three things, in order',
+   items:['A process, so every project is repeatable','A design system, so the work looks professional','A portfolio, so the work gets you hired']},
+ {t:'cta', disc:'Educational content only. No specific income, hiring, or career result is guaranteed. Results vary and depend on your own effort, background, and market conditions.'}
+];
+
+const titleSlide=`<div class="kick">A free live masterclass</div>
+  <h1>Designed,<br>Not Just Built</h1>
+  <p class="lead">How to create eLearning that looks like a professional made it, even on your first project.</p>
+  <p class="lead" style="margin-top:22px;font-weight:600;color:var(--ink)">Tim Slade &middot; The eLearning Designer's Academy</p>`;
+
+const whoSlide=`<div class="kick">Who this is for</div>
+  <h2>New and aspiring eLearning designers</h2>
+  <ul>
+    <li>Career changers moving into instructional design</li>
+    <li>Teachers making the jump into eLearning and L&amp;D</li>
+    <li>Anyone who knows the tools but wants work that looks the part</li>
+  </ul>`;
+
+function chipSlide(){
+  return `<div class="kick">Visual design</div>
+  <h2>Pick four colors. Hold them everywhere.</h2>
+  <p class="lead">Light and dark for on-screen text, one primary and one secondary for accents and headings. That is the whole palette.</p>
+  <div class="chips">
+    <div class="chip" style="background:linear-gradient(135deg,#191b1f,#2b2f36)">Dark text<small>Body copy</small></div>
+    <div class="chip" style="background:linear-gradient(135deg,#9aa1aa,#c7ccd2);color:#191b1f">Light text<small>On dark fills</small></div>
+    <div class="chip" style="background:linear-gradient(135deg,#ee4830,#ff6a4d)">Primary<small>Emphasis</small></div>
+    <div class="chip" style="background:linear-gradient(135deg,#2095cf,#3bb0e6)">Secondary<small>Headings</small></div>
+  </div>`;
+}
+
+function twoboxSlide(){
+  return `<div class="kick">The difference</div>
+  <h2>Same content. Two outcomes.</h2>
+  <div class="two">
+    <div class="box bad"><h3>Built, not designed</h3><p>Wall-to-wall text, clip-art, three fonts, nothing aligned. Technically complete, quietly amateur.</p></div>
+    <div class="box good"><h3>Designed</h3><p>One idea per screen, a held palette, real hierarchy, breathing room. The learner stays, and it looks like it belongs.</p></div>
+  </div>`;
+}
+
+const credSlide=`<div class="kick">Why learn this from me</div>
+  <h2>Tim Slade</h2>
+  <p class="lead">Nearly two decades in instructional design, an award-winning freelance eLearning designer, and the person who wrote the book new designers start with.</p>
+  <div class="cred">
+    <div><b>The Handbook</b><span>Author of The eLearning Designer's Handbook</span></div>
+    <div><b>11,000+</b><span>Members in the Academy community</span></div>
+    <div><b>Live</b><span>I teach the process and the craft, in person</span></div>
+  </div>`;
+
+const ctaDisc=S.find(x=>x.t==='cta').disc;
+const ctaSlide=`<div class="kick">Your next step</div>
+  <h1>Ready to design eLearning you are proud of?</h1>
+  <p class="lead">The Hands-On Cohort and Coaching program walks you through the full process, the visual design craft, and six months of personal coaching, until you have the portfolio and the confidence to get hired.</p>
+  <span class="pill">Apply for the next cohort</span>
+  <p class="disc">${ctaDisc}</p>`;
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  let cls='slide';
+  if(s.t==='divider')cls+=' divider';
+  if(s.t==='cta')cls+=' cta';
+  el.className=cls;
+  let inner='';
+  if(s.t==='title')inner=titleSlide;
+  else if(s.t==='who')inner=whoSlide;
+  else if(s.t==='chips')inner=chipSlide();
+  else if(s.t==='twobox')inner=twoboxSlide();
+  else if(s.t==='cred')inner=credSlide;
+  else if(s.t==='cta')inner=ctaSlide;
+  else if(s.t==='statement')inner=`<div class="kick">${s.kick}</div><p class="big">${s.html}</p>`;
+  else if(s.t==='divider')inner=`<div class="kick">${s.kick}</div><h1>${s.h}</h1>${s.lead?`<p class="lead">${s.lead}</p>`:''}`;
+  else { // content / steps
+    const ul=s.t==='steps'?'steps':'';
+    inner=`<div class="kick">${s.kick}</div><h2>${s.h}</h2>${s.lead?`<p class="lead" style="margin-bottom:14px">${s.lead}</p>`:''}<ul class="${ul}">${(s.items||[]).map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  }
+  el.innerHTML=`<span class="num">${i+1} / ${S.length}</span>`+inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
