@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Delta Method - a masterclass by Gilad Naor</title>
+<style>
+  /* Palette derived from managementdeltas.com (brand.json): light scheme, #fafaf7 ground,
+     #121212 ink, electric-lime #ccff00 accent; Charter display + Inter body (his own faces). */
+  :root{
+    --bg:#f4f6ea; --panel:#ffffff; --ink:#121212; --rule:#e3e6d4;
+    --accent:#ccff00; --deep:#5a6b00; --mut:#5c5c56;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);
+    font-family:"Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+    padding:54px 56px;margin:0 0 26px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .num{position:absolute;top:20px;right:26px;font-size:12px;letter-spacing:.14em;
+    color:var(--mut);font-weight:600}
+  .kick{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--deep);
+    font-weight:700;margin-bottom:18px}
+  h1,h2{font-family:"Charter","Georgia",serif;font-weight:700;line-height:1.08;letter-spacing:-.01em}
+  h1{font-size:52px}
+  h2{font-size:34px;margin-bottom:18px}
+  p{font-size:19px;line-height:1.5;color:#232320;max-width:40em}
+  p.lead{font-size:23px;color:var(--ink)}
+  .sub{font-size:21px;color:var(--mut);margin-top:16px;font-family:"Charter",serif}
+  .by{margin-top:40px;font-size:15px;color:var(--mut);letter-spacing:.02em}
+  .by b{color:var(--ink)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:19px;line-height:1.5;color:#232320;padding-left:30px;position:relative;margin:13px 0;max-width:40em}
+  li::before{content:"\25B4";position:absolute;left:0;top:1px;color:var(--deep);font-size:15px}
+  .delta{color:var(--deep);font-weight:700}
+  .big{font-family:"Charter",serif;font-size:40px;line-height:1.14;max-width:18em}
+  .divider{background:var(--ink);color:var(--bg)}
+  .divider::before{background:var(--accent)}
+  .divider .kick{color:var(--accent)}
+  .divider h2{color:var(--bg);font-size:40px;margin:0}
+  .divider .part{font-size:16px;color:#bdbdb3;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+  .tag{display:inline-block;background:var(--accent);color:#1a1a0a;font-weight:700;
+    font-size:13px;letter-spacing:.08em;padding:5px 11px;border-radius:3px;margin-bottom:20px;text-transform:uppercase}
+  .disc{font-size:13px;color:var(--mut);margin-top:26px;max-width:44em;line-height:1.45}
+  .cta-steps{margin-top:20px}
+  .cta-steps li{font-size:20px}
+  @media(max-width:620px){.slide{padding:34px 26px}h1{font-size:36px}h2{font-size:26px}.big{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title',kick:'A Management Deltas masterclass',h:'The Delta Method',
+  sub:'Calm leadership for engineering managers, built from small daily deltas, not heroic overhauls.',
+  by:'Presented by <b>Gilad Naor</b>, Management Deltas. Former engineering leader at Meta and Amazon.'},
+
+ {t:'who',kick:'Who this is for',h:'For the manager who is always one fire behind',
+  p:'You run a team of engineers. You are good at the work. But the week runs you: standups, escalations, one-on-ones you reschedule, a reorg you did not ask for. You keep waiting for the big change that finally makes it calm.'},
+
+ {t:'trap',kick:'The trap',h:'The heroic-overhaul myth',
+  p:'Most managers believe the fix is one big move: the new process, the reorg, the perfect hire, the framework you will roll out next quarter. So you wait for the clear week to install it. The clear week never comes, and nothing changes.'},
+
+ {t:'hook',divider:true,part:'The reframe',h:'Your team does not need a better you. It needs a one percent better you, every day.'},
+
+ {t:'div1',divider:true,part:'Part One',h:'Why good engineers get stuck as managers'},
+
+ {t:'p1a',kick:'The reactive loop',h:'You are managing in interrupt mode',
+  list:['Every day is inbound: the thing on fire sets your agenda, not you.',
+        'Context-switching eats the deep work you were promoted for.',
+        'The important-but-not-urgent (growing people, hiring well, your own next level) never gets a turn.']},
+
+ {t:'p1b',kick:'The quiet part',h:'The five rings of loneliness',
+  p:'Management is lonelier than engineering, and nobody warned you. You cannot vent down to your reports, up to your boss, or sideways to peers you now compete with. That isolation is why managers quietly stall, not lack of talent.'},
+
+ {t:'p1c',kick:'The cost',h:'What the loop actually costs',
+  list:['Your best engineers leave for managers who grow them.',
+        'Your own promotion stalls because you are busy, not visible.',
+        'You burn out doing the job of three people and calling it dedication.']},
+
+ {t:'div2',divider:true,part:'Part Two',h:'The Delta Method'},
+
+ {t:'p2a',kick:'The core idea',h:'Lead by deltas, not by overhauls',
+  p:'A delta is one small, deliberate improvement to how you manage, made today, with the team you already have. You do not reorganize. You change one repeatable thing. Deltas compound: a one percent better one-on-one, standup, and decision, every week, becomes a calm, effective leader inside a quarter.'},
+
+ {t:'p2b',kick:'Framework 1',h:'The Manager Compass',
+  p:'Before tactics, direction. Your Compass is the short set of values and decision rules you steer by, so that when every option looks defensible you do not re-litigate from scratch. A manager with a Compass decides in minutes what a reactive manager agonizes over for days.'},
+
+ {t:'p2c',kick:'Framework 2',h:'The Coaching Map',
+  p:'The highest-leverage delta most managers can make: stop telling, start coaching. The Coaching Map moves you from giving answers (which makes you the bottleneck) to developing the people who find them. You scale your judgment instead of renting it out one answer at a time.'},
+
+ {t:'p2d',kick:'Framework 3',h:'The Manager Influence Map',
+  p:'Authority is the weakest tool you own. The Influence Map is how you see who actually needs to move, and how influence travels across an org that does not report to you. This is how a calm manager gets headcount, priority, and cover without a single raised voice.'},
+
+ {t:'p2e',kick:'Framework 4',h:'AI-first management: the AI Stack',
+  p:'The manager job just changed. The AI Stack is a layered view of where AI genuinely removes load from your team and where it quietly adds risk. Used well, it is the single biggest source of deltas available to a manager this year: hours back, faster decisions, fewer bottlenecks.'},
+
+ {t:'p2f',kick:'Putting it together',h:'A management operating system',
+  p:'Compass for direction. Coaching Map to scale yourself. Influence Map to move the org. The AI Stack for leverage. Strung together and run weekly, these stop being ideas and become your operating system, the quiet machine that runs the team so you can stop running after it.'},
+
+ {t:'div3',divider:true,part:'Part Three',h:'A week run on deltas'},
+
+ {t:'p3a',kick:'The picture',h:'Calm is a system, not a personality',
+  list:['Monday: one delta chosen for the week, not twenty intentions.',
+        'One-on-ones that develop instead of status-check.',
+        'Decisions made against the Compass, in minutes.',
+        'AI carrying the load that used to eat your Friday.']},
+
+ {t:'p3b',kick:'Why me',h:'I have run this loop from the inside',
+  p:'Nearly twenty years as an engineering leader at Meta, Amazon, and startups. Since 2022 I have coached more than 250 software managers and Staff-plus engineers, many into senior roles at Big Tech. The Delta Method is what I teach them, because it is what actually moved me.',
+  by:'<b>Gilad Naor</b>, Management Deltas'},
+
+ {t:'recap',kick:'The recap',h:'One percent, repeated, beats one big move',
+  list:['The overhaul you are waiting for will not come, and would not hold.',
+        'Deltas compound into calm, effective leadership inside a quarter.',
+        'Compass, Coaching Map, Influence Map, AI Stack: run them weekly.']},
+
+ {t:'cta',kick:'Your first delta',h:'Build your own operating system',
+  p:'If this is the way you want to lead, the next step is to build your own management operating system with me, framework by framework, with a small cohort of managers doing the same.',
+  steps:['Join the next cohort of Build Your Engineering Management Operating System.',
+         'Not ready for a cohort? Subscribe to The Deltas Newsletter and start with one delta this week.'],
+  disc:'This masterclass is educational. It shares a leadership method and frameworks; it is not a guarantee of any specific promotion, compensation, or business outcome. Results depend on your own context and effort.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.divider?' divider':'');
+  let h='';
+  h+='<span class="num">'+String(i+1).padStart(2,'0')+' / '+S.length+'</span>';
+  if(s.divider){
+    if(s.part)h+='<div class="part">'+s.part+'</div>';
+    if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+    h+='<h2>'+s.h+'</h2>';
+  } else if(s.t==='title'){
+    if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+    h+='<h1>'+s.h+'</h1>';
+    if(s.sub)h+='<p class="sub">'+s.sub+'</p>';
+    if(s.by)h+='<div class="by">'+s.by+'</div>';
+  } else if(s.t==='hook'){
+    if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+    h+='<div class="big">'+s.h+'</div>';
+  } else {
+    if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+    h+='<h2>'+s.h+'</h2>';
+    if(s.p)h+='<p class="lead">'+s.p+'</p>';
+    if(s.list){h+='<ul>';s.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+    if(s.steps){h+='<ul class="cta-steps">';s.steps.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+    if(s.by)h+='<div class="by">'+s.by+'</div>';
+    if(s.disc)h+='<div class="disc">'+s.disc+'</div>';
+  }
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
