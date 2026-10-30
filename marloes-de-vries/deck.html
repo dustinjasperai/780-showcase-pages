@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back to Your Creative Self — Marloes De Vries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf7f0; --ink:#36350a; --accent:#ee403a; --peach:#ffe2d9;
+    --rule:#e7ddc9; --soft:#6f6a4a; --olive:#817e28;
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Hanken Grotesque',system-ui,sans-serif;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{background:#efe8da;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;}
+  .slide{display:none;width:min(960px,96vw);aspect-ratio:16/10;background:var(--paper);
+    border:1px solid var(--rule);box-shadow:0 18px 60px rgba(54,53,10,.12);
+    padding:64px 72px;position:relative;overflow:hidden;}
+  .slide.on{display:flex;flex-direction:column;justify-content:center;}
+  .slide::after{content:"";position:absolute;right:-60px;bottom:-60px;width:220px;height:220px;
+    border-radius:50% 42% 55% 45%;background:var(--peach);opacity:.5;z-index:0;}
+  .slide > *{position:relative;z-index:1;}
+  .kick{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:var(--serif);font-weight:600;font-size:64px;line-height:1.04;letter-spacing:-.01em;}
+  h2{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.1;margin-bottom:18px;}
+  .lead{font-family:var(--serif);font-style:italic;font-size:30px;line-height:1.3;color:var(--soft);}
+  p{font-size:20px;line-height:1.6;color:var(--ink);max-width:62ch;}
+  p+p{margin-top:16px;}
+  .big{font-family:var(--serif);font-size:40px;line-height:1.18;font-weight:500;max-width:20ch;}
+  .big .hl{color:var(--accent);}
+  ul{list-style:none;margin-top:14px;}
+  li{font-size:21px;line-height:1.5;padding-left:28px;position:relative;margin-bottom:14px;max-width:58ch;}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:50%;background:var(--accent);}
+  .part{font-family:var(--serif);font-size:22px;color:var(--olive);margin-bottom:10px;font-style:italic;}
+  .sub{font-size:19px;color:var(--soft);margin-top:14px;max-width:60ch;}
+  .credit{font-size:19px;color:var(--soft);margin-top:10px;}
+  .cta-line{font-size:22px;margin-top:18px;}
+  .cta-line a{color:var(--accent);text-decoration:none;border-bottom:2px solid var(--peach);}
+  .disclaimer{font-size:13px;color:var(--soft);margin-top:30px;max-width:66ch;line-height:1.5;}
+  footer{position:fixed;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:18px;
+    font-family:var(--sans);font-size:12px;color:#9a9270;letter-spacing:.05em;}
+  .nav{position:fixed;bottom:12px;right:20px;font-size:12px;color:#9a9270;}
+  .mark{font-family:var(--serif);font-style:italic;color:var(--olive);}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span>Marloes De Vries</span><span>&middot;</span><span class="mark">a live class</span></footer>
+<div class="nav"><span id="pos">1</span> / <span id="tot">1</span></div>
+<script>
+const S=[
+  {t:'title'},
+  {t:'who'},
+  {t:'trap'},
+  {t:'hook'},
+  {t:'part',part:'Part one',h:'Somewhere, making became performing'},
+  {t:'problem'},
+  {t:'cost'},
+  {t:'part',part:'Part two',h:'Make to feel good, not to be good'},
+  {t:'pillar',kick:'Pillar one',h:'Draw to feel good, not to be good enough',p:'The goal is not a better drawing. The goal is a better hour. When the point of making is how it feels, the fear of a bad result loses its grip, and you start again.'},
+  {t:'pillar',kick:'Pillar two',h:'The sketchbook as a judgment-free sandbox',p:'Cheap paper. Fifteen minutes. No one ever has to see it. A space with no stakes is the only place the inner critic cannot follow you, so that is where the play comes back.'},
+  {t:'pillar',kick:'Pillar three',h:'Loose, intuitive painting with no agenda',p:'Big marks, soft shapes, colour chosen by feel instead of by rule. When you stop painting the thing and start painting the feeling of it, the stiffness leaves your hand.'},
+  {t:'pillar',kick:'Pillar four',h:'Rest is creative fuel, not a reward',p:'A tired, over-scheduled maker has nothing to make from. Slowing down, walking, doing nothing on purpose, that is not the opposite of the work. It is where the work refills.'},
+  {t:'part',part:'Part three',h:'A real week, made differently'},
+  {t:'changes'},
+  {t:'week'},
+  {t:'whyme'},
+  {t:'invite'},
+  {t:'cta',disc:'This class is offered for creative wellbeing and education only. It is not therapy or medical advice. No specific result is guaranteed. Results vary, and every creative\'s path is their own.'}
+];
+
+function render(s){
+  if(s.t==='title') return `<div class="kick">A live class</div>
+    <h1>Back to Your<br>Creative Self</h1>
+    <p class="lead" style="margin-top:20px;">How to make again when you have lost the joy.</p>
+    <p style="margin-top:22px;">With Marloes De Vries, illustrator and author.</p>`;
+  if(s.t==='who') return `<div class="kick">Who this is for</div>
+    <h2>The creative who used to love this</h2>
+    <p>Illustrators, painters, makers of every kind who once could not stop drawing, and who now open the sketchbook and feel nothing but pressure.</p>
+    <p>If you are burnt out, blocked, or quietly convinced you have lost it, you are in the right room.</p>`;
+  if(s.t==='trap') return `<div class="kick">The trap</div>
+    <h2>You open the book, and close it again</h2>
+    <p>Nothing feels good enough to be worth starting. So the book stays shut, the guilt grows, and the longer you wait the harder it gets.</p>
+    <p class="sub">The problem is almost never talent. It is that making stopped feeling safe.</p>`;
+  if(s.t==='hook') return `<div class="kick">An uncomfortable idea</div>
+    <p class="big">Getting <span class="hl">better</span> at your craft can be the very thing that stops you making.</p>
+    <p class="sub">The more you know, the louder the critic, and the higher the bar every first mark has to clear.</p>`;
+  if(s.t==='part') return `<div class="part">${s.part}</div><h2 style="font-size:50px;max-width:18ch;">${s.h}</h2>`;
+  if(s.t==='problem') return `<div class="kick">The real problem</div>
+    <h2>Making turned into performing</h2>
+    <p>At some point the audience moved into your own head. Now every line is judged before it has even landed, by you, against your best work on your best day.</p>
+    <p>That is an impossible standard to make anything under.</p>`;
+  if(s.t==='cost') return `<div class="kick">What it costs</div>
+    <h2>The blank page keeps the score</h2>
+    <ul>
+      <li>You make less, so you trust yourself less, so you make even less.</li>
+      <li>The work that does come out feels tight and careful, never alive.</li>
+      <li>The thing that used to restore you becomes one more place you fall short.</li>
+    </ul>`;
+  if(s.t==='pillar') return `<div class="kick">${s.kick}</div><h2>${s.h}</h2><p>${s.p}</p>`;
+  if(s.t==='changes') return `<div class="kick">What changes</div>
+    <h2>The joy returns first, the skill follows</h2>
+    <p>When you make to feel good, you make more. When you make more, you get looser, braver, and yes, better, but the better is a side effect now, not the price of entry.</p>`;
+  if(s.t==='week') return `<div class="kick">A real week</div>
+    <h2>Small, regular, low-stakes</h2>
+    <ul>
+      <li>Fifteen minutes in the sandbox, most days, nothing precious.</li>
+      <li>One loose, intuitive painting a week with no plan and no audience.</li>
+      <li>One proper rest, protected on purpose, no screen, no output.</li>
+    </ul>`;
+  if(s.t==='whyme') return `<div class="kick">Why listen to me</div>
+    <h2>I lost it too, and found the way back</h2>
+    <p>Twenty-five years of making, around fifty books illustrated, sixteen years freelance, and hundreds of creatives mentored. Then burnout, a shut sketchbook, and a slow return to painting that taught me everything in this class.</p>`;
+  if(s.t==='invite') return `<div class="kick">Three ways to keep making</div>
+    <h2>Come make with me</h2>
+    <p>If this is the direction you want, there are three ways to keep going: a one-day painting workshop to loosen up, a one-to-one session to get unstuck, or the Creative Rest Retreat to do the deeper reset over a few quiet days.</p>`;
+  if(s.t==='cta') return `<div class="kick">Your next step</div>
+    <h2>Start making again</h2>
+    <p class="cta-line">Find the next workshop, session and retreat at <a href="https://marloesdevries.com">marloesdevries.com</a>.</p>
+    <p class="credit">Bring a cheap sketchbook. Bring no expectations. That is the whole method.</p>
+    <p class="disclaimer">${s.disc}</p>`;
+  return '';
+}
+
+let i=0;const stage=document.getElementById('stage');
+function show(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  stage.innerHTML='';
+  const d=document.createElement('div');d.className='slide on';d.innerHTML=render(S[i]);
+  stage.appendChild(d);
+  document.getElementById('pos').textContent=i+1;
+  document.getElementById('tot').textContent=S.length;
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')show(i-1);
+});
+document.addEventListener('click',e=>{const w=innerWidth;show(e.clientX<w*0.3?i-1:i+1);});
+show(0);
+</script>
+</body>
+</html>
