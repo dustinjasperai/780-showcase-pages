@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Signature Story Method | Bobby Umar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Mulish:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#121416; --panel:#1b1f22; --rule:#2c3236;
+    --accent:#f6b501; --ink:#f4f1ea; --ink-soft:#c3c7c9; --ink-mute:#8b9094;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Mulish',system-ui,sans-serif;overflow:hidden;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease;}
+  .slide.on{display:flex;opacity:1;}
+  .eyebrow{font-family:'Mulish';font-weight:700;font-size:clamp(11px,1.3vw,15px);letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:26px;}
+  .eyebrow::before{content:"";display:block;width:54px;height:3px;background:var(--accent);margin-bottom:16px;}
+  h1{font-family:'Antonio';font-weight:700;font-size:clamp(40px,7.4vw,104px);line-height:.98;
+    letter-spacing:.005em;text-transform:uppercase;}
+  h2{font-family:'Antonio';font-weight:700;font-size:clamp(30px,5.2vw,68px);line-height:1.02;
+    text-transform:uppercase;letter-spacing:.005em;}
+  .sub{font-family:'Mulish';font-weight:400;font-size:clamp(17px,2vw,27px);color:var(--ink-soft);
+    margin-top:28px;max-width:30ch;line-height:1.45;}
+  .big{font-family:'Antonio';font-weight:600;font-size:clamp(34px,5.6vw,74px);line-height:1.04;
+    text-transform:uppercase;}
+  .big .hl{color:var(--accent);}
+  ul{list-style:none;margin-top:34px;display:flex;flex-direction:column;gap:20px;max-width:36ch;}
+  li{font-size:clamp(17px,2vw,25px);color:var(--ink-soft);line-height:1.4;padding-left:34px;position:relative;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent);}
+  .label{font-family:'Antonio';font-weight:700;color:var(--accent);font-size:clamp(13px,1.5vw,18px);
+    letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px;}
+  .pillars{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap;}
+  .pill{flex:1 1 220px;background:var(--panel);border:1px solid var(--rule);border-top:3px solid var(--accent);
+    padding:28px 24px;}
+  .pill .n{font-family:'Antonio';font-weight:700;color:var(--accent);font-size:28px;}
+  .pill h3{font-family:'Antonio';font-weight:600;text-transform:uppercase;font-size:clamp(20px,2.4vw,30px);
+    margin:8px 0 12px;letter-spacing:.01em;}
+  .pill p{color:var(--ink-soft);font-size:clamp(14px,1.5vw,18px);line-height:1.45;}
+  .creds{display:flex;flex-wrap:wrap;gap:14px 30px;margin-top:34px;max-width:40ch;}
+  .creds span{font-size:clamp(15px,1.7vw,21px);color:var(--ink-soft);}
+  .creds b{color:var(--ink);font-weight:700;}
+  .disc{font-family:'Mulish';font-size:13px;color:var(--ink-mute);margin-top:40px;max-width:52ch;line-height:1.5;}
+  .cta-line{font-size:clamp(18px,2.1vw,26px);color:var(--ink-soft);margin-top:26px;max-width:34ch;line-height:1.45;}
+  .cta-btn{display:inline-block;margin-top:34px;background:var(--accent);color:#121416;font-family:'Antonio';
+    font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(18px,2vw,26px);
+    padding:16px 34px;}
+  .nav{position:fixed;bottom:22px;right:26px;font-family:'Mulish';font-size:13px;color:var(--ink-mute);
+    display:flex;gap:16px;align-items:center;z-index:10;}
+  .nav button{background:none;border:1px solid var(--rule);color:var(--ink-soft);font-size:16px;
+    width:36px;height:36px;cursor:pointer;}
+  .nav button:hover{border-color:var(--accent);color:var(--accent);}
+  .count{min-width:48px;text-align:center;}
+  @media(max-width:640px){.slide{padding:6vh 7vw;}.pillars{gap:12px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">&larr;</button><span class="count" id="count"></span><button id="next">&rarr;</button></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'A Live Masterclass with Bobby Umar',h1:'The Signature Story Method',sub:'How experts get booked to speak by leading with connection, not a louder pitch.'},
+  {t:'list',eyebrow:'What you will leave with',h2:'One hour from now',items:['A drafted 90-second signature story that is yours alone','The three pillars of a personal brand that actually gets you found','A clear path from invisible expert to paid stages']},
+  {t:'list',eyebrow:'Who this is for',h2:'This is you if',items:['You know you should be on more stages, and you are not','You have sent pitches and one-sheets that went nowhere','You watch less qualified people get booked while you wait']},
+  {t:'big',eyebrow:'The trap',big:'You think you need a <span class="hl">better pitch.</span>'},
+  {t:'statement',eyebrow:'The trap, continued',h2:'So you polish the wrong thing',sub:'A sharper bio. A tighter one-sheet. A more impressive list of credentials. None of it is the reason anyone chooses to put you on their stage.'},
+  {t:'big',eyebrow:'The reframe',big:'Nobody books a resume. <span class="hl">They book a feeling.</span>'},
+  {t:'label',label:'Part One',h2:'Why experts stay invisible'},
+  {t:'statement',eyebrow:'The credibility trap',h2:'More expertise, said the same way',sub:'You lead with what you know. But audiences and event hosts do not choose the most qualified person. They choose the person they trust and remember.'},
+  {t:'list',eyebrow:'The three gaps',h2:'What is really missing',items:['No story that makes a stranger feel something fast','No visible brand, so the right people never find you','No system, so being booked stays random and rare']},
+  {t:'label',label:'Part Two',h2:'The method'},
+  {t:'statement',eyebrow:'The foundation',h2:'Lead with the heart',sub:'Heart-based connection comes before any tactic. When people feel you before they evaluate you, the pitch, the fee, and the yes all get easier.'},
+  {t:'statement',eyebrow:'The core move',h2:'Your 90-second signature story',sub:'One real moment, the turn, and the lesson it left you. Ninety seconds, because that is all it takes for a room to decide how they feel about you. You will draft yours live.'},
+  {t:'pillars',eyebrow:'Discover Your Personal Brand',h2:'Three pillars',pills:[
+    {n:'01',h:'Knowledge',p:'The one idea only you can teach, said in a way nobody else can copy.'},
+    {n:'02',h:'Digital Voice',p:'Speaking, writing, and storytelling that sound unmistakably like you.'},
+    {n:'03',h:'Community',p:'Authentic relationships that put you on stages, long before you ask.'}]},
+  {t:'statement',eyebrow:'Pillar one in practice',h2:'Knowledge',sub:'Not everything you know. The single idea you can own. That is what a host remembers when they are choosing who to book next.'},
+  {t:'statement',eyebrow:'Pillar two in practice',h2:'Digital Voice',sub:'Your story told consistently in public, so the right rooms hear you before you ever pitch them. Visibility is a practice, not an accident.'},
+  {t:'statement',eyebrow:'Pillar three in practice',h2:'Community',sub:'Most stages come from a relationship, not a cold email. Heart-based networking is how you become the person people want to introduce.'},
+  {t:'label',label:'Part Three',h2:'When the room feels you first'},
+  {t:'statement',eyebrow:'The compounding loop',h2:'From invisible to in demand',sub:'One story earns the first stage. The brand makes you findable. The community refers you to the next room. Each booking makes the following one easier.'},
+  {t:'creds',eyebrow:'Why listen to me',h2:'Bobby Umar',creds:[['5x','TEDx speaker'],['Top 100','Inc leadership speakers in North America'],['2x','LinkedIn Top Voice'],['750K+','following across platforms'],['Founder','of the Discover Your Personal Brand conference']]},
+  {t:'list',eyebrow:'The recap',h2:'Three moves',items:['One story that makes a room feel something','Three pillars that make you findable','One system so being booked stops being luck']},
+  {t:'cta',eyebrow:'Your next step',h2:'Build your speaking career',line:'If you want help turning your story into stages, the Speaker Mastermind is where we do it together. Book a call with me and we will see if it is a fit.',btn:'Book a call',disc:'Educational content only. Results vary and depend on your own effort, experience, and market. No specific outcome, booking, or income is guaranteed.'}
+];
+const stage=document.getElementById('stage');
+function esc(s){return s;}
+function build(){
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');d.className='slide';d.dataset.i=i;
+    let h='';
+    if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+    if(s.label)h+=`<div class="label">${s.label}</div>`;
+    if(s.h1)h+=`<h1>${s.h1}</h1>`;
+    if(s.h2)h+=`<h2>${s.h2}</h2>`;
+    if(s.big)h+=`<div class="big">${s.big}</div>`;
+    if(s.sub)h+=`<div class="sub">${s.sub}</div>`;
+    if(s.items){h+='<ul>'+s.items.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+    if(s.pills){h+='<div class="pillars">'+s.pills.map(p=>`<div class="pill"><div class="n">${p.n}</div><h3>${p.h}</h3><p>${p.p}</p></div>`).join('')+'</div>';}
+    if(s.creds){h+='<div class="creds">'+s.creds.map(c=>`<span><b>${c[0]}</b> ${c[1]}</span>`).join('')+'</div>';}
+    if(s.line)h+=`<div class="cta-line">${s.line}</div>`;
+    if(s.btn)h+=`<div><span class="cta-btn">${s.btn}</span></div>`;
+    if(s.disc)h+=`<div class="disc">${s.disc}</div>`;
+    d.innerHTML=h;stage.appendChild(d);
+  });
+}
+build();
+let cur=0;const slides=[...document.querySelectorAll('.slide')];const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(e.target.closest('.nav'))return;show(cur+1);});
+show(0);
+</script>
+</body>
+</html>
