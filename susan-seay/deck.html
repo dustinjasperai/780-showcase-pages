@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parent on Purpose — a masterclass with Susan Seay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF8F3;        /* warm paper */
+    --panel:#FFFFFF;     /* clean card */
+    --rule:#E7E1D6;      /* soft rule */
+    --ink:#033863;       /* her dominant navy (brand.json 25 uses) */
+    --muted:#4a5a68;     /* dimmed navy for secondary text */
+    --accent:#ff8427;    /* her link/accent orange (brand.json 20 uses) */
+    --leaf:#94bc24;      /* her green, used sparingly (brand.json 13 uses) */
+    --head:'Barlow',system-ui,sans-serif;  /* her primary face */
+    --body:'Nunito',system-ui,sans-serif;  /* also on her site */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 20px 80px}
+  .slide{
+    background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:56px 60px;margin:0 0 26px;min-height:430px;
+    display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 1px 0 rgba(3,56,99,.03);
+  }
+  .kicker{font-family:var(--head);font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:700;font-size:54px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:38px;line-height:1.1;letter-spacing:-.01em}
+  .lede{font-size:21px;line-height:1.5;color:var(--muted);margin-top:18px;max-width:44ch}
+  p.big{font-size:27px;line-height:1.4;max-width:36ch}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);margin-top:16px;max-width:52ch}
+  ul{list-style:none;margin-top:22px}
+  li{font-size:20px;line-height:1.4;padding:12px 0 12px 34px;position:relative;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:19px;width:14px;height:14px;
+    border-radius:4px;background:var(--leaf)}
+  .pill{display:inline-block;font-family:var(--head);font-weight:600;font-size:14px;
+    color:#fff;background:var(--ink);padding:6px 14px;border-radius:999px;margin-bottom:22px}
+  .num{font-family:var(--head);font-weight:700;font-size:16px;color:var(--accent)}
+  .part h1{font-size:46px}
+  .part{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .part .kicker{color:#ffd9b8}
+  .cta{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .cta h2{color:#fff}
+  .cta .sub{color:#d7e2ec}
+  .step{font-size:22px;line-height:1.5;margin-top:10px}
+  .disc{font-size:13px;line-height:1.5;color:#9fb3c2;margin-top:30px;max-width:60ch}
+  .credit{font-size:16px;color:var(--muted);margin-top:26px;font-family:var(--head);font-weight:600}
+  .focal{color:var(--accent)}
+  @media(max-width:640px){.slide{padding:38px 28px}h1{font-size:38px}h2{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title',html:`
+    <div class="kicker">A live masterclass for moms</div>
+    <h1>Parent on <span class="focal">Purpose</span></h1>
+    <p class="lede">How high-achieving moms lower their stress without lowering their standards.</p>
+    <div class="credit">with Susan Seay, Mentor for Moms</div>`},
+
+  {t:'content',html:`
+    <div class="kicker">Who this is for</div>
+    <p class="big">You run hard at everything. You are the one people count on.</p>
+    <p class="sub">So why does home feel like the one place you are always a little behind?</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">The trap</div>
+    <p class="big">You keep raising the standard and lowering yourself to meet it.</p>
+    <p class="sub">More lists. More pressure. And a quiet feeling that a good mom would already have this handled.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">The reframe</div>
+    <p class="big">The problem was never your standards.</p>
+    <p class="sub">It is that your home is being run on everyone else's plan but your own.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">Two things are true</div>
+    <p class="big">Being a mom is hard. And being a mom is wonderful.</p>
+    <p class="sub">Both are true on the same day. You do not have to pick one.</p>`},
+
+  {t:'part',cls:'part',html:`
+    <div class="kicker">Part One</div>
+    <h1>The Committee</h1>
+    <p class="lede">Why a capable woman can feel like she is failing at the one thing she wants most.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">Meet the committee</div>
+    <p class="big">There is a committee in your head.</p>
+    <p class="sub">The cranky voices. The comparisons. The endless shoulds. They narrate your day and they are never satisfied.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">What it costs you</div>
+    <ul>
+      <li>You react to the day instead of leading it.</li>
+      <li>You measure yourself against moms whose values are not yours.</li>
+      <li>The gap grows between the mom you are and the mom you want to be.</li>
+    </ul>`},
+
+  {t:'content',html:`
+    <div class="kicker">The truth the committee hides</div>
+    <p class="big">A bad day does not make you a bad mom.</p>
+    <p class="sub">It makes you a mom who had a bad day. That distinction changes everything that comes next.</p>`},
+
+  {t:'part',cls:'part',html:`
+    <div class="kicker">Part Two</div>
+    <h1>Parent on Purpose</h1>
+    <p class="lede">Five moves that turn a reactive home into one you lead on purpose.</p>`},
+
+  {t:'content',html:`
+    <span class="pill">Move 1</span>
+    <h2>Name your family's core values</h2>
+    <p class="sub">Not the neighbor's values. Not the internet's. Yours. When you know what your family stands for, most decisions make themselves.</p>`},
+
+  {t:'content',html:`
+    <span class="pill">Move 2</span>
+    <h2>Silence the committee</h2>
+    <p class="sub">You cannot lead from guilt. You learn to catch the shoulds, set them down, and make the next decision from your values instead.</p>`},
+
+  {t:'content',html:`
+    <span class="pill">Move 3</span>
+    <h2>Run your home like the leader you already are</h2>
+    <p class="sub">You manage people and priorities all day. We bring that same skill home. This is where you lower your stress, not your standards.</p>`},
+
+  {t:'content',html:`
+    <span class="pill">Move 4</span>
+    <h2>Close the gap between your lips and your kids' ears</h2>
+    <p class="sub">When they simply will not listen, there are five questions that change the conversation. You stop repeating yourself and start being heard.</p>`},
+
+  {t:'content',html:`
+    <span class="pill">Move 5</span>
+    <h2>Ask the 10 questions, once a year</h2>
+    <p class="sub">A single, unhurried conversation with each child, every year. A practice I have kept for over a decade, and the one most moms wish they had started sooner.</p>`},
+
+  {t:'part',cls:'part',html:`
+    <div class="kicker">Part Three</div>
+    <h1>Lower Your Stress, Not Your Standards</h1>
+    <p class="lede">A home that still has hard days, run by a mom who is no longer at war with herself.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">A week run on purpose</div>
+    <ul>
+      <li>You decide from values, so small choices stop draining you.</li>
+      <li>The committee still talks. You just stop taking its advice.</li>
+      <li>Your standards stay high. The pressure to prove something quietly leaves.</li>
+    </ul>`},
+
+  {t:'content',html:`
+    <div class="kicker">Why me</div>
+    <p class="big">I did not learn this in theory.</p>
+    <p class="sub">Mom of seven. Certified life coach. Since 2017 the Mentor for Moms podcast has passed 100,000 downloads, and I have walked thousands of moms through this since 2012.</p>`},
+
+  {t:'content',html:`
+    <div class="kicker">The one shift</div>
+    <p class="big">Stop looking for the answer out there.</p>
+    <p class="sub">Start leading the home that is right in front of you, on purpose, by the values that are already yours.</p>`},
+
+  {t:'cta',cls:'cta',html:`
+    <div class="kicker">Your next step</div>
+    <h2>Start parenting on purpose this week.</h2>
+    <p class="step">Grab the free guide, 12 Things Intentional Moms Do Differently, and bring one move into your home today.</p>
+    <p class="sub">When you are ready to go deeper, Mentor for Moms mentorship is where we build your family's plan together.</p>
+    <p class="disc">This masterclass is for educational purposes only. Every family and every child is different, and individual results vary. Nothing here is a guarantee of any specific outcome.</p>`},
+];
+const deck=document.getElementById('deck');
+S.forEach(s=>{const d=document.createElement('section');d.className='slide'+(s.cls?' '+s.cls:'');d.innerHTML=s.html;deck.appendChild(d);});
+</script>
+</body>
+</html>
