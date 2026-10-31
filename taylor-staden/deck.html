@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mental Game of Golf | Upper Mentality</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#1b1b1b;
+    --panel:#303030;
+    --panel-2:#262626;
+    --ink:#f7f7f7;
+    --ink-soft:#d8d8d8;
+    --ink-muted:#a4a4a4;
+    --accent:#2d7bba;
+    --rule:#3a3a3a;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Helvetica,Arial,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  #stage{width:100vw;height:100vh;position:relative;}
+  .slide{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;justify-content:center;
+    padding:7vh 9vw;
+  }
+  .slide.on{display:flex;}
+  .eyebrow{
+    font-family:'Oswald',sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:.22em;
+    font-size:14px;color:var(--accent);margin-bottom:22px;
+  }
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,6vw,76px);line-height:1.02;letter-spacing:-.01em;}
+  h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(26px,4vw,50px);line-height:1.08;letter-spacing:-.005em;}
+  .lede{font-size:clamp(17px,2vw,24px);color:var(--ink-soft);line-height:1.5;max-width:46ch;margin-top:26px;}
+  .sub{font-size:clamp(15px,1.5vw,19px);color:var(--ink-muted);margin-top:18px;}
+  .accent-rule{width:72px;height:5px;background:var(--accent);margin:0 0 30px;}
+  .big-stat{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(44px,9vw,120px);color:var(--accent);line-height:1;}
+  .kicker{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--ink-muted);margin-bottom:16px;}
+  ul{list-style:none;margin-top:28px;}
+  li{font-size:clamp(16px,1.8vw,22px);color:var(--ink-soft);padding:14px 0;border-top:1px solid var(--rule);display:flex;gap:16px;align-items:flex-start;}
+  li:last-child{border-bottom:1px solid var(--rule);}
+  li .n{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);min-width:38px;}
+  .pillar{display:inline-block;background:var(--panel);border:1px solid var(--rule);border-left:5px solid var(--accent);padding:10px 20px;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:14px;color:var(--ink);margin-bottom:26px;}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:34px 38px;max-width:52ch;}
+  .credo{font-size:clamp(18px,2.4vw,30px);color:var(--ink);line-height:1.4;max-width:40ch;font-family:'Oswald',sans-serif;font-weight:500;}
+  .disclaimer{font-size:13px;color:var(--ink-muted);margin-top:30px;max-width:60ch;line-height:1.55;}
+  .cta-step{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(22px,3vw,40px);color:var(--accent);margin-top:22px;}
+  .brandline{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.16em;font-size:14px;color:var(--ink-muted);margin-top:40px;}
+  #nav{position:fixed;bottom:22px;right:26px;font-family:'Oswald',sans-serif;font-size:13px;color:var(--ink-muted);letter-spacing:.1em;z-index:5;}
+  #nav b{color:var(--accent);}
+  .hint{position:fixed;bottom:22px;left:26px;font-size:12px;color:var(--ink-muted);font-family:'Oswald',sans-serif;letter-spacing:.08em;z-index:5;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><b id="cur">1</b> / <span id="tot">1</span></div>
+<div class="hint">Use arrow keys or click to advance</div>
+<script>
+const S=[
+  {t:'title',h:`<div class="eyebrow">Upper Mentality &middot; Taylor Staden, CMPC</div>
+    <h1>The Mental Game<br>of Golf</h1>
+    <p class="lede">Why your best range swing disappears when the round is on the line, and the three mental skills that bring it back.</p>`},
+  {t:'who',h:`<div class="kicker">Who this is for</div>
+    <h2>The golfer who is pure on the range<br>and lost on the first tee.</h2>
+    <p class="lede">You strike it clean with no one watching. Put a scorecard in your pocket and a group on the tee, and a different golfer shows up. This is for competitive golfers who know their ceiling is higher than their scores.</p>`},
+  {t:'trap',h:`<div class="kicker">The trap</div>
+    <h2>You have bought every fix<br>for the wrong problem.</h2>
+    <p class="lede">New driver. Launch monitor numbers. More lessons, more range balls. The swing keeps getting better and the scores do not follow, because the thing that unravels under pressure was never in the swing.</p>`},
+  {t:'reframe',h:`<div class="accent-rule"></div>
+    <div class="big-stat">70-90%</div>
+    <h2 style="margin-top:18px;">Golf is mostly mental.<br>Your training is almost all physical.</h2>
+    <p class="sub">That gap is the whole opportunity, and almost nobody trains it.</p>`},
+  {t:'p1head',h:`<div class="kicker">Part one &middot; The real problem</div>
+    <h2>Range skill and scorecard skill<br>are two different skills.</h2>
+    <p class="lede">The range rewards freedom: no consequence, no story, just the next ball. The course adds fear, memory, and a number that matters. The swing is identical. The mind is not.</p>`},
+  {t:'p1a',h:`<div class="kicker">Part one</div>
+    <h2>Pressure does not change your swing.<br>It changes who is running it.</h2>
+    <p class="lede">Under threat the golfer tightens, steers, and plays not to lose. Trained golfers do not feel less pressure. They have a repeatable way to meet it, so their practiced skill survives contact with the scorecard.</p>`},
+  {t:'part2',h:`<div class="pillar">The method &middot; Three pillars</div>
+    <h2>Three trainable mental skills.</h2>
+    <p class="lede">Not motivation, not positive thinking. Three specific skills you build the same way you build a swing: on purpose, with reps.</p>`},
+  {t:'pillar1',h:`<div class="pillar">Pillar one</div>
+    <h2>Overcome the fear of failure.</h2>
+    <p class="lede">Develop a resilient mindset that can manage the highs and lows of a round. Stop playing not-to-lose. Treat a bad shot as information, not a verdict, and commit fully to the next one.</p>`},
+  {t:'pillar1b',h:`<div class="kicker">Pillar one &middot; On the course</div>
+    <h2>A golfer who stays in the round<br>after the double bogey.</h2>
+    <p class="lede">The score on one hole stops leaking into the next three. Resilience is the difference between a bad hole and a bad round.</p>`},
+  {t:'pillar2',h:`<div class="pillar">Pillar two</div>
+    <h2>Build confidence you can repeat.</h2>
+    <p class="lede">Confidence is a skill, not a mood you wait to feel. Built from process and preparation, it stops depending on how you struck it on the warm-up and starts showing up every round.</p>`},
+  {t:'pillar2b',h:`<div class="kicker">Pillar two &middot; On the course</div>
+    <h2>Confidence that does not need<br>a good warm-up to exist.</h2>
+    <p class="lede">You walk to the first tee certain of your preparation, not hoping for a feeling. That certainty is trainable, and it is repeatable.</p>`},
+  {t:'pillar3',h:`<div class="pillar">Pillar three</div>
+    <h2>Perform when it is on the line.</h2>
+    <p class="lede">A pre-shot routine, attentional control, and emotional regulation so your practice-level skill shows up on the shot that counts. Trust the skill you already own when it matters most.</p>`},
+  {t:'pillar3b',h:`<div class="kicker">Pillar three &middot; On the course</div>
+    <h2>The same swing on the 18th tee<br>as on the range.</h2>
+    <p class="lede">Routine quiets the noise, attention narrows to this shot, and the skill you built in practice is the skill that comes out under pressure.</p>`},
+  {t:'part3',h:`<div class="kicker">Over a season</div>
+    <h2>Fewer rounds lost to your own head.</h2>
+    <ul>
+      <li><span class="n">01</span><span>Bad holes stop becoming bad rounds.</span></li>
+      <li><span class="n">02</span><span>Your scoring average drifts toward your range ceiling.</span></li>
+      <li><span class="n">03</span><span>You compete with a clear process instead of hope.</span></li>
+    </ul>`},
+  {t:'whyme',h:`<div class="kicker">Why work with a specialist</div>
+    <h2>This is a field, not a pep talk.</h2>
+    <p class="lede">Upper Mentality is built on applied sport psychology: a Certified Mental Performance Consultant (CMPC), a Master of Science in Sport and Exercise Psychology, and years training competitive athletes across golf, hockey, gymnastics, and more since 2019. The mental game has a method. This is it.</p>`},
+  {t:'proactive',h:`<div class="accent-rule"></div>
+    <p class="credo">The strongest golfers do not train their minds in a crisis. They train before they need it, the same way they train a swing.</p>`},
+  {t:'recap',h:`<div class="kicker">The three skills, in one line</div>
+    <ul>
+      <li><span class="n">1</span><span>Overcome the fear of failure.</span></li>
+      <li><span class="n">2</span><span>Build confidence you can repeat.</span></li>
+      <li><span class="n">3</span><span>Perform when the round is on the line.</span></li>
+    </ul>
+    <p class="sub">Trainable. Repeatable. Most of the game.</p>`},
+  {t:'cta',h:`<div class="eyebrow">Your next step</div>
+    <h2>Train the 70-90% you have been ignoring.</h2>
+    <p class="lede">If you are a competitive golfer who is better than your scores, let's talk about building the mental side of your game.</p>
+    <div class="cta-step">Book a free discovery call with Taylor.</div>
+    <div class="brandline">Upper Mentality &middot; uppermentality.ca</div>
+    <p class="disclaimer">This masterclass is educational. Mental performance training supports how you practice and compete. No specific score, ranking, or result is guaranteed. Results vary from golfer to golfer.</p>`}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' on':'');d.innerHTML=s.h||'';stage.appendChild(d);});
+let i=0;const slides=document.querySelectorAll('.slide');
+document.getElementById('tot').textContent=slides.length;
+function go(n){slides[i].classList.remove('on');i=Math.max(0,Math.min(slides.length-1,n));slides[i].classList.add('on');document.getElementById('cur').textContent=i+1;}
+document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(i+1);}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(i-1);}});
+document.addEventListener('click',e=>{go(i+(e.clientX< window.innerWidth*0.28?-1:1));});
+</script>
+</body>
+</html>
