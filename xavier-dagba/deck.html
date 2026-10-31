@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Golden Shadow, a Masterclass with Xavier Dagba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Neuton:ital,wght@0,400;0,700;0,800;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1016;        /* his near-black navy, one step down from #161e2a */
+    --panel:#161e2a;     /* his navy, from ranked_colors */
+    --ink:#f3ece0;       /* warm off-white text on dark */
+    --muted:#9aa3b2;     /* muted slate */
+    --accent:#ffe09e;    /* his dominant gold (#ffe09e, 26 uses) */
+    --bronze:#a46c3b;    /* his button bronze (#a46c3b, 26 uses) */
+    --serif:'Neuton',Georgia,serif;        /* his face */
+    --sans:'Josefin Sans',system-ui,sans-serif; /* his face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;
+    justify-content:center;padding:7vh 9vw;opacity:0;transition:opacity .4s ease;
+  }
+  .slide.on{display:flex;opacity:1}
+  /* gold kintsugi seam motif */
+  .slide::before{
+    content:"";position:absolute;left:0;top:0;height:100%;width:3px;
+    background:linear-gradient(180deg,transparent,var(--bronze) 18%,var(--accent) 50%,var(--bronze) 82%,transparent);
+    opacity:.55;
+  }
+  .kicker{font-family:var(--sans);font-weight:600;letter-spacing:.32em;
+    text-transform:uppercase;font-size:clamp(11px,1.1vw,14px);color:var(--accent)}
+  h1{font-family:var(--serif);font-weight:800;line-height:1.02;
+    font-size:clamp(34px,6.6vw,88px);margin:.28em 0 .22em;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;line-height:1.08;
+    font-size:clamp(28px,4.6vw,56px);margin:.2em 0 .5em}
+  p{font-size:clamp(17px,2vw,27px);line-height:1.5;color:var(--ink);max-width:30ch}
+  p.lead{color:var(--muted);max-width:34ch}
+  .big{font-size:clamp(30px,5vw,62px);line-height:1.1;font-weight:700;max-width:22ch}
+  ul{list-style:none;margin-top:.6em}
+  ul li{font-size:clamp(17px,2vw,26px);line-height:1.55;padding-left:1.4em;
+    position:relative;margin:.35em 0;max-width:34ch}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:.7em;height:.7em;
+    transform:rotate(45deg);background:var(--accent)}
+  .num{font-family:var(--sans);font-weight:600;color:var(--bronze);
+    font-size:clamp(13px,1.3vw,16px);letter-spacing:.2em}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:center}
+  .card{background:var(--panel);border:1px solid rgba(164,108,59,.4);
+    border-radius:14px;padding:4vh 3vw}
+  .card h3{font-family:var(--sans);font-weight:600;letter-spacing:.04em;
+    font-size:clamp(16px,1.6vw,20px);color:var(--accent);margin-bottom:.4em}
+  .card p{font-size:clamp(15px,1.5vw,20px);color:var(--muted);max-width:none}
+  .quietline{font-family:var(--sans);color:var(--muted);font-size:clamp(13px,1.3vw,16px);
+    letter-spacing:.04em;margin-top:1.4em;max-width:46ch;line-height:1.5}
+  .cta-note{font-family:var(--sans);font-size:clamp(12px,1.2vw,14px);color:var(--muted);
+    margin-top:2.2em;max-width:52ch;line-height:1.5;border-top:1px solid rgba(154,163,178,.25);padding-top:1.1em}
+  .btn{display:inline-block;margin-top:1.4em;font-family:var(--sans);font-weight:600;
+    letter-spacing:.12em;text-transform:uppercase;font-size:clamp(13px,1.4vw,17px);
+    color:var(--bg);background:var(--accent);padding:.8em 1.6em;border-radius:40px}
+  .glyph{font-size:clamp(26px,3vw,40px);color:var(--bronze);margin-bottom:.1em}
+  footer{position:fixed;left:0;right:0;bottom:16px;display:flex;justify-content:space-between;
+    padding:0 9vw;font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .dots{display:flex;gap:6px}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(154,163,178,.35)}
+  .dot.on{background:var(--accent)}
+  .hint{opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>
+  <span>Embodied Light / Xavier Dagba</span>
+  <span class="dots" id="dots"></span>
+  <span class="hint">← / → to move</span>
+</footer>
+<script>
+const S=[
+ {t:'title',kicker:'A Live Masterclass',h:'The Golden Shadow',sub:'How to reclaim the gifts you exiled and lead, love and serve from an unleashed heart.',by:'with Xavier Dagba'},
+
+ {t:'lead',kicker:'Who this is for',h:'You have done the inner work. You still hold back.',p:'For creatives, light workers and thought leaders who feel called toward visibility and deeper truth, yet notice something in them pull back the moment it is time to fully express.'},
+
+ {t:'hook',kicker:'The reframe',big:'You are not stuck. You are split.'},
+
+ {t:'lead',kicker:'The trap',h:'The "almost there" zone.',p:'Almost ready to unleash your voice. Almost ready to leap. Almost ready to bring your deep work out. It can last for years, and it is one of the quietest forms of suffering.'},
+
+ {t:'lead',kicker:'Part One: the real problem',h:'Healing was never the finish line.',p:'Illuminating your darkness is only as useful as it makes more room for your light. Most people stay in the healing loop and never cross into integration, where the work actually starts to move.'},
+
+ {t:'lead',kicker:'Part One',h:'Pushing harder is not the answer.',p:'You do not move forward by forcing yourself. You move forward by restoring the inner conditions that make movement possible. The parts of you that learned it was safer to stay small keep hijacking your momentum.'},
+
+ {t:'section',num:'PART TWO',h:'Inner Alchemy',p:'Turning the shadow into gold. Five movements that take you from fragmentation to integrated expression.'},
+
+ {t:'pillar',num:'MOVEMENT 01',h:'The Shadow Walk',p:'Harness the wisdom of your triggers instead of being run by them. Your reactions are a map. Followed consciously, they lead to the exact material that is ready to be integrated.'},
+
+ {t:'pillar',num:'MOVEMENT 02',h:'The Golden Shadow',p:'The shadow does not only hide the wound. It guards the gift. We reclaim the power, creativity and voice you exiled because it was once unsafe to let them be seen.'},
+
+ {t:'pillar',num:'MOVEMENT 03',h:'Inner Coherence',p:'End the subtle self-betrayal that splits you in two. When intention, emotion and action line up, the pull-back that stalls you loses its grip and expression stops costing so much.'},
+
+ {t:'pillar',num:'MOVEMENT 04',h:'Survival to Power',p:'Learn to catch the moment your energy leaks into fight, flight or freeze, and bring it back to an empowered state. The same charge that protected you becomes fuel for your work.'},
+
+ {t:'pillar',num:'MOVEMENT 05',h:'Enheartenment',p:'Lead, love and serve from an unleashed heart rather than from the wound. This is the shift from performing your gifts to embodying them.'},
+
+ {t:'two-card',num:'PART THREE',h:'What integration looks like',a:{k:'Before',p:'Driven by the wound. Visible but still unseen. Expression that has to fight its way out, every time.'},b:{k:'After',p:'Creating from wholeness. Your truth leads. What wants to emerge no longer has to force its way through you.'}},
+
+ {t:'lead',kicker:'The outcome',h:'Expression that no longer has to fight its way out.',p:'This is not surface motivation. It is an embodied reset of how you relate to your light, your power and your truth, so forward motion becomes your natural state.'},
+
+ {t:'why',kicker:'Why me',h:'A trustworthy guide for the descent.',p:'I am a shadow integration facilitator, trauma-informed transformation guide, and the author of Scars of Gold. My work bridges Jungian psychology, somatic experiencing and spiritual wisdom. Thousands have moved through these shifts in my workshops and immersions.'},
+
+ {t:'recap',kicker:'The path',h:'From split to unleashed.',items:['Follow the trigger, not the story','Reclaim the golden shadow','Restore inner coherence','Move survival energy into power','Lead from an unleashed heart']},
+
+ {t:'cta',kicker:'Your next step',h:'Ready to be unleashed?',p:'If this is the work your heart has been circling, the deeper journey is INTEGRATE, my group coaching experience in shadow work and inner alchemy.',btn:'Step into INTEGRATE',note:'This masterclass is educational and reflects one teacher’s approach to inner work. It is not therapy or medical advice, and it offers no guarantee of any particular result. Your experience is your own.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');d.className='slide';d.dataset.i=i;
+    let h='';
+    if(s.kicker) h+=`<div class="kicker">${esc(s.kicker)}</div>`;
+    if(s.num && s.t!=='section' && s.t!=='pillar' && s.t!=='two-card' && s.t!=='recap') h+=`<div class="num">${esc(s.num)}</div>`;
+    if(s.t==='title'){
+      h+=`<div class="glyph">\u{1F702}</div><h1>${esc(s.h)}</h1><p class="lead">${esc(s.sub)}</p><p class="num" style="margin-top:1.6em">${esc(s.by)}</p>`;
+    }else if(s.t==='hook'){
+      h+=`<div class="big">${esc(s.big)}</div>`;
+    }else if(s.t==='section'){
+      h+=`<div class="num">${esc(s.num)}</div><h1>${esc(s.h)}</h1><p class="lead">${esc(s.p)}</p>`;
+    }else if(s.t==='pillar'){
+      h+=`<div class="num">${esc(s.num)}</div><h2>${esc(s.h)}</h2><p>${esc(s.p)}</p>`;
+    }else if(s.t==='two-card'){
+      h+=`<div class="num">${esc(s.num)}</div><h2>${esc(s.h)}</h2><div class="two"><div class="card"><h3>${esc(s.a.k)}</h3><p>${esc(s.a.p)}</p></div><div class="card"><h3>${esc(s.b.k)}</h3><p>${esc(s.b.p)}</p></div></div>`;
+    }else if(s.t==='recap'){
+      h+=`<h2>${esc(s.h)}</h2><ul>${s.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+    }else if(s.t==='why'){
+      h+=`<h2>${esc(s.h)}</h2><p>${esc(s.p)}</p>`;
+    }else if(s.t==='cta'){
+      h+=`<h1>${esc(s.h)}</h1><p>${esc(s.p)}</p><span class="btn">${esc(s.btn)}</span><div class="cta-note">${esc(s.note)}</div>`;
+    }else{
+      h+=`<h2>${esc(s.h)}</h2><p>${esc(s.p)}</p>`;
+    }
+    d.innerHTML=h;stage.appendChild(d);
+  });
+  const dots=document.getElementById('dots');
+  dots.innerHTML=S.map((_,i)=>`<span class="dot" data-i="${i}"></span>`).join('');
+}
+let cur=0;
+function show(n){
+  cur=Math.max(0,Math.min(S.length-1,n));
+  document.querySelectorAll('.slide').forEach(el=>el.classList.toggle('on',+el.dataset.i===cur));
+  document.querySelectorAll('.dot').forEach(el=>el.classList.toggle('on',+el.dataset.i===cur));
+}
+render();show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp') show(cur-1);
+});
+document.addEventListener('click',e=>{
+  const d=e.target.closest('.dot');
+  if(d){show(+d.dataset.i);return;}
+  show(cur+1);
+});
+</script>
+</body>
+</html>
