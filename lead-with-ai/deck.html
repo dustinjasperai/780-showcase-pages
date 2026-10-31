@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your First AI Team — Lead with AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFBF7;
+    --panel:#EEF1E8;
+    --rule:#D6DACE;
+    --ink:#16180F;
+    --muted:#565A4C;
+    --accent:#4CA30D;
+    --serif:'IBM Plex Serif',Georgia,serif;
+    --sans:'Public Sans',-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #deck{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+  .slide{
+    background:var(--bg);
+    border:1px solid var(--rule);
+    border-radius:14px;
+    padding:52px 56px;
+    margin:0 0 22px;
+    min-height:430px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+  }
+  .slide .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:18px}
+  .slide h1{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.01em}
+  .slide h2{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.14;letter-spacing:-.01em}
+  .slide .sub{font-size:20px;color:var(--muted);margin-top:18px;max-width:40ch;line-height:1.45}
+  .slide p{font-size:19px;line-height:1.55;color:var(--ink);max-width:52ch;margin-top:16px}
+  .slide p.lead{font-size:23px;line-height:1.45}
+  .brandline{position:absolute;bottom:22px;left:56px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .pagenum{position:absolute;bottom:22px;right:56px;font-size:13px;color:var(--muted)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:26px}
+  .cards.three{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:22px 20px}
+  .card .tag{font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:8px}
+  .card .tag .mk{color:var(--accent)}
+  .card p{font-size:15px;line-height:1.45;color:var(--muted);margin-top:0;max-width:none}
+  .big{font-family:var(--serif);font-size:72px;font-weight:600;color:var(--accent);line-height:1}
+  .statrow{display:flex;gap:40px;margin-top:30px;flex-wrap:wrap}
+  .stat .n{font-family:var(--serif);font-size:44px;font-weight:600;color:var(--accent);line-height:1}
+  .stat .l{font-size:14px;color:var(--muted);margin-top:6px;max-width:16ch}
+  .title-slide{align-items:flex-start}
+  .title-slide h1{font-size:58px;max-width:18ch}
+  .accentbar{width:62px;height:5px;background:var(--accent);border-radius:3px;margin-bottom:26px}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:58ch;line-height:1.5}
+  ul.clean{margin-top:18px;list-style:none}
+  ul.clean li{font-size:18px;line-height:1.5;padding-left:26px;position:relative;margin-bottom:12px;max-width:50ch}
+  ul.clean li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;background:var(--accent);border-radius:2px}
+  .cta h2{font-size:40px}
+  .cta .btn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;font-weight:700;font-size:18px;padding:15px 30px;border-radius:9px;text-decoration:none}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S=[
+ {t:'title',kicker:'A Lead with AI Masterclass',h1:'Your First AI Team',sub:'How non-technical leaders build a working fleet of AI agents in two weeks.'},
+
+ {t:'statement',kicker:'Who this is for',h2:'You are a director, VP or executive who already uses AI a little.',p:'You have opened the chatbots. You have written a few prompts. You get the feeling there is something much bigger here, and you do not have two weeks to go find out alone.'},
+
+ {t:'statement',kicker:'The trap',h2:'So AI quietly became a faster search box.',p:'It drafts an email, summarizes a doc, saves you a few minutes, and then the day takes over again. The tool waits for you to pick it up. Nothing actually changes in how the work gets done.'},
+
+ {t:'hook',kicker:'The reframe',h2:'The leaders pulling ahead are not prompting better than you.',p:'They stopped using AI as a tool they pick up. They handed standing work to agents that run while they are in meetings. That is a different thing, and it is learnable in an afternoon.'},
+
+ {t:'part',kicker:'Part one',h2:'A tool waits. A team works.'},
+
+ {t:'statement',kicker:'Part one',h2:'The gap is not skill. It is architecture.',p:'A prompt gets you one answer, once. An agent is briefed once and then owns a recurring job: watching, drafting, checking, flagging. Most leaders never cross that line because nobody showed them how to set the first one up. That is the whole course.'},
+
+ {t:'part',kicker:'Part two',h2:'The build: from your role to running agents'},
+
+ {t:'cards',kicker:'Part two / the LeadOS system',h2:'We start from your actual job, not a generic curriculum.',cards:[
+   {tag:'LeadOS Intake<span class="mk">™</span>',p:'A 15-minute interview that captures your real role, your standing work, and where your time actually goes.'},
+   {tag:'LeadOS Blueprint<span class="mk">™</span>',p:'Your personal AI-leadership profile. It turns the intake into a plan built for how you work, not the average leader.'}
+ ]},
+
+ {t:'cards',kicker:'Part two / choosing the work',h2:'Then we pick the right work to hand over first.',cards:[
+   {tag:'LeadOS Compass<span class="mk">™</span>',p:'Surfaces up to 10 high-impact workflows where an agent can create immediate leverage for you.'},
+   {tag:'GED-RT Workflow Prioritization',p:'Ranks those workflows so your first agent lands on something that matters this week, not a toy demo.'}
+ ]},
+
+ {t:'cards',kicker:'Part two / the two methods',h2:'And two methods do the heavy lifting.',cards:[
+   {tag:'CODO Prompting',p:'Our structured way to brief an agent so a non-technical leader gets reliable, usable output every time, not a coin flip.'},
+   {tag:'OVER Framework',p:'Redesign the workflow around the agent. We do not just speed up the old steps, we rebuild how the task actually gets done.'}
+ ]},
+
+ {t:'statement',kicker:'Part two / the plan',h2:'LeadOS Pathways™ turns all of that into a two-week path.',p:'A personalized schedule that takes you from your first working agent on day one to a small fleet of them by the end. 30-minute lessons early in the week, a live workshop midweek, and your own build time on Thursday and Friday.'},
+
+ {t:'part',kicker:'Part three',h2:'Your fleet, running on your work'},
+
+ {t:'cards',kicker:'Part three / your agents',h2:'You leave with agents, not notes.',three:true,cards:[
+   {tag:'Chief of Staff',p:'Your first agent. It triages, prepares, drafts, and keeps your standing priorities moving between meetings.'},
+   {tag:'Pipeline Hygiene',p:'For sales leaders. Keeps records clean, flags stalls, and preps the next action before you ask.'},
+   {tag:'Month-End Close',p:'For finance leaders. Runs the recurring checklist, catches the usual misses, and hands you a clean summary.'}
+ ]},
+
+ {t:'statement',kicker:'Part three / demo day',h2:'The last session is Demo Day.',p:'You do not present slides about what you learned. You show the agents you built running on your own work. That is the proof we hold ourselves to.'},
+
+ {t:'why',kicker:'Why this works',h2:'Built with leaders, at scale, and it holds up.',statrow:[
+   {n:'1,500+',l:'leaders who built real assistants'},
+   {n:'30,000+',l:'leaders in the Lead with AI community'},
+   {n:'94',l:'NPS from the people who did it'},
+   {n:'5 / 5',l:'course rating'}
+ ],p:'Non-technical leaders from teams at Microsoft, Apple and McKinsey have done exactly this with us. The point was never to understand AI. It was to leave with it working.'},
+
+ {t:'statement',kicker:'The arc',h2:'Two weeks, one promise.',p:'Start from your role. Pick the work that matters. Build your Chief of Staff. Add role agents around it. Finish Demo Day with a fleet that runs without you in the loop for every step.'},
+
+ {t:'cta',kicker:'Your next step',h2:'Build your first AI team with us.',p:'The next AI Leader Advanced cohort is forming now. Two weeks, live, and you leave with agents already running on your work.',btn:'Enroll in AI Leader Advanced',disc:'This masterclass is educational. AI results vary by individual, role and organization, and nothing here is a promise or guarantee of any specific outcome. You are responsible for reviewing anything an AI agent produces before you act on it.'}
+];
+
+const el=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.t==='title'?' title-slide':'')+(s.t==='cta'?' cta':'');
+  let h='';
+  if(s.kicker) h+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){ h+='<div class="accentbar"></div><h1>'+s.h1+'</h1>'; if(s.sub)h+='<div class="sub">'+s.sub+'</div>'; }
+  else { if(s.h1)h+='<h1>'+s.h1+'</h1>'; if(s.h2)h+='<h2>'+s.h2+'</h2>'; }
+  if(s.p && s.t!=='cta' && s.t!=='why') h+='<p'+(s.t==='statement'||s.t==='hook'?' class="lead"':'')+'>'+s.p+'</p>';
+  if(s.cards){ h+='<div class="cards'+(s.three?' three':'')+'">'; s.cards.forEach(c=>{ h+='<div class="card"><div class="tag">'+c.tag+'</div><p>'+c.p+'</p></div>'; }); h+='</div>'; }
+  if(s.statrow){ h+='<div class="statrow">'; s.statrow.forEach(x=>{ h+='<div class="stat"><div class="n">'+x.n+'</div><div class="l">'+x.l+'</div></div>'; }); h+='</div>'; if(s.p)h+='<p>'+s.p+'</p>'; }
+  if(s.t==='cta'){ if(s.p)h+='<p>'+s.p+'</p>'; if(s.btn)h+='<a class="btn" href="https://www.leadwithai.co">'+s.btn+'</a>'; if(s.disc)h+='<div class="disc">'+s.disc+'</div>'; }
+  h+='<div class="brandline">Lead with AI</div><div class="pagenum">'+(i+1)+' / '+S.length+'</div>';
+  d.innerHTML=h;
+  el.appendChild(d);
+});
+</script>
+</body>
+</html>
