@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Obvious Yes — a masterclass with Magali De Reu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140b30;        /* one shade deeper than her #180e3a ground */
+    --panel:#241a5e;     /* derived between her #211450 and #2c256f */
+    --rule:#2c256f;      /* her brand rule */
+    --accent:#4855bf;    /* brand periwinkle (the one electric color) */
+    --ink:#ffffff;
+    --muted:#d2d7db;
+    --display:'Syne',system-ui,sans-serif;
+    --body:'Spline Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{
+    position:relative;background:linear-gradient(170deg,var(--panel),var(--bg));
+    border:1px solid var(--rule);border-radius:18px;
+    padding:56px 56px 52px;margin:0 0 26px;min-height:446px;
+    display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12.5px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.12;letter-spacing:-.01em}
+  h3{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;margin-bottom:10px}
+  p{font-size:19px;line-height:1.55;color:var(--muted);max-width:46ch}
+  p.lead{font-size:22px;color:var(--ink);max-width:40ch}
+  .sub{margin-top:20px;font-size:21px;color:var(--muted);max-width:42ch}
+  .hl{color:var(--ink);background:linear-gradient(transparent 62%,rgba(72,85,191,.55) 0);padding:0 2px}
+  ul{list-style:none;margin-top:24px;display:grid;gap:14px}
+  li{position:relative;padding-left:30px;font-size:19px;line-height:1.5;color:var(--muted);max-width:50ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent)}
+  li b{color:var(--ink);font-weight:600}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .step{background:var(--bg);border:1px solid var(--rule);border-radius:12px;padding:22px}
+  .step .n{font-family:var(--display);font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.1em}
+  .step h3{font-size:20px;margin:8px 0 8px}
+  .step p{font-size:16px;max-width:none}
+  .stat{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:28px}
+  .stat div{background:var(--bg);border:1px solid var(--rule);border-radius:12px;padding:20px}
+  .stat .big{font-family:var(--display);font-weight:700;font-size:34px;color:var(--ink)}
+  .stat .lbl{font-size:15px;color:var(--muted);margin-top:4px}
+  .foot{position:absolute;right:24px;bottom:18px;font-family:var(--display);font-size:12px;color:#6b63b8;letter-spacing:.08em}
+  .cta p{max-width:48ch}
+  .disc{margin-top:26px;font-size:13.5px;color:#8a83c9;max-width:60ch;line-height:1.5}
+  .big-q{font-family:var(--display);font-weight:700;font-size:40px;line-height:1.1;letter-spacing:-.01em;max-width:20ch}
+  @media(max-width:620px){.slide{padding:38px 28px}h1{font-size:38px}h2{font-size:27px}.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const BRAND="The Obvious Yes";
+const S=[
+ {t:"title", html:`<div class="kicker">A masterclass with Magali De Reu</div>
+   <h1>The Obvious Yes</h1>
+   <p class="sub">How founders become the <span class="hl">only logical choice</span> on LinkedIn by leading with personality, not expertise.</p>`},
+ {t:"who", html:`<div class="kicker">Who this is for</div>
+   <h2>You are good at the work. On LinkedIn you still blend in.</h2>
+   <p class="sub">Founders, coaches and consultants who know their craft, keep posting, and still get compared to ten people they have nothing in common with.</p>`},
+ {t:"trap", html:`<div class="kicker">The trap</div>
+   <h2>So you post more.</h2>
+   <ul>
+     <li>More tips, more frameworks, more "value."</li>
+     <li>It sounds like everyone else in the feed.</li>
+     <li>Buyers shop you on price because nothing tells them why <b>you</b>.</li>
+   </ul>`},
+ {t:"reframe", html:`<div class="kicker">The uncomfortable part</div>
+   <p class="big-q">Expertise is now a commodity.</p>
+   <p class="sub">A chatbot drafts a positioning statement and a week of posts in seconds. Knowing how no longer sells. Knowing <span class="hl">how to be unmistakably you</span> does.</p>`},
+ {t:"problem", html:`<div class="kicker">Part one, the core problem</div>
+   <h2>The market keeps comparing you.</h2>
+   <p class="sub">Because your content shows what you do, not who you are, you land in the same bucket as everyone teaching the same thing. The comparison is the problem, not your skill.</p>`},
+ {t:"shift", html:`<div class="kicker">The shift</div>
+   <h1 style="font-size:46px">Personality first.<br>Expertise second.</h1>
+   <p class="sub">People do not buy the information. They buy the person they want to be in the room with.</p>`},
+ {t:"proximity", html:`<div class="kicker">The Proximity Principle</div>
+   <h2>Clients pay for access to you, not to what you know.</h2>
+   <p class="sub">You are not replicable. Your repeatable processes are. Build the brand on the part only you can offer and the comparison disappears.</p>`},
+ {t:"os", html:`<div class="kicker">Part two, the method</div>
+   <h2>The Personality-to-Demand OS</h2>
+   <div class="steps">
+     <div class="step"><div class="n">01</div><h3>Person</h3><p>Find the claim only you can make.</p></div>
+     <div class="step"><div class="n">02</div><h3>Publish</h3><p>Turn it into content that sounds like no one else.</p></div>
+     <div class="step"><div class="n">03</div><h3>Pull</h3><p>Let the right buyers come to you.</p></div>
+   </div>`},
+ {t:"person", html:`<div class="kicker">Move one, Person</div>
+   <h2>Find what only you can claim.</h2>
+   <p class="sub">We dig out the belief, the lived experience and the point of view nobody else in your market can borrow, and we build your method and your offer on top of it. That claim becomes your obvious yes.</p>`},
+ {t:"beliefs", html:`<div class="kicker">What gets in the way</div>
+   <h3>Three beliefs we clear first:</h3>
+   <ul>
+     <li>"I have to earn the right to charge this."</li>
+     <li>"Sharing what I actually think is cringe."</li>
+     <li>"I show up for what I do, not for who I am."</li>
+   </ul>
+   <p class="sub">Positioning is 60% nerve. The claim only works once you are willing to stand on it.</p>`},
+ {t:"publish", html:`<div class="kicker">Move two, Publish</div>
+   <h2>The posts are already in your calls.</h2>
+   <p class="sub">The free explanations you give a client on a call are the content. Those notes become the posts. You are not inventing ideas, you are mining the ones you already give away.</p>`},
+ {t:"mining", html:`<div class="kicker">Stop posting, start mining</div>
+   <h2>Write for the buyer, not the algorithm.</h2>
+   <ul>
+     <li>Lead with the point of view, not the listicle.</li>
+     <li>Use the buyer-psychology triggers hiding in how you already talk.</li>
+     <li>Let people feel the person before they see the credential.</li>
+   </ul>`},
+ {t:"pull", html:`<div class="kicker">Move three, Pull</div>
+   <h2>The readers turn into paid work.</h2>
+   <p class="sub">When the writing carries the person, the right people arrive already sold on you and self-select out if they are not a fit. Inbound, instead of chasing. That is the pull.</p>`},
+ {t:"split", html:`<div class="kicker">The 40/60 split</div>
+   <h2>Tactics are only 40% of this.</h2>
+   <div class="stat">
+     <div><div class="big">40%</div><div class="lbl">hooks, formats, cadence, the mechanics</div></div>
+     <div><div class="big">60%</div><div class="lbl">judgment, positioning calls, and the nerve to be seen</div></div>
+   </div>`},
+ {t:"looks", html:`<div class="kicker">Part three, the week after</div>
+   <h2>The week after you become the obvious yes.</h2>
+   <ul>
+     <li>Posts that only you could have written.</li>
+     <li>DMs from buyers who already decided it is you.</li>
+     <li>Fewer "can you send your rates" and more "how do we start."</li>
+   </ul>`},
+ {t:"whyme", html:`<div class="kicker">Why listen to me</div>
+   <h2>I rebuilt this on myself first.</h2>
+   <div class="stat">
+     <div><div class="big">&euro;20K to &euro;510K</div><div class="lbl">unpaid to a full year, by refusing to sound like everyone else</div></div>
+     <div><div class="big">150+</div><div class="lbl">personal brands built</div></div>
+     <div><div class="big">#1</div><div class="lbl">Personal Brand Strategist, Favikon</div></div>
+     <div><div class="big">11M+</div><div class="lbl">LinkedIn impressions</div></div>
+   </div>`},
+ {t:"recap", html:`<div class="kicker">The whole idea in one line</div>
+   <p class="big-q">Make yourself the obvious yes, and the market stops shopping around.</p>`},
+ {t:"cta", html:`<div class="kicker">Come find your obvious yes</div>
+   <h2>Build your obvious yes inside The Obvious Yes.</h2>
+   <p class="sub">The community where founders find the claim only they can make, publish it, and let the right buyers pull toward them, with weekly workshops, audits and feedback.</p>
+   <p class="disc">Educational content only. No specific result is guaranteed. Results vary with effort, market and offer, and past figures are not a promise of future income.</p>`}
+];
+const deck=document.getElementById("deck");
+S.forEach((s,i)=>{
+  const el=document.createElement("section");
+  el.className="slide"+(s.t==="cta"?" cta":"");
+  el.innerHTML=(s.html||"")+`<div class="foot">${BRAND} &middot; ${String(i+1).padStart(2,"0")}/${String(S.length).padStart(2,"0")}</div>`;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
