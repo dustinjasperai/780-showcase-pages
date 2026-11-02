@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free First Class - The Itinerary Boss Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1e9;        /* warm ivory ground, from light site scheme */
+    --panel:#fffdf7;
+    --ink:#212529;       /* harvested body ink */
+    --muted:#5b6368;
+    --rule:#dce1e5;      /* harvested neutral */
+    --accent:#0f6e6e;    /* deep teal, category-derived (see research ## Palette) */
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--panel);border:1px solid var(--rule);border-radius:10px;position:relative;overflow:hidden;box-shadow:0 18px 50px rgba(15,110,110,.08)}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--serif);font-weight:600;font-size:60px;line-height:1.04;letter-spacing:.2px}
+  h2{font-family:var(--serif);font-weight:600;font-size:42px;line-height:1.08;margin-bottom:18px}
+  p.lede{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.3;color:var(--muted);margin-top:18px;max-width:40ch}
+  p.body{font-size:18px;line-height:1.6;max-width:52ch;color:var(--ink);margin-top:10px}
+  ul{margin:14px 0 0 0;list-style:none;max-width:54ch}
+  li{font-size:18px;line-height:1.55;padding:9px 0 9px 26px;position:relative;border-bottom:1px solid var(--rule)}
+  li:before{content:"";position:absolute;left:0;top:18px;width:11px;height:2px;background:var(--accent)}
+  li b{font-weight:700}
+  .num{font-family:var(--serif);font-size:20px;color:var(--accent);font-weight:600}
+  .pill{display:inline-block;font-family:var(--serif);font-size:72px;font-weight:600;color:var(--accent);line-height:1}
+  .foot{position:absolute;left:72px;bottom:28px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .page{position:absolute;right:28px;bottom:26px;font-size:12px;color:var(--muted)}
+  .rule{width:54px;height:3px;background:var(--accent);margin:22px 0}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:56ch;line-height:1.5}
+  .cta-step{font-family:var(--serif);font-size:30px;color:var(--ink);margin-top:10px}
+  nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+  nav button{font-family:var(--sans);border:1px solid var(--rule);background:#fff;color:var(--ink);border-radius:999px;width:40px;height:40px;font-size:16px;cursor:pointer}
+  nav button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<nav><button id="prev" aria-label="Previous">&larr;</button><button id="next" aria-label="Next">&rarr;</button></nav>
+<script>
+const S = [
+  {t:'title', eyebrow:'Itinerary Boss Masterclass', h1:'Free First Class',
+    lede:'How high-spend business owners turn the money they are already spending into premium travel.'},
+
+  {t:'who', eyebrow:'Who this is for', h2:'You already spend like a frequent flyer.',
+    body:'If your business moves $10,000 to $15,000 or more through cards and accounts every month, you are generating a small fortune in travel value. Most owners never see a cent of it. This hour is for the owner who is tired of paying cash for trips their own spending could cover.'},
+
+  {t:'trap', eyebrow:'The trap', h2:'Points feel like a hobby for travel nerds.',
+    body:'So you take the 1% cash back, or a statement credit, and move on. It feels responsible. It is actually the most expensive habit on your books, because the alternative was a lie-flat seat to anywhere, bought with spend you could not avoid in the first place.'},
+
+  {t:'reframe', eyebrow:'The reframe', h2:'The cost is not money. It is the travel you never collect.',
+    lede:'Every month of unstructured spend is a first-class trip you quietly left on the table.'},
+
+  {t:'part', eyebrow:'Part one', pill:'01', h2:'The real problem is no structure.',
+    body:'Random cards, random spend, points scattered across programs, value expiring or redeemed for pennies. It is not that you lack discipline. It is that nobody built you a system, so your spend leaks value by default.'},
+
+  {t:'bullets', eyebrow:'What that leak looks like', h2:'Four quiet losses.',
+    items:['<b>Wrong cards</b> on your biggest spend categories','<b>Points stranded</b> in programs that cannot move','<b>Redemptions</b> at one cent when they were worth five','<b>Personal and business spend</b> working against each other']},
+
+  {t:'part', eyebrow:'Part two', pill:'02', h2:'The method: Reward Architecture.',
+    body:'Reward Architecture is the system I install for owners. It has three moving parts, and in that order they turn unavoidable spend into premium travel on purpose, not by accident.'},
+
+  {t:'bullets', eyebrow:'Pillar one', h2:'Card alignment.',
+    body:'We map your actual spend, then match each category to the card that earns the most transferable value on it.',
+    items:['Your top spend categories, named','The right card behind each one','Transferable currencies, never dead-end points']},
+
+  {t:'bullets', eyebrow:'Pillar two', h2:'Routing rules.',
+    body:'Then we route the spend you already have to make deliberately, so earning happens without adding a single task to your week.',
+    items:['Deliberate routing of unavoidable business spend','Welcome offers timed around real purchases','Personal and business spend pulling the same direction']},
+
+  {t:'bullets', eyebrow:'Pillar three', h2:'Redemption strategy.',
+    body:'Earning is half the game. Redemption is where the value is won or lost.',
+    items:['Business-class and first-class seats, not coach','5-star hotels at a fraction of cash','A plan for when and how to cash points out']},
+
+  {t:'bullets', eyebrow:'The on-ramp', h2:'The 5-Step Roadmap.',
+    body:'Before the full architecture, there is a simple path that gets most people their first free 5-star trip.',
+    items:['Pick the one right starting card','Hit the welcome offer with planned spend','Stack everyday earning on top','Learn one transfer partner well','Book the first premium redemption']},
+
+  {t:'bullets', eyebrow:'An advanced play', h2:'Two-Player Mode.',
+    body:'If you travel with a partner, you can run cards in sequence and pool points. Done right it roughly doubles the output of the same spend. It is how we booked a run of trips most people assume costs a fortune in cash.'},
+
+  {t:'part', eyebrow:'Part three', pill:'03', h2:'Spend you already made, trips you never paid for.',
+    body:'These are my own trips and a few owner stories, not a promise of yours. Results depend entirely on your spend, your cards, and how the structure is used.'},
+
+  {t:'bullets', eyebrow:'Real redemptions', h2:'Spend you were making anyway.',
+    items:['A Europe trip where structured booking saved us close to $5,000','A business-class seat booked on a 100,000-point welcome offer','An owner spending seven figures a year who generated over two million points in months']},
+
+  {t:'why', eyebrow:'Why me', h2:'I learned this on the road, not in theory.',
+    body:'I spent six-plus years as a sales road warrior and built a real estate portfolio, which meant years of heavy, unavoidable spend. I turned that spend into a decade of premium travel, then into a system. Today I host the Points, Cards and Travel podcast and I install Reward Architecture for owners through Itinerary Boss.'},
+
+  {t:'close', eyebrow:'The takeaway', h2:'Your business is already buying the ticket.',
+    lede:'The only question is whether you have the structure to collect it.'},
+
+  {t:'cta', eyebrow:'Your next step', h2:'Install your Reward Architecture.',
+    step:'Book a 15-minute call with Ross and map what your spend could already be earning.',
+    disc:'Educational only. Nothing here is financial, credit, or tax advice, and no outcome is guaranteed. Travel value depends on your spending, card approvals, program rules, and award availability, all of which change. Results shown are illustrative and will vary.'}
+];
+
+const stage=document.getElementById('stage');
+let i=0;
+function esc(s){return s||''}
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const d=document.createElement('div');
+  d.className='slide on';
+  let h='';
+  if(s.eyebrow) h+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+  if(s.pill) h+='<div class="pill">'+esc(s.pill)+'</div><div class="rule"></div>';
+  if(s.h1) h+='<h1>'+esc(s.h1)+'</h1>';
+  if(s.h2) h+='<h2>'+esc(s.h2)+'</h2>';
+  if(s.body) h+='<p class="body">'+esc(s.body)+'</p>';
+  if(s.items){h+='<ul>';s.items.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+  if(s.lede) h+='<p class="lede">'+esc(s.lede)+'</p>';
+  if(s.step) h+='<div class="cta-step">'+esc(s.step)+'</div>';
+  if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+  h+='<div class="foot">Itinerary Boss</div><div class="page">'+(i+1)+' / '+S.length+'</div>';
+  d.innerHTML=h;
+  stage.appendChild(d);
+}
+function go(n){i=(n+S.length)%S.length;render();}
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+render();
+</script>
+</body>
+</html>
