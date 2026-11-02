@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making the Brave Leap: a masterclass with Heather Vickery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a0e14;        /* deep warm near-black, from her dark site scheme warmed to magenta */
+    --panel:#241420;     /* raised panel */
+    --rule:#3a2230;      /* hairline */
+    --accent:#e91665;    /* her dominant brand magenta (brand.json, 14 uses) */
+    --accent-2:#00af9d;  /* her teal, used sparingly */
+    --ink:#f6eef2;       /* warm off-white */
+    --muted:#b89aa7;     /* muted rose-grey */
+    --display:'Gloock',Georgia,serif;
+    --body:'Lato',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0f080c;color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 20px 80px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:18px;
+    padding:64px 64px 56px;margin:0 0 26px;min-height:520px;display:flex;flex-direction:column;
+    justify-content:center;overflow:hidden;
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .eyebrow{font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin:0 0 18px}
+  h1{font-family:var(--display);font-weight:400;font-size:62px;line-height:1.04;margin:0 0 18px}
+  h2{font-family:var(--display);font-weight:400;font-size:40px;line-height:1.1;margin:0 0 16px}
+  .lede{font-size:23px;color:var(--ink);max-width:40ch;margin:0 0 10px}
+  .sub{font-size:19px;color:var(--muted);max-width:52ch;margin:10px 0 0}
+  ul{margin:14px 0 0;padding:0;list-style:none}
+  li{font-size:21px;margin:0 0 14px;padding-left:30px;position:relative;max-width:54ch}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  .pillar{display:flex;align-items:baseline;gap:20px}
+  .pillar .mark{font-family:var(--display);font-size:92px;color:var(--accent);line-height:.8;flex:none}
+  .pillar .mark.teal{color:var(--accent-2)}
+  .big{font-family:var(--display);font-size:52px;line-height:1.08;max-width:22ch;margin:0}
+  .foot{position:absolute;left:64px;right:64px;bottom:26px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .foot .brand{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.14em}
+  .num{font-variant-numeric:tabular-nums}
+  .disclaimer{font-size:14px;color:var(--muted);max-width:62ch;margin:22px 0 0;line-height:1.5}
+  .cta-line{font-size:24px;color:var(--ink);margin:6px 0 0}
+  .cta-btn{display:inline-block;margin:26px 0 0;background:var(--accent);color:#1a0e14;font-weight:900;
+    font-size:18px;letter-spacing:.04em;padding:16px 30px;border-radius:999px}
+  @media (max-width:640px){
+    .slide{padding:40px 28px}
+    h1{font-size:42px}h2{font-size:30px}.big{font-size:34px}.pillar .mark{font-size:64px}
+    .foot{position:static;margin-top:28px;left:auto;right:auto;bottom:auto}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass with Heather Vickery',
+   h:'Making the Brave Leap',
+   sub:'The 5-part method for deciding when fear says stop.'},
+
+  {t:'intro', eyebrow:'Who this is for',
+   h:'You look like you have it figured out.',
+   lede:'You built the business, the title, the life people envy.',
+   sub:'And there is still one decision you keep circling, telling yourself you will make it when the timing is better. This hour is about that decision.'},
+
+  {t:'intro', eyebrow:'The trap',
+   h:'Fear is a brilliant liar.',
+   lede:'It never shows up as fear.',
+   sub:'It shows up as logic, as being responsible, as waiting for more data, more runway, more certainty. So you call the stall a strategy, and another year goes by.'},
+
+  {t:'hook', eyebrow:'The reframe',
+   big:'You are not afraid of failing. You are afraid of choosing.'},
+
+  {t:'intro', eyebrow:'Part one: the core problem',
+   h:'Waiting to feel ready is the plan that never ships.',
+   lede:'Ready is a feeling, and feelings arrive after the leap, not before it.',
+   sub:'Brave people are not the ones without fear. They are the ones who built a method for moving while the fear is still talking.'},
+
+  {t:'bullets', eyebrow:'What the stall costs you',
+   h:'The quiet price of a decision deferred',
+   items:[
+     'The opportunity moves on while you gather more information.',
+     'Your energy leaks into a choice you have already half-made.',
+     'You model hesitation for the people who watch how you lead.',
+     'The dream gets smaller to fit the fear instead of the other way around.']},
+
+  {t:'intro', eyebrow:'Part two: the method',
+   h:'The BRAVE Method',
+   lede:'Bravery is a skill you practice, not a trait you are born with.',
+   sub:'Five pillars that turn a scary, avoided decision into a clear, repeatable brave move. We will walk each one.'},
+
+  {t:'pillar', eyebrow:'Pillar 1', mark:'B',
+   h:'Boundaries',
+   sub:'Protect your time, energy, and identity first, so the decision comes from you and not from everyone else’s expectations of you.'},
+
+  {t:'pillar', eyebrow:'Pillar 2', mark:'R', teal:true,
+   h:'Reassess, Reframe, Resilience',
+   sub:'Re-read the story you are telling yourself. Reframe fear as information rather than a verdict. Then build the capacity to recover when a brave move does not land perfectly.'},
+
+  {t:'pillar', eyebrow:'Pillar 3', mark:'A',
+   h:'Action and Accountability',
+   sub:'Insight that never becomes a committed, tracked next step is just a nicer way to stay stuck. We turn the reframe into one concrete move with a name and a date.'},
+
+  {t:'pillar', eyebrow:'Pillar 4', mark:'V', teal:true,
+   h:'Vulnerability',
+   sub:'The willingness to be seen trying is not the weak part of a brave decision. It is the engine. Hiding is what keeps the leap small.'},
+
+  {t:'pillar', eyebrow:'Pillar 5', mark:'E',
+   h:'Expansion and Empowerment',
+   sub:'Once the first four pillars hold, the goal gets to grow. You stop deciding from survival and start deciding from the size of the life you actually want.'},
+
+  {t:'intro', eyebrow:'Part three: in practice',
+   h:'What a brave decision looks like on a Tuesday.',
+   lede:'Not a leap off a cliff. A method, run on one real choice.',
+   sub:'We take the decision you walked in avoiding and move it through all five pillars, live, so you leave with the next brave move already named.'},
+
+  {t:'intro', eyebrow:'Dreamscaping',
+   h:'Get specific about the life you are actually building.',
+   lede:'You cannot be brave toward a blur.',
+   sub:'Dreamscaping is how you name the real dream in detail and reverse-engineer the brave moves that build it, so bravery has a destination and not just adrenaline.'},
+
+  {t:'intro', eyebrow:'The honest version',
+   h:'Manifestation is not magic. It is alignment.',
+   lede:'Aligned action plus a mind that is not fighting you.',
+   sub:'We pair the method with subconscious work such as Human Design, hypnotherapy, and the inner reprogramming, so your nervous system stops treating the brave choice as a threat.'},
+
+  {t:'bullets', eyebrow:'Why me',
+   h:'I teach this because I have lived it',
+   items:[
+     'Author of F*CK FEARLESS: Making The Brave Leap.',
+     'Host of The Brave Files podcast.',
+     'Positive Psychology Specialist, certified in Human Design, Hypnotherapy, NLP, and EFT.',
+     'Years coaching entrepreneurs and leaders through the exact decision you are sitting on.']},
+
+  {t:'bullets', eyebrow:'The recap',
+   h:'What you walk out with',
+   items:[
+     'The five pillars of the BRAVE Method, in order.',
+     'One avoided decision, moved through the method live.',
+     'A reframe of fear you can use the next time it dresses up as logic.',
+     'The next brave move, named, with a date on it.']},
+
+  {t:'cta', eyebrow:'Your next brave move',
+   h:'Ready to make the leap with support?',
+   ctaLine:'If this hour helped and you want the method applied to your real life and business, the next step is a private Brave Clarity Call to see if working together through the BRAVE Method is the right fit.',
+   btn:'Book your Brave Clarity Call',
+   disclaimer:'This masterclass is educational. Bravery is a practice and results vary from person to person. Nothing here is a promise or guarantee of any specific income, business, or life outcome.'}
+];
+
+function el(tag, cls, html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sl=el('div','slide');
+  if(s.eyebrow) sl.appendChild(el('div','eyebrow',s.eyebrow));
+  if(s.t==='hook'){
+    sl.appendChild(el('p','big',s.big));
+  } else if(s.t==='pillar'){
+    const row=el('div','pillar');
+    row.appendChild(el('div','mark'+(s.teal?' teal':''),s.mark));
+    const col=el('div');
+    col.appendChild(el('h2',null,s.h));
+    if(s.sub) col.appendChild(el('p','sub',s.sub));
+    row.appendChild(col);
+    sl.appendChild(row);
+  } else if(s.t==='cta'){
+    sl.appendChild(el('h1',null,s.h));
+    if(s.ctaLine) sl.appendChild(el('p','cta-line',s.ctaLine));
+    if(s.btn) sl.appendChild(el('span','cta-btn',s.btn));
+    if(s.disclaimer) sl.appendChild(el('p','disclaimer',s.disclaimer));
+  } else if(s.t==='bullets'){
+    sl.appendChild(el('h2',null,s.h));
+    const ul=el('ul');
+    (s.items||[]).forEach(it=>ul.appendChild(el('li',null,it)));
+    sl.appendChild(ul);
+  } else { /* title / intro */
+    sl.appendChild(el(s.t==='title'?'h1':'h2',null,s.h));
+    if(s.lede) sl.appendChild(el('p','lede',s.lede));
+    if(s.sub) sl.appendChild(el('p','sub',s.sub));
+  }
+  const foot=el('div','foot');
+  foot.appendChild(el('span','brand','Heather Vickery'));
+  foot.appendChild(el('span','num',(i+1)+' / '+S.length));
+  sl.appendChild(foot);
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
