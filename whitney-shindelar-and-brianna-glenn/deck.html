@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Road to $1M | A Masters in Travel Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4ece2; --panel:#fbf7f1; --rule:#e4d4c4;
+    --ink:#201b16; --ink-soft:#5a4f45; --ink-muted:#8a7d6f;
+    --accent:#b5794f;
+  }
+  html,body{height:100%}
+  body{
+    font-family:'Mulish',-apple-system,sans-serif;
+    background:#2a2420; color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; padding:24px;
+  }
+  .stage{width:min(960px,96vw); aspect-ratio:16/9; position:relative;
+    background:var(--bg); border:1px solid var(--rule);
+    box-shadow:0 24px 70px rgba(0,0,0,.38); overflow:hidden}
+  .slide{position:absolute; inset:0; padding:64px 72px; display:none;
+    flex-direction:column; justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-size:12px; font-weight:700; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:22px}
+  h1{font-family:'Playfair Display',Georgia,serif; font-weight:700;
+    font-size:60px; line-height:1.04; letter-spacing:-.01em; color:var(--ink)}
+  h2{font-family:'Playfair Display',Georgia,serif; font-weight:600;
+    font-size:40px; line-height:1.1; color:var(--ink); margin-bottom:20px}
+  .sub{font-size:21px; color:var(--ink-soft); margin-top:22px; max-width:40ch; line-height:1.5}
+  .lead{font-size:23px; color:var(--ink-soft); line-height:1.55; max-width:44ch}
+  .big{font-family:'Playfair Display',Georgia,serif; font-weight:600;
+    font-size:46px; line-height:1.14; color:var(--ink); max-width:24ch}
+  .big .hi{color:var(--accent)}
+  ul{list-style:none; margin-top:10px}
+  li{font-size:21px; color:var(--ink-soft); padding:12px 0 12px 30px;
+    position:relative; border-bottom:1px solid var(--rule); line-height:1.4; max-width:46ch}
+  li:last-child{border-bottom:none}
+  li::before{content:""; position:absolute; left:0; top:21px;
+    width:12px; height:2px; background:var(--accent)}
+  .partnum{font-family:'Playfair Display',serif; font-size:19px; color:var(--accent);
+    font-weight:600; letter-spacing:.04em; margin-bottom:14px}
+  .pillar{font-family:'Playfair Display',serif; font-size:17px; color:var(--accent);
+    font-weight:600; letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:center}
+  .card{background:var(--panel); border:1px solid var(--rule); padding:26px 28px}
+  .card h3{font-family:'Playfair Display',serif; font-size:23px; color:var(--ink); margin-bottom:8px}
+  .card p{font-size:17px; color:var(--ink-soft); line-height:1.45}
+  .credit{font-size:19px; color:var(--ink-soft); line-height:1.6; max-width:50ch}
+  .credit strong{color:var(--ink); font-weight:700}
+  .disc{font-size:13px; color:var(--ink-muted); margin-top:26px; max-width:52ch; line-height:1.5}
+  .cta-line{font-size:22px; color:var(--ink-soft); margin-top:18px}
+  .cta-line b{color:var(--accent)}
+  .nav{position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    display:flex; gap:16px; align-items:center; font-family:'Mulish',sans-serif;
+    font-size:13px; color:#cbbfae}
+  .nav button{background:rgba(255,255,255,.08); color:#f0e7da; border:1px solid rgba(255,255,255,.18);
+    width:34px; height:34px; cursor:pointer; font-size:16px; border-radius:2px}
+  .nav button:hover{background:var(--accent); border-color:var(--accent); color:#fff}
+  .pageno{position:absolute; bottom:26px; right:34px; font-size:12px;
+    color:var(--ink-muted); letter-spacing:.08em}
+  .brandmark{position:absolute; top:30px; left:72px; font-size:12px; font-weight:700;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--ink-muted)}
+  @media(max-width:640px){.slide{padding:34px} h1{font-size:34px} h2{font-size:26px}
+    .big{font-size:28px} .two{grid-template-columns:1fr; gap:16px} .lead,.sub{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button id="prev">&#8249;</button><span id="count"></span><button id="next">&#8250;</button></div>
+<script>
+const S=[
+  {t:'title',k:"A Masters in Travel Masterclass",h:`<h1>The Road to $1M</h1><p class="sub">How to run your travel business like a CEO, not a solo trip-booker.</p>`},
+  {t:'promise',k:"What you'll leave with",b:`<h2>By the end of this hour</h2><ul>
+    <li>Why being fully booked is the ceiling, not the goal</li>
+    <li>The four parts of a travel business that scale past six figures</li>
+    <li>How to price, systemize, and delegate your way toward $1M</li>
+    <li>Where to start this week without burning the business down</li></ul>`},
+  {t:'audience',k:"Who this is for",b:`<h2>You've already proven you can sell travel</h2><p class="lead">You're booked. Clients love you. The referrals keep coming. And yet the revenue has flattened and your calendar is the thing holding it there. This is the room for the advisor who is ready to stop being the bottleneck.</p>`},
+  {t:'trap',k:"The trap",b:`<h2>More clients is not the answer you think it is</h2><p class="lead">Every time you add a client, you add hours you don't have. The booked-out advisor and the broke advisor are often working the exact same week. Volume is not the same as growth.</p>`},
+  {t:'reframe',b:`<p class="big">You don't have a sales problem.<br>You have a <span class="hi">capacity ceiling</span>.</p>`},
+  {t:'part',k:"Part One",b:`<p class="partnum">Part One</p><h2>The solo-booker trap</h2><p class="lead">When you are the product, the sales team, the service team, and the back office, the business can only ever be as big as your week. That is the trap, and almost no one teaching travel talks about it.</p>`},
+  {t:'cost',k:"Part One",b:`<h2>What the plateau actually costs</h2><ul>
+    <li>Income that rises only when you work more hours</li>
+    <li>No room to take the FAM trips that grow you</li>
+    <li>A business you can't step away from, let alone sell</li>
+    <li>Burnout mistaken for "just how this industry is"</li></ul>`},
+  {t:'part',k:"Part Two",b:`<p class="partnum">Part Two</p><h2>Running it like a CEO</h2><p class="lead">A CEO does not do more of the work. A CEO builds the business that does the work. Here are the four shifts that move an advisor from booked-out to scalable.</p>`},
+  {t:'pillar',k:"Part Two . Pillar 1",b:`<p class="pillar">Pillar One</p><h2>Advisor vs. Entrepreneur</h2><p class="lead">The mindset shift first: you are no longer a travel advisor who owns a job. You are the owner of a travel company that happens to be small today. Every decision changes once you hold it that way.</p>`},
+  {t:'pillar',k:"Part Two . Pillar 2",b:`<p class="pillar">Pillar Two</p><h2>Pricing on the road to $1M</h2><p class="lead">You cannot reach a seven-figure business on entry-level fees and whoever walks in. The math only works when your pricing and your client mix are chosen on purpose, not inherited by accident.</p>`},
+  {t:'pillar',k:"Part Two . Pillar 3",b:`<p class="pillar">Pillar Three</p><h2>The four trip design phases</h2><div class="two">
+    <div class="card"><h3>Inquiry &amp; Design</h3><p>A repeatable path from first contact to a booked, paid itinerary.</p></div>
+    <div class="card"><h3>Pre-trip &amp; Post-trip</h3><p>The follow-through that turns one trip into a client for life.</p></div>
+    </div><p class="sub">Systems, not heroics. The experience stops living only in your head.</p>`},
+  {t:'pillar',k:"Part Two . Pillar 4",b:`<p class="pillar">Pillar Four</p><h2>Your first hire, your reclaimed hours</h2><p class="lead">Delegation is not a luxury you earn at $1M. It is the lever that gets you there. The first support role you build is what finally breaks the one-to-one ceiling between your hours and your income.</p>`},
+  {t:'edge',k:"The difference that holds it together",b:`<h2>On your own terms</h2><p class="lead">You can build all of this independent of any host agency or consortia telling you how. The business, the brand, and the clients are yours. That independence is the whole point.</p>`},
+  {t:'part',k:"Part Three",b:`<p class="partnum">Part Three</p><h2>After the ceiling breaks</h2><p class="lead">A business that grows when you are on a FAM trip. Revenue that is no longer chained to your calendar. Work you choose, at prices you set, with help you trust.</p>`},
+  {t:'picture',k:"Part Three",b:`<h2>A week run like a CEO</h2><ul>
+    <li>You work on the business, not only in it</li>
+    <li>Your systems onboard clients while you sleep</li>
+    <li>You raise prices without losing the clients who matter</li>
+    <li>You take the trip, and the business keeps moving</li></ul>`},
+  {t:'whyme',k:"Why listen to us",b:`<h2>Who's teaching this</h2><p class="credit"><strong>Whitney Shindelar</strong> founded Masters in Travel and runs her own luxury agency, Undiscovered Sunsets. <strong>Brianna Glenn</strong> built the boutique agency Milk + Honey Travels over nearly a decade after a career as a professional athlete. Together they host the #1 podcast for travel advisors, with nearly 300 episodes.</p>`},
+  {t:'community',k:"You don't have to do it alone",b:`<h2>The community behind the method</h2><p class="lead">Masters in Travel was built as a safe place where advisors share what actually works, instead of guarding it. The Advisor Accelerator is where this method becomes your weekly rhythm, alongside advisors on the same road.</p>`},
+  {t:'recap',k:"Recap",b:`<h2>The road, in one line</h2><ul>
+    <li>Booked out is a ceiling, not a finish line</li>
+    <li>Price and choose clients on purpose</li>
+    <li>Systemize the trip, then delegate it</li>
+    <li>Own the business, on your own terms</li></ul>`},
+  {t:'cta',k:"Your next step",b:`<h2>Walk the road with us</h2><p class="cta-line">Join the waitlist for <b>the Advisor Accelerator</b> and be first in when the doors open.</p><p class="lead" style="margin-top:14px">Keep listening to the Masters in Travel podcast in the meantime. The next episode is already building on today.</p><p class="disc">This masterclass is educational. It shares frameworks and experience only. No specific income or result is guaranteed. Results vary based on your market, effort, and business.</p>`}
+];
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>`<section class="slide${i===0?' on':''}">
+  <div class="brandmark">Masters in Travel</div>
+  ${s.k?`<div class="kicker">${s.k}</div>`:''}
+  ${s.h||s.b||''}
+  <div class="pageno">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>
+</section>`).join('');
+let i=0;const slides=[...stage.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(n){slides[i].classList.remove('on');i=(n+slides.length)%slides.length;
+  slides[i].classList.add('on');count.textContent=`${i+1} / ${slides.length}`;}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+count.textContent=`1 / ${slides.length}`;
+</script>
+</body>
+</html>
