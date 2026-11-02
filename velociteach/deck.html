@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Alpha Method — Pass the PMP on Your First Try</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e9f1f9;        /* pale tint of Velociteach blue #004b91 on light (brand.json site_scheme:light) */
+    --panel:#fcfeff;
+    --ink:#004b91;       /* Velociteach dominant blue (#004b91, 260 uses) */
+    --body:#1a2733;      /* deep neutral on light */
+    --muted:#5a6b7a;
+    --accent:#fbb03f;    /* Velociteach CTA amber (brand button) */
+    --rule:#d8e2ec;
+    --serif:'IBM Plex Serif',Georgia,serif;
+    --sans:'Montserrat',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--body);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:980px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent)}
+  h1{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:clamp(30px,5.4vw,58px);line-height:1.06;margin:.3em 0}
+  h2{font-family:var(--serif);font-weight:600;color:var(--ink);font-size:clamp(24px,3.8vw,40px);line-height:1.12;margin:.15em 0 .5em}
+  p.lead{font-size:clamp(17px,2.1vw,22px);line-height:1.5;color:var(--body);max-width:40em}
+  p.sub{font-size:16px;color:var(--muted);margin-top:.8em;max-width:40em}
+  ul{list-style:none;margin:1.1em 0;max-width:42em}
+  li{position:relative;padding-left:1.5em;margin:.55em 0;font-size:clamp(16px,1.9vw,20px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:2px;background:var(--accent)}
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin:1.3em 0}
+  .chip{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:8px;padding:12px 16px;font-weight:600;color:var(--ink);box-shadow:0 1px 2px rgba(0,75,145,.05)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:1.2em 0}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:20px 22px}
+  .card .n{font-family:var(--serif);font-weight:700;color:var(--accent);font-size:22px}
+  .card h3{font-family:var(--sans);font-weight:600;color:var(--ink);font-size:18px;margin:.2em 0 .3em}
+  .card p{font-size:15px;color:var(--muted);line-height:1.45}
+  .big{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:clamp(40px,8vw,96px);line-height:1}
+  .quote{font-family:var(--serif);font-size:clamp(22px,3.2vw,34px);line-height:1.3;color:var(--ink);max-width:24em}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-top:6px solid var(--accent);border-radius:14px;padding:30px 32px;max-width:40em}
+  .disclaimer{font-size:12.5px;color:var(--muted);margin-top:1.6em;max-width:44em;line-height:1.5}
+  footer{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:14px 22px;font-size:12px;color:var(--muted);font-family:var(--sans)}
+  footer .brand{font-family:var(--serif);font-weight:600;color:var(--ink);letter-spacing:.02em}
+  .nav{position:fixed;right:22px;bottom:40px;display:flex;gap:8px;z-index:5}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:8px;font-size:18px;cursor:pointer}
+  .nav button:hover{border-color:var(--ink)}
+  .count{position:fixed;left:22px;bottom:46px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span class="brand">Velociteach</span><span>The Alpha Method &middot; PMP Exam Prep Masterclass</span></footer>
+<div class="count" id="count"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8592;</button><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="eyebrow">A Velociteach Masterclass</div>
+    <h1>The Alpha Method</h1>
+    <p class="lead">How the top 2% of project managers pass the PMP on their first try, and why studying harder is not the answer.</p>
+    <p class="sub">Taught by the team behind the field's most-trusted PMP study guide.</p>`},
+
+  {t:'audience', html:`
+    <div class="eyebrow">Who this is for</div>
+    <h2>You are good at the job. The exam still scares you.</h2>
+    <p class="lead">You run real projects. But the PMP sits between you and the title, the raise, or the next role, and the questions do not look like the work you actually do.</p>
+    <ul>
+      <li>You have the hours and the experience, you just need to pass.</li>
+      <li>You have heard the exam changed, and the old prep does not match it.</li>
+      <li>You cannot afford to fail, pay again, and wait again.</li>
+    </ul>`},
+
+  {t:'trap', html:`
+    <div class="eyebrow">The trap</div>
+    <h2>The PMP is not a memory test. It is a judgment test.</h2>
+    <p class="lead">Most people study it like a vocabulary list, and then sit down to questions that ask what the best project manager would do next. Memorizing the book is not the same as thinking the way the exam rewards.</p>`},
+
+  {t:'reframe', html:`
+    <div class="eyebrow">The reframe</div>
+    <p class="quote">The people who pass easily are not studying more. They are studying like the top 2% already think.</p>
+    <p class="sub">That is not a motivational line. It is a research finding.</p>`},
+
+  {t:'part', html:`
+    <div class="eyebrow">Part One</div>
+    <h2>Why smart project managers fail the PMP</h2>
+    <p class="lead">Three quiet reasons, none of them about effort:</p>
+    <ul>
+      <li>They cram facts the exam no longer asks for.</li>
+      <li>They answer from how their company does it, not how a strong PM would.</li>
+      <li>They never build a way to recall a whole knowledge area under pressure.</li>
+    </ul>`},
+
+  {t:'exam', html:`
+    <div class="eyebrow">What the exam actually tests</div>
+    <h2>Three domains, three ways of working</h2>
+    <p class="lead">The current PMP is built around People, Process, and Business Environment, and it asks you to move between Predictive, Agile, and Hybrid approaches. If your prep is still organized the old way, you are studying a map that no longer matches the ground.</p>
+    <div class="chips"><span class="chip">People</span><span class="chip">Process</span><span class="chip">Business Environment</span><span class="chip">Predictive</span><span class="chip">Agile</span><span class="chip">Hybrid</span></div>`},
+
+  {t:'mistake', html:`
+    <div class="eyebrow">The most expensive mistake</div>
+    <p class="quote">Failing is not the costly part. Failing with the wrong prep, then paying and waiting to do it again, is.</p>
+    <p class="sub">The fix is not more hours. It is the right material, organized the way the exam now thinks.</p>`},
+
+  {t:'research', html:`
+    <div class="eyebrow">Part Two &middot; the research</div>
+    <h2>The Alpha Study</h2>
+    <p class="lead">We surveyed more than 5,000 project managers and the people they work with to find what actually separates the top 2% from everyone else. The gap was never raw knowledge. It was a handful of habits of thought.</p>`},
+
+  {t:'alphas', html:`
+    <div class="eyebrow">What the top 2% do differently</div>
+    <h2>Eight areas. Three that change how you answer every question.</h2>
+    <div class="grid">
+      <div class="card"><div class="n">01</div><h3>Approach</h3><p>They plan deliberately and lead the project instead of reacting to it. The exam rewards the proactive choice almost every time.</p></div>
+      <div class="card"><div class="n">02</div><h3>Communication</h3><p>They treat clear, predictable communication as a tool to manage stakeholders, which is exactly the "best next action" the exam looks for.</p></div>
+      <div class="card"><div class="n">03</div><h3>Focus &amp; Prioritization</h3><p>They stay roughly twice as responsive as everyone else by protecting attention, the same discipline that gets you through 180 questions.</p></div>
+      <div class="card"><div class="n">04</div><h3>Attitude &amp; Belief</h3><p>They expect to succeed and enjoy the work, and that steadiness is what carries you through the hard middle of the exam.</p></div>
+    </div>`},
+
+  {t:'bridge', html:`
+    <div class="eyebrow">The connection</div>
+    <h2>Think like an Alpha, and the right answer stops being a guess.</h2>
+    <p class="lead">When you read a question the way the top 2% approach a real project, the "best" answer is usually obvious. The exam is testing judgment, and judgment is the thing the research says can be learned.</p>`},
+
+  {t:'part', html:`
+    <div class="eyebrow">Part Three &middot; the system</div>
+    <h2>PASSTrack: a four-step path to the exam</h2>
+    <p class="lead">The mindset is the edge. This is how we turn it into a pass, on a fixed timeline.</p>`},
+
+  {t:'passtrack', html:`
+    <div class="eyebrow">The PASSTrack system</div>
+    <h2>Prepare &rarr; Attend &rarr; Study &rarr; Succeed</h2>
+    <div class="grid">
+      <div class="card"><div class="n">1</div><h3>Prepare</h3><p>A pre-class action plan and eLearning so you walk in already oriented, not starting from zero.</p></div>
+      <div class="card"><div class="n">2</div><h3>Attend</h3><p>A focused four-day intensive, built on accelerated-learning techniques, not a lecture you sit through.</p></div>
+      <div class="card"><div class="n">3</div><h3>Study</h3><p>Practice in as many formats as there are ways to learn, so the material sticks the way it needs to.</p></div>
+      <div class="card"><div class="n">4</div><h3>Succeed</h3><p>Sit the exam within two weeks, while it is fresh, with a plan for the day itself.</p></div>
+    </div>`},
+
+  {t:'memory', html:`
+    <div class="eyebrow">The method inside the method</div>
+    <h2>Twelve memory devices, one per knowledge area</h2>
+    <p class="lead">The reason our students recall whole sections under pressure is not willpower. It is a set of color-coded mind maps that hold an entire knowledge area in a single picture.</p>
+    <div class="chips">
+      <span class="chip">Integration</span><span class="chip">Scope</span><span class="chip">Schedule</span>
+      <span class="chip">Cost</span><span class="chip">Quality</span><span class="chip">Risk</span>
+      <span class="chip">Resources</span><span class="chip">Communication</span><span class="chip">Stakeholders</span>
+    </div>`},
+
+  {t:'formats', html:`
+    <div class="eyebrow">Learn at the speed of you</div>
+    <h2>Everyone learns differently, so the material comes in every format</h2>
+    <ul>
+      <li>Audio and visual modules you can move through at your own pace.</li>
+      <li>A testing lab with simulated exams that mirror the real thing.</li>
+      <li>Exercises and practice that rebuild the concept from a new angle each time.</li>
+    </ul>`},
+
+  {t:'pacing', html:`
+    <div class="eyebrow">Built around you</div>
+    <h2>Start before day one, at the speed of you</h2>
+    <p class="lead">Preparation begins with a one-hour session with an instructor and a pre-class plan, so the four days are spent sharpening judgment, not meeting the material for the first time. You move at the pace that fits your week, then arrive ready.</p>`},
+
+  {t:'result', html:`
+    <div class="eyebrow">The payoff</div>
+    <h2>Pass once. Become a better PM for good.</h2>
+    <p class="lead">The outcome is the certificate. The by-product is that you start running your real projects the way the top 2% do, because that is the lens you learned the material through.</p>`},
+
+  {t:'proof', html:`
+    <div class="eyebrow">Why learn it here</div>
+    <h2>This is the team that wrote the book. Literally.</h2>
+    <ul>
+      <li>The PMP Exam: How to Pass on Your First Try, more than 250,000 copies in the field's hands.</li>
+      <li>InSite, our e-learning platform, used by students on six continents.</li>
+      <li>A real guarantee: don't pass after three tries in a year, and tuition is refunded.</li>
+    </ul>`},
+
+  {t:'cta', html:`
+    <div class="eyebrow">Your next step</div>
+    <h2>Sit the next cohort of the 4-Day PMP Exam Prep class.</h2>
+    <div class="cta-box">
+      <p class="lead">Pick an upcoming date, bring your experience, and leave ready to sit the exam within two weeks, backed by the PASSTrack guarantee.</p>
+      <p class="sub">Prefer to start on your own first? Begin inside InSite and move into a live cohort when you are ready.</p>
+    </div>
+    <p class="disclaimer">Educational information only. Preparation improves readiness; it does not guarantee an individual exam result, and outcomes vary by person and effort. PMP is a registered mark of the Project Management Institute, which does not sponsor or endorse this material.</p>`}
+];
+
+let i=0;
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+function render(){
+  stage.innerHTML='';
+  const d=document.createElement('div');
+  d.className='slide on';
+  d.innerHTML=S[i].html;
+  stage.appendChild(d);
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
