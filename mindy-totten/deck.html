@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boutique Practice | A masterclass with Mindy Totten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f5f4ef;        /* her cream page ground */
+    --panel:#ebe8df;     /* half-step down from the cream */
+    --ink:#3a3a40;       /* between her #404040 body and #4e4e56 h1 */
+    --ink-soft:#6a6a70;
+    --rule:#d8d2c4;      /* her warm-sand footer tone */
+    --accent:#4e4e56;    /* her slate-violet H1 color */
+  }
+  html,body{height:100%;}
+  body{font-family:'Jost',-apple-system,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+  .slide{height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;padding:9vh 9vw;position:relative;}
+  .slide .pageno{position:absolute;bottom:4vh;right:9vw;font-size:12px;letter-spacing:.18em;color:var(--ink-soft);font-weight:400;}
+  .brandline{position:absolute;top:4vh;left:9vw;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+  .eyebrow{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:22px;}
+  h1{font-family:'EB Garamond',Georgia,serif;font-weight:600;font-size:clamp(34px,6.2vw,74px);line-height:1.05;color:var(--ink);letter-spacing:-.01em;max-width:18ch;}
+  h2{font-family:'EB Garamond',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,52px);line-height:1.12;color:var(--ink);letter-spacing:-.005em;max-width:20ch;}
+  .lede{font-family:'EB Garamond',Georgia,serif;font-size:clamp(20px,2.6vw,30px);line-height:1.4;color:var(--ink);max-width:24ch;margin-top:10px;}
+  p.body{font-size:clamp(17px,1.9vw,22px);line-height:1.6;color:var(--ink);max-width:30ch;margin-top:26px;font-weight:300;}
+  .sub{font-size:clamp(16px,1.7vw,20px);color:var(--ink-soft);margin-top:20px;max-width:32ch;font-weight:300;}
+  .title-meta{margin-top:40px;padding-top:24px;border-top:2px solid var(--rule);font-size:16px;letter-spacing:.04em;color:var(--ink-soft);font-weight:400;}
+  .title-meta strong{color:var(--accent);font-weight:600;}
+  .stage{display:flex;align-items:baseline;gap:22px;}
+  .stage .num{font-family:'EB Garamond',serif;font-size:clamp(44px,7vw,92px);color:var(--rule);font-weight:600;line-height:.9;}
+  .big-num{font-family:'EB Garamond',serif;font-size:clamp(70px,13vw,150px);color:var(--accent);font-weight:600;line-height:.9;letter-spacing:-.02em;}
+  ul.pillars{list-style:none;margin-top:30px;max-width:34ch;}
+  ul.pillars li{font-size:clamp(16px,1.8vw,21px);padding:14px 0;border-top:1px solid var(--rule);color:var(--ink);font-weight:300;}
+  ul.pillars li:last-child{border-bottom:1px solid var(--rule);}
+  ul.pillars li b{font-weight:500;color:var(--accent);}
+  .credit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 46px;margin-top:34px;max-width:40ch;}
+  .credit-grid div{border-top:2px solid var(--rule);padding-top:14px;}
+  .credit-grid .n{font-family:'EB Garamond',serif;font-size:clamp(26px,3.4vw,40px);color:var(--accent);font-weight:600;}
+  .credit-grid .l{font-size:14px;color:var(--ink-soft);margin-top:6px;font-weight:300;}
+  .cta .step{margin-top:28px;font-size:clamp(17px,1.9vw,22px);font-weight:300;max-width:30ch;line-height:1.55;}
+  .cta .whats-in{margin-top:22px;font-size:15px;color:var(--ink-soft);max-width:34ch;line-height:1.6;font-weight:300;}
+  .disclaimer{position:absolute;bottom:4vh;left:9vw;right:22vw;font-size:12px;color:var(--ink-soft);font-weight:300;line-height:1.5;max-width:50ch;}
+  .hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);background:var(--panel);padding:7px 16px;border:1px solid var(--rule);border-radius:40px;z-index:10;opacity:.9;}
+  @media(max-width:640px){.slide{padding:8vh 8vw;}.credit-grid{grid-template-columns:1fr;}.disclaimer{right:8vw;}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="hint" id="hint">Scroll or press &darr; to advance</div>
+<script>
+/* The masterclass deck is data. Each entry in S is one slide. */
+const S = [
+  {t:'title', brand:'The Bodywork Project', eyebrow:'A masterclass for massage & bodywork therapists',
+   h:'The Boutique Practice',
+   lede:'How to grow your bodywork business without constantly hustling for new clients.',
+   meta:'Presented by <strong>Mindy Totten</strong>, bodywork business mentor'},
+
+  {t:'statement', eyebrow:'Who this is for',
+   h:'You are excellent at the work. Nobody ever taught you the business.',
+   body:'If you trained hard on your hands and your modality, then got handed a business with no instructions, this hour is for you.'},
+
+  {t:'statement', eyebrow:'The trap',
+   h:'So you do the only thing you were shown: take on more.',
+   body:'More clients. More hours. A discount to fill the gaps. A packed week that still leaves the bank account thin and your body tired.'},
+
+  {t:'statement', eyebrow:'The honest reframe',
+   h:'A full schedule is not the goal. For most bodyworkers it is how they burn out and leave the field.',
+   sub:'The practitioners who last are not the busiest ones. They are the ones who built something smaller on purpose.'},
+
+  {t:'bignum', eyebrow:'What is actually possible', num:'2 days',
+   body:'A boutique practice can fund a six-figure life on about two working days a week. Fewer clients, valued higher, who rebook again and again. That is the practice this hour is about.'},
+
+  {t:'statement', eyebrow:'Part one',
+   h:'The real problem is not your marketing. It is that you are positioned like a commodity.',
+   body:'When you look interchangeable with every other therapist in town, the only lever left is price. So you lower it, and the hustle never ends.'},
+
+  {t:'statement', eyebrow:'Part two',
+   h:'The Three Stages of Bodyworker Success',
+   sub:'A map out of the hustle: from getting clear, to building a practice that runs on your terms.'},
+
+  {t:'stage', eyebrow:'Stage one', num:'1', h:'Starting Out: reflection and clarity.',
+   body:'Get really good at what you do, then get clear on the one client you are built to serve and the practice you actually want. Clarity is the whole foundation.'},
+
+  {t:'stage', eyebrow:'Stage two', num:'2', h:'Hitting Your Stride: create and build.',
+   body:'Design the boutique practice on purpose, price it with integrity, and stop carrying it alone. The support you give yourself here changes everything.'},
+
+  {t:'stage', eyebrow:'Stage three', num:'3', h:'Growing in Service: sustain and endure.',
+   body:'Get your work out into the world in ways that reach beyond one pair of hands: teaching, mentoring, and offerings that serve more people without more hours.'},
+
+  {t:'pillars', eyebrow:'The four disciplines', h:'What a boutique practice is built from',
+   items:[
+     {b:'Boutique business design.', rest:'Small, premium, and sustainable by design, not high-volume.'},
+     {b:'Pricing with integrity.', rest:'Raise once, grounded in your real numbers, without apology.'},
+     {b:'Boundaries that protect you.', rest:'A cancellation policy with integrity is the anti-burnout discipline.'},
+     {b:'Connection and rebooking.', rest:'A deeply rebooked practice beats one that markets forever.'}
+   ]},
+
+  {t:'statement', eyebrow:'Pricing with integrity',
+   h:'Raise your prices once, on purpose, not a few dollars at a time.',
+   body:'A meaningful raise you can feel in your monthly numbers, rooted in your real worth, is easier to hold than a slow trickle you keep apologizing for.'},
+
+  {t:'statement', eyebrow:'Boundaries',
+   h:'The practice should protect the practitioner, not drain her.',
+   body:'Integrity around your cancellation policy and your time is not rigid. It is what keeps you in the field long enough to do your best work.'},
+
+  {t:'statement', eyebrow:'Part three',
+   h:'A week that gives back more than it takes',
+   body:'White space in the calendar. Clients who book their next visit before they leave. Fees that match your skill. A practice that funds your life instead of consuming it.'},
+
+  {t:'credit', eyebrow:'Why trust this map',
+   h:'I built it the hard way, then walked thousands of therapists through it.',
+   grid:[
+     {n:'24+ yrs', l:'in business'},
+     {n:'18+ yrs', l:'as a craniosacral therapist'},
+     {n:'Six figures', l:'on about two days a week'},
+     {n:'Since 2014', l:'mentoring bodyworkers'}
+   ]},
+
+  {t:'cta', brand:'The Bodywork Project', eyebrow:'Where to go from here',
+   h:'Ready to build your boutique practice?',
+   step:'The Bodywork Project walks you through all three stages, step by step, with the templates, the pricing and boundary work, and two private mentoring calls with me.',
+   whats:'Six guided modules, the Business Toolkit of done-for-you templates and scripts, and private time with me, built for the therapist who wants a practice that lasts.',
+   disclaimer:'This masterclass is educational. It shares a framework and one practitioner’s experience; it is not a guarantee of income or results. Every practice is different, and your outcomes depend on your own market, work, and choices.'}
+];
+
+function el(tag, cls, html){var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+function pageno(n){return '<span class="pageno">'+String(n+1).padStart(2,'0')+'</span>';}
+
+function build(){
+  var deck=document.getElementById('deck');
+  S.forEach(function(s,idx){
+    var sec=el('section','slide '+(s.t==='cta'?'cta':''));
+    var inner='';
+    if(s.brand) inner+='<div class="brandline">'+s.brand+'</div>';
+    if(s.eyebrow) inner+='<div class="eyebrow">'+s.eyebrow+'</div>';
+    if(s.t==='title'){
+      inner+='<h1>'+s.h+'</h1>';
+      if(s.lede) inner+='<p class="lede">'+s.lede+'</p>';
+      if(s.meta) inner+='<div class="title-meta">'+s.meta+'</div>';
+    } else if(s.t==='bignum'){
+      inner+='<div class="big-num">'+s.num+'</div>';
+      if(s.body) inner+='<p class="body">'+s.body+'</p>';
+    } else if(s.t==='stage'){
+      inner+='<div class="stage"><span class="num">'+s.num+'</span><h2>'+s.h+'</h2></div>';
+      if(s.body) inner+='<p class="body">'+s.body+'</p>';
+    } else if(s.t==='pillars'){
+      inner+='<h2>'+s.h+'</h2><ul class="pillars">';
+      s.items.forEach(function(it){inner+='<li><b>'+it.b+'</b> '+it.rest+'</li>';});
+      inner+='</ul>';
+    } else if(s.t==='credit'){
+      inner+='<h2>'+s.h+'</h2><div class="credit-grid">';
+      s.grid.forEach(function(g){inner+='<div><div class="n">'+g.n+'</div><div class="l">'+g.l+'</div></div>';});
+      inner+='</div>';
+    } else if(s.t==='cta'){
+      inner+='<h1>'+s.h+'</h1>';
+      if(s.step) inner+='<p class="step">'+s.step+'</p>';
+      if(s.whats) inner+='<p class="whats-in">'+s.whats+'</p>';
+      if(s.disclaimer) inner+='<div class="disclaimer">'+s.disclaimer+'</div>';
+    } else {
+      if(s.h) inner+='<h2>'+s.h+'</h2>';
+      if(s.body) inner+='<p class="body">'+s.body+'</p>';
+      if(s.sub) inner+='<p class="sub">'+s.sub+'</p>';
+    }
+    inner+=pageno(idx);
+    sec.innerHTML=inner;
+    deck.appendChild(sec);
+  });
+}
+build();
+
+var deck=document.getElementById('deck');
+var slides=Array.prototype.slice.call(document.querySelectorAll('.slide'));
+var i=0;
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(i+1);}
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+});
+var hint=document.getElementById('hint');
+deck.addEventListener('scroll',function(){hint.style.opacity=deck.scrollTop>50?'0':'.9';});
+</script>
+</body>
+</html>
