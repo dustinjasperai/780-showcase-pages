@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Small-Town Advantage — a live masterclass with Molly Knuth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Palette derived from mollyknuth.com (extract_brand.js, see 01-deep-research.md ## Palette)
+     --bg  #241a19  warm near-black brown, her dominant ground (60 uses)
+     --panel #2d211e half-step lift of the ground
+     --ink #f6f1e9  her cream (22 uses)
+     --accent #452820 her chestnut button color (the one brand accent)
+     --rule #452820 */
+  :root{
+    --bg:#241a19;
+    --panel:#2d211e;
+    --ink:#f6f1e9;
+    --muted:#c9b9ad;
+    --accent:#452820;
+    --rule:#452820;
+    --serif:"Playfair Display",Georgia,serif;
+    --sans:"Josefin Sans","Century Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .slide{min-height:100vh;width:100%;display:flex;flex-direction:column;justify-content:center;padding:8vh 9vw;border-bottom:1px solid rgba(246,241,233,.08);position:relative}
+  .eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;color:var(--muted)}
+  .accent-bar{width:64px;height:3px;background:var(--accent);margin:1.4rem 0}
+  h1{font-family:var(--serif);font-weight:800;font-size:clamp(2.6rem,6.4vw,5.2rem);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.08;margin-bottom:.4em}
+  h3{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(1.3rem,2.6vw,1.9rem);color:var(--muted)}
+  p{font-size:clamp(1.05rem,1.7vw,1.4rem);max-width:60ch;margin-top:1rem;color:var(--ink)}
+  p.lead{font-size:clamp(1.2rem,2.1vw,1.7rem);color:var(--muted)}
+  .kicker{font-family:var(--serif);font-style:italic;font-size:clamp(1.4rem,3vw,2.2rem);color:var(--accent-ink,var(--ink))}
+  .q{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,5vw,4rem);color:var(--ink)}
+  .qnum{font-family:var(--sans);font-weight:600;color:var(--muted);letter-spacing:.2em;font-size:.8rem;text-transform:uppercase}
+  ul.plain{list-style:none;margin-top:1.4rem;max-width:62ch}
+  ul.plain li{font-size:clamp(1.05rem,1.8vw,1.45rem);padding:.55rem 0 .55rem 1.4rem;border-bottom:1px solid rgba(246,241,233,.08);position:relative}
+  ul.plain li:before{content:"";position:absolute;left:0;top:1.25rem;width:10px;height:10px;background:var(--accent);border-radius:2px}
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem;margin-top:2rem;max-width:1100px}
+  .story-card{background:var(--panel);border:1px solid rgba(246,241,233,.1);border-left:4px solid var(--accent);padding:1.3rem}
+  .story-card .step{font-family:var(--sans);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;color:var(--muted)}
+  .story-card .name{font-family:var(--serif);font-weight:700;font-size:1.35rem;margin:.3rem 0 .4rem}
+  .story-card .desc{font-size:.98rem;color:var(--ink)}
+  .cred-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.2rem;margin-top:2rem;max-width:1000px}
+  .stat{background:var(--panel);border:1px solid rgba(246,241,233,.1);padding:1.4rem}
+  .stat .big{font-family:var(--serif);font-weight:800;font-size:clamp(2rem,4vw,3rem);color:var(--ink)}
+  .stat .lab{font-size:.92rem;color:var(--muted);margin-top:.3rem}
+  .cta-box{margin-top:2rem;background:var(--accent);color:var(--ink);display:inline-block;padding:1rem 2.2rem;font-family:var(--sans);font-weight:600;letter-spacing:.04em;font-size:1.15rem}
+  .disclaimer{margin-top:2.4rem;font-size:.82rem;color:var(--muted);max-width:60ch;line-height:1.5}
+  .pageno{position:absolute;bottom:3vh;right:9vw;font-size:.75rem;color:var(--muted);letter-spacing:.1em}
+  .brandmark{position:absolute;top:6vh;left:9vw;font-family:var(--sans);font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.72rem;color:var(--muted)}
+  @media(max-width:640px){.slide{padding:7vh 7vw}}
+</style>
+</head>
+<body>
+<main id="deck"></main>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass with Molly Knuth', h1:'The Small-Town Advantage', h3:'Build a brand your whole town rallies behind.'},
+  {t:'promise', h2:'What you will walk out with', lead:'In sixty minutes, live, you will answer the first three of the five questions every small-town founder has to answer, and leave with the start of a real plan built for your business and your town.'},
+  {t:'who', h2:'This is for you if', body:'You run a business in a town the big marketing playbooks forget. You wear every hat. You are told to copy what works in the city, and it keeps not fitting. You want more of the right people to find you without spending your life online.'},
+  {t:'reframe', kicker:'Here is the reframe the rest of this hour is built on.', q:'Small town isn’t the obstacle. It’s the strategy.'},
+  {t:'part', part:'Part One', h2:'Why the usual advice keeps failing you', body:'Most business advice is written for corporations, not communities. It assumes a huge audience, a big budget, and a customer who will never see you at the grocery store. In a town of 2,500, none of that is true, and that is exactly why the templates break.'},
+  {t:'cost', h2:'The real cost', body:'So you spin. You post more, chase the algorithm, copy a competitor three states away, and still feel invisible in your own town. The problem was never your business. It was borrowing a strategy built for someone whose town you will never live in.'},
+  {t:'part', part:'Part Two', h2:'The Found Framework', h3:'Five questions. One plan. Built for your business, specifically.'},
+  {t:'q', qnum:'Question One', q:'How do I do this?', desc:'Start from your goals and your town, not a generic template. Name what you are actually building and why it matters here.'},
+  {t:'q', qnum:'Question Two', q:'Where are my people?', desc:'The small-town version of audience. The channels, the word-of-mouth map, and the community touchpoints that actually move a local business.'},
+  {t:'q', qnum:'Question Three', q:'What do I say?', desc:'Say what you stand for, so the right people hear it. Message first, template last.'},
+  {t:'q', qnum:'Question Four', q:'How do I share it?', desc:'Pick the few mediums you can sustain, and show up where your community already is.'},
+  {t:'q', qnum:'Question Five', q:'How do I know it’s working?', desc:'The simple signals that tell you to keep going or adjust, without a dashboard built for a Fortune 500.'},
+  {t:'part', part:'Part Two, continued', h2:'Story Sticks', h3:'The five-part story that makes a small-town brand stick.'},
+  {t:'story', h2:'Your business, told as a story', cards:[
+    {step:'Exposition', name:'The setup', desc:'Introduce your team and your town. Who you are and where you stand.'},
+    {step:'Rising Action', name:'The problem', desc:'The real problems your work solves for the people here.'},
+    {step:'Climax', name:'The turn', desc:'Advocate for your offer. This is the moment it matters.'},
+    {step:'Falling Action', name:'The next step', desc:'Make it obvious and easy to say yes.'},
+    {step:'Resolution', name:'The ripple', desc:'The transformation, for the customer and the town.'}
+  ]},
+  {t:'why', h2:'Why story, not stats', body:'Research from psychologist Jerome Bruner found that facts are up to twenty times more likely to be remembered when they are part of a story. Features and specifics get forgotten. Story sticks. That is the whole reason a small business with a small budget can still be unforgettable.'},
+  {t:'part', part:'Part Three', h2:'When a town rallies behind you', body:'A brand built this way does something a corporate template never will. Your customers become your marketing. What you build here ripples out past your own front door and beyond your ZIP code. You get back control of your time, and a business your community is proud of.'},
+  {t:'cred', h2:'Why listen to me', body:'I started Molly Knuth Media in 2017 after teaching high-school English, and I have spent nearly a decade helping small-town businesses tell their stories, from Cascade, Iowa, population 2,500.', stats:[
+    {big:'270+', lab:'episodes of The Found Podcast'},
+    {big:'60,000+', lab:'downloads and counting'},
+    {big:'1:1', lab:'founders guided through Found'}
+  ]},
+  {t:'recap', kicker:'Remember the one idea.', q:'The town is the strategy.'},
+  {t:'cta', h2:'Finish all five questions', body:'Today you answered the first three. In Found, my twelve-week program, we work the whole framework together: mission, message, and a plan built for your business and your town. If you are ready to stop spinning and start building, this is the next step.', cta:'Start with Found', disclaimer:'This masterclass is educational. Every business is different and results vary. Nothing here is a promise or guarantee of income, revenue, or specific results.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const sec = document.createElement('section');
+  sec.className = 'slide';
+  let inner = '<div class="brandmark">Molly Knuth &middot; Build the Business, Build the Town</div>';
+  if (s.t === 'title') {
+    inner += `<div class="eyebrow">${s.eyebrow}</div><div class="accent-bar"></div><h1>${s.h1}</h1><h3 style="margin-top:1rem">${s.h3}</h3>`;
+  } else if (s.t === 'reframe' || s.t === 'recap') {
+    inner += `<h3>${s.kicker}</h3><div class="accent-bar"></div><div class="q">${s.q}</div>`;
+  } else if (s.t === 'promise') {
+    inner += `<h2>${s.h2}</h2><div class="accent-bar"></div><p class="lead">${s.lead}</p>`;
+  } else if (s.t === 'part') {
+    inner += `<div class="eyebrow">${s.part}</div><div class="accent-bar"></div><h2>${s.h2}</h2>${s.h3?`<h3>${s.h3}</h3>`:''}${s.body?`<p>${s.body}</p>`:''}`;
+  } else if (s.t === 'q') {
+    inner += `<div class="qnum">${s.qnum}</div><div class="accent-bar"></div><div class="q">${s.q}</div><p>${s.desc}</p>`;
+  } else if (s.t === 'story') {
+    let cards = s.cards.map(c=>`<div class="story-card"><div class="step">${c.step}</div><div class="name">${c.name}</div><div class="desc">${c.desc}</div></div>`).join('');
+    inner += `<h2>${s.h2}</h2><div class="accent-bar"></div><div class="story-grid">${cards}</div>`;
+  } else if (s.t === 'cred') {
+    let stats = s.stats.map(x=>`<div class="stat"><div class="big">${x.big}</div><div class="lab">${x.lab}</div></div>`).join('');
+    inner += `<h2>${s.h2}</h2><div class="accent-bar"></div><p>${s.body}</p><div class="cred-grid">${stats}</div>`;
+  } else if (s.t === 'cta') {
+    inner += `<h2>${s.h2}</h2><div class="accent-bar"></div><p>${s.body}</p><div class="cta-box">${s.cta}</div><div class="disclaimer">${s.disclaimer}</div>`;
+  } else {
+    inner += `${s.h2?`<h2>${s.h2}</h2>`:''}<div class="accent-bar"></div>${s.body?`<p>${s.body}</p>`:''}`;
+  }
+  inner += `<div class="pageno">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>`;
+  sec.innerHTML = inner;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
