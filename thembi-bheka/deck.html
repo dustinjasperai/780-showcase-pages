@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Authority Shift — Thembi Bheka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfbf7;
+    --panel:#ffffff;
+    --ink:#141c5e;
+    --accent:#ff7a8c;
+    --muted:#5a6079;
+    --rule:#141c5e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;padding:6vh 8vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:"Archivo";font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;color:var(--accent)}
+  h1{font-family:"Lora";font-weight:600;font-size:clamp(2.4rem,5.4vw,4rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:"Lora";font-weight:600;font-size:clamp(1.9rem,3.8vw,2.9rem);line-height:1.1}
+  .lede{font-family:"Lora";font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1.34;font-weight:400;color:var(--ink)}
+  p.body{font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--muted);max-width:40ch}
+  .big{font-family:"Lora";font-weight:600;font-size:clamp(2.6rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.015em}
+  .accentbar{width:64px;height:5px;background:var(--accent);border-radius:3px;margin:28px 0}
+  .kicker{font-family:"Archivo";font-weight:600;color:var(--accent);font-size:1rem;letter-spacing:.04em}
+  .two{display:grid;grid-template-columns:1fr 1px 1fr;gap:40px;align-items:start}
+  .two .col h3{font-family:"Lora";font-weight:600;font-size:1.5rem;margin-bottom:10px}
+  .divider{background:var(--rule);opacity:.18;width:1px;height:100%}
+  ul.clean{list-style:none;margin-top:18px}
+  ul.clean li{font-size:1.15rem;line-height:1.5;padding:10px 0 10px 28px;position:relative;color:var(--ink);border-bottom:1px solid rgba(20,28,94,.08)}
+  ul.clean li:before{content:"";position:absolute;left:0;top:19px;width:10px;height:10px;background:var(--accent);border-radius:50%}
+  .movenum{font-family:"Lora";font-weight:600;font-size:clamp(3rem,7vw,5rem);color:var(--accent);line-height:1}
+  .section-label{font-family:"Archivo";font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-size:.85rem}
+  .fact{font-size:1.1rem;line-height:1.55;color:var(--ink);padding:8px 0;border-bottom:1px solid rgba(20,28,94,.1);max-width:52ch}
+  .fact b{font-family:"Lora";font-weight:600}
+  .disc{font-size:.8rem;color:var(--muted);margin-top:26px;max-width:62ch;line-height:1.5}
+  .ctabtn{display:inline-block;margin-top:26px;background:var(--ink);color:#fff;font-family:"Archivo";font-weight:600;font-size:1.1rem;padding:16px 30px;border-radius:999px}
+  .quietbrand{position:fixed;left:8vw;bottom:4vh;font-family:"Archivo";font-weight:600;letter-spacing:.04em;font-size:.8rem;color:var(--muted)}
+  #nav{position:fixed;right:8vw;bottom:4vh;font-family:"Archivo";font-size:.8rem;color:var(--muted)}
+  #nav b{color:var(--ink)}
+  .hint{position:fixed;left:50%;bottom:4vh;transform:translateX(-50%);font-size:.72rem;color:var(--muted);opacity:.6;font-family:"Archivo"}
+  h1 .hl{color:var(--accent)}
+  .lede .hl{color:var(--accent);font-style:italic}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="quietbrand">THEMBI BHEKA</div>
+<div id="nav"><b id="cur">1</b> / <span id="tot"></span></div>
+<div class="hint">Use arrow keys</div>
+<script>
+const S=[
+  {t:'title', eyebrow:'A live masterclass with Thembi Bheka', h:'The Authority <span class="hl">Shift</span>', sub:'How established experts get chosen by reputation and judgment, not by price.'},
+  {t:'whofor', label:'Who this is for', lede:'You are a coach, consultant, or advisor who does genuinely excellent work.', body:'Your clients are happy. Your referrals are real. And yet you keep watching louder, cheaper, more visible people win the engagements that should have been yours.'},
+  {t:'trap', label:'The trap', big:'"We loved your work. We went with someone cheaper."', body:'If you have heard a version of that line, the problem is almost never the quality of the work. It is something else entirely.'},
+  {t:'reframe', lede:'You are not underqualified.', big:'You are <span class="hl">under-positioned.</span>', body:'Qualified is table stakes. Positioned is what makes the market choose you on purpose.'},
+  {t:'section', num:'Part One', h:'Why excellent work gets sold on price'},
+  {t:'split', label:'The Authority Economy', h:'The market has split in two.', colA:'The commodity half', colAbody:'Work sold by comparison. Buyers line up three options, read the price, and pick. Expertise is assumed, so it stops counting.', colB:'The recognition half', colBbody:'Work sold by reputation and judgment. Buyers already trust the name, so price becomes a detail, not the decision.'},
+  {t:'legibility', label:'The legibility problem', h:'Expertise alone no longer positions you.', body:'When the market cannot clearly see what you stand for, it has no way to value you except by comparison. Illegible expertise gets sold like a commodity, no matter how good it is.'},
+  {t:'why', label:'The real mechanism', lede:'Price competition is a symptom.', body:'You do not compete on price because your fees are wrong. You compete on price because the buyer cannot yet see the difference between you and the next option. Fix the seeing, and the pricing follows.'},
+  {t:'section', num:'Part Two', h:'The Three-Move Positioning Process'},
+  {t:'move', num:'01', h:'Decide what you are for.', body:'Not your niche. Your claim. The one thing you want to be known for and will stake your name on. Most experts hedge here, and hedging is what keeps them legible to no one.'},
+  {t:'move', num:'02', h:'Build the signals that carry it.', body:'Evidence, frameworks, proof, and stages. The visible artefacts that let a buyer recognise your judgment before they ever hire you, instead of taking it on faith afterward.'},
+  {t:'move', num:'03', h:'Architect the pipeline.', body:'Recognition that does not convert is just applause. The last move turns being known into being chosen: a clear path from the moment someone recognises you to the moment they work with you.'},
+  {t:'compound', label:'How it compounds', h:'Each move makes the next one cheaper.', body:'A sharp claim makes your signals obvious to build. Strong signals make the pipeline almost pull itself. This is why positioning is leverage, not a one-time branding exercise.'},
+  {t:'section', num:'Part Three', h:'What the shift looks like'},
+  {t:'before', h:'From one lane to the other.', colA:'In the commodity lane', colAbody:'You pitch, you discount, you justify your fee, and you hope. Every engagement starts from zero.', colB:'In the recognition lane', colBbody:'People arrive already half-decided. The conversation is about fit and scope, not about whether you are worth it.'},
+  {t:'shift', label:'The Coaching Economy Split', h:'The money is already moving.', body:'High-touch private advisory is accelerating while mass-market course and group programs contract. The experts who reposition toward recognition-led demand are the ones the shift is rewarding, not leaving behind.'},
+  {t:'whyme', label:'Why I can show you this', h:'I had to make this shift myself.', facts:['<b>I arrived in Canada as a refugee with five dollars</b> and spent ten years in the ICU before building anything.','<b>I trained tens of thousands of women across Africa</b> in digital and virtual-assistant skills, then watched AI erase that category from the inside.','<b>So I rebuilt around judgment, not volume.</b> I now advise governments and founders and sit on a national AI charter.','<b>I have taught this from the stages of INBOUND, PLF Live, Mom 2.0 and Podfest,</b> and was voted Spokesperson of the Year by a thousand entrepreneurs.']},
+  {t:'first', label:'Start here', h:'Your first move this week.', body:'Before you touch your website or your fees, write one sentence: the claim you are willing to be known for. If it could belong to any good coach in your field, it is not yet a position. Sharpen it until only you could say it.'},
+  {t:'recap', lede:'The work was never the problem.', big:'Get <span class="hl">seen</span> for it.', body:'Decide what you are for. Build the signals that carry it. Architect the pipeline. That is the whole shift.'},
+  {t:'cta', label:'Work with me', h:'Ready to make the shift?', body:'If you want help turning your expertise into a position the market chooses on sight, there are a few ways to work with me, from a single Advisory Hour to the SPAR Room and a Positioning VIP Day. Apply, and I reply within 48 hours, including when the answer is no.', btn:'Apply to work with Thembi', disc:'This masterclass is educational. No specific result, revenue, or outcome is guaranteed. Results vary and depend on your own work, market, and execution.'}
+];
+
+const stage=document.getElementById('stage');
+function render(s){
+  if(s.t==='title') return `<div class="slide on"><div class="eyebrow">${s.eyebrow}</div><div class="accentbar"></div><h1>${s.h}</h1><p class="lede" style="margin-top:22px">${s.sub}</p></div>`;
+  if(s.t==='whofor') return `<div class="slide on"><div class="section-label">${s.label}</div><div class="accentbar"></div><p class="lede">${s.lede}</p><p class="body" style="margin-top:20px;max-width:46ch">${s.body}</p></div>`;
+  if(s.t==='trap') return `<div class="slide on"><div class="section-label">${s.label}</div><div class="accentbar"></div><div class="big">${s.big}</div><p class="body" style="margin-top:24px">${s.body}</p></div>`;
+  if(s.t==='reframe') return `<div class="slide on"><p class="lede">${s.lede}</p><div class="big" style="margin-top:6px">${s.big}</div><p class="body" style="margin-top:24px">${s.body}</p></div>`;
+  if(s.t==='section') return `<div class="slide on"><div class="kicker">${s.num}</div><div class="accentbar"></div><h2>${s.h}</h2></div>`;
+  if(s.t==='split'||s.t==='before') return `<div class="slide on"><div class="section-label">${s.label||''}</div><div class="accentbar"></div><h2 style="margin-bottom:28px">${s.h}</h2><div class="two"><div class="col"><h3>${s.colA}</h3><p class="body">${s.colAbody}</p></div><div class="divider"></div><div class="col"><h3 style="color:var(--accent)">${s.colB}</h3><p class="body">${s.colBbody}</p></div></div></div>`;
+  if(s.t==='legibility'||s.t==='why'||s.t==='compound'||s.t==='shift'||s.t==='first') return `<div class="slide on"><div class="section-label">${s.label}</div><div class="accentbar"></div>${s.lede?`<p class="lede">${s.lede}</p>`:''}<h2 style="margin:${s.lede?'14px 0':'0 0 0 0'}">${s.h}</h2><p class="body" style="margin-top:20px;max-width:52ch">${s.body}</p></div>`;
+  if(s.t==='move') return `<div class="slide on"><div class="movenum">${s.num}</div><h2 style="margin:10px 0 0">${s.h}</h2><p class="body" style="margin-top:18px;max-width:50ch">${s.body}</p></div>`;
+  if(s.t==='whyme') return `<div class="slide on"><div class="section-label">${s.label}</div><div class="accentbar"></div><h2 style="margin-bottom:22px">${s.h}</h2>${s.facts.map(f=>`<div class="fact">${f}</div>`).join('')}</div>`;
+  if(s.t==='recap') return `<div class="slide on"><p class="lede">${s.lede}</p><div class="big" style="margin-top:4px">${s.big}</div><p class="body" style="margin-top:24px;max-width:54ch">${s.body}</p></div>`;
+  if(s.t==='cta') return `<div class="slide on"><div class="section-label">${s.label}</div><div class="accentbar"></div><h2>${s.h}</h2><p class="body" style="margin-top:18px;max-width:56ch">${s.body}</p><span class="ctabtn">${s.btn}</span><p class="disc">${s.disc}</p></div>`;
+  return `<div class="slide on"><h2>${s.h||''}</h2></div>`;
+}
+let i=0;
+document.getElementById('tot').textContent=S.length;
+function show(n){i=Math.max(0,Math.min(S.length-1,n));stage.innerHTML=render(S[i]);document.getElementById('cur').textContent=i+1;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)show(i+1);else show(i-1);});
+show(0);
+</script>
+</body>
+</html>
