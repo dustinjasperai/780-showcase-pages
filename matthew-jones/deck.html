@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Blueprint for Success — Power Up Your Tradie Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf8f5;
+    --panel:#f1ede7;
+    --ink:#2b2b2b;
+    --muted:#6a6560;
+    --accent:#bc0000;
+    --rule:#ddd6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    width:min(960px,96vw);
+    aspect-ratio:16/9;
+    background:var(--paper);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.45);
+    border-radius:6px;
+  }
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;color:var(--accent);margin-bottom:1.1rem;display:flex;align-items:center;gap:.6rem}
+  .eyebrow::before{content:"";width:28px;height:3px;background:var(--accent);display:inline-block}
+  h1{font-family:'Poppins',sans-serif;font-weight:800;font-size:3.0rem;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.1rem;line-height:1.1;margin-bottom:.9rem}
+  .lede{font-size:1.18rem;line-height:1.5;color:var(--muted);margin-top:1.1rem;max-width:40ch}
+  p.body{font-size:1.06rem;line-height:1.55;color:var(--ink);max-width:48ch;margin-top:.5rem}
+  .stagenum{font-family:'Poppins',sans-serif;font-weight:800;font-size:5.5rem;color:var(--accent);line-height:1;opacity:.14;position:absolute;top:6%;right:8%}
+  .pill{display:inline-block;font-family:'Poppins',sans-serif;font-weight:600;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#fff;padding:.35rem .7rem;border-radius:3px;margin-bottom:1rem;width:max-content}
+  ul.rows{list-style:none;margin-top:1.3rem;display:grid;gap:.75rem;max-width:52ch}
+  ul.rows li{display:flex;gap:.9rem;align-items:flex-start;font-size:1.04rem;line-height:1.4}
+  ul.rows li b{font-family:'Poppins',sans-serif;color:var(--accent);min-width:1.4rem}
+  .scoreboard{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.6rem}
+  .scoreboard .cell{background:var(--panel);border-top:4px solid var(--accent);padding:1rem .85rem;border-radius:4px}
+  .scoreboard .cell h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.04rem;margin-bottom:.35rem}
+  .scoreboard .cell span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+  .quote{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.4rem;line-height:1.18;max-width:20ch}
+  .disc{font-size:.78rem;color:var(--muted);line-height:1.45;margin-top:1.6rem;max-width:56ch}
+  .credit{display:flex;gap:1.4rem;margin-top:1.4rem;flex-wrap:wrap}
+  .credit div{background:var(--panel);padding:.8rem 1rem;border-radius:4px;font-size:.92rem}
+  .credit b{font-family:'Poppins',sans-serif;display:block;color:var(--accent);font-size:1.3rem}
+  .cta-line{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent);margin-top:1rem}
+  footer.brand{position:absolute;left:8%;bottom:5%;font-family:'Poppins',sans-serif;font-weight:600;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;color:#faf8f5;font-family:'Inter';font-size:.82rem}
+  .nav button{background:var(--accent);color:#fff;border:0;width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer}
+  .count{min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">&lsaquo;</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">1</span></span>
+  <button id="next" aria-label="Next">&rsaquo;</button>
+</div>
+<script>
+const S = [
+  {t:'title', pill:'A free live masterclass', h:'The Blueprint for Success', lede:'How Aussie tradie business owners earn more and work less, by coaching the business like a performance team instead of just working harder.'},
+  {t:'for', ey:'Who this is for', h:'You built a good trade business. It just owns you.', body:'You are the best on the tools, the quotes, the invoices, the complaints and the late-night paperwork. The work is flowing. The bank account and your weekends are not. If that is the trap you are in, this hour is for you.'},
+  {t:'quote', ey:'The hard truth', q:'The busiest tradie on the street is often the brokest.', body:'More hours is not the lever. You cannot out-work a business that has no system driving its profit. Working harder just buys you a bigger version of the same trap.'},
+  {t:'text', ey:'What the trap costs', h:'Every year you stay stuck has a price', body:'It is the margin left on jobs you underquoted, the good people you could not keep, and the weekends you never got back. The cost is not just money. It is the business you meant to build quietly slipping further away.'},
+  {t:'part', n:'1', pill:'Part One', h:'Why great tradies stay stuck', body:'You were trained to be a brilliant tradie. Nobody trained you to run the business behind it. So you default to the one lever you know: do more work yourself.'},
+  {t:'list', ey:'The three usual mistakes', h:'It is almost always these three', rows:['Pricing off what the next bloke charges instead of what the job actually costs you to deliver.','Being the only person who can run a job properly, so nothing scales past your own two hands.','Flying blind on the numbers, so you only find out a job lost money after it is done.']},
+  {t:'text', ey:'The mindset shift', h:'From a tradie mindset to a business-performance mindset', body:'A tradie mindset asks how do I get this job done. A business-performance mindset asks what drives the profit, and how do I coach it up. Same person, completely different business. That shift is the first move, and everything else is built on it.'},
+  {t:'quote', ey:'The performance lens', q:'Great teams do not train harder. They train what matters.', body:'A performance coach never tells an athlete to just try harder. They find the few drivers that move the result and they coach those. Your business works exactly the same way.'},
+  {t:'part', n:'2', pill:'Part Two', h:'The Blueprint: four drivers you can coach', body:'Treat your business the way a performance coach treats an athlete. You do not train everything at once. You train the four things that actually move the result: Clarity, Control, Confidence, Connection.'},
+  {t:'pillar', n:'01', c:'Clarity', body:'Define the profit and the lifestyle you actually want, and the number that gets you there. Most tradie businesses are busy with no target. Clarity sets the scoreboard before the game starts.'},
+  {t:'pillar', n:'02', c:'Control', body:'Measure the profit-performance drivers that decide whether a job makes money. When you can see the drivers, you can coach them. This is where working less starts.'},
+  {t:'pillar', n:'03', c:'Confidence', body:'Make educated decisions about which clients to take and which people to hire, using the numbers instead of a gut feel on a Friday. Good decisions compound.'},
+  {t:'pillar', n:'04', c:'Connection', body:'Attract the great opportunities and the right relationships that power up performance, so growth stops depending on you chasing every lead yourself.'},
+  {t:'scoreboard', ey:'The four together', h:'One scoreboard, four drivers', body:'Run all four and the business stops depending on how many hours you personally throw at it.'},
+  {t:'part', n:'3', pill:'Part Three', h:'What it looks like when it works', body:'Off the tools earlier. A team you trust. Jobs you chose because the numbers said yes. A business that serves your life instead of swallowing it.'},
+  {t:'quote', ey:'The real goal', q:'A business that serves you, not the other way around.', body:'That is the whole point of the Blueprint. Earn more, work less, and get your time back, without gambling the business to do it.'},
+  {t:'whyme', ey:'Why listen to me', h:'A tradie first, a performance coach second', credits:[['6,000+','Aussie tradie businesses coached'],['Author','Power Up Your Tradie Business'],['Host','Power Up Your Business Podcast']], body:'I started on the tools, then spent years as a performance coach. Cube Performance is what happens when you point that at a trade business.'},
+  {t:'cta', pill:'Your next move', h:'Ready to power up your tradie business?', body:'Book a free Business Assessment Call and we will map your four drivers together, or grab a free copy of Power Up Your Tradie Business to start today.', cta:'Book your free Business Assessment Call', disc:'This masterclass is educational. No income or result is guaranteed. Results vary and depend on your market, your team, your effort, and your execution.'}
+];
+
+const esc = t => (t==null?'':String(t));
+const brandFoot = '<footer class="brand">POWER UP YOUR BUSINESS</footer>';
+const paper = {
+  title: s => `<div class="pill">${esc(s.pill)}</div><h1>${esc(s.h)}</h1><p class="lede">${esc(s.lede)}</p>${brandFoot}`,
+  for: s => `<div class="eyebrow">${esc(s.ey)}</div><h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p>${brandFoot}`,
+  text: s => `<div class="eyebrow">${esc(s.ey)}</div><h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p>${brandFoot}`,
+  quote: s => `<div class="eyebrow">${esc(s.ey)}</div><p class="quote">${esc(s.q)}</p><p class="body">${esc(s.body)}</p>${brandFoot}`,
+  part: s => `<div class="stagenum">${esc(s.n)}</div><div class="pill">${esc(s.pill)}</div><h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p>`,
+  list: s => `<div class="eyebrow">${esc(s.ey)}</div><h2>${esc(s.h)}</h2><ul class="rows">${s.rows.map((r,i)=>`<li><b>${i+1}</b>${esc(r)}</li>`).join('')}</ul>`,
+  pillar: s => `<div class="stagenum">${esc(s.n)}</div><div class="eyebrow">The Blueprint for Success</div><h2>${esc(s.c)}</h2><p class="body">${esc(s.body)}</p>${brandFoot}`,
+  scoreboard: s => `<div class="eyebrow">${esc(s.ey)}</div><h2>${esc(s.h)}</h2><div class="scoreboard"><div class="cell"><h3>Clarity</h3><span>The target and the lifestyle you want</span></div><div class="cell"><h3>Control</h3><span>The numbers that drive the profit</span></div><div class="cell"><h3>Confidence</h3><span>The right clients, the right team</span></div><div class="cell"><h3>Connection</h3><span>The opportunities that compound</span></div></div><p class="body">${esc(s.body)}</p>`,
+  whyme: s => `<div class="eyebrow">${esc(s.ey)}</div><h2>${esc(s.h)}</h2><div class="credit">${s.credits.map(c=>`<div><b>${esc(c[0])}</b>${esc(c[1])}</div>`).join('')}</div><p class="body">${esc(s.body)}</p>`,
+  cta: s => `<div class="pill">${esc(s.pill)}</div><h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p><p class="cta-line">${esc(s.cta)}</p><p class="disc">${esc(s.disc)}</p>${brandFoot}`
+};
+
+const stage = document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className = 'slide' + (i===0?' on':'');
+  d.innerHTML = paper[s.t](s);
+  stage.appendChild(d);
+});
+let idx = 0;
+const slides = [...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent = slides.length;
+function show(n){
+  idx = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((el,i)=>el.classList.toggle('on', i===idx));
+  document.getElementById('cur').textContent = idx+1;
+}
+document.getElementById('next').onclick=()=>show(idx+1);
+document.getElementById('prev').onclick=()=>show(idx-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(idx+1);
+  if(e.key==='ArrowLeft')show(idx-1);
+});
+</script>
+</body>
+</html>
