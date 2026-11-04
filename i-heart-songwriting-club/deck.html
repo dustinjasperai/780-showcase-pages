@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Write a Song a Week, a masterclass with Francesca de Valence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f5f1; --panel:#ffffff; --ink:#2c2c30; --muted:#6b6b72;
+    --accent:#e12991; --deep:#aa0066; --teal:#008080; --rule:#e6e0dc;
+    --serif:'PT Serif',Georgia,serif; --sans:'Montserrat',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:64px 60px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:700;font-size:54px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;font-size:38px;line-height:1.12;margin-bottom:18px}
+  .lead{font-size:21px;line-height:1.5;color:var(--ink);max-width:40ch}
+  .lead.muted{color:var(--muted)}
+  p.body{font-size:18px;line-height:1.6;color:var(--ink);max-width:54ch;margin-top:14px}
+  .big{font-family:var(--serif);font-size:44px;line-height:1.14;letter-spacing:-.01em;max-width:22ch}
+  .accent{color:var(--accent)} .deep{color:var(--deep)}
+  .pillarnum{font-family:var(--serif);font-size:20px;color:var(--deep);font-weight:700;margin-bottom:10px}
+  ul.pts{margin-top:22px;list-style:none}
+  ul.pts li{font-size:18px;line-height:1.5;padding-left:28px;position:relative;margin-bottom:14px;max-width:52ch}
+  ul.pts li::before{content:"";position:absolute;left:0;top:10px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent)}
+  .weeks{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:30px;max-width:620px}
+  .week{background:var(--bg);border:1px solid var(--rule);border-radius:12px;padding:16px 10px;text-align:center}
+  .week .n{font-family:var(--serif);font-size:15px;color:var(--muted)}
+  .week .note{font-size:22px;color:var(--accent);margin-top:6px}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:28px;max-width:640px}
+  .stat .num{font-family:var(--serif);font-size:42px;color:var(--deep);font-weight:700}
+  .stat .lab{font-size:15px;color:var(--muted);margin-top:4px}
+  .steps{margin-top:24px;display:flex;flex-direction:column;gap:14px;max-width:56ch}
+  .step{display:flex;gap:14px;align-items:baseline;font-size:18px;line-height:1.5}
+  .step .k{font-family:var(--serif);color:var(--deep);font-weight:700;min-width:120px}
+  .disclaimer{font-size:13px;color:var(--muted);margin-top:30px;max-width:60ch;line-height:1.5}
+  .kicker{font-size:17px;color:var(--teal);font-weight:600;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title', eyebrow:'A live songwriting masterclass',
+   h:'Write a Song <span class="accent">a Week</span>',
+   lead:'How to beat the blank page and become a prolific songwriter, with Francesca de Valence.'},
+
+  {t:'big', eyebrow:'If this is you',
+   big:'You start more songs than you ever <span class="accent">finish.</span>',
+   body:'Voice memos full of half-ideas. A notebook of first verses. The nagging sense that there is a real body of work in there somewhere, if you could only get it out.'},
+
+  {t:'big', eyebrow:'The reframe',
+   big:'You do not improve by learning <span class="deep">how</span> to write great songs. You improve by <span class="accent">writing</span> them.',
+   body:'Craft grows in the doing. The writers who get good are simply the writers who keep finishing songs. Everything today is built to get you doing exactly that.'},
+
+  {t:'part', eyebrow:'Part One', h:'Why the songs keep stalling',
+   lead:'It is almost never a lack of talent or ideas. Three quiet blocks stop more songwriters than any missing skill ever has.'},
+
+  {t:'pillar', num:'The first block', h:'Perfectionism',
+   body:'You polish bar one for a month and never reach the bridge. The song dies waiting to be good enough to continue. Finished beats perfect, every single time.'},
+
+  {t:'pillar', num:'The second block', h:'No rhythm, no time',
+   body:'Writing only when inspiration strikes means writing almost never. Without a repeating slot on the calendar, the song is always next week’s problem.'},
+
+  {t:'pillar', num:'The third block', h:'The fear of finishing',
+   body:'A finished song can be judged. An unfinished one stays safe in the drawer. So the drawer fills, and the catalogue never grows.'},
+
+  {t:'part', eyebrow:'Part Two', h:'The practice that fixes all three',
+   lead:'Not more theory. A structure that forces the song out of your head and onto the page, on a schedule, with people beside you.'},
+
+  {t:'list', eyebrow:'The method', h:'One song a week. On a deadline. In a term.',
+   pts:[
+     'Each week you get a prompt and a deadline, and you write one complete song to it.',
+     'The deadline does the heavy lifting: it ends the endless polishing and the waiting for inspiration.',
+     'Ten weeks to a term, so the practice has a shape, a start, and a finish line you can see.'
+   ]},
+
+  {t:'weeks', eyebrow:'Ten weeks, ten songs', h:'A finished song every week.'},
+
+  {t:'pillar', num:'The engine', h:'The peer-feedback circle',
+   body:'Every week you give and receive honest feedback inside a small group writing alongside you. Accountability, perspective, and belonging are what turn a good intention into a weekly habit.'},
+
+  {t:'big', eyebrow:'Why it works',
+   big:'Practice over theory. <span class="accent">Output over polish.</span>',
+   body:'A masterclass can teach you a technique. Only a practice can make you a songwriter. The weekly song plus the circle is the practice, and it is the thing that compounds.'},
+
+  {t:'part', eyebrow:'Part Three', h:'What ten weeks does to a writer',
+   lead:'This is not a hypothetical. It is the arithmetic of showing up.'},
+
+  {t:'list', eyebrow:'The arithmetic', h:'Ten weeks in, you are a different writer.',
+   pts:[
+     'Ten finished songs you can play, record, and release, where before there were ten first verses.',
+     'A repeatable way to write that does not depend on mood or motivation.',
+     'Proof, to yourself, that you finish what you start.'
+   ]},
+
+  {t:'big', eyebrow:'The real shift',
+   big:'You stop <span class="deep">trying</span> to write songs. You simply <span class="accent">become</span> someone who does.',
+   body:'That identity, prolific and unblocked, is the thing every other goal depends on: the album, the gigs, the release. It all starts with finishing this week’s song.'},
+
+  {t:'cred', eyebrow:'Who is teaching this', h:'Francesca de Valence',
+   body:'Award-winning songwriter, Master of Music Pedagogy, and the founder of I Heart Songwriting Club. She has taught this practice for over a decade, around the world and online.',
+   stats:[
+     ['30,000+','songs written through the practice'],
+     ['1,500+','songwriters, in 30+ countries'],
+     ['700+','songs in her own catalogue'],
+     ['10 yrs','running the weekly practice']
+   ]},
+
+  {t:'steps', eyebrow:'Where to take it', h:'Keep the practice going.',
+   steps:[
+     ['Write weekly','Join The Club and write a song a week with the community, term after term.'],
+     ['Start fresh','Take a 10-week course and write ten songs in ten weeks, guided the whole way.'],
+     ['Go pro','Apply to the Level Up Club mentorship to turn the practice into a released body of work.']
+   ]},
+
+  {t:'cta', eyebrow:'Your next song is this week',
+   big:'Come and <span class="accent">write one with us.</span>',
+   body:'Pick the path that fits where you are, and start finishing songs this week at iheartsongwritingclub.com.',
+   kicker:'iheartsongwritingclub.com',
+   disclaimer:'This masterclass is educational. No specific creative, career, or financial result is guaranteed. Results vary with the work you put in.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach(s=>{
+  const el=document.createElement('section'); el.className='slide '+s.t;
+  const eb = s.eyebrow?`<div class="eyebrow">${s.eyebrow}</div>`:'';
+  let h='';
+  if(s.t==='title'){
+    h=`${eb}<h1>${s.h}</h1><p class="lead muted" style="margin-top:26px">${s.lead}</p>`;
+  }else if(s.t==='big'||s.t==='cta'){
+    h=`${eb}<div class="big">${s.big}</div><p class="body">${s.body}</p>`;
+    if(s.kicker) h+=`<p class="kicker">${s.kicker}</p>`;
+    if(s.disclaimer) h+=`<p class="disclaimer">${s.disclaimer}</p>`;
+  }else if(s.t==='part'){
+    h=`${eb}<h2>${s.h}</h2><p class="lead">${s.lead}</p>`;
+  }else if(s.t==='pillar'){
+    h=`<div class="pillarnum">${s.num}</div><h2>${s.h}</h2><p class="body">${s.body}</p>`;
+  }else if(s.t==='list'){
+    h=`${eb}<h2>${s.h}</h2><ul class="pts">${s.pts.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  }else if(s.t==='weeks'){
+    let cells=''; for(let i=1;i<=10;i++){cells+=`<div class="week"><div class="n">Week ${i}</div><div class="note">&#9834;</div></div>`}
+    h=`${eb}<h2>${s.h}</h2><div class="weeks">${cells}</div>`;
+  }else if(s.t==='cred'){
+    h=`${eb}<h2>${s.h}</h2><p class="body">${s.body}</p><div class="stats">${s.stats.map(x=>`<div class="stat"><div class="num">${x[0]}</div><div class="lab">${x[1]}</div></div>`).join('')}</div>`;
+  }else if(s.t==='steps'){
+    h=`${eb}<h2>${s.h}</h2><div class="steps">${s.steps.map(x=>`<div class="step"><span class="k">${x[0]}</span><span>${x[1]}</span></div>`).join('')}</div>`;
+  }
+  el.innerHTML=h; deck.appendChild(el);
+});
+</script>
+</body>
+</html>
