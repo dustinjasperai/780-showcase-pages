@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The CMO Operating System — A Live Masterclass with Mandy Hornaday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6efe3;
+    --panel:#efe4d2;
+    --ink:#211018;
+    --accent:#e98b63;
+    --rule:#2a1420;
+    --dim:#b6a2ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #deck{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory}
+  .slide{
+    min-height:100vh;width:100%;
+    scroll-snap-align:start;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:8vh 9vw;position:relative;
+  }
+  .slide:nth-child(even){background:var(--panel)}
+  .eyebrow{
+    font-family:'Hanken Grotesk';font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;
+    font-size:clamp(11px,1.1vw,14px);color:var(--accent);margin-bottom:1.4rem;
+  }
+  h1{font-family:'Fraunces';font-weight:700;line-height:1.02;
+     font-size:clamp(34px,6vw,76px);letter-spacing:-0.01em;max-width:16ch}
+  h2{font-family:'Fraunces';font-weight:600;line-height:1.06;
+     font-size:clamp(28px,4.4vw,54px);letter-spacing:-0.01em;max-width:18ch}
+  .lede{font-size:clamp(17px,1.8vw,24px);line-height:1.5;max-width:46ch;margin-top:1.6rem;color:var(--rule)}
+  .big{font-family:'Fraunces';font-weight:600;font-size:clamp(26px,3.6vw,46px);line-height:1.12;max-width:20ch}
+  .num{font-family:'Fraunces';font-weight:700;font-size:clamp(44px,8vw,110px);color:var(--accent);line-height:1}
+  ul{list-style:none;margin-top:1.8rem;max-width:40ch}
+  li{font-size:clamp(16px,1.6vw,21px);line-height:1.5;padding:.55rem 0 .55rem 1.4rem;
+     border-bottom:1px solid rgba(42,20,32,.12);position:relative}
+  li:before{content:"";position:absolute;left:0;top:1.15rem;width:.5rem;height:.5rem;
+     background:var(--accent);border-radius:1px}
+  .layerline{display:flex;align-items:baseline;gap:1rem;margin-top:1rem}
+  .layerline .k{font-family:'Fraunces';font-weight:600;color:var(--accent);font-size:clamp(14px,1.3vw,18px);width:2.2rem}
+  .stack{margin-top:2rem;max-width:40ch}
+  .stack .row{padding:.6rem 0;border-top:1px solid rgba(42,20,32,.14);font-size:clamp(15px,1.5vw,20px)}
+  .stack .row:last-child{border-bottom:1px solid rgba(42,20,32,.14)}
+  .brandmark{position:absolute;top:5vh;left:9vw;font-family:'Fraunces';font-weight:700;
+     letter-spacing:.02em;font-size:14px;text-transform:uppercase;color:var(--rule)}
+  .brandmark span{color:var(--accent)}
+  .foot{position:absolute;bottom:5vh;left:9vw;font-size:12px;color:var(--dim);letter-spacing:.04em}
+  .disclaimer{margin-top:2rem;max-width:52ch;font-size:13px;line-height:1.5;color:var(--dim)}
+  .cta-box{margin-top:2rem;display:inline-block;background:var(--rule);color:var(--bg);
+     font-family:'Hanken Grotesk';font-weight:600;padding:1rem 1.8rem;border-radius:3px;
+     font-size:clamp(15px,1.5vw,19px);letter-spacing:.01em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:9}
+  @media(max-width:640px){.slide{padding:10vh 7vw}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div id="deck"></div>
+<script>
+const S=[
+  {t:'title', eyebrow:'A live masterclass for senior marketing leaders',
+   h:'The CMO Operating System',
+   sub:'How to build one connected foundation your function, and your AI, actually run on, so the work stops routing through you.'},
+
+  {t:'who', eyebrow:'Who this is for',
+   h:'You lead the function. So everything comes back to you.',
+   sub:'In-house CMOs, VPs and heads of marketing, and fractional leaders who are done running every answer, every approval, and every plan through themselves.'},
+
+  {t:'trap', eyebrow:'The trap',
+   h:'Too many answers live in your head.',
+   items:['Who owns this one?','Should we even do this?','Does it ladder to the strategy?','Can you approve before we ship?'],
+   sub:'The questions pile up, and they all route back to the same place. You.'},
+
+  {t:'reframe', eyebrow:'The reframe',
+   big:'You are not behind. You are unsystematized.',
+   sub:'This is not a people problem, and it is not a you problem. It is a systems gap, and a systems gap is something you can close.'},
+
+  {t:'part', eyebrow:'Part one', h:'Why the work keeps stalling'},
+
+  {t:'point', eyebrow:'The real reason',
+   h:'Work rarely stalls because the team is slow.',
+   sub:'It stalls when people are not sure who owns it, who approves it, or what happens next. Those gaps route straight back to you, and your week fills with holding it all together by hand.'},
+
+  {t:'point', eyebrow:'Why it got worse',
+   h:'AI was supposed to hand you your time back.',
+   sub:'Instead most of us have more tools, more chats, and more output, with no more clarity. The issue is not the AI. We added it to functions that were never documented, so it scaled the mess. Give it a real foundation and the same AI becomes real horsepower.'},
+
+  {t:'part', eyebrow:'Part two', h:'The five layers you build'},
+
+  {t:'layers', eyebrow:'Beneath the surface',
+   h:'One system, five connected layers.',
+   stack:['Strategy Core','Team & Decisions','Agile Planning','Command Center','Operating Rhythms'],
+   sub:'Underneath the marketing everyone sees, this is the foundation that makes it run.'},
+
+  {t:'layer', eyebrow:'Layer one', k:'01', h:'Strategy Core',
+   sub:'Your positioning, ICP, messaging, and goals in one source of truth, so the whole team works from the same strategy instead of a deck nobody can find.'},
+
+  {t:'layer', eyebrow:'Layer two', k:'02', h:'Team & Decisions',
+   sub:'Who owns what, who approves what, and how decisions get made. The questions that keep routing through you get an answer that is not you.'},
+
+  {t:'layer', eyebrow:'Layer three', k:'03', h:'Agile Planning',
+   sub:'Your roadmap, capacity, and investments planned on an agile cadence, so the plan moves as the business moves instead of going stale a month in.'},
+
+  {t:'layer', eyebrow:'Layer four', k:'04', h:'Command Center',
+   sub:'Your North Star, KPIs, and the investments behind them in one reporting view. When the CEO, CRO, or CFO asks what marketing is driving, the answer is already on a screen.'},
+
+  {t:'layer', eyebrow:'Layer five', k:'05', h:'Operating Rhythms',
+   sub:'Your meeting cadence, QBRs, and board prep designed on purpose, so the day to day runs on the system, not on you.'},
+
+  {t:'partners', eyebrow:'On top of the foundation',
+   h:'Your AI partners, working on your direction.',
+   items:['Strategic Sparring Partner, to pressure-test strategy','Momentum Maker, to answer who owns and who approves','Agile Planning Partner, to keep the plan current in minutes','Insights Spotter, to flag the moves that matter','Value Translator, to turn numbers into the story each room needs','Chief of Staff, to orchestrate the whole system'],
+   sub:'The system is yours. The AI works on your direction.'},
+
+  {t:'brain', eyebrow:'Assembled',
+   big:'Five layers, stitched into one Marketing Brain.',
+   sub:'Your strategy, team, plan, numbers, and rhythms in one connected workspace, with your best AI work becoming something you reuse instead of something you rebuild.'},
+
+  {t:'part', eyebrow:'Part three', h:'What changes when it runs'},
+
+  {t:'change', eyebrow:'The payoff',
+   h:'Work on your department, not just in it.',
+   sub:'Ownership and approvals get answered without you. Your plan moves as the business moves. And the week you win back goes to the strategy, creativity, and bigger bets only you can make.'},
+
+  {t:'credibility', eyebrow:'Built by a CMO, for CMOs',
+   h:'This is not built from theory.',
+   sub:'Mandy Hornaday scaled a company from $50M to $750M as its marketing executive, led teams across full-time, contractor, and agency talent, and navigated multiple acquisitions. Her own fractional practice scaled past $40,000 a month on this exact system. She is living it right now.'},
+
+  {t:'cta', eyebrow:'Your next step',
+   h:'Build the system you own.',
+   sub:'Six weeks from now you will have a connected operating system for your marketing function, yours to keep, at this company, the next one, or across every client. Join the waitlist to hear first when the next cohort opens.',
+   cta:'Join the waitlist at growthactivated.com',
+   disclaimer:'This masterclass is educational. No specific business outcome, revenue figure, or hiring result is guaranteed. Results vary with your situation, your market, and the work you put in.'}
+];
+
+const deck=document.getElementById('deck');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach(s=>{
+  const d=document.createElement('section');d.className='slide';
+  let h='<div class="brandmark">Growth <span>|</span> Activated</div>';
+  if(s.eyebrow) h+=`<div class="eyebrow">${esc(s.eyebrow)}</div>`;
+  if(s.num) h+=`<div class="num">${esc(s.num)}</div>`;
+  if(s.h) h+=`<h1>${esc(s.h)}</h1>`;
+  if(s.big) h+=`<div class="big">${esc(s.big)}</div>`;
+  if(s.k && s.h){ /* layer already rendered h above; prefix number */ }
+  if(s.stack){h+='<div class="stack">';s.stack.forEach(r=>h+=`<div class="row">${esc(r)}</div>`);h+='</div>';}
+  if(s.items){h+='<ul>';s.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+='</ul>';}
+  if(s.sub) h+=`<p class="lede">${esc(s.sub)}</p>`;
+  if(s.cta) h+=`<div class="cta-box">${esc(s.cta)}</div>`;
+  if(s.disclaimer) h+=`<p class="disclaimer">${esc(s.disclaimer)}</p>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+const prog=document.getElementById('prog');
+deck.addEventListener('scroll',()=>{
+  const max=deck.scrollHeight-deck.clientHeight;
+  prog.style.width=(max>0?(deck.scrollTop/max*100):0)+'%';
+});
+</script>
+</body>
+</html>
