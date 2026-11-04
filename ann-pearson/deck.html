@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Indispensable Paralegal Team | Ann Pearson, Paralegal Boot Camp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faf8f6;
+    --ink:#00093a;
+    --ink-soft:#33373d;
+    --rule:#e2ddd4;
+    --panel:#f4eadd;
+    --accent:#0060d1;
+    --spark:#ffe674;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Lato',-apple-system,sans-serif;
+    background:var(--ink);
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    position:relative;
+    width:min(100vw,1200px);
+    aspect-ratio:16/9;
+    background:var(--bg);
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+  }
+  .slide{
+    position:absolute;inset:0;
+    padding:7% 8%;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .slide.active{display:flex;}
+  .kicker{
+    font-family:'Lato',sans-serif;font-weight:900;
+    text-transform:uppercase;letter-spacing:.18em;
+    font-size:clamp(10px,1.2vw,15px);
+    color:var(--accent);margin-bottom:18px;
+  }
+  h1{font-family:'Archivo Black',sans-serif;font-weight:400;
+    font-size:clamp(28px,5vw,62px);line-height:1.04;
+    color:var(--ink);letter-spacing:-.01em;}
+  h2{font-family:'Archivo Black',sans-serif;font-weight:400;
+    font-size:clamp(22px,3.4vw,42px);line-height:1.1;
+    color:var(--ink);margin-bottom:22px;letter-spacing:-.01em;}
+  p{font-size:clamp(15px,1.7vw,23px);line-height:1.55;color:var(--ink-soft);max-width:30ch;}
+  .lead p{max-width:34ch;}
+  .big{font-size:clamp(19px,2.3vw,30px);color:var(--ink);font-weight:700;max-width:26ch;}
+  .promise{margin-top:26px;font-size:clamp(15px,1.8vw,24px);color:var(--ink-soft);max-width:34ch;}
+  ul{list-style:none;margin-top:10px;}
+  li{position:relative;padding-left:30px;margin-bottom:16px;
+    font-size:clamp(15px,1.7vw,23px);color:var(--ink-soft);max-width:38ch;line-height:1.45;}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:12px;background:var(--accent);}
+  li b{color:var(--ink);}
+  .tab{display:inline-block;background:var(--ink);color:var(--bg);
+    font-family:'Archivo Black',sans-serif;font-size:clamp(12px,1.4vw,18px);
+    padding:7px 16px;margin-bottom:20px;letter-spacing:.02em;}
+  .spark{background:linear-gradient(transparent 62%,var(--spark) 62%);padding:0 2px;}
+  .rulecol{border-left:3px solid var(--accent);padding-left:26px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start;}
+  .step{border-top:2px solid var(--ink);padding-top:14px;}
+  .step .n{font-family:'Archivo Black',sans-serif;color:var(--accent);font-size:clamp(14px,1.6vw,20px);}
+  .step h3{font-family:'Archivo Black',sans-serif;font-weight:400;color:var(--ink);font-size:clamp(16px,1.9vw,26px);margin:6px 0 8px;}
+  .step p{font-size:clamp(13px,1.4vw,18px);max-width:24ch;}
+  .credit li{max-width:40ch;}
+  .cta h2{color:var(--ink);}
+  .cta .btn{display:inline-block;margin-top:24px;background:var(--accent);color:#fff;
+    font-family:'Archivo Black',sans-serif;font-size:clamp(14px,1.7vw,22px);
+    padding:16px 30px;letter-spacing:.01em;}
+  .disclaimer{margin-top:30px;font-size:clamp(10px,1.1vw,13px);color:var(--ink-soft);max-width:60ch;opacity:.8;}
+  .footer-brand{position:absolute;left:8%;bottom:5%;font-weight:900;letter-spacing:.14em;
+    text-transform:uppercase;font-size:clamp(9px,1vw,12px);color:var(--ink-soft);opacity:.7;}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:16px;font-family:'Lato',sans-serif;
+    color:#cfd3df;font-size:13px;z-index:10;}
+  #nav button{background:var(--accent);color:#fff;border:none;font-family:'Lato',sans-serif;
+    font-weight:700;padding:7px 14px;cursor:pointer;}
+  #count{min-width:54px;text-align:center;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav">
+  <button id="prev">Prev</button>
+  <span id="count"></span>
+  <button id="next">Next</button>
+</div><script>
+const S=[
+  {t:'title',k:'A Paralegal Boot Camp masterclass',h:'The Indispensable Paralegal Team',promise:'How to turn new and mid-level paralegals into billable, case-owning strategists your attorneys stop double-checking.'},
+
+  {t:'who',k:'Who this is for',h:'The firm that keeps rebuilding the same hire',body:'Managing partners and legal-support leaders who keep hiring capable paralegals, then watch the work still land back on the attorney’s desk.'},
+
+  {t:'trap',k:'The trap',h:'You hired help. You still own the file.',body:'Most firms train paralegals on tasks: file this, cite-check that, calendar the deadline. Tasks get done. Judgment never transfers. So the attorney stays the bottleneck on every case.'},
+
+  {t:'trap',k:'The trap · up close',h:'Monday morning, every week',body:'The attorney opens the paralegal’s work and re-does the thinking anyway. Not because the paralegal is lazy. Because nobody ever showed them how to carry the case, only how to process the task in front of them.'},
+
+  {t:'reframe',k:'The reframe',big:'A paralegal who only does tasks will always need an attorney watching. A paralegal who owns outcomes gives the attorney their time back.',sub:'The gap between those two people is not talent. It is a system nobody taught them.'},
+
+  {t:'part',k:'Part one · the real cost',h:'Why "give it ten years" is the only plan most firms have',body:'The default path is to wait a decade for a paralegal to figure it out by osmosis. That is ten years of attorney time spent re-doing work, and most paralegals leave before year three.'},
+
+  {t:'part',k:'Part one · the real cost',h:'Three costs the firm never puts on the invoice',list:[['Attorney hours','spent reviewing work a trained paralegal should own outright.'],['Billable leakage','tasks that should bill at the paralegal rate get absorbed by the attorney or written off.'],['Turnover','capable people leave because nobody built them a path to confidence.']]},
+
+  {t:'part',k:'Part one · the real cost',h:'The billable-hour math nobody runs',body:'Every task the attorney absorbs instead of the paralegal is time billed at the wrong rate, or not billed at all. A support team that owns its share of the file is not a soft benefit. It is recovered revenue on every matter.'},
+
+  {t:'framework',k:'Part two · the method',h:'The Paralegal Performance System',body:'The framework I built from twenty years inside AmLaw litigation and paralegal management. It moves a hire from task-doer to case strategist in three layers, not ten years.'},
+
+  {t:'steps',k:'Part two · the method',h:'The three layers',steps:[['01','Foundation','Establish ownership and standards. The paralegal learns to read the whole case, not just the assignment in front of them.'],['02','Reinforcement','Accountability and group coaching turn new habits into default behavior, so the skill holds under deadline pressure.'],['03','Customization','Training mapped to your practice area and your firm’s standards, so what they learn is what you actually need.']]},
+
+  {t:'habit',k:'Part two · the behaviors',h:'The Seven Habits of the Indispensable Paralegal',list:[['Master the technology','the paralegal who owns e-discovery and AI tools works cases nobody else on the team can.'],['Check the rules, every time','assume nothing, verify everything, before it reaches the attorney.'],['Be the calm, not the storm','a stressed attorney does not need a stressed paralegal under a filing deadline.']]},
+
+  {t:'habit',k:'Part two · the behaviors',h:'The signature move: begin with the end in mind',body:'The living trial notebook: build it the day the complaint arrives, not three weeks before trial. The paralegal who does this stops reacting to the case and starts driving it.'},
+
+  {t:'habit',k:'Part two · the inflection',h:'AI will not replace your paralegals. It will sort them.',body:'AI usage among legal professionals jumped from 19% to 79% in a single year. The paralegals who learn to use it for review, research, and drafting will carry more of the case. The ones who wait become the road, not the steamroller.'},
+
+  {t:'picture',k:'Part three · the payoff',h:'The first ninety days at your firm',list:[['The attorney stops re-checking','work goes out at the paralegal’s standard, not the attorney’s review queue.'],['Cases move earlier','the paralegal anticipates the next filing instead of waiting to be told.'],['The bench gets deeper','new hires ramp in months, so one departure no longer stalls the firm.']]},
+
+  {t:'part',k:'Part three · the payoff',h:'"But we don’t have time to train"',body:'Neither did the firms already doing it. The point of a system is that it does not depend on a senior attorney finding spare hours. The training carries the structure, and the group coaching carries the accountability, so your people build the habit without your calendar.'},
+
+  {t:'why',k:'Part three · why me',h:'I did this job before I taught it',credit:['Litigation paralegal at an AmLaw-50 firm: antitrust, product liability, construction litigation.','Paralegal Manager at McKenna Long & Aldridge, leading paralegals and case teams across Atlanta, New York, and San Diego.','Founded Paralegal Boot Camp in 2010; trained legal-support teams at firms of every size since.']},
+
+  {t:'part',k:'Part three · why me',h:'Built for how firms actually work',body:'This is not a generic CLE catalog. It is a performance system built by someone who managed paralegals across three offices and knows exactly where the work breaks down between the assignment and the attorney’s desk.'},
+
+  {t:'cta',k:'Bring this to your firm',h:'Build the team, not just the hire',body:'If your firm is ready to stop re-doing paralegal work, the Paralegal Boot Camp team-training program installs this system across your support staff, with group coaching, mapped to your practice areas.',cta:'Talk to Ann about team training',disc:'Educational only. No specific result is guaranteed. Results vary by firm, team, caseload, and practice area.'},
+];
+
+const stage=document.getElementById('stage');
+function slideHTML(s){
+  let inner='';
+  if(s.k) inner+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='title'){
+    inner+=`<h1>${s.h}</h1><p class="promise">${s.promise}</p>`;
+  }else if(s.t==='reframe'){
+    inner=`<div class="rulecol"><p class="big spark-wrap">${s.big}</p><p class="promise">${s.sub}</p></div>`;
+    if(s.k) inner=`<div class="kicker">${s.k}</div>`+inner;
+  }else if(s.steps){
+    inner+=`<h2>${s.h}</h2><div class="two" style="grid-template-columns:repeat(3,1fr)">`;
+    s.steps.forEach(st=>{inner+=`<div class="step"><div class="n">${st[0]}</div><h3>${st[1]}</h3><p>${st[2]}</p></div>`;});
+    inner+=`</div>`;
+  }else if(s.list){
+    inner+=`<h2>${s.h}</h2><ul>`;
+    s.list.forEach(l=>{inner+=`<li><b>${l[0]}</b> — ${l[1]}</li>`;});
+    inner+=`</ul>`;
+  }else if(s.credit){
+    inner+=`<h2>${s.h}</h2><ul class="credit">`;
+    s.credit.forEach(l=>{inner+=`<li>${l}</li>`;});
+    inner+=`</ul>`;
+  }else if(s.t==='cta'){
+    inner+=`<h2>${s.h}</h2><p class="promise">${s.body}</p><span class="btn">${s.cta}</span><p class="disclaimer">${s.disc}</p>`;
+  }else{
+    if(s.h) inner+=`<h2>${s.h}</h2>`;
+    if(s.body) inner+=`<p>${s.body}</p>`;
+  }
+  inner+=`<div class="footer-brand">Paralegal Boot Camp · Ann Pearson</div>`;
+  return inner;
+}
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' active':'');d.innerHTML=slideHTML(s);stage.appendChild(d);});
+let cur=0;const slides=document.querySelectorAll('.slide');const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,i)=>el.classList.toggle('active',i===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
