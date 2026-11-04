@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Identity Trap — Life Beyond Clinical Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e8f0ef;        /* pale teal wash, derived from brand teal #176e74 */
+    --panel:#ffffff;
+    --rule:#cfe0dc;
+    --ink:#17292b;       /* deep slate-teal */
+    --muted:#536061;
+    --accent:#176e74;    /* brand teal, verbatim from brand.json */
+    --accent-soft:#d6e8e6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 24px 120px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:56px 60px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(23,41,43,.03);position:relative}
+  .slide.title{background:var(--ink);color:#e8f0ef;border-color:var(--ink)}
+  .slide.accentfill{background:var(--accent);color:#eef6f5;border-color:var(--accent)}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin:0 0 18px}
+  .slide.title .eyebrow,.slide.accentfill .eyebrow{color:rgba(255,255,255,.72)}
+  h1{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:52px;line-height:1.06;
+    margin:0 0 20px;letter-spacing:-.01em}
+  h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:40px;line-height:1.1;
+    margin:0 0 18px;letter-spacing:-.01em}
+  p{font-size:20px;line-height:1.5;margin:0 0 16px;max-width:60ch}
+  .lead{font-size:23px;color:var(--muted)}
+  .slide.title .lead{color:rgba(232,240,239,.82)}
+  .slide.accentfill .lead{color:rgba(238,246,245,.9)}
+  ul{margin:8px 0 0;padding:0;list-style:none}
+  li{font-size:20px;line-height:1.5;padding:14px 0 14px 34px;position:relative;
+    border-top:1px solid var(--rule)}
+  li:before{content:"";position:absolute;left:0;top:22px;width:14px;height:14px;
+    border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent)}
+  .r3{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap}
+  .r3 .step{flex:1;min-width:210px;background:var(--bg);border:1px solid var(--rule);
+    border-radius:14px;padding:22px}
+  .r3 .step .k{font-family:"Newsreader",serif;font-size:26px;color:var(--accent);margin:0 0 8px}
+  .r3 .step p{font-size:17px;color:var(--muted);margin:0}
+  .foot{font-size:14px;color:var(--muted);margin-top:26px;max-width:66ch;line-height:1.5}
+  .cta-line{font-size:22px;color:#eef6f5;font-weight:500;margin-top:10px}
+  .num{font-size:14px;color:var(--muted);letter-spacing:.1em;position:absolute;top:22px;right:26px}
+  .slide.title .num,.slide.accentfill .num{color:rgba(255,255,255,.5)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass from Life Beyond Clinical Practice',
+   h:'The Identity Trap',
+   lead:'Why the success you worked so hard for can be the thing keeping you stuck, and the path out.'},
+
+  {t:'who', eyebrow:'Who this is for',
+   h:'You trained for years. You became very good. And lately it feels too small.',
+   lead:'This is for clinically trained professionals who sense they are capable of more than the role, the title, or the career path they built.',
+   list:['You have not stopped caring. You have outgrown the container.',
+         'You keep circling the same thought and talking yourself out of it.',
+         'You do not want to waste your training. You want it to mean more.']},
+
+  {t:'trap', eyebrow:'The trap',
+   h:'Everyone calls it a career problem. It is an identity problem.',
+   lead:'The reason the obvious moves do not fix it is that the thing holding you in place is not the job. It is who you believe you are allowed to be.'},
+
+  {t:'reframe', kind:'accentfill', eyebrow:'The reframe',
+   h:'Your success became a constraint, not an enabler.',
+   lead:'The identity you built to succeed is now the fence around what you will let yourself consider. That is not failure. It is the predictable cost of being good at one thing for a long time.'},
+
+  {t:'firsttry', eyebrow:'What most clinicians try first',
+   h:'A new job. A side gig. A course. Then the same feeling returns.',
+   lead:'The usual moves treat the symptom. They change the setting without changing the self that walks into it, so the dissatisfaction follows you in.',
+   list:['Chasing a job list before you know what you are solving for.',
+         'Adding a certificate on top of an identity you have not examined.',
+         'Waiting for certainty that never arrives.']},
+
+  {t:'part1', eyebrow:'Part one',
+   h:'Clarity has to come before the leap.',
+   lead:'A career pivot without clarity is simply a role change. It usually leads straight back to the same dissatisfaction, in a new building with a new logo.'},
+
+  {t:'clarityq', eyebrow:'The clarity question',
+   h:'What are you actually solving for?',
+   lead:'Not "what job could I get" but "what do I need this next chapter to give me that this one stopped giving." Clarity is the answer to that question, and everything downstream depends on it.',
+   list:['Freedom, impact, income, autonomy: name the real one.',
+         'Clarity is not a nicer title. It is a direction you can test.',
+         'Get it right and the options reorganize themselves.']},
+
+  {t:'part2intro', eyebrow:'Part two: the method',
+   h:'The R3 path out of the identity trap.',
+   lead:'Three moves, in order. Each one unlocks the next. You do not redesign a career on top of an identity you have not yet released.'},
+
+  {t:'r3', eyebrow:'The R3 Model',
+   h:'Release, Redefine, Redesign.',
+   r3:[
+     {k:'Release', p:'Let go of the identity constraints clinical success quietly built, the "I am only a [profession]" that now runs the decisions.'},
+     {k:'Redefine', p:'Decide who you are beyond the clinical role, using the strengths underneath the title rather than the title itself.'},
+     {k:'Redesign', p:'Build a career on that new definition, deliberately, not by accident or by whoever offers you a job first.'}
+   ]},
+
+  {t:'release', eyebrow:'Release',
+   h:'You are not abandoning your training. You are loosening its grip on "who am I?"',
+   lead:'The skills, the judgment, the years are yours forever. What you release is the belief that they are the only thing you are permitted to be.'},
+
+  {t:'redefine', eyebrow:'Redefine',
+   h:'Name the strengths under the role, not the role.',
+   lead:'Clinicians are trained to diagnose, to hold responsibility, to translate complexity for frightened people. Those strengths travel anywhere. The job title does not.'},
+
+  {t:'redesign', eyebrow:'Redesign',
+   h:'Design the career on purpose.',
+   lead:'Once the identity is released and redefined, the choice stops looking like "stay or quit" and starts looking like a shape you can actually build toward.'},
+
+  {t:'concrete', eyebrow:'What that looks like',
+   h:'A career with more than one room in it.',
+   lead:'Redesigned does not mean one dramatic jump. It often means a portfolio: some clinical, some teaching, some advising, some building, arranged around the clarity you found.',
+   list:['Keep the parts of practice you still love, on your terms.',
+         'Add the work that uses the strengths the title hid.',
+         'Hold it as a whole, not a gamble you bet everything on.']},
+
+  {t:'expansion', eyebrow:'Career Identity Expansion',
+   h:'You do not have to pick one self.',
+   lead:'The goal is not to replace the clinician with something else. It is to expand so more than one you can exist at once: clinician and educator, and leader, and whatever is next.',
+   list:['Multidimensional, not a single hard pivot.',
+         'Your clinical identity stays. It just stops being the ceiling.',
+         'Expansion, not amputation.']},
+
+  {t:'courage', kind:'accentfill', eyebrow:'The real decision',
+   h:'Choose courage over certainty.',
+   lead:'Certainty is exactly what kept you still. You will not get a guarantee before you move. You will get clarity, a method, and the next honest step, which is how every real pivot actually starts.'},
+
+  {t:'cost', eyebrow:'The cost of waiting',
+   h:'Another year of thinking about it is another year of the same Monday.',
+   lead:'Nothing bad happens if you wait. That is the problem. The trap is comfortable, which is why so many good clinicians stay in it for a decade longer than they meant to.'},
+
+  {t:'whyme', eyebrow:'Why I teach this',
+   h:'I taught optometry for twelve years before I walked my own version of this.',
+   lead:'I am an optometrist and educator who hit the exact trap I just described: accomplished, respected, and quietly certain there had to be more. The R3 path is the one I built going through it, and now use with other health professionals.'},
+
+  {t:'notthis', eyebrow:'What this is not',
+   h:'This is not "quit medicine" advice.',
+   lead:'Plenty of people in this work stay clinical and simply stop feeling trapped by it. The point is not the exit. The point is that the decision becomes yours again, made from clarity instead of from the fence your success built.'},
+
+  {t:'cta', kind:'accentfill', eyebrow:'Your next step',
+   h:'Start with clarity, not a resignation letter.',
+   lead:'If this named something you have been circling, the first move is a conversation about what you are actually solving for.',
+   ctaline:'Book a Career Clarity Session, or join the waitlist for the Career Identity Expansion Lab.',
+   foot:'This masterclass is educational. It shares a framework for thinking about career identity and is not individualized career, financial, legal, or medical advice. Outcomes vary from person to person and nothing here is a guarantee of any particular result.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(s.t==='title'?' title':'')+(s.kind==='accentfill'?' accentfill':'');
+  let html='<div class="num">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>';
+  if(s.eyebrow) html+='<p class="eyebrow">'+s.eyebrow+'</p>';
+  if(s.t==='title'){ html+='<h1>'+s.h+'</h1>'; }
+  else { html+='<h2>'+s.h+'</h2>'; }
+  if(s.lead) html+='<p class="lead">'+s.lead+'</p>';
+  if(s.r3){ html+='<div class="r3">'; s.r3.forEach(x=>{ html+='<div class="step"><div class="k">'+x.k+'</div><p>'+x.p+'</p></div>'; }); html+='</div>'; }
+  if(s.list){ html+='<ul>'; s.list.forEach(x=>{ html+='<li>'+x+'</li>'; }); html+='</ul>'; }
+  if(s.ctaline) html+='<p class="cta-line">'+s.ctaline+'</p>';
+  if(s.foot) html+='<p class="foot">'+s.foot+'</p>';
+  el.innerHTML=html;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
