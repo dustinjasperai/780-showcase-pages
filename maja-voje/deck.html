@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTM Strategist — Live Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafafa;        /* brand dominant ground (brand.json, 54 uses) */
+    --panel:#efefef;     /* brand body bg rgb(239,239,239) */
+    --ink:#1a1a1a;       /* brand text/header near-black (33 uses) */
+    --muted:#55575c;
+    --accent:#9453ff;    /* brand purple button/link bg (brand.json, 7 uses) */
+    --rule:#1a1a1a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--panel);color:var(--ink);font-family:'Inter',system-ui,sans-serif}
+  .deck{max-width:1040px;margin:0 auto;padding:40px 18px 80px}
+  .slide{background:var(--bg);border:1px solid #e3e3e3;border-top:6px solid var(--accent);
+    border-radius:4px;padding:56px 60px;margin:0 0 26px;min-height:520px;
+    display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .num{position:absolute;top:18px;right:24px;font:600 13px 'Chakra Petch';color:var(--muted);letter-spacing:.06em}
+  .kick{font:600 14px 'Chakra Petch';letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font:700 60px/1.04 'Chakra Petch';letter-spacing:-.01em;margin-bottom:22px}
+  h2{font:700 42px/1.08 'Chakra Petch';letter-spacing:-.01em;margin-bottom:20px}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink);max-width:40ch}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);max-width:46ch;margin-top:14px}
+  ul{list-style:none;margin-top:14px}
+  li{font-size:21px;line-height:1.4;padding:16px 0 16px 42px;position:relative;border-bottom:1px solid #e6e6e6;max-width:52ch}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:0;top:22px;width:22px;height:4px;background:var(--accent);border-radius:2px}
+  .big{font:700 150px/1 'Chakra Petch';color:var(--accent);letter-spacing:-.03em}
+  .path{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .step{font:600 15px 'Chakra Petch';letter-spacing:.04em;background:var(--panel);border:1px solid #ddd;
+    padding:11px 16px;border-radius:3px}
+  .step.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .dark{background:var(--ink);border-top-color:var(--accent)}
+  .dark .kick{color:#c7a9ff}
+  .dark h1,.dark h2{color:#fafafa}
+  .dark .lead{color:#ededed}
+  .dark .sub{color:#b9bbc0}
+  .pillar{font:700 15px 'Chakra Petch';letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .disc{font-size:14px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:58ch}
+  .cta-row{margin-top:24px;font:600 20px 'Chakra Petch';color:var(--ink)}
+  .cta-row span{color:var(--accent)}
+  @media(max-width:640px){.slide{padding:36px 26px;min-height:auto}h1{font-size:40px}h2{font-size:30px}.big{font-size:96px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Maja Voje', h:'The 74% Problem',
+   lead:'Why great products fail at go-to-market, and the method to reach product-market fit on purpose.'},
+
+  {t:'agenda', kick:'The next hour', h:'What we will work through.',
+   lead:'One idea, four decisions, and a way to run them deliberately:',
+   list:['Why most launches stall, and where.','The one buyer you sell to first.','The motion that actually fits that buyer.','How to turn traction into a repeatable system.']},
+
+  {t:'who', kick:'Who this is for', h:'You built something real.',
+   lead:'Founders and early growth teams at B2B, AI and tech companies, approaching launch or already shipped, and wondering why traction is slower than the product deserves.'},
+
+  {t:'trap', kick:'The trap', h:'"We just need more marketing."',
+   lead:'So you add more channels, more content, more spend. The pipeline stays thin. The problem was never the volume of marketing.',
+   sub:'It was that the go-to-market was never decided on purpose.'},
+
+  {t:'dark', kick:'The reframe', h:'It is almost never the product.',
+   lead:'74% of products fail not because the product is bad, but because of go-to-market mistakes.',
+   sub:'Which is good news. Go-to-market is a decision you can make well.'},
+
+  {t:'cost', kick:'What it costs', h:'The expensive version of this.',
+   lead:'A go-to-market left to chance burns the two things a young company cannot get back: runway and time in market.',
+   sub:'Every month aimed at the wrong buyer with the wrong motion is a month a competitor spends aimed at the right one.'},
+
+  {t:'part', kick:'Part one', h:'The real problem',
+   lead:'Most teams go to market before they have chosen two things: who they sell to first, and how they reach them.',
+   sub:'Without those two decisions, every channel underperforms, because none of them was aimed.'},
+
+  {t:'method', kick:'Part two', h:'The GTM Strategist method',
+   lead:'A path from a product to product-market fit, run deliberately instead of by luck.',
+   path:['Research','ICP','Motion','Scale'], on:0},
+
+  {t:'pillar', kick:'Step one', pillar:'Research', h:'Start from evidence, not opinion.',
+   lead:'Before anything else, understand the market, the buyer and the alternatives well enough that the next decisions are grounded.',
+   sub:'Research is cheap. Guessing in-market is not.',
+   path:['Research','ICP','Motion','Scale'], on:1},
+
+  {t:'pillar', kick:'Step two', pillar:'Initial Customer Profile', h:'Pick your beachhead.',
+   lead:'The single highest-leverage decision: the one initial customer profile that gives you real, repeatable early traction.',
+   sub:'Choose it narrow on purpose. Scattered beats nothing, but a beachhead beats scattered.',
+   path:['Research','ICP','Motion','Scale'], on:2},
+
+  {t:'pillar', kick:'Step three', pillar:'Go-To-Market Motion', h:'Choose how you reach them.',
+   lead:'Product-led, sales-led, community-led. Each fits a different buyer and stage. Most teams default to one instead of choosing the right one.',
+   sub:'The motion decides your funnel, your pricing surface, and your first hires.',
+   path:['Research','ICP','Motion','Scale'], on:3},
+
+  {t:'pillar', kick:'Step four', pillar:'Scale', h:'Turn traction into a system.',
+   lead:'Once the ICP and the motion are proven, scaling is a system, not a scramble: the 100-step checklist that turns a working launch into a repeatable operation.',
+   path:['Research','ICP','Motion','Scale'], on:4},
+
+  {t:'ai', kick:'A note for AI founders', h:'AI changes the surface, not the method.',
+   lead:'Launching an AI or deep-tech product profitably still comes down to the same decisions: who first, which motion, and how you prove value fast.',
+   sub:'The playbooks half-apply. The method still holds.'},
+
+  {t:'mistakes', kick:'Where it goes wrong', h:'The three usual misses.',
+   lead:'Almost every stalled launch traces back to one of these:',
+   list:['Selling to everyone, so landing with no one.','Running a motion borrowed from a company at a different stage.','Scaling spend before the ICP and motion were actually proven.']},
+
+  {t:'look', kick:'When it clicks', h:'From guesswork to a plan.',
+   lead:'When go-to-market is decided on purpose:',
+   list:['You know exactly who you are selling to first.','You run the one motion that fits that buyer.','Every channel is aimed, so spend stops leaking.','Growth becomes a system you can repeat and hand off.']},
+
+  {t:'whyme', kick:'Why listen to me', h:'This is the work I do.',
+   lead:'15 years in growth across Google, Rocket Internet, Bayer and Heineken. 850+ teams advised. Author of the bestselling Go-To-Market Strategist. I have seen where launches break, and where they take off.'},
+
+  {t:'recap', kick:'In one line', h:'Decide your go-to-market on purpose.',
+   lead:'Research the market, pick one buyer, choose the motion that fits, then scale what is proven.',
+   sub:'That sequence is the difference between a launch that stalls and one that compounds.'},
+
+  {t:'cta', kick:'Your next move', h:'Make your go-to-market a decision.',
+   lead:'If this is the way you want to work, the full method is yours to keep going with.',
+   ctarow:'Next step: the GTM Strategist method and masterclass',
+   disc:'This masterclass is educational. It shares a method and a way of thinking about go-to-market. Results vary by product, market and execution; nothing here is a guarantee of revenue, funding, or any specific outcome.'}
+];
+
+const d = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide' + (s.t==='dark'?' dark':'');
+  let h = '';
+  h += '<div class="num">'+(i+1)+' / '+S.length+'</div>';
+  if(s.kick) h += '<div class="kick">'+s.kick+'</div>';
+  if(s.pillar) h += '<div class="pillar">'+s.pillar+'</div>';
+  if(s.t==='dark' && s.lead && s.h){ h += '<h1>'+s.h+'</h1>'; }
+  else if(s.t==='title'){ h += '<h1>'+s.h+'</h1>'; }
+  else { h += '<h2>'+s.h+'</h2>'; }
+  if(s.big) h += '<div class="big">'+s.big+'</div>';
+  if(s.lead) h += '<p class="lead">'+s.lead+'</p>';
+  if(s.sub) h += '<p class="sub">'+s.sub+'</p>';
+  if(s.list){ h += '<ul>'; s.list.forEach(x=>h+='<li>'+x+'</li>'); h += '</ul>'; }
+  if(s.path){ h += '<div class="path">'; s.path.forEach((p,pi)=>h+='<span class="step'+(pi+1===s.on?' on':'')+'">'+p+'</span>'); h += '</div>'; }
+  if(s.ctarow) h += '<div class="cta-row">'+s.ctarow.replace('GTM Strategist','<span>GTM Strategist</span>')+'</div>';
+  if(s.disc) h += '<p class="disc">'+s.disc+'</p>';
+  el.innerHTML = h;
+  d.appendChild(el);
+});
+</script>
+</body>
+</html>
