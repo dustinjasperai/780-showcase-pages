@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Second in Command Scorecard — masterclass deck</title>
+<style>
+  :root{ --bg:#070e18; --accent:#f2b542; --ink:#f7f3ea; --muted:#aebbcd; --line:#2a3b55; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:'Schibsted Grotesk',system-ui,sans-serif;}
+  .wrap{display:flex;flex-direction:column;height:100vh;}
+  .stage{flex:1;position:relative;overflow:hidden;}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--bg);}
+  .bar{display:flex;align-items:center;justify-content:center;gap:18px;
+    padding:12px 16px;background:#0f1b2d;border-top:1px solid var(--line);}
+  button{font-family:inherit;font-weight:700;font-size:15px;color:#0f1b2d;background:var(--accent);
+    border:0;border-radius:9px;padding:9px 20px;cursor:pointer;}
+  button:disabled{opacity:.35;cursor:default;}
+  .count{font-size:14px;color:var(--muted);letter-spacing:.08em;min-width:90px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage"><iframe id="frame" src="01.html" title="Slide"></iframe></div>
+  <div class="bar">
+    <button id="prev" aria-label="Previous slide">Prev</button>
+    <div class="count"><span id="cur">1</span> / <span id="total">23</span></div>
+    <button id="next" aria-label="Next slide">Next</button>
+  </div>
+</div>
+<script>
+  var TOTAL = 23, i = 1;
+  var frame = document.getElementById('frame');
+  var cur = document.getElementById('cur');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function render(){
+    frame.src = pad(i) + '.html';
+    cur.textContent = i;
+    prev.disabled = (i <= 1);
+    next.disabled = (i >= TOTAL);
+  }
+  function go(n){ i = Math.min(TOTAL, Math.max(1, n)); render(); }
+  prev.addEventListener('click', function(){ go(i - 1); });
+  next.addEventListener('click', function(){ go(i + 1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { go(i + 1); e.preventDefault(); }
+    if(e.key === 'ArrowLeft' || e.key === 'PageUp') { go(i - 1); e.preventDefault(); }
+    if(e.key === 'Home') go(1);
+    if(e.key === 'End') go(TOTAL);
+  });
+  render();
+</script>
+</body>
+</html>
