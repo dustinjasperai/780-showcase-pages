@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train Around Your Life — BPC Performance Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f2f0; --panel:#fffdfc; --rule:#e7dcd8;
+    --ink:#141414; --muted:#5d5751; --accent:#c12938;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Roboto",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(100vw,1180px);aspect-ratio:16/9;position:relative}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;
+    justify-content:center;background:var(--bg)}
+  .slide.on{display:flex}
+  h1{font-family:"Archivo",sans-serif;font-weight:800;font-size:58px;line-height:1.02;letter-spacing:-.5px}
+  h2{font-family:"Archivo",sans-serif;font-weight:800;font-size:40px;line-height:1.05;letter-spacing:-.3px}
+  .eyebrow{font-family:"Archivo",sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:3px;font-size:14px;color:var(--accent);margin-bottom:18px}
+  p.lead{font-size:23px;line-height:1.5;color:var(--muted);margin-top:20px;max-width:30ch}
+  p.body{font-size:20px;line-height:1.55;color:var(--ink);margin-top:16px;max-width:40ch}
+  .big{font-size:30px}
+  .num{font-family:"Archivo",sans-serif;font-weight:800;color:var(--accent);font-size:22px}
+  ul{margin-top:22px;list-style:none;display:flex;flex-direction:column;gap:14px;max-width:46ch}
+  ul li{font-size:21px;line-height:1.4;padding-left:20px;position:relative}
+  ul li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;background:var(--accent)}
+  .pillars{margin-top:26px;display:flex;flex-direction:column;gap:16px;max-width:52ch}
+  .pillars div{display:flex;gap:16px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:14px}
+  .pillars .num{min-width:34px}
+  .pillars b{font-family:"Archivo",sans-serif;font-weight:600;font-size:20px}
+  .pillars span{display:block;color:var(--muted);font-size:17px;margin-top:3px}
+  .arc{display:flex;gap:0;margin-top:34px;align-items:flex-end}
+  .arc .step{flex:1;border-top:3px solid var(--rule);padding-top:16px}
+  .arc .step.hot{border-top-color:var(--accent)}
+  .arc .step b{font-family:"Archivo",sans-serif;font-size:22px}
+  .arc .step span{display:block;color:var(--muted);font-size:16px;margin-top:6px}
+  .week{margin-top:26px;display:grid;grid-template-columns:repeat(7,1fr);gap:10px;max-width:100%}
+  .week div{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px 10px;font-size:15px}
+  .week div b{font-family:"Archivo",sans-serif;color:var(--accent);display:block;margin-bottom:6px;font-size:14px;letter-spacing:1px}
+  .foot{position:absolute;left:72px;bottom:30px;font-size:13px;color:var(--muted);letter-spacing:1px}
+  .brand{position:absolute;right:72px;bottom:30px;font-family:"Archivo",sans-serif;font-weight:600;
+    font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ink)}
+  .brand b{color:var(--accent)}
+  .cta .btn{display:inline-block;margin-top:28px;background:var(--accent);color:#fff;
+    font-family:"Archivo",sans-serif;font-weight:600;font-size:20px;padding:16px 30px;border-radius:10px}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.5}
+  .rule{width:64px;height:4px;background:var(--accent);margin:22px 0}
+  .nav{position:fixed;bottom:16px;right:18px;font-size:12px;color:var(--muted);font-family:"Archivo"}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><span id="pg">1</span> / <span id="tot"></span> &nbsp; (arrow keys)</div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A free live masterclass', h:'Train Around Your Life', lead:'The 5-Pillar System for the time-crunched endurance athlete. Get faster on the hours you actually have.'},
+  {t:'text', eyebrow:'Who this is for', h:'You train around a full life', body:'You have a job, a family, and a race on the calendar. You do not have unlimited hours, and more volume is not an option. This is for the triathlete, cyclist or runner who wants to get faster on the time they already have.'},
+  {t:'text', eyebrow:'The trap', h:'More hours is not the answer', body:'Most athletes chase speed by adding volume. When life is full, that path runs out fast, and the training that survives is whatever fits, not whatever matters. You end up busy, tired, and still flat on race day.'},
+  {t:'text', eyebrow:'The real cost', h:'Random training wastes your scarcest resource', body:'Your scarcest resource is not fitness. It is time. A plan with no system spends your six or eight weekly hours on whatever feels productive, instead of on the work that actually moves your race.'},
+  {t:'text', eyebrow:'Part one', h:'The problem is a missing system', body:'A workout is not a plan. A plan is not a system. What separates athletes who improve on limited time is a repeatable way to decide what each hour is for, and how it all fits together.'},
+  {t:'pillars', eyebrow:'Part two: the method', h:'The 5 Pillars of Performance', items:[
+    ['1','Training & Recovery','Periodized load and real recovery, so every session has a job and you adapt instead of just accumulating fatigue.'],
+    ['2','Efficiency & Technique','Position, cadence, pedal stroke and run form. Free speed you buy with skill, not more hours.'],
+    ['3','Nutrition & Hydration','Fueling and an individual hydration strategy built from your own sweat profile, so the back half of your race holds.'],
+    ['4','Equipment & Optimization','The right setup, dialed and fitted, so your gear helps instead of quietly costing you watts.'],
+    ['5','Strategy & Mental Game','Race execution and the head game, so the fitness you built shows up on the day that counts.']
+  ]},
+  {t:'text', eyebrow:'Pillar one', h:'Training & Recovery', body:'Every hour is assigned a purpose before the week starts. Hard days are hard, easy days are truly easy, and recovery is planned, not hoped for. On limited time, this is where most of the speed hides.'},
+  {t:'text', eyebrow:'Pillar two', h:'Efficiency & Technique', body:'Two athletes with the same engine can be minutes apart on skill alone. Better position, a cleaner pedal stroke and smoother run form give you speed without asking for hours you do not have.'},
+  {t:'text', eyebrow:'Pillar three', h:'Nutrition & Hydration', body:'Generic fueling advice fails because every athlete sweats differently. An individual sweat and sodium profile turns race-day fueling from a guess into a plan, and keeps you strong when others fade.'},
+  {t:'text', eyebrow:'Pillar four', h:'Equipment & Optimization', body:'A proper fit and the right setup are the cheapest speed in the sport. Dialed equipment protects your body on long days and stops quiet losses you never see on the clock.'},
+  {t:'text', eyebrow:'Pillar five', h:'Strategy & Mental Game', body:'Fitness is only potential until you execute. A clear race plan and a trained head game are what let the work you did on limited time actually land on race day.'},
+  {t:'arc', eyebrow:'Part three: the arc', h:'Build. Peak. Compete.', steps:[
+    ['Build','Aerobic base, skills and consistency. The foundation every later gain is built on.', false],
+    ['Peak','Race-specific intensity and a smart taper. Sharpen what the base made possible.', true],
+    ['Compete','Execute the plan on race day and peak for the events that matter most.', false]
+  ]},
+  {t:'text', eyebrow:'Build', h:'Build the base', body:'Early season is about aerobic foundation, technique and simply showing up. On limited time this phase is protected, because everything later depends on it.'},
+  {t:'text', eyebrow:'Peak', h:'Sharpen for the race', body:'As the A-race nears, training turns race-specific. Intensity rises, volume is managed, and a deliberate taper turns weeks of work into fresh legs on the day.'},
+  {t:'text', eyebrow:'Compete', h:'Execute on the day', body:'Peaking is a skill. We time fitness, fueling and the mental plan to the events that matter, so you arrive ready instead of hoping it comes together.'},
+  {t:'week', eyebrow:'Your training week', h:'Six smart sessions, one full life', days:[
+    ['MON','Strength 30m'],['TUE','Bike intervals 45m'],['WED','Rest + mobility'],['THU','Run tempo 40m'],
+    ['FRI','Swim technique 30m'],['SAT','Long ride'],['SUN','Long run or off']
+  ]},
+  {t:'text', eyebrow:'How we coach it', h:'Live coaching, not a static plan', body:'Our House of Pain sessions put a coach on the screen with you in real time to cue position and effort, and individual sweat testing personalizes your fueling. You are coached through the method, not handed a PDF.'},
+  {t:'text', eyebrow:'Why us', h:'Coaches who race and teach', body:'The team behind this has coached endurance athletes since 2009, with national-level racing experience, certified coaches across swim, bike and run, and a focus on the athlete training around a full life. We have seen what works when time is tight.'},
+  {t:'cta', eyebrow:'Your next step', h:'Train smarter this season', body:'If you want the 5 Pillars applied to your season and your schedule, start with a custom plan or a short athlete call. We will build the week around your life.', btn:'Start your custom coaching', disc:'Educational only. Training outcomes depend on the individual athlete, consistency, health and many other factors. No specific performance, placing or result is promised or guaranteed. Consult a physician before beginning a new program.'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s)=>{
+  const d=document.createElement('section'); d.className='slide';
+  let h='';
+  if(s.eyebrow) h+=`<div class="eyebrow">${esc(s.eyebrow)}</div>`;
+  if(s.t==='title'){h+=`<h1>${esc(s.h)}</h1><div class="rule"></div><p class="lead big">${esc(s.lead)}</p>`;}
+  else if(s.t==='text'){h+=`<h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p>`;}
+  else if(s.t==='pillars'){h+=`<h2>${esc(s.h)}</h2><div class="pillars">`+s.items.map(i=>`<div><span class="num">${esc(i[0])}</span><div><b>${esc(i[1])}</b><span>${esc(i[2])}</span></div></div>`).join('')+`</div>`;}
+  else if(s.t==='arc'){h+=`<h2>${esc(s.h)}</h2><div class="arc">`+s.steps.map(st=>`<div class="step ${st[2]?'hot':''}"><b>${esc(st[0])}</b><span>${esc(st[1])}</span></div>`).join('')+`</div>`;}
+  else if(s.t==='week'){h+=`<h2>${esc(s.h)}</h2><div class="week">`+s.days.map(dd=>`<div><b>${esc(dd[0])}</b>${esc(dd[1])}</div>`).join('')+`</div>`;}
+  else if(s.t==='cta'){h+=`<h2>${esc(s.h)}</h2><p class="body">${esc(s.body)}</p><div class="cta"><span class="btn">${esc(s.btn)}</span></div><p class="disc">${esc(s.disc)}</p>`;}
+  h+=`<div class="foot">BUILD. PEAK. COMPETE.</div><div class="brand"><b>BPC</b> Performance Coaching</div>`;
+  d.innerHTML=h; stage.appendChild(d);
+});
+let i=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((e,x)=>e.classList.toggle('on',x===i));document.getElementById('pg').textContent=i+1;}
+show(0);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+stage.addEventListener('click',()=>show(i+1));
+</script>
+</body>
+</html>
