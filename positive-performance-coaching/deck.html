@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train by Your Own Numbers — Positive Performance Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f8fa;        /* ground, from site light-scheme */
+    --panel:#ffffff;     /* panel */
+    --ink:#1a1a1a;       /* text, from brand.json ranked color */
+    --muted:#5b636c;
+    --rule:#d7dde3;      /* hairline */
+    --accent:#e8622c;    /* energy orange accent */
+    --head:'DM Sans',system-ui,sans-serif;  /* their own face */
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:48px 20px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide .num{position:absolute;top:22px;right:26px;font-family:var(--head);font-weight:700;
+    font-size:13px;color:var(--muted);letter-spacing:.08em}
+  .eyebrow{font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--head);font-weight:800;font-size:52px;line-height:1.05;letter-spacing:-.02em}
+  h2{font-family:var(--head);font-weight:800;font-size:38px;line-height:1.08;letter-spacing:-.01em}
+  h3{font-family:var(--head);font-weight:700;font-size:24px;line-height:1.15}
+  p{font-size:20px;line-height:1.55;color:var(--ink);max-width:62ch;margin-top:18px}
+  p.lead{font-size:23px;color:var(--muted)}
+  .sub{font-size:19px;color:var(--muted);margin-top:16px;max-width:62ch}
+  ul{margin:22px 0 0 0;list-style:none;max-width:64ch}
+  li{position:relative;padding-left:30px;font-size:20px;line-height:1.5;margin-bottom:16px}
+  li:before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  li b{font-family:var(--head);font-weight:700}
+  .zones{display:flex;gap:8px;margin-top:30px}
+  .zones span{flex:1;height:14px;border-radius:4px;background:var(--rule)}
+  .zones span:nth-child(2){background:#f2c9a0}
+  .zones span:nth-child(3){background:#eca772}
+  .zones span:nth-child(4){background:#e8622c}
+  .zones span:nth-child(5){background:#b8420f}
+  .big{font-family:var(--head);font-weight:800;font-size:46px;line-height:1.08;letter-spacing:-.02em}
+  .accentbar{width:64px;height:6px;background:var(--accent);border-radius:3px;margin-bottom:26px}
+  .cta h2{font-size:42px}
+  .disclaimer{font-size:14px;color:var(--muted);margin-top:30px;max-width:66ch;line-height:1.5}
+  .brandline{font-family:var(--head);font-weight:700;color:var(--muted);font-size:15px;
+    letter-spacing:.06em;text-transform:uppercase;margin-top:28px}
+  .credit{display:grid;grid-template-columns:1fr 1fr;gap:14px 40px;margin-top:26px;max-width:70ch}
+  .credit div{font-size:18px;line-height:1.4}
+  .credit b{font-family:var(--head)}
+  @media(max-width:640px){.slide{padding:36px 26px}h1{font-size:36px}h2{font-size:28px}.big{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'Positive Performance Coaching · Live Masterclass',
+    h:'Train by Your Own Numbers',
+    sub:'The power-based system for endurance athletes who train hard and still plateau. With Coach Rob.'},
+
+  {t:'who',eyebrow:'Who this is for',
+    h:'Cyclists, runners and triathletes who are done guessing',
+    sub:'You put in the hours. You follow a plan. But you keep hitting the same ceiling, and you fade when the race gets long. This hour is for you.'},
+
+  {t:'trap',eyebrow:'The trap',
+    h:'You are probably training someone else’s workout',
+    body:'Generic plans. Percentage charts pulled off the internet. Zones you borrowed from a training partner or a magazine. They feel productive. They are not yours.'},
+
+  {t:'reframe',eyebrow:'The hard truth',
+    big:'Your zones are not your friend’s zones. If the numbers are not yours, the plan is not either.',
+    sub:'Two athletes with the same FTP on paper can need completely different training. The chart does not know that. A tested plan does.'},
+
+  {t:'part',eyebrow:'Part one',
+    h:'The core problem: training without your own data',
+    body:'Feel lies on the days it matters most. Heart rate drifts with heat, sleep and caffeine. When every session is run on a guess, you cannot tell a good day from an overreaching one, so progress stalls and you never quite know why.'},
+
+  {t:'part',eyebrow:'Part one',
+    h:'Why feel and borrowed charts fall apart',
+    list:['<b>Feel</b> rewards going too hard on easy days and too easy on hard ones.',
+      '<b>Heart rate</b> lags the effort and drifts with conditions.',
+      '<b>Generic percentages</b> assume your physiology matches the chart. It rarely does.']},
+
+  {t:'part',eyebrow:'Part two · the method',
+    h:'The power-based system, in five pieces',
+    sub:'This is what I coach inside Positive Performance Coaching. Each piece is built on your numbers, not a template.'},
+
+  {t:'pillar',eyebrow:'Piece 1',
+    h:'Test for the thresholds that are actually yours',
+    body:'A ramp test and the talk-test protocol to find your real boundaries, instead of plugging your weight into a percentage chart. This is where the whole plan starts.',
+    zones:true},
+
+  {t:'pillar',eyebrow:'Piece 2',
+    h:'Train by power, not by hope',
+    body:'Once we know your numbers, every session targets a specific adaptation in watts. You stop training in the grey zone where nothing improves, and you can see progress session to session.'},
+
+  {t:'pillar',eyebrow:'Piece 3',
+    h:'Build the Zone 2 aerobic base',
+    body:'The boundary-and-percentages work that separates athletes who hold power late from athletes who fade. Get the easy work genuinely easy, and the hard work earns its place.'},
+
+  {t:'pillar',eyebrow:'Piece 4',
+    h:'Add functional strength',
+    body:'Strength is built into the plan, not bolted on. The right lifting makes you more durable, more resistant to injury, and able to put more force through the pedals and the ground late in a race.'},
+
+  {t:'pillar',eyebrow:'Piece 5',
+    h:'Fuel the work',
+    body:'Nutrition matched to the training block. The best session in the world does nothing if you are underfueled for it, and durability in the final hour is won or lost on fueling.'},
+
+  {t:'part',eyebrow:'Part three',
+    h:'What a week in the system looks like',
+    list:['Easy days that are truly easy, held to your tested Zone 2 boundary.',
+      'Hard days aimed at a specific wattage target, not a vibe.',
+      'Strength that supports the bike and the run instead of fighting them.',
+      'Fueling planned around the key sessions, not improvised.']},
+
+  {t:'part',eyebrow:'The payoff',
+    h:'Still standing at the finish',
+    body:'When the plan is built on your numbers, you stop fading. You hold power on the last climb, you run the back half of the race instead of surviving it, and you finally see the ceiling move.'},
+
+  {t:'why',eyebrow:'Why listen to me',
+    h:'I race the method I coach',
+    credit:[['20+ years','Competing in cycling and running'],
+      ['200+ races','USAC, USATF, USAT and NSG'],
+      ['2025','National Champion, 5K time trial (National Senior Games)'],
+      ['Global','Athletes coached across the US, Canada, Australia and Europe'],
+      ['The Cycling 360 Show','Founder of one of cycling’s longest-running podcasts'],
+      ['Endurance Quick Cast','Current host, for all endurance athletes']]},
+
+  {t:'cta',eyebrow:'Your next step',
+    h:'Train by your own numbers',
+    body:'If you are ready to stop training someone else’s workout, this is exactly how we build it together inside Positive Performance Coaching. Start with a tested plan and let the numbers do the arguing.',
+    brand:'Positive Performance Coaching · Coach Rob',
+    disclaimer:'This masterclass is for education only. Training outcomes depend on the individual athlete, consistency, health and many factors outside any coach’s control. No specific performance result is promised or guaranteed.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.t==='cta'?' cta':'');
+  let html='<span class="num">'+String(i+1).padStart(2,'0')+' / '+S.length+'</span>';
+  if(s.eyebrow) html+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title'){html+='<div class="accentbar"></div><h1>'+s.h+'</h1>';}
+  else if(s.t==='reframe'){html+='<div class="big">'+s.big+'</div>';}
+  else if(s.h){html+='<h2>'+s.h+'</h2>';}
+  if(s.body) html+='<p>'+s.body+'</p>';
+  if(s.sub) html+='<p class="sub">'+s.sub+'</p>';
+  if(s.list){html+='<ul>';s.list.forEach(x=>html+='<li>'+x+'</li>');html+='</ul>';}
+  if(s.zones){html+='<div class="zones"><span></span><span></span><span></span><span></span><span></span></div>';}
+  if(s.credit){html+='<div class="credit">';s.credit.forEach(c=>html+='<div><b>'+c[0]+'</b><br>'+c[1]+'</div>');html+='</div>';}
+  if(s.brand) html+='<div class="brandline">'+s.brand+'</div>';
+  if(s.disclaimer) html+='<div class="disclaimer">'+s.disclaimer+'</div>';
+  d.innerHTML=html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
