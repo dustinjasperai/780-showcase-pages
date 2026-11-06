@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From the Guitar Up — A Songwriting Masterclass with Mike Meiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1612;        /* their dominant ground (21 uses, brand.json) */
+    --panel:#241d17;     /* one step up off the ground, derived warm brown */
+    --rule:#5a4e42;      /* warm taupe */
+    --ink:#f5ead8;       /* their warm cream (12 uses) */
+    --ink-dim:#b9ab97;
+    --accent:#af0000;    /* their deep red (7 uses, brand.json) */
+    --accent-soft:#c87832;
+    --title-font:"Oswald",sans-serif;
+    --body-font:"Poppins",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body-font);
+       -webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center}
+  .slide{display:none;width:min(1040px,92vw);max-height:92vh;overflow:auto;
+         background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+         padding:clamp(28px,5vw,64px);box-shadow:0 24px 70px rgba(0,0,0,.55)}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--title-font);text-transform:uppercase;letter-spacing:.22em;
+          font-size:clamp(12px,1.5vw,15px);color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--title-font);font-weight:700;line-height:1.02;
+     font-size:clamp(34px,6.4vw,74px);text-transform:uppercase;letter-spacing:.01em}
+  h2{font-family:var(--title-font);font-weight:600;line-height:1.05;
+     font-size:clamp(26px,4.4vw,52px);text-transform:uppercase;letter-spacing:.01em;margin-bottom:18px}
+  p{font-size:clamp(16px,2vw,23px);line-height:1.55;color:var(--ink);max-width:52ch;margin-top:14px}
+  p.dim{color:var(--ink-dim)}
+  .lead{font-size:clamp(20px,2.7vw,30px);line-height:1.4;max-width:46ch}
+  .big{font-size:clamp(26px,4vw,44px);font-family:var(--title-font);font-weight:500;
+       line-height:1.12;text-transform:none;letter-spacing:0;max-width:40ch}
+  ul{margin:20px 0 0 0;list-style:none}
+  li{font-size:clamp(16px,2vw,22px);line-height:1.5;padding:12px 0 12px 30px;position:relative;
+     border-top:1px solid var(--rule);max-width:54ch}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:21px;width:12px;height:12px;
+             background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .num{font-family:var(--title-font);color:var(--accent);font-weight:700;
+       font-size:clamp(40px,7vw,96px);line-height:1;margin-bottom:8px}
+  .quote{font-size:clamp(22px,3.2vw,38px);line-height:1.28;font-weight:300;max-width:42ch}
+  .quote .hi{color:var(--accent-soft)}
+  .wave{display:flex;align-items:flex-end;gap:8px;height:86px;margin:26px 0 4px}
+  .wave span{flex:1;background:var(--rule);border-radius:3px 3px 0 0}
+  .wave span.hi{background:var(--accent)}
+  .cred{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .cred span{font-family:var(--title-font);text-transform:uppercase;letter-spacing:.08em;
+             font-size:clamp(12px,1.5vw,15px);color:var(--ink-dim);border:1px solid var(--rule);
+             padding:8px 12px;border-radius:999px}
+  .cta-btn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;
+           font-family:var(--title-font);text-transform:uppercase;letter-spacing:.12em;font-weight:600;
+           font-size:clamp(16px,2vw,22px);padding:16px 30px;border-radius:8px}
+  .foot{margin-top:26px;font-size:13px;color:var(--ink-dim);line-height:1.5;max-width:60ch}
+  .nav{position:fixed;bottom:18px;right:22px;display:flex;gap:10px;align-items:center;z-index:5}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+               border-radius:7px;padding:9px 14px;font-family:var(--title-font);
+               letter-spacing:.06em;text-transform:uppercase;font-size:13px;cursor:pointer}
+  .count{position:fixed;bottom:22px;left:22px;font-family:var(--title-font);
+         letter-spacing:.14em;font-size:13px;color:var(--ink-dim);z-index:5}
+  .brandtag{font-family:var(--title-font);text-transform:uppercase;letter-spacing:.28em;
+            font-size:12px;color:var(--ink-dim);margin-top:30px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker">A Songwriting Masterclass</div>
+    <h1>From the<br>Guitar Up</h1>
+    <p class="lead">How to write songs that actually move people, starting with the instrument already in your hands.</p>
+    <div class="brandtag">With Mike Meiers &middot; Songwriting For Guitar</div>`},
+
+  {t:'who', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You write your own songs on the guitar</h2>
+    <p>You can play. You can come up with a melody and some words. But somewhere along the way you were taught that the song is the lyric and the topline, and the guitar is just there to hold it up.</p>
+    <p class="dim">So you pour everything into the words and the melody. And the song still comes out flat, and you cannot quite say why.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The uncomfortable part</div>
+    <p class="quote">Your song isn't flat because of the lyric. It's flat because the guitar is doing the <span class="hi">same thing</span> from the first bar to the last.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker">Part One</div>
+    <h2>You're playing your song, not writing it</h2>
+    <p>Three things quietly put a ceiling on almost every song a guitarist writes. Once you can see them, you can fix them on purpose instead of hoping the next one comes out better.</p>`},
+
+  {t:'prob', html:`
+    <div class="num">01</div>
+    <h2>Your default strumming pattern</h2>
+    <p>Every player has one pattern they absorbed in their first few years, and they reach for it without noticing. It shows up on the ballad and the up-tempo song and the bridge, all the same. The song never gets to breathe because the right hand never changes.</p>`},
+
+  {t:'prob', html:`
+    <div class="num">02</div>
+    <h2>No highs, mids, and lows</h2>
+    <p>A song has to rise and fall to pull someone through it.</p>
+    <p class="quote" style="margin-top:18px">If you keep it at one level the whole way through, it's not interesting. It's <span class="hi">boring</span>.</p>`},
+
+  {t:'prob', html:`
+    <div class="num">03</div>
+    <h2>The wrong voicings</h2>
+    <p>Every genre says the same chords in a different accent. G, C, D and Em in a folk song are a different language than the same four chords in a pop record.</p>
+    <p>Voicings are how you pick the right accent, and they unlock melodies you could not hear before.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker">Part Two</div>
+    <h2>Own the guitar as the writer</h2>
+    <p>The shift is simple to say and it changes everything: the guitar is not the backing track. It is a highlighter for the melody and the lyric, and it carries the emotion of the song.</p>
+    <p class="dim">If you write songs with your guitar, you're a songwriting guitarist. You can't dismiss the two.</p>`},
+
+  {t:'frame', html:`
+    <div class="kicker">The framework</div>
+    <h2>Highs, mids, and lows</h2>
+    <div class="wave"><span style="height:28%"></span><span style="height:40%"></span><span style="height:34%"></span><span style="height:62%"></span><span class="hi" style="height:100%"></span><span style="height:70%"></span><span style="height:46%"></span><span style="height:58%"></span><span style="height:30%"></span></div>
+    <p>Map the song as an emotional curve. Once the highs, mids and lows are engrained you start to see the gaps, and you fill them on purpose with a hook, a change in the strumming, or a single hit where the song needs to land.</p>`},
+
+  {t:'frame', html:`
+    <div class="kicker">The framework</div>
+    <h2>Voicings unlock melodies</h2>
+    <p>Pick the genre's accent first, then let the shape of the chord show you the melody.</p>
+    <ul>
+      <li>Open and ringing pulls one set of melody notes toward you.</li>
+      <li>Tight and high up the neck pulls a different set.</li>
+      <li>The chord you already know, voiced for the song, becomes a new idea.</li>
+    </ul>`},
+
+  {t:'frame', html:`
+    <div class="kicker">The framework</div>
+    <h2>The listening system</h2>
+    <p>Stop listening to music passively. For the genre you want to write in, you learn three specific things to listen for: the melody patterns, the production moves, and the way the song is built.</p>
+    <p>That becomes a formula you can run on any reference track, so the greats become a drill instead of a mystery.</p>`},
+
+  {t:'frame', html:`
+    <div class="kicker">The fast diagnostic</div>
+    <h2>The three questions that unstick any song</h2>
+    <p>When a song stalls, you do not need more theory. You need three questions that tell you exactly where it broke and what the guitar can do about it, so you finish it instead of filing it away.</p>`},
+
+  {t:'look', html:`
+    <div class="kicker">On your own songs</div>
+    <h2>A flat verse, rebuilt</h2>
+    <ul>
+      <li>Same chords, same lyric, same melody as before.</li>
+      <li>The strumming opens up in the pre-chorus so the chorus has somewhere to go.</li>
+      <li>One voicing change lifts the top note under the hook.</li>
+      <li>A single hit lands on the downbeat of the last chorus.</li>
+    </ul>
+    <p>Nothing was added to the song. The guitar just started doing its job.</p>`},
+
+  {t:'frame', html:`
+    <div class="kicker">How you score it</div>
+    <h2>The SongFlow Blueprint</h2>
+    <p>Feedback like "make it better" never helped anyone. The SongFlow Blueprint is a structured way to look at a song and see where it is working and where it is falling apart, so every note you change is a decision, not a guess.</p>`},
+
+  {t:'why', html:`
+    <div class="kicker">Why listen to me</div>
+    <h2>I write for a living, and I teach what works</h2>
+    <p>I am an Emmy award winning songwriter and producer, and I have spent years figuring out how a guitar player turns the instrument into finished songs that connect.</p>
+    <div class="cred">
+      <span>Emmy Award Winner</span><span>MTV</span><span>VH1</span><span>NPR</span>
+      <span>FOX Sports</span><span>History Channel</span><span>Showtime</span><span>Target</span>
+      <span>130+ Podcast Episodes</span>
+    </div>`},
+
+  {t:'who', html:`
+    <div class="kicker">The honest part</div>
+    <h2>This is a craft, not a shortcut</h2>
+    <p>Nobody writes a great song because they watched one class. What changes is that you stop guessing. You know what to listen for, you know what the guitar can do, and you know how to tell when a song is finished.</p>`},
+
+  {t:'cta', html:`
+    <div class="kicker">Where to take this next</div>
+    <h2>Write your next song with a coach in your corner</h2>
+    <p>If you want help putting this to work on your own songs, the 90-Day Songwriter Accelerator pairs you with a Songwriting For Guitar coach who builds a plan around your level and your music, with real feedback until the songs are finished.</p>
+    <a class="cta-btn" href="https://sfg-accelerator.com/">Find Your Coach</a>
+    <p class="foot">Educational content only. No specific result is guaranteed. Results vary from person to person and depend on the work you put in. Nothing here is a promise of any particular creative, career, or financial outcome.</p>
+    <div class="brandtag">Mike Meiers &middot; Songwriting For Guitar</div>`}
+];
+
+let i = 0;
+const stage = document.getElementById('stage');
+const count = document.getElementById('count');
+function render(){
+  stage.innerHTML = '<div class="slide on">' + S[i].html + '</div>';
+  count.textContent = String(i+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0');
+}
+function go(d){ i = Math.max(0, Math.min(S.length-1, i+d)); render(); }
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+render();
+</script>
+</body>
+</html>
