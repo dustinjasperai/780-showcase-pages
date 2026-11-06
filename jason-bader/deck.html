@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hidden Cash in Your Warehouse | The Distribution Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #fbfbf9;
+    --panel: #f2f3f0;
+    --ink: #33373d;
+    --ink-soft: #555555;
+    --ink-muted: #69727d;
+    --rule: #e2e4df;
+    --accent: #1d7342;
+  }
+  html { -webkit-font-smoothing: antialiased; }
+  body { background: var(--ink); font-family: 'EB Garamond', Georgia, serif; }
+  #stage { max-width: 1040px; margin: 0 auto; }
+  .slide {
+    position: relative;
+    background: var(--bg);
+    color: var(--ink);
+    aspect-ratio: 16/9;
+    margin: 22px 16px;
+    padding: 72px 80px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    border: 1px solid var(--rule);
+  }
+  .slide.show { display: flex; }
+  .eyebrow { font-family:'Raleway',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; color: var(--accent); margin-bottom: 20px; }
+  .slide h1 { font-family:'Raleway',sans-serif; font-weight:800; font-size:52px; line-height:1.08; letter-spacing:-0.01em; color: var(--ink); margin-bottom: 22px; }
+  .slide h2 { font-family:'Raleway',sans-serif; font-weight:700; font-size:38px; line-height:1.14; color: var(--ink); margin-bottom: 18px; }
+  .slide p { font-size: 24px; line-height: 1.5; color: var(--ink-soft); max-width: 46ch; margin-bottom: 14px; }
+  .slide .big { font-size: 30px; color: var(--ink); font-weight: 500; }
+  .slide ul { list-style: none; margin-top: 8px; }
+  .slide li { font-size: 23px; line-height: 1.45; color: var(--ink-soft); padding-left: 28px; position: relative; margin-bottom: 14px; max-width: 48ch; }
+  .slide li::before { content:''; position:absolute; left:0; top:13px; width:11px; height:11px; background: var(--accent); border-radius: 2px; }
+  .slide li strong { color: var(--ink); font-family:'Raleway',sans-serif; font-weight:700; }
+  .part h1 { font-size: 64px; }
+  .part { background: var(--panel); border-left: 8px solid var(--accent); }
+  .cash { color: var(--accent); font-weight: 600; }
+  .brandline { font-family:'Raleway',sans-serif; font-size:15px; letter-spacing:0.04em; color: var(--ink-muted); margin-top: 28px; }
+  .disclaimer { font-family:'Raleway',sans-serif; font-size:13px; line-height:1.5; color: var(--ink-muted); margin-top: 26px; max-width: 60ch; }
+  .nav { position: fixed; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 14px; align-items:center; font-family:'Raleway',sans-serif; }
+  .nav button { font-family:'Raleway',sans-serif; font-weight:600; font-size:14px; background: var(--bg); color: var(--ink); border: 1px solid var(--rule); padding: 8px 16px; cursor: pointer; border-radius: 4px; }
+  .nav .count { color:#cfd3d0; font-size:13px; }
+  @media (max-width:720px){ .slide{ padding:40px 32px;} .slide h1{font-size:34px;} .part h1{font-size:42px;} .slide h2{font-size:26px;} .slide p,.slide li{font-size:18px;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">Prev</button><span class="count" id="count"></span><button id="next">Next</button></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for independent distributors',
+    h1:'The Hidden Cash in Your Warehouse',
+    p:'How independent distribution owners turn dead stock and sloppy turns into net profit. Taught live, from 40 years on the warehouse floor.',
+    brand:'The Distribution Team' },
+
+  {t:'audience', eyebrow:'Who this is for',
+    h1:'Owners who feel the squeeze',
+    bullets:['Owners and branch managers of independent wholesale distributors',
+      'Tools, fasteners, electrical, plumbing, industrial and specialty supply',
+      'Profit looks fine on the statement, but the bank account is always tight'] },
+
+  {t:'trap', eyebrow:'The trap',
+    h2:'You are profitable on paper and broke in the bank',
+    p:'You hit margin. You grow the top line. Yet every month the cash is tied up somewhere you cannot see. Most owners assume that is just distribution.',
+    p2:'It is not. It is inventory.' },
+
+  {t:'reframe', eyebrow:'The reframe',
+    h1:'Your inventory is not an asset.',
+    p:'It is cash you have already spent, sitting on a shelf, waiting for a customer who may never call. Once you see it that way, the whole business changes.' },
+
+  {t:'part', eyebrow:'Part one', h1:'Where the cash hides' },
+
+  {t:'problem', eyebrow:'The core problem',
+    h2:'Three quiet leaks',
+    bullets:['<strong>Dead and slow stock</strong> you keep paying to store and insure',
+      '<strong>Over-ordering</strong> that feels safe and quietly starves cash flow',
+      '<strong>The cost of mistakes</strong>, which is always bigger than the mistake'] },
+
+  {t:'cash', eyebrow:'The idea the whole room remembers',
+    h1:'Inventory <span class="cash">is cash</span>.',
+    p:'Every dollar sitting on your shelves is a dollar that is not in your bank, not paying your people, and not buying the fast movers that actually sell.' },
+
+  {t:'mistake', eyebrow:'The cost of mistakes',
+    h2:'A $100 miss is never a $100 miss',
+    p:'By the time you add the pick, the freight, the return, the credit and the trust you burned with the customer, a hundred dollar error can cost you thousands. We put a real number on it.' },
+
+  {t:'part', eyebrow:'Part two', h1:'The Branch Management method' },
+
+  {t:'pillar', eyebrow:'Pillar one',
+    h2:'Driving Net Profit',
+    bullets:['Understand what your business is actually worth to the supply chain',
+      'Read the expenses the way an owner does, not a bookkeeper',
+      'Get the whole team hunting for cash, not just you'] },
+
+  {t:'pillar', eyebrow:'Pillar two',
+    h2:'Profitable Inventory Management',
+    bullets:['Improve turns without wrecking your service levels',
+      'Cycle count so the numbers are finally true',
+      'Liquidate dead and surplus stock in bundles that recover real cash'] },
+
+  {t:'pillar', eyebrow:'Pillar three',
+    h2:'Driving Customer Profitability',
+    bullets:['Find out which customers and SKUs actually make you money',
+      'Use ROI to cut vendor duplication and tighten the line card',
+      'Stop subsidizing the accounts that quietly cost you'] },
+
+  {t:'pillar', eyebrow:'Pillar four',
+    h2:'Leading the Team',
+    bullets:['Turn a branch manager into a business manager',
+      'Give your people the few numbers that actually drive the branch',
+      'Build the habits that keep the cash coming after the engagement ends'] },
+
+  {t:'part', eyebrow:'Part three', h1:'The first ninety days on the floor' },
+
+  {t:'picture', eyebrow:'The first quarter',
+    h2:'A calmer, richer branch',
+    bullets:['A dead-stock liquidation plan already turning shelves back into cash',
+      'Turns trending up while service levels hold',
+      'A team that can name the branch numbers and knows where the cash is'] },
+
+  {t:'why', eyebrow:'Why learn this from me',
+    h2:'A practitioner, not a theorist',
+    bullets:['Roughly 40 years in distribution, most of it inside a family wholesale business',
+      'Two decades coaching independent distributors across North America',
+      'Host of the weekly Distribution Talk podcast and a former STAFDA board member'],
+    brand:'The Distribution Team' },
+
+  {t:'recap', eyebrow:'The whole masterclass in three lines',
+    h2:'Remember this',
+    bullets:['See inventory as cash, because it is',
+      'Put a number on your dead stock and your mistakes',
+      'Run the four pillars until hunting cash is a team habit'] },
+
+  {t:'cta', eyebrow:'Your next step',
+    h1:'Ready to find the cash?',
+    p:'If you want to run these moves on your own branch, the next step is a conversation about the Branch Management Program and Executive Coaching.',
+    cta:'Book a call with The Distribution Team at distributionteam.com',
+    disclaimer:'This masterclass is for education only. It is not financial, legal or accounting advice, and it makes no guarantee of specific results. Outcomes vary with your market, your team and the work you put in.' }
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s,i) => {
+  const d = document.createElement('section');
+  d.className = 'slide' + (s.t==='part'?' part':'') + (i===0?' show':'');
+  let html = '';
+  if (s.eyebrow) html += '<div class="eyebrow">'+s.eyebrow+'</div>';
+  if (s.h1) html += '<h1>'+s.h1+'</h1>';
+  if (s.h2) html += '<h2>'+s.h2+'</h2>';
+  if (s.p) html += '<p>'+s.p+'</p>';
+  if (s.p2) html += '<p class="big">'+s.p2+'</p>';
+  if (s.bullets) html += '<ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+  if (s.cta) html += '<p class="big">'+s.cta+'</p>';
+  if (s.brand) html += '<div class="brandline">'+s.brand+'</div>';
+  if (s.disclaimer) html += '<div class="disclaimer">'+s.disclaimer+'</div>';
+  d.innerHTML = html;
+  stage.appendChild(d);
+});
+
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const count = document.getElementById('count');
+function go(n){ slides[cur].classList.remove('show'); cur=(n+slides.length)%slides.length; slides[cur].classList.add('show'); count.textContent=(cur+1)+' / '+slides.length; }
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(cur+1); if(e.key==='ArrowLeft')go(cur-1); });
+count.textContent='1 / '+slides.length;
+</script>
+</body>
+</html>
