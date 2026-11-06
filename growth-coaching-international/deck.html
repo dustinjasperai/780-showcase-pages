@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Coaching Way of Leading in Schools - Growth Coaching International</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,800;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eceff4; --panel:#ffffff; --ink:#1b273e; --muted:#5b6478;
+    --accent:#fd6620; --rule:#d9dde4; --slate:#727c8e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--slate);font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .stage{width:min(960px,100%);aspect-ratio:16/10;background:var(--bg);border-radius:14px;
+    box-shadow:0 18px 50px rgba(27,39,62,.28);position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;
+    justify-content:center}
+  .slide.on{display:flex}
+  .slide.dark{background:var(--ink);color:var(--bg)}
+  .slide.dark .muted{color:#aeb7c9}
+  .kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin:0 0 18px}
+  h1{font-family:'Newsreader',Georgia,serif;font-weight:800;font-size:52px;line-height:1.05;margin:0 0 18px}
+  h2{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:38px;line-height:1.1;margin:0 0 16px}
+  .lead{font-size:22px;line-height:1.5;color:var(--muted);max-width:40ch;margin:0}
+  .big{font-family:'Newsreader',Georgia,serif;font-weight:400;font-style:italic;font-size:40px;line-height:1.25;max-width:26ch}
+  .accentbar{width:64px;height:5px;background:var(--accent);border-radius:3px;margin:0 0 26px}
+  ul{margin:8px 0 0;padding:0;list-style:none}
+  li{font-size:21px;line-height:1.5;padding:10px 0 10px 30px;position:relative;max-width:44ch}
+  li::before{content:"";position:absolute;left:0;top:19px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);opacity:.85}
+  .brand{position:absolute;left:72px;bottom:40px;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--slate);font-weight:600}
+  .step{font-family:'Newsreader',Georgia,serif;font-size:30px;font-weight:600}
+  .step .mark{color:var(--accent);font-weight:800;margin-right:14px}
+  .quote{font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:26px;line-height:1.4;
+    border-left:4px solid var(--accent);padding-left:22px;color:var(--ink);max-width:40ch;margin:6px 0}
+  .quote.them{color:var(--muted);border-left-color:var(--rule)}
+  .stat{display:flex;gap:48px;margin-top:10px;flex-wrap:wrap}
+  .stat div span{display:block;font-family:'Newsreader',serif;font-weight:800;font-size:46px;color:var(--accent)}
+  .stat div small{font-size:15px;color:var(--muted);letter-spacing:.04em}
+  .disc{position:absolute;left:72px;right:72px;bottom:30px;font-size:12.5px;color:var(--slate);line-height:1.4}
+  .nav{position:fixed;bottom:16px;right:22px;color:#fff;font-size:13px;opacity:.9;font-weight:500}
+  .pg{position:absolute;right:72px;bottom:40px;font-size:13px;color:var(--slate);font-weight:600}
+  @media(max-width:640px){.slide{padding:34px 30px}h1{font-size:34px}h2{font-size:26px}.big{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S=[
+ {t:'title',kicker:'A GCI Masterclass',h:'A Coaching Way of Leading in Schools',lead:'Turn your everyday conversations into coaching conversations.'},
+ {t:'who',kicker:'Who this is for',h:'If you lead other educators, this is for you.',li:['School and middle leaders','Instructional and leadership coaches','Any educator who guides other adults']},
+ {t:'big',kicker:'The trap',big:'You care, so you tell them what to do. And it works, right up until you are not in the room.'},
+ {t:'darkhook',kicker:'The reframe',big:'Compliance is not commitment. Telling builds compliance. Coaching builds agency.'},
+ {t:'part',kicker:'Part One',h:'Why good advice stops working'},
+ {t:'bul',kicker:'The telling default',h:'What advice quietly costs you',li:['People wait to be told instead of thinking','Ownership sits with you, not with them','The same problem comes back next week','You carry a load that was never yours to carry']},
+ {t:'bul',kicker:'Where leading really happens',h:'Not in the meeting. In the moment.',li:['The real influence is the ordinary conversation','The corridor, the staffroom, the quick check-in','That is where a coaching way of leading lives']},
+ {t:'part',kicker:'Part Two',h:'The GROWTH model'},
+ {t:'bul',kicker:'The GROWTH model',h:'A shape for the conversation',li:['Six moves that bring intention to any conversation','Facilitative and reflective, not directive','Builds trust, clarity and professional agency']},
+ {t:'step',kicker:'GROWTH',h:'Goal',big:'What would good actually look like here? Name the outcome before anything else.'},
+ {t:'step',kicker:'GROWTH',h:'Reality',big:'What is really happening now? Get honest about the current picture together.'},
+ {t:'step',kicker:'GROWTH',h:'Options',big:'What could you try? Widen the field before narrowing it.'},
+ {t:'step',kicker:'GROWTH',h:'Will',big:'What will you do, and by when? Commitment in their words, not yours.'},
+ {t:'step',kicker:'GROWTH',h:'Tactics',big:'What is the very first move, in concrete detail?'},
+ {t:'step',kicker:'GROWTH',h:'Habits',big:'What keeps this going after the conversation ends?'},
+ {t:'part',kicker:'Part Three',h:'What changes in the room'},
+ {t:'convo',kicker:'One real conversation',h:'From telling to coaching',them:'My team just will not own the new approach. I keep telling them.',coach:'What would owning it look like by next term? And what is one small move you could make this week?'},
+ {t:'why',kicker:'Why learn this with GCI',h:'We have spent two decades on this one thing.',stats:[['100,000+','educators in our courses since 2002'],['1000+','schools and organisations partnered'],['20+','years leading coaching in education']]},
+ {t:'recap',kicker:'The one idea',big:'Coaching is a way of leading. It starts in the conversation you are about to have.'},
+ {t:'cta',kicker:'Your next step',h:'Become an accredited coach',lead:'Bring the GROWTH model into your school with our Coaching Accreditation Program. Register your interest at growthcoaching.com.au.',disc:'This masterclass is provided for professional learning purposes only. Examples are illustrative. Outcomes depend on context and individual effort; no specific results are guaranteed.'}
+];
+const stage=document.getElementById('stage');
+function render(){
+ stage.innerHTML='';
+ S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide'+((s.t==='darkhook'||s.t==='part'||s.t==='recap')?' dark':'');
+  let h='';
+  if(s.kicker) h+='<p class="kicker">'+s.kicker+'</p>';
+  if(s.t==='title'){h+='<div class="accentbar"></div><h1>'+s.h+'</h1><p class="lead">'+s.lead+'</p>';}
+  else if(s.t==='who'){h+='<h2>'+s.h+'</h2><ul>'+s.li.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  else if(s.t==='big'||s.t==='darkhook'||s.t==='recap'){h+='<p class="big">'+s.big+'</p>';}
+  else if(s.t==='part'){h+='<div class="accentbar"></div><h1>'+s.h+'</h1>';}
+  else if(s.t==='bul'){h+='<h2>'+s.h+'</h2><ul>'+s.li.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  else if(s.t==='step'){h+='<h1>'+s.h+'</h1><p class="big">'+s.big+'</p>';}
+  else if(s.t==='convo'){h+='<h2>'+s.h+'</h2><p class="quote them">'+s.them+'</p><p class="quote">'+s.coach+'</p>';}
+  else if(s.t==='why'){h+='<h2>'+s.h+'</h2><div class="stat">'+s.stats.map(x=>'<div><span>'+x[0]+'</span><small>'+x[1]+'</small></div>').join('')+'</div>';}
+  else if(s.t==='cta'){h+='<div class="accentbar"></div><h1>'+s.h+'</h1><p class="lead">'+s.lead+'</p><p class="disc">'+s.disc+'</p>';}
+  if(s.t!=='cta'&&s.t!=='title') h+='<div class="pg">'+(i+1)+' / '+S.length+'</div>';
+  h+='<div class="brand">Growth Coaching International</div>';
+  d.innerHTML=h;
+  stage.appendChild(d);
+ });
+ show(0);
+}
+let cur=0;
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));
+ [...stage.children].forEach((c,i)=>c.classList.toggle('on',i===cur));
+ document.getElementById('nav').textContent=(cur+1)+' / '+S.length+'  (use arrow keys)';}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',()=>show(cur+1));
+render();
+</script>
+</body>
+</html>
