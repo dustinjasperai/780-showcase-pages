@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The CSO Shift - Dave Moreno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Karla:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf8f4;
+    --panel:#f1ece2;
+    --rule:#d8cdb6;
+    --ink:#23201b;
+    --muted:#5c564c;
+    --gold:#cdab3a;
+    --red:#c33f2e;
+    --display:'Fjalla One',sans-serif;
+    --body:'Karla',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#2b2824;}
+  body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .deck{max-width:960px;margin:0 auto;padding:28px 16px 80px;}
+  .slide{
+    position:relative;background:var(--paper);border:1px solid var(--rule);
+    border-radius:10px;aspect-ratio:16/9;width:100%;margin:0 0 26px;overflow:hidden;
+    padding:56px 60px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+  }
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--gold);}
+  .ey{font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;font-size:14px;color:var(--gold);margin-bottom:18px;}
+  h1{font-family:var(--display);font-size:62px;line-height:1.02;letter-spacing:.005em;margin-bottom:18px;}
+  h2{font-family:var(--display);font-size:42px;line-height:1.06;margin-bottom:20px;}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink);max-width:40ch;}
+  .sub{font-size:19px;line-height:1.55;color:var(--muted);max-width:52ch;margin-top:6px;}
+  .big{font-family:var(--display);font-size:54px;line-height:1.05;max-width:20ch;}
+  .big .r{color:var(--red);}
+  ul{list-style:none;margin-top:10px;}
+  li{font-size:21px;line-height:1.5;padding:12px 0 12px 30px;position:relative;border-bottom:1px solid var(--rule);max-width:50ch;}
+  li:last-child{border-bottom:0;}
+  li::before{content:"";position:absolute;left:0;top:21px;width:12px;height:12px;background:var(--gold);border-radius:2px;}
+  .triad{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;}
+  .tcard{flex:1;min-width:210px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:22px 20px;}
+  .tcard .w{font-family:var(--display);font-size:30px;color:var(--ink);}
+  .tcard .w b{color:var(--gold);}
+  .tcard .n{font-size:15px;color:var(--muted);margin-top:8px;line-height:1.45;}
+  .foot{position:absolute;left:60px;bottom:24px;font-size:13px;color:var(--muted);letter-spacing:.04em;}
+  .pg{position:absolute;right:28px;bottom:24px;font-family:var(--display);font-size:13px;color:var(--gold);}
+  .cta h2{color:var(--ink);}
+  .cta .step{font-family:var(--display);font-size:26px;color:var(--gold);margin-top:8px;}
+  .disc{font-size:13px;line-height:1.5;color:var(--muted);margin-top:22px;max-width:60ch;border-top:1px solid var(--rule);padding-top:14px;}
+  .redbar::before{background:var(--red);}
+  @media(max-width:700px){
+    .slide{padding:30px 26px;aspect-ratio:auto;min-height:72vw;}
+    h1{font-size:38px}h2{font-size:28px}.big{font-size:32px}.lead{font-size:18px}.foot{left:26px}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const BRAND="Dave Moreno | The Badass Business Coach";
+const S=[
+  {t:'title'},
+  {t:'promise',ey:'What you will leave with',h:'An honest answer to one question',
+   lead:'Why the harder you work, the more stuck the business feels, and the one thing that actually changes the result.',
+   sub:'Not another tactic. The layer underneath every tactic.'},
+  {t:'audience',ey:'Who this is for',h:'The owner who is doing everything right',
+   lead:'You are putting in the hours. You care about the work. The team is busy and the calendar is full.',
+   sub:'And the business still feels heavier than it should, and it is not growing the way the effort says it should.'},
+  {t:'trap',ey:'The trap',h:'So you add more',
+   lead:'More hours. More hustle. More tactics off the last podcast you listened to.',
+   sub:'The result does not move, so the only lever that feels left is to work harder still. That loop is the trap.'},
+  {t:'reframe',reframe:true,ey:'The reframe',
+   big:['Strategy is to blame for everything. ',{r:'Good and bad.'}],
+   sub:'The business you have is the exact output of the strategy you are running. Grinding harder on the wrong strategy only scales the wrong result faster.'},
+  {t:'problem',ey:'Part one, the core problem',h:'You are fixing symptoms',
+   lead:'Cash is tight, so you chase revenue. The team drops balls, so you take the work back. Marketing is quiet, so you post more.',
+   sub:'Every one of those is a symptom. The cause is a strategy decision made by default, usually reactively, often years ago.'},
+  {t:'cause',ey:'Symptom vs root cause',h:'Treat the cause, not the noise',
+   list:['A symptom is where the pain shows up.','A root cause is the strategy choice that made the pain inevitable.','Fix the symptom and it comes back wearing a new face. Fix the strategy and a whole row of symptoms disappears at once.']},
+  {t:'model-intro',ey:'Part two, the model',h:'Become your own Chief Strategy Officer',
+   lead:'Every owner is already making strategy decisions. Most are making them by accident, between fires.',
+   sub:'The CSO model makes strategy a deliberate, owned function, so the business is run on purpose instead of by whatever is burning that day. This is lived strategy, not book strategy.'},
+  {t:'model',ey:'The CSO model',h:'Run the business on purpose',
+   list:['Decide the strategy deliberately, before the week decides it for you.','Judge every tactic by whether it serves that strategy, not by whether it feels productive.','Own the function the way a real company owns its CSO seat, because in your business that seat is yours.']},
+  {t:'systems',ey:'The systems philosophy',h:'Smart beats hard',
+   triad:[['Smart','> Hard','Choose the leverage move over the heroic one.'],['Focused','> Busy','A short list done fully beats a long list touched lightly.'],['Systemized','> Stretched','Build the system once so you do not carry it by hand forever.']]},
+  {t:'freedom',ey:'The systems philosophy',h:'Systems should feel like freedom',
+   lead:'Owners default to harder, busier, and more stretched, and call it work ethic.',
+   sub:'The inversion: build systems that remove you from the bottleneck, so the business scales without your hours scaling with it. A system should feel like freedom, not punishment.'},
+  {t:'execution',ey:'The operating system',h:'Doing what you said you would do',
+   lead:'Badass, defined: doing what you said you would do, and working hard toward the things you actually want.',
+   sub:'Most owners do not have a strategy problem on paper. They have a follow-through problem in practice. The gap between the plan and the execution is where growth leaks out.'},
+  {t:'sequence',ey:'The sequence',h:'Internal game, then external game',
+   lead:'Master the internal game, the mindset and the stories you tell yourself, to win the external one, the revenue, the team, the scale.',
+   sub:'Get this order wrong and every external fix slides off. Get it right and the external results stop being a fight.'},
+  {t:'outcome',ey:'Part three, on the other side',h:'Lighter, clearer, and still growing',
+   list:['You make fewer decisions, and the ones you make hold.','The team runs the systems instead of waiting on you.','Growth stops depending on another heroic quarter from you.']},
+  {t:'credibility',ey:'Why me',h:'I built this from the hole I dug myself out of',
+   lead:'I built, scaled, and sold multiple six and seven figure businesses, with a Fortune 500 background behind it.',
+   sub:'I also drove a company into trouble, gained 130 pounds, and burned out, before I hired a coach and rebuilt everything around strategy instead of hustle. The model is what got me out.'},
+  {t:'recap',ey:'The one idea',h:'Change the strategy, not the effort',
+   lead:'If the result is not what you want, you do not need more hours. You need a different strategy underneath them.',
+   sub:'That is the whole shift. Everything else is downstream of it.'},
+  {t:'start',ey:'Start here',h:'One decision this week',
+   lead:'Pick the single result you are most stuck on. Do not touch the symptom.',
+   sub:'Trace it down to the strategy decision that made it inevitable, and change that one decision. Watch how many symptoms move with it.'},
+  {t:'cta',cta:true,ey:'Your next step',h:'Let us fix the strategy behind your result',
+   step:'Book a strategy call, or join the Next Level Academy',
+   sub:'Bring the result you are stuck on. We will find the strategy decision underneath it and change that, not the symptoms.',
+   disc:'Educational content only. Examples describe a method, not a promise. No income or result is guaranteed. Results vary with the business, the market, and the work you put in.'}
+];
+
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.reframe?' redbar':'')+(s.cta?' cta':'');
+  let h='';
+  if(s.t==='title'){
+    h+='<div class="ey">A live masterclass</div>';
+    h+='<h1>The CSO Shift</h1>';
+    h+='<div class="lead">Why working harder stopped working, and the one layer that actually changes the result.</div>';
+    h+='<div class="sub" style="margin-top:22px;font-family:var(--display);color:var(--ink)">Dave Moreno</div>';
+    h+='<div class="sub" style="margin-top:0">The Badass Business Coach</div>';
+  }else{
+    if(s.ey) h+='<div class="ey">'+esc(s.ey)+'</div>';
+    if(s.big){
+      let b='';
+      s.big.forEach(p=>{ b += (typeof p==='string')? esc(p) : '<span class="r">'+esc(p.r)+'</span>'; });
+      h+='<div class="big">'+b+'</div>';
+    }
+    if(s.h) h+='<h2>'+esc(s.h)+'</h2>';
+    if(s.lead) h+='<div class="lead">'+esc(s.lead)+'</div>';
+    if(s.list){ h+='<ul>'; s.list.forEach(x=>h+='<li>'+esc(x)+'</li>'); h+='</ul>'; }
+    if(s.triad){
+      h+='<div class="triad">';
+      s.triad.forEach(t=>{ h+='<div class="tcard"><div class="w">'+esc(t[0])+' <b>'+esc(t[1])+'</b></div><div class="n">'+esc(t[2])+'</div></div>'; });
+      h+='</div>';
+    }
+    if(s.step) h+='<div class="step">'+esc(s.step)+'</div>';
+    if(s.sub) h+='<div class="sub">'+esc(s.sub)+'</div>';
+    if(s.disc) h+='<div class="disc">'+esc(s.disc)+'</div>';
+  }
+  h+='<div class="foot">'+esc(BRAND)+'</div>';
+  h+='<div class="pg">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>';
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
