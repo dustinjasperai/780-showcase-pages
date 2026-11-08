@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Média à Soi — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fefae0;        /* warm cream ground (brand dominant #2, uses 53) */
+    --panel:#f3edd6;     /* tinted cream panel */
+    --rule:#e4ddc4;      /* soft rule */
+    --ink:#1e3b27;       /* deep forest green (brand dominant, uses 99) */
+    --muted:#4b6350;     /* desaturated green for secondary text */
+    --accent:#ae431e;    /* terracotta (brand footer accent) */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px;
+  }
+  .stage{width:min(960px,100%);}
+  .slide{
+    background:var(--bg);
+    border:1px solid var(--rule);
+    border-radius:14px;
+    aspect-ratio:16/10;
+    padding:64px;
+    display:none;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(30,59,39,.28);
+  }
+  .slide.on{display:flex}
+  .eyebrow{
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:22px;
+  }
+  h1{font-family:'Literata',Georgia,serif;font-weight:700;font-size:46px;line-height:1.1;letter-spacing:-.01em;}
+  h2{font-family:'Literata',Georgia,serif;font-weight:700;font-size:38px;line-height:1.14;}
+  .sub{font-size:19px;color:var(--muted);margin-top:20px;max-width:46ch;line-height:1.5;}
+  .big{font-family:'Literata',Georgia,serif;font-weight:600;font-size:34px;line-height:1.25;max-width:24ch;}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px;}
+  li{font-size:20px;line-height:1.4;padding-left:28px;position:relative;max-width:42ch;}
+  li:before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;border-radius:2px;background:var(--accent);}
+  .steps{counter-reset:s;margin-top:24px;display:flex;flex-direction:column;gap:14px;}
+  .steps li{padding-left:44px;}
+  .steps li:before{counter-increment:s;content:counter(s);background:var(--ink);color:var(--bg);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;top:2px;}
+  .section-tag{font-family:'Literata',serif;font-size:15px;color:var(--accent);font-weight:600;letter-spacing:.06em;}
+  .spacer{flex:1}
+  .kicker{font-size:16px;color:var(--muted);margin-top:18px;max-width:48ch;line-height:1.5;}
+  .foot{position:absolute;bottom:26px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;}
+  .pillar{font-family:'Literata',serif;font-size:15px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em;}
+  .accentword{color:var(--accent)}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:52ch;line-height:1.5;}
+  .nav{display:flex;gap:10px;justify-content:center;margin-top:18px;}
+  .nav button{font-family:'Inter';font-size:13px;background:var(--bg);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 16px;cursor:pointer;}
+  .count{color:#cdbf97;font-size:12px;text-align:center;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div id="deck"></div>
+  <div class="nav"><button onclick="go(-1)">Précédent</button><button onclick="go(1)">Suivant</button></div>
+  <div class="count" id="count"></div>
+</div>
+<script>
+const S=[
+  {t:'title',eyebrow:'Masterclass en direct · Le Média à Soi',
+   h:'Transformer ton expertise en un média qui prend de la valeur avec le temps.',
+   sub:'Un canal d’acquisition que tu possèdes vraiment. Pour les experts, consultants et indépendants. Avec Nouha Smaali.'},
+
+  {t:'content',eyebrow:'Pour qui',
+   h:'Cette heure est pour toi si...',
+   list:['Tu es expert, consultant ou indépendant, et ton savoir est réel.',
+         'Tu crées du contenu, mais il disparaît aussi vite qu’il sort.',
+         'Tu veux des clients sans dépendre de l’humeur des algorithmes.']},
+
+  {t:'statement',eyebrow:'Le constat',
+   big:'Tu publies. Ça marche un jour. Puis plus rien. Et tu recommences, chaque semaine.'},
+
+  {t:'statement',eyebrow:'Le vrai problème',
+   big:'Ce n’est pas ta visibilité le problème. C’est que ton contenu ne t’appartient pas, et qu’il ne compose pas.'},
+
+  {t:'section',tag:'Partie 1',h:'Le vrai problème'},
+
+  {t:'content',eyebrow:'Partie 1',
+   h:'Tu loues de l’attention.',
+   kicker:'Sur les réseaux, ton audience, ta portée et ton économie dépendent d’une plateforme que tu ne contrôles pas. Un changement d’algorithme, et tout ton travail baisse d’un coup.'},
+
+  {t:'content',eyebrow:'Partie 1',
+   h:'Ton post disparaît en 48 heures.',
+   kicker:'Le format social récompense le volume et l’instant. Rien ne s’accumule. Tu cours sur un tapis roulant, et tu repars de zéro à chaque publication.'},
+
+  {t:'section',tag:'Partie 2',h:'La méthode'},
+
+  {t:'pillar',eyebrow:'Pilier 1',pillar:'L’effet cumulatif',
+   h:'Le média comme un actif.',
+   kicker:'Un média se construit et prend de la valeur dans le temps. Un bon article peut encore t’amener des lecteurs et des clients dans deux ans. On arrête de produire du jetable, on construit un actif.'},
+
+  {t:'pillar',eyebrow:'Pilier 2',pillar:'Identifiabilité > visibilité',
+   h:'Être trouvé et reconnu, pas juste vu.',
+   kicker:'L’objectif n’est pas d’être vu par tout le monde. C’est d’être la référence identifiable d’une niche précise, pour les bonnes personnes. C’est ça qui convertit, pas la portée brute.'},
+
+  {t:'pillar',eyebrow:'Pilier 3',pillar:'La niche ultra-précise',
+   h:'Cinq étapes pour viser juste.',
+   steps:['Construire ton autorité et comprendre ton audience avant de lancer.',
+          'Affiner ton positionnement jusqu’à parler à une seule personne.',
+          'Résoudre un problème précis et récurrent, pas juste publier.',
+          'Séparer la distribution de la plateforme pour amener les bons lecteurs.',
+          'Lancer comme un produit, pas comme un blog.']},
+
+  {t:'pillar',eyebrow:'Pilier 4',pillar:'Le média à soi',
+   h:'Posséder ton espace.',
+   kicker:'Construis un média que tu possèdes et que tu pilotes toi-même. Ta relation avec ton audience, et ce qu’elle rapporte, ne dépendent plus d’un algorithme que tu ne maîtrises pas.'},
+
+  {t:'section',tag:'Partie 3',h:'À quoi ça ressemble'},
+
+  {t:'content',eyebrow:'Partie 3',
+   h:'Un média qui travaille pour toi.',
+   list:['Les bons lecteurs te trouvent, te reconnaissent et reviennent.',
+         'Ton contenu s’accumule au lieu de disparaître.',
+         'Une liste que tu possèdes, pas des abonnés que tu loues.']},
+
+  {t:'statement',eyebrow:'Le résultat',
+   big:'Tu ne cherches plus l’attention. On vient à toi, déjà convaincu par ce que tu as écrit.'},
+
+  {t:'content',eyebrow:'Pourquoi moi',
+   h:'Nouha Smaali.',
+   kicker:'Cinq ans en banque, aux côtés de plus de 400 entrepreneurs, à lire des modèles économiques. Puis Le Média à Soi, plus de 1 000 abonnés, et La Fabrique, où j’accompagne des experts à construire leur média, concrètement, étape par étape.'},
+
+  {t:'content',eyebrow:'Récapitulatif',
+   h:'La méthode en quatre piliers.',
+   list:['Le média comme un actif qui compose.',
+         'Identifiabilité avant visibilité.',
+         'Une niche ultra-précise, en cinq étapes.',
+         'Un média que tu possèdes et pilotes.']},
+
+  {t:'cta',eyebrow:'La suite',
+   h:'Construisons ton média d’autorité.',
+   kicker:'Si tu veux transformer ton expertise en un média qui prend de la valeur, réserve un appel pour en parler, ou rejoins La Fabrique pour avancer chaque mois.',
+   disc:'Contenu éducatif uniquement. Results vary. No income or result is guaranteed. Les résultats varient selon ton travail, ton marché et ton exécution.'}
+];
+
+function slideHTML(s){
+  let inner='';
+  if(s.eyebrow) inner+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.t==='section'){
+    inner=`<div class="spacer"></div><div class="section-tag">${s.tag}</div><h1>${s.h}</h1><div class="spacer"></div>`;
+    return inner;
+  }
+  if(s.t==='title'){
+    inner+=`<div class="spacer"></div><h1>${s.h}</h1><div class="sub">${s.sub}</div><div class="spacer"></div>`;
+    return inner;
+  }
+  if(s.t==='statement'){
+    inner+=`<div class="spacer"></div><div class="big">${s.big}</div><div class="spacer"></div>`;
+    return inner;
+  }
+  if(s.pillar) inner+=`<div class="pillar">${s.pillar}</div>`;
+  if(s.h) inner+=`<h2>${s.h}</h2>`;
+  if(s.kicker) inner+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.list){inner+='<ul>';s.list.forEach(x=>inner+=`<li>${x}</li>`);inner+='</ul>';}
+  if(s.steps){inner+='<ul class="steps">';s.steps.forEach(x=>inner+=`<li>${x}</li>`);inner+='</ul>';}
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  return inner;
+}
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide'+(i===0?' on':'');
+  d.innerHTML=slideHTML(s)+`<div class="foot"><span>Le Média à Soi · Nouha Smaali</span><span>${i+1} / ${S.length}</span></div>`;
+  deck.appendChild(d);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+function show(n){slides[cur].classList.remove('on');cur=(n+S.length)%S.length;slides[cur].classList.add('on');document.getElementById('count').textContent=`${cur+1} / ${S.length}`;}
+function go(d){show(cur+d);}
+document.getElementById('count').textContent=`1 / ${S.length}`;
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+</script>
+</body>
+</html>
