@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Blank-Canvas Method - 2ndwind Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8fc; --panel:#f1ebf7; --rule:#e2d8ef; --ink:#191818;
+    --muted:#5c5566; --accent:#7c3aed;
+    --display:'Poppins',sans-serif; --body:'Raleway',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;
+    justify-content:center;padding:8vh 10vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;font-size:clamp(.62rem,1.1vw,.8rem);color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:300;line-height:1.04;
+    font-size:clamp(2.1rem,6vw,4.4rem);letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:500;line-height:1.1;
+    font-size:clamp(1.7rem,4.4vw,3rem);letter-spacing:-.01em}
+  .sub{font-size:clamp(1.05rem,2.1vw,1.5rem);color:var(--muted);
+    margin-top:1.6rem;max-width:30ch;font-weight:400;line-height:1.4}
+  .lead{font-size:clamp(1.15rem,2.3vw,1.7rem);margin-top:1.4rem;max-width:26ch;
+    font-weight:500;line-height:1.3}
+  .by{margin-top:3rem;font-family:var(--display);font-weight:500;
+    font-size:clamp(.9rem,1.6vw,1.1rem);color:var(--ink)}
+  .by span{color:var(--accent)}
+  .big{font-size:clamp(2rem,5vw,3.6rem);font-family:var(--display);font-weight:300;
+    line-height:1.08;letter-spacing:-.01em;max-width:18ch}
+  ol.pillars{margin-top:2rem;list-style:none;display:flex;flex-direction:column;gap:1.05rem;max-width:34ch}
+  ol.pillars li{display:flex;gap:1rem;align-items:flex-start}
+  ol.pillars .n{font-family:var(--display);font-weight:600;color:var(--accent);
+    font-size:1.1rem;min-width:1.7rem}
+  ol.pillars .t{font-size:clamp(1rem,1.9vw,1.25rem);line-height:1.35}
+  ol.pillars .t b{font-weight:600}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:clamp(1.6rem,4vw,2.8rem);max-width:30ch;margin-top:2rem}
+  .card .kicker{font-family:var(--display);font-weight:600;color:var(--accent);
+    font-size:.95rem;margin-bottom:.8rem}
+  .card p{font-size:clamp(1rem,1.9vw,1.25rem);line-height:1.4}
+  .steps{margin-top:2rem;display:flex;flex-direction:column;gap:1rem;max-width:36ch}
+  .steps .row{display:flex;gap:1.1rem;align-items:baseline}
+  .steps .wk{font-family:var(--display);font-weight:600;color:var(--accent);
+    font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;min-width:5.2rem}
+  .steps .d{font-size:clamp(1rem,1.9vw,1.2rem);line-height:1.3}
+  .story{max-width:30ch;font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.4;margin-top:1.4rem;color:var(--ink)}
+  .disc{margin-top:2.4rem;font-size:.82rem;color:var(--muted);max-width:44ch;line-height:1.45}
+  .cta-line{margin-top:1.8rem;font-family:var(--display);font-weight:600;
+    color:var(--accent);font-size:clamp(1.1rem,2.3vw,1.5rem)}
+  #nav{position:fixed;bottom:2.2vh;right:2.6vw;display:flex;gap:.7rem;align-items:center;z-index:10}
+  #nav button{font-family:var(--display);background:transparent;border:1px solid var(--rule);
+    color:var(--ink);width:2.4rem;height:2.4rem;border-radius:50%;cursor:pointer;font-size:1rem}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+  #count{font-family:var(--display);font-size:.8rem;color:var(--muted);min-width:3.4rem;text-align:center}
+  .dot{display:inline-block;width:.55rem;height:.55rem;border-radius:50%;background:var(--accent);margin-bottom:1.6rem}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="previous">‹</button><span id="count"></span><button id="next" aria-label="next">›</button></div>
+<script>
+const S=[
+ {t:'title',e:'A live masterclass for athletes',h:'The Blank-Canvas Method',s:'How elite athletes find the second career they are actually built for.',by:'with Ryan Gonsalves, 2ndwind Academy'},
+ {t:'who',e:'Who this is for',h:'You are near the end of the game, or just out of it.',s:'And the question "what now?" showed up louder, and sooner, than anyone warned you it would. This hour is about answering it on purpose.'},
+ {t:'hook',e:'An honest reframe',big:'The advice you keep hearing is quietly making this harder.',s:'Let us look at why, and what to do instead.'},
+ {t:'part',n:'Part One',h:'The problem nobody names out loud'},
+ {t:'lead',e:'The identity trap',h:'For your whole life, the honest answer to "who are you?" was the sport.',s:'When the game ends, the question does not. It just gets quieter and heavier.'},
+ {t:'lead',e:'The skills myth',h:'"You have so many transferable skills" is the most comforting wrong answer you will get.',s:'It feels supportive. It also keeps you waiting to be picked for who you were, instead of building who you are next.'},
+ {t:'part',n:'Part Two',h:'The Blank-Canvas Method'},
+ {t:'pillars',e:'The method, in four moves',h:'Build from what already makes you rare.',items:[
+   ['Traits, not skills.','Start from the traits that made you elite.'],
+   ['The blank canvas.','Give yourself permission to begin again.'],
+   ['Match, do not guess.','Fit traits to careers with evidence.'],
+   ['Calm before the pivot.','Start exploring while you still compete.']
+ ]},
+ {t:'cardslide',e:'Pillar 1',k:'Traits, not skills',p:'Name the traits that made you elite: discipline, coachability, competing under pressure, learning fast from feedback. Those transfer. The drills do not.'},
+ {t:'cardslide',e:'Pillar 2',k:'The blank canvas',p:'Give yourself permission to be a beginner again. You are not behind. You are early, with a rare set of traits and a clean page to build on.'},
+ {t:'cardslide',e:'Pillar 3',k:'Match, do not guess',p:'"What do you want to be?" is paralysing. Instead, match your traits to the careers where athletes like you have already thrived, using evidence, not a blank stare.'},
+ {t:'cardslide',e:'Pillar 4',k:'Calm before the pivot',p:'The best transitions start while you are still competing. Build a buffer of exploration early so the move is a decision, not a panic.'},
+ {t:'part',n:'Part Three',h:'The seven weeks that change the question'},
+ {t:'steps',e:'The 7-week shape',h:'Athlete Career Design',rows:[
+   ['Weeks 1-2','Name the traits. Separate the person from the athlete.'],
+   ['Weeks 3-4','Match those traits to real career directions.'],
+   ['Weeks 5-6','Test the shortlist. Build the first missing skills.'],
+   ['Week 7','A plan you can act on, and a room that has your back.']
+ ]},
+ {t:'story',e:'Why me',p:'I left school at 16 to play football. Injuries ended that early. I spent the next twenty years rebuilding, through a degree and a long career in banking and wealth, before coming back to help athletes do it on purpose instead of by accident. I now coach Olympians and pros through exactly this.'},
+ {t:'cta',e:'Your next move',h:'Design your second wind, on purpose.',cta:'Join the next Athlete Career Design cohort at 2ndwind.io',disc:'Educational content only. No specific role, income, or result is guaranteed. Results vary and depend on your own effort, circumstances, and the market.'}
+];
+
+function esc(x){return x;}
+function render(s){
+ if(s.t==='title') return `
+   <span class="dot"></span>
+   <span class="eyebrow">${s.e}</span>
+   <h1>${s.h}</h1>
+   <p class="sub">${s.s}</p>
+   <p class="by">${s.by}</p>`;
+ if(s.t==='who') return `
+   <span class="eyebrow">${s.e}</span>
+   <h2>${s.h}</h2>
+   <p class="sub">${s.s}</p>`;
+ if(s.t==='hook') return `
+   <span class="eyebrow">${s.e}</span>
+   <p class="big">${s.big}</p>
+   <p class="sub">${s.s}</p>`;
+ if(s.t==='part') return `
+   <span class="eyebrow">${s.n}</span>
+   <h2>${s.h}</h2>`;
+ if(s.t==='lead') return `
+   <span class="eyebrow">${s.e}</span>
+   <p class="lead">${s.h}</p>
+   <p class="sub">${s.s}</p>`;
+ if(s.t==='pillars') return `
+   <span class="eyebrow">${s.e}</span>
+   <h2>${s.h}</h2>
+   <ol class="pillars">${s.items.map((it,i)=>`<li><span class="n">${i+1}</span><span class="t"><b>${it[0]}</b> ${it[1]}</span></li>`).join('')}</ol>`;
+ if(s.t==='cardslide') return `
+   <span class="eyebrow">${s.e}</span>
+   <div class="card"><div class="kicker">${s.k}</div><p>${s.p}</p></div>`;
+ if(s.t==='steps') return `
+   <span class="eyebrow">${s.e}</span>
+   <h2>${s.h}</h2>
+   <div class="steps">${s.rows.map(r=>`<div class="row"><span class="wk">${r[0]}</span><span class="d">${r[1]}</span></div>`).join('')}</div>`;
+ if(s.t==='story') return `
+   <span class="eyebrow">${s.e}</span>
+   <p class="story">${s.p}</p>`;
+ if(s.t==='cta') return `
+   <span class="eyebrow">${s.e}</span>
+   <h2>${s.h}</h2>
+   <p class="cta-line">${s.cta}</p>
+   <p class="disc">${s.disc}</p>`;
+ return '';
+}
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('section');d.className='slide';d.dataset.i=i;d.innerHTML=render(s);stage.appendChild(d);});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(i){cur=Math.max(0,Math.min(S.length-1,i));slides.forEach((el,k)=>el.classList.toggle('on',k===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(!e.target.closest('#nav'))show(cur+1);});
+show(0);
+</script>
+</body>
+</html>
