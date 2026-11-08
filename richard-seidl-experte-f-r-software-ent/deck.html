@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quality as an Attitude - A live masterclass with Richard Seidl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ec;        /* warm ivory ground, from his light scheme */
+    --ink:#1a1510;       /* espresso near-black */
+    --muted:#6b5f50;     /* warm muted */
+    --panel:#ece3d4;     /* warm panel */
+    --rule:#c3b299;      /* warm rule */
+    --accent:#9c4100;    /* burnt orange, from brand probe */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:56px 56px;margin:22px 0;min-height:460px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1,h2{font-family:"Source Serif 4",Georgia,serif;font-weight:700;line-height:1.08;letter-spacing:-.01em}
+  .title h1{font-size:60px}
+  .title .sub{font-family:"Source Serif 4",serif;font-size:24px;font-weight:400;color:var(--muted);margin-top:18px;line-height:1.35}
+  .title .by{margin-top:34px;font-size:15px;color:var(--ink);font-weight:500}
+  h2{font-size:40px;margin-bottom:10px}
+  .lead{font-size:21px;line-height:1.5;color:var(--muted);margin-top:14px;max-width:40ch}
+  .part .num{font-family:"Source Serif 4",serif;font-size:19px;color:var(--accent);font-weight:600;margin-bottom:10px}
+  ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px}
+  li{font-size:20px;line-height:1.4;padding-left:30px;position:relative;max-width:46ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .shift{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+  .shift .row{display:flex;align-items:center;gap:18px;font-family:"Source Serif 4",serif;font-size:26px}
+  .shift .from{color:var(--muted)}
+  .shift .to{color:var(--ink);font-weight:600}
+  .shift .arrow{color:var(--accent);font-weight:700}
+  .stat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:30px}
+  .stat .b{background:var(--panel);border-radius:10px;padding:22px 24px}
+  .stat .n{font-family:"Source Serif 4",serif;font-size:34px;font-weight:700;color:var(--accent)}
+  .stat .l{font-size:15px;color:var(--muted);margin-top:6px;line-height:1.3}
+  .big{font-family:"Source Serif 4",serif;font-size:34px;line-height:1.25;max-width:24ch}
+  .cta h2{font-size:46px}
+  .cta .step{margin-top:22px;font-size:22px;line-height:1.45;max-width:40ch}
+  .disclaimer{margin-top:40px;font-size:13px;color:var(--muted);line-height:1.5;max-width:60ch;border-top:1px solid var(--rule);padding-top:16px}
+  .foot{position:absolute;bottom:20px;right:28px;font-size:12px;color:var(--rule);letter-spacing:.08em}
+  @media(max-width:640px){.slide{padding:36px 28px}.title h1{font-size:40px}h2{font-size:30px}.stat{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:"title", h:"Quality as an Attitude",
+   sub:"Why the best testing teams win on mindset, not tools.",
+   by:"A live masterclass with Richard Seidl"},
+
+  {t:"who", k:"Who this is for", h:"For the tester who has outgrown the checklist",
+   lead:"You have two or three years in. You can run the tools and pass the certs. Now you want to talk about strategy, automation architecture, and where your career goes next, while your colleagues are still dealing with the basics."},
+
+  {t:"trap", k:"The trap", h:"You did everything right and still feel stuck",
+   lead:"You learned the techniques. You collected the certificates. And quality still slips, the release still slips, and somehow it still lands on you."},
+
+  {t:"hook", k:"A reframe", big:"The tools were never the problem. Quality is decided long before a single test runs, in how the team thinks."},
+
+  {t:"part", num:"Part One", h:"Why quality keeps slipping"},
+
+  {t:"point", k:"Problem one", h:"Testing as a checkbox",
+   lead:"When testing is a gate bolted on at the end, the important decisions have already been made. You are inspecting quality that is no longer there to find."},
+
+  {t:"point", k:"Problem two", h:"The certificate ceiling",
+   lead:"A certification gets you in the door and teaches you the vocabulary. It does not teach judgment, and judgment is the thing experienced testers are actually paid for."},
+
+  {t:"part", num:"Part Two", h:"Quality as an Attitude"},
+
+  {t:"point", k:"The core idea", h:"Quality is a posture, not a purchase",
+   lead:"Quality as an attitude means something simple and hard: it is a mindset and a set of team behaviors you live every day, not a tool you buy or a process box you tick. Good software serves people, not the other way around."},
+
+  {t:"list", k:"How it is taught", h:"Three pillars",
+   items:["Practice before theory. Every idea is tied to a real project, never a slide marathon.",
+          "Tailored to the tester. The work meets your real level and background, not a fixed syllabus.",
+          "Real-world relevance. You bring your own hardest problem into the room and leave with a plan."]},
+
+  {t:"shift", k:"The shift", h:"What changes in you",
+   rows:[["From tools","to mindset"],["From certificate","to craft"],["From gatekeeper","to team"]]},
+
+  {t:"part", num:"Part Three", h:"How the work actually runs"},
+
+  {t:"point", k:"In the room", h:"Hot seats",
+   lead:"You bring a live challenge from your own work. The group and I give direct, specific feedback, so you leave with a next move, not a theory."},
+
+  {t:"point", k:"In the room", h:"Expert impulses",
+   lead:"We work through what is actually moving in the field right now: testing strategy, AI, automation, and leadership, as a conversation between peers, not a lecture."},
+
+  {t:"point", k:"In the room", h:"Accountability",
+   lead:"You set goals that matter to you, and the group holds you to them between sessions. Momentum is the point, not another folder of notes."},
+
+  {t:"stats", k:"Why learn this from me", h:"A quarter century in the craft",
+   stats:[["25+ years","building better software with teams"],
+          ["8 books","on testing, automation, and agile quality"],
+          ["700+ testers","trained through the academy"],
+          ["DPSQ 2025","German Award for Software Quality"]]},
+
+  {t:"point", k:"The promise", h:"Stop clicking through test cases",
+   lead:"The goal is simple. You stop being the person who just runs the test cases and become the person who sets the standard the team tests to."},
+
+  {t:"cta", k:"Next step", h:"Ready to test like it is a craft?",
+   step:"Come to the live session, then apply for the Software Test Mastermind. Six handpicked testers, twice a month, for six months. We start with a short application and a conversation.",
+   disc:"This masterclass is educational. It shares methods and experience from a working career in software quality. No specific result is guaranteed. Results vary and depend on the work you put in."}
+];
+
+const deck = document.getElementById("deck");
+function el(tag, cls, html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+S.forEach((s, i) => {
+  const d = el("div", "slide " + s.t);
+  if (s.k) d.appendChild(el("div","kicker",s.k));
+  if (s.t === "title"){
+    d.appendChild(el("h1",null,s.h));
+    d.appendChild(el("div","sub",s.sub));
+    d.appendChild(el("div","by",s.by));
+  } else if (s.t === "part"){
+    d.appendChild(el("div","num",s.num));
+    d.appendChild(el("h2",null,s.h));
+  } else if (s.t === "hook"){
+    d.appendChild(el("div","big",s.big));
+  } else if (s.t === "shift"){
+    d.appendChild(el("h2",null,s.h));
+    const wrap = el("div","shift");
+    s.rows.forEach(r=>{
+      const row = el("div","row");
+      row.appendChild(el("span","from",r[0]));
+      row.appendChild(el("span","arrow","&rarr;"));
+      row.appendChild(el("span","to",r[1]));
+      wrap.appendChild(row);
+    });
+    d.appendChild(wrap);
+  } else if (s.t === "list"){
+    d.appendChild(el("h2",null,s.h));
+    const ul = el("ul");
+    s.items.forEach(it=>ul.appendChild(el("li",null,it)));
+    d.appendChild(ul);
+  } else if (s.t === "stats"){
+    d.appendChild(el("h2",null,s.h));
+    const g = el("div","stat");
+    s.stats.forEach(b=>{
+      const box = el("div","b");
+      box.appendChild(el("div","n",b[0]));
+      box.appendChild(el("div","l",b[1]));
+      g.appendChild(box);
+    });
+    d.appendChild(g);
+  } else if (s.t === "cta"){
+    d.appendChild(el("h2",null,s.h));
+    d.appendChild(el("div","step",s.step));
+    d.appendChild(el("div","disclaimer",s.disc));
+  } else {
+    d.appendChild(el("h2",null,s.h));
+    if (s.lead) d.appendChild(el("div","lead",s.lead));
+  }
+  d.appendChild(el("div","foot","Quality as an Attitude"));
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
