@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reliable Revenue Roadmap | Life After Corporate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Red+Hat+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f4f1ed;      /* her warm cream ground */
+    --panel:#ffffff;
+    --sand:#e4d4b0;    /* her sand tint */
+    --ink:#023e4d;     /* her dominant deep teal */
+    --body:#333333;
+    --rule:#b2cbd1;    /* her pale blue hairline */
+    --accent:#cba425;  /* her gold link color */
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--body);font-family:'Red Hat Display',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:980px;}
+  .slide.active{display:block;animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .eyebrow{font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Gloock',Georgia,serif;font-weight:400;color:var(--ink);font-size:clamp(34px,6vw,68px);line-height:1.08;letter-spacing:-.01em;margin-bottom:24px;}
+  h2{font-family:'Gloock',Georgia,serif;font-weight:400;color:var(--ink);font-size:clamp(28px,4.4vw,46px);line-height:1.12;margin-bottom:22px;}
+  .promise{font-size:clamp(18px,2.2vw,24px);color:var(--body);max-width:40ch;line-height:1.5;}
+  p.lead{font-size:clamp(17px,2vw,21px);color:var(--body);max-width:52ch;line-height:1.6;margin-bottom:16px;}
+  ul{list-style:none;max-width:60ch;}
+  li{font-size:clamp(16px,1.9vw,20px);color:var(--body);line-height:1.5;padding:14px 0 14px 34px;position:relative;border-bottom:1px solid var(--rule);}
+  li:last-child{border-bottom:none;}
+  li::before{content:"";position:absolute;left:0;top:22px;width:16px;height:2px;background:var(--accent);}
+  .part{font-family:'Gloock',Georgia,serif;}
+  .part .num{display:inline-block;font-size:15px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-family:'Red Hat Display',sans-serif;margin-bottom:18px;}
+  .pillar{display:flex;gap:22px;align-items:flex-start;}
+  .pillar .k{font-family:'Gloock',serif;font-size:clamp(40px,6vw,72px);color:var(--sand);line-height:.9;}
+  .pillar .k.inked{color:var(--accent);}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:34px 38px;max-width:62ch;}
+  .brandline{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;margin-top:30px;}
+  .byline{font-size:16px;color:var(--body);margin-top:8px;}
+  .disclaimer{font-size:13px;color:#6b7b7f;margin-top:26px;max-width:58ch;line-height:1.5;}
+  .cta-steps li::before{background:var(--ink);}
+  .dark{background:var(--ink);} /* used via body swap on cta if needed */
+  nav{position:fixed;bottom:20px;right:26px;display:flex;gap:10px;align-items:center;font-family:'Red Hat Display',sans-serif;}
+  nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);font-size:18px;width:40px;height:40px;border-radius:50%;cursor:pointer;}
+  nav button:hover{border-color:var(--accent);color:var(--accent);}
+  #count{font-size:13px;color:#6b7b7f;min-width:52px;text-align:center;}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s;}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div id="stage"></div>
+<nav><button id="prev">&#8249;</button><span id="count"></span><button id="next">&#8250;</button></nav>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass with Deb Boulanger', h1:'The Reliable Revenue Roadmap',
+   promise:'How women who left corporate build predictable, premium income without chasing referrals.',
+   brandline:'Life After Corporate'},
+  {t:'who', eyebrow:'Who this is for', h:'You left the corner office. You did not leave your ambition.',
+   lead:'You spent fifteen, twenty, twenty-five years earning the title. Now you are building a coaching or consulting business on your own terms. The expertise is real. The predictable paycheck is gone.'},
+  {t:'trap', eyebrow:'The trap', h:'So you do what got you promoted: you work harder.',
+   lead:'More networking. More free calls. Chasing the next referral. Some months are wonderful. Some months are crickets. And you cannot tell which is coming.'},
+  {t:'hook', hook:'Working harder is exactly why your revenue stays unpredictable.'},
+  {t:'part', num:'One', h:'The Referral Roulette Trap'},
+  {t:'copy', h2:'Referrals are a gift, not a system.',
+   lead:'A referral depends on someone else remembering you at the exact moment their friend has the exact problem. You cannot schedule that. You cannot forecast it. You cannot scale it.',
+   lead2:'That is why the revenue swings. Not because you are not good enough. Because you are relying on a channel you do not control.'},
+  {t:'copy', h2:'And the usual advice makes it worse.',
+   list:['"Just network more" turns your calendar into unpaid coffee chats.',
+         '"Lower your price to get started" trains the market to see you as cheap.',
+         '"Post every day" adds noise, not qualified buyers.']},
+  {t:'part', num:'Two', h:'The Reliable Revenue System'},
+  {t:'copy', h2:'Three moves that replace luck with a system.',
+   lead:'This is the work I take women through. It is not about doing more. It is about building a path a stranger can travel from never having heard of you to paying you a premium fee.'},
+  {t:'pillar', pillar:'1', h2:'STANDOUT Positioning',
+   lead:'Before you sell anything, we make you the obvious choice for one specific buyer. A standout value proposition and messaging that sets you apart, so you stop competing on price and start being sought out.'},
+  {t:'pillar', pillar:'2', h2:'A Premium Offer, Validated',
+   lead:'We shape one premium offer and pressure-test it with real buyer conversations and an AI strategy system before you ever launch. You find out what the market will pay for, instead of guessing and hoping.'},
+  {t:'pillar', pillar:'3', h2:'The CEO Schedule',
+   lead:'We build the week around the few activities that actually produce revenue, and protect them. You stop working in the business all day and start working on it, which is the only way it scales past you.'},
+  {t:'copy', h2:'Together, they become a path, not a scramble.',
+   lead:'Positioning makes you findable and premium. A validated offer gives a stranger a clear reason to buy. The CEO schedule makes it repeatable. That is what reliable revenue actually is: a path you control, run on purpose, every month.'},
+  {t:'part', num:'Three', h:'What Reliable Revenue Looks Like'},
+  {t:'copy', h2:'Predictable, premium, and yours.',
+   list:['You know roughly what next month will bring, because the path is running on purpose.',
+         'You charge premium fees without flinching, because your positioning earned them.',
+         'You spend your time on the work only you can do, not chasing the next warm intro.']},
+  {t:'copy', h2:'Whether you are just starting or already scaling.',
+   list:['Just out of corporate: you build the positioning and first premium offer the right way.',
+         'A few years in: you replace the referral swings with a path you control.',
+         'Scaling six figures: you tighten the system so growth does not cost you your life.']},
+  {t:'whyme', eyebrow:'Why me', h2:'I built this because I needed it.',
+   lead:'I left a senior corporate career to build my own business and ran straight into the feast-or-famine cycle myself. I built the Reliable Revenue System to get out of it, and I have spent years helping women founders use it to close the revenue gap for good.',
+   brand:true},
+  {t:'cta', eyebrow:'Your next step', h2:'Ready to build your reliable revenue?',
+   lead:'If today gave you the map, the Business Coaching Academy is where we walk it together, step by step. And when you are scaling a six-figure business, the Reliable Revenue Mastermind is the room for that next level.',
+   steps:['Join the Business Coaching Academy to build your positioning and validated offer.',
+          'Apply for the Reliable Revenue Mastermind when you are ready to scale.',
+          'Start free inside the Life After Corporate Community.'],
+   brandline:'Life After Corporate   lifeaftercorporate.com',
+   disclaimer:'This masterclass is for education only. No specific income or result is guaranteed. Results vary and depend on your market, your offer, and the work you put in.'}
+];
+
+const stage = document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function render(d){
+  if(d.t==='title'){
+    return `<div class="slide"><div class="eyebrow">${esc(d.eyebrow)}</div>
+      <h1>${esc(d.h1)}</h1>
+      <div class="promise">${esc(d.promise)}</div>
+      <div class="brandline">${esc(d.brandline)}</div></div>`;
+  }
+  if(d.t==='cta'){
+    return `<div class="slide"><div class="eyebrow">${esc(d.eyebrow)}</div>
+      <h2>${esc(d.h2)}</h2>
+      <p class="lead">${esc(d.lead)}</p>
+      <ul class="cta-steps">${d.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+      <div class="brandline">${esc(d.brandline)}</div>
+      <div class="disclaimer">${esc(d.disclaimer)}</div></div>`;
+  }
+  if(d.t==='part'){ return `<div class="slide part"><div class="num">Part ${esc(d.num)}</div><h1>${esc(d.h)}</h1></div>`; }
+  if(d.t==='hook'){ return `<div class="slide"><h1>${esc(d.hook)}</h1></div>`; }
+  let inner='';
+  if(d.eyebrow) inner+=`<div class="eyebrow">${esc(d.eyebrow)}</div>`;
+  if(d.t==='pillar'){
+    const inked = d.pillar==='2'?' inked':'';
+    inner+=`<div class="pillar"><div class="k${inked}">${esc(d.pillar)}</div><div>`;
+    if(d.h2) inner+=`<h2>${esc(d.h2)}</h2>`;
+    if(d.lead) inner+=`<p class="lead">${esc(d.lead)}</p>`;
+    inner+=`</div></div>`;
+    return `<div class="slide">${inner}</div>`;
+  }
+  if(d.h) inner+=`<h1>${esc(d.h)}</h1>`;
+  if(d.h2) inner+=`<h2>${esc(d.h2)}</h2>`;
+  if(d.lead) inner+=`<p class="lead">${esc(d.lead)}</p>`;
+  if(d.lead2) inner+=`<p class="lead">${esc(d.lead2)}</p>`;
+  if(d.list){ inner+='<ul>'+d.list.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'; }
+  if(d.brand) inner+=`<div class="byline">Deb Boulanger, founder of Life After Corporate</div>`;
+  return `<div class="slide">${inner}</div>`;
+}
+stage.innerHTML = S.map(render).join('');
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){ i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  document.getElementById('count').textContent=(i+1)+' / '+slides.length;
+  document.getElementById('prog').style.width=((i+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
