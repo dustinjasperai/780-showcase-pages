@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find the Friction — Culture of Convenience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071e2c;        /* site ground, dark scheme */
+    --panel:#0d2b3d;     /* navy lifted */
+    --rule:#1c4257;
+    --accent:#fec10f;    /* brand gold */
+    --sky:#3995d1;       /* secondary, used sparingly */
+    --ink:#f4f6f8;
+    --muted:#9fb3bf;
+    --head:'Barlow Condensed',system-ui,sans-serif;
+    --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 6vw}
+  .slide{display:none;width:min(1040px,100%);min-height:60vh}
+  .slide.active{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:var(--head);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-size:1rem;font-weight:600;margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.6rem,6vw,4.6rem);line-height:1.02;letter-spacing:.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(2rem,4.4vw,3.2rem);line-height:1.05;margin-bottom:1.2rem}
+  .lede{font-size:clamp(1.1rem,2.1vw,1.5rem);color:var(--muted);margin-top:1.6rem;max-width:46ch;line-height:1.5}
+  p.body{font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.6;max-width:54ch;margin-top:1rem;color:var(--ink)}
+  .kicker{color:var(--accent);font-weight:600}
+  .part{font-family:var(--head);font-size:clamp(3rem,8vw,6rem);font-weight:700;color:var(--panel);-webkit-text-stroke:2px var(--accent);line-height:.9}
+  .section-label{font-family:var(--head);text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-size:1.3rem;margin-top:1.4rem}
+  ul.grid{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1rem 2.4rem;margin-top:1.8rem}
+  ul.grid li{padding:1rem 1.1rem;background:var(--panel);border-left:3px solid var(--accent);border-radius:4px}
+  ul.grid li b{font-family:var(--head);font-size:1.3rem;letter-spacing:.02em;display:block;color:var(--ink)}
+  ul.grid li span{color:var(--muted);font-size:.98rem;display:block;margin-top:.3rem;line-height:1.4}
+  .dims{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem}
+  .dims span{font-family:var(--head);letter-spacing:.04em;background:var(--panel);border:1px solid var(--rule);color:var(--ink);padding:.6rem 1rem;border-radius:999px;font-size:1.15rem}
+  .big-quote{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4vw,3rem);line-height:1.12;max-width:20ch}
+  .cta-box{margin-top:2rem;padding:1.4rem 1.6rem;background:var(--panel);border:1px solid var(--accent);border-radius:8px;display:inline-block}
+  .cta-box b{font-family:var(--head);font-size:1.6rem;color:var(--accent);letter-spacing:.02em}
+  .disclaimer{color:var(--muted);font-size:.82rem;margin-top:2.2rem;max-width:60ch;line-height:1.5}
+  .cred{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:1.6rem}
+  .cred div{min-width:180px}
+  .cred b{font-family:var(--head);font-size:2.4rem;color:var(--accent);display:block;line-height:1}
+  .cred span{color:var(--muted);font-size:.98rem}
+  footer{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:1rem 6vw;font-size:.8rem;color:var(--muted);font-family:var(--head);letter-spacing:.1em;text-transform:uppercase}
+  footer .brand{color:var(--ink)}
+  .nav{position:fixed;right:6vw;bottom:2.6rem;display:flex;gap:.6rem;z-index:5}
+  .nav button{font-family:var(--head);background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;padding:.5rem .9rem;cursor:pointer;font-size:1rem}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span class="brand">Culture of Convenience</span><span id="pageno"></span></footer>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title'},
+ {t:'agenda'},
+ {t:'who'},
+ {t:'trap'},
+ {t:'reframe'},
+ {t:'part',n:'One',label:'What friction actually is'},
+ {t:'friction-def'},
+ {t:'theater'},
+ {t:'training'},
+ {t:'cost'},
+ {t:'part',n:'Two',label:'The Seven Suspects'},
+ {t:'suspects-intro'},
+ {t:'suspects-a'},
+ {t:'suspects-b'},
+ {t:'hdi'},
+ {t:'part',n:'Three',label:'Making the fix stick'},
+ {t:'reengineer'},
+ {t:'looks-like'},
+ {t:'takeaways'},
+ {t:'credibility'},
+ {t:'cta',disclaimer:'Educational session only. No specific result is guaranteed. Results vary by store, team and market. Examples are illustrative of operational approaches and are not a promise of outcomes, revenue or income.'}
+];
+
+function slideHTML(s){
+ switch(s.t){
+  case 'title': return `
+    <div class="eyebrow">A live masterclass for convenience store operators</div>
+    <h1>Find the Friction</h1>
+    <div class="lede">Make the right thing the easy thing. The friction behind your team's hardest days has a name, and it is fixable.</div>`;
+  case 'agenda': return `
+    <div class="eyebrow">The next 45 minutes</div>
+    <h2>Here is where we are going.</h2>
+    <ul class="grid">
+      <li><b>What friction is</b><span>And why busy has been hiding it from you.</span></li>
+      <li><b>The Seven Suspects</b><span>The patterns behind every repeat headache.</span></li>
+      <li><b>The Human Difficulty Index</b><span>How to find where friction is concentrated.</span></li>
+      <li><b>The first move</b><span>What to re-engineer so the fix actually sticks.</span></li>
+    </ul>`;
+  case 'who': return `
+    <div class="eyebrow">Who this is for</div>
+    <h2>You run the store, and the same problems keep coming back.</h2>
+    <p class="body">Multi-unit operators and the leaders who answer for consistency across locations, through turnover, and through growth. If you keep solving the same headache every month, this hour is for you.</p>`;
+  case 'trap': return `
+    <div class="eyebrow">The trap</div>
+    <h2>More effort keeps not closing the gap.</h2>
+    <div class="big-quote">Your best people never stop moving, and you are still behind.</div>
+    <p class="body">Longer shifts have not closed it either. So you start to wonder if it is a people problem.</p>`;
+  case 'reframe': return `
+    <div class="eyebrow">The reframe</div>
+    <h2>It is not a people problem. It is a friction problem.</h2>
+    <p class="body"><span class="kicker">Friction</span> is any place where the right thing is harder to do than the wrong thing. Your team is not lazy. The path is just built so the wrong move is the easy move. Change the path and the behavior follows.</p>`;
+  case 'part': return `
+    <div class="part">Part ${s.n}</div>
+    <div class="section-label">${s.label}</div>`;
+  case 'friction-def': return `
+    <div class="eyebrow">Part One</div>
+    <h2>The right thing has to be the easy thing.</h2>
+    <p class="body">Every standard you set competes with the path of least resistance. When the correct step takes more clicks, more walking, more asking, people quietly route around it. Friction is that gap, and you can measure it.</p>`;
+  case 'theater': return `
+    <div class="eyebrow">Convenience Theater</div>
+    <h2>Busy is not the same as effective.</h2>
+    <p class="body">Motion and results look identical from the inside. A team can be slammed all day and still move nothing forward. Three questions, under a minute each, tell you which one you are watching:</p>
+    <ul class="grid">
+      <li><b>What got finished?</b><span>Not what got touched. What is actually done.</span></li>
+      <li><b>Who owned it?</b><span>If everyone owned it, no one did.</span></li>
+      <li><b>Will it hold tomorrow?</b><span>Or does it fall apart on the next shift?</span></li>
+    </ul>`;
+  case 'training': return `
+    <div class="eyebrow">The hard truth</div>
+    <h2>New hires and more training will not fix the friction.</h2>
+    <p class="body">Friction is structural. When the structure makes the wrong thing easier, every new person inherits it and every training wears off against it. You cannot staff your way out of a path built the wrong way.</p>`;
+  case 'cost': return `
+    <div class="eyebrow">What it is costing you</div>
+    <h2>Friction shows up on every line that matters.</h2>
+    <p class="body">It leaks out as turnover you keep re-hiring against, as shrink nobody can trace, as a new standard that works for three weeks and fades. You feel it as the same conversation on repeat. Unnamed, it just looks like the cost of doing business.</p>`;
+  case 'suspects-intro': return `
+    <div class="eyebrow">The Seven Suspects</div>
+    <h2>Every operational headache has the same DNA.</h2>
+    <p class="body">The symptoms feel different. The causes repeat. Name the pattern and you can finally remove it instead of firefighting it again next week.</p>`;
+  case 'suspects-a': return `
+    <div class="eyebrow">The Seven Suspects, part one</div>
+    <h2>Four you will recognize by Monday.</h2>
+    <ul class="grid">
+      <li><b>Strategic Fog</b><span>Priorities nobody can rank, so everything feels urgent.</span></li>
+      <li><b>Accountability Drift</b><span>Ownership that never quite lands on a person.</span></li>
+      <li><b>Tribal Knowledge</b><span>How-it-works lives in one head, not the system.</span></li>
+      <li><b>Fragmented Execution</b><span>Every location does the same job a different way.</span></li>
+    </ul>`;
+  case 'suspects-b': return `
+    <div class="eyebrow">The Seven Suspects, part two</div>
+    <h2>And four more that quietly undo your wins.</h2>
+    <ul class="grid">
+      <li><b>Reactive Operations</b><span>Problems caught after they cost you, not before.</span></li>
+      <li><b>Visibility Illusion</b><span>Numbers on a screen that no one actually trusts.</span></li>
+      <li><b>Improvement Decay</b><span>Fixes that quietly slide back within weeks.</span></li>
+      <li><b>Resource Dependency</b><span>Performance that hangs on one specific person showing up.</span></li>
+    </ul>`;
+  case 'hdi': return `
+    <div class="eyebrow">The Human Difficulty Index</div>
+    <h2>A map before a prescription.</h2>
+    <p class="body">Before you fix anything, you find where the friction is concentrated. The Index scores seven dimensions and grades each one from annoying to critical, so you work the strain that matters first.</p>
+    <div class="dims"><span>Clarity</span><span>Consistency</span><span>Decision &amp; Ownership</span><span>Visibility</span><span>Capacity</span><span>Confidence</span><span>Sustainability</span></div>`;
+  case 'reengineer': return `
+    <div class="eyebrow">Part Three</div>
+    <h2>Re-engineer the path, do not push harder.</h2>
+    <p class="body">Once you can name the suspect, the fix is almost always the same shape: make the right action the path of least resistance. Fewer steps, clearer ownership, the knowledge in the system instead of the person.</p>`;
+  case 'looks-like': return `
+    <div class="eyebrow">A low-friction store</div>
+    <h2>A store that holds through turnover and growth.</h2>
+    <p class="body">The right thing stops depending on who is working. New hires ramp against a path that already points the right way. The improvement you made in March is still running in September. That is what removing friction buys you.</p>`;
+  case 'takeaways': return `
+    <div class="eyebrow">What you leave with</div>
+    <h2>Three things you can use tomorrow.</h2>
+    <ul class="grid">
+      <li><b>A name for the work</b><span>The friction your team does around broken processes.</span></li>
+      <li><b>Three questions</b><span>To ask any manager, under a minute each.</span></li>
+      <li><b>One first move</b><span>The path to re-engineer before anything else.</span></li>
+    </ul>`;
+  case 'credibility': return `
+    <div class="eyebrow">Why listen to us</div>
+    <h2>Four decades of building the systems that did not exist.</h2>
+    <p class="body">Culture of Convenience was built from the floor up, from scaling a multi-unit operation and building the training systems it needed when none were on the shelf.</p>
+    <div class="cred">
+      <div><b>40+ yrs</b><span>building, running and scaling operations</span></div>
+      <div><b>7</b><span>friction dimensions in the Human Difficulty Index</span></div>
+      <div><b>With you</b><span>we work alongside your team, not around it</span></div>
+    </div>`;
+  case 'cta': return `
+    <div class="eyebrow">Your next step</div>
+    <h2>Start a Friction Discovery Conversation.</h2>
+    <p class="body">Bring one headache that keeps coming back. We will help you name the friction underneath it and show you the first move to remove it.</p>
+    <div class="cta-box"><b>Find Your Friction at cultureofconvenience.com</b></div>
+    <div class="disclaimer">${s.disclaimer}</div>`;
+ }
+}
+
+let i=0;
+const stage=document.getElementById('stage');
+function render(){
+ stage.innerHTML=`<div class="slide active">${slideHTML(S[i])}</div>`;
+ document.getElementById('pageno').textContent=(i+1)+' / '+S.length;
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
