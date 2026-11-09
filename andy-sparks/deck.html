@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Capacity Gap: a masterclass by Andy Sparks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f2ead4;
+    --panel: #faf7ec;
+    --ink: #2b3a24;
+    --ink-soft: #3b2f26;
+    --ink-muted: #5a5040;
+    --accent: #3d4f2f;
+    --rule: #d4c9a8;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    background: var(--ink);
+    color: var(--ink-soft);
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage { max-width: 1040px; margin: 0 auto; padding: 32px 20px 72px; }
+  .slide {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 64px 60px;
+    margin: 0 0 22px;
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .kicker { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .num { position: absolute; top: 24px; right: 30px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-muted); }
+  h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 56px; line-height: 1.08; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 22px; }
+  h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 38px; line-height: 1.14; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 20px; }
+  .sub { font-size: 23px; color: var(--ink-muted); line-height: 1.4; }
+  p { font-size: 21px; line-height: 1.5; color: var(--ink-soft); margin-bottom: 16px; max-width: 42ch; }
+  .big { font-size: 34px; line-height: 1.3; color: var(--ink); max-width: 30ch; }
+  ul { list-style: none; margin-top: 10px; }
+  li { font-size: 21px; line-height: 1.45; color: var(--ink-soft); padding-left: 26px; position: relative; margin-bottom: 14px; max-width: 44ch; }
+  li::before { content: ""; position: absolute; left: 0; top: 13px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .pin { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(61,79,47,0.18); display: inline-block; margin-right: 10px; vertical-align: middle; }
+  .byline { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--ink-muted); margin-top: 34px; letter-spacing: 0.02em; }
+  .label { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .step { border-left: 3px solid var(--accent); padding-left: 20px; margin-bottom: 22px; }
+  .step h3 { font-family: 'Fraunces', serif; font-size: 25px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .step p { font-size: 18px; margin-bottom: 0; color: var(--ink-muted); }
+  .disclaimer { font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.5; color: var(--ink-muted); margin-top: 24px; max-width: 54ch; }
+  .cta-line { font-size: 24px; color: var(--ink); margin-top: 10px; }
+  @media (max-width: 680px) {
+    .slide { padding: 44px 28px; min-height: 420px; }
+    h1 { font-size: 38px; } h2 { font-size: 28px; } .sub { font-size: 19px; }
+    p, li { font-size: 18px; } .big { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const S = [
+  {t:'title',
+    kicker:'A masterclass for startup founders & CEOs',
+    h1:'The Capacity Gap',
+    sub:'Why knowing the right answer was never your real bottleneck, and how to find your own position before the job changes under you again.',
+    byline:'Andy Sparks, executive coach and two-time startup CEO' },
+
+  {t:'who',
+    kicker:'Who this is for',
+    h2:'You run a venture-backed company',
+    body:['You lead a B2B software company somewhere between 10 and 300 people.',
+          'The product works. The team is real. And the job you are doing today is not the job you signed up for.',
+          'This is for the founder who keeps hearing the right advice and still cannot seem to act on it.'] },
+
+  {t:'reframe',
+    kicker:'The trap',
+    big:'You have read the books. You know the best practice. And you still are not doing it.',
+    note:'That gap is not a knowledge problem. If it were, the summary would have fixed it already.' },
+
+  {t:'hook',
+    kicker:'The reframe',
+    big:'The answer is rarely the bottleneck. Your capacity to use the answer is the bottleneck.',
+    note:'Everything in this hour is about widening that capacity, not handing you one more answer to stack on the pile.' },
+
+  {t:'part', label:'Part one', h2:'The job changed underneath you',
+    body:['Every stage of a company asks a different person to run it.',
+          'What made you a great founder at ten people quietly becomes the thing holding you back at eighty.',
+          'The work is noticing that shift in real time, instead of a year after it cost you.'] },
+
+  {t:'two',
+    kicker:'Two layers, always',
+    h2:'Outer skills and the inner game',
+    body:['One layer is the craft: hiring, performance management, sales, building a team. Real, teachable, learnable.',
+          'The other layer is what stops you using the craft you already know.'] },
+
+  {t:'reframe',
+    kicker:'The inner game',
+    big:'If your ego will not let you hire people smarter than you, that stays a problem until you figure out what is underneath it.',
+    note:'The tactic is never the thing in the way. The thing underneath the tactic is.' },
+
+  {t:'part', label:'Part two', h2:'The Google Maps model',
+    body:['My whole method fits in one picture you already use every day.',
+          'Before Maps can route you anywhere, it has to do one thing first: find out exactly where you are standing.'] },
+
+  {t:'bluedot',
+    kicker:'Step one',
+    h2:'Find your blue dot',
+    body:['<span class="pin"></span>Where are you actually, right now, not where you wish you were.',
+          'How did you get here. What do you like about this spot. What do you not.',
+          'Most founders try to route before they have located the dot. The map spins.'] },
+
+  {t:'who',
+    kicker:'Step two',
+    h2:'Pick a real destination',
+    body:['Only once the dot is honest can you choose where you are going and mean it.',
+          'A destination you actually want pulls different behaviour out of you than a goal you inherited from a board deck.'] },
+
+  {t:'steps',
+    kicker:'The move, every time',
+    h2:'Read, stay, then intervene',
+    steps:[
+      { h:'Read what is actually happening', p:'Is the root structural, interpersonal, or personal? Name it before you touch it.' },
+      { h:'Stay with what you found', p:'Resist the reach for a fix. The first solution is usually aimed at the symptom.' },
+      { h:'Offer the intervention that fits', p:'Match the move to the real root, not to whatever is loudest.' } ] },
+
+  {t:'reframe',
+    kicker:'Why this order matters',
+    big:'Most coaching and most advice skips straight to the intervention. That is why it stops working the week after you hear it.',
+    note:'Diagnosis before prescription. Same as any discipline you would trust with something that mattered.' },
+
+  {t:'part', label:'Part three', h2:'What the work looks like',
+    body:['It is not a lecture and it is not a therapy couch.',
+          'It is a repeatable rhythm you can run on yourself long after a session ends.'] },
+
+  {t:'steps',
+    kicker:'The session arc',
+    h2:'Update, work, wrap up',
+    steps:[
+      { h:'The update', p:'What moved, what changed, what is alive since last time.' },
+      { h:'The work', p:'What do you want to walk away with today? Then we go there together.' },
+      { h:'The wrap up', p:'Turn the insight into the one or two things you will actually do.' } ] },
+
+  {t:'who',
+    kicker:'Why me',
+    h2:'I have sat in the chair',
+    body:['Startup CEO twice, COO once. I lived the mis-hires, the co-founder split, the board meetings that did not go to plan.',
+          'Since 2020 I have coached more than sixty founders for over eighteen hundred hours.',
+          'I built this to be the person I needed and did not have.'] },
+
+  {t:'close',
+    kicker:'The one thing to keep',
+    big:'Build the capacity, and the answers you already have finally start working.',
+    note:'That is the whole game. Everything else is a tactic sitting on top of it.' },
+
+  {t:'cta',
+    kicker:'If this is your season',
+    h2:'Let us work together',
+    cta:'If you are a founder or CEO at one of these turns, book a conversation with me and we will find your blue dot together.',
+    disclaimer:'This masterclass is for education only. It is not business, legal, or financial advice. No specific result is guaranteed. Results vary with your own company, market, and effort.' }
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s, i) => {
+  const d = document.createElement('section');
+  d.className = 'slide';
+  let h = '<div class="num">' + String(i+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0') + '</div>';
+  if (s.kicker) h += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.label) h += '<div class="label">' + s.label + '</div>';
+  if (s.h1) h += '<h1>' + s.h1 + '</h1>';
+  if (s.h2) h += '<h2>' + s.h2 + '</h2>';
+  if (s.sub) h += '<p class="sub">' + s.sub + '</p>';
+  if (s.big) h += '<p class="big">' + s.big + '</p>';
+  if (s.body) h += s.body.map(x => '<p>' + x + '</p>').join('');
+  if (s.steps) h += s.steps.map(st => '<div class="step"><h3>' + st.h + '</h3><p>' + st.p + '</p></div>').join('');
+  if (s.note) h += '<p style="color:var(--ink-muted);font-size:18px;margin-top:10px;">' + s.note + '</p>';
+  if (s.cta) h += '<p class="cta-line">' + s.cta + '</p>';
+  if (s.byline) h += '<div class="byline">' + s.byline + '</div>';
+  if (s.disclaimer) h += '<div class="disclaimer">' + s.disclaimer + '</div>';
+  d.innerHTML = h;
+  stage.appendChild(d);
+});
+</script>
+</body>
+</html>
