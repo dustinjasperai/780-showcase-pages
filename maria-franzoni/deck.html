@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bookability Formula — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f1ec; --panel:#fffcf9; --ink:#2d3031; --muted:#595959;
+    --accent:#f9684b; --rule:#e6ded4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Roboto",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;position:relative;
+    box-shadow:0 18px 50px rgba(45,48,49,.10);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 68px;display:none;flex-direction:column;
+    justify-content:center;gap:18px}
+  .slide.on{display:flex}
+  .eyebrow{font-family:"Raleway";font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent)}
+  h1{font-family:"Raleway";font-weight:800;font-size:46px;line-height:1.06;letter-spacing:-.01em}
+  h2{font-family:"Raleway";font-weight:800;font-size:34px;line-height:1.1}
+  h3{font-family:"Raleway";font-weight:700;font-size:24px}
+  p{font-size:19px;line-height:1.5;color:var(--muted);max-width:62ch}
+  p.lead{font-size:22px;color:var(--ink)}
+  .big{font-family:"Raleway";font-weight:800;font-size:40px;line-height:1.08;letter-spacing:-.01em}
+  ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  li{font-size:19px;line-height:1.4;padding-left:30px;position:relative;color:var(--ink)}
+  li::before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;border-radius:3px;
+    background:var(--accent)}
+  .num{font-family:"Raleway";font-weight:800;color:var(--accent);font-size:15px;
+    letter-spacing:.12em;text-transform:uppercase}
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:10px}
+  .step{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:16px 14px}
+  .step span{font-family:"Raleway";font-weight:800;color:var(--accent);font-size:13px}
+  .step b{display:block;font-family:"Raleway";font-weight:700;font-size:17px;margin-top:6px;color:var(--ink)}
+  .traits{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  .trait{background:var(--bg);border:1px solid var(--rule);border-left:4px solid var(--accent);
+    border-radius:8px;padding:14px 18px;font-family:"Raleway";font-weight:700;font-size:20px}
+  .cred{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .chip{background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:8px 16px;
+    font-size:15px;color:var(--ink)}
+  .cta-box{background:var(--ink);color:#fff;border-radius:12px;padding:30px 34px;max-width:70%}
+  .cta-box .accent{color:var(--accent)}
+  .disc{font-size:12.5px;color:var(--muted);margin-top:14px;max-width:70ch}
+  footer{position:absolute;left:68px;bottom:26px;font-size:13px;color:var(--muted);
+    font-family:"Raleway";font-weight:600;letter-spacing:.04em}
+  #dots{position:absolute;right:28px;bottom:24px;display:flex;gap:6px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+  #dots i.on{background:var(--accent)}
+  #nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+    font-size:13px;color:var(--muted)}
+  button{font:inherit;border:1px solid var(--rule);background:#fff;color:var(--ink);
+    border-radius:8px;padding:6px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass with Maria Franzoni', h:'The Bookability Formula',
+   p:'How the 1% most booked speakers get chosen, from someone who spent 23 years deciding.'},
+  {t:'lead', eyebrow:'What you will leave with',
+   h:'Why bookers choose one speaker over another',
+   p:'You will see the booking decision from the other side of the desk, and the four things that make a speaker the easy yes. Not stagecraft. The commercial engine around your speaking.'},
+  {t:'list', eyebrow:'Who this is for', h:'You are good on the stage. You are losing the shortlist.',
+   items:['You deliver brilliantly, yet the diary still runs hot and cold.',
+          'Enquiries go quiet after the fee conversation.',
+          'You hear "we went in a different direction" more than you would like.',
+          'You know you are worth more than you are charging.']},
+  {t:'lead', eyebrow:'The trap', h:'Build a great talk. Set a fee. Wait for the phone.',
+   p:'Most speakers pour everything into the keynote, then sit and hope the right enquiry arrives. That leaves the booking decision entirely in someone else hands, and most of your income on the table.'},
+  {t:'big', eyebrow:'The uncomfortable truth', big:'Expertise alone does not make you bookable.',
+   p:'Being an excellent speaker and being a commercially bookable one are two different things. The best talk in the room loses to the speaker who is easier to choose.'},
+  {t:'lead', eyebrow:'Part one', h:'Bookability is decided on the booker side of the desk',
+   p:'When an organiser or bureau builds a shortlist, they are not scoring your delivery. They are asking a different set of questions, and they are answering them in seconds, often before they ever watch your reel.'},
+  {t:'list', eyebrow:'Part one', h:'What the shortlist is really asking',
+   items:['Is this person relevant to our audience and this moment?',
+          'Do we already know and trust them, or know someone who does?',
+          'Will they be remembered after the event?',
+          'Are they going to be easy, safe and professional to work with?']},
+  {t:'lead', eyebrow:'Part two', h:'The Bookability Formula',
+   p:'Rooted in the 80/20 principle and built on real booking data from 23 years inside international speaker bureaus. Four traits, amplified by value and tempered by ego.'},
+  {t:'trait', eyebrow:'Trait one', h:'Relevant',
+   p:'Aligned with what this audience needs right now. Relevance beats reputation when a booker is matching a speaker to a brief.'},
+  {t:'trait', eyebrow:'Trait two', h:'Known',
+   p:'Recognised in your field and visible to the people who book. Known does not mean famous. It means findable, credible and already on the radar.'},
+  {t:'trait', eyebrow:'Trait three', h:'Memorable',
+   p:'Distinctive enough to be recommended by name weeks later. Memorable speakers get passed along. Forgettable ones get a thank you email.'},
+  {t:'trait', eyebrow:'Trait four', h:'Easy to work with',
+   p:'Clear, responsive, professional from first contact to invoice. The lowest-risk speaker wins more often than the most talented one.'},
+  {t:'traits4', eyebrow:'The formula', h:'Four traits the most booked speakers share'},
+  {t:'steps', eyebrow:'The system', h:'The 5 Step Process'},
+  {t:'list', eyebrow:'Part three', h:'What changes when you become the easy yes',
+   items:['You win more of the enquiries you already get.',
+          'You charge higher fees without losing the booking.',
+          'One keynote becomes a workshop, a programme, a repeat client.',
+          'You stop waiting to be found and start being chosen.']},
+  {t:'cred', eyebrow:'Why listen to me', h:'I booked the speakers you have heard of',
+   p:'23 years as an international speaker bureau owner and agent, deciding who got the stage.',
+   chips:['Neil Armstrong','Richard Branson','Bob Geldof','Bear Grylls','Anita Roddick','Author, The Bookability Formula']},
+  {t:'lead', eyebrow:'The shift', h:'From hoping you get found to being the easy yes',
+   p:'Bookability is not luck and it is not charisma. It is a set of commercial decisions you can make on purpose, starting with the four traits and the process that builds them.'},
+  {t:'cta', eyebrow:'Your next step', h:'Build your bookability with me',
+   p:'If you want to apply the Bookability Formula to your own speaking business, work with me through the 5 Step Process inside the Speaking Business Academy.',
+   cta:'Book a call at mariafranzoni.me',
+   disc:'Educational content only. No result is guaranteed. Results vary by speaker, market and effort, and nothing here is a promise of bookings, fees or income.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='slide'+(i===idx?' on':'');
+    let inner='';
+    if(s.eyebrow) inner+=`<div class="eyebrow">${s.eyebrow}</div>`;
+    if(s.t==='title'){inner+=`<h1>${s.h}</h1><p class="lead">${s.p}</p>`;}
+    else if(s.t==='big'){inner+=`<div class="big">${s.big}</div><p>${s.p}</p>`;}
+    else if(s.t==='lead'){inner+=`<h2>${s.h}</h2><p class="lead">${s.p}</p>`;}
+    else if(s.t==='list'){inner+=`<h2>${s.h}</h2><ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`;}
+    else if(s.t==='trait'){inner+=`<h2>${s.h}</h2><p class="lead">${s.p}</p>`;}
+    else if(s.t==='traits4'){inner+=`<h2>${s.h}</h2><div class="traits"><div class="trait">Relevant</div><div class="trait">Known</div><div class="trait">Memorable</div><div class="trait">Easy to work with</div></div>`;}
+    else if(s.t==='steps'){inner+=`<h2>${s.h}</h2><div class="steps">
+       <div class="step"><span>01</span><b>The Market</b></div>
+       <div class="step"><span>02</span><b>Your Expert Profile</b></div>
+       <div class="step"><span>03</span><b>Get Booked</b></div>
+       <div class="step"><span>04</span><b>Deliver</b></div>
+       <div class="step"><span>05</span><b>Growth</b></div></div>
+       <p>Market insight, positioning, fees and proposals, delivery, then follow up and referrals. The end to end path to being more bookable and charging more.</p>`;}
+    else if(s.t==='cred'){inner+=`<h2>${s.h}</h2><p class="lead">${s.p}</p><div class="cred">${s.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`;}
+    else if(s.t==='cta'){inner+=`<h2>${s.h}</h2><div class="cta-box"><p style="color:#fff;font-size:20px;max-width:none">${s.p}</p><h3 style="margin-top:14px;color:#fff">${s.cta}</h3></div><p class="disc">${s.disc}</p>`;}
+    inner+=`<footer>The Bookability Formula</footer><div id="dots">${S.map((_,j)=>`<i class="${j===idx?'on':''}"></i>`).join('')}</div>`;
+    d.innerHTML=inner; stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(idx+1)+' / '+S.length;
+}
+let idx=0;
+function go(n){idx=Math.max(0,Math.min(S.length-1,idx+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();go(e.clientX-r.left>r.width/2?1:-1);});
+render();
+</script>
+</body>
+</html>
