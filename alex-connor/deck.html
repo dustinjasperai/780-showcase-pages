@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fearless Physique Method - Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141109; --panel:#1e1a10; --rule:#3a3324; --accent:#d4a02c;
+    --ink:#f4efe4; --muted:#b8ad97;
+    --display:'Oswald',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;position:relative;
+    padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .kicker{font-family:var(--display);text-transform:uppercase;letter-spacing:.22em;
+    font-size:clamp(11px,1.4vw,14px);color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;line-height:1.04;
+    font-size:clamp(30px,6vw,62px);letter-spacing:.005em;margin-bottom:16px}
+  h2{font-family:var(--display);font-weight:600;line-height:1.08;
+    font-size:clamp(24px,4.4vw,44px);margin-bottom:18px}
+  p.lead{font-size:clamp(16px,2.2vw,23px);color:var(--muted);line-height:1.5;max-width:46ch}
+  ul{list-style:none;margin-top:10px}
+  ul li{font-size:clamp(15px,2vw,21px);line-height:1.5;padding-left:28px;position:relative;
+    margin-bottom:14px;max-width:48ch}
+  ul li:before{content:"";position:absolute;left:0;top:.62em;width:12px;height:2px;
+    background:var(--accent)}
+  .big{font-family:var(--display);font-weight:700;color:var(--accent);
+    font-size:clamp(40px,8vw,84px);line-height:1}
+  .pillar{font-family:var(--display);color:var(--accent);font-weight:600;
+    font-size:clamp(20px,3vw,30px)}
+  .disc{margin-top:22px;font-size:clamp(11px,1.4vw,13px);color:var(--muted);
+    max-width:54ch;line-height:1.5}
+  .cta-step{font-family:var(--display);font-weight:600;font-size:clamp(18px,2.6vw,26px);
+    color:var(--ink);margin-top:10px}
+  footer{position:absolute;bottom:18px;left:clamp(28px,5vw,64px);
+    font-family:var(--display);letter-spacing:.18em;text-transform:uppercase;
+    font-size:11px;color:var(--muted)}
+  .count{position:absolute;bottom:18px;right:clamp(28px,5vw,64px);font-size:12px;color:var(--muted)}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);
+    font-family:var(--display);padding:8px 16px;border-radius:8px;cursor:pointer;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<main id="stage" aria-live="polite"></main>
+<div class="nav"><button id="prev">Prev</button><button id="next">Next</button></div>
+<script>
+const S=[
+ {t:'title',k:'Fearless Training - Live Masterclass',h:'The Fearless Physique Method',
+  b:'How to get lean, strong and confident naked, without extreme diets or living in the gym.'},
+ {t:'for',k:'Who this is for',h:'You want a body you are proud of. You are done with punishing plans.',
+  pts:['You have lost the same stone more than once','You train but the mirror has not moved in months','You are busy, and you want something that fits a real life, not a bodybuilder one']},
+ {t:'trap',k:'The trap',h:'The problem was never your willpower.',
+  b:'Most plans are built to be dramatic for 21 days, then impossible to keep. You did not fail them. They were designed to fail you.'},
+ {t:'reframe',k:'The reframe',h:'Extreme gets attention. Sustainable gets results.',
+  b:'A body that lasts is built on foundations you can repeat for years, not a crash you can hold for three weeks.'},
+ {t:'part',k:'Part one',h:'The rebound cycle, and why it keeps winning'},
+ {t:'body',k:'The cycle',h:'Cut too hard. Train too much. Burn out. Rebound.',
+  pts:['Aggressive deficits that wreck energy, sleep and training','Random high-volume programs with no progression','All-or-nothing food rules that break at the first weekend','Motivation running the show, so the first bad week ends it']},
+ {t:'body',k:'The cost',h:'Every rebound makes the next attempt harder.',
+  b:'Lost strength, slower progress, and a quiet belief that this is just not for you. It is. The method was the problem.'},
+ {t:'part',k:'Part two',h:'The Fearless Method: three pillars, one system'},
+ {t:'pillar',k:'Pillar one',pill:'Train Smart',h:'Foundational lifts, progressive, controlled.',
+  pts:['Goal-aligned compound movements, not endless variety','Progressive overload you can actually track','Controlled tempo and real form over ego and chaos','A well-rounded physique on three to four smart sessions a week']},
+ {t:'pillar',k:'Pillar two',pill:'Fuel Flexibly',h:'Sustainable nutrition you enjoy.',
+  pts:['Flexible, enjoyable eating instead of banned-food lists','Protein, nutrient timing and micronutrients that serve your goal','Supplements judged on evidence, not hype','A way of eating you could hold for a year, not a week']},
+ {t:'pillar',k:'Pillar three',pill:'Master Your Mindset',h:'Lifestyle design that outlasts motivation.',
+  pts:['Systems and identity, so adherence is not a daily fight','Lifestyle design built around your week, not against it','Recovery and intellectual growth as part of performance','The habits that make a result hold long after the plan ends']},
+ {t:'glue',k:'Why all three',h:'Train, fuel and mindset are one system, not three hobbies.',
+  b:'Coach one and ignore the others and the body stalls. Handled together, they compound. That is holistic performance.'},
+ {t:'part',k:'Part three',h:'What the first twelve weeks look like'},
+ {t:'body',k:'The build',h:'Simple inputs, repeated, measured.',
+  pts:['Weeks 1 to 4 - build the foundation: smart training, flexible fuelling, the first habits','Weeks 5 to 8 - progressive overload and real adherence, strength climbing','Weeks 9 to 12 - the physique and the confidence start showing, and the system is yours to keep']},
+ {t:'whyme',k:'Why me',h:'A sports scientist and accredited nutritionist, not a guru.',
+  pts:['Qualified sports exercise scientist and accredited sports nutritionist','Around fifteen years coaching real people to look and feel better naked','Host of the ROAR Knowledge Podcast','In-person, online and app-based coaching worldwide']},
+ {t:'cta',k:'Your next step',h:'Build a body you are proud of, the sustainable way.',
+  step:'Apply to coach with Fearless Training and we will build your plan together.',
+  disc:'For education only. This masterclass shares training and nutrition principles; it is not medical advice. No specific result is guaranteed. Results vary with effort, consistency and individual circumstances. Consult a qualified professional before beginning any new training or nutrition program.'}
+];
+let i=0;const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function render(){
+ const s=S[i];let h='';
+ h+=`<div class="kicker">${esc(s.k)}</div>`;
+ if(s.t==='title'){h+=`<h1>${esc(s.h)}</h1><p class="lead">${esc(s.b)}</p>`}
+ else if(s.t==='part'){h+=`<h1>${esc(s.h)}</h1>`}
+ else if(s.t==='reframe'||s.t==='trap'||s.t==='glue'){h+=`<h2>${esc(s.h)}</h2><p class="lead">${esc(s.b)}</p>`}
+ else if(s.t==='pillar'){h+=`<div class="pillar">${esc(s.pill)}</div><h2>${esc(s.h)}</h2><ul>${s.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`}
+ else if(s.t==='for'||s.t==='body'||s.t==='whyme'){h+=`<h2>${esc(s.h)}</h2>`+(s.b?`<p class="lead">${esc(s.b)}</p>`:'')+(s.pts?`<ul>${s.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:'')}
+ else if(s.t==='cta'){h+=`<h2>${esc(s.h)}</h2><div class="cta-step">${esc(s.step)}</div><div class="disc">${esc(s.disc)}</div>`}
+ h+=`<footer>Fearless Training</footer><div class="count">${i+1} / ${S.length}</div>`;
+ stage.innerHTML=h;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render()}
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
+render();
+</script>
+</body>
+</html>
