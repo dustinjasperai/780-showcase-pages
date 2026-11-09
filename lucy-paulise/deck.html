@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead With Curiosity, Not Fear | A Masterclass by Lucy Paulise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#faf8fb;
+    --panel:#d1f2f1;
+    --ink:#2b2340;
+    --ink-soft:#4a4460;
+    --accent:#47006d;
+    --accent2:#cc3366;
+    --rule:#e6ddec;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Open Sans',-apple-system,sans-serif;
+    background:#efe9f2;
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh;
+  }
+  .deck{ width:100%; max-width:960px; }
+  .slide{
+    display:none;
+    background:var(--bg);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    aspect-ratio:16/9;
+    padding:56px 64px;
+    position:relative;
+    flex-direction:column;
+    box-shadow:0 18px 50px rgba(43,35,64,0.10);
+  }
+  .slide.active{ display:flex; }
+  .slide.center{ justify-content:center; }
+  .eyebrow{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent2); margin-bottom:20px; }
+  h1{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:50px; line-height:1.08; letter-spacing:-0.01em; color:var(--accent); }
+  h2{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:37px; line-height:1.14; color:var(--ink); margin-bottom:18px; }
+  .sub{ font-size:22px; color:var(--ink-soft); margin-top:22px; max-width:44ch; }
+  .lead{ font-size:22px; color:var(--ink-soft); line-height:1.5; max-width:48ch; }
+  .big{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:40px; line-height:1.2; color:var(--ink); max-width:26ch; }
+  .big .hl{ color:var(--accent2); }
+  ul{ list-style:none; margin-top:14px; }
+  li{ font-size:21px; color:var(--ink-soft); padding:11px 0 11px 34px; position:relative; border-bottom:1px solid var(--rule); }
+  li:last-child{ border-bottom:none; }
+  li::before{ content:""; position:absolute; left:4px; top:20px; width:12px; height:12px; border:2px solid var(--accent); border-radius:50%; }
+  .pillar-num{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.12em; color:var(--accent2); margin-bottom:10px; }
+  .panel{ background:var(--panel); border-radius:10px; padding:30px 34px; margin-top:8px; }
+  .kicker{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:18px; color:var(--accent); margin-bottom:8px; }
+  .meta{ margin-top:auto; font-family:'Montserrat',sans-serif; font-weight:600; font-size:15px; color:var(--ink); letter-spacing:0.02em; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:10px; }
+  .two .col .kicker{ font-size:15px; letter-spacing:0.06em; text-transform:uppercase; }
+  .two .col p{ font-size:19px; color:var(--ink-soft); line-height:1.45; }
+  .disclaimer{ font-size:13px; color:var(--ink-soft); margin-top:20px; max-width:62ch; font-style:italic; }
+  .creds{ font-size:20px; color:var(--ink-soft); line-height:1.65; margin-top:8px; }
+  .pageno{ position:absolute; bottom:22px; left:64px; font-family:'Montserrat',sans-serif; font-size:13px; color:#9a90ad; }
+  .nav{ position:fixed; bottom:18px; right:22px; font-family:'Montserrat',sans-serif; font-size:13px; color:#7a7290; display:flex; gap:14px; align-items:center; }
+  .nav button{ font-family:inherit; font-size:13px; border:1px solid #cfc3da; background:#fff; color:var(--accent); border-radius:6px; padding:5px 12px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+
+<script>
+const S = [
+  {t:'title', center:true, eyebrow:'A live leadership masterclass',
+   h1:'Lead With Curiosity,<br>Not Fear',
+   sub:'For leaders who are tired of running on certainty and ready to lead like the room can surprise them.',
+   meta:'Lucy Paulise, PCC &nbsp;&middot;&nbsp; Curious Leadership'},
+
+  {t:'who', eyebrow:'Who this is for', h2:'You lead under real pressure.',
+   bullets:[
+     'You are a director, VP, founder or C-suite leader with a team counting on you.',
+     'The stakes are high and visible, and the margin for a wrong call feels thin.',
+     'You are capable. That is exactly why people keep handing you more to carry.'
+   ]},
+
+  {t:'statement', center:true, eyebrow:'The default move',
+   big:'Under pressure, capable leaders reach for <span class="hl">certainty</span>.',
+   sub:'It feels like control. It feels responsible. And it is quietly the most expensive habit you have.'},
+
+  {t:'list', eyebrow:'What certainty looks like', h2:'The tells',
+   bullets:[
+     'You over-prepare, so nothing can catch you out.',
+     'You hold the decision instead of handing it down.',
+     'You step in and redo the work, because your way is safer.',
+     'You leave meetings exhausted and a little more alone.'
+   ]},
+
+  {t:'statement', center:true, eyebrow:'The reframe',
+   big:'Certainty is <span class="hl">rigid</span>. Curiosity is <span class="hl">adaptive</span>.',
+   sub:'When you lead from certainty, you freeze and force. When you lead from curiosity, you read the room and respond in real time.'},
+
+  {t:'content', eyebrow:'Part one', h2:'The problem is not the pressure.<br>It is your response to it.',
+   lead:'Pressure is not going anywhere. What you can change is the first move you make when it arrives. Certainty narrows your options. Curiosity opens them. This masterclass is about making curiosity your trained default, not your lucky day.'},
+
+  {t:'part', center:true, eyebrow:'Part two', h1:'The Curious Leadership shift',
+   sub:'Three pillars that move you from control to curiosity, one practiced choice at a time.'},
+
+  {t:'pillar', num:'Pillar 01 &middot; Regulated Ambition', h2:'Detach from the outcome',
+   lead:'Trade "I must control how this lands" for "I am curious how this unfolds." You cannot control every variable, and pretending you can burns the bandwidth you need to actually execute. Detaching is not caring less. It is aiming hard and holding loosely.'},
+
+  {t:'pillar', num:'Pillar 02 &middot; Active Surrender', h2:'The 50 percent rule',
+   lead:'Contribute your 50 percent and let your team build the other 50. When you fill the whole gap, you get compliance and quiet resistance. When you leave room, people step in, own it, and bring thinking you would never have reached alone.'},
+
+  {t:'pillar', num:'Pillar 03 &middot; Energy Management', h2:'Normalize the stakes',
+   lead:'Use curiosity to read reality instead of forcing outcomes through over-preparation. Name the stakes plainly, then ask a better question. High stakes do not require high tension. They require a clear head and the energy to use it.'},
+
+  {t:'statement', center:true, eyebrow:'The point',
+   big:'Curiosity is a <span class="hl">discipline</span>, not a personality trait.',
+   sub:'You do not have to be born calm or naturally open. You practice the three pillars until they become the move you reach for first.'},
+
+  {t:'panel', eyebrow:'When it becomes a team', h2:'From "me" to "we"',
+   kicker:'The We Culture shift (CARE)',
+   lead:'Connection, Attention, Respect, Empowerment. A curious leader builds a team that thinks for itself, because decisions live closest to the work instead of waiting on you. That is how you stop being the bottleneck you keep complaining about.'},
+
+  {t:'twocol', eyebrow:'Part three', h2:'What a curious week looks like',
+   left:{k:'Reactive', p:'Rehearse the hard conversation ten times. Hold the decision. Fix the deck yourself at 11pm. Leave the meeting carrying all of it.'},
+   right:{k:'Adaptive', p:'Open with a real question. Hand the decision down with context. Let the draft be theirs. Leave the meeting with a team that grew.'}},
+
+  {t:'content', eyebrow:'The cost of staying reactive', h2:'What it is really costing you',
+   lead:'The hours are the small part. The real bill is the thinking your team never shares, the decisions that queue on your desk, and the version of you that shows up tired to the things that matter at home. Certainty does not just tire you. It shrinks the room.'},
+
+  {t:'creds', eyebrow:'Why listen to me on this', h2:'Lucy Paulise',
+   creds:'ICF Professional Certified Coach (PCC) with 3,000+ hours coaching leaders.<br>Forbes contributor and author of We Culture and Timebox.<br>2024 ASQ Crosby Medal for the We Culture framework.<br>20+ years inside technology, healthcare, energy and manufacturing teams.'},
+
+  {t:'list', eyebrow:'The three pillars, together', h2:'Your trained default',
+   bullets:[
+     'Detach from the outcome, so pressure stops running you.',
+     'Give 50 percent, so your team owns the rest.',
+     'Normalize the stakes, so a clear head does the work.'
+   ]},
+
+  {t:'statement', center:true, eyebrow:'The invitation',
+   big:'Lead like the room can <span class="hl">surprise you</span>.',
+   sub:'That is the whole shift. Not softer, not less driven. More curious, and far harder to knock off balance.'},
+
+  {t:'cta', center:true, eyebrow:'Keep leading, with me', h2:'Work with me directly',
+   lead:'If this is the way you want to lead, the Executive Coaching program is where we make it stick. Six months, one on one, built around your real pressures, your team and your goals. We start with a fit-and-direction call to map it to you.',
+   kicker:'Book your fit-and-direction call at lucypaulise.com',
+   disclaimer:'This masterclass is educational. It shares frameworks and perspective, and no particular leadership result is guaranteed. Individual outcomes depend on your own context, effort and circumstances, and results vary.'}
+];
+
+function render(s){
+  const c = s.center ? ' center' : '';
+  let inner = '';
+  if(s.eyebrow) inner += '<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title' || s.t==='part'){
+    inner += '<h1'+(s.t==='part'?' style="font-size:46px;"':'')+'>'+s.h1+'</h1>';
+    if(s.sub) inner += '<p class="sub">'+s.sub+'</p>';
+    if(s.meta) inner += '<div class="meta">'+s.meta+'</div>';
+  } else if(s.t==='statement'){
+    inner += '<p class="big">'+s.big+'</p>';
+    if(s.sub) inner += '<p class="sub">'+s.sub+'</p>';
+  } else if(s.t==='pillar'){
+    inner += '<div class="pillar-num">'+s.num+'</div><h2>'+s.h2+'</h2><p class="lead">'+s.lead+'</p>';
+  } else if(s.t==='who' || s.t==='list'){
+    inner += '<h2>'+s.h2+'</h2><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+    if(s.sub) inner += '<p class="sub" style="margin-top:16px;">'+s.sub+'</p>';
+  } else if(s.t==='content'){
+    inner += '<h2>'+s.h2+'</h2><p class="lead">'+s.lead+'</p>';
+  } else if(s.t==='panel'){
+    inner += '<h2>'+s.h2+'</h2><div class="panel"><div class="kicker">'+s.kicker+'</div><p class="lead" style="margin:0;">'+s.lead+'</p></div>';
+  } else if(s.t==='twocol'){
+    inner += '<h2>'+s.h2+'</h2><div class="two"><div class="col"><div class="kicker">'+s.left.k+'</div><p>'+s.left.p+'</p></div><div class="col"><div class="kicker">'+s.right.k+'</div><p>'+s.right.p+'</p></div></div>';
+  } else if(s.t==='creds'){
+    inner += '<h2>'+s.h2+'</h2><p class="creds">'+s.creds+'</p>';
+  } else if(s.t==='cta'){
+    inner += '<h2>'+s.h2+'</h2><p class="lead">'+s.lead+'</p><p class="kicker" style="margin-top:22px;">'+s.kicker+'</p><p class="disclaimer">'+s.disclaimer+'</p>';
+  }
+  return '<section class="slide'+c+'">'+inner+'<div class="pageno"></div></section>';
+}
+
+const deck = document.getElementById('deck');
+deck.innerHTML = S.map(render).join('');
+const slides = Array.from(document.querySelectorAll('.slide'));
+let i = 0;
+function show(n){
+  slides[i].classList.remove('active');
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides[i].classList.add('active');
+  const label = (i+1)+' / '+slides.length;
+  document.getElementById('count').textContent = label;
+  slides[i].querySelector('.pageno').textContent = label;
+}
+function go(d){ show(i+d); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight' || e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+deck.addEventListener('click', e => { if(e.target.tagName!=='BUTTON') go(1); });
+show(0);
+</script>
+</body>
+</html>
