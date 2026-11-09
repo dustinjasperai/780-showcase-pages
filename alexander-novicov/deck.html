@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Strong, Not Destroyed · Alex Novicov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#e9eef7; --panel:#ffffff; --rule:#ccd5e6;
+    --accent:#2d48b3; --ink:#15161c; --slate:#3c4350; --dim:#8a93a3;
+  }
+  html,body{height:100%}
+  body{background:#e9ecf1;font-family:'DM Sans',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9ecf1}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Barlow Condensed',sans-serif;font-size:1.25vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2.2vh}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:600;color:var(--ink);line-height:1.04;letter-spacing:.002em}
+  .t-title h1{font-size:6.2vw;text-transform:uppercase}
+  .t-normal h1{font-size:3.9vw;max-width:86%}
+  .t-normal .body{font-size:1.52vw;color:var(--slate);margin-top:2.6vh;max-width:72%;line-height:1.58;font-weight:300}
+  .sub{font-size:1.9vw;color:var(--slate);margin-top:3vh;max-width:74%;line-height:1.46;font-weight:300}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Barlow Condensed',sans-serif;font-size:1.5vw;font-weight:600;color:var(--accent);margin-bottom:1.8vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:5.4vw;max-width:90%;text-transform:uppercase}
+  .t-section .rule{width:15vw;height:3px;background:var(--accent);margin-top:3.2vh;border-radius:2px}
+  .t-dark{background:var(--ink);align-items:center;text-align:center}
+  .t-dark h1{font-size:4.1vw;max-width:88%;color:#f7f8fa;font-weight:500}
+  .t-dark .kicker{color:#8ea2e8}
+  .t-cta{background:radial-gradient(130% 130% at 50% 0%,#20304f 0%,#15161c 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.4vw;max-width:84%;color:#f7f8fa}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{border:1.5px solid var(--accent);color:#cdd7f6;border-radius:100px;padding:1.3vh 1.7vw;font-size:1.25vw;font-weight:500;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.92vw;color:#9aa6d6;text-align:center;line-height:1.45}
+  .t-title .disc,.t-normal .disc{text-align:left;color:var(--dim)}
+  .brandline{font-family:'Barlow Condensed',sans-serif;font-size:1.5vw;color:var(--slate);margin-top:3.4vh;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+  .brandline b{color:var(--accent);font-weight:700}
+  .motif{position:absolute;pointer-events:none}
+  .title-motif{right:7%;bottom:8%;width:26vw;opacity:.95}
+  .corner-motif{right:6%;bottom:7%;width:12vw;opacity:.5}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(21,22,28,.08);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600;font-family:'Barlow Condensed',sans-serif}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:3vw}.t-title h1{font-size:10vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.6vw}.t-section h1{font-size:8vw}.t-dark h1{font-size:6.4vw}
+    .t-cta h1{font-size:7.4vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">Strong, Not Destroyed</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- two-engine durability motif: aerobic line holds, muscular line fades without training -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="dura" viewBox="0 0 280 160">
+  <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="16" y1="140" x2="264" y2="140" stroke="#8a93a3" opacity="0.35"/>
+    <line x1="16" y1="18" x2="16" y2="140" stroke="#8a93a3" opacity="0.35"/>
+    <path d="M22 60 C 90 58, 170 56, 258 56" stroke="#2d48b3" opacity="0.95"/>
+    <path d="M22 62 C 90 70, 170 104, 258 132" stroke="#15161c" opacity="0.28" stroke-dasharray="5 6"/>
+    <circle cx="258" cy="56" r="5" fill="none" stroke="#2d48b3" stroke-width="2.8"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Strong, Not Destroyed',sub:'How runners over 35 finish their big ultra strong, instead of falling apart in the final hours.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You train hard. You still fall apart late.',body:'You run consistent weeks, you respect the distance, and the first half feels smooth. Then somewhere past halfway the legs go heavy, the pace bleeds away, and the finish turns into a long march you just survive.'},
+ {t:'dark',k:'The reframe',title:'You do not have a fitness problem. You have a durability problem.'},
+
+ {t:'section',idx:'Part One',title:'Why Strong Runners Collapse Late'},
+ {t:'normal',k:'The late-race truth',title:'Your lungs are fine. Your structure gives out.',body:'Late-race fade is rarely about the aerobic engine. It is the muscular system quietly running out of the capacity to hold form, absorb downhills, and keep driving when the terrain and fatigue keep changing.'},
+ {t:'normal',k:'Why more mileage backfires',title:'Piling on volume only trains the engine you already have.',body:'If the aerobic base is already there, adding junk miles sharpens the half that was not the problem and deepens the fatigue in the half that was. Volume magnifies the weakness instead of fixing it.'},
+ {t:'dark',title:'What running ignores is exactly what breaks at mile 40.'},
+
+ {t:'section',idx:'Part Two',title:'The Durable Athlete Method'},
+ {t:'normal',k:'Two engines',title:'Aerobic and muscular durability. Most plans train one.',body:'Aerobic durability is your ability to keep producing energy. Muscular durability is your ability to keep producing force without breaking down. Finishing strong needs both, and only one shows up on a standard training plan.'},
+ {t:'normal',k:'Running Resilience Training',title:'Strength and conditioning, programmed by a running coach.',body:'Running Resilience Training is the second engine. It is strength work built for the demands of a long day on trail, so what running ignores gets trained on purpose instead of left to chance.'},
+ {t:'normal',k:'Durability, not willpower',title:'Build the system that holds form under fatigue.',body:'Progressive strength, mobility, and the right fuelling teach your body to keep moving well when it is tired. The goal is not to grit through the collapse. It is to build a body that does not collapse.'},
+ {t:'dark',title:'Train the second engine, and the last 10 miles stop being a survival march.'},
+
+ {t:'section',idx:'Part Three',title:'Measure It, Do Not Guess It'},
+ {t:'normal',k:'Test and retest',title:'3RM and durability tests, rebuilt every 12 weeks.',body:'Durability is trainable, which means it is measurable. Baseline strength and durability tests show where you actually break down, and a 12-week retest rebuilds the plan around real progress instead of a feeling.'},
+ {t:'normal',k:'The scorecard',title:'Score four markers, not just your weekly mileage.',body:'Aerobic engine, muscular durability, late-race fade, and strength under fatigue. When you can see all four, you stop guessing whether you are ready and start training the one that is holding you back.'},
+
+ {t:'section',idx:'Part Four',title:'What A Durable Season Looks Like'},
+ {t:'normal',k:'A durable season',title:'Fewer junk miles. More strength. A stronger finish.',body:'The weeks get more purposeful, not just bigger. Strength and running reinforce each other, the late-race fade shrinks, and race day becomes the day you execute rather than the day you hope to hang on.'},
+ {t:'normal',k:'Why me',title:'A run, strength, and conditioning coach for runners over 35.',body:'I coach ambitious athletes over 35 with full lives and big races. My background across run coaching, personal training, and strength and conditioning is why the plan treats you as a whole athlete, not just a set of mile splits.'},
+ {t:'dark',title:'Finish your next ultra strong, not destroyed.'},
+
+ {t:'section',idx:'Your next step',title:'Train With Me'},
+ {t:'cta',title:'Ready to build the body that finishes strong?',chips:['Download the free Big Ultra guide','Apply for STRONG coaching'],disc:'Educational content for trail and ultra runners. No performance, race, or health result is guaranteed. Training should be adapted to your own history and medical guidance. Results vary by athlete.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}"><use href="#dura"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">STRONG, NOT DESTROYED · <b>Alex Novicov</b></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
