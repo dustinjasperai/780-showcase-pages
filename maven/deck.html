@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do Less Marketing, Get More Clients: a Maven masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#081f4e;        /* brand deep navy (brand.json #081f4e) */
+    --panel:#0e2a5e;     /* one step up from ground */
+    --rule:#2a4a86;      /* muted blue between navy and brand #1d67cd */
+    --ink:#e8dfdf;       /* brand warm off-white (brand.json #e8dfdf) */
+    --muted:#a9bcdd;     /* desaturated blue-grey for secondary text */
+    --accent:#f39517;    /* brand orange signal (brand.json #f39517) */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Lato',system-ui,sans-serif;
+    font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:'Jost',sans-serif;font-weight:700;font-size:clamp(2.1rem,5.4vw,4rem);line-height:1.04;
+    letter-spacing:-.01em;color:#fff}
+  h2{font-family:'Jost',sans-serif;font-weight:600;font-size:clamp(1.5rem,3.4vw,2.5rem);line-height:1.1;
+    color:#fff;margin-bottom:1.1rem}
+  .lede{font-size:clamp(1.05rem,1.9vw,1.4rem);color:var(--muted);margin-top:1.3rem;max-width:40ch}
+  p.body{font-size:clamp(1rem,1.5vw,1.2rem);color:var(--ink);margin-top:1rem;max-width:52ch}
+  .big{font-family:'Jost',sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,5rem);color:var(--accent);line-height:1}
+  ul{list-style:none;margin-top:1.4rem;max-width:56ch}
+  ul li{position:relative;padding-left:1.7rem;margin:.8rem 0;font-size:clamp(1rem,1.5vw,1.2rem)}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:.55rem;height:.55rem;
+    background:var(--accent);border-radius:50%}
+  .phase{display:flex;gap:1.1rem;align-items:flex-start;margin:1.1rem 0}
+  .phase .num{font-family:'Jost',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent);
+    min-width:2.3rem}
+  .phase .pt{font-family:'Jost',sans-serif;font-weight:600;font-size:clamp(1.1rem,2vw,1.5rem);color:#fff}
+  .phase .pd{color:var(--muted);font-size:1rem;margin-top:.2rem;max-width:48ch}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem 2.4rem;margin-top:1.6rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:1.4rem 1.5rem}
+  .card .k{font-family:'Jost',sans-serif;font-weight:600;color:#fff;font-size:1.1rem;margin-bottom:.4rem}
+  .card .v{color:var(--muted);font-size:1rem}
+  .credit{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;margin-top:1.6rem;color:var(--muted);font-size:1rem}
+  .credit b{color:var(--ink);font-weight:700}
+  .disclaimer{margin-top:2rem;color:#7f93b8;font-size:.82rem;max-width:60ch;line-height:1.5}
+  .cta-line{font-family:'Jost',sans-serif;font-weight:600;color:var(--accent);font-size:1.2rem;margin-top:1.6rem}
+  .brandbar{position:fixed;left:7vw;bottom:4.5vh;font-family:'Jost',sans-serif;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;color:var(--muted)}
+  .count{position:fixed;right:7vw;bottom:4.5vh;font-family:'Jost',sans-serif;font-size:.78rem;color:var(--muted)}
+  .nav{position:fixed;right:7vw;top:4.5vh;display:flex;gap:.5rem}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);width:40px;height:40px;
+    border-radius:10px;font-size:1.1rem;cursor:pointer}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)" aria-label="Previous">‹</button><button onclick="go(1)" aria-label="Next">›</button></div>
+<div class="brandbar">Maven · Jay Kingley</div>
+<div class="count" id="count"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for fractional executives',
+    h1:'Do Less Marketing,<br>Get More Clients',
+    lede:'The Referable Fractional: how top operators build a full, premium book without turning into a full-time marketer.'},
+
+  {t:'who', eyebrow:'Who this is for',
+    h2:'You left the C-suite to go fractional',
+    bullets:['25 plus years of hard-won leadership, now sold by the engagement',
+             'You are in the top 20% of what you do',
+             'You want 4 to 6 premium clients a year, not a second full-time job',
+             'And you are quietly tired of chasing every one of them']},
+
+  {t:'statement', eyebrow:'The trap', big:'Great work.',
+    body:'You are excellent at the work. So why does the pipeline still feel like a coin flip every quarter?'},
+
+  {t:'statement', eyebrow:'The uncomfortable part', big:'More marketing is the wrong answer.',
+    body:'The harder you push cold outreach and content, the more you look like a vendor begging for a seat. Effort is not the problem. Positioning is.'},
+
+  {t:'point', eyebrow:'Part one · the real problem',
+    h2:'Fractionals get sold as staff augmentation',
+    body:'When the market sees you as an extra pair of hands or a low-level problem solver, you compete on availability and price. Replaceable people do not get referred.'},
+
+  {t:'point', eyebrow:'Part one · the cost',
+    h2:'This is Struggle City',
+    bullets:['Feast and famine, with no say over which',
+             'Discounting to win work you should be turning away',
+             'Chasing strangers who do not yet trust you',
+             'A reputation that never compounds into inbound']},
+
+  {t:'point', eyebrow:'The shift everything turns on',
+    h2:'Stop being a vendor. Become the wisdom holder.',
+    body:'The highest-paid fractionals are hired for the problems they identify, not just the tasks they execute. That is the person a network cannot help but introduce.'},
+
+  {t:'statement', eyebrow:'Part two · the method', big:'Become Remarkably Referable.',
+    body:'A system so your best clients, past colleagues, and network send the right people to you, on purpose and on repeat. Less marketing. More clients.'},
+
+  {t:'phases', eyebrow:'The Catalyst method · three phases',
+    h2:'How referable gets built',
+    phases:[
+      {n:'01', pt:'Go-To-Market Strategy', pd:'Get sharp on who you are for and the outcome only you own, so the right buyers recognise you in one sentence.'},
+      {n:'02', pt:'Referral Generation', pd:'Replace cold outreach with a deliberate referral engine. Turn every colleague and client into a source of qualified introductions.'},
+      {n:'03', pt:'Referable Brand Building', pd:'Build the reputation and thought leadership that makes inbound show up on its own, so demand outlives any single relationship.'}]},
+
+  {t:'point', eyebrow:'Why the three compound',
+    h2:'Each phase feeds the next',
+    body:'Clear positioning makes you easy to refer. Referrals give you proof. Proof builds the brand. The brand brings inbound that needs no chasing at all. That is the flywheel.'},
+
+  {t:'statement', eyebrow:'Part three · life in Success City', big:'Welcome to Success City.',
+    body:'A fractional practice where the right clients arrive already sold, at premium rates, in the volume you actually want.'},
+
+  {t:'grid', eyebrow:'The referable practice',
+    h2:'What changes in Success City',
+    cards:[
+      {k:'The 4 to 6 client year', v:'A full book of premium retainers, chosen on fit, not taken out of fear.'},
+      {k:'Inbound that pre-sells', v:'People reach out already convinced, because someone they trust vouched for you.'},
+      {k:'Premium with no apology', v:'You are priced as the wisdom holder, not the cheapest pair of hands.'},
+      {k:'Time back', v:'Less time marketing, more time doing the work you left the C-suite to do.'}]},
+
+  {t:'credit', eyebrow:'Why listen to this',
+    h2:'Jay Kingley',
+    body:'Cornell undergrad, Wharton MBA, and more than 35 years directing marketing and business strategy for everything from solo practices to multinationals. Host of the Fractionals Unplugged podcast, where the best fractional executives share how they built a business to match.',
+    credit:['<b>Cornell</b> undergrad','<b>Wharton</b> MBA','<b>35+ years</b> go-to-market','<b>Fractionals Unplugged</b> host']},
+
+  {t:'point', eyebrow:'An honest filter',
+    h2:'Who this is not for',
+    bullets:['Anyone looking for a hack instead of a system',
+             'Fractionals who would rather stay busy than get positioned',
+             'People who want more cold outreach, not less']},
+
+  {t:'statement', eyebrow:'The one decision', big:'Chase, or be chosen.',
+    body:'You can keep marketing harder and hope the pipeline holds. Or you can become remarkably referable, and let the right clients come to you.'},
+
+  {t:'cta', eyebrow:'Your next step',
+    h2:'Let us map your path to Success City',
+    body:'If you want the referability system built around your practice, the next step is a private conversation about where you are and what a predictable, premium book would take.',
+    cta:'Book a Catalyst consult with Maven',
+    disclaimer:'This masterclass is educational. It shares a methodology and the experiences behind it. It is not a guarantee of clients, revenue, or results. Outcomes depend on your market, your practice, and the work you put in.'}
+];
+
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+let i=0;
+function esc(s){return s;}
+function render(s){
+  let h='<div class="slide on">';
+  if(s.eyebrow) h+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title'){h+='<h1>'+s.h1+'</h1>'; if(s.lede)h+='<p class="lede">'+s.lede+'</p>';}
+  else if(s.t==='statement'){ if(s.big)h+='<div class="big">'+s.big+'</div>'; if(s.body)h+='<p class="body">'+s.body+'</p>';}
+  else if(s.t==='who'||s.t==='point'){ if(s.h2)h+='<h2>'+s.h2+'</h2>'; if(s.body)h+='<p class="body">'+s.body+'</p>';
+    if(s.bullets){h+='<ul>';s.bullets.forEach(b=>h+='<li>'+b+'</li>');h+='</ul>';}}
+  else if(s.t==='phases'){ h+='<h2>'+s.h2+'</h2>'; s.phases.forEach(p=>{h+='<div class="phase"><div class="num">'+p.n+'</div><div><div class="pt">'+p.pt+'</div><div class="pd">'+p.pd+'</div></div></div>';}); }
+  else if(s.t==='grid'){ h+='<h2>'+s.h2+'</h2><div class="grid2">'; s.cards.forEach(c=>h+='<div class="card"><div class="k">'+c.k+'</div><div class="v">'+c.v+'</div></div>'); h+='</div>'; }
+  else if(s.t==='credit'){ h+='<h2>'+s.h2+'</h2>'; if(s.body)h+='<p class="body">'+s.body+'</p>'; if(s.credit){h+='<div class="credit">';s.credit.forEach(c=>h+='<span>'+c+'</span>');h+='</div>';}}
+  else if(s.t==='cta'){ h+='<h2>'+s.h2+'</h2>'; if(s.body)h+='<p class="body">'+s.body+'</p>'; if(s.cta)h+='<div class="cta-line">'+s.cta+'</div>'; if(s.disclaimer)h+='<div class="disclaimer">'+s.disclaimer+'</div>'; }
+  h+='</div>';
+  stage.innerHTML=h;
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render(S[i]);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render(S[0]);
+</script>
+</body>
+</html>
