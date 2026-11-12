@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become the Obvious Choice | A masterclass by Jo White, RD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #f6f2ea;
+    --panel: #efe9dd;
+    --rule: #d8cfbf;
+    --ink: #161e2a;
+    --ink-soft: #3b4250;
+    --ink-muted: #6b6f78;
+    --accent: #f30b95;
+  }
+  html, body { height:100%; }
+  body {
+    font-family:'Libre Baskerville', Georgia, serif;
+    background:var(--ink);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage { max-width:1040px; margin:0 auto; padding:28px 20px 80px; }
+  .slide {
+    position:relative;
+    background:var(--bg);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    aspect-ratio:16/9;
+    margin:0 auto;
+    padding:60px 64px;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .slide.on { display:flex; }
+  .kicker {
+    font-family:'Fjalla One', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    font-size:14px;
+    color:var(--accent);
+    margin-bottom:20px;
+  }
+  .slide h2 {
+    font-family:'Fjalla One', sans-serif;
+    font-weight:400;
+    font-size:46px;
+    line-height:1.08;
+    color:var(--ink);
+    letter-spacing:0.005em;
+    margin-bottom:18px;
+  }
+  .slide .sub { font-size:19px; line-height:1.5; color:var(--ink-soft); max-width:40ch; }
+  .slide ul { list-style:none; margin-top:10px; }
+  .slide li { position:relative; font-size:19px; line-height:1.45; color:var(--ink-soft); padding-left:28px; margin-bottom:14px; max-width:46ch; }
+  .slide li::before { content:''; position:absolute; left:0; top:13px; width:12px; height:12px; background:var(--accent); border-radius:50%; }
+  .slide .note { margin-top:22px; font-size:15px; font-style:italic; color:var(--ink-muted); max-width:52ch; }
+  .slide .big { font-family:'Fjalla One', sans-serif; font-size:60px; line-height:1.05; color:var(--ink); }
+  .slide .big .pink { color:var(--accent); }
+  .cover { justify-content:flex-end; background:var(--panel); }
+  .cover h2 { font-size:62px; }
+  .cover .by { font-family:'Fjalla One', sans-serif; text-transform:uppercase; letter-spacing:0.14em; font-size:15px; color:var(--ink-muted); margin-top:28px; }
+  .section-slide { background:var(--ink); }
+  .section-slide .kicker { color:var(--accent); }
+  .section-slide h2 { color:var(--bg); font-size:52px; }
+  .section-slide .sub { color:#c7ccd6; }
+  .radius { position:absolute; right:-120px; top:50%; transform:translateY(-50%); width:360px; height:360px; border-radius:50%; border:2px solid var(--accent); opacity:0.35; }
+  .radius::after { content:''; position:absolute; inset:60px; border-radius:50%; border:2px solid var(--accent); opacity:0.7; }
+  .cta-slide { background:var(--ink); }
+  .cta-slide .kicker { color:var(--accent); }
+  .cta-slide h2 { color:var(--bg); font-size:48px; }
+  .cta-slide .sub { color:#c7ccd6; }
+  .cta-slide .step { font-family:'Fjalla One', sans-serif; font-size:22px; color:var(--accent); margin-top:24px; }
+  .disclaimer { margin-top:26px; font-size:13px; font-style:italic; color:#8b909b; max-width:60ch; line-height:1.5; }
+  .nav { max-width:1040px; margin:18px auto 0; display:flex; align-items:center; justify-content:space-between; font-family:'Fjalla One', sans-serif; color:#cfd3da; font-size:14px; letter-spacing:0.05em; }
+  .nav button { font-family:'Fjalla One', sans-serif; background:var(--accent); color:#fff; border:none; border-radius:3px; padding:8px 18px; font-size:14px; letter-spacing:0.06em; cursor:pointer; text-transform:uppercase; }
+  .nav button:disabled { opacity:0.3; cursor:default; }
+  .count { color:#9aa0ab; }
+  @media (max-width:720px){ .slide { padding:34px 30px; aspect-ratio:auto; min-height:70vh; } .slide h2,.cover h2{ font-size:34px; } .slide .big{ font-size:40px; } }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div id="deck"></div>
+</div>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <div class="count"><span id="cur">1</span> / <span id="total">1</span></div>
+  <button id="next">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', cover:true, kicker:'A live masterclass for dietitians and wellness pros',
+   h:'Become the Obvious Choice',
+   sub:'How to build a personal brand so magnetic the right clients arrive already sold, before you ever get on a call.',
+   by:'Presented by Jo White, RD - The Ambitious Nutritionist'},
+
+  {t:'promise', kicker:'What you will walk away with',
+   h:'By the end of this hour',
+   bullets:['Why being talented and being booked are two completely different games',
+            'The three parts of a brand that makes the right people orbit you',
+            'How to stack demand so each month starts with revenue already secured']},
+
+  {t:'audience', kicker:'Who this is for',
+   h:'The best-kept secret',
+   sub:'You are great at what you do. Your clients get real results. And yet the calendar still swings between fully booked and painfully quiet.',
+   note:'If you have ever thought "why are less-qualified people getting chosen over me," this hour is for you.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'The hustle loop',
+   bullets:['Post more, hoping the algorithm finally rewards you',
+            'Discount the offer so a hesitant lead says yes',
+            'Slide into DMs and chase people who went quiet'],
+   note:'More effort, same result. The loop rewards activity, not the one thing that actually moves people to buy.'},
+
+  {t:'hook', statement:true,
+   big:'You do not have a visibility problem. You have a <span class="pink">demand</span> problem.',
+   note:'Being seen is not the same as being chosen. Plenty of people see you. Almost none of them feel they cannot wait to work with you.'},
+
+  {t:'section', section:true, kicker:'Part One',
+   h:'Why talented pros stay the best-kept secret',
+   sub:'The gap is not skill. It is the distance between the moment someone discovers you and the moment they trust you enough to pay.'},
+
+  {t:'problem', kicker:'The real problem',
+   h:'Trust takes too long',
+   bullets:['A cold follower needs many touches before they believe you are the one',
+            'Your content informs them, but it does not make them want you specifically',
+            'So they save your post, learn for free, and hire someone louder']},
+
+  {t:'cost', kicker:'What it costs you',
+   h:'Starting from zero every month',
+   sub:'When demand is not built on purpose, every launch is a cold start. Feast one month, famine the next, and your pricing stays stuck because you cannot afford to say no.'},
+
+  {t:'section', section:true, kicker:'Part Two',
+   h:'The Brand Radius',
+   sub:'A magnetic presence that pulls the right buyers into orbit, so you become the obvious choice before the pitch ever happens.',
+   radius:true},
+
+  {t:'framework', kicker:'The framework',
+   h:'Three parts, one magnetic brand',
+   bullets:['Brand Radius: the gravitational pull that makes you the obvious choice',
+            'Content Consumption Continuum: the ladder that builds trust fast',
+            'Client Attraction Matrix: clear journeys so buyers know when to convert']},
+
+  {t:'pillar', kicker:'Part Two - Pillar 1',
+   h:'Brand Radius',
+   sub:'Position yourself as the obvious choice to hire. Not the cheapest, not the loudest, the one the right person was always going to pick.',
+   note:'Magnetism is built, not born. We define the signal that makes your ideal buyer feel "this person gets me."'},
+
+  {t:'pillar', kicker:'Part Two - Pillar 2',
+   h:'Content Consumption Continuum',
+   sub:'A deliberate ladder of content that shortens the time between discovering you and hiring you.',
+   note:'Instead of posting and praying, each piece moves a stranger one rung closer to a confident yes.'},
+
+  {t:'pillar', kicker:'Part Two - Pillar 3',
+   h:'Client Attraction Matrix',
+   sub:'Build multiple clear sales journeys so buyers always know where to find you and exactly when they are ready to convert.',
+   note:'No more hoping the right people stumble in. You design the paths they travel.'},
+
+  {t:'pillar', kicker:'Part Two - Pillar 4',
+   h:'Stacked Sales System',
+   sub:'Stack and sequence your offers so you start each month with revenue already secured, before the month even begins.',
+   note:'This is demand-first selling. Income becomes predictable because it is engineered, not wished for.'},
+
+  {t:'pillar', kicker:'Part Two - The method that ties it together',
+   h:'From Inquiry to Invoice',
+   sub:'An ethical, integrity-driven sales process that turns interest into paying clients without pressure, scripts, or anything that feels sleazy.',
+   note:'You stay true to your values and still close. The two were never actually in conflict.'},
+
+  {t:'section', section:true, kicker:'Part Three',
+   h:'When demand runs the business',
+   sub:'The quiet months disappear. The right people show up already sold. And you finally price like the expert you are.'},
+
+  {t:'shift', kicker:'The shift',
+   h:'Pre-sold, not persuaded',
+   bullets:['Clients arrive having decided, so calls feel like formalities',
+            'Consistent months replace feast-or-famine swings',
+            'You raise your prices because demand finally supports it']},
+
+  {t:'beforeafter', kicker:'The transformation',
+   h:'From secret to sought-after',
+   sub:'You stop being the best-kept secret and become the name people put on their vision board, the one they were waiting to buy from.'},
+
+  {t:'credibility', kicker:'Why listen to me',
+   h:'Jo White, RD',
+   bullets:['Registered Dietitian who built a 6-figure private practice from scratch',
+            'Since 2018, sold more than $2M in coaching, courses, and programs',
+            'Host of The Nutrition and Ambition Podcast, mentor to hundreds of entrepreneurs'],
+   note:'I built the demand engine I am teaching you, inside the exact market you are in.'},
+
+  {t:'next', kicker:'What to do next',
+   h:'Build demand before you need it',
+   sub:'The pros who win are not the most talented. They are the ones who became the obvious choice on purpose. You can start today.'},
+
+  {t:'recap', kicker:'In one line',
+   h:'Magnetic brand, built on purpose',
+   sub:'Brand Radius to pull them in, a content continuum to earn trust fast, and a stacked system so demand arrives before the month does.'},
+
+  {t:'cta', kicker:'Your next step',
+   h:'Ready to become the obvious choice?',
+   sub:'If you want help building this into your business, my In Demand mastermind is where we do it together over six months, step by step.',
+   step:'Come work with me inside In Demand - theambitiousnutritionist.com',
+   disclaimer:'This masterclass is for educational purposes only. No specific result, income, or revenue is guaranteed. Results vary based on your effort, your market, your offer, and your experience.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('div');
+  let cls = 'slide';
+  if (s.cover) cls += ' cover';
+  if (s.section) cls += ' section-slide';
+  if (s.t === 'cta') cls += ' cta-slide';
+  d.className = cls + (i === 0 ? ' on' : '');
+  let html = '';
+  if (s.kicker) html += '<div class="kicker">' + s.kicker + '</div>';
+  if (s.statement) {
+    html += '<div class="big">' + s.big + '</div>';
+  } else if (s.h) {
+    html += '<h2>' + s.h + '</h2>';
+  }
+  if (s.sub) html += '<div class="sub">' + s.sub + '</div>';
+  if (s.bullets) html += '<ul>' + s.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>';
+  if (s.step) html += '<div class="step">' + s.step + '</div>';
+  if (s.by) html += '<div class="by">' + s.by + '</div>';
+  if (s.note) html += '<div class="note">' + s.note + '</div>';
+  if (s.disclaimer) html += '<div class="disclaimer">' + s.disclaimer + '</div>';
+  if (s.radius) html += '<div class="radius"></div>';
+  d.innerHTML = html;
+  deck.appendChild(d);
+});
+
+let cur = 0;
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+document.getElementById('total').textContent = total;
+const prevB = document.getElementById('prev');
+const nextB = document.getElementById('next');
+function show(n){
+  cur = Math.max(0, Math.min(total - 1, n));
+  slides.forEach((s, i) => s.classList.toggle('on', i === cur));
+  document.getElementById('cur').textContent = cur + 1;
+  prevB.disabled = cur === 0;
+  nextB.disabled = cur === total - 1;
+}
+prevB.onclick = () => show(cur - 1);
+nextB.onclick = () => show(cur + 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') show(cur + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(cur - 1);
+});
+show(0);
+</script>
+</body>
+</html>
