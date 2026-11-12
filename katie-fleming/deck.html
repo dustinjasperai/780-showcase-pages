@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ease Frequency — a masterclass with Katie Fleming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF7F1; --panel:#F3EADF; --rule:#E3D5C4; --ink:#2E2A26;
+    --accent:#B5654A; --rose:#9A6A6A; --muted:#6E655C;
+    --display:'Cormorant Garamond', Georgia, serif;
+    --body:'Hanken Grotesk', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);font-family:var(--body);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:100%;max-width:960px}
+  .slide{display:none;background:var(--bg);aspect-ratio:16/9;width:100%;
+    padding:64px 72px;position:relative;overflow:hidden;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-family:var(--body);font-weight:500;letter-spacing:.18em;
+    text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:600;font-size:66px;line-height:1.02;
+    letter-spacing:-.01em;color:var(--ink)}
+  h2{font-family:var(--display);font-weight:600;font-size:48px;line-height:1.05;
+    color:var(--ink);margin-bottom:20px}
+  .lede{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.3;
+    color:var(--muted);margin-top:26px;max-width:40ch}
+  p.body{font-size:19px;line-height:1.62;color:#4a443d;max-width:46ch;margin-top:14px}
+  ul{list-style:none;margin-top:22px}
+  ul li{font-size:20px;line-height:1.5;color:#43403a;padding-left:26px;
+    position:relative;margin-bottom:16px;max-width:44ch}
+  ul li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;
+    border-radius:50%;background:var(--accent)}
+  .rule{width:64px;height:2px;background:var(--rule);margin:30px 0 0}
+  .horizon{position:absolute;left:0;right:0;bottom:0;height:34%;
+    background:linear-gradient(180deg,transparent, rgba(181,101,74,.06))}
+  .kicker{font-family:var(--display);font-style:italic;font-size:34px;color:var(--rose);
+    margin-top:18px}
+  .num{position:absolute;top:60px;right:72px;font-family:var(--display);
+    font-size:20px;color:var(--rule)}
+  .part{font-family:var(--body);font-weight:600;letter-spacing:.2em;
+    text-transform:uppercase;font-size:12px;color:var(--rose)}
+  .frame{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  .frame .cell{background:var(--panel);border:1px solid var(--rule);border-radius:10px;
+    padding:20px 22px}
+  .frame .cell h3{font-family:var(--display);font-size:24px;font-weight:600;margin-bottom:6px}
+  .frame .cell span{font-size:15px;line-height:1.45;color:#5a544c}
+  .disclaimer{font-size:13px;color:var(--muted);margin-top:26px;max-width:58ch;line-height:1.5}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    display:flex;gap:14px;align-items:center;color:#cbb;font-family:var(--body);font-size:13px}
+  .nav button{background:var(--accent);color:#fff;border:0;border-radius:6px;
+    padding:7px 14px;cursor:pointer;font-family:var(--body);font-size:13px}
+  .brandline{position:absolute;bottom:34px;left:72px;font-family:var(--body);
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass with Katie Fleming', h1:'The Ease Frequency',
+   lede:'How ambitious moms scale a 6 and 7-figure business from aligned energy and presence, and enroll high-ticket clients without a single cold sales call.'},
+
+  {t:'who', part:'Who this is for', h2:'The ambitious mom who was promised more.',
+   body:'You built something real. The podcast, the audience, the offers. And somewhere along the way scaling started to mean more hustle, more launches, more calls, and less of the family you built it all for.'},
+
+  {t:'who', part:'Who this is for', h2:'You are not short on ambition.',
+   body:'You are short on a way to grow that does not take the thing you love most. You do not need another launch strategy. You need a frequency you can actually scale from, and a model that lets the business and the family both win.'},
+
+  {t:'hook', eyebrow:'The reframe', h2:'Scaling taught you to push harder.',
+   kicker:'It quietly cost you your presence.'},
+
+  {t:'part', part:'Part one', h2:'The problem is not your effort.',
+   body:'The treadmill works, until it does not. Launch-to-launch income swings, a calendar full of sales calls, and the belief that rest is something you earn after the next revenue goal. More effort stopped being the answer a long time ago.'},
+
+  {t:'part', part:'Part one', h2:'There is a difference between ease and easy.',
+   body:'Easy means no effort. Ease is something else: the energy you move from. Most ambitious moms are running a strong business from a depleted frequency, and wondering why the next level feels so heavy. The word that runs the whole thing is should.'},
+
+  {t:'framework', part:'Part two', h2:'The framework',
+   frame:[
+     {h:'Ease Frequency', s:'The energy you scale from. Aligned, present, not depleted.'},
+     {h:'Profitable Presence', s:'Presence as a revenue driver, not a trade-off.'},
+     {h:'Feel Good Sales', s:'Enroll through resonance and content, not pressure.'},
+     {h:'The Cash Flow Equation', s:'Near-daily revenue instead of launch roulette.'}
+   ]},
+
+  {t:'part', part:'Part two', h2:'Ease Frequency',
+   body:'This is where it starts. More eyeballs on your content and your live events, more sales, deeper connection, all of it flows from the frequency you create from. Shift the energy first and the strategy finally lands.'},
+
+  {t:'part', part:'Part two', h2:'Profitable Presence',
+   body:'Being present, with your family, in your body, off the hustle treadmill, is the most profitable thing you can do. Presence is not the reward at the end of the quarter. It is the thing that makes the quarter work.'},
+
+  {t:'part', part:'Part two', h2:'Feel Good Sales',
+   body:'Take my money, no sales calls needed. High-ticket clients enroll because your content and your presence did the work long before any conversation. Selling that feels good, because it is built on resonance, not pressure.'},
+
+  {t:'part', part:'Part two', h2:'The Cash Flow Equation',
+   body:'Everyday Payday is the opposite of launch roulette. Consistent, near-daily revenue engineered from the content you are already making, so the money stops swinging from one launch to the next and starts holding you up.'},
+
+  {t:'part', part:'Part two', h2:'Un-Nichable',
+   body:'You were told to box yourself into one rigid niche. It made you smaller and less like you. Un-Nichable is how you stay magnetic and clear without shrinking into a label, so the right people find you because of your range, not in spite of it.'},
+
+  {t:'part', part:'Part two', h2:'Channeled Content',
+   body:'Content stops being a chore when it stops being forced. Channeled, intuitive content becomes the marketing engine, the thing that warms people long before they ever reach an offer. This is what makes Feel Good Sales possible in the first place.'},
+
+  {t:'part', part:'Part three', h2:'The both-and week, hour by hour.',
+   body:'The school run and the client call. Nap-time deep work and the family dinner. An offer launch and real rest. Not balanced on a knife edge, held on the same calendar, on purpose.'},
+
+  {t:'hook', eyebrow:'From and to', h2:'From launch roulette to Everyday Payday.',
+   kicker:'From hustling for it to scaling from ease.'},
+
+  {t:'hook', eyebrow:'The both-and life', h2:'A business empire and a family legacy.',
+   kicker:'At the same time. On purpose.'},
+
+  {t:'who', part:'Why trust this', h2:'Built in the real both-and.',
+   body:'Katie Fleming is the founder of the Ambitious Mom brand and host of the Ambitious Mom Podcast, running since 2017. A multi-six-figure mentor who coaches ambitious moms to scale with ease and flow while staying present with their families.'},
+
+  {t:'cta', eyebrow:'Your next step', h2:'Ready to scale from ease?',
+   body:'Inside the Shift Inner Circle Mastermind, this becomes your way of working: private and group coaching, rolling support, and the signature programs behind everything above. Come build the empire and the legacy at the same time.',
+   disclaimer:'This masterclass is educational. It shares frameworks and principles, not guarantees. Results vary by person, market, and effort, and no specific income or outcome is promised.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className='slide'+(i===0?' on':'');
+  let inner = `<div class="num">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>`;
+  if(s.part) inner += `<div class="part">${s.part}</div>`;
+  if(s.eyebrow) inner += `<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.h1) inner += `<h1>${s.h1}</h1>`;
+  if(s.h2) inner += `<h2>${s.h2}</h2>`;
+  if(s.lede) inner += `<div class="lede">${s.lede}</div>`;
+  if(s.body) inner += `<p class="body">${s.body}</p>`;
+  if(s.kicker) inner += `<div class="kicker">${s.kicker}</div>`;
+  if(s.frame){ inner += '<div class="frame">'; s.frame.forEach(f=>{ inner += `<div class="cell"><h3>${f.h}</h3><span>${f.s}</span></div>`; }); inner += '</div>'; }
+  if(s.disclaimer) inner += `<div class="disclaimer">${s.disclaimer}</div>`;
+  inner += `<div class="horizon"></div><div class="brandline">The Ambitious Mom</div>`;
+  d.innerHTML = inner;
+  deck.appendChild(d);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+function show(i){slides[cur].classList.remove('on');cur=(i+slides.length)%slides.length;slides[cur].classList.add('on');count.textContent=(cur+1)+' / '+slides.length;}
+function go(n){show(cur+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+count.textContent='1 / '+slides.length;
+</script>
+</body>
+</html>
