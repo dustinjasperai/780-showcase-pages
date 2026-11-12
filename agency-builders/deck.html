@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uncapped Profit | Agency Builders masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f7f9fc;
+    --panel:#eef2f9;
+    --ink:#0d1b3b;
+    --ink-soft:#33415e;
+    --ink-muted:#6b7794;
+    --accent:#204181;
+    --accent-soft:#c9d7ef;
+    --rule:#dbe3f1;
+  }
+  html,body{ height:100%; }
+  body{
+    font-family:'Inter',-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .deck{ max-width:960px; margin:0 auto; }
+  .slide{ display:none; min-height:100vh; padding:72px 64px; flex-direction:column; justify-content:center; }
+  .slide.active{ display:flex; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:56px; line-height:1.05; letter-spacing:-0.02em; color:var(--ink); margin-bottom:22px; }
+  h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:38px; line-height:1.12; letter-spacing:-0.015em; color:var(--ink); margin-bottom:20px; }
+  .lede{ font-size:23px; line-height:1.5; color:var(--ink-soft); max-width:32ch; }
+  .sub{ font-size:20px; line-height:1.55; color:var(--ink-soft); margin-bottom:14px; max-width:62ch; }
+  .part{ font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:18px; }
+  .ladder{ margin-top:14px; border-left:3px solid var(--accent-soft); }
+  .rung{ padding:14px 0 14px 22px; }
+  .rung b{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; color:var(--ink); }
+  .rung span{ display:block; font-size:16px; color:var(--ink-muted); margin-top:2px; }
+  .rung.on{ border-left:3px solid var(--accent); margin-left:-25px; padding-left:22px; }
+  .rung.on b{ color:var(--accent); }
+  .card{ background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:34px 36px; max-width:58ch; }
+  .card .num{ font-family:'Space Mono',monospace; color:var(--accent); font-size:14px; letter-spacing:0.1em; margin-bottom:10px; }
+  ul.points{ list-style:none; margin-top:10px; }
+  ul.points li{ font-size:20px; color:var(--ink-soft); padding:10px 0 10px 28px; position:relative; max-width:60ch; }
+  ul.points li::before{ content:""; position:absolute; left:0; top:17px; width:10px; height:10px; background:var(--accent); border-radius:2px; }
+  .disclaimer{ font-size:13px; color:var(--ink-muted); margin-top:26px; max-width:66ch; line-height:1.5; }
+  .cta-box{ display:inline-block; margin-top:8px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:19px; color:#fff; background:var(--accent); padding:16px 30px; border-radius:10px; }
+  .nav{ position:fixed; bottom:20px; right:24px; font-family:'Space Mono',monospace; font-size:12px; color:var(--ink-muted); background:rgba(247,249,252,0.9); padding:6px 12px; border:1px solid var(--rule); border-radius:8px; }
+  .brandline{ margin-top:30px; font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-muted); letter-spacing:0.04em; }
+  @media (max-width:680px){ .slide{ padding:48px 24px; } h1{ font-size:38px; } h2{ font-size:28px; } .lede{ font-size:20px; } }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:"Agency Builders // Live masterclass with Jay Owen",
+    h:"Uncapped Profit",
+    lede:"Why your agency's margin is a pricing decision, not a volume decision.",
+    brand:"agencybuilders.com" },
+
+  {t:'statement', eyebrow:"Who this is for",
+    h:"You run a real agency. You're busier than ever. The margin keeps shrinking.",
+    sub:["If you took on more clients this year, hired to keep up, and still didn't feel the difference in the bank account, this hour is for you."] },
+
+  {t:'statement', eyebrow:"The trap",
+    h:"You did everything they told you to do.",
+    sub:["Said yes to more work. Hired to deliver it. Chased the top-line number.",
+         "And somehow the profit at the bottom stayed exactly where it was."] },
+
+  {t:'statement', eyebrow:"The reframe",
+    h:"More revenue did not make you more profitable.",
+    sub:["The ceiling was set the day you started billing by the hour. Growth just pushed more volume through a model that was never built to compound."] },
+
+  {t:'part', part:"Part One", h:"Why effort stopped paying" },
+
+  {t:'points', eyebrow:"The core problem",
+    h:"Hourly and cost-plus pricing tie your income to your capacity.",
+    points:["Every new hour of billable work needs a new hour of paid labor.",
+            "So the only way to earn more is to buy more hours.",
+            "Headcount goes up. Overhead goes up. Margin stays flat."] },
+
+  {t:'statement', eyebrow:"The real cost",
+    h:"Capacity-based pricing can't compound.",
+    sub:["A software company sells the same product a thousand times. An hourly agency sells each hour once, then has to go buy another one. That is the whole reason your margin feels stuck while your revenue climbs."] },
+
+  {t:'part', part:"Part Two", h:"The margin ladder",
+    sub:["The same project, priced four different ways. Each rung up lifts the profit without adding a single hour of headcount."] },
+
+  {t:'ladder', eyebrow:"Rung one", h:"Hourly: margin capped",
+    ladder:[ {b:"Hourly", span:"Margin capped. You sell time once and rebuy it.", on:true},
+             {b:"Fixed scope", span:"Margin stable."},
+             {b:"Productized", span:"Margin repeatable."},
+             {b:"Value-based", span:"Margin uncapped."} ] },
+
+  {t:'statement', eyebrow:"Rung two", h:"Fixed scope: margin stabilizes",
+    sub:["Price the deliverable, not the clock. When scope is fixed and you deliver faster than estimated, the efficiency becomes your profit instead of the client's discount."] },
+
+  {t:'statement', eyebrow:"Rung three", h:"Productized: margin becomes repeatable",
+    sub:["Package a repeatable outcome and sell it again and again at a known price and a known cost. A fixed Brand Sprint sold at $12,000 has a margin you can predict before the kickoff call, because you have run it before."] },
+
+  {t:'card', eyebrow:"Rung four", h:"Value-based: margin uncapped",
+    card:{ num:"The example",
+      text:"A redesign projected to add $500,000 a year to a client's revenue is priced at $75,000. The fee is a fraction of the value created, and it has nothing to do with how many hours it took you to build." } },
+
+  {t:'statement', eyebrow:"The pillar", h:"This is Uncapped Profit.",
+    sub:["Margin first, not vanity revenue. Price to the outcome you create, not the hours you spend. It is one of the three things we build inside Agency Builders: Radical Freedom, Uncapped Profit, and True Purpose."] },
+
+  {t:'part', part:"Part Three", h:"Uncapped Profit, running in your agency" },
+
+  {t:'points', eyebrow:"What changes",
+    h:"Fewer, better-priced projects. The same team. More profit.",
+    points:["You start choosing clients by the margin they carry, not the logo.",
+            "Delivery speed becomes profit instead of a reason to discount.",
+            "The agency finally earns more without needing more of you."] },
+
+  {t:'statement', eyebrow:"The shift", h:"From working in the agency to leading it.",
+    sub:["When margin stops depending on your personal capacity, you get your time back. That is Radical Freedom: the agency scales without wrecking your life."] },
+
+  {t:'statement', eyebrow:"Why me", h:"I have run this playbook, not just taught it.",
+    sub:["I started a web design business at seventeen and spent twenty-five years building it into a full-service agency, through every hiring, pricing, and profitability wall you are hitting now. Agency Builders is where I bring other owners through the same walls."] },
+
+  {t:'statement', eyebrow:"The bigger why", h:"Profit is a means, not the goal.",
+    sub:["We build margin so the business can fund a life and a mission that matter. That is True Purpose: the reason uncapping your profit is worth the work in the first place."] },
+
+  {t:'points', eyebrow:"The recap", h:"One decision moves all of it.",
+    points:["Hourly caps you. Fixed scope steadies you.",
+            "Productized makes margin repeatable. Value-based uncaps it.",
+            "Your margin was never a volume problem. It was a pricing decision."] },
+
+  {t:'cta', eyebrow:"Inside Agency Builders",
+    h:"Come build Uncapped Profit with the room.",
+    sub:["This is the work we do together in the community, the masterminds, and the Executive room: rebuild your pricing so the next year of growth actually reaches the bottom line."],
+    cta:"Join the agency owners at agencybuilders.com",
+    disclaimer:"This masterclass is educational. It is not a promise or guarantee of income, revenue, or specific results. Every agency's outcome depends on its own market, offer, pricing, and effort. The figures shown are illustrative examples, not projections for your business." }
+];
+
+function esc(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function render(){
+  var deck = document.getElementById('deck');
+  deck.innerHTML = S.map(function(s){
+    var h = '';
+    if(s.eyebrow) h += '<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    if(s.part) h += '<div class="part">'+esc(s.part)+'</div>';
+    if(s.t==='title'){ h += '<h1>'+esc(s.h)+'</h1>'; if(s.lede) h+='<p class="lede">'+esc(s.lede)+'</p>'; if(s.brand) h+='<div class="brandline">'+esc(s.brand)+'</div>'; }
+    else { if(s.h) h += '<h2>'+esc(s.h)+'</h2>'; }
+    (s.sub||[]).forEach(function(p){ h += '<p class="sub">'+esc(p)+'</p>'; });
+    if(s.ladder){ h += '<div class="ladder">'+s.ladder.map(function(r){ return '<div class="rung'+(r.on?' on':'')+'"><b>'+esc(r.b)+'</b><span>'+esc(r.span)+'</span></div>'; }).join('')+'</div>'; }
+    if(s.card){ h += '<div class="card"><div class="num">'+esc(s.card.num)+'</div><p class="sub" style="margin-bottom:0">'+esc(s.card.text)+'</p></div>'; }
+    if(s.points){ h += '<ul class="points">'+s.points.map(function(p){ return '<li>'+esc(p)+'</li>'; }).join('')+'</ul>'; }
+    if(s.cta){ h += '<div class="cta-box">'+esc(s.cta)+'</div>'; }
+    if(s.disclaimer){ h += '<p class="disclaimer">'+esc(s.disclaimer)+'</p>'; }
+    return '<section class="slide">'+h+'</section>';
+  }).join('');
+}
+render();
+var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+var i = 0, nav = document.getElementById('nav');
+function show(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+  nav.innerHTML = (i+1)+' / '+slides.length+' &nbsp; use arrow keys';
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown', function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){ show(i+1); e.preventDefault(); }
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ show(i-1); e.preventDefault(); }
+});
+document.getElementById('deck').addEventListener('click', function(){ show(i+1); });
+show(0);
+</script>
+</body>
+</html>
