@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Therapreneur's Path | Therapists Rising</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#211a15;        /* warm espresso near-black (brand site_scheme: dark) */
+    --panel:#2c231c;     /* raised warm panel */
+    --rule:#4a3b2e;      /* warm hairline */
+    --accent:#cb9c72;    /* brand gold, verbatim from brand.json */
+    --ink:#f3ece2;       /* warm off-white */
+    --muted:#b7a996;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Montserrat',system-ui,sans-serif;font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{
+    position:absolute;inset:0;display:none;
+    flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease;
+  }
+  .slide.on{display:flex;opacity:1}
+  .eyebrow{
+    font-family:'Montserrat';font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;font-size:clamp(11px,1.1vw,14px);
+    color:var(--accent);margin-bottom:2.2vh;
+  }
+  h1{
+    font-family:'Kaisei Decol',serif;font-weight:700;
+    font-size:clamp(30px,5.4vw,66px);line-height:1.05;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Kaisei Decol',serif;font-weight:500;
+    font-size:clamp(26px,4vw,48px);line-height:1.1;margin-bottom:3vh;
+  }
+  p.lead{font-size:clamp(16px,1.7vw,22px);line-height:1.55;max-width:52ch;color:var(--ink)}
+  p.sub{font-size:clamp(15px,1.5vw,19px);line-height:1.6;max-width:56ch;color:var(--muted);margin-top:2.4vh}
+  .accentline{width:64px;height:3px;background:var(--accent);margin:3vh 0}
+  ul.points{list-style:none;margin-top:1vh;max-width:60ch}
+  ul.points li{
+    font-size:clamp(15px,1.6vw,21px);line-height:1.5;padding:1.5vh 0 1.5vh 2.2em;
+    position:relative;border-bottom:1px solid var(--rule);
+  }
+  ul.points li:last-child{border-bottom:none}
+  ul.points li::before{
+    content:"";position:absolute;left:0;top:2.3vh;width:11px;height:11px;
+    border:2px solid var(--accent);border-radius:50%;
+  }
+  .step-num{font-family:'Kaisei Decol',serif;color:var(--accent);font-size:clamp(28px,3.4vw,42px);margin-bottom:1.6vh;display:block}
+  .big{font-family:'Kaisei Decol',serif;font-size:clamp(34px,6vw,72px);line-height:1.04;font-weight:700}
+  .big .em{color:var(--accent)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:center}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:4vh 3vw}
+  .card h3{font-family:'Kaisei Decol',serif;font-weight:500;font-size:clamp(18px,2vw,26px);margin-bottom:1.4vh;color:var(--accent)}
+  .card p{font-size:clamp(14px,1.4vw,17px);line-height:1.55;color:var(--muted)}
+  .who{font-size:clamp(15px,1.6vw,20px);line-height:1.7;max-width:50ch}
+  .who b{color:var(--accent);font-weight:500}
+  .disclaimer{font-size:12px;line-height:1.5;color:var(--muted);max-width:60ch;margin-top:4vh}
+  .cta-step{font-family:'Kaisei Decol',serif;font-size:clamp(20px,2.4vw,30px);color:var(--ink);margin-top:2vh}
+  footer{position:absolute;bottom:3vh;left:9vw;right:9vw;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  footer .brand{color:var(--accent);font-weight:600}
+  .nav{position:absolute;bottom:3vh;right:9vw;z-index:5}
+  .nav button{background:transparent;border:1px solid var(--rule);color:var(--ink);font-family:'Montserrat';font-size:14px;padding:7px 14px;border-radius:8px;cursor:pointer;margin-left:6px}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{position:absolute;bottom:3.4vh;left:9vw;font-size:12px;color:var(--muted);letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'A live masterclass with Dr. Hayley Kelly',h1:'The Therapreneur’s Path',sub:'How to turn your clinical skills into a profitable online program, without risking your registration.'},
+  {t:'who',eyebrow:'Who this is for',h2:'If any of this is you…',who:'You are a <b>therapist or health professional</b> who is good at what you do, and quietly exhausted by it. Your income is <b>capped</b> by the hours in a week. You have thought about a different way to work, but it feels too big, and a little bit risky.'},
+  {t:'statement',eyebrow:'The honest reframe',big:'Seeing more clients is not the answer. <span class="em">The model is.</span>'},
+  {t:'lead',eyebrow:'Part one · the ceiling',h2:'The therapy chair has a hard limit',lead:'One of you, one of them, one hour at a time. Every dollar is tied to an hour you personally sit in the room. There is no version of that maths where you work less and earn more. Burnout is not a willpower problem. It is built into the model.'},
+  {t:'lead',eyebrow:'Part one · the fear',h2:'And one quiet fear keeps you stuck',lead:'Most therapists who think about diversifying stop at the same wall: the fear of getting it wrong with their registration. So they stay in the chair, telling themselves now is not the time. The fear is valid. It is also solvable.'},
+  {t:'statement',eyebrow:'Part two · Therapreneurship',big:'From <span class="em">one to one</span>, to supporting <span class="em">the many</span>.'},
+  {t:'lead',eyebrow:'Therapreneurship',h2:'You already own the hard part',lead:'The years of training, the clinical judgement, the trust you have earned: that is the asset. Therapreneurship is simply repackaging what you already know into something scalable, an online program, a group, a membership, so your expertise can reach many people at once instead of one at a time.'},
+  {t:'roadmap',eyebrow:'The roadmap',h2:'The Program, Marketing and Non-Sleazy Sales Roadmap',cards:[
+    {h:'1 · Niche',p:'Lock a profitable, specific audience you are genuinely placed to serve.'},
+    {h:'2 · Validate',p:'Prove people want it before you build it, so you never create into silence.'},
+    {h:'3 · Design',p:'Shape the curriculum and the transformation, drawing on your clinical skill.'},
+    {h:'4 · Sell (non-sleazy)',p:'A sales page and email flow that convert while staying true to your ethics.'}
+  ]},
+  {t:'step',num:'Step 1',h2:'Niche',lead:'Not “all therapists,” not “anyone who is stressed.” A narrow, nameable group whose problem you understand better than almost anyone. The narrower the niche, the louder your message, and the easier every later step becomes.'},
+  {t:'step',num:'Step 2',h2:'Validate before you build',lead:'The most expensive mistake is building a full program nobody asked for. You will learn to test the idea with real people and collect first commitments before you record a single lesson.'},
+  {t:'step',num:'Step 3',h2:'Design the transformation',lead:'This is where your clinical skill becomes your unfair advantage. You already know how change actually happens. You will map a curriculum that takes someone from where they are to the outcome you promised, step by step.'},
+  {t:'step',num:'Step 4',h2:'Sell without the sleaze',lead:'Selling is not a dirty word. It is how people say yes to the help they came looking for. You will build a sales page and email sequence that feel like you, honest, warm, clear, and still convert.'},
+  {t:'lead',eyebrow:'Part three · the moat',h2:'Diversify legally and ethically',lead:'This is the piece the generic business advice skips. As a registered professional you have real obligations, around client stories, claims, contracts, disclaimers and advertising. Knowing the rules is what lets you move with confidence instead of fear. Done right, compliance is not a brake. It is your protection.'},
+  {t:'lead',eyebrow:'Life past the ceiling',h2:'A second income that does not cost you more hours',lead:'An online program runs while you sleep, sees clients while you are with your family, and lifts the ceiling the therapy chair put on you. It does not replace the work you love. It gives you room to choose how much of it you do.'},
+  {t:'who',eyebrow:'Why me',h2:'I have walked this exact path',who:'I am <b>Dr. Hayley Kelly</b>: a clinical psychologist for 12 years, PhD and Masters, and a Board-approved Supervisor with the Psychology Board of Australia. After becoming a mother I rebuilt how I work, repackaged my expertise into an online course, and now I teach other therapists to do the same, without burning out or burning their registration.'},
+  {t:'cta',eyebrow:'Your next step',h2:'Ready to build yours?',cta_step:'Join The Incubator, the 8-week program where we build and launch your first online program together, with the compliance guardrails built in.',disc:'Educational only. This masterclass shares general information and strategy; it is not legal, financial, or clinical advice, and it is not a guarantee of income or results. Outcomes vary and depend on your own effort, market, and circumstances. Always seek advice specific to your registration and jurisdiction.'}
+];
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');d.className='slide';d.dataset.i=i;
+  let html='';
+  if(s.eyebrow) html+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.t==='title'){html+=`<h1>${s.h1}</h1><div class="accentline"></div><p class="sub">${s.sub}</p>`}
+  else if(s.t==='statement'){html+=`<div class="big">${s.big}</div>`}
+  else if(s.t==='who'){html+=`<h2>${s.h2}</h2><p class="who">${s.who}</p>`}
+  else if(s.t==='lead'){html+=`<h2>${s.h2}</h2><p class="lead">${s.lead}</p>`}
+  else if(s.t==='roadmap'){html+=`<h2>${s.h2}</h2><div class="two" style="grid-template-columns:1fr 1fr">`+s.cards.map(c=>`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')+`</div>`}
+  else if(s.t==='step'){html+=`<span class="step-num">${s.num}</span><h2>${s.h2}</h2><p class="lead">${s.lead}</p>`}
+  else if(s.t==='cta'){html+=`<h2>${s.h2}</h2><p class="cta-step">${s.cta_step}</p><p class="disclaimer">${s.disc}</p>`}
+  html+=`<footer><span class="brand">Therapists Rising</span><span>The Therapreneur’s Path</span></footer>`;
+  d.innerHTML=html;deck.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];const count=document.getElementById('count');
+function show(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(slides.length-1,n));slides[cur].classList.add('on');count.textContent=(cur+1)+' / '+slides.length;}
+function go(d){show(cur+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show(0);
+</script>
+</body>
+</html>
