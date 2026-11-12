@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Multi-Service Exterior Cleaning Business | A.E. Mackintosh Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#edefee; --panel:#fafbfa; --ink:#282b2a; --ink-soft:#494d4b; --ink-muted:#868b88;
+    --rule:#dadedb; --accent:#a58b44; --accent-soft:#efe8d5;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',-apple-system,sans-serif; background:#d9d5cc; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{
+    position:relative; width:min(1000px,96vw); aspect-ratio:16/10; background:var(--bg);
+    border:1px solid var(--rule); box-shadow:0 18px 60px rgba(0,0,0,0.22); overflow:hidden;
+  }
+  .slide{
+    position:absolute; inset:0; padding:64px 72px; display:none; flex-direction:column;
+    opacity:0; transition:opacity .25s ease;
+  }
+  .slide.on{display:flex; opacity:1;}
+  .kicker{font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:22px;}
+  h1{font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:52px; line-height:1.05;
+    letter-spacing:-.015em; color:var(--ink); margin-bottom:20px;}
+  h2{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1.1;
+    letter-spacing:-.01em; color:var(--ink); margin-bottom:26px;}
+  .sub{font-size:22px; color:var(--ink-soft); line-height:1.4; max-width:40ch;}
+  .foot{margin-top:auto; font-size:15px; color:var(--ink-muted); letter-spacing:.02em;}
+  .rule{width:64px; height:4px; background:var(--accent); margin:0 0 28px;}
+  ul{list-style:none; display:flex; flex-direction:column; gap:16px; max-width:46ch;}
+  li{position:relative; padding-left:30px; font-size:21px; color:var(--ink-soft); line-height:1.4;}
+  li::before{content:""; position:absolute; left:0; top:12px; width:12px; height:12px;
+    background:var(--accent); border-radius:2px;}
+  .big{font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:46px; line-height:1.12;
+    letter-spacing:-.015em; color:var(--ink); max-width:24ch; margin:auto 0;}
+  .big .hl{color:var(--accent);}
+  .partnum{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:14px;}
+  .ladder{display:flex; flex-direction:column; gap:12px; margin-top:6px;}
+  .rung{display:flex; align-items:center; gap:18px; background:var(--panel); border:1px solid var(--rule);
+    border-left:4px solid var(--accent); padding:16px 22px;}
+  .rung .n{font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:20px; color:var(--accent); width:28px;}
+  .rung .lab{font-size:20px; font-weight:600; color:var(--ink);}
+  .rung .note{margin-left:auto; font-size:15px; color:var(--ink-muted);}
+  .body{font-size:22px; color:var(--ink-soft); line-height:1.5; max-width:44ch;}
+  .disclaimer{margin-top:20px; font-size:13px; color:var(--ink-muted); line-height:1.5; max-width:60ch;}
+  .cta-line{font-size:20px; color:var(--ink-soft); margin-top:10px;}
+  #hud{position:fixed; bottom:16px; right:22px; font-size:12px; color:#6a665d; letter-spacing:.08em;
+    display:flex; gap:14px; align-items:center;}
+  #hud button{font:inherit; color:#6a665d; background:none; border:1px solid #b9b4a8; padding:4px 10px;
+    cursor:pointer; border-radius:3px;}
+  .notes{position:absolute; left:72px; right:72px; bottom:22px; font-size:14px; color:var(--ink-muted);
+    border-top:1px solid var(--rule); padding-top:10px; display:none;}
+  body.shownotes .notes{display:block;}
+  @media (max-width:640px){
+    .slide{padding:34px 30px;} h1{font-size:34px;} h2{font-size:26px;} .sub{font-size:18px;}
+    .big{font-size:30px;} li{font-size:17px;} .body{font-size:18px;}
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud"><span id="counter"></span><button id="notesBtn">Hide notes</button></div>
+<script>
+const S=[
+  {t:'title', kicker:'A.E. Mackintosh · Live Masterclass',
+   title:'The Multi-Service Exterior Cleaning Business',
+   sub:'How to turn a single-service round into a year-round, recurring-revenue operation.',
+   foot:'with Ashley Mackintosh · 30 years in exterior cleaning',
+   notes:'Welcome. Set the promise plainly, then get into why windows-only has a ceiling.'},
+
+  {t:'bullets', kicker:'The promise', title:'What you will leave with',
+   items:['Why a single-service round caps your income','The exact order to add services',
+     'How to do the high-value work safely, so you charge more','A plan to turn one-off jobs into recurring revenue'],
+   notes:'Four clear takeaways. Keep it concrete.'},
+
+  {t:'bullets', kicker:'Who this is for', title:'This is for you if...',
+   items:['You run a window cleaning or exterior cleaning round','Your income drops every time the weather turns',
+     'You are competing on price and it is a grind','You want to grow without just chasing more new customers'],
+   notes:'Name their world back to them. They should feel seen in the first minute.'},
+
+  {t:'body', kicker:'The trap', title:'The one-service trap',
+   body:'You started with windows. The work is good and the customers are happy. But windows only pay when the sun is out, there is always someone cheaper, and the only way to earn more is to work more hours. The ceiling is built into a single service.',
+   notes:'This is the pain, in the customer world, before any solution.'},
+
+  {t:'reframe', big:'You do not need more customers. You need more <span class="hl">services per customer</span>.',
+   notes:'The dark reframe. Let it land. The rest of the session proves it.'},
+
+  {t:'part', num:'Part One', title:'The single-service ceiling',
+   notes:'Why windows-only caps you.'},
+
+  {t:'bullets', kicker:'Part One', title:'Why windows-only caps you',
+   items:['Weather decides your week, not you','Winter and rain create income gaps','Price competition races to the bottom',
+     'More revenue only comes from more hours on the glass'],
+   notes:'Four reasons the ceiling is real. Keep momentum.'},
+
+  {t:'part', num:'Part Two', title:'The service ladder',
+   notes:'The core framework, built from my own course range.'},
+
+  {t:'ladder', kicker:'Part Two', title:'One customer, four services',
+   rungs:[['1','Windows','where most people start'],['2','Gutters','same visit, same customer'],
+     ['3','Pressure washing','drives, patios, paths'],['4','Roof & soft wash','the highest-value work']],
+   notes:'The ladder is the spine of the method. Each rung is the same customer paying you more.'},
+
+  {t:'bullets', kicker:'Pillar 1', title:'Craft to a standard',
+   items:['Traditional and water-fed pole, done properly','Soft washing and low-pressure roof work without damage',
+     'Safe use of equipment and chemicals','Results a customer can see and will pay to keep'],
+   notes:'Craft first. The money is in the high-value work only if you do it safely.'},
+
+  {t:'bullets', kicker:'Pillar 2', title:'Stack the right services',
+   items:['Sell to the customers you already clean for','Fill the weather gaps with all-season work',
+     'Raise revenue per round, not just customer count','Add services in an order that compounds'],
+   notes:'This is the growth engine. Existing customers, more services.'},
+
+  {t:'bullets', kicker:'Pillar 3', title:'Price for the standard',
+   items:['Position as the professional, not the cheapest van','A visible standard customers trust',
+     'Charge for safety, insurance and finish','Stop competing on price alone'],
+   notes:'Tie price to the standard. The AEM certified idea lives here.'},
+
+  {t:'bullets', kicker:'Pillar 4', title:'Build the business',
+   items:['Plan it instead of drifting into it','Turn one-off jobs into recurring rounds','Simple systems for quoting and scheduling',
+     'Support from people who have done it'],
+   notes:'The business layer. Planning plus recurring revenue plus support.'},
+
+  {t:'part', num:'Part Three', title:'The year-round operation',
+   notes:'Paint the after state.'},
+
+  {t:'bullets', kicker:'Part Three', title:'A year-round operation',
+   items:['Work that does not stop when it rains','A rising average value per customer','Recurring revenue you can predict',
+     'A business that can grow beyond your own two hands'],
+   notes:'The outcome, concretely. This is the life they want.'},
+
+  {t:'bullets', kicker:'Why me', title:'Why learn this from me',
+   items:['Almost 30 years running A.E. Mackintosh','Built from a single service to a full exterior-cleaning range',
+     'A certified standard and an approved contractor network','Still on the tools, teaching what actually works'],
+   notes:'Credibility slide. Operator, not a guru.'},
+
+  {t:'cta', kicker:'Your next step', title:'Go further with the training',
+   cta:'If this was useful, the full method lives in the training courses, the in-person training days, and the mentoring. The next live session and the Business Support community are the places to keep going.',
+   disclaimer:'Educational content only. Results depend on your own effort, market and execution, and are not guaranteed. Nothing here is a promise of income.',
+   notes:'Close on the coach next step. No hard numbers, no guarantees.'}
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s)=>{
+  const d=document.createElement('div'); d.className='slide';
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'){
+    h+=`<div class="rule"></div><h1>${s.title}</h1><p class="sub">${s.sub}</p><div class="foot">${s.foot}</div>`;
+  } else if(s.t==='bullets'){
+    h+=`<h2>${s.title}</h2><ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  } else if(s.t==='body'){
+    h+=`<h2>${s.title}</h2><p class="body">${s.body}</p>`;
+  } else if(s.t==='reframe'){
+    h+=`<p class="big">${s.big}</p>`;
+  } else if(s.t==='part'){
+    h+=`<div class="partnum">${s.num}</div><h1>${s.title}</h1>`;
+  } else if(s.t==='ladder'){
+    h+=`<h2>${s.title}</h2><div class="ladder">${s.rungs.map(r=>`<div class="rung"><span class="n">${r[0]}</span><span class="lab">${r[1]}</span><span class="note">${r[2]}</span></div>`).join('')}</div>`;
+  } else if(s.t==='cta'){
+    h+=`<h2>${s.title}</h2><p class="body">${s.cta}</p><p class="disclaimer">${s.disclaimer}</p>`;
+  }
+  if(s.notes) h+=`<div class="notes"><strong>Notes:</strong> ${s.notes}</div>`;
+  d.innerHTML=h; stage.appendChild(d);
+});
+
+let i=0; const slides=[...document.querySelectorAll('.slide')];
+const counter=document.getElementById('counter');
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('on',k===i));counter.textContent=`${i+1} / ${slides.length}`;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){show(i+1);e.preventDefault();}
+  else if(e.key==='ArrowLeft'){show(i-1);e.preventDefault();}
+});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();(e.clientX-r.left)/r.width<0.3?show(i-1):show(i+1);});
+const nb=document.getElementById('notesBtn');
+nb.addEventListener('click',()=>{document.body.classList.toggle('shownotes');nb.textContent=document.body.classList.contains('shownotes')?'Hide notes':'Show notes';});
+document.body.classList.add('shownotes');
+show(0);
+</script>
+</body>
+</html>
