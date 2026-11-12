@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Isn't Advertising — A Masterclass with Dr. Lee Wood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f7f5f0;
+    --panel:#fffdf8;
+    --ink:#20303a;
+    --ink-soft:#44565f;
+    --ink-muted:#7c8990;
+    --accent:#b8893f;
+    --rule:#2c6b70;
+    --hair:#e4ddd0;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Newsreader',Georgia,serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; padding:24px;
+  }
+  #stage{ width:min(960px,96vw); aspect-ratio:16/10; position:relative; }
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    background:var(--panel); border:1px solid var(--hair);
+    padding:64px 72px; overflow:hidden;
+  }
+  .slide.active{ display:flex; }
+  .kicker{
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
+    margin-bottom:20px;
+  }
+  .kicker::after{ content:""; display:block; width:48px; height:2px; background:var(--accent); margin-top:12px; }
+  h1{ font-size:52px; font-weight:600; line-height:1.08; letter-spacing:-.01em; margin-bottom:18px; }
+  h2{ font-size:38px; font-weight:600; line-height:1.14; letter-spacing:-.01em; margin-bottom:20px; }
+  .sub{ font-size:22px; color:var(--ink-soft); line-height:1.4; max-width:40ch; }
+  .lead{ font-size:26px; color:var(--ink-soft); line-height:1.4; max-width:42ch; }
+  .big{ font-size:120px; font-weight:700; color:var(--rule); line-height:1; letter-spacing:-.02em; margin-bottom:8px; }
+  ul{ list-style:none; margin-top:8px; }
+  li{ font-size:23px; color:var(--ink-soft); line-height:1.5; padding-left:28px; position:relative; margin-bottom:14px; max-width:44ch; }
+  li::before{ content:""; position:absolute; left:0; top:14px; width:12px; height:2px; background:var(--accent); }
+  .brand{ font-family:'Inter',sans-serif; font-size:14px; color:var(--ink-muted); margin-top:28px; letter-spacing:.02em; }
+  .note{ font-family:'Inter',sans-serif; font-size:13px; color:var(--ink-muted); line-height:1.5; margin-top:24px; max-width:52ch; }
+  .partnum{ font-family:'Inter',sans-serif; font-size:15px; letter-spacing:.2em; text-transform:uppercase; color:var(--rule); font-weight:600; }
+  .cta h2{ color:var(--ink); }
+  .cta .sub{ color:var(--ink-soft); }
+  #hud{ position:fixed; bottom:16px; right:20px; font-family:'Inter',sans-serif; font-size:12px; color:var(--ink-muted); letter-spacing:.08em; }
+  #hud b{ color:var(--accent); }
+  @media(max-width:680px){
+    .slide{ padding:36px 30px; }
+    h1{ font-size:34px; } h2{ font-size:26px; } .sub,.lead{ font-size:18px; }
+    li{ font-size:17px; } .big{ font-size:74px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud"><b id="cur">1</b> / <span id="tot"></span> &nbsp; use arrow keys</div>
+<script>
+const S=[
+  {t:'title',
+    kicker:'A live masterclass for practice owners',
+    title:"Marketing Isn't Advertising",
+    sub:"How to build a chiropractic practice new patients come to, without competing on price.",
+    brand:"One on One Chiropractic Coaching  ·  Dr. Lee Wood, DC" },
+
+  {t:'content',
+    kicker:'Who this is for',
+    title:"You own the practice.",
+    body:["You are busy but not dominant in your town.","You have tried discounts, promos, and ads to pull in new patients.","And it still feels like you are starting from zero every month."] },
+
+  {t:'content',
+    kicker:'The trap',
+    title:"More advertising felt like the answer.",
+    lead:"So the budget goes up, a new promo goes out, and the schedule fills for a week. Then it empties again. The ads were never the problem." },
+
+  {t:'stat',
+    kicker:'The real picture',
+    big:"93%",
+    sub:"of the people in your town do not have a chiropractor. The demand is not missing. A reason to choose you is." },
+
+  {t:'reframe',
+    kicker:'The reframe',
+    title:"Advertising cannot fix a practice people do not come back to.",
+    lead:"Spending more to send strangers to an ordinary experience just spends more. First you become worth coming back to. Then advertising works." },
+
+  {t:'part', partnum:'Part One', title:"Why more ads will not save you." },
+
+  {t:'content',
+    kicker:'The race to the bottom',
+    title:"Competing on price and visibility is a trap.",
+    body:["Lowest price is a position anyone can take from you tomorrow.","Loudest ad is a position you have to keep paying to hold.","Neither one makes you the obvious choice."] },
+
+  {t:'reframe',
+    kicker:'The thesis',
+    title:"Marketing is how you operate.",
+    lead:"The services you offer, and the way you offer them, are the number one way you market the practice. Everything else is amplification." },
+
+  {t:'part', partnum:'Part Two', title:"The Market-Dominating Position." },
+
+  {t:'content',
+    kicker:'Market-Dominating Position',
+    title:"Give people something they cannot get anywhere else.",
+    lead:"A market-dominating position is the reason a patient drives past three other offices to reach yours. It is built, not bought." },
+
+  {t:'content',
+    kicker:'Aim narrow',
+    title:"Pick the ideal patient. Go where they already are.",
+    lead:"You do not need everyone. You need the right ones, reached on purpose, instead of broad campaigns that spend into the wind." },
+
+  {t:'content',
+    kicker:'Ways to differentiate',
+    title:"Be the only logical choice.",
+    body:["A one-stop wellness experience, not a quick adjustment.","Hours and scheduling built around their life, not yours.","A technique or outcome they cannot get down the street.","A membership that makes care a habit, not an event."] },
+
+  {t:'part', partnum:'Part Three', title:"The Three Operating Policies." },
+
+  {t:'content',
+    kicker:'Policy one',
+    title:"Everyone keeps a HELP attitude.",
+    lead:"Every person on the team, every interaction, exists to help the patient. That tone is felt at the front desk before it is felt on the table." },
+
+  {t:'content',
+    kicker:'Policy two',
+    title:"Every patient leaves better than they came in.",
+    lead:"Better physically, and better than the mood they walked in with. People remember how your office made them feel." },
+
+  {t:'content',
+    kicker:'Policy three',
+    title:"Every patient feels they got more than they paid for.",
+    lead:"When the value is obvious, price stops being the conversation. Patients seek experienced experts who truly care, that they can trust." },
+
+  {t:'content',
+    kicker:'Clear the path',
+    title:"Then remove the obstacles.",
+    body:["Parking, hours, and payment that get in the way.","The fear, confusion, or past bad visit that holds people back.","Make the easy choice actually easy."] },
+
+  {t:'content',
+    kicker:'What it looks like',
+    title:"A practice that owns its zip code.",
+    lead:"New patients arrive already sold, because the practice earned the position. Referrals compound. The ad budget becomes an accelerator, not a life-support machine." },
+
+  {t:'content',
+    kicker:'Why listen to me',
+    title:"I have run this, not just taught it.",
+    body:["43 years in active chiropractic practice.","26 years owning a high-volume, multi-doctor clinic.","Coach of the Year 2010; hundreds of chiropractors coached one on one."] },
+
+  {t:'cta',
+    kicker:'Your next step',
+    title:"Let's build your market-dominating position.",
+    sub:"If you want this mapped to your practice, book a one on one call with me and we will start on your position, your policies, and your plan.",
+    brand:"One on One Chiropractic Coaching  ·  Dr. Lee Wood, DC",
+    note:"This training is educational. Results vary by practice and by effort; nothing here is a guarantee of income, patient volume, or any specific outcome." }
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide'+(s.t==='cta'?' cta':'')+(i===0?' active':'');
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${esc(s.kicker)}</div>`;
+  if(s.partnum) h+=`<div class="partnum">${esc(s.partnum)}</div>`;
+  if(s.big) h+=`<div class="big">${esc(s.big)}</div>`;
+  if(s.title) h+= (s.t==='title'?`<h1>${esc(s.title)}</h1>`:`<h2>${esc(s.title)}</h2>`);
+  if(s.lead) h+=`<p class="lead">${esc(s.lead)}</p>`;
+  if(s.sub) h+=`<p class="sub">${esc(s.sub)}</p>`;
+  if(s.body){ h+='<ul>'+s.body.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'; }
+  if(s.brand) h+=`<div class="brand">${esc(s.brand)}</div>`;
+  if(s.note) h+=`<div class="note">${esc(s.note)}</div>`;
+  d.innerHTML=h;
+  stage.appendChild(d);
+});
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function go(n){ slides[cur].classList.remove('active'); cur=Math.max(0,Math.min(S.length-1,n)); slides[cur].classList.add('active'); document.getElementById('cur').textContent=cur+1; }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')go(cur+1); if(e.key==='ArrowLeft')go(cur-1); });
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
