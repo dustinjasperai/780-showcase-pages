@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Simple Practice - A Live Masterclass with Dr. Melissa Longo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e2032;        /* her dominant steel-blue #345e7d, darkened */
+    --panel:#16304a;     /* tint of steel-blue */
+    --rule:#28496b;      /* tint of steel-blue */
+    --accent:#85b1dd;    /* her sky-blue, ranked_colors #85b1dd, single accent */
+    --ink:#e9f0f7;       /* cool off-white, from her white H2 on dark */
+    --muted:#9fb3c6;
+    --display:'Montserrat', system-ui, sans-serif;  /* her own face */
+    --body:'Spectral', Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .deck{display:flex;flex-direction:column}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;border-bottom:1px solid var(--rule);position:relative}
+  .kicker{font-family:var(--display);font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.8rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6.2vw,4.6rem);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,4.4vw,3.1rem);line-height:1.1;letter-spacing:-.01em}
+  .sub{font-size:clamp(1.1rem,2vw,1.5rem);color:var(--muted);margin-top:1.4rem;max-width:46ch}
+  .lead{font-size:clamp(1.3rem,2.6vw,2rem);margin-top:1.2rem;max-width:40ch}
+  ul{list-style:none;margin-top:2rem;max-width:52ch}
+  li{position:relative;padding-left:1.8rem;margin:1rem 0;font-size:clamp(1.05rem,1.8vw,1.3rem)}
+  li::before{content:"";position:absolute;left:0;top:.65em;width:.7rem;height:.7rem;border-radius:50%;background:var(--accent)}
+  .pillar-no{font-family:var(--display);font-weight:800;font-size:clamp(3rem,8vw,6rem);color:var(--accent);opacity:.35;line-height:1}
+  .num-row{display:flex;align-items:baseline;gap:1.4rem}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(1.6rem,3vw,2.6rem);margin-top:2rem;max-width:56ch}
+  .cta-btn{display:inline-block;margin-top:2.2rem;font-family:var(--display);font-weight:700;
+    background:var(--accent);color:#0a1724;padding:1rem 2rem;border-radius:999px;text-decoration:none;letter-spacing:.02em}
+  .foot{position:absolute;bottom:3vh;left:9vw;right:9vw;display:flex;justify-content:space-between;
+    font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .disclaimer{font-size:.8rem;color:var(--muted);margin-top:2rem;max-width:60ch;font-style:italic}
+  .horizon{height:2px;width:clamp(60px,9vw,120px);background:var(--accent);margin:1.6rem 0}
+</style>
+</head>
+<body>
+<main class="deck" id="deck"></main>
+<script>
+const S = [
+  {t:'title', kicker:'A Live Masterclass', h:'The Simple Practice',
+    sub:'Build a chiropractic practice that thrives without running you into the ground. With Dr. Melissa Longo.' },
+
+  {t:'content', kicker:'Who this is for', h:'For the booked-solid chiropractor who is quietly exhausted',
+    bullets:['You are seeing a full book of patient visits every week',
+      'You are proud of the care, and drained by everything around it',
+      'You are starting to wonder if growth always has to mean more chaos'] },
+
+  {t:'statement', kicker:'The story we get told', h:'You were told the answer is always MORE',
+    sub:'More patients. More hours. More systems. More marketing. And somehow you are more tired for all of it.' },
+
+  {t:'statement', kicker:'The reframe', h:'What if your practice is not too small. It is too complicated.',
+    sub:'The problem was never your effort. It is everything you have been told to add.' },
+
+  {t:'section', kicker:'Part One', h:'The Volume Trap' },
+
+  {t:'content', kicker:'The real cost', h:'A practice that cannot run without you is not an asset. It is a second job you cannot quit.',
+    bullets:['Burnout dressed up as a full schedule',
+      'Resentment creeping into work you used to love',
+      'No room to think, create, or simply be off'] },
+
+  {t:'statement', kicker:'The core idea', h:'Simplify first. Scale second.',
+    sub:'You cannot grow something cleanly on a messy foundation. We clear the clutter before we add anything.' },
+
+  {t:'section', kicker:'Part Two', h:'The Simple Practice Method' },
+
+  {t:'pillar', no:'01', h:'Find Clarity',
+    sub:'Get clear on who you are, who you want to serve, and the goals that actually fit the life you want. Every decision after this gets easier.' },
+
+  {t:'pillar', no:'02', h:'Orient Yourself',
+    sub:'Protect your health, build success rituals, set real boundaries, and run on gratitude and confidence instead of hustle and fear.' },
+
+  {t:'pillar', no:'03', h:'Build Your Foundations',
+    sub:'The infrastructure a simple practice stands on: clean clinical systems, a clear brand, your personal brand, and the tools to work virtually when you want to.' },
+
+  {t:'pillar', no:'04', h:'Communicate Effectively',
+    sub:'Share your message with confidence. Content, storytelling, audio and video, and a social presence that sounds like you, not a template.' },
+
+  {t:'pillar', no:'05', h:'Simplify and Scale',
+    sub:'Track what works, repurpose what you make, delegate what drains you, and understand the real phases of growth so you scale on purpose.' },
+
+  {t:'content', kicker:'And two more', h:'Systems that carry it forward',
+    bullets:['Market Your Message: grow your brand across channels without doubling your workload',
+      'Systems That Flow: clinical workflows built for patient convenience and your sanity'] },
+
+  {t:'section', kicker:'Part Three', h:'The Practice on the Other Side' },
+
+  {t:'content', kicker:'The practice you actually want', h:'A week with room to breathe',
+    bullets:['A schedule you designed on purpose, not one that happened to you',
+      'A practice built around your life, not the reverse',
+      'Patients who stay because the care, and the practitioner, are not running on empty'] },
+
+  {t:'credibility', kicker:'Why listen to me', h:'Dr. Melissa Longo',
+    sub:'Chiropractor, mentor, speaker, and host of the Rockstar Doctor Life podcast. Twelve years in practice, including rebuilding my own inside a 500 square foot space, and five years mentoring practitioners to simplify their practice and amplify their lives.' },
+
+  {t:'statement', kicker:'The whole method in three moves', h:'Clarity. Simplicity. Sustainable scale.',
+    sub:'That is the order. It is always the order.' },
+
+  {t:'cta', kicker:'Your next step', h:'Ready to build your Simple Practice?',
+    sub:'Book a complimentary clarity call, or join the waitlist for the next Simple Practice group program. We will map what a simpler, more sustainable practice looks like for you.',
+    btn:'Book a clarity call',
+    note:'This masterclass is educational and not a promise. No result is guaranteed. Results vary with your situation, effort, and market. This is not a guarantee of income or specific outcomes.' },
+];
+
+const deck = document.getElementById('deck');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+S.forEach((s, i) => {
+  const sec = document.createElement('section');
+  sec.className = 'slide';
+  let inner = '';
+  if (s.kicker) inner += `<div class="kicker">${esc(s.kicker)}</div>`;
+  if (s.t === 'title') {
+    inner += `<h1>${esc(s.h)}</h1><div class="horizon"></div><p class="sub">${esc(s.sub)}</p>`;
+  } else if (s.t === 'section') {
+    inner += `<h1>${esc(s.h)}</h1>`;
+  } else if (s.t === 'statement') {
+    inner += `<h2>${esc(s.h)}</h2>` + (s.sub?`<p class="lead">${esc(s.sub)}</p>`:'');
+  } else if (s.t === 'pillar') {
+    inner += `<div class="num-row"><span class="pillar-no">${esc(s.no)}</span><h2>${esc(s.h)}</h2></div>` +
+      `<p class="sub">${esc(s.sub)}</p>`;
+  } else if (s.t === 'credibility') {
+    inner += `<h2>${esc(s.h)}</h2><div class="panel"><p class="sub" style="margin-top:0">${esc(s.sub)}</p></div>`;
+  } else if (s.t === 'cta') {
+    inner += `<h2>${esc(s.h)}</h2><p class="sub">${esc(s.sub)}</p>` +
+      `<a class="cta-btn" href="#">${esc(s.btn)}</a>` +
+      `<p class="disclaimer">${esc(s.note)}</p>`;
+  } else {
+    inner += `<h2>${esc(s.h)}</h2>`;
+    if (s.bullets) inner += '<ul>' + s.bullets.map(b=>`<li>${esc(b)}</li>`).join('') + '</ul>';
+  }
+  inner += `<div class="foot"><span>The Simple Practice</span><span>${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</span></div>`;
+  sec.innerHTML = inner;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
