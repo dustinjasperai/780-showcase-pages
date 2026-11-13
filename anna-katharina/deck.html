@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Karriere Comeback — Mama mit Karriere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0d5257;   /* her body bg deep teal (brand.json) */
+    --panel:#0f4247;    /* half-step darker teal panel */
+    --ink:#f2f2f2;      /* her off-white */
+    --sage:#91bbb7;     /* her sage rule color */
+    --teal2:#196e70;    /* her link teal */
+    --accent:#91709b;   /* her muted purple accent */
+    --muted:#bcd4d1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ground);color:var(--ink);font-family:'Raleway',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+  #stage{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:10vh 10vw}
+  .slide.on{display:flex}
+  .kick{font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sage);font-weight:600;margin-bottom:1.4rem}
+  .big{font-family:'Spectral',Georgia,serif;font-size:clamp(4rem,14vw,10rem);font-weight:700;color:var(--accent);line-height:.9;opacity:.9}
+  h1{font-family:'Spectral',Georgia,serif;font-weight:700;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.05;letter-spacing:-.01em;max-width:18ch}
+  h2{font-family:'Spectral',Georgia,serif;font-weight:600;font-size:clamp(1.7rem,4vw,3rem);line-height:1.12;max-width:20ch}
+  .rule{width:66px;height:3px;background:var(--accent);margin:1.8rem 0}
+  .lede{font-size:clamp(1.1rem,1.9vw,1.45rem);max-width:58ch;color:var(--ink)}
+  ul{margin:2rem 0 0;max-width:62ch;list-style:none}
+  li{font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--muted);padding:.85rem 0 .85rem 1.6rem;border-bottom:1px solid rgba(145,187,183,.16);position:relative}
+  li:before{content:"";position:absolute;left:0;top:1.4rem;width:8px;height:8px;background:var(--accent);border-radius:50%}
+  .cardwrap{display:flex;justify-content:flex-start}
+  .inner{background:var(--panel);border:1px solid rgba(145,187,183,.22);border-left:4px solid var(--accent);padding:2.4rem 2.6rem;border-radius:5px;max-width:30ch}
+  .inner h2{max-width:none}
+  .inner .lede{margin-top:1rem;color:var(--muted)}
+  .disc{margin-top:2.2rem;font-size:.82rem;color:rgba(188,212,209,.72);max-width:64ch;font-style:italic}
+  .foot{position:absolute;bottom:4vh;left:10vw;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(145,187,183,.55)}
+  #nav{position:fixed;bottom:3vh;right:4vw;display:flex;align-items:center;gap:.8rem;z-index:5;font-size:.8rem;color:var(--sage)}
+  #nav button{background:var(--panel);color:var(--sage);border:1px solid rgba(145,187,183,.3);padding:.4rem .9rem;border-radius:4px;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span id="count"></span><button id="next">Next</button></div>
+<script>
+const S=[
+ {t:'title',kick:'A live masterclass with Katharina / Mama mit Karriere',h:'The Karriere Comeback',lede:'How mothers build a bigger career after kids, without choosing between the two.'},
+ {t:'promise',h:'What you will leave with',ul:['A plan to grow your career after kids, not pause it','Which move comes first, instead of waiting to feel ready','The language to ask for the bigger role, not the smaller workload']},
+ {t:'who',kick:'Who this is for',h:'You are already good at this. That was never in question.',lede:'You lead a team or a department, or you run your own company, and you manage real budgets. And you are a mother. This room is for women who are done being told those two facts compete.'},
+ {t:'hook',kick:'The reframe',h:'The problem was never your ambition.',lede:'It was accepting someone else’s definition of a realistic career for a mother. You were handed the flexible track and told it was the sensible choice. Quietly, you still want the room where the real decisions get made.'},
+ {t:'part',kick:'Part one',h:'What actually caps a mother’s career'},
+ {t:'content',h:'It is not effort. It is three specific forces.',ul:['The structural barriers: systems built for someone with no caregiving load, real but navigable','The guilt tax: every ambitious move gets priced in guilt before you make it, and that tax is optional','The 24-hour math: you will never find more hours, so the game was never more hours']},
+ {t:'content',kick:'The constraint flip',h:'Your 24 hours are an advantage, not a handicap.',lede:'The mothers who rise fastest stop apologising for their limits and start using them. Hard constraints force clearer priorities and faster, cleaner leadership calls than any always-available peer can make.'},
+ {t:'part',kick:'Part two',h:'The method: Coaching. Consulting. Caring.'},
+ {t:'card',kick:'Pillar one / Coaching',h:'Find the bigger role worth wanting.',lede:'Before strategy, direction. We get specific about the version of your career that is worth rearranging your life for, so the ambition has a clear target instead of a vague ache.'},
+ {t:'card',kick:'Pillar two / Consulting',h:'Make the move like a strategist.',lede:'The part most mother-coaching skips. How to position yourself, negotiate the step up, and plan the next level around your real constraints, using the startup and corporate strategy tools I used in my own career.'},
+ {t:'card',kick:'Pillar three / Caring',h:'Grow inside a circle, not alone.',lede:'The mothers who grow fastest do it surrounded by other ambitious mothers who treat a big career as normal. The community is where the plan survives contact with a hard week.'},
+ {t:'content',h:'Direction, then the move, then the people who keep you in it.',ul:['Coaching sets the target, so you stop optimising a career you did not choose','Consulting builds the route, a concrete constraint-aware plan to the next level','Community holds the line, peers who make the bigger career feel ordinary']},
+ {t:'part',kick:'Part three',h:'What the comeback looks like'},
+ {t:'content',h:'From worker bee to the room where it happens.',lede:'Picture the next review where you ask for the bigger mandate instead of the smaller workload. Picture planning your return from leave as a step up, not a step back. This method is built to make that move routine, not heroic.'},
+ {t:'content',kick:'The objection',h:'"I do not have time for a bigger role."',lede:'A bigger role done well is usually more leverage and more control over your time, not less. The goal is never more hours from you. It is more authority over how the hours get spent.'},
+ {t:'why',kick:'Why learn this from me',h:'I built a corporate and startup career while raising two kids.',lede:'Department roles, startup strategy and consulting, investing, and the Windeln und Workouts blog, then Mama mit Karriere. I am not coaching you toward balance from the sidelines. I am showing you the strategist’s playbook I used to keep climbing after kids.'},
+ {t:'content',kick:'In one line',h:'Mamas koennen Karriere.',lede:'Mothers can build careers. Not despite the kids. Often because of them.'},
+ {t:'recap',h:'The whole method in one breath',ul:['Coaching sets the target worth the rearranging','Consulting builds the constraint-aware route to the next level','Community keeps you in it when the week gets hard']},
+ {t:'cta',kick:'Your next step',h:'Let us plan your comeback.',lede:'If this is the version of your career you want, book a coaching call with me or join the Mama mit Karriere waitlist, and we will map the move together.',disc:'This masterclass is for education only. It is not a guarantee of any specific career outcome, promotion, or income. Every mother’s situation is different and results vary.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+  let h='';
+  if(s.kick)h+='<div class="kick">'+s.kick+'</div>';
+  if(s.t==='part'){h+='<div class="big">'+(i)+'</div><h2 style="margin-top:.2em">'+s.h+'</h2>';}
+  else if(s.t==='title'){h+='<h1>'+s.h+'</h1><div class="rule"></div>'+(s.lede?'<div class="lede">'+s.lede+'</div>':'');}
+  else if(s.t==='card'){h+='<div class="cardwrap"><div class="inner"><h2>'+s.h+'</h2>'+(s.lede?'<div class="lede">'+s.lede+'</div>':'')+'</div></div>';}
+  else{h+='<h2>'+s.h+'</h2><div class="rule"></div>';if(s.lede)h+='<div class="lede">'+s.lede+'</div>';}
+  if(s.ul){h+='<ul>'+s.ul.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+  if(s.disc)h+='<div class="disc">'+s.disc+'</div>';
+  h+='<div class="foot">Mama mit Karriere &middot; Coaching. Consulting. Caring.</div>';
+  d.innerHTML=h;stage.appendChild(d);
+});
+let cur=0;const slides=[...stage.children];const count=document.getElementById('count');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',e=>{if(e.clientX> stage.getBoundingClientRect().left+stage.clientWidth/2)show(cur+1);else show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
