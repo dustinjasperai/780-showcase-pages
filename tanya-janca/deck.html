@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bad. Better. Best. — A Live Secure Coding Masterclass with Tanya Janca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --panel:#f2f2f2;
+    --rule:#e2e2e2;
+    --ink:#1c1c1c;
+    --muted:#55555a;
+    --accent:#420381;   /* her site link purple — She Hacks Purple */
+    --accent2:#277da9;  /* her site button teal */
+    --bad:#b4232a;
+    --better:#b7791f;
+    --best:#277da9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#e9e9ec;color:var(--ink);font-family:"Roboto",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 16px 64px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:10px;
+    aspect-ratio:16/9;margin:20px 0;padding:56px 60px;overflow:hidden;
+    box-shadow:0 2px 14px rgba(20,20,30,.06);display:flex;flex-direction:column;justify-content:center;
+  }
+  .slide .num{position:absolute;top:20px;right:26px;font-size:12px;color:#aaa;letter-spacing:.08em}
+  .eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:18px}
+  h1{font-family:"Roboto Slab",Georgia,serif;font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:"Roboto Slab",Georgia,serif;font-weight:700;font-size:36px;line-height:1.1;margin-bottom:16px}
+  .lead{font-size:21px;line-height:1.5;color:var(--muted);max-width:40ch}
+  .big{font-size:30px;line-height:1.3;font-weight:500;max-width:30ch}
+  p{font-size:18px;line-height:1.55;color:var(--muted);max-width:52ch;margin-top:10px}
+  ul{margin:18px 0 0 0;list-style:none}
+  li{font-size:19px;line-height:1.5;padding:8px 0 8px 28px;position:relative;max-width:50ch}
+  li:before{content:"";position:absolute;left:0;top:16px;width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .title-slide{background:linear-gradient(160deg,#2a0152 0%,#420381 55%,#5a1a9e 100%);color:#fff;border:none}
+  .title-slide .eyebrow{color:#d8c4f3}
+  .title-slide h1{color:#fff;font-size:60px}
+  .title-slide .lead{color:#e9ddf7;margin-top:22px;font-size:22px}
+  .kicker{font-size:15px;color:#cbb7ec;margin-top:30px;letter-spacing:.04em}
+  .hook h2{font-size:44px;max-width:22ch}
+  .accentbar{width:64px;height:6px;background:var(--accent);border-radius:3px;margin-bottom:26px}
+  .code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:16px;line-height:1.5;
+    background:#1c1c22;color:#eaeaf0;border-radius:8px;padding:18px 20px;margin-top:18px;max-width:60ch;white-space:pre-wrap}
+  .state{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 12px;border-radius:999px;margin-bottom:14px}
+  .state.bad{background:rgba(180,35,42,.12);color:var(--bad)}
+  .state.better{background:rgba(183,121,31,.14);color:var(--better)}
+  .state.best{background:rgba(39,125,169,.14);color:var(--best)}
+  .threecol{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  .threecol .cell{background:var(--panel);border-radius:8px;padding:18px 16px}
+  .threecol .cell h3{font-family:"Roboto Slab",serif;font-size:17px;margin-bottom:8px}
+  .threecol .cell p{font-size:15px;margin-top:4px}
+  .part .eyebrow{color:var(--accent2)}
+  .part h2{font-size:40px}
+  .cta-slide{background:var(--ink);color:#fff;border:none}
+  .cta-slide .eyebrow{color:#b79be0}
+  .cta-slide h2{color:#fff;font-size:40px}
+  .cta-slide p{color:#c9c9d2}
+  .cta-btn{display:inline-block;margin-top:24px;background:var(--accent);color:#fff;font-weight:500;
+    font-size:18px;padding:14px 28px;border-radius:8px}
+  .disc{font-size:13px;color:#8a8a95;margin-top:26px;max-width:58ch;line-height:1.5}
+  .credit{display:flex;gap:14px;align-items:baseline;margin-top:14px}
+  .credit .n{font-family:"Roboto Slab",serif;font-size:40px;color:var(--accent);font-weight:700}
+  .credit .l{font-size:16px;color:var(--muted)}
+  .creditrow{display:flex;gap:40px;flex-wrap:wrap;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live secure coding masterclass', h1:'Bad. Better. Best.',
+   lead:'How your developers learn to write secure code once, and stop shipping the same vulnerabilities every sprint.',
+   kicker:'With Tanya Janca, SheHacksPurple. Live, 60 minutes.'},
+
+  {t:'lead', eyebrow:'The promise', h2:'By the end of this hour',
+   lead:'You will be able to look at a piece of your own code, see exactly where it is unsafe, and rewrite it so the vulnerability cannot come back. Not with a scanner. With your own eyes.'},
+
+  {t:'bullets', eyebrow:'Who this is for', h2:'You are a developer who keeps meeting security at the wrong time',
+   bullets:[
+     'Your pull request fails a security review and you are not sure what you did wrong.',
+     'The scanner throws a wall of findings and no one explains the fix, just the flag.',
+     'You want to build it right the first time, not patch it after the pen test.']},
+
+  {t:'hook', eyebrow:'The reframe', h2:'A scanner finds the bug. It never teaches the developer not to write it again.',
+   p:'So the same classes of vulnerabilities come back, sprint after sprint, in new code. Tools catch symptoms. This masterclass fixes the habit.'},
+
+  {t:'part', eyebrow:'Part one', h2:'Why secure code feels so hard',
+   p:'Security gets bolted on at the end, by a different team, in a language developers were never taught. The result is friction, rework, and code that is secure by accident instead of by design.'},
+
+  {t:'bullets', eyebrow:'The real cost', h2:'Bolting it on later is the expensive path',
+   bullets:[
+     'Vulnerabilities found in production cost many times more to fix than ones designed out.',
+     'Developers learn nothing from a ticket that just says "SQL injection, line 142".',
+     'The same three or four mistake patterns account for most of what breaks.']},
+
+  {t:'part', eyebrow:'Part two, the method', h2:'Bad, Better, Best',
+   p:'The core of how I teach. We take one real, vulnerable piece of code and move it through three states. You see the difference between fixing a problem and fixing it well.'},
+
+  {t:'code', eyebrow:'The method in action', state:'bad', stateLabel:'Bad',
+   h2:'Start with code that looks fine and is not',
+   code:'query = "SELECT * FROM users\\n  WHERE name = \'" + userName + "\'";\ndb.run(query);',
+   p:'It works in the demo, it passes the tests, and it is wide open to SQL injection. This is where most code lives.'},
+
+  {t:'code', eyebrow:'The method in action', state:'better', stateLabel:'Better',
+   h2:'Better is an improvement, not yet the answer',
+   code:'if (!isValid(userName)) reject();\nquery = "SELECT * FROM users\\n  WHERE name = \'" + userName + "\'";\ndb.run(query);',
+   p:'We added input validation. Safer, but we are still building the query by hand and trusting ourselves to never slip. Better is a trap if you stop here.'},
+
+  {t:'code', eyebrow:'The method in action', state:'best', stateLabel:'Best',
+   h2:'Best makes the whole class of bug impossible',
+   code:'query = "SELECT * FROM users WHERE name = ?";\ndb.run(query, [userName]);',
+   p:'A parameterized query. The data can never be read as code. You did not patch this bug, you removed the possibility of it. That is the goal every time.'},
+
+  {t:'bullets', eyebrow:'Why it sticks', h2:'Built so your team still remembers it next month',
+   bullets:[
+     'Short, active sessions with recall exercises instead of a four-hour lecture.',
+     'Cheat sheets your developers keep open while they code.',
+     'Extensive hands-on code review, because you learn secure coding by doing it.']},
+
+  {t:'bullets', eyebrow:'Pillar', h2:'Secure by default: stop rolling your own',
+   bullets:[
+     'Use the framework built-ins for auth, crypto, and input handling.',
+     'Hand-rolled security is where most serious bugs are born.',
+     'The safest code is the code you did not have to write.']},
+
+  {t:'bullets', eyebrow:'Pillar', h2:'Design it in, do not patch it on',
+   bullets:[
+     'Define security requirements before the first line of code.',
+     'Threat model the feature during design, while changes are cheap.',
+     'Most expensive vulnerabilities were decisions, not typos.']},
+
+  {t:'threecol', eyebrow:'Pillar', h2:'Testing that backs you up',
+   cells:[
+     {h3:'SAST', p:'Reads your source for unsafe patterns as you build.'},
+     {h3:'DAST', p:'Attacks the running app the way a real attacker would.'},
+     {h3:'IAST', p:'Watches from inside at runtime for what the others miss.'}]},
+
+  {t:'threecol', eyebrow:'The surface we cover', h2:'Wherever your code runs',
+   cells:[
+     {h3:'Web and APIs', p:'The attack surface most teams expose first.'},
+     {h3:'Mobile', p:'Trust boundaries that move with the device.'},
+     {h3:'Serverless', p:'New shapes, same secure coding principles.'}]},
+
+  {t:'part', eyebrow:'Part three', h2:'A team that writes it right the first time',
+   p:'Not a certificate nobody reads. A shared habit: developers who can run Bad, Better, Best on their own pull requests, catch the pattern in review, and ship code that is secure by design.'},
+
+  {t:'credit', eyebrow:'Why learn this from me',
+   h2:'I have spent a career bridging developers and security',
+   rows:[
+     {n:'30', l:'years in software development and application security'},
+     {n:'2', l:'best-selling books, Alice and Bob Learn Application Security and Secure Coding'},
+     {n:'1000s', l:'of developers and security professionals trained live'}],
+   p:'I teach developers to write secure code, in plain language, with humour, because I was a developer first.'},
+
+  {t:'bullets', eyebrow:'The one thing to keep', h2:'Make Bad, Better, Best a team reflex',
+   bullets:[
+     'Bad: it works and it is unsafe.',
+     'Better: safer, but still fragile.',
+     'Best: the whole class of bug is gone. Aim here every time.']},
+
+  {t:'cta', eyebrow:'Bring this to your team', h2:'Teach your developers to write secure code',
+   p:'If you want your engineering team running Bad, Better, Best on their own code, I deliver this live and tailored to your stack.',
+   btn:'Get in touch with She Hacks Purple',
+   disc:'This masterclass is educational. No specific security outcome or result is guaranteed. Results vary by team, codebase, and practice, and no training or technique eliminates every vulnerability.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  const cls=({title:'title-slide',hook:'hook',part:'part',cta:'cta-slide'})[s.t]||'';
+  el.className='slide '+cls;
+  let h='<div class="num">'+(i+1)+' / '+S.length+'</div>';
+  if(s.eyebrow) h+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title'){
+    h+='<h1>'+s.h1+'</h1><div class="lead">'+s.lead+'</div><div class="kicker">'+s.kicker+'</div>';
+  } else if(s.t==='lead'){
+    h+='<h2>'+s.h2+'</h2><div class="lead">'+s.lead+'</div>';
+  } else if(s.t==='hook'){
+    h+='<div class="accentbar"></div><h2>'+s.h2+'</h2><p>'+s.p+'</p>';
+  } else if(s.t==='part'){
+    h+='<h2>'+s.h2+'</h2><p>'+s.p+'</p>';
+  } else if(s.t==='bullets'){
+    h+='<h2>'+s.h2+'</h2><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+  } else if(s.t==='code'){
+    h+='<span class="state '+s.state+'">'+s.stateLabel+'</span><h2>'+s.h2+'</h2><div class="code">'+s.code+'</div><p>'+s.p+'</p>';
+  } else if(s.t==='threecol'){
+    h+='<h2>'+s.h2+'</h2><div class="threecol">'+s.cells.map(c=>'<div class="cell"><h3>'+c.h3+'</h3><p>'+c.p+'</p></div>').join('')+'</div>';
+  } else if(s.t==='credit'){
+    h+='<h2>'+s.h2+'</h2><div class="creditrow">'+s.rows.map(r=>'<div class="credit"><span class="n">'+r.n+'</span><span class="l">'+r.l+'</span></div>').join('')+'</div><p>'+s.p+'</p>';
+  } else if(s.t==='cta'){
+    h+='<h2>'+s.h2+'</h2><p>'+s.p+'</p><span class="cta-btn">'+s.btn+'</span><div class="disc">'+s.disc+'</div>';
+  }
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
