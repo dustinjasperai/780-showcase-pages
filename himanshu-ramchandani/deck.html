@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ship Real AI: The PILOT Method — Himanshu Ramchandani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef0e7;        /* harvested dominant ground, verbatim */
+    --panel:#fbfcf7;     /* off-white tint of the harvested ground */
+    --ink:#2a2c28;       /* deepened from harvested olive-gray for readable body */
+    --muted:#65685f;     /* harvested dominant olive/sage */
+    --rule:#dcded4;
+    --accent:#65685f;    /* harvested dominant olive/sage */
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .deck{max-width:960px;margin:0 auto;padding:48px 20px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px;margin:0 0 26px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(42,44,40,.03)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:18px}
+  h1{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-.02em;margin-bottom:18px}
+  h2{font-size:32px;line-height:1.14;font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+  p{font-size:19px;line-height:1.55;color:var(--ink);max-width:62ch;margin-bottom:12px}
+  p.sub{color:var(--muted);font-size:21px}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:19px;line-height:1.5;padding:10px 0 10px 30px;position:relative;max-width:64ch}
+  li::before{content:'›';position:absolute;left:4px;color:var(--accent);font-family:var(--mono);font-weight:700}
+  .gate{font-family:var(--mono);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;
+    margin:8px 0;display:flex;gap:16px;align-items:flex-start;background:var(--bg)}
+  .gate .k{color:var(--accent);font-weight:700;font-size:15px;min-width:118px}
+  .gate .v{font-family:var(--sans);font-size:17px;line-height:1.45}
+  .big{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.12}
+  .statrow{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
+  .stat{font-family:var(--mono);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;background:var(--bg)}
+  .stat b{display:block;font-size:26px;color:var(--ink)}
+  .stat span{font-size:13px;color:var(--muted)}
+  .foot{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:28px}
+  .disc{font-size:14px;color:var(--muted);max-width:66ch;margin-top:22px;line-height:1.5}
+  .cta-note{font-family:var(--mono);font-size:14px;color:var(--accent);margin-top:14px}
+  @media(max-width:640px){.slide{padding:34px 26px}h1{font-size:34px}h2{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+ {t:'title',kicker:'A live masterclass · 90 minutes',h:'Ship Real AI. Not Another Demo.',
+  sub:'How to take an AI system from a notebook prototype to a deployed, evaluated, production product using the PILOT method.',
+  foot:'Himanshu Ramchandani · Microsoft MVP · AI Engineer HQ'},
+
+ {t:'bullets',kicker:'Who this is for',h:'You can call an LLM. You can\'t ship one.',
+  p:'This session is for engineers and data scientists who are past tutorials and want to put real AI systems in front of real users.',
+  li:['You\'ve built impressive demos that never left your laptop',
+      'You know the APIs but freeze at deployment, evals and monitoring',
+      'You want a portfolio of shipped systems, not another certificate']},
+
+ {t:'bullets',kicker:'The trap',h:'The demo graveyard.',
+  p:'Most AI learning ends at the demo. A clever notebook, a screen recording, a cool thread. Then nothing.',
+  li:['Scattered tutorials that never add up to a system',
+      'Prototypes that break the moment a real user touches them',
+      'No way to prove the thing actually works']},
+
+ {t:'statement',kicker:'The reframe',h:'The highest-paid AI skill is not prompting. It is shipping.',
+  sub:'The market is flooded with people who can prototype. Almost nobody can deploy, evaluate and operate an AI system in production. That scarcity is the whole opportunity.'},
+
+ {t:'bullets',kicker:'Part one · the core problem',h:'The gap between an API call and a product.',
+  p:'A production AI system has to survive things a demo never faces:',
+  li:['Reliability when inputs are messy and traffic is real',
+      'Evaluation, so you know quality before users do',
+      'Cost control, so a single feature doesn\'t bankrupt the margin',
+      'Monitoring and recovery, so failures are seen and fixed']},
+
+ {t:'bullets',kicker:'Part one · why demos die',h:'Four reasons the prototype never ships.',
+  li:['No evals, so nobody can tell good output from bad at scale',
+      'No guardrails, so one bad response becomes an incident',
+      'No deployment story, so it stays trapped in a notebook',
+      'No feedback loop, so it never gets better after launch']},
+
+ {t:'statement',kicker:'Part two · the method',h:'PILOT: five ship gates, not five chapters.',
+  sub:'Every system you build moves through five gates. Each gate is a real artifact you can show, not a topic you read about. If a gate is not done, the system is not shipped.'},
+
+ {t:'gates',kicker:'Part two · the framework',h:'The PILOT method.',
+  gates:[
+   ['P · Problem','A one-paragraph problem statement. Scope the outcome and the user before a line of code.'],
+   ['I · Insight','An architecture diagram and decision records. The shape of the system and why you chose it.'],
+   ['L · Learn','An eval suite with golden sets and LLM judges. You cannot improve what you do not measure.'],
+   ['O · Output','A live URL, Dockerized, with CI and eval gates. It runs where users are, not on your machine.'],
+   ['T · Traction','Real users, logged feedback and a recorded defense. Evidence the system works in the world.']]},
+
+ {t:'bullets',kicker:'Gate L · deeper',h:'Evals are the unlock.',
+  p:'The difference between a hobby project and a production system is that you can measure it.',
+  li:['A golden set of inputs with known-good outputs',
+      'LLM judges to score quality automatically on every change',
+      'Eval gates in CI, so a regression never reaches a user']},
+
+ {t:'bullets',kicker:'Gate O · deeper',h:'Shipped means it runs without you.',
+  li:['A live URL anyone can hit, not a localhost screenshot',
+      'Dockerized, so it runs the same everywhere',
+      'CI with eval gates, so every deploy is checked before it lands']},
+
+ {t:'bullets',kicker:'Part three · what you build',h:'Systems, not slides.',
+  p:'Run through the real building blocks of production AI, each taken through the five gates:',
+  li:['A retrieval (RAG) system that answers from your own data',
+      'An autonomous agent with tools, memory and control flow',
+      'A deployment pipeline with monitoring and observability',
+      'A portfolio of shipped systems you can defend in an interview']},
+
+ {t:'gates',kicker:'Part three · a worked path',h:'From prototype to production, one gate at a time.',
+  gates:[
+   ['Day one','A problem statement and an architecture. You know what you are building and why.'],
+   ['Mid-build','An eval suite catches your regressions before anyone else does.'],
+   ['Ship day','A live, Dockerized URL behind CI. The system is real.'],
+   ['After launch','Logged feedback tells you what to fix next. The loop is closed.']]},
+
+ {t:'stats',kicker:'Why learn this from me',h:'I build and teach production AI.',
+  p:'I have spent close to a decade building AI systems used by real businesses and teaching engineers to do the same.',
+  stats:[['Microsoft','MVP'],['100+','AI projects shipped'],['10,000+','engineers trained'],['200+','live sessions']]},
+
+ {t:'bullets',kicker:'The common objection',h:'"I\'m not senior enough for this."',
+  p:'You do not need to be. The method abstracts the complexity and focuses on building.',
+  li:['If you know basic Python, you can ship a real system',
+      'The gates give you a path when the field feels like alphabet soup',
+      'You leave with built, deployed work, not just notes']},
+
+ {t:'statement',kicker:'The transformation',h:'From LLM user to AI engineer who ships.',
+  sub:'Stop collecting tutorials. Start shipping systems that run in production, prove their quality, and improve from real feedback. That is the engineer the market is short of.'},
+
+ {t:'cta',kicker:'Your next step',h:'Come build inside AI Engineer HQ.',
+  p:'The next live cohort takes you through the PILOT method end to end: you ship real production AI artifacts with reviewed pull requests and a real engineering workflow, alongside other engineers.',
+  note:'Join the next AI Engineer HQ cohort and ship your first production system.',
+  disc:'This masterclass is educational. It shares an engineering method and teaching approach. It is not a guarantee of employment, income, or any specific result. Outcomes depend on your own effort, background and circumstances, and results vary.'}
+];
+
+const deck=document.getElementById('deck');
+for(const s of S){
+  const d=document.createElement('section');d.className='slide';
+  let h='';
+  if(s.kicker)h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h)h+=(s.t==='title'?`<h1>${s.h}</h1>`:`<h2>${s.h}</h2>`);
+  if(s.sub)h+=`<p class="sub">${s.sub}</p>`;
+  if(s.p)h+=`<p>${s.p}</p>`;
+  if(s.li)h+='<ul>'+s.li.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+  if(s.gates)h+=s.gates.map(g=>`<div class="gate"><div class="k">${g[0]}</div><div class="v">${g[1]}</div></div>`).join('');
+  if(s.stats){h+='<div class="statrow">'+s.stats.map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')+'</div>';}
+  if(s.note)h+=`<div class="cta-note">${s.note}</div>`;
+  if(s.foot)h+=`<div class="foot">${s.foot}</div>`;
+  if(s.disc)h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;deck.appendChild(d);
+}
+</script>
+</body>
+</html>
