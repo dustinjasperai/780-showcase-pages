@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Outbound Operating System — The SD Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#16120f; --panel:#201913; --rule:#3a2d24; --ink:#f6f2ec;
+    --muted:#b8a99c; --accent:#ff5a1f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Inter Tight",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  .wrap{max-width:960px;margin:0 auto;padding:48px 24px 120px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:56px 56px 52px;margin:22px 0;min-height:520px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .num{position:absolute;top:22px;right:26px;font-size:12px;letter-spacing:.14em;color:var(--muted)}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-size:54px;line-height:1.04;font-weight:800;letter-spacing:-.02em;margin-bottom:20px}
+  h2{font-size:38px;line-height:1.08;font-weight:700;letter-spacing:-.015em;margin-bottom:18px}
+  h3{font-size:26px;line-height:1.15;font-weight:700;margin-bottom:12px}
+  p{font-size:20px;line-height:1.5;color:var(--ink);max-width:62ch;margin-bottom:14px}
+  p.sub{color:var(--muted);font-size:19px}
+  .lead{font-size:30px;line-height:1.3;font-weight:500}
+  ul{list-style:none;margin:14px 0}
+  li{font-size:20px;line-height:1.45;padding:12px 0 12px 30px;position:relative;border-top:1px solid var(--rule);color:var(--ink)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:21px;width:10px;height:10px;background:var(--accent);border-radius:2px}
+  .chain{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .chain span{font-family:"JetBrains Mono",monospace;font-size:15px;padding:10px 14px;border:1px solid var(--rule);border-radius:8px;color:var(--muted)}
+  .chain span.hot{color:var(--bg);background:var(--accent);border-color:var(--accent);font-weight:700}
+  .chain b{color:var(--accent);padding:0 4px;align-self:center}
+  .phase{font-family:"JetBrains Mono",monospace;color:var(--accent);font-size:14px;letter-spacing:.14em;margin-bottom:10px}
+  .big{font-size:88px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--accent)}
+  .disc{margin-top:26px;font-size:13px;line-height:1.5;color:var(--muted);max-width:70ch;border-top:1px solid var(--rule);padding-top:16px}
+  .cta-box{margin-top:26px;display:inline-block;font-family:"JetBrains Mono",monospace;font-size:16px;color:var(--bg);background:var(--accent);padding:14px 22px;border-radius:9px;font-weight:700}
+  .foot{text-align:center;color:var(--muted);font-size:13px;letter-spacing:.14em;margin-top:40px}
+  @media(max-width:640px){.slide{padding:34px 26px}h1{font-size:38px}h2{font-size:28px}.big{font-size:56px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<div class="foot mono">THE SD LAB &middot; SYSTEMS BEAT HEROICS</div>
+<p style="max-width:760px;margin:18px auto 0;padding:0 24px;color:#b8a99c;font-size:13px;line-height:1.5;text-align:center">This masterclass is educational. No specific result is guaranteed. Results vary with your market, team, and execution, and no income claim is made.</p>
+<script>
+const S=[
+  {t:'title',kicker:'The SD Lab · Live Masterclass',
+   h:'The Outbound Operating System',
+   p:'Why your pipeline depends on heroes, and how to rebuild it so it does not.',
+   sub:'A live, 60-minute working session for B2B SaaS founders and sales leaders.'},
+
+  {t:'content',kicker:'Who this is for',
+   h:'You are not short on effort.',
+   p:'This is for founders, CROs and sales leaders running a team that is busy but inconsistent. The dials are happening. The activity reports look fine. The pipeline still swings wildly month to month, and nobody can tell you exactly why.',
+   sub:'If outbound only works when your best rep is on a tear, this hour is for you.'},
+
+  {t:'hook',kicker:'The reframe',
+   big:'It is not a people problem.',
+   p:'When outbound misses, the instinct is to blame effort, blame reps, or hire more of them. But teams with great people still miss, and teams with average people hit every quarter. The difference is never heroics. It is the system underneath.'},
+
+  {t:'section',phase:'PART ONE',h:'The problem is activity theater.',
+   p:'Most outbound is measured by motion: dials, sends, touches. Motion feels like progress, so a broken chain can run for months while everyone stays busy. The number looks like a volume problem, so the team adds volume. The leak just gets louder.'},
+
+  {t:'chain',kicker:'Your framework: the outbound chain',
+   h:'Pipeline is a chain, not a funnel.',
+   p:'Cold outbound only becomes pipeline by passing through six links, in order. Each link depends on the one before it. Break any single link and everything downstream collapses, no matter how much activity you pour in at the top.'},
+
+  {t:'content',kicker:'The silent break',
+   h:'The chain breaks at one link.',
+   p:'Almost every struggling team is failing at exactly one link, and solving the wrong one. Add more dials when the break is targeting, and you just reach the wrong accounts faster. Rewrite scripts when the break is trust, and the calls still stall.',
+   sub:'Step one is never "do more." It is finding the one broken link.'},
+
+  {t:'section',phase:'PART TWO',h:'The rebuild: six phases.',
+   p:'This is the Revenue Rebuild method. Not a course you watch, a system you install. We work through the whole operating system in order, fix the broken link first, then make the fix stick so the team runs it without you.'},
+
+  {t:'phase',n:'01',phase:'PHASE ONE',h:'Diagnose',
+   p:'Score the operating system across targeting, messaging, calls, coaching and management. Find the one link that is actually breaking, and the three that are quietly leaking behind it. No rebuild starts before the diagnosis.'},
+
+  {t:'phase',n:'02',phase:'PHASE TWO',h:'Messaging',
+   p:'Rebuild the message around the signal and the account, not the feature. Relevance is what earns a reply, and trust is what earns a conversation. Most "messaging problems" are actually targeting problems wearing a disguise.'},
+
+  {t:'phase',n:'03',phase:'PHASE THREE',h:'Calls',
+   p:'The cold call is where trust becomes a conversation or dies. Rebuild the call framework and the call review process so quality, not volume, is the thing you are coaching. A better call beats ten more dials every time.'},
+
+  {t:'phase',n:'04',phase:'PHASE FOUR',h:'Coaching',
+   p:'Install a coaching structure that happens in the trenches: real calls, real accounts, every week. Coaching that lives in a quarterly review is theater. Coaching that lives in the weekly rhythm is how reps actually change.'},
+
+  {t:'phase',n:'05',phase:'PHASE FIVE',h:'Management',
+   p:'Build the manager cadence and pipeline review rhythm that inspect the system, not just the number. When managers inspect leading activity against the chain, misses get caught early, while there is still time to fix them.'},
+
+  {t:'phase',n:'06',phase:'PHASE SIX',h:'Operating Rhythm',
+   p:'Leave behind the operating documents, scorecards and weekly rhythm that keep the whole thing running. The goal is a system the team owns, so results stop depending on who is having a good month.'},
+
+  {t:'content',kicker:'The diagnostic',
+   h:'Ten places outbound leaks.',
+   p:'The readiness assessment scores your team across ten dimensions, from signal readiness and ICP precision to messaging architecture and conversation creation. It is how you see the broken link before you spend a dollar scaling the spend.'},
+
+  {t:'section',phase:'PART THREE',h:'A number that does not need a hero.',
+   p:'A repeatable number that does not need a hero. Reps who know exactly what a good conversation sounds like. Managers inspecting the system instead of refreshing the dashboard. Pipeline that holds when your best rep takes a week off.'},
+
+  {t:'hook',kicker:'The principle',
+   big:'Systems beat heroics.',
+   p:'Heroics do not scale and they do not survive a bad month. A system does. When the operating system is sound, outbound stops being a scramble and starts being something you can plan around.'},
+
+  {t:'content',kicker:'Why me',
+   h:'An operator, not a theorist.',
+   p:'I have spent nineteen years in B2B SaaS sales. I started as an SDR in 2007 and worked up through AE, manager, director and VP before starting The SD Lab. Everything here comes from rebuilding real outbound motions with teams on live calls and real accounts, not from a slide library.',
+   sub:'Coaching happens in the trenches. Everything else is theater.'},
+
+  {t:'cta',kicker:'Your next step',
+   h:'Find your broken link.',
+   p:'Start with the Modern Outbound Readiness Assessment to score your operating system, then book a strategy call to walk through what a rebuild would look like for your team.',
+   cta:'Take the assessment · Book a strategy call',
+   disc:'This masterclass is educational. No specific result is guaranteed. Results vary with your market, team, and execution, and no income claim is made.'}
+];
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+const CHAIN=['Targeting','Relevance','Trust','Conversation','Qualification','Pipeline'];
+let html='';
+S.forEach((s,i)=>{
+  const num='<div class="num mono">'+String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')+'</div>';
+  let body='';
+  if(s.t==='title'){
+    body='<div class="kicker">'+esc(s.kicker)+'</div><h1>'+esc(s.h)+'</h1><p class="lead">'+esc(s.p)+'</p><p class="sub">'+esc(s.sub)+'</p>';
+  }else if(s.t==='hook'){
+    body='<div class="kicker">'+esc(s.kicker)+'</div><div class="big">'+esc(s.big)+'</div><p style="margin-top:22px">'+esc(s.p)+'</p>';
+  }else if(s.t==='section'){
+    body='<div class="phase">'+esc(s.phase)+'</div><h2>'+esc(s.h)+'</h2><p>'+esc(s.p)+'</p>';
+  }else if(s.t==='phase'){
+    body='<div class="phase">'+esc(s.phase)+'</div><h2>'+esc(s.h)+'</h2><p>'+esc(s.p)+'</p>';
+  }else if(s.t==='chain'){
+    let c='<div class="chain">';
+    CHAIN.forEach((x,j)=>{c+='<span'+(x==='Trust'?' class="hot"':'')+'>'+esc(x)+'</span>'+(j<CHAIN.length-1?'<b>&rsaquo;</b>':'');});
+    c+='</div>';
+    body='<div class="kicker">'+esc(s.kicker)+'</div><h2>'+esc(s.h)+'</h2><p>'+esc(s.p)+'</p>'+c;
+  }else if(s.t==='content'){
+    body='<div class="kicker">'+esc(s.kicker)+'</div><h2>'+esc(s.h)+'</h2><p>'+esc(s.p)+'</p>'+(s.sub?'<p class="sub">'+esc(s.sub)+'</p>':'');
+  }else if(s.t==='cta'){
+    body='<div class="kicker">'+esc(s.kicker)+'</div><h2>'+esc(s.h)+'</h2><p>'+esc(s.p)+'</p><div class="cta-box mono">'+esc(s.cta)+'</div>'+
+      '<div class="disc">'+esc(s.disc)+'</div>';
+  }
+  html+='<section class="slide">'+num+body+'</section>';
+});
+document.getElementById('deck').innerHTML=html;
+</script>
+</body>
+</html>
