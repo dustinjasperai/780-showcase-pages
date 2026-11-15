@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 30-Minute LinkedIn Sales Engine — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e5e7eb; --panel:#ffffff; --ink:#222222; --muted:#555555;
+    --accent:#216e56; --rule:#d1d5db;
+    --display:'Space Grotesk',system-ui,sans-serif; --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100%;max-width:960px;aspect-ratio:16/9;max-height:100vh;position:relative}
+  .slide{position:absolute;inset:0;padding:6% 8%;display:none;flex-direction:column;
+    justify-content:center;background:var(--panel);border:1px solid var(--rule)}
+  .slide.on{display:flex}
+  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:clamp(10px,1.3vw,13px);color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;line-height:1.04;font-size:clamp(28px,5.2vw,52px);
+    letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;line-height:1.08;font-size:clamp(22px,3.8vw,40px);
+    letter-spacing:-.01em}
+  p{font-size:clamp(14px,1.9vw,20px);line-height:1.5;color:var(--muted);margin-top:16px;max-width:42ch}
+  .big{font-family:var(--display);font-weight:600;font-size:clamp(22px,4vw,40px);color:var(--ink);
+    line-height:1.12;max-width:20ch}
+  .sub{margin-top:14px;color:var(--muted);font-size:clamp(14px,1.9vw,20px);max-width:44ch}
+  ul{margin-top:22px;list-style:none;display:flex;flex-direction:column;gap:14px}
+  li{position:relative;padding-left:26px;font-size:clamp(14px,1.9vw,20px);line-height:1.4;max-width:46ch}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:11px;height:2px;background:var(--accent)}
+  .pill{display:inline-block;font-family:var(--display);font-weight:600;font-size:clamp(11px,1.5vw,15px);
+    color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 14px;margin-bottom:20px;width:max-content}
+  .flow{display:flex;align-items:center;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .node{font-family:var(--display);font-weight:600;background:var(--bg);border:1px solid var(--rule);
+    border-radius:10px;padding:12px 16px;font-size:clamp(12px,1.6vw,17px)}
+  .node.accent{border-color:var(--accent);color:var(--accent)}
+  .arrow{color:var(--accent);font-weight:700}
+  .disclaimer{margin-top:22px;font-size:clamp(10px,1.2vw,12px);color:var(--muted);max-width:60ch;line-height:1.45}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px 34px;margin-top:24px}
+  .k{font-family:var(--display);font-weight:600;color:var(--ink);font-size:clamp(14px,1.9vw,19px)}
+  .v{color:var(--muted);font-size:clamp(13px,1.6vw,16px);margin-top:4px;line-height:1.4}
+  #nav{position:fixed;bottom:16px;right:20px;font-family:var(--display);font-size:13px;color:var(--muted);
+    display:flex;gap:14px;align-items:center}
+  #nav button{font:inherit;color:var(--accent);background:none;border:1px solid var(--rule);
+    border-radius:8px;padding:6px 12px;cursor:pointer}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .2s}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'A live masterclass with Andy Mewborn',h1:'The 30-Minute LinkedIn Sales Engine',sub:'How B2B founders turn posts into booked sales calls, in 30 minutes a day.'},
+  {t:'promise',pill:'What you will leave with',big:'A repeatable system, not another posting streak.',bullets:['A 30-day plan of content engineered to attract qualified buyers','A way to produce it in 30 minutes a day, not three hours','The exact path from a cold stranger to a booked call']},
+  {t:'who',pill:'Who this is for',big:'Founders who know LinkedIn should drive revenue.',sub:'B2B founders, consultants and service providers selling offers over 5K who post, get some likes, and still cannot trace a single deal back to it.'},
+  {t:'trap',pill:'The trap',big:'You are told to "be consistent" and "add value."',sub:'So you post more. The likes go up. The calendar stays empty. More content is not the answer when the content was never built to sell.'},
+  {t:'hook',h2:'A bigger following is not a business.',sub:'Most founders are building an audience. Almost none are building a pipeline. Those are two different machines, and only one of them pays you.'},
+  {t:'part',pill:'Part one',big:'The real problem: content with no system behind it.'},
+  {t:'body',h2:'Vanity engagement is not demand.',bullets:['A viral post full of peers and job-seekers books zero calls','Buyers do not like and comment, they read quietly and reach out','If a post is not engineered for a buyer, reach is just noise']},
+  {t:'body',h2:'The three-hour post is why you quit.',bullets:['Most advice has you writing for hours with no template','It works for two weeks, then real work takes over','A system a busy founder cannot sustain is not a system']},
+  {t:'part',pill:'Part two',big:'The system: four moving parts that turn posts into pipeline.'},
+  {t:'body',eyebrow:'Pillar 1',h2:'The 30-day content-to-pipeline system.',sub:'Thirty pieces of content over thirty days, each one built for a specific buyer, not for the algorithm. You end the month with a body of work that sells for you.'},
+  {t:'body',eyebrow:'Pillar 2',h2:'The 30-minutes-a-day content system.',sub:'Repeatable post formats and hooks, plus AI to cut the writing from hours to minutes, so the engine keeps running on your busiest week.'},
+  {t:'body',eyebrow:'Pillar 3',h2:'The founder-led offer framework.',sub:'Content without a sharp offer just builds an audience. We sharpen the offer first so every post has somewhere for the right person to go.'},
+  {t:'body',eyebrow:'Pillar 4',h2:'The conversion layer.',bullets:['Lead magnets and one-pagers that carry the sale while you sleep','Email sequences that follow the opt-in','The CEO Comment Method: get the buyer to start the DM']},
+  {t:'part',pill:'Part three',big:'Thirty days, from first post to booked call.'},
+  {t:'flow',h2:'One engine, four stages.',flow:[['Content',1],['Lead magnet',0],['One-pager',0],['Booked call',1]]},
+  {t:'grid',pill:'Why me',big:'I have run this from the inside out.',pairs:[['Outreach','Early member, watched it grow from about 1M to 250M in ARR'],['Taplio','Co-founded the LinkedIn content tool, later acquired by lemlist'],['Distribute','Now building sales software used across real deal flow'],['Brand30','4,000+ founders have been through the system']]},
+  {t:'body',h2:'The method, not the magic.',sub:'None of this is a growth hack. It is the same sales mechanics that move enterprise deals, pointed at your own LinkedIn. That is why it keeps working after the novelty wears off.'},
+  {t:'recap',pill:'In one line',big:'Build content that sells, in 30 minutes a day, so strangers become booked calls.'},
+  {t:'cta',pill:'Your next step',h2:'Join the next Brand30 cohort.',sub:'Four weeks, live, with the full system and direct coaching. Bring your offer and your calendar and leave with an engine that runs.',disclaimer:'Educational content only. Examples describe a method, not a promise. Results vary with your offer, your market, and the work you put in. No earnings or outcome is guaranteed.'}
+];
+const stage=document.getElementById('stage');
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function slide(s){
+  let h='';
+  if(s.eyebrow)h+=`<div class="eyebrow">${esc(s.eyebrow)}</div>`;
+  if(s.pill)h+=`<span class="pill">${esc(s.pill)}</span>`;
+  if(s.h1)h+=`<h1>${esc(s.h1)}</h1>`;
+  if(s.h2)h+=`<h2>${esc(s.h2)}</h2>`;
+  if(s.big)h+=`<div class="big">${esc(s.big)}</div>`;
+  if(s.bullets)h+=`<ul>${s.bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`;
+  if(s.pairs)h+=`<div class="grid2">${s.pairs.map(p=>`<div><div class="k">${esc(p[0])}</div><div class="v">${esc(p[1])}</div></div>`).join('')}</div>`;
+  if(s.flow){h+=`<div class="flow">`+s.flow.map((n,i)=>`<span class="node ${n[1]?'accent':''}">${esc(n[0])}</span>`+(i<s.flow.length-1?'<span class="arrow">&rarr;</span>':'')).join('')+`</div>`}
+  if(s.sub)h+=`<div class="sub">${esc(s.sub)}</div>`;
+  if(s.disclaimer)h+=`<div class="disclaimer">${esc(s.disclaimer)}</div>`;
+  return `<section class="slide">${h}</section>`;
+}
+stage.innerHTML=S.map(slide).join('');
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(){slides.forEach((el,x)=>el.classList.toggle('on',x===i));
+  document.getElementById('count').textContent=(i+1)+' / '+slides.length;
+  document.getElementById('bar').style.width=((i+1)/slides.length*100)+'%';}
+function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));show();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
