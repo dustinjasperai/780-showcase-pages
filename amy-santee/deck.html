@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Read Your Career Like a Culture | Amy Santee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0e2a34;
+    --panel: #143642;
+    --accent: #c1451f;
+    --ink: #faf9f5;
+    --ink-soft: #d9e0dd;
+    --sage: #537456;
+    --tan: #b9a373;
+  }
+  html, body { height:100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Archivo', -apple-system, system-ui, sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage { width:100vw; height:100vh; position:relative; }
+  .slide {
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding: 8vh 10vw;
+    opacity:0; transition: opacity .35s ease;
+  }
+  .slide.on { display:flex; opacity:1; }
+  .eyebrow {
+    font-family:'Archivo',sans-serif; font-size:13px; font-weight:600;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--tan);
+    margin-bottom:22px;
+  }
+  h1 { font-family:'Libre Baskerville', Georgia, serif; font-weight:700;
+    font-size: clamp(34px, 6vw, 68px); line-height:1.08; letter-spacing:-0.01em; }
+  h2 { font-family:'Libre Baskerville', Georgia, serif; font-weight:700;
+    font-size: clamp(28px, 4.4vw, 48px); line-height:1.14; margin-bottom:20px; }
+  .lead { font-size: clamp(18px, 2.3vw, 26px); color:var(--ink-soft); line-height:1.5; max-width:30ch; }
+  .sub { font-size: clamp(17px, 1.9vw, 22px); color:var(--ink-soft); line-height:1.55; max-width:40ch; margin-top:10px; }
+  .accent { color:var(--accent); }
+  .rule { width:64px; height:4px; background:var(--accent); margin:26px 0; border:0; }
+  ul { list-style:none; margin-top:14px; max-width:42ch; }
+  ul li { font-size: clamp(17px, 2vw, 23px); color:var(--ink-soft); line-height:1.5; padding-left:26px; position:relative; margin-bottom:16px; }
+  ul li::before { content:''; position:absolute; left:0; top:.6em; width:10px; height:10px; background:var(--sage); border-radius:2px; }
+  .step-k { font-family:'Libre Baskerville',serif; color:var(--accent); font-size: clamp(22px,2.6vw,30px); }
+  .big-num { font-family:'Libre Baskerville',serif; color:var(--tan); font-size: clamp(60px,9vw,120px); line-height:1; opacity:.5; margin-bottom:8px; }
+  .quote { font-family:'Libre Baskerville',serif; font-style:italic; font-size: clamp(24px,3.4vw,40px); line-height:1.3; max-width:24ch; }
+  .card { background:var(--panel); border-left:5px solid var(--accent); padding:30px 34px; border-radius:4px; max-width:46ch; }
+  .card h3 { font-family:'Libre Baskerville',serif; font-size: clamp(20px,2.3vw,27px); margin-bottom:10px; color:var(--ink); }
+  .card p { font-size: clamp(15px,1.7vw,19px); color:var(--ink-soft); line-height:1.5; }
+  .disclaimer { font-family:'Archivo',sans-serif; font-size:13px; color:var(--ink-soft); opacity:.7; max-width:52ch; margin-top:28px; line-height:1.5; }
+  .cta-step { font-size: clamp(18px,2.1vw,24px); color:var(--ink); margin-top:8px; }
+  #nav { position:fixed; bottom:22px; right:28px; font-family:'Archivo',sans-serif; font-size:12px; color:var(--ink-soft); opacity:.6; letter-spacing:.05em; }
+  .hint { position:fixed; bottom:22px; left:28px; font-family:'Archivo',sans-serif; font-size:12px; color:var(--ink-soft); opacity:.45; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"></div>
+<div class="hint">Use arrow keys to move through the slides</div>
+<script>
+const S = [
+  {t:'title',
+    eyebrow:'A live masterclass with Amy Santee',
+    h:'Read Your Career Like a Culture',
+    lead:'Why your work stopped fitting, and how to find your next move without blowing up your life.' },
+
+  {t:'promise', eyebrow:'What you will leave with',
+    h2:'You will be able to name what is actually wrong.',
+    sub:'Not a vague feeling. A read on the structure underneath it, and a method to turn that read into a decision you can stand behind.' },
+
+  {t:'who', eyebrow:'Who this is for',
+    h2:'Experienced professionals who are done pretending.',
+    bullets:['You are competent and the resume looks fine.','You are burned out, restless, or quietly checked out.','The work no longer fits who you have become.'] },
+
+  {t:'trap', eyebrow:'The trap',
+    h2:'You assume the problem is you.',
+    sub:'So you either white-knuckle through it, or you fantasize about detonating everything and starting over from zero. Both keep you stuck.' },
+
+  {t:'reframe', eyebrow:'The reframe',
+    quote:'The dissatisfaction is usually structural, not personal.',
+    sub:'An anthropologist does not ask what is wrong with a person. She reads the culture around them.' },
+
+  {t:'part', eyebrow:'Part One', num:'01',
+    h2:'The institution is shaping what you feel.' },
+
+  {t:'content', eyebrow:'Part One',
+    h2:'Read it like a culture.',
+    bullets:['Incentives: what does this place actually reward?','Power: who holds it, and how does it move?','Rituals: what are the unwritten rules you keep obeying?'] },
+
+  {t:'content', eyebrow:'Part One',
+    h2:'Once you can see the system, you stop blaming yourself.',
+    sub:'The same situation that felt like personal failure becomes a set of conditions you can read, test, and respond to on purpose.' },
+
+  {t:'part', eyebrow:'Part Two', num:'02',
+    h2:'The method: Research, Act, Decide.' },
+
+  {t:'step', k:'Research',
+    h2:'Gather real data on your own situation.',
+    sub:'Your experiences, your trajectory, the tensions, and where your values and the work have come apart. Surface the constraints you have been treating as fixed.' },
+
+  {t:'step', k:'Act',
+    h2:'Test ideas through small, deliberate moves.',
+    sub:'Real-world experiments that narrow your options without forcing a premature, high-stakes commitment. You learn by doing, not by overthinking.' },
+
+  {t:'step', k:'Decide',
+    h2:'Build a decision you can actually stand behind.',
+    sub:'A framework grounded in the data you gathered plus your own judgment, so the choice holds up after the adrenaline of the leap wears off.' },
+
+  {t:'part', eyebrow:'Part Three', num:'03',
+    h2:'What changes once you can read the culture.' },
+
+  {t:'reframe', eyebrow:'Identity',
+    quote:'Your job does not have to be your whole identity.',
+    sub:'It is ok to do a job to pay the bills. Decoupling who you are from what you do for work gives you room to think clearly.' },
+
+  {t:'content', eyebrow:'The throughline',
+    h2:'You do not have to start over.',
+    sub:'A transition is rarely a demolition. There is almost always a throughline, the thing that carries across. We find it and keep it, then change what genuinely needs to change.' },
+
+  {t:'reframe', eyebrow:'Liminality',
+    quote:'Betwixt and between is a stage, not a failure.',
+    sub:'Every rite of passage has an uncomfortable in-between. Naming it as a known stage takes away its power to make you panic.' },
+
+  {t:'content', eyebrow:'Why trust this read',
+    h2:'This is trained, not improvised.',
+    bullets:['Master’s in Applied Anthropology.','About 15 years in UX research and strategy before this.','A full-time career strategy practice since 2020.'] },
+
+  {t:'cta', eyebrow:'Your next move',
+    h2:'Run this on your own situation.',
+    step:'Start with a Strategy Session, or go deeper with the Wayfinding Package when you are ready to work through a full transition.',
+    disclaimer:'This masterclass is educational. No specific career, salary, or financial result is guaranteed. Career decisions involve many factors outside any single method, and results vary from person to person.' }
+];
+
+const stage = document.getElementById('stage');
+const nav = document.getElementById('nav');
+let i = 0;
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function render(){
+  stage.innerHTML = '';
+  S.forEach((s, idx) => {
+    const d = document.createElement('div');
+    d.className = 'slide' + (idx===i ? ' on' : '');
+    let html = '';
+    if (s.eyebrow) html += '<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    if (s.t==='title'){ html += '<h1>'+esc(s.h)+'</h1><hr class="rule"><p class="lead">'+esc(s.lead)+'</p>'; }
+    else if (s.t==='part'){ html += '<div class="big-num">'+esc(s.num)+'</div><h2>'+esc(s.h2)+'</h2>'; }
+    else if (s.t==='reframe'){ html += '<p class="quote">'+esc(s.quote)+'</p>'; if(s.sub) html += '<p class="sub">'+esc(s.sub)+'</p>'; }
+    else if (s.t==='step'){ html += '<div class="step-k">'+esc(s.k)+'</div><h2>'+esc(s.h2)+'</h2><p class="sub">'+esc(s.sub)+'</p>'; }
+    else if (s.t==='cta'){ html += '<h2>'+esc(s.h2)+'</h2><p class="cta-step">'+esc(s.step)+'</p><p class="disclaimer">'+esc(s.disclaimer)+'</p>'; }
+    else { if(s.h2) html += '<h2>'+esc(s.h2)+'</h2>'; if(s.sub) html += '<p class="sub">'+esc(s.sub)+'</p>'; if(s.bullets){ html += '<ul>'; s.bullets.forEach(b=> html += '<li>'+esc(b)+'</li>'); html += '</ul>'; } }
+    d.innerHTML = html;
+    stage.appendChild(d);
+  });
+  nav.textContent = (i+1) + ' / ' + S.length;
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, n)); render(); }
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight' || e.key==='ArrowDown' || e.key===' ') { e.preventDefault(); go(i+1); }
+  if (e.key==='ArrowLeft' || e.key==='ArrowUp') { e.preventDefault(); go(i-1); }
+});
+document.addEventListener('click', () => go(i+1));
+render();
+</script>
+</body>
+</html>
