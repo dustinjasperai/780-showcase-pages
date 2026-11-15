@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live One Life, Not Two | Leader of One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f6f3eb;        /* brand cream ground (brand.json uses=30) */
+    --panel:#efe9dc;     /* a shade down, same family */
+    --ink:#181b18;       /* brand ink (uses=36) */
+    --ink-soft:#3b3d38;
+    --muted:#625f56;     /* brand taupe (uses=4) */
+    --rule:#d9d3c5;
+    --accent:#ba4928;    /* brand terracotta (uses=5) */
+    --accent-soft:#dc7652;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'DM Sans',-apple-system,sans-serif;
+    background:var(--ink);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .deck{max-width:960px;margin:0 auto;}
+  .slide{
+    position:relative;
+    background:var(--bg);
+    min-height:540px;
+    aspect-ratio:16/9;
+    padding:64px 72px;
+    display:flex;flex-direction:column;justify-content:center;
+    border-bottom:6px solid var(--ink);
+    overflow:hidden;
+  }
+  .plumb{position:absolute;top:0;bottom:0;left:72px;width:2px;background:var(--accent);opacity:.55;}
+  .slide.pad-plumb{padding-left:104px;}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Libre Caslon Display',Georgia,serif;font-weight:400;font-size:60px;line-height:1.06;color:var(--ink);letter-spacing:-0.01em;}
+  h2{font-family:'Libre Caslon Display',Georgia,serif;font-weight:400;font-size:40px;line-height:1.12;color:var(--ink);margin-bottom:20px;}
+  .lead{font-size:23px;line-height:1.5;color:var(--ink-soft);margin-top:22px;max-width:46ch;}
+  p.body{font-size:20px;line-height:1.55;color:var(--ink-soft);max-width:52ch;margin-top:14px;}
+  .kicker{font-size:19px;color:var(--muted);margin-top:26px;}
+  ul{list-style:none;margin-top:18px;}
+  ul li{font-size:20px;line-height:1.4;color:var(--ink-soft);padding-left:26px;position:relative;margin-bottom:14px;max-width:50ch;}
+  ul li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:2px;background:var(--accent);}
+  .phase-no{font-family:'Libre Caslon Display',serif;font-size:22px;color:var(--accent);margin-bottom:10px;}
+  .big-quote{font-family:'Libre Caslon Display',Georgia,serif;font-size:46px;line-height:1.14;color:var(--ink);max-width:20ch;}
+  .cite{font-size:16px;color:var(--muted);margin-top:24px;letter-spacing:.02em;}
+  .brandline{position:absolute;bottom:28px;left:72px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+  .slide.cta{background:var(--ink);color:var(--bg);}
+  .slide.cta .plumb{background:var(--accent-soft);opacity:.8;}
+  .slide.cta h2,.slide.cta h1{color:var(--bg);}
+  .slide.cta p.body,.slide.cta .lead{color:#cfcabb;}
+  .slide.cta .eyebrow{color:var(--accent-soft);}
+  .disclaimer{font-size:14px;line-height:1.5;color:#9a978c;margin-top:34px;max-width:54ch;}
+  .cta-step{font-family:'Libre Caslon Display',serif;font-size:26px;color:var(--bg);margin-top:26px;}
+  .two{display:flex;gap:40px;margin-top:24px;flex-wrap:wrap;}
+  .two .col{flex:1;min-width:240px;}
+  .two .col h3{font-family:'Libre Caslon Display',serif;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:8px;}
+  .two .col p{font-size:18px;color:var(--muted);line-height:1.45;}
+  @media (max-width:680px){
+    .slide{padding:40px 30px;min-height:460px;}
+    .slide.pad-plumb{padding-left:46px;}
+    .plumb{left:30px;}
+    h1{font-size:40px;} h2{font-size:30px;} .big-quote{font-size:32px;}
+    .lead{font-size:19px;} p.body{font-size:17px;} ul li{font-size:17px;}
+    .brandline{left:30px;}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live self-leadership masterclass for men',
+   h1:'Live One Life,<br>Not Two',
+   lead:'For men who have mastered the game but not the player. One hour on closing the gap between who you appear to be and who you actually are.'},
+
+  {t:'promise', eyebrow:'What this hour gives you',
+   h2:'By the end, you will see the gap clearly, and you will know how to close it.',
+   body:'Not more motivation. Not another morning routine. A way to make one standard hold when no one is watching and nothing is forcing it.'},
+
+  {t:'who', eyebrow:'Who this is for',
+   h2:'You look successful. You feel the gap.',
+   body:'You are somewhere between 30 and 55. The results are real: the title, the income, the family, the reputation. And still there is a quiet distance between the man you present and the man you are when the door closes.'},
+
+  {t:'trap', eyebrow:'The trap',
+   h2:'Somewhere, you learned to perform.',
+   body:'Approval became the metric. You got good at reading the room and giving it what it wanted. It worked. It kept working. And the price was that your choices slowly stopped belonging to you.'},
+
+  {t:'twolives', eyebrow:'The real cost',
+   h2:'Two lives are expensive to run.',
+   two:[
+     {h3:'The life you show', p:'Composed. Capable. The one that gets the nods and the promotions.'},
+     {h3:'The life you live', p:'The missed commitments to yourself. The small compromises you would never admit out loud.'}
+   ],
+   kicker:'The energy it takes to keep the two from touching is the exhaustion you cannot explain.'},
+
+  {t:'reframe', eyebrow:'The reframe',
+   quote:'Discipline is not the problem. Identity is.',
+   cite:'When identity is unsettled, every decision becomes a negotiation. You are not lazy. You are divided.'},
+
+  {t:'part', eyebrow:'Part one',
+   h2:'The gap between values and choices.',
+   body:'Most men can recite their values. Far fewer can show you a week of choices that match them. The distance between the two is not a character flaw. It is an unexamined pattern, and patterns can be named.'},
+
+  {t:'why', eyebrow:'Part one',
+   h2:'Why willpower fails here.',
+   body:'You cannot out-discipline an identity you have never actually defined. Willpower spends itself fighting a version of you that was never decided on purpose. Define the man first, and the discipline stops being a fight.'},
+
+  {t:'partmethod', eyebrow:'Part two',
+   h2:'The Leader of One method.',
+   body:'Four phases, ten sessions. Not a mindset you perform and not a brotherhood you join. A private, structured path to installing an identity you can lead from.'},
+
+  {t:'phase', eyebrow:'Part two', phase:'Phase one',
+   h2:'Identity Realignment.',
+   body:'Review the specific gaps between what you say matters and what you actually choose. Then write the identity statement: the man you are deciding to be, in words plain enough to be held to.'},
+
+  {t:'phase', eyebrow:'Part two', phase:'Phase two',
+   h2:'Ownership and Integrity.',
+   body:'Run an integrity audit on the places your life and your word do not match. Name the justification patterns you use to excuse the gap, and retire them one by one.'},
+
+  {t:'phase', eyebrow:'Part two', phase:'Phase three',
+   h2:'Disciplined Self-Leadership.',
+   body:'Set decision rules so the right choice is already made before the moment of pressure arrives. Put simple tracking in place so follow-through stops depending on how you feel that day.'},
+
+  {t:'phase', eyebrow:'Part two', phase:'Phase four',
+   h2:'Integration and Maintenance.',
+   body:'Learn to spot drift early, while it is still small. Build the maintenance plan that keeps one standard holding under real pressure, long after the novelty is gone.'},
+
+  {t:'shift', eyebrow:'What changes',
+   h2:'When identity aligns, discipline becomes automatic.',
+   body:'And when you stop performing for approval, leadership becomes the default setting. Not a role you switch on in the meeting. The way you move through an ordinary Tuesday.'},
+
+  {t:'week', eyebrow:'Part three',
+   h2:'A real week, led as one man.',
+   body:'The same pressures arrive. The difference is that you meet them as one man with one standard, instead of negotiating with yourself every time. Fewer open loops. Less noise. A direction you can respect.'},
+
+  {t:'whyme', eyebrow:'Why me',
+   h2:'I wrote the book to teach the skill. I coach to install the identity.',
+   body:'Leader of One grew out of The Leadership Journey and years of weekly letters to men who look successful but feel the gap. The ideas are not new to you. Living them as one standard is the part most men never get to.'},
+
+  {t:'standard', eyebrow:'The standard',
+   quote:'A standard you live. Not just believe.',
+   cite:'Responsibility begins with what you can influence: your choices, your commitments, and how you respond to the people around you.'},
+
+  {t:'cta', eyebrow:'The honest conversation',
+   h2:'If you are ready to examine your patterns without defending them.',
+   step:'Apply for Realignment, and we will have one honest conversation about whether this is the right work for you.',
+   disclaimer:'This masterclass is educational. It is not therapy and it is not a guarantee of any specific result. What changes depends on the work you are willing to do.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x||'';}
+S.forEach(s=>{
+  const el=document.createElement('section');
+  el.className='slide pad-plumb'+(s.t==='cta'?' cta':'');
+  let inner='<div class="plumb"></div>';
+  if(s.eyebrow) inner+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+  if(s.h1) inner+='<h1>'+s.h1+'</h1>';
+  if(s.h2) inner+='<h2>'+esc(s.h2)+'</h2>';
+  if(s.quote) inner+='<div class="big-quote">'+esc(s.quote)+'</div>';
+  if(s.lead) inner+='<p class="lead">'+esc(s.lead)+'</p>';
+  if(s.phase) inner+='<div class="phase-no">'+esc(s.phase)+'</div>';
+  if(s.body) inner+='<p class="body">'+esc(s.body)+'</p>';
+  if(s.two){inner+='<div class="two">';s.two.forEach(c=>{inner+='<div class="col"><h3>'+esc(c.h3)+'</h3><p>'+esc(c.p)+'</p></div>';});inner+='</div>';}
+  if(s.kicker) inner+='<p class="kicker">'+esc(s.kicker)+'</p>';
+  if(s.cite) inner+='<p class="cite">'+esc(s.cite)+'</p>';
+  if(s.step) inner+='<div class="cta-step">'+esc(s.step)+'</div>';
+  if(s.disclaimer) inner+='<p class="disclaimer">'+esc(s.disclaimer)+'</p>';
+  inner+='<div class="brandline">Leader of One</div>';
+  el.innerHTML=inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
