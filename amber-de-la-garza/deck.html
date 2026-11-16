@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The High-Value Hours Masterclass | Amber De La Garza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;        /* her site ground (brand.json site_scheme: light) */
+    --panel:#f4f8fc;     /* faint tint of her blue accent */
+    --rule:#dedede;      /* her neutral rule (brand.json ranked color) */
+    --accent:#008fff;    /* her exact brand/link blue (brand.json rgb(0,143,255)) */
+    --ink:#121a24;       /* near-black slide ink */
+    --muted:#55606c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#e9edf1;font-family:Inter,system-ui,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--bg);position:relative;
+    border:1px solid var(--rule);border-radius:10px;overflow:hidden;
+    box-shadow:0 18px 50px rgba(18,26,36,.14)}
+  .slide{position:absolute;inset:0;padding:60px 64px;display:none;flex-direction:column;
+    justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-family:"Barlow Semi Condensed";font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);font-size:15px;margin-bottom:18px}
+  h1{font-family:"Barlow Semi Condensed";font-weight:700;font-size:54px;line-height:1.03;
+    letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:"Barlow Semi Condensed";font-weight:700;font-size:40px;line-height:1.06;
+    margin-bottom:16px}
+  p{font-size:20px;line-height:1.5;color:var(--muted);max-width:46ch}
+  .lead{font-size:23px;color:var(--ink)}
+  .big{font-size:30px;line-height:1.3;color:var(--ink);font-weight:500;max-width:30ch}
+  ul{list-style:none;margin-top:12px}
+  li{font-size:20px;line-height:1.5;padding-left:26px;position:relative;margin:10px 0;color:var(--ink)}
+  li:before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:2px;
+    background:var(--accent)}
+  .meta{margin-top:26px;font-size:17px;color:var(--muted)}
+  .meta strong{color:var(--ink);font-weight:600}
+  .buckets{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:10px;max-width:640px}
+  .bucket{border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;
+    padding:16px 18px;background:var(--panel)}
+  .bucket h3{font-family:"Barlow Semi Condensed";font-size:21px;font-weight:600;margin-bottom:4px}
+  .bucket span{font-size:15px;color:var(--muted)}
+  .kicker{font-family:"Barlow Semi Condensed";font-weight:600;color:var(--accent);font-size:20px;
+    letter-spacing:.04em;margin-bottom:10px}
+  .disclaim{margin-top:26px;font-size:13.5px;color:var(--muted);max-width:60ch;line-height:1.5}
+  .nav{position:fixed;bottom:16px;right:20px;font-size:13px;color:#6b7682;font-family:Inter}
+  .count{position:absolute;bottom:18px;left:24px;font-size:13px;color:#9aa4ae;
+    font-family:"Barlow Semi Condensed";letter-spacing:.08em}
+  .accentword{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">← / → to move</div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'who'},
+  {t:'trap'},
+  {t:'reframe'},
+  {t:'part', k:'Part One', h:'The real problem is allocation, not effort',
+    p:'Most owners try to fix productivity by finding more hours. There are no more hours. The leverage is in where the hours you already have get spent.'},
+  {t:'cost'},
+  {t:'part', k:'Part Two', h:'The High-Value Activities Bucket System',
+    p:'Every task you touch belongs to one of four buckets. Two of them multiply profit. Two of them quietly eat it. The skill is knowing which hour you are in.'},
+  {t:'buckets'},
+  {t:'bucketdetail', k:'Buckets that multiply', h:'Marketing, visibility, and sales',
+    items:['These are the activities that bring in revenue and compound over time.',
+           'For most owners they get bumped first when the day gets full.',
+           'Your best hours, the ones with the most focus, belong here.']},
+  {t:'bucketdetail', k:'Buckets to contain', h:'Client delivery and administration',
+    items:['Delivery has to happen, but it should not eat your highest-value hours.',
+           'Administration expands to fill whatever time you give it.',
+           'The goal is to contain, systemize, and delegate, not to do more of it faster.']},
+  {t:'part', k:'The structure underneath', h:'S.T.O.P., the four pillars',
+    p:'Self, Time, Organization, People. Allocation only holds when the owner behind it is steady. S.T.O.P. is the structure that keeps the buckets from collapsing back into chaos.'},
+  {t:'rap'},
+  {t:'part', k:'Part Three', h:'What a high-value week looks like',
+    p:'When the calendar is built around the profit-multiplying buckets first, the busywork fits into the edges instead of swallowing the middle.'},
+  {t:'picture'},
+  {t:'why'},
+  {t:'cta', disc:'This masterclass is educational only. No result is guaranteed. Results vary based on your market, your effort, and your business.'}
+];
+
+function render(s){
+  if(s.t==='title') return `
+    <div class="eyebrow">A live masterclass for small business owners</div>
+    <h1>The High-Value Hours<br><span class="accentword">Masterclass</span></h1>
+    <p class="lead">Put your best time into the work that actually multiplies profit.</p>
+    <div class="meta"><strong>Amber De La Garza</strong>, The Productivity Specialist</div>`;
+  if(s.t==='who') return `
+    <div class="eyebrow">Who this is for</div>
+    <h2>You are busy from open to close</h2>
+    <p>Established small business owners who are working more hours than ever, yet the business still runs through them for almost everything. You do not need motivation. You need a method for where your time goes.</p>`;
+  if(s.t==='trap') return `
+    <div class="eyebrow">The trap</div>
+    <p class="big">You crossed off a full list today, and the business still did not move forward.</p>
+    <p style="margin-top:18px">That gap is not a discipline problem. It is a sign your best hours are going to the wrong bucket.</p>`;
+  if(s.t==='reframe') return `
+    <div class="eyebrow">The reframe</div>
+    <p class="big">You do not have a time problem. You have a <span class="accentword">time-allocation</span> problem.</p>`;
+  if(s.t==='part') return `
+    <div class="kicker">${s.k}</div>
+    <h2>${s.h}</h2>
+    <p>${s.p}</p>`;
+  if(s.t==='cost') return `
+    <div class="eyebrow">What it costs</div>
+    <h2>Low-value hours are not free</h2>
+    <ul>
+      <li>Every hour in a low-value bucket is an hour not spent on growth.</li>
+      <li>The owner becomes the bottleneck, so the business cannot outgrow their calendar.</li>
+      <li>Burnout shows up long before the revenue ceiling does.</li>
+    </ul>`;
+  if(s.t==='buckets') return `
+    <div class="eyebrow">The four buckets</div>
+    <h2>Where does this hour belong?</h2>
+    <div class="buckets">
+      <div class="bucket"><h3>Marketing &amp; visibility</h3><span>Multiplies profit</span></div>
+      <div class="bucket"><h3>Sales</h3><span>Multiplies profit</span></div>
+      <div class="bucket"><h3>Client servicing</h3><span>Contain and systemize</span></div>
+      <div class="bucket"><h3>Administration</h3><span>Contain and delegate</span></div>
+    </div>`;
+  if(s.t==='bucketdetail') return `
+    <div class="kicker">${s.k}</div>
+    <h2>${s.h}</h2>
+    <ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(s.t==='rap') return `
+    <div class="eyebrow">The daily habit</div>
+    <h2>The 15-minute Daily RAP</h2>
+    <p>Review and Action Plan. Fifteen minutes to review the day and decide which high-value activities get your best time tomorrow. Small, repeatable, and it compounds.</p>`;
+  if(s.t==='picture') return `
+    <div class="eyebrow">The picture</div>
+    <h2>Designed, not reacted to</h2>
+    <ul>
+      <li>High-value work is blocked first, in your sharpest hours.</li>
+      <li>Delivery and admin are contained to defined windows.</li>
+      <li>You end the week having moved the business, not just survived it.</li>
+    </ul>`;
+  if(s.t==='why') return `
+    <div class="eyebrow">Why learn this from me</div>
+    <h2>A decade inside busy businesses</h2>
+    <ul>
+      <li>Over ten years coaching successful, busy owners through the Business by Design Methodology.</li>
+      <li>Host of Small Business Straight Talk, a top 1% podcast with 400+ episodes.</li>
+      <li>Productivity and time-management training delivered for teams at Pepsi, Marriott, and MGM.</li>
+    </ul>`;
+  if(s.t==='cta') return `
+    <div class="eyebrow">Your next step</div>
+    <h2>Map your high-value hours with me</h2>
+    <p>If you want help applying this to your own calendar and business, book a one-on-one strategy session and we will find the one change that matters most right now.</p>
+    <div class="meta"><strong>Book a strategy session</strong> at amberdelagarza.com</div>
+    <div class="disclaim">${s.disc}</div>`;
+  return '';
+}
+
+let i=0;const stage=document.getElementById('stage');
+function show(){stage.innerHTML=`<div class="slide on">${render(S[i])}</div><div class="count">${i+1} / ${S.length}</div>`;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){i=Math.min(i+1,S.length-1);show();}
+  if(e.key==='ArrowLeft'){i=Math.max(i-1,0);show();}
+});
+stage.addEventListener('click',()=>{i=Math.min(i+1,S.length-1);show();});
+show();
+</script>
+</body>
+</html>
