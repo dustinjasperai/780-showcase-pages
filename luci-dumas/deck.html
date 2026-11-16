@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wall Portrait Method — Luci Dumas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  /* Palette derived from lucidumascoaching.com (brand.json): light scheme,
+     ground #faf8fb, panel #f1edf3, accent #524e68 (plum-slate, 2nd dominant),
+     soft lavender #9c92ac (dominant), ink #333333. Type: Butler display serif
+     (Cormorant Garamond web stand-in) + Lato. Deliberately NOT Fraunces+Work Sans. */
+  :root{
+    --bg:#faf8fb; --panel:#f1edf3; --accent:#524e68; --soft:#9c92ac;
+    --ink:#333333; --muted:#6b6676;
+    --serif:'Butler','Cormorant Garamond',Georgia,serif;
+    --sans:'Lato',-apple-system,Segoe UI,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400}
+  #deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:#fff;border:1px solid #e7e1ec;border-radius:10px;
+    padding:64px 60px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 2px rgba(82,78,104,.06)}
+  .slide.center{align-items:center;text-align:center}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    font-size:12px;color:var(--soft);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:600;font-size:52px;line-height:1.05;color:var(--accent);letter-spacing:.3px}
+  h2{font-family:var(--serif);font-weight:600;font-size:38px;line-height:1.12;color:var(--accent)}
+  h3{font-family:var(--serif);font-weight:500;font-style:italic;font-size:30px;color:var(--ink);line-height:1.2}
+  p{font-size:20px;line-height:1.6;color:var(--ink);max-width:40em;margin-top:18px}
+  p.lead{font-size:23px;color:var(--muted)}
+  .rule{width:64px;height:3px;background:var(--accent);margin:26px 0;border-radius:2px}
+  .slide.center .rule{margin:26px auto}
+  ul{margin:22px 0 0 0;list-style:none;max-width:40em}
+  li{font-size:21px;line-height:1.5;padding:14px 0 14px 34px;position:relative;border-top:1px solid #eee}
+  li:first-child{border-top:none}
+  li:before{content:"";position:absolute;left:0;top:22px;width:12px;height:12px;background:var(--soft);border-radius:50%}
+  .step{font-family:var(--serif);font-size:15px;color:var(--soft);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .big{font-family:var(--serif);font-size:72px;color:var(--accent);line-height:1;margin:6px 0}
+  .foot{font-size:13px;color:var(--muted);margin-top:30px;max-width:46em}
+  .brandline{font-family:var(--serif);font-style:italic;color:var(--soft);font-size:18px;margin-top:30px}
+  .nav{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:var(--soft);
+    font-family:var(--sans);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav">The Wall Portrait Method &middot; Luci Dumas &middot; The Profitable Photographer</div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for portrait &amp; wedding photographers',
+   h1:'The Wall Portrait Method',
+   lead:'How to turn one portrait session into several heirloom wall portraits, in person, without discounting.'},
+
+  {t:'promise', eyebrow:'The promise',
+   h2:'You already make beautiful work. This class is about getting paid what it is worth.',
+   p:'By the end you will know how to walk a family into an in-person ordering session and guide them to wall portraits and albums they are proud to commit to, instead of handing over a folder of files and hoping.'},
+
+  {t:'who', eyebrow:'Who this is for',
+   h2:'For the photographer who is great behind the camera and quietly undercharging.',
+   ul:['You book sessions but your average sale feels low for the quality you deliver.',
+       'You send a gallery link and let clients pick the smallest package.',
+       'You love the craft and want a business that actually supports you.']},
+
+  {t:'trap', eyebrow:'The trap',
+   h3:'"I will just put the gallery online and let them choose."',
+   p:'The online gallery feels easier. But it quietly trains your clients to shop on price, buy the cheapest digital option, and never see their photos on a wall. The art you made ends up on a phone screen, and your income ends up capped.'},
+
+  {t:'hook', center:true, eyebrow:'The reframe',
+   h1:'The money was never in the files.',
+   lead:'It is in the wall. It always was.'},
+
+  {t:'part', center:true, step:'Part One', h2:'Why selling files keeps you poor.'},
+
+  {t:'body', eyebrow:'The core problem',
+   h2:'Digital files are a race to the bottom.',
+   p:'When the product is a download, every photographer in your town is selling the same thing, so the only thing left to compete on is price. The client has no reason to invest, because a file on a drive does not feel like anything. There is nothing to hang, nothing to pass down, nothing that says this was worth it.'},
+
+  {t:'body', eyebrow:'The core problem',
+   h2:'Discount packages teach clients to buy small.',
+   p:'Pre-set packages and gallery checkouts quietly set the ceiling. The client picks the cheapest tier that gets them the files, and the conversation about what these portraits could mean on their wall never happens. You did master-level work and left most of the value on the table.'},
+
+  {t:'part', center:true, step:'Part Two', h2:'The In-Person Sales System.'},
+
+  {t:'pillar', step:'Pillar One', eyebrow:'The In-Person Sales System',
+   h2:'Become the trusted advisor.',
+   p:'Your client does not know how to buy portraits. That is your job, not a sales pitch. When you show up as the expert who helps them make a decision they will love for decades, price stops being the conversation and legacy becomes it.'},
+
+  {t:'pillar', step:'Pillar Two', eyebrow:'The In-Person Sales System',
+   h2:'Ask the right questions at the consultation.',
+   p:'The sale is won before the shutter clicks. A short set of discovery questions at the consult, about their home, their walls, the people who matter, tells you exactly what to create and sets up the order long before you sit down to show images.'},
+
+  {t:'pillar', step:'Pillar Three', eyebrow:'The In-Person Sales System',
+   h2:'Design the wall, not the download.',
+   p:'In the ordering session you sit with the family and design their wall together, at size, in their space. You are not selling files. You are helping them place heirlooms in their home. This is where a single session becomes several wall portraits and an album.'},
+
+  {t:'pillar', step:'The mechanic', eyebrow:'The In-Person Sales System',
+   h2:'One shoot. Several pieces.',
+   p:'Done this way, a single family or children&apos;s session typically turns into three to seven wall portraits and albums, not one small package. Same amount of shooting. A completely different business.'},
+
+  {t:'part', center:true, step:'Part Three', h2:'Fewer families, served completely.'},
+
+  {t:'body', eyebrow:'The shift',
+   h2:'Same calendar. A business that holds you up.',
+   p:'You are not booking more sessions or working more weekends. You are serving each family more completely, so the work you already love to do finally pays like the craft it is. Fewer clients, treated beautifully, each one investing in art for their home.'},
+
+  {t:'why', eyebrow:'Why listen to me',
+   h2:'I have done this for 40 years.',
+   p:'I am Luci Dumas, a PPA Master Craftsman portrait and wedding photographer in San Diego. I have made my entire living from this craft, through every economic swing, by selling portraits as heirlooms, in person. Now I teach photographers to do the same through The Profitable Photographer.',
+   brand:'The Profitable Photographer &middot; Luci Dumas Coaching'},
+
+  {t:'recap', eyebrow:'The method, in one slide',
+   h2:'The Wall Portrait Method.',
+   ul:['Become the trusted advisor, not the order-taker.',
+       'Ask the right questions at the consultation.',
+       'Design the wall in an in-person ordering session.',
+       'Turn one shoot into several heirloom pieces.']},
+
+  {t:'cta', center:true, eyebrow:'Your next step',
+   h1:'Let us build your version of this.',
+   p:'If you want help putting the In-Person Sales System to work in your own studio, book a complimentary call with me, or join the next Your Best Year Yet Mastermind.',
+   foot:'This masterclass is for education only. It is not a guarantee of income or results. Every photography business is different and your results will vary.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(s=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.center?' center':'');
+  let html='';
+  if(s.eyebrow) html+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.step) html+=`<div class="step">${s.step}</div>`;
+  if(s.h1) html+=`<h1>${s.h1}</h1>`;
+  if(s.h2) html+=`<h2>${s.h2}</h2>`;
+  if(s.h3) html+=`<h3>${s.h3}</h3>`;
+  if(s.big) html+=`<div class="big">${s.big}</div>`;
+  if(s.h1||s.h2||s.h3) html+=`<div class="rule"></div>`;
+  if(s.lead) html+=`<p class="lead">${s.lead}</p>`;
+  if(s.p) html+=`<p>${s.p}</p>`;
+  if(s.ul){ let u='<ul>'; s.ul.forEach(li=>u+=`<li>${li}</li>`); u+='</ul>'; html+=u; }
+  if(s.brand) html+=`<div class="brandline">${s.brand}</div>`;
+  if(s.foot) html+=`<div class="foot">${s.foot}</div>`;
+  d.innerHTML=html;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
