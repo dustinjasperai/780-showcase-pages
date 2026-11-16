@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Superniche Masterclass — Adventure Wedding Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2e3c3d;        /* her dominant alpine slate-green */
+    --panel:#36494a;
+    --rule:#4a5e5f;
+    --accent:#a88324;    /* her brand gold (brand.json ranked_colors #2) */
+    --ink:#f4f6f6;       /* her off-white */
+    --sage:#a5b3b6;      /* her sage */
+    --display:'Poppins',sans-serif;
+    --body:'Nunito Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  section.slide{
+    min-height:100vh;width:100%;scroll-snap-align:start;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;position:relative;border-bottom:1px solid var(--rule);
+  }
+  .horizon{position:absolute;left:9vw;right:9vw;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.25}
+  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,5.2vw,4rem);line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:1.15;margin-bottom:1.1rem}
+  p.lead{font-size:clamp(1.05rem,1.7vw,1.4rem);max-width:46ch;color:var(--ink)}
+  p.sub{font-size:clamp(1rem,1.5vw,1.2rem);max-width:52ch;color:var(--sage);margin-top:1.1rem}
+  .brandline{margin-top:2.4rem;font-family:var(--display);font-weight:600;color:var(--sage);font-size:.95rem}
+  .brandline b{color:var(--ink)}
+  ul.pillars{list-style:none;margin-top:1.6rem;display:grid;gap:1rem;max-width:40ch}
+  ul.pillars li{padding-left:1.3rem;position:relative;color:var(--ink);font-size:1.1rem}
+  ul.pillars li:before{content:"";position:absolute;left:0;top:.62em;width:.55rem;height:.55rem;background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+  .num{font-family:var(--display);font-weight:700;font-size:clamp(3rem,8vw,6rem);color:var(--accent);opacity:.9;line-height:1}
+  .two{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center}
+  .creds{display:grid;gap:.7rem;margin-top:1.4rem;max-width:48ch}
+  .creds div{color:var(--sage)}
+  .creds b{color:var(--ink);font-weight:700}
+  .disclaimer{margin-top:2rem;font-size:.82rem;color:var(--sage);max-width:60ch;opacity:.85}
+  .cta-step{font-family:var(--display);font-weight:600;color:var(--accent);font-size:1.15rem;margin-top:1.2rem}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:50}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="deck" id="deck"></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'Free live masterclass',h:'The Superniche Masterclass',p:'Build a profitable adventure photography business that lets you work less and adventure more.',brand:'Adventure Wedding Academy with Cat Ekkelboom-White'},
+  {t:'plain',eyebrow:'Who this is for',h:'For wedding and elopement photographers who are great at the craft and stuck on the treadmill',p:'You can shoot. What you want now is a business that fits your life instead of swallowing it.'},
+  {t:'plain',eyebrow:'The trap',h:'You followed the advice',p:'Shoot more. Post more. Drop your price to stay booked. So you did, and you are busier and more tired than you have ever been, with less of the work you love.'},
+  {t:'reframe',eyebrow:'The reframe',h:'You do not need more weddings. You need the right ones.',p:'The problem was never volume. It is that you are competing in a crowd that was never the right fit for you.'},
+  {t:'section',num:'01',eyebrow:'Part One',h:'The real problem is not a shortage of weddings',p:'It is that "wedding photographer" is the most crowded title in the industry. When you look like everyone else, the only lever left is price, and price is a race you lose by winning.'},
+  {t:'plain',eyebrow:'Part One',h:'The cost of blending in',p:'More enquiries you have to chase. More weekends you give away. Bookings you quietly resent. A business that was supposed to give you freedom, and instead owns your calendar.'},
+  {t:'section',num:'02',eyebrow:'Part Two',h:'The Work Less, Adventure More method',p:'Four shifts that turn a busy, generic photography business into a focused one that fits the life you actually want.'},
+  {t:'pillar',num:'1',eyebrow:'Shift one',h:'Own a superniche',p:'Go narrower than "wedding photographer" to a niche only you can own. A superniche makes you the obvious choice for the couples you want, so you stop competing on price and start being sought out by name.'},
+  {t:'pillar',num:'2',eyebrow:'Shift two',h:'Price for the life you want',p:'Your prices should be built backwards from the life you are trying to fund, not forwards from what the local market charges. Fewer, better bookings at the right price beat a full calendar at the wrong one.'},
+  {t:'pillar',num:'3',eyebrow:'Shift three',h:'Market with integrity',p:'Build a business that is good for people and the planet. Values-led, honest marketing is not a tax on growth. For the right couples it is the whole reason they choose you.'},
+  {t:'pillar',num:'4',eyebrow:'Shift four',h:'Add income beyond the camera',p:'A business that only earns when you are shooting is fragile. Products, resources and affiliate income add streams that keep paying while you are on a mountain, or simply taking a weekend off.'},
+  {t:'plain',eyebrow:'The engine underneath',h:'Be the one they find',p:'When your niche is clear, being found gets easier. The right couples search for exactly what you do, and good positioning plus simple SEO puts you in front of them before anyone else.'},
+  {t:'plain',eyebrow:'Part Three',h:'What a superniche week looks like',p:'Fewer enquiries, and almost all of them a yes. Weekends you choose. Travel and adventure built into the work, not squeezed around it. The business finally running at the size of the life, not the other way around.'},
+  {t:'plain',eyebrow:'The foundation',h:'You are the foundation of the business',p:'The most important work is internal. Protect your energy and your time, because no one else will. A sustainable business is built on a sustainable you, not on hustle.'},
+  {t:'creds',eyebrow:'Why me',h:'Cat Ekkelboom-White',creds:[
+    'Pioneer of adventure elopements in Europe, shooting in the Austrian Alps and the Italian Dolomites through Wild Connections Photography.',
+    'Founder of Adventure Wedding Academy and Photographers for People and Planet, helping photographers build sustainable, values-led businesses.',
+    'British-born, based in Tirol, Austria, and a certified mountain hiking guide. I built my business around the life I wanted first.'
+  ]},
+  {t:'recap',eyebrow:'The four shifts',h:'Work Less, Adventure More',items:['Own a superniche','Price for the life you want','Market with integrity','Add income beyond the camera']},
+  {t:'cta',eyebrow:'Your next step',h:'Ready to build your superniche?',p:'If this is the business you want, the next step is to go deeper together. Explore the courses and 1:1 mentoring at Adventure Wedding Academy and let us map your superniche.',step:'Start at adventureweddingacademy.com',disclaimer:'This masterclass is for education only. It shares the approach and principles behind building a sustainable photography business. No specific income, booking, or business result is guaranteed. Results vary and depend on your own work, market, and circumstances.'}
+];
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function slideHTML(s){
+  const horizon=(s.t==='title'||s.t==='reframe')?'<div class="horizon"></div>':'';
+  const eb=s.eyebrow?`<div class="eyebrow">${esc(s.eyebrow)}</div>`:'';
+  switch(s.t){
+    case 'title':
+      return `${eb}<h1>${esc(s.h)}</h1><p class="sub">${esc(s.p)}</p><div class="brandline">${esc(s.brand)}</div>${horizon}`;
+    case 'reframe':
+      return `${eb}<h1>${esc(s.h)}</h1><p class="sub">${esc(s.p)}</p>${horizon}`;
+    case 'section':
+      return `<div class="two"><div class="num">${esc(s.num)}</div><div>${eb}<h2>${esc(s.h)}</h2><p class="lead">${esc(s.p)}</p></div></div>`;
+    case 'pillar':
+      return `${eb}<div class="two"><div class="num">${esc(s.num)}</div><div><h2>${esc(s.h)}</h2><p class="lead">${esc(s.p)}</p></div></div>`;
+    case 'plain':
+      return `${eb}<h2>${esc(s.h)}</h2><p class="lead">${esc(s.p)}</p>`;
+    case 'creds':
+      return `${eb}<h2>${esc(s.h)}</h2><div class="creds">${s.creds.map(c=>`<div>${esc(c)}</div>`).join('')}</div>`;
+    case 'recap':
+      return `${eb}<h2>${esc(s.h)}</h2><ul class="pillars">${s.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+    case 'cta':
+      return `${eb}<h2>${esc(s.h)}</h2><p class="lead">${esc(s.p)}</p><div class="cta-step">${esc(s.step)}</div><p class="disclaimer">${esc(s.disclaimer)}</p>`;
+  }
+  return '';
+}
+document.getElementById('deck').innerHTML=S.map(s=>`<section class="slide">${slideHTML(s)}</section>`).join('');
+const prog=document.getElementById('prog');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?(scrollY/h*100):0)+'%';});
+</script>
+</body>
+</html>
