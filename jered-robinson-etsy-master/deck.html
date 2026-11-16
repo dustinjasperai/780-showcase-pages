@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The One Bottleneck — Grow My Etsy Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbf6ef; --panel:#f3e7d8; --ink:#262321; --ink-soft:#514b45;
+    --ink-muted:#8a8078; --rule:#e0d3c1; --accent:#fd763f;
+  }
+  html,body{height:100%}
+  body{font-family:'Figtree',system-ui,sans-serif;background:#e7e0d6;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .stage{width:100%;max-width:960px;aspect-ratio:16/9;background:var(--bg);
+    position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(38,35,33,.18);border-radius:6px}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:52px;line-height:1.05;
+    letter-spacing:-.02em;color:var(--ink);margin-bottom:20px}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:34px;line-height:1.12;
+    letter-spacing:-.01em;color:var(--ink);margin-bottom:18px}
+  p{font-size:20px;line-height:1.5;color:var(--ink-soft);max-width:38ch;margin-bottom:14px}
+  .lead{font-size:23px;color:var(--ink-soft);max-width:40ch}
+  .big{font-size:30px;font-weight:600;color:var(--ink);max-width:36ch;line-height:1.25}
+  ul{list-style:none;margin-top:8px}
+  li{font-size:20px;line-height:1.4;color:var(--ink-soft);padding-left:26px;position:relative;margin-bottom:14px;max-width:40ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;background:var(--accent);border-radius:2px}
+  .num{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--ink-muted);margin-bottom:10px}
+  .panel{background:var(--panel);border-left:4px solid var(--accent);padding:22px 26px;border-radius:4px;max-width:44ch;margin-top:8px}
+  .panel p{margin:0;color:var(--ink)}
+  .kicker{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:var(--accent);margin-bottom:10px}
+  .funnel{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-width:420px}
+  .node{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:12px 18px;font-size:17px;color:var(--ink-soft)}
+  .node.choke{background:#fff3ec;border:2px solid var(--accent);color:var(--ink);font-weight:600}
+  .node.choke span{color:var(--accent);font-family:'Space Grotesk',sans-serif;font-size:13px;display:block;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+  .disclaimer{font-size:14px;color:var(--ink-muted);max-width:54ch;margin-top:18px;line-height:1.45}
+  .cta-line{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:var(--accent);margin-top:8px}
+  .nav{position:absolute;bottom:18px;right:26px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--ink-muted);display:flex;gap:16px;align-items:center;z-index:5}
+  .nav button{font-family:inherit;font-size:13px;border:1px solid var(--rule);background:var(--bg);color:var(--ink-soft);
+    padding:5px 12px;border-radius:4px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .brandmark{position:absolute;top:26px;left:72px;font-family:'Space Grotesk',sans-serif;font-size:13px;
+    font-weight:600;letter-spacing:.08em;color:var(--ink-muted);text-transform:uppercase;z-index:5}
+  @media(max-width:760px){.slide{padding:38px 34px}h1{font-size:34px}h2{font-size:26px}p,li,.lead{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="brandmark">Grow My Etsy Shop</div>
+  <div class="nav">
+    <button id="prev">Prev</button><span id="count"></span><button id="next">Next</button>
+  </div>
+</div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="eyebrow">A live masterclass for Etsy owners</div>
+    <h1>The One Bottleneck</h1>
+    <p class="lead">Find the single thing choking your shop's growth, and fix that first. Taught by someone who has worked inside million dollar Etsy shops.</p>`},
+  {t:'for', html:`
+    <div class="eyebrow">Who this is for</div>
+    <h2>You are doing everything. The needle isn't moving.</h2>
+    <p>New listings, better photos, another round of keywords, a sale, a reel. Some weeks it works. Most weeks it doesn't, and you cannot tell why.</p>
+    <div class="panel"><p>If your shop feels stuck no matter how hard you push, this hour is for you.</p></div>`},
+  {t:'reframe', html:`
+    <div class="eyebrow">The reframe</div>
+    <h2 style="max-width:16ch">Your shop isn't stuck from too little effort.</h2>
+    <p class="big">It's choked at one point. Everything upstream of that point is wasted work.</p>`},
+  {t:'part', html:`
+    <div class="num">Part One</div>
+    <h1 style="font-size:46px">The core problem</h1>
+    <p class="lead">Why scattering effort across twenty tactics keeps a shop flat.</p>`},
+  {t:'trap', html:`
+    <div class="eyebrow">The trap</div>
+    <h2>You're treating symptoms.</h2>
+    <p>Low sales is not a problem. It's a result. It can come from no traffic, wrong traffic, weak listings, or a price that scares buyers off.</p>
+    <p>Fix the wrong one and nothing changes. You just feel busier.</p>`},
+  {t:'idea', html:`
+    <div class="eyebrow">The idea</div>
+    <h2>Every shop has one real constraint.</h2>
+    <div class="funnel">
+      <div class="node">People see your listing</div>
+      <div class="node choke">They don't click, or don't buy <span>the bottleneck</span></div>
+      <div class="node">Order ships, reviews build</div>
+      <div class="node">They come back and buy again</div>
+    </div>
+    <p style="margin-top:14px">Growth lives at the choke point. Find it, and one change moves everything.</p>`},
+  {t:'stages', html:`
+    <div class="eyebrow">Where the bottleneck hides</div>
+    <h2>It moves as you grow.</h2>
+    <ul>
+      <li><strong>Early:</strong> nobody knows you exist yet</li>
+      <li><strong>Growth:</strong> you have traffic but you're not converting it</li>
+      <li><strong>Maturity:</strong> fulfillment and repeat buyers cap your ceiling</li>
+    </ul>
+    <p>The fix for one stage is the wrong move for another.</p>`},
+  {t:'part', html:`
+    <div class="num">Part Two</div>
+    <h1 style="font-size:46px">The ten principles</h1>
+    <p class="lead">The diagnosis I run on every shop, stage by stage.</p>`},
+  {t:'early', html:`
+    <div class="kicker">Early stage</div>
+    <h2>Build trust before you chase money.</h2>
+    <ul>
+      <li>Stop making money your first goal. Etsy promotes shops buyers trust.</li>
+      <li>Most customers do not know you exist yet. Visibility beats polish.</li>
+      <li>The hardest part of your business is usually a skill you have not built yet.</li>
+    </ul>`},
+  {t:'growth', html:`
+    <div class="kicker">Growth stage</div>
+    <h2>Focus and compound.</h2>
+    <ul>
+      <li>Stay with one target audience instead of reinventing the shop.</li>
+      <li>Do ten times more of what is already working.</li>
+      <li>Once you have traffic, focus on selling better, not louder.</li>
+    </ul>`},
+  {t:'maturity', html:`
+    <div class="kicker">Maturity stage</div>
+    <h2>Protect margin, deepen the relationship.</h2>
+    <ul>
+      <li>Raise your prices when fulfillment is choking your growth.</li>
+      <li>Never let loyal customers run out of things to buy.</li>
+      <li>Stop hunting for the next secret. Execute the fundamentals.</li>
+    </ul>`},
+  {t:'method', html:`
+    <div class="eyebrow">The method</div>
+    <h2>Diagnosis, not a checklist.</h2>
+    <p>We read your real numbers first: views, click rate, conversion, repeat rate. The numbers point straight at the one stage that's holding you.</p>
+    <div class="panel"><p>Then we fix that one thing, and only that thing, until the data moves.</p></div>`},
+  {t:'path', html:`
+    <div class="eyebrow">The path</div>
+    <h2>Four weeks, one constraint at a time.</h2>
+    <ul>
+      <li><strong>Week 1:</strong> goals, values, and where you really are</li>
+      <li><strong>Week 2:</strong> your true audience and how to reach them</li>
+      <li><strong>Week 3:</strong> keywords, SEO, and listings that get found</li>
+      <li><strong>Week 4:</strong> conversion, and beating buyer objections</li>
+    </ul>`},
+  {t:'part', html:`
+    <div class="num">Part Three</div>
+    <h1 style="font-size:46px">What changes</h1>
+    <p class="lead">What a shop looks like once the bottleneck is gone.</p>`},
+  {t:'after', html:`
+    <div class="eyebrow">On the other side</div>
+    <h2>You stop guessing.</h2>
+    <p>You know which number to watch and what to do when it dips. Effort finally lands where it compounds, and the shop feels like a business with a plan.</p>`},
+  {t:'whyme', html:`
+    <div class="eyebrow">Why listen to me</div>
+    <h2>I've run this shop by shop.</h2>
+    <p>Five years building and selling my own Etsy shop. 160 and counting one-on-one calls with Etsy owners. Now on a team scaling multi million dollar online stores.</p>
+    <p>Same diagnosis every time: find the one constraint, fix it, repeat.</p>`},
+  {t:'cta', html:`
+    <div class="eyebrow">Your next step</div>
+    <h2>Let's find your bottleneck.</h2>
+    <p>Send me your shop. I'll tell you the one stage that's holding you back and the first move to make.</p>
+    <div class="cta-line">Apply for a Growth Plan at growmyetsyshop.com</div>
+    <p class="disclaimer">This is an educational masterclass. No income or specific result is guaranteed. Results vary from shop to shop and depend on your market, products, pricing, and effort.</p>`}
+];
+const stage=document.getElementById('stage');
+const nav=stage.querySelector('.nav');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  d.innerHTML=s.html;
+  stage.insertBefore(d,nav);
+});
+const els=[...document.querySelectorAll('.slide')];let cur=0;
+function show(n){cur=Math.max(0,Math.min(els.length-1,n));
+  els.forEach((e,i)=>e.classList.toggle('on',i===cur));
+  document.getElementById('count').textContent=(cur+1)+' / '+els.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
