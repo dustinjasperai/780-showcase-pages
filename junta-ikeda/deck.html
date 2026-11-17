@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turn Your Games Into Your Training (IM Junta Ikeda)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f7f5;      /* light paper, from brand probe (site_scheme: light) */
+    --panel:#ececea;   /* panel */
+    --rule:#d8d8d4;    /* derived from brand grey #cccccc */
+    --ink:#16161a;     /* ink */
+    --accent:#2d20d4;  /* brand indigo, verbatim from brand.json ranked_colors */
+    --muted:#55555f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .slide{
+    background:#fff;border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 26px;min-height:420px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;box-shadow:0 1px 0 rgba(0,0,0,.02);
+  }
+  .num{position:absolute;top:20px;right:26px;font-size:12px;color:var(--muted);letter-spacing:.08em}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+  h1{font-family:"Bitter",Georgia,serif;font-weight:700;font-size:clamp(30px,5vw,50px);line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:"Bitter",Georgia,serif;font-weight:700;font-size:clamp(24px,3.6vw,36px);line-height:1.12;margin-bottom:18px}
+  p{font-size:19px;line-height:1.55;color:var(--ink);max-width:46ch}
+  p.lede{font-size:22px;color:var(--muted)}
+  .sub{margin-top:18px;color:var(--muted);font-size:18px}
+  ul{margin:18px 0 0 0;list-style:none}
+  li{font-size:19px;line-height:1.5;padding:10px 0 10px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:4px;top:19px;width:9px;height:9px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .loop li::before{border-radius:50%;transform:none}
+  .big{font-family:"Bitter",Georgia,serif;font-weight:700;font-size:clamp(40px,8vw,84px);color:var(--accent);line-height:1}
+  .part-k{font-family:"Bitter",Georgia,serif;color:var(--accent);font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;font-weight:700}
+  .cta h1{color:var(--accent)}
+  .disclaimer{margin-top:26px;font-size:13px;color:var(--muted);line-height:1.5;max-width:60ch}
+  .brandline{position:absolute;bottom:20px;left:54px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .stage{background:var(--panel);border-radius:10px;padding:16px 18px}
+  .stage b{font-family:"Bitter",serif;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:"title", eyebrow:"A live masterclass with IM Junta Ikeda",
+   h:"Turn Your Games Into Your Training",
+   sub:"The 10-habit system serious players use to improve on purpose, not by accident."},
+
+  {t:"content", eyebrow:"Who this is for",
+   h:"You already play. You already study. The needle still won't move.",
+   p:"If you are roughly 1200 and up, play regularly, and have put real hours into openings, tactics and videos, and your rating has still been flat for months, this hour is for you. The problem almost certainly is not effort. It is what you are spending the effort on."},
+
+  {t:"content", eyebrow:"The trap",
+   h:"More content is not more improvement.",
+   p:"The feed sells you the next opening course, the next puzzle pack, the next database. It feels like progress because it feels like work. But consuming material is not the same as training, and the gap between the two is where most players stall for years."},
+
+  {t:"reframe", eyebrow:"The reframe",
+   big:"Your own games are the best coach you have.",
+   p:"Every game you have ever played is a record of exactly how you think, where you panic, and what you do not understand yet. Most players never mine it. That is the whole opportunity."},
+
+  {t:"part", k:"Part One", h:"Why strong effort stalls",
+   p:"Three quiet reasons improving players plateau, and why none of them is about talent."},
+
+  {t:"content", eyebrow:"Part One",
+   h:"You are training the wrong layer",
+   p:"Openings feel urgent, so they eat your study time. But games are rarely lost in the opening. They are lost in the middlegame decisions and the endgame technique that nobody schedules time for, because there is no shiny course telling you to."},
+
+  {t:"content", eyebrow:"Part One",
+   h:"You study answers, not your own mistakes",
+   p:"Watching a master explain a position teaches you their thinking. It does not touch the specific blind spots that cost you points last week. Improvement is personal. Generic study gives generic results."},
+
+  {t:"content", eyebrow:"Part One",
+   h:"You have no loop",
+   p:"Study, play, repeat is not a loop if nothing connects the games you play to the training you do next. Without that connection you are starting from zero every week."},
+
+  {t:"part", k:"Part Two", h:"The game-to-training loop",
+   p:"My core method. Turn your games into lessons, your lessons into training, and your training into long-term progress."},
+
+  {t:"loop", eyebrow:"Part Two: the loop",
+   h:"One system, four moves",
+   items:["Play your games the way you always do",
+          "Review each one to find the real decision that went wrong",
+          "Convert that into a specific, repeatable training block",
+          "Return to the board already working on it"]},
+
+  {t:"content", eyebrow:"Part Two",
+   h:"The 10 habits that compound",
+   p:"Inside the loop sit ten repeatable habits that turn scattered study into a training routine that compounds. They are not more content. They are how you handle the content and the games you already have. We will walk the ones that move the needle fastest."},
+
+  {t:"stages", eyebrow:"Part Two: the 5 stages",
+   h:"Match your training to where you actually are",
+   stages:[["Stage 1","Stop losing games you were winning"],
+           ["Stage 2","Build a dependable opening you understand"],
+           ["Stage 3","Train the middlegame decision, not the move"],
+           ["Stage 4","Make endgame technique automatic"],
+           ["Stage 5","Prepare like the player you are becoming"]]},
+
+  {t:"content", eyebrow:"Part Two",
+   h:"Why the stages matter",
+   p:"Most frustration comes from training a stage you are not at yet, or one you have already passed. When your training matches your stage, every hour pays. When it does not, you grind and stay still."},
+
+  {t:"part", k:"Part Three", h:"What a real training week looks like",
+   p:"Not more hours. The same hours, pointed at the right thing."},
+
+  {t:"content", eyebrow:"Part Three",
+   h:"From one game to a week of training",
+   p:"We take a single real game and run it through the loop live: find the turning point, name the habit it exposes, and build the exact short training block to fix it. By the end you will see how one game becomes a focused week, and how a few weeks become a rating you can feel."},
+
+  {t:"content", eyebrow:"Part Three",
+   h:"This is what I do with players every day",
+   p:"25 years competing as an International Master, 15 years coaching, players who have gone from 1500 to 2200, teenagers to the Olympiad, club players to beating titled opponents in classical. The method in this hour is the same one behind all of it."},
+
+  {t:"content", eyebrow:"The takeaway",
+   h:"Improvement is a system, not a secret",
+   p:"You do not need another course. You need a way to train that uses the games you are already playing. Build the loop once and it keeps paying, at every stage, for as long as you play."},
+
+  {t:"cta", eyebrow:"Your next move",
+   h:"Keep going with me",
+   p:"If you want help building your own loop, the next step is simple: start with the free Chess Improvement Reset to audit how you train, join the 10-Habit Chess Improvement System for the full method, or book a 1:1 session and we will work straight from your games.",
+   sub:"Thanks for spending the hour with me. Now go turn your next game into your next lesson.",
+   disclaimer:"This masterclass is educational. No specific rating gain or result is guaranteed. Results vary with your own practice and effort."}
+];
+
+const deck = document.getElementById("deck");
+S.forEach((s, i) => {
+  const el = document.createElement("section");
+  el.className = "slide" + (s.t === "cta" ? " cta" : "");
+  let inner = `<div class="num">${String(i+1).padStart(2,"0")} / ${String(S.length).padStart(2,"0")}</div>`;
+  if (s.eyebrow) inner += `<div class="eyebrow">${s.eyebrow}</div>`;
+  if (s.t === "title") {
+    inner += `<h1>${s.h}</h1><p class="lede sub">${s.sub}</p>`;
+  } else if (s.t === "reframe") {
+    inner += `<div class="big">${s.big}</div><p class="sub">${s.p}</p>`;
+  } else if (s.t === "part") {
+    inner += `<div class="part-k">${s.k}</div><h1>${s.h}</h1><p class="sub">${s.p}</p>`;
+  } else if (s.t === "loop") {
+    inner += `<h2>${s.h}</h2><ul class="loop">` + s.items.map(x=>`<li>${x}</li>`).join("") + `</ul>`;
+  } else if (s.t === "stages") {
+    inner += `<h2>${s.h}</h2><div class="two">` + s.stages.map(x=>`<div class="stage"><b>${x[0]}</b><br>${x[1]}</div>`).join("") + `</div>`;
+  } else if (s.t === "cta") {
+    inner += `<h1>${s.h}</h1><p>${s.p}</p>`;
+    if (s.sub) inner += `<p class="sub">${s.sub}</p>`;
+    inner += `<div class="disclaimer">${s.disclaimer}</div>`;
+  } else {
+    inner += `<h2>${s.h}</h2><p>${s.p}</p>`;
+  }
+  inner += `<div class="brandline">IM Junta Ikeda &middot; The 10-Habit Chess Improvement System</div>`;
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
