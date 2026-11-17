@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Output Factory - Building a Second Brain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8f2e5;      /* their dominant cream paper */
+    --panel:#ffffff;
+    --ink:#0a0d25;     /* their navy */
+    --rule:#1b3c46;    /* their teal */
+    --accent:#ffbd00;  /* their gold spark */
+    --muted:#5b5f52;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--rule);font-family:"Spectral",Georgia,serif;color:var(--ink);}
+  .stage{height:100vh;display:flex;align-items:center;justify-content:center;}
+  .slide{
+    display:none;width:min(1040px,94vw);aspect-ratio:16/9;background:var(--bg);
+    border-radius:14px;padding:64px 72px;position:relative;overflow:hidden;
+    box-shadow:0 24px 60px rgba(10,13,37,.28);
+  }
+  .slide.on{display:flex;flex-direction:column;justify-content:center;}
+  .eyebrow{font-family:"Poppins",sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:13px;color:var(--rule);margin-bottom:18px;}
+  .eyebrow .dot{color:var(--accent);}
+  h1{font-family:"Poppins",sans-serif;font-weight:700;font-size:58px;line-height:1.02;letter-spacing:-.01em;}
+  h2{font-family:"Poppins",sans-serif;font-weight:600;font-size:40px;line-height:1.06;letter-spacing:-.01em;}
+  p{font-size:25px;line-height:1.42;max-width:42ch;color:var(--ink);margin-top:18px;}
+  p.lead{font-size:28px;color:var(--ink);}
+  .big{font-family:"Poppins",sans-serif;font-weight:700;font-size:66px;line-height:1.0;letter-spacing:-.02em;}
+  .accentbar{width:64px;height:7px;background:var(--accent);border-radius:4px;margin-bottom:26px;}
+  .sub{font-size:22px;color:var(--muted);margin-top:22px;}
+  ul{margin-top:22px;list-style:none;}
+  li{font-size:24px;line-height:1.5;padding-left:30px;position:relative;margin-bottom:12px;max-width:44ch;}
+  li:before{content:"";position:absolute;left:0;top:13px;width:12px;height:12px;background:var(--accent);border-radius:3px;}
+  .code-row{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap;}
+  .code-chip{font-family:"Poppins",sans-serif;font-weight:600;font-size:17px;padding:12px 18px;
+    border:2px solid var(--rule);border-radius:10px;color:var(--rule);}
+  .code-chip.hot{background:var(--accent);border-color:var(--accent);color:var(--ink);}
+  .step{font-family:"Poppins",sans-serif;font-weight:700;font-size:150px;color:var(--accent);
+    line-height:.8;opacity:.9;}
+  .letter{font-family:"Poppins",sans-serif;font-weight:700;font-size:120px;color:var(--rule);line-height:.8;}
+  .two{display:grid;grid-template-columns:118px 1fr;gap:34px;align-items:center;}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 46px;margin-top:30px;max-width:720px;}
+  .stat .n{font-family:"Poppins",sans-serif;font-weight:700;font-size:44px;color:var(--rule);}
+  .stat .l{font-size:18px;color:var(--muted);margin-top:4px;}
+  .para{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:26px;max-width:760px;}
+  .para .box{background:var(--panel);border-left:6px solid var(--accent);padding:16px 18px;border-radius:8px;}
+  .para .box b{font-family:"Poppins",sans-serif;font-weight:600;font-size:20px;display:block;color:var(--rule);}
+  .para .box span{font-size:17px;color:var(--ink);}
+  .cta-note{font-size:17px;color:var(--muted);margin-top:34px;max-width:60ch;line-height:1.4;}
+  .nav{position:fixed;bottom:16px;right:22px;font-family:"Poppins",sans-serif;font-size:13px;
+    color:var(--bg);opacity:.8;}
+  .brand{position:absolute;top:30px;right:40px;font-family:"Poppins",sans-serif;font-weight:600;
+    font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--rule);opacity:.85;}
+  .present{margin-top:40px;font-family:"Poppins",sans-serif;font-weight:600;font-size:20px;color:var(--rule);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div id="deck"></div>
+  <div class="nav" id="nav"></div>
+</div>
+<script>
+const S = [
+  {t:'title', c:`<div class="brand">Building a Second Brain</div>
+    <div class="eyebrow">Live masterclass<span class="dot"> .</span></div>
+    <h1>The Output Factory</h1>
+    <p class="lead">How to turn everything you read, save, and capture into finished work.</p>
+    <div class="present">with Tiago Forte</div>`},
+
+  {t:'who', c:`<div class="eyebrow">Who this is for</div>
+    <div class="accentbar"></div>
+    <h2>You consume more than ever. You have less to show for it.</h2>
+    <ul>
+      <li>You save articles, highlights, and links you never open again.</li>
+      <li>You run three or four note apps and still start every project from a blank page.</li>
+      <li>You know you are learning a lot. You just cannot point to what it produced.</li>
+    </ul>`},
+
+  {t:'hook', c:`<div class="eyebrow">The quiet problem</div>
+    <div class="accentbar"></div>
+    <h1>Your second brain quietly became a hoard.</h1>
+    <p>A pile of saved information is not knowledge. It is weight. And most "productivity" advice just helps you hoard faster.</p>`},
+
+  {t:'cost', c:`<div class="eyebrow">What it costs you</div>
+    <div class="accentbar"></div>
+    <h1>Every unfinished idea is interest you pay forever.</h1>
+    <p>The book you meant to write. The system you meant to build. The thinking you did once and can never find again. A hoard does not just sit there. It quietly taxes everything you try to make next.</p>`},
+
+  {t:'p1', c:`<div class="eyebrow">Part one <span class="dot">.</span> the real problem</div>
+    <div class="accentbar"></div>
+    <h2>Storing is not the goal. Producing is.</h2>
+    <p>The point was never to collect more. It was to finish more: the article, the proposal, the decision, the launch. Collection without output is just a more organized way to feel behind.</p>`},
+
+  {t:'reframe', c:`<div class="eyebrow">The reframe</div>
+    <div class="accentbar"></div>
+    <h1>Your brain is for having ideas, not storing them.</h1>
+    <p class="lead">A second brain is a factory that turns ideas into results, not a warehouse that stores them. You stop optimizing yourself and start building an external system more reliable than you will ever be.</p>`},
+
+  {t:'notapp', c:`<div class="eyebrow">Before we start</div>
+    <div class="accentbar"></div>
+    <h2>This is not another app to learn.</h2>
+    <p>Apps come and go. A second brain is a set of habits that outlive every tool you will ever use. Keep your work in plain, portable form, and it travels with you into whatever comes next.</p>`},
+
+  {t:'codeintro', c:`<div class="eyebrow">Part two <span class="dot">.</span> the method</div>
+    <div class="accentbar"></div>
+    <h2>The CODE method</h2>
+    <p>Four steps that move an idea from the moment it lands to the moment it ships.</p>
+    <div class="code-row">
+      <div class="code-chip">C <span>Capture</span></div>
+      <div class="code-chip">O <span>Organize</span></div>
+      <div class="code-chip">D <span>Distill</span></div>
+      <div class="code-chip hot">E <span>Express</span></div>
+    </div>`},
+
+  {t:'capture', c:`<div class="two">
+    <div class="letter">C</div>
+    <div>
+      <div class="eyebrow">Capture</div>
+      <h2>Keep only what resonates.</h2>
+      <p>One place, not twelve. You are not a librarian trying to save everything. You keep the handful of things that make you think, and you let the rest go.</p>
+    </div></div>`},
+
+  {t:'organize', c:`<div class="two">
+    <div class="letter">O</div>
+    <div>
+      <div class="eyebrow">Organize</div>
+      <h2>Organize by what it is FOR.</h2>
+      <p>Not by topic. By the project or goal it serves. Everything you keep gets pointed at something you are actually trying to finish.</p>
+    </div></div>`},
+
+  {t:'para', c:`<div class="eyebrow">The organizing system <span class="dot">.</span> PARA</div>
+    <div class="accentbar"></div>
+    <h2>Your whole digital life in four buckets.</h2>
+    <div class="para">
+      <div class="box"><b>Projects</b><span>Short-term efforts with a goal and an end.</span></div>
+      <div class="box"><b>Areas</b><span>Ongoing responsibilities you maintain over time.</span></div>
+      <div class="box"><b>Resources</b><span>Topics and interests for the future.</span></div>
+      <div class="box"><b>Archive</b><span>Inactive items, kept but out of the way.</span></div>
+    </div>`},
+
+  {t:'distill', c:`<div class="two">
+    <div class="letter">D</div>
+    <div>
+      <div class="eyebrow">Distill</div>
+      <h2>Leave yourself the gold.</h2>
+      <p>Summarize in layers so the essence is findable the day you need it, not buried under everything you saved around it.</p>
+    </div></div>`},
+
+  {t:'express', c:`<div class="two">
+    <div class="step">E</div>
+    <div>
+      <div class="eyebrow">Express <span class="dot">.</span> the whole point</div>
+      <h2>Ship the output.</h2>
+      <p>This is the step everyone skips, and the only one that matters. Turn a folder of notes into a first draft. A second brain that never produces anything is just a tidier hoard.</p>
+    </div></div>`},
+
+  {t:'expressdemo', c:`<div class="eyebrow">Express, in practice</div>
+    <div class="accentbar"></div>
+    <h2>From a folder to a first draft.</h2>
+    <p>Point at the notes you already captured for one project. Pull the distilled lines to the top. What felt like a blank page a minute ago is now a draft with your own thinking already in it.</p>`},
+
+  {t:'run', c:`<div class="eyebrow">Part three <span class="dot">.</span> the payoff</div>
+    <div class="accentbar"></div>
+    <h2>When the factory runs.</h2>
+    <ul>
+      <li>You open a project and your past thinking is already waiting for you.</li>
+      <li>First drafts start half-done instead of from zero.</li>
+      <li>What you learn this month compounds into what you make next month.</li>
+    </ul>`},
+
+  {t:'compound', c:`<div class="eyebrow">Why it gets easier</div>
+    <div class="accentbar"></div>
+    <h1>The work you do once keeps paying you back.</h1>
+    <p>A note you distill today is a shortcut next quarter. The system gets more valuable the longer you run it, instead of getting heavier.</p>`},
+
+  {t:'day', c:`<div class="eyebrow">Before and after</div>
+    <div class="accentbar"></div>
+    <h1>From "I will deal with it later" to "it is already handled."</h1>
+    <p>Same amount of reading and saving. The difference is a system that turns all of it into work you can point to.</p>`},
+
+  {t:'whyme', c:`<div class="eyebrow">Why learn this from me</div>
+    <div class="accentbar"></div>
+    <h2>This method has been pressure-tested at scale.</h2>
+    <div class="stats">
+      <div class="stat"><div class="n">500,000+</div><div class="l">books sold, in 25+ languages</div></div>
+      <div class="stat"><div class="n">30,000+</div><div class="l">professionals trained, 70+ countries</div></div>
+      <div class="stat"><div class="n">150+</div><div class="l">companies, from startups to Toyota and Nestle</div></div>
+      <div class="stat"><div class="n">NPS 70</div><div class="l">from the most recent live cohort</div></div>
+    </div>`},
+
+  {t:'start', c:`<div class="eyebrow">Where to begin</div>
+    <div class="accentbar"></div>
+    <h2>Start with one project this week.</h2>
+    <ul>
+      <li>Pick one thing you are actually trying to finish.</li>
+      <li>Capture only what serves it. Organize it under that project.</li>
+      <li>Distill the few lines that matter, then express a first draft.</li>
+    </ul>`},
+
+  {t:'cta', c:`<div class="brand">Building a Second Brain</div>
+    <div class="eyebrow">Your next step</div>
+    <div class="accentbar"></div>
+    <h1>Build a second brain that produces.</h1>
+    <p class="lead">Join the Second Brain Membership and put the CODE method to work with live workshops, monthly sessions, and a community of practitioners, or start with the BASB Foundation course.</p>
+    <div class="cta-note">For educational purposes only. Results vary from person to person and depend on your own effort and circumstances. No specific outcome or result is guaranteed.</div>`}
+];
+
+let i=0;
+const deck=document.getElementById('deck');
+const nav=document.getElementById('nav');
+function render(){
+  deck.innerHTML = `<div class="slide on">${S[i].c}</div>`;
+  nav.textContent = (i+1)+' / '+S.length;
+}
+function go(d){ i=Math.max(0,Math.min(S.length-1,i+d)); render(); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+document.addEventListener('click',e=>{ go(e.clientX < window.innerWidth/2 ? -1 : 1); });
+render();
+</script>
+</body>
+</html>
