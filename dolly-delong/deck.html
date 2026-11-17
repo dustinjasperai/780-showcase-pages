@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Consistent Booking System — Dolly DeLong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#33351d;        /* her dominant dark olive */
+    --panel:#3d3f24;     /* one step up */
+    --ink:#f9f7f5;       /* her cream */
+    --accent:#e5b871;    /* her warm gold button */
+    --secondary:#70763d; /* her muted olive */
+    --rose:#b75c64;      /* her dusty rose, rare */
+    --rule:rgba(249,247,245,0.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Karla',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:100vw;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 10vw;opacity:0;transition:opacity .4s ease}
+  .slide.on{display:flex;opacity:1}
+  .eyebrow{font-family:'Karla';font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:clamp(11px,1.3vw,15px);color:var(--accent);margin-bottom:2.2vh}
+  h1{font-family:'Playfair Display';font-weight:700;line-height:1.04;
+    font-size:clamp(34px,6vw,76px);letter-spacing:-.01em}
+  h2{font-family:'Playfair Display';font-weight:700;line-height:1.08;
+    font-size:clamp(28px,4.6vw,56px)}
+  .sub{font-family:'Playfair Display';font-style:italic;font-weight:500;
+    font-size:clamp(18px,2.4vw,30px);color:var(--ink);opacity:.9;margin-top:2.4vh;max-width:28ch}
+  p.body{font-size:clamp(16px,1.7vw,22px);line-height:1.5;max-width:40ch;margin-top:2.6vh;color:var(--ink);opacity:.92}
+  .lead{color:var(--accent)}
+  .kicker{font-family:'Karla';font-weight:600;color:var(--secondary);
+    font-size:clamp(13px,1.5vw,18px);letter-spacing:.04em;margin-bottom:1.6vh}
+  ul{list-style:none;margin-top:3vh;display:flex;flex-direction:column;gap:1.6vh;max-width:36ch}
+  li{position:relative;padding-left:2.4ch;font-size:clamp(16px,1.8vw,23px);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.65em;width:1.1ch;height:1.1ch;
+    background:var(--accent);border-radius:2px}
+  .fourc{display:grid;grid-template-columns:repeat(2,1fr);gap:2.2vh 4vw;margin-top:3.4vh;max-width:40ch}
+  .fourc .c{border-left:3px solid var(--accent);padding-left:1.4ch}
+  .fourc .c b{font-family:'Playfair Display';font-weight:700;font-size:clamp(20px,2.3vw,30px);display:block}
+  .fourc .c span{font-size:clamp(13px,1.4vw,17px);opacity:.82}
+  .cal{display:grid;grid-template-columns:repeat(6,1fr);gap:1.1vw;margin-top:3.6vh;max-width:52vw}
+  .cal .wk{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+    padding:1.4vh 0;text-align:center;font-family:'Karla';font-weight:600;
+    font-size:clamp(12px,1.3vw,16px)}
+  .cal .wk.hi{border-color:var(--accent);color:var(--accent)}
+  .foot{position:absolute;bottom:4vh;left:10vw;right:10vw;display:flex;justify-content:space-between;
+    align-items:center;font-family:'Karla';font-size:clamp(11px,1.1vw,14px);color:var(--ink);opacity:.5}
+  .disclaimer{font-size:clamp(11px,1.1vw,14px);opacity:.55;margin-top:3vh;max-width:50ch;line-height:1.4}
+  .cta-line{font-family:'Karla';font-weight:600;color:var(--accent);font-size:clamp(18px,2.2vw,28px);margin-top:2.8vh}
+  .progress{position:absolute;bottom:0;left:0;height:4px;background:var(--accent);transition:width .3s}
+  .nav{position:absolute;bottom:3.4vh;right:3vw;display:flex;gap:10px;z-index:5}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .big{font-size:clamp(40px,8vw,104px);font-family:'Playfair Display';font-weight:700;line-height:1}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div class="progress" id="prog"></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'who'},
+  {t:'promise'},
+  {t:'reframe'},
+  {t:'part', k:'PART ONE', h:'Why consistency keeps slipping', b:'You are not inconsistent because you are lazy or uncommitted. You are inconsistent because you are marketing without a system, deciding what to post in the moment, every single time.'},
+  {t:'reactive'},
+  {t:'cost'},
+  {t:'myth'},
+  {t:'part', k:'PART TWO', h:'The 4C Weekly Content System', b:'A repeatable shape for every post, so you never stare at a blank caption box again. Guidance, not scripts.'},
+  {t:'fourc'},
+  {t:'part', k:'PART THREE', h:'The 6-Week Booking Window', b:'Most photographers market the sessions that are already gone. We flip it: you map content to a forward six-week calendar and market ahead of your schedule.'},
+  {t:'calendar'},
+  {t:'rhythm'},
+  {t:'seo'},
+  {t:'backend'},
+  {t:'week'},
+  {t:'me'},
+  {t:'recap'},
+  {t:'cta', disclaimer:'For education only. No booking, income, or business result is guaranteed. Results vary based on your market, your effort, and many factors outside anyone\'s control.'}
+];
+
+const stage = document.getElementById('stage');
+
+function slideHTML(s, i, n){
+  const foot = `<div class="foot"><span>Systems &amp; Workflow Magic</span><span>${i+1} / ${n}</span></div>`;
+  switch(s.t){
+    case 'title': return `<div class="slide">
+      <div class="eyebrow">A free live masterclass for family photographers</div>
+      <h1>The Consistent<br>Booking System</h1>
+      <div class="sub">How family photographers stay booked without living on Instagram</div>
+      <p class="body" style="opacity:.75;margin-top:4vh">with Dolly DeLong &middot; Systems &amp; Workflow Magic</p>${foot}</div>`;
+    case 'who': return `<div class="slide">
+      <div class="kicker">If this is you</div>
+      <h2>You love the sessions.<br>It is the marketing that<br>wears you down.</h2>
+      <p class="body">You open Instagram meaning to post, lose an hour, and close it with nothing up. Some months you are fully booked. Others are quiet and you are not sure why. The talent was never the problem.</p>${foot}</div>`;
+    case 'reframe': return `<div class="slide" style="align-items:flex-start">
+      <div class="eyebrow">The reframe</div>
+      <div class="big">You are not<br>inconsistent.</div>
+      <div class="sub lead" style="margin-top:3vh">You are missing a system.</div>${foot}</div>`;
+    case 'part': return `<div class="slide">
+      <div class="eyebrow">${s.k}</div>
+      <h2>${s.h}</h2>
+      <p class="body">${s.b}</p>${foot}</div>`;
+    case 'reactive': return `<div class="slide">
+      <div class="kicker">The trap</div>
+      <h2>Reactive marketing</h2>
+      <ul>
+        <li>You post about a session after it has already happened.</li>
+        <li>You announce mini sessions a week before, to the same small audience.</li>
+        <li>You go quiet in your busy season, right when next season is booking.</li>
+      </ul>
+      <p class="body">The fix is not posting more. It is posting on a plan that runs ahead of your calendar.</p>${foot}</div>`;
+    case 'promise': return `<div class="slide">
+      <div class="kicker">By the end of the next hour</div>
+      <h2>You will have a weekly<br>marketing rhythm you<br>can actually keep</h2>
+      <p class="body">Not more tips to add to the pile. A simple, repeatable system you can run in one short block a week, built for the family photographer who has a full life outside the business.</p>${foot}</div>`;
+    case 'cost': return `<div class="slide" style="align-items:flex-start">
+      <div class="eyebrow">What it quietly costs</div>
+      <div class="big">The gap<br>in the calendar.</div>
+      <p class="body">Every quiet week is not just lost income. It is the session a family booked with someone who simply stayed visible while you were heads down. Inconsistency is expensive in a way you never see on an invoice.</p>${foot}</div>`;
+    case 'myth': return `<div class="slide">
+      <div class="kicker">Let us kill one myth first</div>
+      <h2>This is not about<br>posting more, or going viral</h2>
+      <p class="body">You do not need a trend, a dance, or a bigger following. You need the right few things, in the right order, every week. Fewer decisions, not more content.</p>${foot}</div>`;
+    case 'seo': return `<div class="slide">
+      <div class="kicker">The part that works while you sleep</div>
+      <h2>Three keywords a week</h2>
+      <p class="body">Alongside the social rhythm, you plant three search terms your local families are actually typing into Google. Social reaches the people who already found you. Search brings in the ones who never had.</p>${foot}</div>`;
+    case 'fourc': return `<div class="slide">
+      <div class="eyebrow">The 4C Weekly Content System</div>
+      <h2>Four jobs, every week</h2>
+      <div class="fourc">
+        <div class="c"><b>Connect</b><span>Show the human behind the camera and build trust.</span></div>
+        <div class="c"><b>Clarify</b><span>Teach the one thing your families need to understand.</span></div>
+        <div class="c"><b>Celebrate</b><span>Let recent work and happy clients do the selling.</span></div>
+        <div class="c"><b>Call to action</b><span>Tell them the exact next step to book you.</span></div>
+      </div>
+      <p class="body" style="opacity:.8">Fill the shape with your voice. You never start from a blank box.</p>${foot}</div>`;
+    case 'calendar': return `<div class="slide">
+      <div class="eyebrow">The 6-Week Booking Window</div>
+      <h2>Market six weeks ahead</h2>
+      <div class="cal">
+        <div class="wk hi">Week 1</div><div class="wk">Week 2</div><div class="wk">Week 3</div>
+        <div class="wk">Week 4</div><div class="wk">Week 5</div><div class="wk hi">Week 6</div>
+      </div>
+      <p class="body">Every piece of content points at a session that is still open to book. You are always filling the calendar in front of you, not behind you.</p>${foot}</div>`;
+    case 'rhythm': return `<div class="slide">
+      <div class="kicker">The weekly rhythm</div>
+      <h2>One block. Two to three hours.<br>A full week of marketing.</h2>
+      <ul>
+        <li>Five posts, mapped to the 4C jobs.</li>
+        <li>One email to your list.</li>
+        <li>Three SEO keywords your families are actually searching.</li>
+      </ul>
+      <p class="body">Batch it once, schedule it, and get back to your clients.</p>${foot}</div>`;
+    case 'backend': return `<div class="slide">
+      <div class="eyebrow">The quiet part that holds it up</div>
+      <h2>Systems in the backend</h2>
+      <p class="body">A Dubsado client workflow keeps you top of mind before, during, and after every session. A simple Trello hub keeps the whole business in one place. Calm instead of chaos, so the marketing rhythm actually sticks.</p>${foot}</div>`;
+    case 'week': return `<div class="slide">
+      <div class="kicker">Your Thursday, from now on</div>
+      <h2>A week inside the system</h2>
+      <ul>
+        <li>Thursday: batch the week in one sitting.</li>
+        <li>Friday to Sunday: schedule and walk away.</li>
+        <li>Monday to Friday: short daily stories, no decisions required.</li>
+      </ul>
+      <p class="body lead">Consistent marketing that fits around real life, not the other way around.</p>${foot}</div>`;
+    case 'me': return `<div class="slide">
+      <div class="eyebrow">Why me</div>
+      <h2>I built this running<br>my own business</h2>
+      <p class="body">I am a family photographer first. I still run my own service business. In 2020 I started teaching what I had figured out the hard way, pairing simple systems with strategic marketing, and today I share it every week on the Systems &amp; Workflow Magic podcast and with the photographers inside my membership.</p>${foot}</div>`;
+    case 'recap': return `<div class="slide">
+      <div class="eyebrow">The system, in one picture</div>
+      <h2>Plan ahead. Post on a shape.<br>Batch it once. Stay booked.</h2>
+      <ul>
+        <li>The 6-Week Booking Window, so you market ahead.</li>
+        <li>The 4C system, so every post has a job.</li>
+        <li>The weekly rhythm, so it all fits in one block.</li>
+      </ul>${foot}</div>`;
+    case 'cta': return `<div class="slide">
+      <div class="eyebrow">Your next step</div>
+      <h2>Come run this with me,<br>every week</h2>
+      <p class="body">Inside the Family Photographers Marketing Society I hand you the weekly plan already built: the posts, the email, the keywords, and a short walkthrough, mapped to the 4C system and the 6-week window. You just add your voice.</p>
+      <div class="cta-line">Join the Family Photographers Marketing Society</div>
+      <p class="disclaimer">${s.disclaimer}</p>${foot}</div>`;
+  }
+  return `<div class="slide"></div>`;
+}
+
+stage.innerHTML = S.map((s,i)=>slideHTML(s,i,S.length)).join('');
+const slides = [...document.querySelectorAll('.slide')];
+let idx = 0;
+function show(n){
+  idx = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((el,i)=>el.classList.toggle('on', i===idx));
+  document.getElementById('prog').style.width = ((idx+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick=()=>show(idx+1);
+document.getElementById('prev').onclick=()=>show(idx-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(idx+1);
+  if(e.key==='ArrowLeft')show(idx-1);
+});
+show(0);
+</script>
+</body>
+</html>
