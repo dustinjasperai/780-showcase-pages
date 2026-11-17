@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Level 3 Business — a masterclass with Mark Creedon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D2A3F;        /* deep Metropole navy */
+    --panel:#13354C;
+    --rule:#27496A;
+    --accent:#C8912C;    /* gold */
+    --ink:#F4EFE6;       /* warm paper */
+    --muted:#A9BBCB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;line-height:1.5}
+  #stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.active{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  h1,h2,h3{font-family:"Spectral",Georgia,serif;font-weight:600;line-height:1.15}
+  h1{font-size:clamp(34px,6vw,64px)}
+  h2{font-size:clamp(26px,4.4vw,44px)}
+  h3{font-size:clamp(20px,3vw,30px)}
+  .eyebrow{font-family:"Inter",sans-serif;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  p{font-size:clamp(17px,2.1vw,22px);color:var(--ink);margin-top:18px;max-width:40ch}
+  p.muted{color:var(--muted)}
+  .lead{font-size:clamp(20px,2.6vw,27px)}
+  ul{margin-top:22px;padding-left:0;list-style:none}
+  li{font-size:clamp(17px,2.1vw,21px);padding:12px 0 12px 30px;border-bottom:1px solid var(--rule);position:relative;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:20px;width:10px;height:10px;background:var(--accent);border-radius:2px}
+  .big{font-family:"Spectral",serif;font-size:clamp(30px,5vw,52px);line-height:1.2}
+  .kicker{color:var(--accent)}
+  .levels{display:grid;gap:14px;margin-top:26px}
+  .level{background:var(--panel);border-left:4px solid var(--rule);padding:16px 20px;border-radius:4px}
+  .level.on{border-left-color:var(--accent)}
+  .level .lab{font-family:"Spectral",serif;color:var(--accent);font-size:19px}
+  .level .d{color:var(--muted);font-size:16px;margin-top:4px}
+  .title-wrap{border-top:3px solid var(--accent);padding-top:26px}
+  .foot{position:fixed;bottom:22px;left:0;right:0;display:flex;justify-content:space-between;padding:0 7vw;font-size:12px;color:var(--muted);letter-spacing:.04em}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:5}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;padding:8px 16px;font-family:"Inter",sans-serif;font-size:14px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+  .disclaimer{margin-top:28px;font-size:13px;color:var(--muted);max-width:60ch;line-height:1.6}
+  .brandline{margin-top:30px;font-size:15px;color:var(--muted)}
+  .cta-step{display:inline-block;margin-top:24px;font-family:"Spectral",serif;font-size:clamp(20px,3vw,28px);color:var(--bg);background:var(--accent);padding:14px 26px;border-radius:6px;font-weight:600}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="foot"><span>The Level 3 Business</span><span id="pg"></span></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',html:`<div class="title-wrap"><div class="eyebrow">A live masterclass</div>
+   <h1>The Level 3 Business</h1>
+   <p class="lead">How to build a company that runs without you.</p>
+   <div class="brandline">With Mark Creedon &middot; Business Accelerator Mastermind</div></div>`},
+ {t:'promise',html:`<div class="eyebrow">What you will leave with</div>
+   <h2>A plan to step out of the day to day, without the business slowing down.</h2>
+   <p>In the next hour you will see the three levels every business moves through, where yours
+   sits today, and the exact levers that move an owner from indispensable to free.</p>`},
+ {t:'whofor',html:`<div class="eyebrow">Who this is for</div>
+   <h2>You broke six figures. So why does it still run through you?</h2>
+   <p>You are good at the work. The business grew because you carried it. And now the reward
+   for that is a calendar that is full of other people’s decisions.</p>
+   <p class="muted">If a week off would cost you revenue, this hour is for you.</p>`},
+ {t:'reframe',html:`<div class="eyebrow">The hard truth</div>
+   <p class="big">If it cannot run without you, <span class="kicker">you do not own a business. You own a job.</span></p>
+   <p>The fix is not more hours. It is a different kind of business underneath you.</p>`},
+ {t:'part',html:`<div class="title-wrap"><div class="eyebrow">Part One</div><h1>The Owner’s Trap</h1></div>`},
+ {t:'bottleneck',html:`<div class="eyebrow">The real problem</div>
+   <h2>Every decision routes back to you.</h2>
+   <p>Approvals, quotes, the hard client call, the thing only you know how to do. Each one is
+   small. Together they are a ceiling, and the ceiling is you.</p>`},
+ {t:'harder',html:`<div class="eyebrow">Why effort stops working</div>
+   <h2>Working harder makes the trap tighter.</h2>
+   <p>The more you personally produce, the more the business depends on you producing. Growth
+   that leans on the owner is just a bigger job, not a bigger business.</p>`},
+ {t:'part',html:`<div class="title-wrap"><div class="eyebrow">Part Two</div><h1>The Three Levels</h1></div>`},
+ {t:'levels',html:`<div class="eyebrow">The framework</div>
+   <h2>Three levels of business maturity.</h2>
+   <div class="levels">
+     <div class="level"><div class="lab">Level 1</div><div class="d">The business cannot run without you.</div></div>
+     <div class="level"><div class="lab">Level 2</div><div class="d">You lead it, but you still hold it together.</div></div>
+     <div class="level on"><div class="lab">Level 3</div><div class="d">Systems and team run it. You choose the work.</div></div>
+   </div>`},
+ {t:'level1',html:`<div class="eyebrow">Level 1</div>
+   <h2>Owner dependent.</h2>
+   <p>You are the product, the sales team, and the quality control. If you stop, it stops.
+   Most owners build a strong Level 1 and mistake the stress of it for success.</p>`},
+ {t:'level2',html:`<div class="eyebrow">Level 2</div>
+   <h2>Owner led.</h2>
+   <p>You have people and a bit of process, but you are still the glue. You have swapped doing
+   the work for directing all of it, and the phone still rings for you on a Sunday.</p>`},
+ {t:'level3',html:`<div class="eyebrow">Level 3</div>
+   <h2>Owner independent.</h2>
+   <p>Documented systems and an empowered team carry the operation. Your job becomes
+   direction and growth, not rescue. The business keeps its promises whether you are in the
+   room or not.</p>`},
+ {t:'part',html:`<div class="title-wrap"><div class="eyebrow">Part Three</div><h1>The Three Levers</h1></div>`},
+ {t:'systems',html:`<div class="eyebrow">Lever one</div>
+   <h2>Systems: write the business down.</h2>
+   <p>The knowledge in your head is the leash. Turn the way you win into documented steps,
+   blueprints, and templates a competent person can follow, and the work stops needing you.</p>`},
+ {t:'team',html:`<div class="eyebrow">Lever two</div>
+   <h2>Team: hire for the seat, then let go.</h2>
+   <p>A Level 3 business is built on people who own outcomes, not tasks you check. That means
+   the right seat, the standard written down, and the discipline to stop taking the ball back.</p>`},
+ {t:'targets',html:`<div class="eyebrow">Lever three</div>
+   <h2>Targets and rhythm: lead by the numbers.</h2>
+   <p>Clear targets, a weekly rhythm, and simple accountability replace you chasing everything
+   in person. The business reports to a system, and the system reports to you.</p>`},
+ {t:'week',html:`<div class="eyebrow">A Level 3 week</div>
+   <h2>A week where nothing waits on you.</h2>
+   <ul>
+     <li>The team runs the day against written standards.</li>
+     <li>The numbers tell you where to look before anyone has to.</li>
+     <li>Your time goes to the few decisions only an owner can make.</li>
+     <li>A week away costs the business nothing.</li>
+   </ul>`},
+ {t:'whyme',html:`<div class="eyebrow">Why listen to me on this</div>
+   <h2>I built a business that could not run without me first.</h2>
+   <p>I have coached business owners since 2005, I wrote the bestselling book How to Have a
+   Business Not a Job, and I host the Mastermind For Business podcast. The Level 3 method is
+   what I use with owners inside the Business Accelerator Mastermind.</p>`},
+ {t:'recap',html:`<div class="eyebrow">The shape of it</div>
+   <h2>Find your level. Pull the three levers. Earn your time back.</h2>
+   <ul>
+     <li>Name the level you are actually at today.</li>
+     <li>Write the business down into systems.</li>
+     <li>Build a team that owns outcomes.</li>
+     <li>Lead by targets and a weekly rhythm.</li>
+   </ul>`},
+ {t:'cta',html:`<div class="eyebrow">Your next step</div>
+   <h2>Map your path to a Level 3 business.</h2>
+   <p>If you want help applying this to your business, the next step is a Game Plan session
+   inside the Business Accelerator Mastermind.</p>
+   <span class="cta-step">Book your Game Plan session</span>
+   <div class="disclaimer">This masterclass is educational. It is not financial, legal, or
+   business advice. No result is guaranteed. Results vary with your market, effort, and
+   execution, and every business is different.</div>`}
+];
+function H(s){return s.html;}
+let i=0;
+function render(){document.getElementById('stage').innerHTML=`<div class="slide active">${H(S[i])}</div>`;document.getElementById('pg').textContent=(i+1)+' / '+S.length;}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
