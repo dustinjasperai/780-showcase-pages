@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Owned Store — A Masterclass with Steve Chou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e9eef4;        /* blue-grey paper derived from his deep blue #013d7b */
+    --panel:#fbfcff;     /* near-white blue panel, same family */
+    --panel2:#dfe7f1;    /* deeper tint of the same blue paper */
+    --ink:#14181d;        /* his dominant text color */
+    --muted:#55606e;
+    --rule:#ccd6e3;       /* hairline, blue-grey to match the ground */
+    --accent:#013d7b;     /* his deep-blue button/link color */
+    --green:#0c8442;      /* his green, for first-sale ticks */
+    --display:'Newsreader',Georgia,serif;
+    --text:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text)}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:52px 54px;margin:0 0 22px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(20,24,29,.02)}
+  .slide.dark{background:var(--ink);color:#f3f4f6;border-color:var(--ink)}
+  .slide.paper{background:var(--panel2)}
+  .eyebrow{font-family:var(--text);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin:0 0 18px}
+  .slide.dark .eyebrow{color:#7fb0e0}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.04;margin:0 0 18px}
+  h2{font-family:var(--display);font-weight:600;font-size:36px;line-height:1.1;margin:0 0 16px}
+  p{font-size:19px;line-height:1.55;color:var(--ink);margin:0 0 14px;max-width:62ch}
+  .slide.dark p{color:#d8dbe0}
+  .lead{font-size:22px;color:var(--muted)}
+  .slide.dark .lead{color:#aab2bd}
+  ul{margin:8px 0 0;padding:0;list-style:none}
+  li{font-size:19px;line-height:1.5;margin:0 0 14px;padding-left:30px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;border-radius:3px;
+    background:var(--accent)}
+  li.tick::before{background:var(--green);border-radius:50%}
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:10px}
+  .step{background:var(--panel2);border:1px solid var(--rule);border-radius:10px;padding:20px 22px}
+  .step .n{font-family:var(--display);font-weight:700;font-size:30px;color:var(--accent);line-height:1}
+  .step h4{font-family:var(--text);font-weight:600;font-size:18px;margin:10px 0 6px}
+  .step p{font-size:16px;color:var(--muted);margin:0}
+  .kicker{font-size:17px;color:var(--muted);margin-top:18px}
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:26px;
+    padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+  .slide.dark .foot{border-color:#2a2f37;color:#8b93a1}
+  .brand{font-weight:600;letter-spacing:.02em}
+  .disc{font-size:13px;color:var(--muted);line-height:1.5;margin-top:18px;max-width:64ch}
+  .cta-btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:18px;
+    padding:14px 26px;border-radius:9px;margin-top:8px}
+  .num{font-family:var(--display);color:var(--accent);font-weight:700}
+  @media(max-width:680px){.slide{padding:34px 26px;min-height:0}h1{font-size:38px}h2{font-size:28px}.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', cls:'', ey:'A live masterclass', h1:'The Owned Store',
+    lead:'How to build a profitable online store you actually own, the family-first way.',
+    foot:['My Wife Quit Her Job, with Steve Chou','Create A Profitable Online Store']},
+
+  {t:'audience', ey:'Who this is for', h:'You want a store that lasts, not a lottery ticket',
+    p:['This is for you if you want to start, or finally fix, an online store selling your own products. You are not looking for a get-rich-quick dropshipping hack. You want a real business you control, that can grow, and that fits around your family instead of swallowing it.']},
+
+  {t:'trap', cls:'paper', ey:'The promise you have heard', h:'"Just dropship it. Just sell on Amazon."',
+    p:['It sounds easy, and the first version usually is. Pick a trending product, list it, run some ads, watch a sale come in. For a while it can even work.'],
+    kicker:'Then you look closer at what you have actually built.'},
+
+  {t:'reframe', cls:'dark', ey:'The hard part nobody says out loud', h:'You do not own any of it',
+    p:['Not the customer. Not the traffic. Not the product everyone else is selling too. The marketplace owns the buyer, the ad platform owns the reach, and the supplier owns the thing in the box. Change one rule and your business is gone by Friday.']},
+
+  {t:'part', ey:'Part One', h:'You are renting your business',
+    p:['Before we build anything, we have to name the trap. Almost every "start an online store" pitch quietly hands your business to someone else.']},
+
+  {t:'problem', ey:'The core problem', h:'A rented store can disappear three ways',
+    ul:[{text:'The platform changes fees, rankings, or rules, and your "business" moves with it.'},
+        {text:'The product is a commodity: the same dropship listing a hundred sellers run, racing each other to the bottom on price.'},
+        {text:'You never kept the customer, so every sale starts from zero and you pay for the same buyer again and again.'}]},
+
+  {t:'cost', cls:'paper', ey:'What it costs you', h:'Busy, but never building',
+    p:['The rented model keeps you working inside someone else\'s machine. More hours, more money poured into ads, more stress, and nothing that compounds. That is the opposite of why most people wanted a business in the first place.']},
+
+  {t:'part', ey:'Part Two', h:'The owned-store method',
+    p:['Here is the path I used to build Bumblebee Linens and teach in Create A Profitable Online Store. Four moves, in order, then the engine that makes it compound.']},
+
+  {t:'ladder', ey:'The method, in one view', h:'Zero to your first sale, on your own store',
+    steps:[{n:'1',h:'Validate demand',p:'Prove people will pay before you spend.'},
+           {n:'2',h:'Source a supplier',p:'A real product with real margin.'},
+           {n:'3',h:'Launch a store you own',p:'Your site, your checkout, your list.'},
+           {n:'4',h:'Get first sales',p:'Traffic that proves the model.'}],
+    kicker:'Then we add the engine that makes it compound.'},
+
+  {t:'pillar', ey:'Pillar one', n:'01', h:'Find a product and validate real demand',
+    p:['Pick a profitable niche and prove people will pay before you spend a dime. Most beginners fall in love with a product first and check demand never. We do it the other way around, with simple validation you can run this week.']},
+
+  {t:'pillar', ey:'Pillar two', n:'02', h:'Source a supplier you can trust',
+    p:['Find dependable wholesale suppliers, overseas and here at home, and build a real relationship with them. This is how you get a product that is yours, with margin, instead of a dropship listing a hundred other people are selling.']},
+
+  {t:'pillar', ey:'Pillar three', n:'03', h:'Launch a store you own',
+    p:['Set up your own online store the right way, with no technical experience needed. Your store, your checkout, your customer list. You are building on land you own, not renting space on a marketplace that can change the rules overnight.']},
+
+  {t:'pillar', ey:'Pillar four', n:'04', h:'Get your first paying customers',
+    p:['Proven traffic to land the first sales and prove the model is real. First sales are a decision point, not a finish line, and they tell you exactly what to scale.']},
+
+  {t:'engine', cls:'dark', ey:'The engine', h:'Own the audience, own the list',
+    p:['The stores that last are not the ones chasing the cheapest click. They own an audience. A blog, a channel, a podcast, and above all an email list you control. That list is the one asset no platform can take, and it is what turns a store into a business that keeps selling.']},
+
+  {t:'own', ey:'The principle under all of it', h:'Build on land you own',
+    ul:[{text:'Your own store instead of a marketplace listing.',tick:true},
+        {text:'Your own product and supplier instead of a shared dropship link.',tick:true},
+        {text:'Your own audience and email list instead of rented reach.',tick:true}],
+    kicker:'Own those three and you have a business, not a side hustle at someone else\'s mercy.'},
+
+  {t:'part', ey:'Part Three', h:'What a family-first store looks like',
+    p:['The point was never to work more. It was to build something that funds your life and still lets you be there for it.']},
+
+  {t:'proof', cls:'paper', ey:'A real example', h:'Bumblebee Linens',
+    p:['My wife and I started a wedding linens store so she could leave her job before our first child arrived. Selling our own products on our own store, it replaced her six-figure salary inside the first year, and it is still a seven-figure business today.'],
+    kicker:'Same method, same four moves, same engine. Nothing we rented.'},
+
+  {t:'whyme', ey:'Why learn this from me', h:'I have been doing this since 2007',
+    p:['I am Steve Chou. Alongside our store I built My Wife Quit Her Job into a top-ranked ecommerce podcast and channel, wrote the Wall Street Journal bestseller The Family First Entrepreneur, and have taught the owned-store method to more than a hundred thousand students. This is the exact path, taught live.']},
+
+  {t:'recap', ey:'Recap', h:'The owned store, start to finish',
+    ul:[{text:'Validate demand before you spend.'},
+        {text:'Source a supplier and own a real product.'},
+        {text:'Launch a store you control.'},
+        {text:'Earn first sales, then scale what works.'},
+        {text:'Own the audience and the list so it compounds.'}]},
+
+  {t:'cta', cls:'dark', ey:'Your next step', h:'Build it with me',
+    p:['Create A Profitable Online Store is where I teach this method in full, with 450+ lessons and weekly live office hours, so you can build a store you own at your own pace with me in your corner.'],
+    cta:'Enroll in Create A Profitable Online Store',
+    disc:'Educational content only. No income or result is guaranteed. Results vary and depend on your own work, market, and effort. The store examples shared are my own and are not a promise of income.',
+    foot:['My Wife Quit Her Job, with Steve Chou','mywifequitherjob.com']}
+];
+
+function esc(x){return x;}
+function paras(a){return (a||[]).map(t=>`<p>${t}</p>`).join('');}
+function bullets(a){return a&&a.length?`<ul>${a.map(b=>`<li class="${b.tick?'tick':''}">${b.text}</li>`).join('')}</ul>`:'';}
+function steps(a){return a&&a.length?`<div class="steps">${a.map(s=>`<div class="step"><div class="n">${s.n}</div><h4>${s.h}</h4><p>${s.p}</p></div>`).join('')}</div>`:'';}
+function foot(f){return f?`<div class="foot"><span class="brand">${f[0]}</span><span>${f[1]}</span></div>`:'';}
+
+function slide(s){
+  const cls = 'slide' + (s.cls? ' '+s.cls : '');
+  let inner = '';
+  if(s.ey) inner += `<p class="eyebrow">${s.ey}</p>`;
+  if(s.h1) inner += `<h1>${s.h1}</h1>`;
+  if(s.h) inner += `<h2>${s.n?`<span class="num">${s.n}</span>&nbsp;&nbsp;`:''}${s.h}</h2>`;
+  if(s.lead) inner += `<p class="lead">${s.lead}</p>`;
+  inner += paras(s.p);
+  inner += steps(s.steps);
+  inner += bullets(s.ul);
+  if(s.kicker) inner += `<p class="kicker">${s.kicker}</p>`;
+  if(s.cta) inner += `<span class="cta-btn">${s.cta}</span>`;
+  if(s.disc) inner += `<p class="disc">${s.disc}</p>`;
+  inner += foot(s.foot);
+  return `<section class="${cls}">${inner}</section>`;
+}
+document.getElementById('deck').innerHTML = S.map(slide).join('');
+</script>
+</body>
+</html>
