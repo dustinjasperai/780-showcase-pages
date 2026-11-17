@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Sellable Billing Company — a masterclass with Amanda DeMoura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a2532;        /* her dominant brand navy (brand.json #1 ranked hex, 66 uses) = deck ground */
+    --panel:#223040;     /* lifted navy panel, derived from --bg */
+    --deep:#121c27;      /* deeper navy for accent slides */
+    --ink:#f4efe6;       /* warm cream text, from her light reading surfaces */
+    --muted:#aeb8c4;
+    --rule:#33424f;
+    --accent:#f37021;    /* her brand orange (brand.json #2 ranked hex) */
+    --display:'Playfair Display',Georgia,serif;
+    --text:'Questrial',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--text);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:56px 56px 52px;margin:0 0 26px;min-height:460px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+  .slide.dark{background:var(--deep);color:var(--ink);border-color:var(--deep)}
+  .slide.dark .eyebrow{color:var(--accent)}
+  .slide.dark .muted{color:#aeb8c4}
+  .eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:18px}
+  .mark{width:52px;height:4px;background:var(--accent);border-radius:3px;margin:0 0 22px}
+  h1{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.12}
+  .promise{font-size:20px;color:var(--muted);margin-top:22px;max-width:40ch;line-height:1.5}
+  .muted{color:var(--muted)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 34px;position:relative;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:0}
+  li::before{content:"";position:absolute;left:4px;top:21px;width:14px;height:3px;background:var(--accent);border-radius:2px}
+  .step{display:flex;align-items:baseline;gap:18px;margin-bottom:6px}
+  .step .n{font-family:var(--display);font-size:46px;font-weight:700;color:var(--accent);line-height:1}
+  .step h2{font-size:30px}
+  .big{font-family:var(--display);font-size:40px;font-weight:600;line-height:1.14;max-width:24ch}
+  .sub{font-size:18px;color:var(--muted);margin-top:18px;max-width:54ch;line-height:1.55}
+  .foot{font-size:13px;color:var(--muted);margin-top:30px;max-width:60ch;line-height:1.5}
+  .cta-line{font-size:22px;margin-top:14px;line-height:1.5;max-width:44ch}
+  .pill{display:inline-block;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent);border:1px solid rgba(243,112,33,.5);border-radius:999px;padding:6px 14px;margin-bottom:22px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  .card{background:var(--deep);border:1px solid var(--rule);border-radius:10px;padding:20px}
+  .card .k{font-family:var(--display);font-size:22px;color:var(--ink);margin-bottom:6px}
+  .card .v{font-size:15px;color:var(--muted);line-height:1.45}
+  @media(max-width:640px){.slide{padding:34px 26px}h1{font-size:36px}h2{font-size:26px}.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A masterclass with Amanda DeMoura',
+   h1:'The Sellable<br>Billing Company',
+   promise:'How to build a dental billing business that pays you now and sells for seven figures later.'},
+
+  {t:'forwho', eyebrow:'Who this is for', items:[
+    'You run, or want to start, a dental billing company.',
+    'You are great at the billing itself, but you are doing every part of the business.',
+    'You want the company to be worth something one day, not just busy today.']},
+
+  {t:'statement', eyebrow:'The trap',
+   big:'Most dental billing owners build themselves a job, not a business.',
+   sub:'You traded a front desk for a laptop, and the ceiling came with you. More clients means more of your hours, until there are no more hours to give.'},
+
+  {t:'statement', dark:true, eyebrow:'The hard truth',
+   big:'If your company cannot run without you, you do not own a company. You own a very demanding client.',
+   sub:'The good news: the fix is a set of decisions, and you can make them on purpose.'},
+
+  {t:'part', dark:true, pill:'Part One', h:'Why most billing companies never become assets'},
+
+  {t:'statement', eyebrow:'The core problem',
+   big:'Being the best biller in the room is what keeps you small.',
+   sub:'The skill that wins your first clients, clean claims and fast AR, is the same skill that traps you. When every result runs through your hands, the company can only ever be as big as your week.'},
+
+  {t:'buyers', eyebrow:'What a buyer actually pays for',
+   sub:'A buyer is not buying your talent. They are buying what keeps paying after you leave.',
+   cards:[
+     {k:'Recurring revenue', v:'Contracts that renew, not projects that end.'},
+     {k:'Documented systems', v:'The company in writing, so it survives you.'},
+     {k:'A real team', v:'Delivery that does not depend on your hands.'}]},
+
+  {t:'part', dark:true, pill:'Part Two', h:'The Blueprint: biller to owner to exit'},
+
+  {t:'step', n:'1', h:'Foundation and niche',
+   b:'Pick the business you actually want before you build it. Specialty billing, credentialing, AR, startups or PPO work are different companies. Choose lifestyle, boutique or agency on purpose, then set up the legal and financial base to match.'},
+
+  {t:'step', n:'2', h:'Pricing that survives',
+   b:'The single decision that decides whether a new billing company lives: retainer, percentage of collections, or audit based. Package your offer so it is profitable on the first client, not the fiftieth.'},
+
+  {t:'step', n:'3', h:'The technician to CEO shift',
+   b:'A biller who is great at claims is not yet running a company. This is the boundary, delegation and leadership work that moves you out of the daily queue and into the seat where the business is actually built.'},
+
+  {t:'step', n:'4', h:'Systems that run without you',
+   b:'SOPs, HIPAA basics, a clean tech stack, and claims, AR and client communication that happen whether or not you are at your desk. Documented systems are what a buyer is really paying for.'},
+
+  {t:'step', n:'5', h:'Team and scale',
+   b:'When and who to hire, how to train, and the culture that lets other people deliver your standard. Scale is just your standard, repeated by someone who is not you.'},
+
+  {t:'step', n:'6', h:'The exit',
+   b:'What turns a book of clients into a seven figure sale: recurring revenue, documented systems, a real team, and clean numbers. Most owners never learn this because almost none of them have made the sale.'},
+
+  {t:'part', dark:true, pill:'Part Three', h:'The company that pays you and sells'},
+
+  {t:'forwho', eyebrow:'A week in the built company', items:[
+    'Claims and AR move through your systems and your team, not your inbox.',
+    'New clients sign a priced, packaged offer you do not have to reinvent.',
+    'Your numbers are clean enough to show a buyer tomorrow.',
+    'You spend your time on strategy and relationships, the CEO work.']},
+
+  {t:'statement', dark:true, eyebrow:'Why learn this from me',
+   big:'I built Essential Dental Services from scratch, scaled it to seven figures, and sold it in 2024.',
+   sub:'20+ years in dentistry, from dental assistant to practice administrator. ADA dental coding certificate and a Fellowship with the American Association of Dental Office Management. I teach the exit because I have actually made one.'},
+
+  {t:'statement', eyebrow:'The path',
+   big:'Foundation. Pricing. The CEO shift. Systems. Team. Exit.',
+   sub:'Six decisions that turn a skilled biller into the owner of a company worth buying.'},
+
+  {t:'cta', eyebrow:'Your next step',
+   h:'Let us build yours into a sellable company.',
+   line:'Join the Dental Billing Business Blueprint, or book a 1:1 coaching call with me, and we will map your foundation, pricing and exit together.',
+   disc:'This masterclass is educational. No income, growth or sale result is guaranteed. Results vary and depend on your effort, your market and your execution.'}
+];
+
+function el(html){const s=document.createElement('section');s.className='slide';return [s,html];}
+function slide(s){
+  const d=document.createElement('section');
+  d.className='slide'+(s.dark?' dark':'');
+  let h='';
+  if(s.eyebrow) h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.t==='title'){
+    h+=`<div class="mark"></div><h1>${s.h1}</h1><p class="promise">${s.promise}</p>`;
+  }else if(s.t==='forwho'){
+    h+=`<ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  }else if(s.t==='statement'){
+    h+=`<div class="mark"></div><p class="big">${s.big}</p>`+(s.sub?`<p class="sub">${s.sub}</p>`:'');
+  }else if(s.t==='part'){
+    d.innerHTML=`<div class="pill">${s.pill}</div><h2 style="font-size:40px;max-width:20ch">${s.h}</h2>`;
+    return d;
+  }else if(s.t==='buyers'){
+    h+=`<div class="mark"></div><p class="sub" style="margin-top:0;margin-bottom:6px">${s.sub}</p>`+
+       `<div class="grid3">${s.cards.map(c=>`<div class="card"><div class="k">${c.k}</div><div class="v">${c.v}</div></div>`).join('')}</div>`;
+  }else if(s.t==='step'){
+    h=`<div class="step"><span class="n">${s.n}</span><h2>${s.h}</h2></div><p class="sub" style="margin-top:14px;max-width:54ch">${s.b}</p>`;
+  }else if(s.t==='cta'){
+    h+=`<div class="mark"></div><h2 style="font-size:36px;max-width:22ch">${s.h}</h2>`+
+       `<p class="cta-line">${s.line}</p><p class="foot">${s.disc}</p>`;
+  }
+  d.innerHTML=h;
+  return d;
+}
+const deck=document.getElementById('deck');
+S.forEach(s=>deck.appendChild(slide(s)));
+</script>
+</body>
+</html>
