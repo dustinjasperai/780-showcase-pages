@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOW UP — The Mid-Career Masterclass | John Neral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Quattrocento+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#10211c;
+    --panel:#127059;
+    --rule:#566566;
+    --accent:#179375;
+    --ink:#ecf0f1;
+    --ink-soft:#c7d3d1;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Quattrocento Sans',system-ui,sans-serif;line-height:1.6;overflow:hidden;}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;}
+  .slide.on{display:block;animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .eyebrow{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:22px;}
+  h1{font-family:'PT Serif',Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,62px);line-height:1.1;letter-spacing:-.01em;margin-bottom:22px;}
+  h2{font-family:'PT Serif',Georgia,serif;font-weight:700;font-size:clamp(26px,4.4vw,44px);line-height:1.15;margin-bottom:20px;}
+  p{font-size:clamp(17px,2.2vw,22px);color:var(--ink-soft);max-width:40ch;margin-bottom:16px;}
+  p.lead{color:var(--ink);font-size:clamp(19px,2.6vw,26px);max-width:34ch;}
+  .big{font-family:'PT Serif',Georgia,serif;font-size:clamp(70px,16vw,150px);line-height:.95;color:var(--accent);font-weight:700;}
+  ul{list-style:none;margin-top:10px;}
+  li{font-size:clamp(17px,2.3vw,23px);padding:14px 0;border-top:1px solid rgba(86,101,102,.5);display:flex;gap:18px;align-items:baseline;}
+  li:last-child{border-bottom:1px solid rgba(86,101,102,.5);}
+  li b{font-family:'PT Serif',Georgia,serif;color:var(--accent);font-size:1.15em;min-width:1.4em;}
+  li span{color:var(--ink-soft);}
+  li span em{color:var(--ink);font-style:normal;font-weight:700;}
+  .tag{display:inline-block;background:var(--panel);color:var(--ink);padding:5px 14px;border-radius:2px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:24px;}
+  .disc{color:var(--rule);font-size:13px;max-width:52ch;margin-top:26px;line-height:1.5;}
+  .cta-line{font-family:'PT Serif',Georgia,serif;font-size:clamp(20px,3vw,30px);color:var(--ink);margin-top:10px;}
+  .credit{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px;}
+  .credit div{border-left:3px solid var(--accent);padding-left:14px;}
+  .credit b{display:block;font-family:'PT Serif',serif;font-size:clamp(22px,3vw,34px);color:var(--ink);}
+  .credit span{font-size:14px;color:var(--ink-soft);}
+  #nav{position:fixed;bottom:20px;right:26px;font-size:13px;color:var(--rule);letter-spacing:.1em;}
+  #bar{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);transition:width .3s;}
+  .hint{position:fixed;bottom:20px;left:26px;font-size:12px;color:var(--rule);letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="bar"></div>
+<div id="nav"></div>
+<div class="hint">Use arrow keys to navigate</div>
+<script>
+const S=[
+ {t:'title'},
+ {t:'who',eyebrow:'Who this is for',h:'You are good at your job. You are also invisible.',p:'This is for the mid-career professional who is doing strong work and quietly wondering why the recognition, the raise, or the next role keeps going to someone else.'},
+ {t:'trap',eyebrow:'The trap',h:'Waiting to be noticed is a strategy. It is just a bad one.',p:'Most of us were taught that if we keep our heads down and do great work, the right people will eventually see it and reward it. At mid-career, that quietly stops being true.'},
+ {t:'reframe',eyebrow:'The reframe',h:'Nobody is coming to tap you on the shoulder.',p:'The people one level up are not waiting to discover you. They are waiting to see you show up: to hear what you want, to watch you take the next opportunity, to notice the value you already create.'},
+ {t:'part',tag:'Part one',h:'Your career is a route, not a ladder.',p:'A ladder has one direction and one person ahead of you on every rung. A route has many ways forward, and you are the one holding the map. That map is your Mid-Career GPS.'},
+ {t:'gps',eyebrow:'The Mid-Career GPS',h:'Four questions that locate you.',list:[['1','Where am I right now, honestly?'],['2','Where do I actually want to go next?'],['3','What is the real distance between the two?'],['4','What is the single next mile I can drive today?']],note:'You build the GPS one mile at a time. You do not need the whole route before you move.'},
+ {t:'part',tag:'Part two',h:'SHOW UP',p:'Six strategies to lead a more energetic and impactful career. Not six things to add to your plate. Six ways to be seen for the work you already do.'},
+ {t:'s',eyebrow:'S',h:'Set ground rules.',p:'Decide how you work, what you protect, and what you say yes and no to, before someone else decides it for you. Boundaries are the first form of visibility.'},
+ {t:'h',eyebrow:'H',h:'Have intentional conversations.',p:'The promotion conversation, the stretch-project ask, the "here is what I want next" talk. The ones that feel awkward are the ones that move your career. Have them on purpose.'},
+ {t:'o',eyebrow:'O',h:'Own where you are.',p:'Not where you wish you were, not where you think you should be. An honest read of your current seat is the only place a real GPS route can start from.'},
+ {t:'w',eyebrow:'W',h:'Welcome new opportunities.',p:'The stretch assignment, the cross-team project, the thing slightly outside your title. Visibility lives at the edge of your comfort, not in the center of your routine.'},
+ {t:'u',eyebrow:'U',h:'Use your genius.',p:'Lead from the two or three things you do better than almost anyone around you. Your genius is not your whole job description. It is the part worth being known for.'},
+ {t:'p',eyebrow:'P',h:'Protect and promote your brand.',p:'Your professional brand is simply what people say about your work when you are not in the room. You can shape that. Showing up is how.'},
+ {t:'triad',tag:'Part three',h:'The Belief Triad',p:'Before the strategies work, three beliefs have to hold: that your value is real, that you are worthy of the next step, and that you have agency over the route. Most mid-career stalls are a crack in one of these, not a skills gap.'},
+ {t:'practice',eyebrow:'The first sixty days',h:'What showing up actually looks like.',list:[['>','One intentional conversation you have been avoiding'],['>','One opportunity you stop waiting for and ask for'],['>','One piece of your genius made visible to the right person'],['>','One honest update to how you talk about your own work']],note:'Small, specific, repeatable. That is the whole method.'},
+ {t:'why',eyebrow:'Why me',credit:[['16 yrs','in education, then a full career pivot of my own'],['2 books','SHOW UP and Your Mid-Career GPS'],['360+ episodes','The Mid-Career GPS Podcast']],p:'I coach from the middle of a career, because I navigated my own. This is the map I wish I had.'},
+ {t:'cta',disc:'This masterclass is educational. No promotion, raise, job offer, or financial result is guaranteed. Results vary and depend on your own situation, effort, and choices.'}
+];
+
+const stage=document.getElementById('stage');
+let i=0;
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="slide"><div class="eyebrow">A live mid-career masterclass with John Neral</div>
+      <h1>SHOW UP</h1>
+      <p class="lead">How mid-career professionals get seen, valued, and promoted where they already are.</p></div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide"><div class="eyebrow">Your next mile</div>
+      <h2>Ready to stop waiting to be noticed?</h2>
+      <p class="cta-line">If this is the map you have been missing, come build your Mid-Career GPS with me inside the SHOW UP Leadership Lab and my coaching.</p>
+      <p class="cta-line" style="color:var(--accent);">johnneral.com &nbsp;&middot;&nbsp; The Mid-Career GPS Podcast</p>
+      <div class="disc">${s.disc}</div></div>`;
+  }
+  let h='<div class="slide">';
+  if(s.tag) h+=`<div class="tag">${s.tag}</div>`;
+  if(s.eyebrow) h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.h) h+=`<h2>${s.h}</h2>`;
+  if(s.p) h+=`<p${s.list||s.credit?'':' class="lead"'}>${s.p}</p>`;
+  if(s.list){h+='<ul>';s.list.forEach(x=>h+=`<li><b>${x[0]}</b><span>${x[1]}</span></li>`);h+='</ul>';}
+  if(s.credit){h+='<div class="credit">';s.credit.forEach(x=>h+=`<div><b>${x[0]}</b><span>${x[1]}</span></div>`);h+='</div>';}
+  if(s.note) h+=`<p style="margin-top:22px;color:var(--ink);">${s.note}</p>`;
+  h+='</div>';
+  return h;
+}
+function render(){
+  stage.innerHTML=slideHTML(S[i]);
+  stage.firstChild.classList.add('on');
+  document.getElementById('nav').textContent=(i+1)+' / '+S.length;
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+document.addEventListener('click',()=>go(1));
+render();
+</script>
+</body>
+</html>
