@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Empowered Stylist - Price for Profit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0c0b;        /* her ground (dark scheme) */
+    --panel:#141211;     /* her near-black panel */
+    --rule:#2b2723;      /* muted cream-gray hairline, from #8a827a */
+    --ink:#f5f0eb;       /* her body cream */
+    --head:#fcedff;      /* her h1/h2 pale lavender */
+    --accent:#caff4a;    /* her dominant lime (link color, 37 uses) */
+    --pop:#e427af;       /* her magenta button, single pop */
+    --muted:#8a827a;     /* her warm gray */
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Manrope',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#050403;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .stage{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vmin 9vmin;background:var(--bg);opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .slide::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(130vmin 90vmin at 88% -10%, rgba(202,255,74,.07), transparent 60%),
+    radial-gradient(120vmin 90vmin at -10% 115%, rgba(228,39,175,.06), transparent 60%);
+    pointer-events:none}
+  .inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+    font-size:1.5vmin;color:var(--accent)}
+  .kicker{font-family:var(--sans);font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    font-size:1.4vmin;color:var(--muted)}
+  h1{font-family:var(--serif);font-weight:700;color:var(--head);font-size:8.6vmin;line-height:1.02;
+    letter-spacing:-.01em;margin:2.4vmin 0}
+  h2{font-family:var(--serif);font-weight:600;color:var(--head);font-size:6.2vmin;line-height:1.06;
+    margin:2vmin 0 2.4vmin}
+  h3{font-family:var(--serif);font-weight:600;color:var(--head);font-size:3.6vmin;line-height:1.1}
+  p{font-size:2.5vmin;line-height:1.5;max-width:60ch;color:var(--ink)}
+  p.lead{font-size:3vmin;color:var(--ink)}
+  .big{font-family:var(--serif);font-weight:600;font-size:5.4vmin;line-height:1.12;color:var(--head);max-width:22ch}
+  .accent{color:var(--accent)}
+  .pop{color:var(--pop)}
+  .rule{height:1px;background:var(--rule);margin:3vmin 0;width:min(560px,70%)}
+  .grid{display:grid;gap:2.4vmin;margin-top:3vmin}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:3vmin 3vmin}
+  .card .n{font-family:var(--serif);font-size:4.4vmin;color:var(--accent);font-weight:700}
+  .card h3{font-size:2.9vmin;margin:.6vmin 0 1vmin}
+  .card p{font-size:2vmin;color:var(--ink);opacity:.92}
+  ul{list-style:none;margin-top:2.4vmin}
+  ul li{font-size:2.5vmin;line-height:1.5;padding-left:3.4vmin;position:relative;margin:1.4vmin 0;max-width:58ch}
+  ul li::before{content:"";position:absolute;left:0;top:1.4vmin;width:1.5vmin;height:1.5vmin;
+    background:var(--accent);border-radius:3px}
+  .ledger{display:grid;grid-template-columns:1fr auto;gap:1.2vmin 3vmin;max-width:680px;margin-top:3vmin;
+    font-family:var(--sans)}
+  .ledger .lbl{font-size:2.4vmin;color:var(--ink);border-bottom:1px dashed var(--rule);padding-bottom:1.2vmin}
+  .ledger .val{font-size:2.4vmin;color:var(--accent);text-align:right;font-weight:700;border-bottom:1px dashed var(--rule);padding-bottom:1.2vmin}
+  .ledger .tot{font-weight:700;color:var(--head);border-bottom:none}
+  .ledger .totv{color:var(--pop);border-bottom:none;font-size:3vmin}
+  .credit{display:flex;gap:4vmin;flex-wrap:wrap;margin-top:3vmin}
+  .credit div{min-width:30%}
+  .credit .n{font-family:var(--serif);font-size:5vmin;color:var(--accent);font-weight:700;line-height:1}
+  .credit .c{font-size:1.9vmin;color:var(--muted);margin-top:.6vmin}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:4vmin 4vmin;margin-top:3vmin;max-width:760px}
+  .pill{display:inline-block;background:var(--pop);color:#0b0a09;font-weight:700;font-family:var(--sans);
+    padding:1.6vmin 3vmin;border-radius:999px;font-size:2.3vmin;margin-top:1.6vmin}
+  .brandline{position:absolute;bottom:4vmin;left:9vmin;font-family:var(--sans);font-size:1.5vmin;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .disclaimer{font-size:1.6vmin;color:var(--muted);max-width:70ch;margin-top:3vmin;line-height:1.5}
+  .nums{font-family:var(--serif);font-size:16vmin;color:var(--accent);font-weight:700;line-height:.9}
+  .hud{position:fixed;bottom:2.2vmin;right:3vmin;font-family:var(--sans);font-size:1.5vmin;color:var(--muted);z-index:10}
+  .nav{position:fixed;bottom:2vmin;left:3vmin;display:flex;gap:1vmin;z-index:10}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);font-family:var(--sans);
+    font-size:1.8vmin;padding:.8vmin 1.6vmin;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="hud" id="hud"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="eyebrow">The Empowered Stylist</div>
+    <h1>Price for Profit</h1>
+    <p class="lead">How to charge what you're worth behind the chair, and make more money in fewer hours.</p>
+    <div class="rule"></div>
+    <div class="kicker">A live masterclass with Angie Mamone</div>`},
+
+  {t:'promise', html:`
+    <div class="eyebrow">What you walk away with</div>
+    <h2>One hour. Answers, not notes.</h2>
+    <ul>
+      <li>The real reason a fully booked chair can still leave you broke.</li>
+      <li>How to set a price on numbers, not nerves: costs, time, and margin.</li>
+      <li>The handful of systems that take the business out of your head.</li>
+      <li>What fewer hours and more money actually looks like, week to week.</li>
+    </ul>`},
+
+  {t:'who', html:`
+    <div class="eyebrow">Who this is for</div>
+    <h2>You are great at the hair.<br>The business is the part nobody taught.</h2>
+    <p class="lead">Beauty school taught you the craft. It never taught you pricing, margin, or how to build a column that pays you like a business instead of a job.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">The trap</div>
+    <p class="big">"I'm booked every day this week, and my account is still empty."</p>
+    <p style="margin-top:3vmin">If that thought has crossed your mind at 11pm, you are not lazy and you are not bad with money. You were handed a craft without the math that makes it pay.</p>`},
+
+  {t:'reframe', html:`
+    <div class="kicker">The hard reframe</div>
+    <h2 class="accent">Being fully booked is not a business.</h2>
+    <p class="lead">It is a job with no ceiling. More clients only means more hours, until the only lever left to pull is the one almost nobody teaches: the price.</p>`},
+
+  {t:'part', html:`
+    <div class="eyebrow">Part One</div>
+    <h1>The core problem</h1>
+    <p class="lead">Most stylists price by looking at the salon down the street, then quietly resent every client who pays it.</p>`},
+
+  {t:'problem', html:`
+    <div class="eyebrow">Pricing by vibes</div>
+    <h2>A copied price is a guess.</h2>
+    <p>When your price comes from the salon down the street, you inherit their costs, their speed, and their mistakes. You have no idea if you are making money on a full head of extensions or quietly paying to do them.</p>
+    <ul>
+      <li>Product and color written off as "supplies."</li>
+      <li>Hours of unpaid planning, DMs, and rebooking.</li>
+      <li>No-shows and redos that erase a whole day.</li>
+    </ul>`},
+
+  {t:'cost', html:`
+    <div class="kicker">What it costs you</div>
+    <p class="big">Undercharge by $40 a client, 25 clients a week, and that is over $50,000 a year you worked for and gave away.</p>
+    <p style="margin-top:2.4vmin;color:var(--muted);font-size:2vmin">Illustrative math, your numbers decide the real figure.</p>`},
+
+  {t:'part', html:`
+    <div class="eyebrow">Part Two</div>
+    <h1>The Empowered Stylist method</h1>
+    <p class="lead">A price built from four things you can actually measure, so you charge with zero guesswork.</p>`},
+
+  {t:'pillars', html:`
+    <div class="eyebrow">The method</div>
+    <h2>Price = Costs + Time + Margin</h2>
+    <div class="grid g3">
+      <div class="card"><div class="n">01</div><h3>Costs</h3><p>Every dollar the service actually eats: product, color, tools, the chair, the overhead behind the chair.</p></div>
+      <div class="card"><div class="n">02</div><h3>Time</h3><p>Not just the install. Consult, prep, cleanup, and the admin the appointment creates.</p></div>
+      <div class="card"><div class="n">03</div><h3>Margin</h3><p>The profit you decide on, on purpose, before you ever quote a number.</p></div>
+    </div>`},
+
+  {t:'ledger', html:`
+    <div class="eyebrow">What the math looks like</div>
+    <h3>A full head, priced on purpose</h3>
+    <div class="ledger">
+      <div class="lbl">Hair and color cost</div><div class="val">your cost</div>
+      <div class="lbl">Chair time (consult to cleanup)</div><div class="val">your hours</div>
+      <div class="lbl">Overhead per hour</div><div class="val">your rate</div>
+      <div class="lbl">Margin you choose</div><div class="val">your call</div>
+      <div class="lbl tot">Your price</div><div class="totv tot">set, not guessed</div>
+    </div>
+    <p style="margin-top:2.6vmin">Same calculator, every service. The number stops being a feeling and starts being a decision.</p>`},
+
+  {t:'confidence', html:`
+    <div class="eyebrow">Pricing clarity</div>
+    <h2>Confidence is a byproduct of math.</h2>
+    <p class="lead">When you know your number is right, you stop flinching when you say it. The client feels that certainty, and the discount conversation quietly disappears.</p>`},
+
+  {t:'systems', html:`
+    <div class="eyebrow">Part Two, continued</div>
+    <h2>Systems take the business out of your head.</h2>
+    <p>Pricing sets the ceiling. Systems are how you stop re-deciding the same things every week and hand your Sunday nights back.</p>
+    <ul>
+      <li>Consult and intake forms that quote for you.</li>
+      <li>A repeatable rebooking rhythm so the column fills itself.</li>
+      <li>A weekly plan built around a goal, not a to-do pile.</li>
+    </ul>`},
+
+  {t:'craft', html:`
+    <div class="eyebrow">Craft and business, together</div>
+    <h2>The install is only half the money.</h2>
+    <p class="lead">Color over extensions, clean blends, and troubleshooting are what make a client rebook for years. The method prices that expertise instead of giving it away as a "touch up."</p>`},
+
+  {t:'part', html:`
+    <div class="eyebrow">Part Three</div>
+    <h1>Fewer hours, more money</h1>
+    <p class="lead">Priced right and run on systems, the business finally shuts off at night.</p>`},
+
+  {t:'result', html:`
+    <div class="eyebrow">Your week, after</div>
+    <h2>Same income. Days that are yours again.</h2>
+    <p>You raise the value of each hour instead of adding more hours. The chair you love becomes a business that pays predictably, with room to breathe. You do not want the 9-to-5. You want this to pay like one, on your terms.</p>`},
+
+  {t:'why', html:`
+    <div class="eyebrow">Why learn this from Angie</div>
+    <h2>Fifteen years behind the chair, and the receipts to prove the method.</h2>
+    <div class="credit">
+      <div><div class="n">15+</div><div class="c">Years as a working stylist and salon owner</div></div>
+      <div><div class="n">1,000+</div><div class="c">Stylists taught through The Empowered Stylist</div></div>
+      <div><div class="n">200+</div><div class="c">Lessons of business and technical content</div></div>
+    </div>
+    <p style="margin-top:2.6vmin;font-size:2.1vmin;color:var(--ink)">Second generation stylist. Former National Color Educator for Paul Mitchell and Director of Education. Still behind the chair, running the systems she teaches.</p>`},
+
+  {t:'line', html:`
+    <div class="kicker">The one thing to remember</div>
+    <p class="big">You were never <span class="pop">just</span> a hairdresser. Price like the business owner you already are.</p>`},
+
+  {t:'cta', html:`
+    <div class="eyebrow">Your next step</div>
+    <h2>Keep going inside The Empowered Stylist.</h2>
+    <p class="lead">The pricing course and calculator, the systems, and the live calls that turn this hour into a business that holds.</p>
+    <div class="cta-box">
+      <h3>The Empowered Stylist: Next Level</h3>
+      <p style="margin-top:1.2vmin">Three full courses, 40+ live calls a year, guest educators, and a community of stylists who get it.</p>
+      <span class="pill">Work with Angie at justahairdresser.com</span>
+    </div>
+    <p class="disclaimer">Educational content only. No income or specific result is guaranteed. Results vary with your market, your costs, your pricing, and the work you put in.</p>`}
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+  d.innerHTML='<div class="inner">'+s.html+'</div><div class="brandline">The Empowered Stylist &middot; Just a Hairdresser</div>';
+  stage.appendChild(d);});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];const hud=document.getElementById('hud');
+function show(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(slides.length-1,n));
+  slides[cur].classList.add('on');hud.textContent=(cur+1)+' / '+slides.length;}
+function go(d){show(cur+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);});
+hud.textContent='1 / '+slides.length;
+</script>
+</body>
+</html>
