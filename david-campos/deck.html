@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 12 Pillars of a Top-40 Sound | Advanced Music Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0e1116; --panel:#161b22; --rule:#273039;
+    --ink:#e8eaed; --muted:#9aa4ad;
+    --accent:#2ecc71; --accent-2:#918bee;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Open Sans',system-ui,sans-serif; line-height:1.6;
+    overflow:hidden;
+  }
+  #stage{position:fixed; inset:0;}
+  .slide{position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+    padding:7vh 9vw; opacity:0; transition:opacity .3s ease;}
+  .slide.active{display:flex; opacity:1;}
+  h1{font-family:'Fira Sans',sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,66px); line-height:1.08; letter-spacing:-0.015em;}
+  h2{font-family:'Fira Sans',sans-serif; font-weight:700; font-size:clamp(24px,3.6vw,44px); line-height:1.14; letter-spacing:-0.01em;}
+  .eyebrow{font-family:'Fira Sans',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.2em;
+    font-size:clamp(11px,1.1vw,14px); color:var(--accent); margin-bottom:22px;}
+  .lead{font-size:clamp(17px,2vw,25px); color:var(--muted); max-width:42ch; margin-top:22px;}
+  p.body{font-size:clamp(16px,1.7vw,21px); color:var(--muted); max-width:46ch; margin-top:16px;}
+  .meter{display:flex; gap:6px; margin-bottom:30px;}
+  .meter span{width:26px; height:7px; border-radius:2px; background:var(--rule);}
+  .meter span.on{background:var(--accent);}
+  .part{color:var(--accent-2); font-family:'Fira Sans',sans-serif; font-weight:700; font-size:clamp(14px,1.4vw,18px); text-transform:uppercase; letter-spacing:.16em; margin-bottom:18px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:34px; max-width:1000px;}
+  .card{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--accent); border-radius:10px; padding:22px 24px;}
+  .card .n{font-family:'Fira Sans',sans-serif; font-weight:800; color:var(--accent-2); font-size:14px; letter-spacing:.1em;}
+  .card h3{font-family:'Fira Sans',sans-serif; font-weight:700; font-size:clamp(17px,1.7vw,21px); margin:6px 0 8px;}
+  .card p{font-size:clamp(14px,1.3vw,16px); color:var(--muted);}
+  ul.clean{margin-top:26px; max-width:50ch; list-style:none;}
+  ul.clean li{position:relative; padding-left:26px; margin-bottom:14px; font-size:clamp(16px,1.6vw,20px); color:var(--ink);}
+  ul.clean li::before{content:""; position:absolute; left:0; top:12px; width:12px; height:3px; border-radius:2px; background:var(--accent);}
+  .cred{font-size:clamp(16px,1.7vw,21px); color:var(--ink); max-width:48ch; margin-top:18px;}
+  .cred strong{color:var(--accent);}
+  .title-brand{margin-top:46px; font-family:'Fira Sans',sans-serif; font-weight:600; color:var(--muted); font-size:clamp(14px,1.4vw,18px);}
+  .title-brand b{color:var(--ink); font-weight:700;}
+  .cta-steps{display:flex; flex-direction:column; gap:14px; margin-top:30px; max-width:52ch;}
+  .cta-steps .step{display:flex; gap:16px; align-items:flex-start;}
+  .cta-steps .k{font-family:'Fira Sans',sans-serif; font-weight:800; color:var(--accent); font-size:22px; line-height:1.3;}
+  .cta-steps .t{font-size:clamp(16px,1.6vw,20px);}
+  .cta-steps .t span{display:block; color:var(--muted); font-size:clamp(14px,1.3vw,16px);}
+  .disclaimer{margin-top:40px; font-size:12px; color:var(--muted); max-width:62ch; line-height:1.5; opacity:.85;}
+  .counter{position:fixed; bottom:20px; right:26px; font-family:'Fira Sans',sans-serif; font-size:12px; letter-spacing:.14em; color:var(--muted);}
+  .hint{position:fixed; bottom:20px; left:26px; font-size:12px; color:var(--muted); opacity:.7;}
+  @media(max-width:640px){ .slide{padding:6vh 7vw;} .grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="counter"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="hint">Arrow keys or click to advance</div>
+
+<script>
+/* The 12 Pillars of a Top-40 Sound. David Campos, Advanced Music Production.
+   The coach's own masterclass to his own audience, ending on his own CTA. */
+const S = [
+  {t:'title', meter:2, eyebrow:'A Free Music Production Class',
+    h:'The 12 Pillars of a Top-40 Sound',
+    lead:"How to make music that sounds world-class, even from a home studio.",
+    brand:'With <b>David Campos</b>, Advanced Music Production' },
+
+  {t:'point', eyebrow:'The promise',
+    h:"By the end of this class you'll know exactly why your tracks stall one notch below professional.",
+    body:"And you'll have the 12-pillar system that closes that gap, in the order you're meant to use it." },
+
+  {t:'point', eyebrow:'Who this is for',
+    h:'Producers, beatmakers, composers, singers and rappers making music at home.',
+    body:"You already make music you're proud of. You just want it to compete with the records you grew up on." },
+
+  {t:'point', eyebrow:'The trap',
+    h:'You keep buying plugins and sample packs.',
+    body:'The mix still comes out muddy, quiet, a little amateur. So you assume it must be your gear, or worse, your talent.' },
+
+  {t:'statement', eyebrow:'The real reason',
+    h:'It was never the gear.',
+    lead:'A world-class record quietly satisfies 12 things. Miss a few of them and no plugin on earth can rescue the track.' },
+
+  {t:'point', part:'Part One',
+    h:'Why good music still sounds unfinished.',
+    body:"Amateur tracks don't fail randomly. They fail in the same predictable places, every time." },
+
+  {t:'list', eyebrow:'The same four leaks',
+    items:[
+      'Arrangement that never decides what the song is about.',
+      'Levels and tone fighting each other instead of stacking.',
+      'Vocals and drums that sit on top of the track, not inside it.',
+      "A master that's either quiet and safe, or loud and crushed."
+    ] },
+
+  {t:'point', part:'Part Two',
+    h:'The 12 Pillars.',
+    body:'Five stages, in order. Each pillar sets up the next. Work them out of sequence and you spend hours fixing problems you created three steps earlier.' },
+
+  {t:'cards', eyebrow:'Stage 1 of 5', h:'Foundation',
+    body:'Your room, your monitoring, and the small handful of gear choices that actually change the sound.',
+    cards:[
+      { n:'PILLAR 1', title:'Studio and acoustics', p:'Hearing the truth before you touch a fader.' },
+      { n:'PILLAR 2', title:'Gear that matters', p:'What to buy, and the expensive things you can skip.' },
+      { n:'PILLAR 3', title:'Sound sources', p:'Starting from pro-quality sounds, not fighting weak ones.' }
+    ] },
+
+  {t:'cards', eyebrow:'Stage 2 of 5', h:'Composition: the 4 Building Blocks',
+    body:'Chords, drums, bass and melodies. Before you program a note, you learn the purpose and the function of each block, so the writing is on purpose instead of by accident.',
+    cards:[
+      { n:'PILLAR 4', title:'Chords and harmony', p:'Movement and emotion, including arpeggiation.' },
+      { n:'PILLAR 5', title:'Drums and bass', p:'The groove and the low end that carry the record.' },
+      { n:'PILLAR 6', title:'Melody and arrangement', p:'Giving the song a shape an audience can follow.' }
+    ] },
+
+  {t:'cards', eyebrow:'Stage 3 of 5', h:'Capture',
+    body:'Getting vocals and live parts in clean, so the mix starts from a strong signal instead of a rescue job.',
+    cards:[
+      { n:'PILLAR 7', title:'Recording setup', p:'Signal chain and gain, dialed before you hit record.' },
+      { n:'PILLAR 8', title:'Vocal production', p:'Direction, comping, timing and cleaning a take.' }
+    ] },
+
+  {t:'cards', eyebrow:'Stage 4 of 5', h:'Treatment',
+    body:"The processing that makes a track sound expensive. Taught as theory first, so you know why you're reaching for a tool, not just copying a preset.",
+    cards:[
+      { n:'PILLAR 9', title:'EQ theory', p:'Carving space so every element is heard.' },
+      { n:'PILLAR 10', title:'Compression', p:'Settings per element: kick, snare, bass, vocal.' },
+      { n:'PILLAR 11', title:'Reverb and effects', p:'Depth and width without washing the mix out.' }
+    ] },
+
+  {t:'cards', eyebrow:'Stage 5 of 5', h:'Finish: the 5 Keys to Mastering',
+    body:'Mixing, automation, and a mastering chain that gets you commercial loudness and polish using stock DAW plugins. No boutique gear required.',
+    cards:[
+      { n:'PILLAR 12', title:'Mix, automate, master', p:'The 5 Keys that make a track sit loud, wide and clean next to a reference record.' }
+    ] },
+
+  {t:'statement', eyebrow:'The part nobody tells you',
+    h:'The pillars are an order of operations.',
+    lead:"Most producers work them out of order. That's the single biggest reason a talented beat still sounds unfinished." },
+
+  {t:'point', part:'Part Three',
+    h:'What it sounds like once the pillars are in place.',
+    body:'The same song, the same gear. One version sounds thin and quiet. The other sits loud, wide and clean, and finally feels like a record.' },
+
+  {t:'cred', eyebrow:'Why learn it from me',
+    h:'I had to reverse-engineer this the hard way.',
+    cred:"Over 30 years I've sold <strong>more than 2 million records</strong>, won a <strong>Clio award</strong>, and made gold and platinum albums and jingles for Coca-Cola, McDonald's, Toyota and the FIFA World Cup. The 12 Pillars are simply what I learned those projects had in common, written down so you don't need 30 years to find them." },
+
+  {t:'steps', eyebrow:'Your path from here', h:'Three steps to a world-class sound.',
+    steps:[
+      { k:'1', t:'The free AMP workshop', s:'Walk the 12 Pillars and build with me, no cost.' },
+      { k:'2', t:'The AMP membership', s:'350+ lessons that teach every pillar in depth.' },
+      { k:'3', t:'The AMP Inner Circle', s:'1-on-1 coaching to a Top-40 standard of production.' }
+    ] },
+
+  {t:'cta', meter:5, eyebrow:'Start here',
+    h:'Join the free AMP music production workshop.',
+    lead:'Learn the 12 Pillars, get the sounds and templates, and take your next track to a world-class level.',
+    disclaimer:'This class is educational. It teaches a music production method and does not guarantee any particular musical, career, or financial result. Outcomes depend on the work you put in. Advanced Music Production, David Campos.' }
+];
+
+function meterHtml(on){ var h='<div class="meter">'; for(var x=0;x<5;x++){ h+='<span class="'+(x<on?'on':'')+'"></span>'; } return h+'</div>'; }
+function render(s){
+  var h='';
+  if(s.meter) h+=meterHtml(s.meter);
+  if(s.part) h+='<div class="part">'+s.part+'</div>';
+  if(s.eyebrow) h+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title'||s.t==='statement'||s.t==='cta'){
+    h+='<h1>'+s.h+'</h1>';
+  } else if(s.h){ h+='<h2>'+s.h+'</h2>'; }
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.body) h+='<p class="body">'+s.body+'</p>';
+  if(s.cred) h+='<p class="cred">'+s.cred+'</p>';
+  if(s.items){ h+='<ul class="clean">'; s.items.forEach(function(it){ h+='<li>'+it+'</li>'; }); h+='</ul>'; }
+  if(s.cards){ h+='<div class="grid">'; s.cards.forEach(function(c){ h+='<div class="card"><div class="n">'+c.n+'</div><h3>'+c.title+'</h3><p>'+c.p+'</p></div>'; }); h+='</div>'; }
+  if(s.steps){ h+='<div class="cta-steps">'; s.steps.forEach(function(st){ h+='<div class="step"><div class="k">'+st.k+'</div><div class="t">'+st.t+'<span>'+st.s+'</span></div></div>'; }); h+='</div>'; }
+  if(s.brand) h+='<div class="title-brand">'+s.brand+'</div>';
+  if(s.disclaimer) h+='<p class="disclaimer">'+s.disclaimer+'</p>';
+  return h;
+}
+
+var stage=document.getElementById('stage');
+S.forEach(function(s){ var sec=document.createElement('section'); sec.className='slide'; sec.innerHTML=render(s); stage.appendChild(sec); });
+var slides=[].slice.call(document.querySelectorAll('.slide'));
+var i=0; document.getElementById('tot').textContent=slides.length;
+function show(n){ i=(n+slides.length)%slides.length;
+  slides.forEach(function(s,x){ s.classList.toggle('active',x===i); });
+  document.getElementById('cur').textContent=i+1; }
+show(0);
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') show(i+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') show(i-1); });
+stage.addEventListener('click',function(){ show(i+1); });
+</script>
+</body>
+</html>
