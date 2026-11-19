@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Executive Mindset — A Masterclass with Alina Florea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --paper:#f5f4f6;
+    --panel:#ffffff;
+    --panel-alt:#eef2f5;
+    --rule:#d9dee4;
+    --ink:#2c3e50;
+    --ink-soft:#4a5a6a;
+    --ink-muted:#7b8794;
+    --accent:#3b516b;
+  }
+  html,body{height:100%;}
+  body{font-family:'Roboto',Arial,sans-serif;background:var(--ink);color:var(--ink);}
+  #deck{max-width:960px;margin:0 auto;}
+  .slide{
+    position:relative;background:var(--paper);min-height:540px;
+    padding:64px 72px;display:none;flex-direction:column;justify-content:center;
+    border-bottom:6px solid var(--accent);
+  }
+  .slide.show{display:flex;}
+  .kicker{font-family:'Open Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+  h1{font-family:'Open Sans',sans-serif;font-weight:700;font-size:42px;line-height:1.14;color:var(--ink);letter-spacing:-.01em;margin-bottom:20px;}
+  h2{font-family:'Open Sans',sans-serif;font-weight:700;font-size:30px;line-height:1.2;color:var(--ink);margin-bottom:18px;}
+  h3{font-family:'Open Sans',sans-serif;font-weight:600;font-size:21px;color:var(--accent);margin-bottom:10px;}
+  p{font-size:19px;line-height:1.6;color:var(--ink-soft);margin-bottom:14px;max-width:48ch;}
+  p.lead{font-size:22px;color:var(--ink);max-width:46ch;}
+  .sub{font-family:'Open Sans',sans-serif;font-size:18px;color:var(--ink-muted);font-weight:400;}
+  ul{list-style:none;margin:8px 0 0;}
+  li{position:relative;padding-left:26px;margin-bottom:13px;font-size:18px;line-height:1.5;color:var(--ink-soft);max-width:52ch;}
+  li::before{content:"";position:absolute;left:0;top:10px;width:9px;height:9px;background:var(--accent);border-radius:2px;}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px;}
+  .pill{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);padding:16px 18px;border-radius:4px;}
+  .pill .n{font-family:'Open Sans',sans-serif;font-size:13px;font-weight:700;color:var(--accent);}
+  .pill .t{font-family:'Open Sans',sans-serif;font-size:16px;font-weight:600;color:var(--ink);margin-top:4px;}
+  .panel{background:var(--panel);border:1px solid var(--rule);padding:26px 30px;border-radius:6px;margin-top:8px;}
+  .panel.alt{background:var(--panel-alt);}
+  .big{font-family:'Open Sans',sans-serif;font-size:56px;font-weight:700;color:var(--accent);line-height:1;}
+  .stats{display:flex;gap:40px;margin-top:18px;flex-wrap:wrap;}
+  .stat .v{font-family:'Open Sans',sans-serif;font-size:34px;font-weight:700;color:var(--accent);}
+  .stat .l{font-size:14px;color:var(--ink-muted);font-family:'Open Sans',sans-serif;}
+  .disclaimer{font-size:13px;color:var(--ink-muted);margin-top:22px;max-width:60ch;line-height:1.5;}
+  .credit{font-family:'Open Sans',sans-serif;font-size:16px;color:var(--ink-muted);margin-top:26px;}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;background:var(--ink);padding:8px 16px;border-radius:30px;}
+  .nav button{background:var(--accent);color:#fff;border:none;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;font-family:'Open Sans',sans-serif;}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .count{color:#cdd6df;font-family:'Open Sans',sans-serif;font-size:13px;letter-spacing:.05em;min-width:54px;text-align:center;}
+  @media(max-width:720px){.slide{padding:44px 30px;}h1{font-size:30px;}h2{font-size:24px;}.pillars{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
+<script>
+const S = [
+  {t:"cover",
+   kicker:"A live masterclass",
+   h1:"The Executive Mindset",
+   sub:"Leading from the inside out. The inner shift that has to happen before any leadership tactic will hold.",
+   credit:"With Alina Florea, ICF PCC, PMP"},
+
+  {t:"who",
+   kicker:"Who this is for",
+   h2:"You are capable, committed, and quietly stuck.",
+   body:["You lead a team or a function. You are good at the work. And lately a thought keeps returning: the way of thinking that got you here is not going to carry you to the next level.",
+         "This hour is for managers and executives who want the next level to feel steadier, not just busier."]},
+
+  {t:"trap",
+   kicker:"The trap",
+   h2:"So you do what has always worked. More.",
+   body:["More hours. More control. One more framework, one more tool, one more late night tightening the plan.",
+         "For a while it works. Then it stops working, and working harder only raises the cost."]},
+
+  {t:"reframe",
+   kicker:"The reframe",
+   h1:"The ceiling is not a skills gap.",
+   lead:"It is a mindset running quietly underneath the skills, deciding how you read pressure, risk, and other people before you have consciously chosen anything."},
+
+  {t:"part",
+   kicker:"Part one",
+   h2:"Leadership is an inner game before it is an outer one.",
+   body:["Two managers face the same crisis with the same tools and training. One contracts, grips tighter, and burns the room out. The other stays grounded and the team leans in.",
+         "The difference is not technique. It is the mindset each one defaults to when the stakes rise."]},
+
+  {t:"body",
+   kicker:"What mindset means here",
+   h2:"Not positive thinking. Your defaults under load.",
+   body:["Mindset is the set of interpretations you reach for automatically when things get hard: what you assume about yourself, about risk, and about the people around you.",
+         "You cannot out-skill a default you have never looked at. The work is to see it, then choose a better one on purpose."]},
+
+  {t:"pillars",
+   kicker:"Part two",
+   h2:"The Executive Mindset, in six shifts",
+   pills:[
+     {n:"01",tt:"Credibility"},{n:"02",tt:"Value, not motion"},{n:"03",tt:"Steady under pressure"},
+     {n:"04",tt:"Clear decisions"},{n:"05",tt:"Influence across lines"},{n:"06",tt:"Sustainable performance"}]},
+
+  {t:"pillar",
+   kicker:"Shift 01",
+   h3:"Credibility",
+   h2:"Presence you do not have to perform.",
+   body:["Credibility stops being about proving you belong in the room and becomes about the weight you carry once you are in it.",
+         "The shift: lead from who you already are, not from the effort of looking the part."]},
+
+  {t:"pillar",
+   kicker:"Shift 02",
+   h3:"Value, not motion",
+   h2:"From reacting to choosing on purpose.",
+   body:["The reactive leader answers whatever is loudest. The intentional leader decides what actually creates value and protects it.",
+         "The shift: your calendar and your attention start following your priorities instead of your inbox."]},
+
+  {t:"pillar",
+   kicker:"Shift 03",
+   h3:"Steady under pressure",
+   h2:"Grounded, without gripping harder.",
+   body:["Under pressure the untrained default is to over-control or to shut down. Neither scales, and both exhaust the people around you.",
+         "The shift: you meet pressure with a grounded response, so the hardest moments are where your team trusts you most."]},
+
+  {t:"pillar",
+   kicker:"Shift 04",
+   h3:"Clear decisions",
+   h2:"Clarity, courage, and steadiness.",
+   body:["Most stalled decisions are not an information problem. They are a nerve problem dressed up as one.",
+         "The shift: you reach decisions with clarity and the courage to stand behind them, instead of outsourcing them to more meetings."]},
+
+  {t:"pillar",
+   kicker:"Shift 05",
+   h3:"Influence across lines",
+   h2:"Move work without authority.",
+   body:["At the next level most of what you need sits in functions you do not control. Pushing harder there breaks relationships.",
+         "The shift: you build the kind of cross-functional trust that gets things moving without a fight."]},
+
+  {t:"pillar",
+   kicker:"Shift 06",
+   h3:"Sustainable performance",
+   h2:"A level you can actually hold.",
+   body:["A promotion you can only survive by running on empty is not a promotion. It is a countdown.",
+         "The shift: you carry the larger role with less mental and emotional load, so the performance lasts."]},
+
+  {t:"body",
+   kicker:"Part three",
+   h2:"A quarter into the shift.",
+   body:["The same week that used to feel like firefighting feels like leading. You make the hard call on Tuesday without a week of churn. A tense cross-team conversation ends with a plan instead of a standoff.",
+         "Nothing on your calendar got easier. You changed who is meeting it."]},
+
+  {t:"method",
+   kicker:"How the shift happens",
+   h2:"Reflection, awareness, and real situations.",
+   body:["We do not work from abstract theory. We work from the decisions and conversations actually on your desk this week.",
+         "Honest challenge, strong support, and enough structured reflection that the new default holds when the pressure returns."]},
+
+  {t:"why",
+   kicker:"Why work with me",
+   h2:"Two decades in the chair, not just the theory.",
+   body:["I spent more than 20 years in senior and C-level roles before I coached a single executive. I know the seat from the inside."],
+   stats:[{v:"1,700+",l:"coaching hours"},{v:"17",l:"countries"},{v:"20+ yrs",l:"C-level experience"}],
+   credit:"ICF Professional Certified Coach, PMP. An architect of change."},
+
+  {t:"recap",
+   kicker:"The whole picture",
+   h2:"Six shifts, one mindset.",
+   pills:[
+     {n:"01",tt:"Credibility"},{n:"02",tt:"Value, not motion"},{n:"03",tt:"Steady under pressure"},
+     {n:"04",tt:"Clear decisions"},{n:"05",tt:"Influence across lines"},{n:"06",tt:"Sustainable performance"}],
+   body:["Change the mindset underneath, and the skills you already have finally get to work at the level you are now in."]},
+
+  {t:"cta",
+   kicker:"Go deeper together",
+   h1:"Build your Executive Mindset.",
+   body:["If this is the level you are reaching for, there are two ways we go deeper together: The Manager Mindset, a focused six-month engagement, and The Executive Mindset, a full twelve-month partnership for senior leaders.",
+         "Start where you are. Bring the real situation you are carrying right now."],
+   credit:"Alina Florea Coaching, Milan",
+   disclaimer:"This masterclass is for education and professional development. It is not a guarantee of any specific promotion, result, or financial outcome. Leadership outcomes depend on your own context, choices, and effort."}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide'+(i===0?' show':'');
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h1) h+=`<h1>${s.h1}</h1>`;
+  if(s.h3) h+=`<h3>${s.h3}</h3>`;
+  if(s.h2) h+=`<h2>${s.h2}</h2>`;
+  if(s.sub) h+=`<p class="sub">${s.sub}</p>`;
+  if(s.lead) h+=`<p class="lead">${s.lead}</p>`;
+  if(s.pills){
+    h+='<div class="pillars">';
+    s.pills.forEach(p=>{h+=`<div class="pill"><div class="n">${p.n}</div><div class="t">${p.tt}</div></div>`;});
+    h+='</div>';
+  }
+  if(s.body) s.body.forEach(b=>{h+=`<p>${b}</p>`;});
+  if(s.stats){
+    h+='<div class="stats">';
+    s.stats.forEach(st=>{h+=`<div class="stat"><div class="v">${st.v}</div><div class="l">${st.l}</div></div>`;});
+    h+='</div>';
+  }
+  if(s.credit) h+=`<div class="credit">${s.credit}</div>`;
+  if(s.disclaimer) h+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+const prev=document.getElementById('prev');
+const next=document.getElementById('next');
+function render(){
+  slides.forEach((s,i)=>s.classList.toggle('show',i===cur));
+  count.textContent=(cur+1)+' / '+slides.length;
+  prev.disabled=cur===0;next.disabled=cur===slides.length-1;
+}
+prev.onclick=()=>{if(cur>0){cur--;render();}};
+next.onclick=()=>{if(cur<slides.length-1){cur++;render();}};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){if(cur<slides.length-1){cur++;render();}}
+  if(e.key==='ArrowLeft'){if(cur>0){cur--;render();}}
+});
+render();
+</script>
+</body>
+</html>
