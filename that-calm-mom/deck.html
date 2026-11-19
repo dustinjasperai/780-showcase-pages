@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calm Is a Skill — A Masterclass with Andrea Maher, That Calm Mom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f6f2ec;        /* their brand cream */
+    --panel:#fbf8f3;     /* half-step lighter cream */
+    --ink:#2e2a24;       /* warm near-black */
+    --ink-soft:#514b42;
+    --ink-muted:#8a8073;
+    --rule:#e4ddd0;
+    --accent:#4f6f93;    /* their brand calm blue */
+    --spark:#c2793a;     /* their brand terracotta */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Lato',-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #deck{height:100vh;width:100vw;position:relative;}
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:8vh 10vw; opacity:0; transition:opacity .4s ease;
+  }
+  .slide.active{display:flex; opacity:1;}
+  .kicker{font-family:'Lato',sans-serif; font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:22px;}
+  h1{font-family:'Spectral',Georgia,serif; font-weight:600; font-size:clamp(34px,6vw,68px); line-height:1.08; letter-spacing:-.01em; color:var(--ink); margin-bottom:24px;}
+  h2{font-family:'Spectral',Georgia,serif; font-weight:600; font-size:clamp(28px,4.4vw,46px); line-height:1.14; color:var(--ink); margin-bottom:22px;}
+  p{font-size:clamp(17px,2vw,23px); line-height:1.6; color:var(--ink-soft); max-width:46ch; margin-bottom:16px;}
+  p.lead{font-family:'Spectral',Georgia,serif; font-size:clamp(20px,2.6vw,30px); color:var(--ink); font-weight:400; max-width:40ch;}
+  .sub{font-family:'Spectral',Georgia,serif; font-style:italic; font-size:clamp(19px,2.4vw,27px); color:var(--accent); max-width:42ch;}
+  ul{list-style:none; margin:10px 0 0; max-width:48ch;}
+  li{position:relative; padding-left:30px; margin-bottom:18px; font-size:clamp(16px,1.9vw,22px); line-height:1.5; color:var(--ink-soft);}
+  li::before{content:""; position:absolute; left:0; top:.55em; width:12px; height:12px; border-radius:50%; background:var(--accent);}
+  li.spark::before{background:var(--spark);}
+  li strong{color:var(--ink); font-weight:700;}
+  .big{font-family:'Spectral',Georgia,serif; font-size:clamp(30px,5vw,56px); line-height:1.12; color:var(--ink); max-width:20ch; font-weight:500;}
+  .big em{font-style:italic; color:var(--accent);}
+  .pillar-num{font-family:'Spectral',Georgia,serif; font-size:clamp(50px,9vw,110px); color:var(--spark); line-height:1; font-weight:500; margin-bottom:6px;}
+  .credit{display:flex; gap:40px; flex-wrap:wrap; margin-top:14px;}
+  .credit div{min-width:120px;}
+  .credit .n{font-family:'Spectral',Georgia,serif; font-size:clamp(30px,4.5vw,52px); color:var(--accent); font-weight:600;}
+  .credit .l{font-size:14px; color:var(--ink-muted); letter-spacing:.04em; margin-top:4px;}
+  .byline{margin-top:30px; font-size:16px; color:var(--ink-muted);}
+  .byline strong{color:var(--ink); font-weight:700;}
+  .disclaimer{font-size:13px; color:var(--ink-muted); line-height:1.5; max-width:60ch; margin-top:26px; border-top:1px solid var(--rule); padding-top:16px;}
+  .cta-line{font-family:'Spectral',Georgia,serif; font-size:clamp(22px,3vw,34px); color:var(--accent); margin-top:8px;}
+  .panelcard{background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:30px 34px; max-width:48ch;}
+  .nav{position:fixed; bottom:22px; right:28px; font-family:'Lato',sans-serif; font-size:13px; color:var(--ink-muted); letter-spacing:.05em; z-index:10;}
+  .nav b{color:var(--accent);}
+  .hint{position:fixed; bottom:22px; left:28px; font-family:'Lato',sans-serif; font-size:12px; color:var(--ink-muted); letter-spacing:.04em; z-index:10;}
+  .progress{position:fixed; top:0; left:0; height:4px; background:var(--accent); transition:width .3s ease; z-index:10;}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div id="deck"></div>
+<div class="hint">← → to move</div>
+<div class="nav"><b id="cur">1</b> / <span id="tot">1</span></div>
+
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker">A Live Masterclass for Moms</div>
+    <h1>Calm Is a Skill</h1>
+    <p class="sub">How to yell less and feel proud of how you parent, without pretending you are never angry.</p>
+    <div class="byline">With <strong>Andrea Maher</strong>, That Calm Mom &middot; Certified Anger Management Specialist &amp; Parenting Coach</div>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You love your kids. You still lose it.</h2>
+    <p>You are not a bad mom. You are a good mom who runs out of room. The noise builds, the day piles up, and the version of you that shows up is not the one you meant to be.</p>
+    <p class="lead">Then comes the guilt, the promise to do better tomorrow, and the same loop the next afternoon.</p>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>The 5pm version of you</h2>
+    <p>Mornings, you have patience to spare. By late afternoon, the tank is empty, the kids are loud, and the smallest thing tips you over.</p>
+    <p class="lead">It is not that you love them less at 5pm. It is that your capacity ran out, and nobody ever taught you how to refill it in the moment.</p>
+  `},
+
+  {t:'hook', html:`
+    <div class="kicker">The reframe</div>
+    <p class="big">You do not have a <em>patience</em> problem.<br>You have a <em>regulation</em> gap.</p>
+    <p style="margin-top:26px">Nobody needs another lecture about being more patient. Patience is what is left over after your nervous system feels safe. The skill is getting there on purpose.</p>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part One &middot; The core problem</div>
+    <h2>Why "just stay calm" never works</h2>
+    <p>In the heat of the moment, "be more patient" is a thing to want, not a thing to do. There is no instruction inside it.</p>
+    <ul>
+      <li>A trigger lands faster than a thought.</li>
+      <li>Your body floods before your logic arrives.</li>
+      <li>You react, then you regret, then you carry the shame into the next moment.</li>
+    </ul>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part One &middot; The core problem</div>
+    <h2>The reaction loop</h2>
+    <p class="lead">Trigger &rarr; flood &rarr; react &rarr; regret &rarr; shame &rarr; and the shame lowers your fuse for the next trigger.</p>
+    <p>Most parenting advice tries to change the child's behavior at the start of that loop. This masterclass changes the one link you actually control: the flood, before it becomes the reaction.</p>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part One &middot; The core problem</div>
+    <h2>What the yelling quietly costs</h2>
+    <p>This is not about guilt. It is about honesty, because the cost is what makes the skill worth learning.</p>
+    <ul>
+      <li>The home starts to feel tense, even in the quiet moments.</li>
+      <li class="spark">Your kids learn to read your mood before they read the room.</li>
+      <li>You start to feel like a stranger to the parent you meant to be.</li>
+    </ul>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part One &middot; The core problem</div>
+    <h2>The good news hiding in that loop</h2>
+    <p>If calm were a personality trait, some moms would simply have it and the rest of us would be out of luck.</p>
+    <p class="lead">It is not a trait. It is a skill, which means it has steps, and steps can be learned and practiced like any other skill.</p>
+  `},
+
+  {t:'part', html:`
+    <div class="kicker">Part Two</div>
+    <h1>The Control Your Anger&trade; method</h1>
+    <p class="sub">Three moves that turn "I lost it again" into "I caught it in time." This is the core of my work with more than 50,000 parents.</p>
+  `},
+
+  {t:'pillar', html:`
+    <div class="pillar-num">01</div>
+    <div class="kicker">Control Your Anger&trade;</div>
+    <h2>See the storm before it lands</h2>
+    <p>Anger is loud at the end and quiet at the start. We map your real early-warning signs, the jaw, the heat, the pace of your own voice, so you feel the wave at a two out of ten instead of a nine.</p>
+    <ul>
+      <li><strong>Name your own triggers</strong>, the specific moments, not "my kids."</li>
+      <li class="spark"><strong>Catch the body first</strong>, because the body speaks before the yell does.</li>
+    </ul>
+  `},
+
+  {t:'pillar', html:`
+    <div class="pillar-num">02</div>
+    <div class="kicker">Control Your Anger&trade;</div>
+    <h2>Regulate before you respond</h2>
+    <p>Between the trigger and your reaction there is a gap. The whole skill lives in that gap. You learn a handful of in-the-moment resets that settle your nervous system in seconds, so you can choose your next move instead of being chosen by it.</p>
+    <ul>
+      <li><strong>Respond instead of react</strong>, on purpose, in real time.</li>
+      <li class="spark"><strong>Stay in control</strong> of your voice and your body with your kids in the room.</li>
+    </ul>
+  `},
+
+  {t:'pillar', html:`
+    <div class="pillar-num">03</div>
+    <div class="kicker">Connection First</div>
+    <h2>Repair, and keep the bond</h2>
+    <p>Calm parenting is not never rupturing. It is knowing how to come back. When a hard moment happens anyway, repair is what teaches your child that big feelings are survivable and that your love is not on the line.</p>
+    <ul>
+      <li><strong>Reconnect</strong> after the storm, in a way your child actually feels.</li>
+      <li class="spark"><strong>Model the skill</strong> you want them to grow up with.</li>
+    </ul>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part Two &middot; How it sticks</div>
+    <h2>Practice, not perfection</h2>
+    <p>You will still have hard moments. The goal is not a mom who never feels anger. It is a mom who knows what to do with it.</p>
+    <p class="lead">Every time you catch the wave early, the skill gets stronger and the fuse gets longer. That is the whole practice.</p>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part Two &middot; Beyond the moment</div>
+    <h2>When behavior still feels like a mystery</h2>
+    <p>Staying regulated is the foundation. Two of my programs build on it, so a calmer you is not left guessing:</p>
+    <ul>
+      <li><strong>Decode Your Child&trade;</strong>, read the need underneath the behavior so you answer what is really going on.</li>
+      <li class="spark"><strong>Respectful Discipline&trade;</strong>, hold a clear limit when your child will not listen, without yelling and without punishment.</li>
+    </ul>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part Two &middot; The whole picture</div>
+    <h2>Calm The Chaos&trade;</h2>
+    <p>Put it together and you have a blueprint for a calm home: a regulated parent, a decoded child, and limits that hold with the connection intact.</p>
+    <p class="lead">Not a perfect home. A calm one, where the hard moments get shorter and the good ones get longer.</p>
+  `},
+
+  {t:'std', html:`
+    <div class="kicker">Part Three &middot; Your ordinary Tuesday</div>
+    <h2>Thirty days in</h2>
+    <ul>
+      <li>You feel the wave early and step into the gap on purpose.</li>
+      <li>The yelling drops, and so does the after-guilt.</li>
+      <li class="spark">Your kids borrow your calm instead of your reactivity.</li>
+      <li>You start to feel proud of how you parent, on ordinary days.</li>
+    </ul>
+    <p style="margin-top:18px">This is what more than 50,000 parents have built, one practiced moment at a time.</p>
+  `},
+
+  {t:'why', html:`
+    <div class="kicker">Why me</div>
+    <h2>I built this because I needed it first</h2>
+    <p>I am a mom of three, including twins. I loved my kids and still lost my patience, and I finally understood my reactions were not a love problem, they were a skills problem. So I went and learned the skills, and then I built the path I wish I had.</p>
+    <div class="credit">
+      <div><div class="n">50,000+</div><div class="l">parents taught</div></div>
+      <div><div class="n">1M+</div><div class="l">parent community</div></div>
+      <div><div class="n">Certified</div><div class="l">Anger Management Specialist &amp; Parenting Coach</div></div>
+    </div>
+  `},
+
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h1>Calm is a skill. You can learn it.</h1>
+    <p class="lead">If today gave you one place to pause, start where the change starts, with you.</p>
+    <p class="cta-line">Begin with Control Your Anger&trade;, or take the full path inside The Complete Calm Parent Bundle&trade;.</p>
+    <div class="byline">Andrea Maher &middot; <strong>That Calm Mom</strong></div>
+    <div class="disclaimer">This masterclass is for education and support only. It is not therapy, medical, or mental-health treatment, and it does not replace care from a licensed professional. No specific result or outcome is guaranteed. Results vary from family to family.</div>
+  `}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' active':'');
+  d.innerHTML=s.html;
+  deck.appendChild(d);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function go(n){
+  cur=Math.max(0,Math.min(S.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  document.getElementById('cur').textContent=cur+1;
+  document.getElementById('prog').style.width=((cur+1)/S.length*100)+'%';
+}
+go(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')go(cur-1);
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('a')) go(cur+1); });
+</script>
+</body>
+</html>
