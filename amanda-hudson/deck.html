@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage With Intention, Not Instinct | The Adaptive Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#1a3955;        /* her dominant brand navy */
+    --panel:#16314a;     /* a shade down from the navy ground */
+    --accent:#cc8e39;    /* her warm gold button color */
+    --ink:#f3f6fa;
+    --ink-soft:#c3d0dc;
+    --ink-muted:#8fa3b5;
+    --rule:rgba(204,142,57,0.35);
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Poppins',system-ui,sans-serif;
+    background:var(--bg); color:var(--ink);
+    overflow:hidden;
+  }
+  #stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:9vh 11vw; max-width:1200px; margin:0 auto;
+  }
+  .slide.active{display:flex;}
+  .eyebrow{font-family:'Poppins'; font-weight:600; font-size:0.78rem; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:1.1rem;}
+  h1{font-family:'Merriweather'; font-weight:900; font-size:3.0rem; line-height:1.14; letter-spacing:-0.01em;}
+  h2{font-family:'Merriweather'; font-weight:700; font-size:2.1rem; line-height:1.2; margin-bottom:1.1rem;}
+  .sub{font-size:1.2rem; color:var(--ink-soft); margin-top:1.4rem; max-width:40ch; line-height:1.6;}
+  p.body{font-size:1.18rem; color:var(--ink-soft); line-height:1.65; max-width:46ch; margin-top:0.6rem;}
+  .part-num{font-family:'Merriweather'; font-weight:900; font-size:1rem; color:var(--accent); letter-spacing:0.18em; text-transform:uppercase;}
+  ul{list-style:none; margin-top:1.3rem; display:flex; flex-direction:column; gap:0.95rem; max-width:48ch;}
+  li{font-size:1.1rem; color:var(--ink-soft); line-height:1.5; padding-left:1.6rem; position:relative;}
+  li::before{content:''; position:absolute; left:0; top:0.6em; width:0.6rem; height:0.6rem; background:var(--accent); border-radius:50%;}
+  li strong{color:var(--ink); font-weight:600;}
+  .big-quote{font-family:'Merriweather'; font-weight:700; font-size:2.6rem; line-height:1.25; max-width:22ch;}
+  .big-quote .hl{color:var(--accent);}
+  .rule{height:2px; width:84px; background:var(--accent); margin:1.6rem 0;}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem; margin-top:1.6rem;}
+  .col h3{font-family:'Poppins'; font-weight:600; font-size:0.8rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:0.8rem;}
+  .col.good h3{color:var(--accent);}
+  .cta-box{margin-top:1.8rem; padding:1.4rem 1.6rem; background:var(--panel); border:1px solid var(--rule); border-radius:10px; max-width:48ch;}
+  .cta-box .step{font-family:'Merriweather'; font-weight:700; font-size:1.25rem; color:var(--ink);}
+  .cta-box .meta{font-size:1rem; color:var(--ink-soft); margin-top:0.5rem;}
+  .disclaimer{font-size:0.8rem; color:var(--ink-muted); margin-top:2rem; max-width:52ch; line-height:1.5;}
+  .credit-name{font-family:'Merriweather'; font-weight:900; font-size:2.2rem;}
+  .nav{position:fixed; bottom:18px; right:24px; font-family:'Poppins'; font-size:0.8rem; color:var(--ink-muted); z-index:10;}
+  .brandmark{position:fixed; bottom:18px; left:24px; font-family:'Poppins'; font-weight:600; font-size:0.78rem; letter-spacing:0.12em; color:var(--ink-muted); z-index:10;}
+  @media (max-width:720px){ h1{font-size:2rem;} h2{font-size:1.5rem;} .big-quote{font-size:1.7rem;} .cols{grid-template-columns:1fr;} .slide{padding:7vh 8vw;} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="brandmark">A MODERN WAY TO WORK</div>
+<div class="nav"><span id="pos">1</span> / <span id="total">1</span> &nbsp;·&nbsp; use arrow keys</div>
+
+<script>
+const S = [
+  {t:'title',
+    eyebrow:'A live masterclass · The Adaptive Manager™',
+    h1:'Manage With Intention, Not Instinct',
+    sub:'The first-90-days system for the manager who was promoted for the work, then handed a team and left to figure out the rest.' },
+
+  {t:'audience',
+    eyebrow:'Who this is for',
+    h2:'You did the work brilliantly. So they made you the manager.',
+    body:'This is for the new or accidental manager. You earned the promotion by being great at the job. Now your job is the people, and nobody handed you a method for that.' },
+
+  {t:'promise',
+    eyebrow:'What you will leave with',
+    h2:'A way to lead on purpose.',
+    list:[
+      'Why managing feels so hard, and why that is not a you problem',
+      'The one shift that separates managers who scale from managers who burn out',
+      'A strengths-based way to get more from your team without grinding them down',
+      'The first moves to make with your team on Monday' ] },
+
+  {t:'reframe',
+    eyebrow:'The hard truth',
+    quote:'The skills that got you promoted are <span class="hl">not</span> the skills the job now needs.' },
+
+  {t:'part', num:'Part One', h2:'Why managing feels so hard' },
+
+  {t:'content',
+    eyebrow:'The accidental manager',
+    h2:'Most managers were never actually trained.',
+    body:'You were promoted for output. Then you inherited hiring, feedback, conflict, motivation and trust, usually overnight, usually with no map. So you manage by instinct, reacting to whatever is loudest.' },
+
+  {t:'content',
+    eyebrow:'Instinct has a ceiling',
+    h2:'Instinct does not scale. Intention does.',
+    cols:[
+      { kind:'bad', title:'Managing by instinct', items:['React to whatever is loudest','Firefight the same problems weekly','Hope the team holds together'] },
+      { kind:'good', title:'Managing with intention', items:['Set clear expectations up front','Lead to each person’s strengths','Build trust on purpose, not by accident'] } ] },
+
+  {t:'part', num:'Part Two', h2:'The Adaptive Manager method' },
+
+  {t:'content',
+    eyebrow:'Pillar one',
+    h2:'The Strengths-Based Manager',
+    body:'Stop managing to fix weaknesses. Identify, amplify and leverage what each person is already good at. It lifts engagement and makes the whole job of managing dramatically easier.' },
+
+  {t:'content',
+    eyebrow:'Pillar two',
+    h2:'Expectations and goal-setting',
+    body:'Most missed deadlines are not performance problems, they are clarity problems. Set expectations and goals so plainly that confusion, drift and chasing people simply go away.' },
+
+  {t:'content',
+    eyebrow:'Pillar three',
+    h2:'The Trust Triangle',
+    body:'Trust is the true currency of management. Learn the three sides of trust, how to build it deliberately, and how to repair it when it breaks, so your team feels safe enough to do their best work.' },
+
+  {t:'content',
+    eyebrow:'Pillar four',
+    h2:'The Feedback Reset',
+    body:'A research-backed, radically simpler way to give feedback and have the hard conversation, so you can address real issues without triggering defensiveness, shutdown or resentment.' },
+
+  {t:'part', num:'Part Three', h2:'Your first 90 days, run with intention' },
+
+  {t:'content',
+    eyebrow:'The shift',
+    h2:'From the manager who holds it together to the manager who leads it forward.',
+    cols:[
+      { kind:'bad', title:'Before', items:['Everything routes through you','Feedback gets saved up and avoided','Good people quietly disengage'] },
+      { kind:'good', title:'After', items:['The team owns outcomes, not just tasks','Hard things get said early and cleanly','People bring their strengths on purpose'] } ] },
+
+  {t:'credibility',
+    eyebrow:'Why learn this here',
+    name:'Amanda Hudson',
+    body:'Leadership strategist and educator with 20+ years across hospitality, technology, higher education and running her own businesses. The Adaptive Manager is her eighteen-module system, built in short, practical lessons you can use the same day, not leadership theory you file away.' },
+
+  {t:'cta',
+    eyebrow:'Your path into the method',
+    h2:'Learn to manage with intention.',
+    step:'The Adaptive Manager™ Live Intensive',
+    meta:'A small live cohort, four weeks together, or start self-paced with the DIY modules. Take the Adaptive Manager quiz and choose the path that fits you.',
+    disclaimer:'This masterclass is educational and reflects one approach to management and leadership. It is not a guarantee of any specific result. Outcomes depend on your own situation, team and effort.' }
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide' + (i === 0 ? ' active' : '');
+  let html = '';
+  if (s.eyebrow) html += `<div class="eyebrow">${s.eyebrow}</div>`;
+  if (s.t === 'title') html += `<h1>${s.h1}</h1><div class="rule"></div><p class="sub">${s.sub}</p>`;
+  else if (s.t === 'part') html += `<div class="part-num">${s.num}</div><div class="rule"></div><h1>${s.h2}</h1>`;
+  else if (s.t === 'reframe') html += `<p class="big-quote">${s.quote}</p>`;
+  else if (s.t === 'credibility') html += `<div class="credit-name">${s.name}</div><div class="rule"></div><p class="body">${s.body}</p>`;
+  else {
+    if (s.h2) html += `<h2>${s.h2}</h2>`;
+    if (s.body) html += `<p class="body">${s.body}</p>`;
+    if (s.list) html += '<ul>' + s.list.map(x => `<li>${x}</li>`).join('') + '</ul>';
+    if (s.cols) html += '<div class="cols">' + s.cols.map(c =>
+      `<div class="col ${c.kind === 'good' ? 'good' : ''}"><h3>${c.title}</h3><ul>` +
+      c.items.map(x => `<li>${x}</li>`).join('') + '</ul></div>').join('') + '</div>';
+    if (s.step) html += `<div class="cta-box"><div class="step">${s.step}</div><div class="meta">${s.meta}</div></div>`;
+    if (s.disclaimer) html += `<div class="disclaimer">${s.disclaimer}</div>`;
+  }
+  d.innerHTML = html;
+  stage.appendChild(d);
+});
+
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+document.getElementById('total').textContent = S.length;
+function go(n){ slides[cur].classList.remove('active'); cur = Math.max(0, Math.min(S.length-1, n)); slides[cur].classList.add('active'); document.getElementById('pos').textContent = cur+1; }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(cur+1);
+  if (e.key === 'ArrowLeft') go(cur-1);
+});
+document.addEventListener('click', () => go(cur+1));
+</script>
+</body>
+</html>
