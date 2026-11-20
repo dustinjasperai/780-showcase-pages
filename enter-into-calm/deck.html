@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Words Are Medicine | Enter Into Calm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#edf1ee; --panel:#faf8f3; --ink:#223b39; --ink-soft:#3f5450;
+    --ink-muted:#7a8683; --rule:#d4ddd7; --accent:#2f6f6b;
+  }
+  html,body{height:100%}
+  body{font-family:'Hanken Grotesk',-apple-system,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 6vw;position:relative}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,64px);line-height:1.08;letter-spacing:-.01em;margin-bottom:20px}
+  h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,46px);line-height:1.12;margin-bottom:24px}
+  p{font-size:clamp(17px,2vw,22px);line-height:1.6;color:var(--ink-soft);max-width:40ch;margin-bottom:16px}
+  p.lead{font-size:clamp(19px,2.3vw,26px);color:var(--ink);max-width:36ch}
+  .sub{font-size:clamp(16px,1.8vw,20px);color:var(--ink-muted);max-width:44ch}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:clamp(16px,1.9vw,21px);line-height:1.5;color:var(--ink-soft);padding-left:28px;position:relative;margin-bottom:16px;max-width:42ch}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:2px;background:var(--accent)}
+  li b{color:var(--ink);font-weight:700}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:18px;padding:clamp(26px,4vw,46px)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+  .quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(26px,4vw,44px);line-height:1.2;color:var(--ink);font-weight:600}
+  .accent{color:var(--accent)}
+  .rule{width:54px;height:3px;background:var(--accent);border-radius:2px;margin:26px 0}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px}
+  .pair .box{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:22px}
+  .pair .tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+  .pair .was .tag{color:var(--ink-muted)}
+  .pair .now .tag{color:var(--accent)}
+  .pair .line{font-size:clamp(16px,1.8vw,20px);color:var(--ink);line-height:1.4}
+  .disc{font-size:14px;color:var(--ink-muted);max-width:52ch;line-height:1.5;margin-top:22px}
+  .cred{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
+  .cred span{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:8px 16px}
+  footer{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:16px 26px;font-size:12px;color:var(--ink-muted);font-weight:600;letter-spacing:.04em}
+  .brandmark{color:var(--ink);font-weight:700}
+  .nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:5}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;width:38px;height:32px;font-size:15px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .count{font-variant-numeric:tabular-nums}
+  @media(max-width:720px){.two,.pair{grid-template-columns:1fr}.two{gap:18px}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev">&larr;</button><span class="count" id="count"></span><button id="next">&rarr;</button></div>
+<footer><span class="brandmark">Enter Into Calm</span><span>Christy Cowgill, CRNA, BCH</span></footer>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for nurses, coaches &amp; therapists', h:'Your Words Are Medicine', p:'How the language you already use at the bedside becomes the most powerful clinical tool you own.', sub:'With Christy Cowgill, nurse anesthetist and board certified hypnotist.'},
+
+  {t:'who', eyebrow:'Who this is for', h:'You went into nursing to help people heal.', body:['You are a <b>nurse, coach, or therapist</b> who senses there is more to healing than the chart.','You watch patients tighten with fear before a procedure and feel limited to medication and monitoring.','You keep hearing about hypnosis and NLP, and you want to know if they actually work, and whether they are safe.']},
+
+  {t:'trap', eyebrow:'The quiet trap', h:'So you reach for the only tools the system handed you.', p:'More medication. More monitoring. More charting. And a patient who is still afraid, still bracing, still convinced the worst is coming.', sub:'The calm you want to give them is not in the medication cabinet. It is in how you speak.'},
+
+  {t:'hook', panel:true, quote:'Every word you say at the bedside is already a hypnotic suggestion. Most of them are accidental, and many of them make the fear worse.'},
+
+  {t:'part', eyebrow:'Part one', h:'The problem nobody taught you in nursing school', p:'A patient in a hospital bed is in a naturally suggestible state. Frightened, uncertain, hanging on your every word. That is the textbook definition of a trance.', lead:'Which means your language is never neutral. It is either deepening the fear or dissolving it.'},
+
+  {t:'list', eyebrow:'Part one', h:'The accidental nocebo', body:['<b>"Rate your pain, zero to ten."</b> You just asked the mind to go find pain and measure it.','<b>The side-effect recital.</b> "This may cause nausea, dizziness, headache." The body hears a to-do list.','<b>"This is going to pinch / burn / be uncomfortable."</b> A direct suggestion, delivered with authority, to a mind in trance.'], sub:'None of it is ill intended. All of it lands as instruction.'},
+
+  {t:'part', eyebrow:'Part two', h:'The method: three ways to make your words heal', p:'This is the heart of what I teach, and it is learnable in an afternoon and refinable over a career.'},
+
+  {t:'reframe', eyebrow:'Method 1', h:'Hypnotic Language Reframing', sub:'Stop sending the mind toward the symptom. Send it toward the state you want.', pair:[{k:'was',tag:'Instead of',line:'"What is your pain level right now?"'},{k:'now',tag:'Reframe',line:'"How comfortable are you getting?"'}]},
+
+  {t:'reframe', eyebrow:'Method 2', h:'Nocebo Neutralization', sub:'You still inform. You simply refuse to leave a bare suggestion of harm sitting in the room.', pair:[{k:'was',tag:'Instead of',line:'"This might give you a headache."'},{k:'now',tag:'Reframe',line:'"Some people notice a headache, and if that happens, we can treat it easily."'}]},
+
+  {t:'list', eyebrow:'Method 3', h:'The NLP feedback pattern', body:['Open with what is <b>working</b> ("your breathing is already slowing").','Name the <b>one adjustment</b> without alarm ("let your shoulders drop").','Close on the <b>positive</b> ("there, that is your body remembering how to settle").'], sub:'The same pattern that calms a patient also steadies a colleague and a team.'},
+
+  {t:'belief', panel:true, quote:'Our words are hypnotic. Belief shapes outcome. Once you see that, you cannot unsee it, and you will never speak at a bedside the same way again.'},
+
+  {t:'part', eyebrow:'Part three', h:'From a technique to a credential', p:'You can start using the reframes tomorrow. But if this is a direction you want to practice in, there is a recognized path.', lead:'This is the work of the NLP &amp; TimeLine Therapy Practitioner certification.'},
+
+  {t:'list', eyebrow:'The path', h:'What the practitioner path includes', body:['<b>40+ hours</b> of real time, hands on practice, not just watching.','A <b>board recognized credential</b> that meets ABNLP and TimeLine Therapy Association standards.','<b>Nursing CE contact hours</b>, because this was built for clinicians, by a clinician.','An ongoing <b>MasterMind community</b> so you are never practicing alone.']},
+
+  {t:'model', eyebrow:'The bigger picture', h:'Calm Collective Care', p:'A trauma responsive, mind body model delivered by nurses who are themselves certified in this work, for people facing surgery, procedures, childbirth, and chronic conditions.', sub:'This is nursing with its full voice restored.'},
+
+  {t:'why', eyebrow:'Why learn this from me', h:'I have spent twenty years at the edge of fear.', cred:['CRNA, Nurse Anesthetist','MS Anesthesiology, Mayo','Board Certified Hypnotist','Former Oncology Nurse','Nurse Coach, NC-BC'], p:'Two decades keeping people calm through their most frightening moments taught me that the anesthetic is only half the work. The words are the other half.'},
+
+  {t:'cta', eyebrow:'Your next step', h:'Bring the calm you were always meant to give.', p:'If today showed you something you want to carry into your practice, the practitioner path is where it becomes a skill you own for the rest of your career.', cta:'Explore the NLP &amp; TimeLine Therapy Practitioner certification at enterintocalm.com', disc:'This masterclass is educational. Hypnosis and NLP are complementary approaches and are not a substitute for medical or psychological treatment. Nothing here is a guarantee of any specific clinical outcome. Results vary by individual and practice.'}
+];
+
+const stage=document.getElementById('stage');
+function render(s){
+  if(s.t==='title') return `<div class="eyebrow">${s.eyebrow}</div><h1>${s.h}</h1><p class="lead">${s.p}</p><div class="rule"></div><p class="sub">${s.sub}</p>`;
+  if(s.panel) return `<div class="panel"><div class="quote">${s.quote}</div></div>`;
+  if(s.pair){let b=s.pair.map(x=>`<div class="box ${x.k}"><div class="tag">${x.tag}</div><div class="line">${x.line}</div></div>`).join('');return `<div class="eyebrow">${s.eyebrow}</div><h2>${s.h}</h2><p class="sub">${s.sub}</p><div class="pair">${b}</div>`;}
+  if(s.cred){let c=s.cred.map(x=>`<span>${x}</span>`).join('');return `<div class="eyebrow">${s.eyebrow}</div><h2>${s.h}</h2><div class="cred">${c}</div><div class="rule"></div><p>${s.p}</p>`;}
+  if(s.t==='cta') return `<div class="eyebrow">${s.eyebrow}</div><h1>${s.h}</h1><p class="lead">${s.p}</p><div class="rule"></div><p class="accent" style="font-weight:700">${s.cta}</p><p class="disc">${s.disc}</p>`;
+  let out=`<div class="eyebrow">${s.eyebrow||''}</div>`;
+  if(s.h) out+= s.t==='part'||s.t==='who'||s.t==='trap' ? `<h2>${s.h}</h2>` : `<h2>${s.h}</h2>`;
+  if(s.lead) out+=`<p class="lead">${s.lead}</p>`;
+  if(s.p) out+=`<p>${s.p}</p>`;
+  if(s.body){out+='<ul>'+s.body.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+  if(s.sub) out+=`<p class="sub">${s.sub}</p>`;
+  return out;
+}
+let i=0;
+function show(n){i=Math.max(0,Math.min(S.length-1,n));stage.innerHTML=`<div class="slide on">${render(S[i])}</div>`;document.getElementById('count').textContent=(i+1)+' / '+S.length;}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
