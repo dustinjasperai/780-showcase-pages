@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 8-Step System for Photorealistic Interior Renders · Arch Viz Artist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0b0c;        /* brand near-black ground (brand.json) */
+    --panel:#161616;     /* brand dominant dark surface (brand.json) */
+    --rule:#2a2a2d;      /* muted hairline */
+    --accent:#3d8be5;    /* brand electric blue (brand.json) */
+    --ink:#f4f4f5;       /* off-white on dark */
+    --muted:#a2a2a8;
+    --head:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:40px 20px}
+  .slide{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:14px;
+    padding:56px 56px;
+    margin:0 0 26px;
+    min-height:430px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .slide::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);opacity:.9;
+  }
+  .kicker{font-family:var(--head);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:600}
+  h1{font-family:var(--head);font-weight:700;font-size:46px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.01em}
+  .promise{font-size:20px;color:var(--muted);margin-top:22px;max-width:46ch;line-height:1.45}
+  p.body{font-size:19px;line-height:1.55;color:#d9d9de;margin-top:16px;max-width:52ch}
+  .big{font-size:27px;line-height:1.35;color:var(--ink);font-family:var(--head);font-weight:500;max-width:48ch}
+  .step-num{font-family:var(--head);font-weight:700;font-size:72px;color:var(--accent);line-height:1}
+  .step-label{font-family:var(--head);font-weight:600;font-size:30px;margin-top:8px}
+  ul{margin-top:22px;list-style:none;display:flex;flex-direction:column;gap:12px}
+  ul li{font-size:18px;line-height:1.4;color:#d9d9de;padding-left:26px;position:relative}
+  ul li::before{content:"";position:absolute;left:0;top:10px;width:9px;height:9px;background:var(--accent);border-radius:2px}
+  .overview{display:grid;grid-template-columns:1fr 1fr;gap:14px 34px;margin-top:26px}
+  .overview .o{display:flex;gap:14px;align-items:baseline}
+  .overview .o b{font-family:var(--head);color:var(--accent);font-size:19px;min-width:26px}
+  .overview .o span{font-size:18px;color:#d9d9de}
+  .stat{display:flex;gap:46px;margin-top:30px;flex-wrap:wrap}
+  .stat .s b{font-family:var(--head);font-weight:700;font-size:40px;color:var(--accent);display:block}
+  .stat .s span{font-size:15px;color:var(--muted)}
+  .cta-line{font-size:21px;color:#d9d9de;margin-top:18px;max-width:48ch;line-height:1.5}
+  .cta-btn{display:inline-block;margin-top:28px;font-family:var(--head);font-weight:600;font-size:18px;color:var(--bg);background:var(--accent);padding:15px 30px;border-radius:9px;text-decoration:none}
+  .disclaimer{font-size:13px;color:#77777d;margin-top:30px;max-width:56ch;line-height:1.5}
+  .pagefoot{font-family:var(--head);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#55555b;position:absolute;right:26px;bottom:20px}
+  .brandfoot{text-align:center;color:#55555b;font-size:13px;font-family:var(--head);letter-spacing:.12em;text-transform:uppercase;padding:10px 0 40px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="brandfoot">Arch Viz Artist · archvizartist.com</div>
+<script>
+const S=[
+  {t:'title',kicker:'A masterclass by Arch Viz Artist',
+   h1:'The 8-Step System for Photorealistic Interior Renders',
+   promise:'How to light, compose, and finish an interior that reads as a photograph. In weeks of focused practice, not years of guessing.'},
+
+  {t:'audience',kicker:'Who this is for',
+   h2:'For the 3D artist whose renders are good, but not yet "wait, is that a photo?"',
+   body:'You know your way around 3ds Max. You can model a room, drop in a camera, hit render. The output is clean. It just still looks like CG, and you cannot always say why.'},
+
+  {t:'trap',kicker:'The trap',
+   h2:'So you buy more stuff.',
+   body:'Another render engine. Another asset pack. Another plugin that promises realism out of the box. The scene gets heavier and the render still does not feel real. The problem was never the toolbox.'},
+
+  {t:'reframe',kicker:'The reframe',
+   big:'Photorealism is not a setting you switch on. It is eight decisions you make before you ever press render.'},
+
+  {t:'part',kicker:'Part one',
+   h2:'Why most interior renders stop just short of real',
+   body:'The software can already produce a photoreal image. What stops it is that the artistic choices get made by accident: the camera lands wherever, the lights get added until it is bright enough, the materials come straight off the shelf. Realism lives in those choices, made on purpose.'},
+
+  {t:'part',kicker:'Part one',
+   h2:'The fix is a repeatable order of operations',
+   body:'Not inspiration. Not a lucky seed. A sequence you run on every scene, the same way every time, so the result is realistic by design and not by chance. That sequence is the 8-Step System.'},
+
+  {t:'overview',kicker:'Part two: the 8-Step System',
+   h2:'Eight steps, in order, on every scene',
+   items:[['1','Composition'],['2','Camera'],['3','Lighting'],['4','Color theory'],['5','Materials'],['6','Asset placement'],['7','Storytelling'],['8','Post-production']]},
+
+  {t:'step',num:'1',label:'Composition',
+   body:'Decide what the image is about before you build it. Where the eye enters, what it rests on, what gets cropped out. A strong composition carries a simple scene; a weak one wastes a detailed one.'},
+
+  {t:'step',num:'2',label:'Camera',
+   body:'Focal length, height, and framing set how the space feels. The right lens reads like architecture photography; the wrong one reads like a video-game screenshot. Exposure and depth of field are camera decisions, not fixes for later.'},
+
+  {t:'step',num:'3',label:'Lighting',
+   body:'Light is the single biggest lever on realism. Know your key, your fill, and your bounce, and light for mood and balance, not just brightness. One believable light beats ten accidental ones.'},
+
+  {t:'step',num:'4',label:'Color theory',
+   body:'Real rooms have a color story: a dominant temperature, an accent, and the way light tints every surface it touches. Control that on purpose and the render stops looking flat and plastic.'},
+
+  {t:'step',num:'5',label:'Materials',
+   body:'Photoreal materials are about imperfection: the right roughness, subtle variation, wear where a real surface would wear. Wood, marble, fabric, and metal each have a tell. Nail the tells and the scene grounds itself.'},
+
+  {t:'step',num:'6',label:'Asset placement',
+   body:'A room looks lived-in when the objects behave like someone uses them. Scatter, overlap, and a little mess read as real; a showroom grid reads as a catalogue. Placement is storytelling you can touch.'},
+
+  {t:'step',num:'7',label:'Storytelling',
+   body:'Every strong image answers a quiet question: who lives here, and what just happened? A book left open, morning light, a cup on the counter. The story is what makes a viewer stay on the image.'},
+
+  {t:'step',num:'8',label:'Post-production',
+   body:'The final grade in the frame buffer and Photoshop is where a good render becomes a finished one. Contrast, glow, subtle color work. Not to rescue the image, but to put the last ten percent on an image that was already right.'},
+
+  {t:'part',kicker:'Part three: what changes',
+   h2:'What the same scene looks like, run through the system',
+   body:'The camera stops fighting the room. The light has a direction and a mood. The materials settle. The eye lands where you meant it to. Nothing about the scene got more expensive. The decisions just got made on purpose, in order.'},
+
+  {t:'why',kicker:'Why learn it here',
+   h2:'This is the method we teach scene by scene, start to finish',
+   body:'Arch Viz Artist has spent years turning professional archviz work into a system beginners can actually follow. Every scene is taught from an empty file to a finished image, in both Corona and V-Ray, so you see the real decisions in real time.',
+   stats:[['180K+','on the YouTube channel'],['2,000+','students taught'],['4 weeks','to a photoreal scene']]},
+
+  {t:'payoff',kicker:'From artistry to income',
+   h2:'Renders this good are what clients pay premium rates for',
+   body:'When your images read as photographs, you stop competing on price. The same system that makes a scene realistic is what lets you charge for the result, take on better projects, and build a body of work people hire you from.'},
+
+  {t:'cta',kicker:'Your next step',
+   h2:'Learn the full 8-Step System on a real interior',
+   ctaLine:'Start with the 3ds Max Interior Visualizations course and build your first truly photoreal scene, one step at a time.',
+   btn:'Start at archvizartist.com',
+   disclaimer:'This masterclass is educational. Your results depend on your own practice, effort, and the work you put in. No specific income or outcome is promised or guaranteed.'},
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide';
+  let h='';
+  if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.h1) h+=`<h1>${s.h1}</h1>`;
+  if(s.promise) h+=`<div class="promise">${s.promise}</div>`;
+  if(s.h2) h+=`<h2>${s.h2}</h2>`;
+  if(s.big) h+=`<div class="big">${s.big}</div>`;
+  if(s.num){ h+=`<div class="step-num">${s.num}</div><div class="step-label">${s.label}</div>`; }
+  if(s.body) h+=`<p class="body">${s.body}</p>`;
+  if(s.items){
+    h+='<div class="overview">';
+    s.items.forEach(it=>{ h+=`<div class="o"><b>${it[0]}</b><span>${it[1]}</span></div>`; });
+    h+='</div>';
+  }
+  if(s.stats){
+    h+='<div class="stat">';
+    s.stats.forEach(st=>{ h+=`<div class="s"><b>${st[0]}</b><span>${st[1]}</span></div>`; });
+    h+='</div>';
+  }
+  if(s.ctaLine) h+=`<div class="cta-line">${s.ctaLine}</div>`;
+  if(s.btn) h+=`<a class="cta-btn" href="https://archvizartist.com">${s.btn}</a>`;
+  if(s.disclaimer) h+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  h+=`<div class="pagefoot">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</div>`;
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
