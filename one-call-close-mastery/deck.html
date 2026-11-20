@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executing the One-Call Close | A Masterclass with Duane Cashin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0C2233;
+    --panel:#15324A;
+    --rule:#24455F;
+    --accent:#4FAE4E;
+    --ink:#EAF1F6;
+    --ink-soft:#AFC3D2;
+  }
+  html,body{height:100%}
+  body{font-family:'Mulish',system-ui,sans-serif;background:#05131F;color:var(--ink);overflow:hidden}
+  #stage{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;background:var(--bg)}
+  .slide.on{display:flex}
+  .k{font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(30px,5.4vw,62px);line-height:1.06;letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(24px,3.6vw,42px);line-height:1.12;margin-bottom:20px}
+  p{font-size:clamp(16px,1.8vw,22px);line-height:1.5;color:var(--ink-soft);max-width:60ch;margin-bottom:14px}
+  .big{font-size:clamp(40px,8vw,92px);font-family:'Archivo',sans-serif;font-weight:800;color:var(--accent);line-height:1;margin:6px 0 18px}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:clamp(16px,1.9vw,23px);line-height:1.5;color:var(--ink);padding:12px 0 12px 30px;border-bottom:1px solid var(--rule);position:relative;max-width:64ch}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:0;top:22px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .lead{color:var(--ink);font-weight:600}
+  .brand{font-family:'Archivo',sans-serif;font-weight:700;color:var(--ink);font-size:16px;margin-top:30px;letter-spacing:.02em}
+  .brand span{color:var(--accent)}
+  .phase{font-family:'Archivo',sans-serif;font-weight:800;color:var(--rule);font-size:clamp(60px,14vw,170px);line-height:.8;margin-bottom:10px}
+  .cta h1{color:var(--ink)}
+  .disc{font-size:13px;color:var(--ink-soft);opacity:.75;margin-top:34px;max-width:70ch;line-height:1.5}
+  .nav{position:fixed;bottom:18px;right:26px;font-family:'Archivo',sans-serif;font-size:12px;letter-spacing:.1em;color:var(--ink-soft);z-index:10}
+  .bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .2s;z-index:10}
+  .hint{position:fixed;bottom:18px;left:26px;font-size:11px;letter-spacing:.08em;color:var(--ink-soft);opacity:.6;z-index:10}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="bar" id="bar"></div>
+<div class="nav" id="nav"></div>
+<div class="hint">Use arrow keys to move</div>
+<script>
+const S=[
+ {t:'title',k:'A live masterclass',h:'Executing the One-Call Close',p:'How lawn care and pest control teams win the call they already paid for.',brand:1},
+ {t:'who',k:'Who this is for',h:'Owners and sales reps who answer the phone',p:'If your company runs lawn care or pest control, your growth lives on the inbound estimate call. This session is for the owners who pay for those calls and the reps who have to close them.'},
+ {t:'trap',k:'The trap',h:'Every inbound call is a paid lead',p:'By the time the phone rings, you have already spent money to make it ring. Most teams still treat that call like a free conversation, answer a few questions, quote a price, and hope the customer calls back.'},
+ {t:'hook',k:'The reframe',h:'A second-call strategy is a refund to your competitor',p:'The customer who says they will think about it is calling the next company on the list. The job does not wait for a follow-up. It gets won or lost on the first call.'},
+ {t:'part',k:'Part one',h:'The core problem'},
+ {t:'stat',k:'The cost of the call',big:'$150 to $400',p:'That is what a single inbound call costs a lawn care or pest control business once marketing is paid for. Every call a rep loses is that much spend with nothing to show for it.'},
+ {t:'why',k:'Why reps lose it',h:'They lead with price and features',p:'The two most common mistakes on the call:',li:['Quoting a price before understanding what the customer actually values','Listing features and services instead of connecting to the reason they called','Letting a soft objection end the call instead of answering it']},
+ {t:'part',k:'Part two',h:'The Five Phases of the One-Call Close'},
+ {t:'phase',n:'1',k:'Phase one',h:'Discovery: asking the correct questions',p:'Before anything else, uncover the customer situation and motivation. The right questions separate the price shoppers from the people who place value on results, so you know who you are talking to before price ever comes up.'},
+ {t:'phase',n:'2',k:'Phase two',h:'Building value, not a feature dump',p:'Present the solution tied to what the customer told you matters. Selling value is how you win against a cheaper competitor instead of racing them to the bottom on price.'},
+ {t:'phase',n:'3',k:'Phase three',h:'Handling the four objections',p:'Four objections decide most lawn and pest estimates:',li:['I need to discuss it with my spouse','I want to think it over','I want a few more estimates','Your price is too high']},
+ {t:'phase',n:'4',k:'Phase four',h:'Closing on the first call',p:'Ask for the business while you are still on the phone. A clear, confident close on the first call is what turns a paid lead into a booked job instead of a maybe.'},
+ {t:'phase',n:'5',k:'Phase five',h:'Follow-up: Personalized Persistence',p:'For the estimates that do not close live, a follow-up cadence matched to the person keeps you in the running without being pushy. Most unsold estimates are winnable; they just go cold.'},
+ {t:'styles',k:'Tailor the pitch',h:'The four personality styles',p:'The same script does not land with every buyer. Reading the four personality styles lets a rep adjust pace and emphasis so the one-call close feels natural to the person on the other end.'},
+ {t:'part',k:'Part three',h:'The one-call close, running in your shop'},
+ {t:'walk',k:'One call, five phases',h:'The whole system on a single call',p:'Discovery sets up the value. Value earns the right to close. The close surfaces the real objection. The objection gets answered, and the job books. Follow-up catches the rest. One framework, start to finish.'},
+ {t:'me',k:'Why this method',h:'Built from thousands of real calls',p:'This process was built for lawn care and pest control specifically, from listening to and analyzing more than three thousand real sales calls in the trade. It is not generic sales theory; it is what works on these calls.'},
+ {t:'proof',k:'What it produces',h:'A measured lift on the calls you already get',p:'Brad Leahy, VP of Blades of Green Lawn Care, on the system:',quote:'It increased our average closing ratio by 6 percent, which has generated an additional 600K in annual business, plus a dramatic reduction in cancellation rate.'},
+ {t:'cta',k:'The next step',h:'Bring the One-Call Close to your team',p:'If you want your reps closing more of the calls you already pay for, book a call with Cash in Sales and we will map the one-call-close system to your business.',brand:1,disc:'This masterclass is educational. Results vary by company, team, and market. No specific income or revenue result is promised or guaranteed. Client figures shown are that client reported outcome, not a projection for your business.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+ const d=document.createElement('div');
+ d.className='slide'+(s.t==='cta'?' cta':'')+(i===0?' on':'');
+ let html='';
+ if(s.k)html+='<div class="k">'+s.k+'</div>';
+ if(s.t==='phase')html+='<div class="phase">'+s.n+'</div>';
+ if(s.h)html+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+ if(s.big)html+='<div class="big">'+s.big+'</div>';
+ if(s.p)html+='<p'+((s.t==='title')?' class="lead"':'')+'>'+s.p+'</p>';
+ if(s.quote)html+='<p class="lead">"'+s.quote+'"</p>';
+ if(s.li){html+='<ul>';s.li.forEach(x=>html+='<li>'+x+'</li>');html+='</ul>';}
+ if(s.brand)html+='<div class="brand">One Call Close Mastery <span>&middot;</span> Duane Cashin</div>';
+ if(s.disc)html+='<div class="disc">'+s.disc+'</div>';
+ d.innerHTML=html;
+ stage.appendChild(d);
+});
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+const nav=document.getElementById('nav');const bar=document.getElementById('bar');
+function go(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));nav.textContent=(cur+1)+' / '+S.length;bar.style.width=((cur+1)/S.length*100)+'%';}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);});
+document.addEventListener('click',e=>{go(cur+1);});
+go(0);
+</script>
+</body>
+</html>
