@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escribir es un lugar — Clase en vivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#dde5e2;        /* their pale sage-grey as the ground */
+    --panel:#f7f3ea;     /* their dominant paper cream as the cards */
+    --panel2:#9cb1a9;    /* their sage, used for hairlines */
+    --ink:#1c2838;       /* their dominant ink-navy */
+    --sage:#9cb1a9;      /* their sage */
+    --accent:#ac3a3a;    /* their muted brick red (only warm accent) */
+    --serif:'Crimson Text', Georgia, serif;
+    --sans:'Montserrat', Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--serif)}
+  #deck{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+  .slide{
+    background:var(--panel);
+    border:1px solid var(--panel2);
+    border-radius:4px;
+    padding:64px 60px;
+    margin:0 0 22px;
+    min-height:460px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    box-shadow:0 1px 0 rgba(28,40,56,0.04);
+  }
+  .kicker{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  h1{font-family:var(--serif);font-weight:600;font-size:54px;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:600;font-size:38px;line-height:1.14}
+  .sub{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.4;color:var(--ink);opacity:.82;margin-top:22px;max-width:40ch}
+  .lead{font-size:24px;line-height:1.5;margin-top:18px;max-width:46ch}
+  ul{list-style:none;margin-top:26px}
+  li{font-size:21px;line-height:1.5;padding:12px 0 12px 30px;position:relative;border-top:1px solid var(--panel2)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:22px;width:11px;height:11px;
+    border-radius:2px;background:var(--accent)}
+  .big{font-size:46px;line-height:1.12;font-weight:600;max-width:20ch}
+  .pill{display:inline-block;font-family:var(--sans);font-weight:600;font-size:13px;
+    letter-spacing:.06em;color:var(--bg);background:var(--ink);padding:6px 14px;border-radius:3px;margin-bottom:24px}
+  .rule{width:64px;height:3px;background:var(--sage);margin:26px 0 0}
+  .foot{position:absolute;left:60px;bottom:26px;font-family:var(--sans);font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink);opacity:.4}
+  .pg{position:absolute;right:60px;bottom:24px;font-family:var(--sans);font-size:11px;color:var(--ink);opacity:.4}
+  .cta h2{font-size:42px}
+  .cta .step{font-family:var(--sans);font-weight:600;font-size:20px;color:var(--accent);margin-top:28px}
+  .disc{font-family:var(--sans);font-size:12px;line-height:1.6;color:var(--ink);opacity:.55;margin-top:36px;max-width:60ch}
+  .whofor{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:28px}
+  .whofor h3{font-family:var(--sans);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .whofor.no h3{color:var(--ink);opacity:.5}
+  .whofor p{font-size:19px;line-height:1.45}
+  .title-slide{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .title-slide h1{color:var(--bg)}
+  .title-slide .sub{color:var(--bg);opacity:.85}
+  .title-slide .kicker{color:var(--sage)}
+  .title-slide .rule{background:var(--accent)}
+  @media(max-width:640px){.slide{padding:40px 26px;min-height:0}h1{font-size:36px}h2{font-size:28px}.whofor{grid-template-columns:1fr}.foot,.pg{position:static;margin-top:20px}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'Clase en vivo para escritoras', h:'Escribir es un lugar',
+   sub:'Cómo sostener una práctica de escritura que no duele, aunque la vida no pare.'},
+
+  {t:'for', kicker:'Para quién es esta clase',
+   lead:'Para ti si tienes un proyecto que te importa de verdad:',
+   bullets:['Una novela, un libro de cuentos o una memoria a medias',
+            'Un guión o una tesis que llevas meses sin abrir',
+            'La sensación de empezar con fuerza y luego dejarlo caer, otra vez']},
+
+  {t:'big', kicker:'La escena de siempre', big:'Empiezas con todo. Después la vida se mete. Y lo dejas. Y vuelve la culpa.'},
+
+  {t:'hook', kicker:'La verdad incómoda',
+   h:'No abandonaste por falta de talento.',
+   sub:'Abandonaste porque estabas escribiendo sola, sin sostén y sin un lugar al que volver.'},
+
+  {t:'lead', kicker:'Parte uno · El problema real',
+   h:'Escribir en soledad no es romántico. Es frágil.',
+   lead:'El manuscrito no se cae por una mala frase. Se cae cuando nadie te espera del otro lado y no hay una estructura que te sostenga la semana difícil.'},
+
+  {t:'list', kicker:'Las dos cosas que casi siempre te detienen',
+   h:'Y rara vez es la trama.',
+   bullets:['La procrastinación: posponer el momento de sentarte, día tras día',
+            'La voz crítica interior: la que dice "esto no sirve" antes de terminar la página',
+            'Las dos se alimentan del aislamiento, no de tu capacidad']},
+
+  {t:'lead', kicker:'Parte dos · El sostén',
+   h:'El sostén es lo que te faltaba.',
+   lead:'No más fuerza de voluntad ni más talento. Tres cosas concretas que convierten la escritura en una práctica que se sostiene.'},
+
+  {t:'list', kicker:'Sostén · Uno', h:'Un método, no inspiración.',
+   bullets:['Una práctica diaria y pequeña que no depende de las musas',
+            'Metas de proceso, no de resultado: presentarte, no "ser genial"',
+            'Un ritmo que sobrevive a las semanas en que todo se complica']},
+
+  {t:'list', kicker:'Sostén · Dos', h:'Compañía, no vigilancia.',
+   bullets:['Escribir acompañada de otras escritoras que entienden el oficio',
+            'Un foro y sesiones donde tu avance importa y alguien lo nota',
+            'La comunidad que reemplaza al aislamiento que te frenaba']},
+
+  {t:'list', kicker:'Sostén · Tres', h:'Un lugar al que volver.',
+   bullets:['Escribir es un lugar: si se lo permites, puede ser tu casa',
+            'Un espacio fijo, tuyo, al que regresas cuando el mundo hace ruido',
+            'La madriguera: cálida, íntima, a prueba de interrupciones']},
+
+  {t:'hook', kicker:'El doble objetivo',
+   h:'Mejor texto y menos sufrimiento, a la vez.',
+   sub:'Casi todos los cursos trabajan solo la página. Aquí cuidamos también tu relación con la escritura, para que escribir deje de doler y empiece a ser parte de tu vida real.'},
+
+  {t:'list', kicker:'Parte tres · Cómo se ve', h:'Una semana de práctica sostenida.',
+   bullets:['Te sientas aunque no tengas ganas, porque el método es pequeño',
+            'Compartes lo escrito y recibes lectura, no juicio',
+            'La voz crítica sigue ahí, pero ya no maneja ella']},
+
+  {t:'lead', kicker:'Antes de empezar', h:'La montaña de capacidades.',
+   lead:'No te falta talento: te falta recordar lo que ya sabes hacer. Empezamos nombrando tus capacidades, porque la escritora que reconoce su oficio deja de negociar consigo misma cada mañana.'},
+
+  {t:'list', kicker:'Quién te acompaña', h:'Laia Jufresa',
+   bullets:['Autora de Umami, novela traducida a más de diez idiomas (PEN Translates Award)',
+            'Nombrada entre las mejores voces jóvenes de América Latina (Bogotá39, México20)',
+            'Coach transformacional acreditada; más de 150 escritoras acompañadas desde 2020']},
+
+  {t:'whofor', kicker:'Para quién es y para quién no',
+   yes_h:'Es para ti si', yes:'Tienes un proyecto real en marcha y quieres una práctica que sobreviva a tu vida, no un golpe de inspiración.',
+   no_h:'No es para ti si', no:'Buscas un truco rápido o esperas que alguien escriba por ti. Aquí se escribe, acompañada y con método.'},
+
+  {t:'list', kicker:'Lo que te llevas', h:'Las tres cosas, otra vez.',
+   bullets:['Un método pequeño que se sostiene solo','Compañía que reemplaza el aislamiento','Un lugar al que volver cada día']},
+
+  {t:'cta', kicker:'Tu siguiente paso', h:'Escribir puede ser el lugar al que siempre vuelves.',
+   sub:'Si quieres que esta clase se convierta en práctica, ese es justo el trabajo que hacemos dentro.',
+   step:'Únete a La Comunidad o a La Madriguera en escribiresunlugar.com',
+   disc:'Esta clase es de carácter educativo. Educational content only: no specific result is guaranteed, and no income or sales are promised. Results vary by writer and by effort.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sec = document.createElement('section');
+  sec.className = 'slide' + (s.t==='title'?' title-slide':'') + (s.t==='cta'?' cta':'');
+  let html = '';
+  if(s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.h) html += '<h'+(s.t==='title'?'1':'2')+'>'+s.h+'</h'+(s.t==='title'?'1':'2')+'>';
+  if(s.big) html += '<div class="big">'+s.big+'</div>';
+  if(s.lead) html += '<p class="lead">'+s.lead+'</p>';
+  if(s.sub) html += '<p class="sub">'+s.sub+'</p>';
+  if(s.t==='title'||s.t==='hook'||s.t==='lead') html += '<div class="rule"></div>';
+  if(s.bullets){html+='<ul>'; s.bullets.forEach(b=>html+='<li>'+b+'</li>'); html+='</ul>';}
+  if(s.t==='whofor'){
+    html += '<div class="whofor"><div><h3>'+s.yes_h+'</h3><p>'+s.yes+'</p></div>'+
+            '<div class="no"><h3>'+s.no_h+'</h3><p>'+s.no+'</p></div></div>';
+  }
+  if(s.step) html += '<div class="step">'+s.step+'</div>';
+  if(s.disc) html += '<p class="disc">'+s.disc+'</p>';
+  if(s.t!=='title'){ html += '<div class="foot">Escribir es un lugar</div>'; }
+  html += '<div class="pg">'+(i+1)+' / '+S.length+'</div>';
+  sec.innerHTML = html;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
