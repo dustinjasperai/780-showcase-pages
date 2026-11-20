@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teach the Body in Front of You | Anatomy of Pilates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faefe5;        /* brand dominant, warm cream */
+    --panel:#f3e3d4;     /* slightly deeper cream panel */
+    --ink:#28241f;       /* brand text ink */
+    --ink-soft:#5a5248;
+    --rule:#e2d2c2;
+    --accent:#be543c;    /* brand terracotta */
+    --sage:#81b19a;      /* brand sage, secondary */
+    --teal:#3b5354;      /* brand deep teal, small accents */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'DM Sans',-apple-system,sans-serif;
+    background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;animation:fade .35s ease;}
+  .slide.on{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,66px);line-height:1.04;letter-spacing:-.01em;margin-bottom:22px;}
+  h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(28px,4.4vw,46px);line-height:1.1;margin-bottom:20px;}
+  p{font-size:clamp(17px,2vw,22px);line-height:1.6;color:var(--ink-soft);max-width:40ch;}
+  p.lead{color:var(--ink);font-size:clamp(19px,2.3vw,26px);max-width:34ch;}
+  .brandline{margin-top:40px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);}
+  ul{list-style:none;margin-top:10px;}
+  li{font-size:clamp(16px,1.9vw,21px);line-height:1.5;color:var(--ink-soft);padding-left:28px;position:relative;margin-bottom:14px;max-width:46ch;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:2px;background:var(--accent);}
+  .pillar-no{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,96px);font-weight:700;color:var(--sage);line-height:1;margin-bottom:12px;}
+  .part{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(40px,7vw,86px);color:var(--ink);line-height:1.05;}
+  .part small{display:block;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start;}
+  .card{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:22px 24px;}
+  .card h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink);margin-bottom:8px;}
+  .card p{font-size:16px;max-width:none;}
+  .disclaimer{margin-top:34px;font-size:12.5px;line-height:1.5;color:var(--ink-soft);max-width:60ch;border-top:1px solid var(--rule);padding-top:14px;}
+  .cta-box{display:inline-block;margin-top:14px;background:var(--accent);color:var(--bg);font-weight:600;font-size:17px;padding:14px 26px;border-radius:2px;}
+  #nav{position:fixed;bottom:20px;right:24px;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-soft);font-weight:500;z-index:5;}
+  #nav button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);width:34px;height:34px;border-radius:50%;cursor:pointer;}
+  #nav button:hover{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+  #count{min-width:46px;text-align:center;letter-spacing:.08em;}
+  .foot{position:fixed;bottom:22px;left:24px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);z-index:5;}
+  @media(max-width:640px){.two{grid-template-columns:1fr;}#stage{padding:7vh 8vw;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="foot">Anatomy of Pilates</div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button><span id="count"></span><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S=[
+ {t:'title',html:`<div class="eyebrow">Anatomy of Pilates &middot; Instructor Session</div>
+   <h1>Teach the Body<br>in Front of You</h1>
+   <p class="lead">Reasoning over memorization. An evidence-informed way to teach any body on your schedule.</p>
+   <div class="brandline">Rooted in anatomy &amp; movement science</div>`},
+ {t:'promise',html:`<div class="eyebrow">What you'll leave with</div>
+   <h2>One confident decision, for any body</h2>
+   <p class="lead">By the end of this session you'll have a way to make a clear, confident choice for the client in front of you, without reaching for a memorized cue.</p>`},
+ {t:'who',html:`<div class="eyebrow">Who this is for</div>
+   <h2>Instructors already teaching real clients</h2>
+   <ul>
+     <li>You teach clients in a studio or private setting every week</li>
+     <li>You're ready to move past default cues and scripted repertoire</li>
+     <li>You want to apply anatomy and biomechanics, not just recite them</li>
+     <li>You're willing to examine your own decision making</li>
+   </ul>`},
+ {t:'trap',html:`<div class="eyebrow">The trap</div>
+   <h2>You learned the repertoire. Then a real body showed up.</h2>
+   <p class="lead">You learned the exercises. You learned the cues. Then someone walked in who didn't match any of it, and the script ran out.</p>`},
+ {t:'reframe',html:`<div class="eyebrow">The reframe</div>
+   <h2>The answer was never more content</h2>
+   <p class="lead">Another exercise library doesn't make the decision clearer. More certifications don't either. Reasoning does. You teach the body, not the choreography.</p>`},
+ {t:'part1',html:`<div class="part"><small>Part One</small>Why memorized cues break</div>`},
+ {t:'p1a',html:`<div class="eyebrow">Variable by design</div>
+   <h2>Choreography assumes an average body</h2>
+   <p>Real bodies are variable and unpredictable. A sequence built for the average client has no instruction for the one in front of you who sits outside it, and most of them do.</p>`},
+ {t:'p1b',html:`<div class="eyebrow">The missing layer</div>
+   <h2>A cue that helps one client hinders the next</h2>
+   <p>"Pull your navel in" lands differently on a bracing client than a breath holder. Without the reason underneath the cue, you can't tell which one you're looking at, so you can't adapt in the moment.</p>`},
+ {t:'part2',html:`<div class="part"><small>Part Two &middot; The Foundation</small>Four pillars you reason from</div>`},
+ {t:'pillar1',html:`<div class="pillar-no">01</div>
+   <h2>Applied Anatomy</h2>
+   <p class="lead">How structures behave under load and in motion. Not memorized origins and insertions, but what the tissue actually does when your client moves.</p>`},
+ {t:'pillar2',html:`<div class="pillar-no">02</div>
+   <h2>Biomechanics &amp; Force Analysis</h2>
+   <p class="lead">How force orientation, joint constraints, and load variables shape the movement outcome, so you can predict what a change will do before you cue it.</p>`},
+ {t:'pillar3',html:`<div class="pillar-no">03</div>
+   <h2>Motor Learning Theory</h2>
+   <p class="lead">How clients actually acquire a movement skill, and how your cueing either helps that process or quietly gets in its way.</p>`},
+ {t:'pillar4',html:`<div class="pillar-no">04</div>
+   <h2>Progressive Loading</h2>
+   <p class="lead">How adaptation works, and how to use it to drive meaningful, lasting change instead of repeating the same session at the same intensity.</p>`},
+ {t:'loop',html:`<div class="eyebrow">How the pillars combine</div>
+   <h2>A reasoning loop, not a script</h2>
+   <ul>
+     <li>Observe what this body is doing under load</li>
+     <li>Form a hypothesis from anatomy and biomechanics</li>
+     <li>Load it, cue it, and watch the response</li>
+     <li>Adjust from what you see, not from the next line in the script</li>
+   </ul>`},
+ {t:'part3',html:`<div class="part"><small>Part Three</small>What it looks like in the studio</div>`},
+ {t:'ex1',html:`<div class="eyebrow">Example &middot; the hypermobile client</div>
+   <h2>Reason from constraints, not a scripted cue</h2>
+   <p>Instead of "find your end range," you read the joint constraints and load for control inside a safer range. Same exercise, a decision the client can actually feel, because you understood the why.</p>`},
+ {t:'ex2',html:`<div class="eyebrow">Example &middot; one exercise, two bodies</div>
+   <h2>The same move, two different calls</h2>
+   <div class="two">
+     <div class="card"><h3>Client A</h3><p>Loads well, needs challenge. Add range and tempo to drive adaptation.</p></div>
+     <div class="card"><h3>Client B</h3><p>Compensating under load. Reduce the variable, rebuild control, then progress.</p></div>
+   </div>
+   <p style="margin-top:22px;">The repertoire is identical. The reasoning is what changes the result.</p>`},
+ {t:'whyme',html:`<div class="eyebrow">Who's teaching this</div>
+   <h2>Cody Jussel, M.S.</h2>
+   <p class="lead">Master's in Kinesiology, with a focus in orthopedic rehabilitation and adaptive sports. Founder of Anatomy of Pilates, where the work is grounded in research, not trend.</p>
+   <div class="brandline">Evidence-informed education for instructors</div>`},
+ {t:'recap',html:`<div class="eyebrow">The whole session in one line</div>
+   <h2>Four pillars. One confident decision.</h2>
+   <ul>
+     <li>Applied anatomy tells you what the body is doing</li>
+     <li>Biomechanics tells you what a change will do</li>
+     <li>Motor learning tells you how to teach it</li>
+     <li>Progressive loading tells you how to grow it</li>
+   </ul>`},
+ {t:'cta',html:`<div class="eyebrow">Your next step</div>
+   <h2>Bring this into your teaching</h2>
+   <p class="lead">The Instructor Mentorship is where you practice this reasoning on your own clients, with feedback, until it's the way you teach.</p>
+   <span class="cta-box">Join the next Instructor Mentorship cohort</span>
+   <p class="disclaimer">This session is educational and reflects a professional-development approach to Pilates instruction. It is not medical advice and does not diagnose or treat any condition. No specific outcome or result is guaranteed. Results vary by instructor, practice, and client.</p>`}
+];
+let i=0;const stage=document.getElementById('stage');
+function render(){
+ stage.innerHTML='';
+ const d=document.createElement('div');d.className='slide on';
+ d.innerHTML=S[i].html||'';stage.appendChild(d);
+ document.getElementById('count').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
