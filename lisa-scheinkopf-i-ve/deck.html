@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assumption Hacking — a live masterclass with Lisa Scheinkopf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#161e2a;        /* deep navy — their heading/hero color (12 uses), site_scheme dark */
+    --panel:#1e2a3c;     /* lighter navy panel */
+    --ink:#eef2f7;       /* near-white ink */
+    --muted:#a9b4c4;     /* muted slate */
+    --rule:#2c3a4f;      /* navy rule */
+    --accent:#2e3091;    /* signature indigo — their button + footer color (10 uses) */
+    --accent2:#d41459;   /* their magenta (5 uses) — used for marks on the dark ground */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#0e141d;color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+  }
+  #stage{width:min(1040px,94vw);aspect-ratio:16/10;background:var(--bg);
+    border:1px solid var(--rule);border-radius:14px;position:relative;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  h1,h2,h3,.eyebrow{font-family:"Fira Sans",system-ui,sans-serif}
+  .eyebrow{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);font-weight:700;margin-bottom:18px}
+  h1{font-size:50px;line-height:1.05;font-weight:800;letter-spacing:-.01em}
+  h2{font-size:38px;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+  p{font-size:21px;line-height:1.5;color:var(--muted);max-width:42ch}
+  .lead{font-size:24px;color:var(--ink)}
+  .big{font-size:58px;line-height:1.04;font-weight:800;letter-spacing:-.02em;max-width:18ch;font-family:"Fira Sans"}
+  .sub{margin-top:22px}
+  .accentbar{width:64px;height:6px;background:var(--accent2);border-radius:3px;margin:0 0 26px}
+  ul{list-style:none;margin-top:24px;display:grid;gap:16px;max-width:48ch}
+  li{position:relative;padding-left:44px;font-size:21px;line-height:1.4;color:var(--ink)}
+  li .n{position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;
+    background:var(--accent2);color:#fff;font-family:"Fira Sans";font-weight:700;font-size:14px;
+    display:flex;align-items:center;justify-content:center}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px;max-width:54ch}
+  .cell{border:1px solid var(--rule);border-radius:10px;padding:16px 18px;background:var(--panel)}
+  .cell.hot{border-color:var(--accent2);box-shadow:inset 0 0 0 1px var(--accent2)}
+  .cell .t{font-family:"Fira Sans";font-weight:700;font-size:16px;margin-bottom:4px;color:var(--ink)}
+  .cell p{font-size:15px}
+  .who{display:grid;gap:12px;margin-top:22px}
+  .who span{font-size:20px;color:var(--ink);padding-left:30px;position:relative}
+  .who span:before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;background:var(--accent2);border-radius:3px}
+  .credit p{max-width:54ch}
+  .disc{margin-top:26px;font-size:14px;color:rgba(255,255,255,.72);max-width:62ch}
+  .slide.cta{background:var(--accent);color:#fff}
+  .slide.cta .eyebrow{color:rgba(255,255,255,.82)}
+  .slide.cta .accentbar{background:#fff}
+  .slide.cta p{color:rgba(255,255,255,.9)}
+  .btn{display:inline-block;margin-top:28px;background:#fff;color:var(--accent);font-family:"Fira Sans";
+    font-weight:700;font-size:19px;padding:14px 26px;border-radius:10px}
+  .brandline{position:absolute;bottom:26px;left:72px;font-family:"Fira Sans";font-weight:700;color:var(--accent2);font-size:15px;letter-spacing:.02em}
+  .slide.cta .brandline{color:rgba(255,255,255,.85)}
+  .pg{position:absolute;bottom:24px;right:28px;font-size:13px;color:var(--muted)}
+  .slide.cta .pg{color:rgba(255,255,255,.7)}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:14px;font-family:"Fira Sans"}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'A live masterclass with Lisa Scheinkopf',h:'The Assumption Blocking Your Breakthrough',sub:'Find the one faulty assumption behind your hardest decision, and learn how to break it.'},
+  {t:'who',eyebrow:'Who this is for',h:'If you are the person people turn to when it is stuck',who:['Internal and external consultants','Leaders driving a change their team keeps resisting','Teams facing a decision that will not move']},
+  {t:'statement',eyebrow:'The trap',big:'You mapped the plan. Built the case. Ran the numbers. And it still will not move.'},
+  {t:'statement',eyebrow:'The reframe',big:'It is not the plan. It is an assumption underneath it that everyone is treating as a fact.'},
+  {t:'part',eyebrow:'Part one',h:'The problem you can see is rarely the one causing the stall',p:'We are trained to fix what is visible. So we work harder on the plan, the pitch, the process, while the real constraint sits one layer down, untouched, and the same problem keeps coming back wearing a new face.'},
+  {t:'part',eyebrow:'Part one',h:'Why every fix seems to create two new problems',p:'When you optimise one part of a system without surfacing the assumption that connects it to the rest, you move the bottleneck instead of removing it. The system pushes back. That pushback is information, not resistance.'},
+  {t:'part',eyebrow:'Part two: the method',h:'Assumption Hacking',p:'A structured way to find and challenge the faulty assumptions at the core of a tough problem. It is the skill Dr. Goldratt called essential to creating breakthroughs, made usable for the decisions you are facing this week.'},
+  {t:'list',eyebrow:'Assumption Hacking, step by step',h:'How to hack the assumption',items:['Name what is actually stuck, in plain words','Surface the assumptions holding it in place','Find the one that is faulty, not just inconvenient','Challenge it, and watch the problem change shape']},
+  {t:'matrix',eyebrow:'Tool one',h:'The Change Matrix',p:'See every facet of the change at once, so buy-in happens before the pitch, not after the fight.',cells:[['Surface','Every obvious and non-obvious facet of the change'],['Trade-offs','Weigh them openly to find the real win-win'],['Risk','Anticipate the consequences and mitigate them early'],['Buy-in','Bring people with you instead of selling past them']]},
+  {t:'list',eyebrow:'Tool two',h:'Evaporating Clouds',items:['Write the conflict down as two needs, not two camps','Expose the assumption each side is defending','Break that assumption and the compromise disappears','What is left is a win-win nobody had to lose for']},
+  {t:'part',eyebrow:'Tool three',h:'The Mystery Analysis',p:'When results do not match what you expected, that gap is a clue. A clear, structured read of it reveals the hidden assumption that quietly shaped the outcome, so you fix the cause instead of arguing about the symptom.'},
+  {t:'part',eyebrow:'Part three: what changes',h:'A decision that finally moves',p:'The change goes through without the drawn-out fight. The team stops defending positions and starts solving the actual problem. And the next hard call is easier, because now you have a method, not just a good instinct.'},
+  {t:'statement',eyebrow:'The Jenrada Clarity Principle',big:'Rigor made human. Focus, flow, and harmony, not just a faster way to be stuck.'},
+  {t:'credit',eyebrow:'Why learn this from me',h:'Lisa Scheinkopf',p:'I have worked in the Theory of Constraints for more than thirty years, including directly with Dr. Eliyahu Goldratt on the development of the TOC Thinking Processes. I wrote "Thinking for a Change: Putting the TOC Thinking Process to Use", and I led the Goldratt School and the North America and India consulting practice at Goldratt Consulting. Jenrada is where I teach this work in plain language, as Chief Assumption Hacker.'},
+  {t:'list',eyebrow:'What you will walk away with',h:'By the end of the hour',items:['A name for the assumption behind your current stall','The Change Matrix, ready to use on a real decision','A simpler way to resolve the conflict stuck in the middle','A method you can run again, not a one-time insight']},
+  {t:'cta',eyebrow:'Your next step',h:'Bring your stuck decision to the next live session',sub:'Join the live masterclass, or book a free discovery call to work through your hardest assumption with me.',btn:'Join the next live masterclass',disc:'This masterclass is educational. It shares a thinking method and tools. No specific result is guaranteed. Results vary and depend on your own situation and the work you put in.'}
+];
+const stage=document.getElementById('stage');let i=0;
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,idx)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(s.t==='cta'?' cta':'')+(idx===i?' on':'');
+    let h='';
+    if(s.eyebrow) h+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    if(s.t==='title'){h+='<div class="accentbar"></div><h1>'+esc(s.h)+'</h1>'+(s.sub?'<p class="lead sub">'+esc(s.sub)+'</p>':'');}
+    else if(s.t==='statement'){h+='<div class="big">'+esc(s.big)+'</div>';}
+    else if(s.t==='who'){h+='<h2>'+esc(s.h)+'</h2><div class="who">'+s.who.map(w=>'<span>'+esc(w)+'</span>').join('')+'</div>';}
+    else if(s.t==='part'){h+='<div class="accentbar"></div><h2>'+esc(s.h)+'</h2>'+(s.p?'<p class="sub">'+esc(s.p)+'</p>':'');}
+    else if(s.t==='list'){h+='<h2>'+esc(s.h)+'</h2><ul>'+s.items.map((it,n)=>'<li><span class="n">'+(n+1)+'</span>'+esc(it)+'</li>').join('')+'</ul>';}
+    else if(s.t==='matrix'){h+='<h2>'+esc(s.h)+'</h2>'+(s.p?'<p class="sub">'+esc(s.p)+'</p>':'')+'<div class="grid">'+s.cells.map((c,n)=>'<div class="cell'+(n===3?' hot':'')+'"><div class="t">'+esc(c[0])+'</div><p>'+esc(c[1])+'</p></div>').join('')+'</div>';}
+    else if(s.t==='credit'){h+='<div class="accentbar"></div><h2>'+esc(s.h)+'</h2><div class="credit"><p class="sub">'+esc(s.p)+'</p></div>';}
+    else if(s.t==='cta'){h+='<div class="accentbar"></div><h1>'+esc(s.h)+'</h1>'+(s.sub?'<p class="sub">'+esc(s.sub)+'</p>':'')+'<div><span class="btn">'+esc(s.btn)+'</span></div><div class="disc">'+esc(s.disc)+'</div>';}
+    h+='<div class="brandline">Jenrada</div><div class="pg">'+(idx+1)+' / '+S.length+'</div>';
+    d.innerHTML=h;stage.appendChild(d);
+  });
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
