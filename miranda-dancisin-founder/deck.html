@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Connected C.A. - Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f3;        /* warm light ground, from brand.json light layout */
+    --panel:#f1ece3;
+    --rule:#e2dacb;
+    --ink:#181816;       /* her dominant hex, verbatim */
+    --muted:#595959;     /* her grey hex */
+    --accent:#5170ff;    /* her periwinkle footer hex, verbatim */
+    --affirm:#4caf72;    /* her green hex, sparing */
+    --serif:'Noto Serif Display',Georgia,serif;
+    --sans:'Work Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);font-family:var(--sans);color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(1120px,96vw);aspect-ratio:16/9;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);border-radius:6px}
+  .slide{position:absolute;inset:0;padding:72px 84px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--serif);font-weight:700;font-size:58px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:600;font-size:40px;line-height:1.1;margin-bottom:22px}
+  p{font-size:21px;line-height:1.55;color:var(--ink);max-width:42ch}
+  p.lead{font-size:25px;color:var(--muted)}
+  .big{font-family:var(--serif);font-size:40px;line-height:1.22;font-weight:500;max-width:20ch}
+  .big em{font-style:italic;color:var(--accent)}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:21px;line-height:1.5;padding:10px 0 10px 30px;position:relative;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:19px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  .step li:before{border-radius:3px}
+  .kicker{font-family:var(--sans);font-weight:600;color:var(--affirm);font-size:16px;letter-spacing:.04em;margin-bottom:8px}
+  .title-foot{margin-top:40px;font-size:18px;color:var(--muted)}
+  .title-foot b{color:var(--ink);font-weight:600}
+  .meth{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--accent);margin-bottom:4px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 40px;margin-top:8px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:22px 24px}
+  .card h3{font-family:var(--serif);font-size:22px;font-weight:600;margin-bottom:6px}
+  .card p{font-size:17px;color:var(--muted)}
+  .disc{font-size:14px;color:var(--muted);margin-top:26px;max-width:60ch;line-height:1.5}
+  .cta-line{font-family:var(--serif);font-size:26px;color:var(--ink);margin-top:14px}
+  .cta-line b{color:var(--accent)}
+  .n{position:absolute;right:30px;bottom:22px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .bar{position:absolute;left:0;top:0;height:6px;background:var(--accent);width:0;transition:width .4s}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:5}
+  #nav button{font-family:var(--sans);font-size:14px;border:1px solid #444;background:#222;color:#eee;padding:7px 16px;border-radius:20px;cursor:pointer}
+  #nav button:hover{background:#333}
+</style>
+</head>
+<body>
+<div id="stage"><div class="bar" id="bar"></div></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',html:`<div class="eyebrow">A masterclass for chiropractic teams</div>
+   <h1>The Connected C.A.</h1>
+   <p class="lead" style="margin-top:20px">How the front desk converts committed patients, and compounds a practice, one conversation at a time.</p>
+   <div class="title-foot">with <b>Miranda Dancisin</b>, two-time C.A. of the Year</div>`},
+
+ {t:'promise',html:`<div class="eyebrow">What you'll leave with</div>
+   <h2>Three systems your C.A. can use tomorrow morning</h2>
+   <ul>
+     <li>A way to lead a hesitant patient without sounding like a script</li>
+     <li>A simple method to turn everyday visits into consistent internal referrals</li>
+     <li>The language that makes commitment and retention feel natural, not pushy</li>
+   </ul>`},
+
+ {t:'who',html:`<div class="eyebrow">Who this is for</div>
+   <h2>Every C.A., wherever they're starting</h2>
+   <div class="grid">
+     <div class="card"><h3>Brand new</h3><p>Build and secure the fundamentals from day one.</p></div>
+     <div class="card"><h3>Struggling</h3><p>Rescue and rebuild inconsistent results.</p></div>
+     <div class="card"><h3>Capable, underused</h3><p>Optimize and unlock the capacity already there.</p></div>
+     <div class="card"><h3>A-player</h3><p>Sharpen and certify, and keep the growth going.</p></div>
+   </div>`},
+
+ {t:'trap',html:`<div class="eyebrow">The trap</div>
+   <p class="big">You hired a great assistant, and the growth of the office still feels like it rests on the doctor.</p>
+   <p style="margin-top:22px;color:var(--muted)">The front desk gets treated as admin. So the moments that decide whether a patient commits, refers, and comes back are left to chance.</p>`},
+
+ {t:'reframe',html:`<div class="eyebrow">The reframe</div>
+   <p class="big">Patients don't decide on information. They decide on <em>how they feel</em> in the moment someone is guiding them.</p>
+   <p style="margin-top:22px;color:var(--muted)">Which means the person guiding that moment is not support staff. They are the conversion.</p>`},
+
+ {t:'p1',html:`<div class="kicker">Part One</div>
+   <h2>The core problem</h2>
+   <p>Most C.A. training is a binder of scripts. Scripts tell you what to say. They don't build the presence, tone, and certainty that make a patient trust the person saying it.</p>
+   <p style="margin-top:16px">So two offices run the same script and get completely different results.</p>`},
+
+ {t:'p1b',html:`<div class="eyebrow">Where it shows up</div>
+   <h2>The seat touches every number that matters</h2>
+   <ul>
+     <li>The new patient who decides whether this office is different</li>
+     <li>The care conversation where commitment is won or lost</li>
+     <li>The quiet referral opening nobody noticed in the waiting room</li>
+     <li>The patient who drifts, when one message could have brought them back</li>
+   </ul>`},
+
+ {t:'p2intro',html:`<div class="kicker">Part Two</div>
+   <h2>Built from the seat your C.A. sits in</h2>
+   <p>These aren't borrowed sales tactics. They came out of doing the job itself. Three methods, each for a different moment in the patient relationship.</p>`},
+
+ {t:'lead',html:`<div class="meth">The L.E.A.D. Method</div>
+   <h2>Lead the moment, don't read at it</h2>
+   <ul class="step">
+     <li><b>Listen</b> for what the patient is really saying</li>
+     <li><b>Explore</b> the layer underneath the hesitation</li>
+     <li><b>Anchor</b> them to the care they came in for</li>
+     <li><b>Direct</b> the next step with certainty</li>
+   </ul>`},
+
+ {t:'tracker',html:`<div class="meth">The Lead Tracker</div>
+   <h2>Catch the referrals everyone misses</h2>
+   <p>"My sister just moved here." The passing comment at the desk. Most teams let those float by. The Lead Tracker makes catching them a habit, so referrals stop being accidental and start being expected.</p>`},
+
+ {t:'sevenw',html:`<div class="meth">The 7W Framework</div>
+   <h2>Hear the objection under the objection</h2>
+   <p>"I need to think about it" is rarely about thinking. The 7W Framework trains your C.A. to read the emotional layer beneath a hesitation and respond to the real concern, moving from guessing to leading.</p>`},
+
+ {t:'arrt',html:`<div class="meth">The A.R.R.T. Method</div>
+   <h2>Make every visit a natural referral</h2>
+   <ul class="step">
+     <li><b>Action</b> that earns the moment</li>
+     <li><b>Referral source</b> named out loud</li>
+     <li><b>Results</b> the patient can feel</li>
+     <li><b>Thank you</b> that closes the loop</li>
+   </ul>
+   <p style="margin-top:14px;color:var(--muted)">No pressure. No lines that feel salesy.</p>`},
+
+ {t:'p3',html:`<div class="kicker">Part Three</div>
+   <h2>Inside the office, day to day</h2>
+   <div class="grid">
+     <div class="card"><h3>Connect</h3><p>The new patient experience, phone presence, body language.</p></div>
+     <div class="card"><h3>Commit</h3><p>Care and financial conversations, handled with confidence.</p></div>
+     <div class="card"><h3>Consistently collect</h3><p>Referrals, reactivations, and retention that compound.</p></div>
+     <div class="card"><h3>Cultivate</h3><p>Keep the growth going long after the basics click.</p></div>
+   </div>`},
+
+ {t:'arc',html:`<div class="eyebrow">The arc</div>
+   <p class="big">In 90 days a C.A. moves from collecting what walks in, to <em>compounding</em> what the office already has.</p>`},
+
+ {t:'shift',html:`<div class="eyebrow">The shift</div>
+   <h2>From busy to leading</h2>
+   <ul>
+     <li>From reciting scripts, to guiding real conversations</li>
+     <li>From hoping for referrals, to expecting them</li>
+     <li>From a front desk that processes, to a seat that drives the practice</li>
+   </ul>`},
+
+ {t:'whyme',html:`<div class="eyebrow">Why learn it here</div>
+   <h2>From someone who sat in the chair</h2>
+   <p>Miranda Dancisin was a record-breaking chiropractic assistant and two-time C.A. of the Year before she coached a single team. She has since trained more than 300 assistants and offices.</p>
+   <p style="margin-top:14px;color:var(--muted)">The methods work because they were built from the seat your C.A. sits in every single day.</p>`},
+
+ {t:'recap',html:`<div class="eyebrow">The three methods</div>
+   <h2>One for every moment</h2>
+   <div class="grid">
+     <div class="card"><h3>L.E.A.D.</h3><p>Lead the care conversation.</p></div>
+     <div class="card"><h3>7W</h3><p>Read the layer under the objection.</p></div>
+     <div class="card"><h3>A.R.R.T.</h3><p>Turn visits into referrals.</p></div>
+     <div class="card"><h3>Connect to Collect</h3><p>Run it across 90 days.</p></div>
+   </div>`},
+
+ {t:'forwho',html:`<div class="eyebrow">Bring it to your team</div>
+   <p class="big">One membership covers your whole office. The seat gets sharper, and so does everything it touches.</p>`},
+
+ {t:'cta',html:`<div class="eyebrow">Your next step</div>
+   <h2>Connection is the conversion</h2>
+   <p>If this is how you want your front desk to lead, bring the Connected C.A. methods to your team.</p>
+   <div class="cta-line">Explore the C3 Certification at <b>chiropracticassistantcoach.com</b></div>
+   <p class="disc">This masterclass is educational. It shares teaching methods and frameworks, not promises. No income or result is guaranteed. Results vary by office, team, and effort.</p>`}
+];
+
+function h(html){const d=document.createElement('div');d.className='slide';d.innerHTML=html;return d;}
+const stage=document.getElementById('stage');
+const bar=document.getElementById('bar');
+let i=0;const slides=[];
+S.forEach((s,idx)=>{const el=h(s.html);const n=document.createElement('div');n.className='n';n.textContent=(idx+1)+' / '+S.length;el.appendChild(n);stage.appendChild(el);slides.push(el);});
+function show(){slides.forEach((e,x)=>e.classList.toggle('on',x===i));bar.style.width=((i+1)/S.length*100)+'%';}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));show();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
