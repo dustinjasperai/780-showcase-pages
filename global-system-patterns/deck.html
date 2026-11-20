@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Decision Tree: a Global System Patterns masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0c; --panel:#17130b; --rule:#2a2420; --accent:#ffb020;
+    --ink:#f5f3ee; --muted:#b9b2a6;
+    --display:'Archivo',system-ui,sans-serif; --body:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{width:min(960px,94vw);aspect-ratio:16/9;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6% 7%;background:var(--bg);border:1px solid var(--rule);border-radius:14px}
+  .slide.on{display:flex}
+  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-size:clamp(11px,1.5vw,15px);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:800;line-height:1.02;font-size:clamp(28px,5.2vw,58px)}
+  h2{font-family:var(--display);font-weight:800;line-height:1.08;font-size:clamp(22px,3.8vw,40px)}
+  p{font-size:clamp(14px,1.9vw,20px);line-height:1.5;color:var(--muted);margin-top:16px;max-width:42ch}
+  .big{color:var(--ink);font-size:clamp(20px,3vw,30px);max-width:30ch}
+  ul{margin-top:18px;list-style:none;display:flex;flex-direction:column;gap:12px}
+  li{font-size:clamp(14px,1.9vw,20px);line-height:1.4;color:var(--ink);padding-left:26px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;background:var(--accent);
+    border-radius:2px;transform:rotate(45deg)}
+  .step{color:var(--muted);font-size:clamp(13px,1.7vw,18px)}
+  .brand{font-family:var(--display);font-weight:600;color:var(--muted);letter-spacing:.04em;
+    margin-top:30px;font-size:clamp(12px,1.5vw,15px)}
+  .disc{color:var(--muted);font-size:clamp(11px,1.3vw,13px);margin-top:22px;max-width:52ch;line-height:1.4}
+  .tag{color:var(--accent)}
+  #nav{position:fixed;bottom:16px;right:22px;color:var(--muted);font-family:var(--display);font-size:13px}
+  .cta-step{font-family:var(--display);font-weight:800;color:var(--accent);font-size:clamp(18px,2.6vw,26px);margin-top:18px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><span id="pos">1</span> / <span id="tot"></span> &nbsp;·&nbsp; use arrow keys</div>
+<script>
+const S=[
+ {t:'title',eyebrow:'A live masterclass for trainers & physiotherapists',
+  h:'The Decision Tree',big:'Why the best assessment beats the best program.',brand:'Global System Patterns'},
+ {t:'audience',eyebrow:'Who this is for',
+  h:'You can already coach. The frustration is different.',
+  p:'You program hard, your client works hard, and the same flare, the same stall, the same pain keeps coming back. This hour is for the trainer or physio who is tired of chasing symptoms.'},
+ {t:'trap',eyebrow:'The trap',
+  h:'More program is not the answer.',
+  p:'When a result will not hold, the instinct is to add: more activation, more mobility, more load. Adding onto a system that cannot organize itself just entrenches the compensation.'},
+ {t:'reframe',eyebrow:'The reframe',
+  h:'The pain is almost never where the problem is.',
+  p:'Location is a symptom, not a source. Until you can read the system that produced it, every intervention is a guess that sometimes works.'},
+ {t:'part',eyebrow:'Part one',h:'Local answers to systemic problems fail.'},
+ {t:'content',eyebrow:'The core problem',
+  h:'Isolated fixes feed the compensation.',
+  p:'Stretch the tight side, activate the quiet muscle, and the body simply finds the next way to protect itself. The pattern moves; it does not resolve. You are treating the output, not the system.'},
+ {t:'content',eyebrow:'A worked example',
+  h:'The runner with the stubborn right glute.',
+  p:'Right glute and lumbar pain every session. The source was not the glute. It was a left-elevated pelvis and a left-sided rotation block. The standard right-glute fix reinforced the asymmetry. Read upward and sideways and the picture changes.'},
+ {t:'part',eyebrow:'Part two',h:'The GSP Decision Tree.',
+  big:'Assessment-first sequencing. A decision tree, not a program.'},
+ {t:'framework',eyebrow:'Level one: the system filter',
+  h:'Pre-screen before anything.',
+  items:['Stabilization tricks: is the body bracing globally instead of stabilizing?','Global posture and przeprost (rib flare, anterior tilt, locked knees)','A clear picture of how the system currently protects itself']},
+ {t:'framework',eyebrow:'Level two: foundations, in order',
+  h:'Build the layers from the ground up.',
+  items:['Foot: neutral arch and a functional support triangle','Pelvis: symmetry across three planes','Lateral subsystem: glute med, obliques, the side chain','Activation sequencing, then thoracic and scapular alignment']},
+ {t:'framework',eyebrow:'Level three: only now',
+  h:'Training integration.',
+  p:'Strength, power and sport-specific demand enter only once the layers beneath them resolve. Load added to an organized system compounds. Load added to a compensation just hides it.'},
+ {t:'rule',eyebrow:'The rule that makes it work',
+  h:'"Yes" descends. "No" goes lateral.',
+  p:'You never descend until the node above is a yes. A no triggers a lateral protocol, and that protocol ends by retesting the original question. Assessment becomes a feedback loop, not a checklist.'},
+ {t:'framework',eyebrow:'The entry skill',
+  h:'FTM: tactile literacy before programming.',
+  items:['Functional muscle tests read how the nervous system adapts to resistance','You feel tissue tension and movement quality, you do not assume it','Every program that follows is built on what you actually found']},
+ {t:'framework',eyebrow:'Shared language',
+  h:'The Trainer’s Table: give "fit" a number.',
+  items:['Four tiers from sedentary onset to advanced athlete','Objective benchmarks: strength multiples, speed, HRV, reactive strength','No more "well-trained" guesswork; the program matches the real tier']},
+ {t:'part',eyebrow:'Part three',h:'What it looks like in practice.'},
+ {t:'content',eyebrow:'One honest sequence',
+  h:'See, decide, retest.',
+  p:'You observe gait and posture, you ask the first question, you follow the yes or the lateral no, you retest, and only then do you program. Slower on day one. Far faster across the twelve weeks that used to stall.'},
+ {t:'proof',eyebrow:'Why this method, from this clinic',
+  h:'Built from thousands of assessments, not a translated slide deck.',
+  p:'Global System Patterns grew out of years of in-clinic gait and biomechanics work at the GSP Clinic in Gorzow Wielkopolski, tested on 3D motion capture and across athletes in MMA, basketball, BJJ, athletics, powerlifting and more. It was refined by what changed movement, not by what a study predicted.'},
+ {t:'framework',eyebrow:'The path forward',
+  h:'The Education Map.',
+  items:['See: learn to observe and palpate without imposing interpretation','Understand: the core method and the decision tree (Trener GSP)','Apply: movement, capacity and pelvic-floor integration','Deepen: plane-based work and ongoing mentorship']},
+ {t:'recap',eyebrow:'The one idea to keep',
+  h:'Read the system, then prescribe.',
+  p:'Every tool in this hour serves one move: understand what the person’s movement system actually lacks before you decide what to do about it.'},
+ {t:'cta',eyebrow:'Your next step',
+  h:'Learn to think this way, under supervision.',
+  step:'Join the next Trener GSP certification',
+  p:'The decision tree is a way of thinking, and thinking is learned by doing it in front of someone who can see what you miss. The Trener GSP certification is where that happens, starting from the FTM Tests foundation.',
+  disc:'Educational content only. No clinical, income or performance result is guaranteed. Results vary by practitioner, client and context.'}
+];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('div'); d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.eyebrow) html+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.h) html+=(s.t==='title'?`<h1>${s.h}</h1>`:`<h2>${s.h}</h2>`);
+  if(s.big) html+=`<p class="big">${s.big}</p>`;
+  if(s.step) html+=`<div class="cta-step">${s.step}</div>`;
+  if(s.items){html+='<ul>'+s.items.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+  if(s.p) html+=`<p>${s.p}</p>`;
+  if(s.brand) html+=`<div class="brand">${s.brand}</div>`;
+  if(s.disc) html+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=html; stage.appendChild(d);
+});
+document.getElementById('tot').textContent=S.length;
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+function go(n){slides[cur].classList.remove('on');cur=Math.max(0,Math.min(S.length-1,n));
+  slides[cur].classList.add('on');document.getElementById('pos').textContent=cur+1;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);});
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
