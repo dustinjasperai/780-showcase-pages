@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Load to Launch: The Ground-Up Speed Method | Justin James</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;600;800&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faf9f7;
+    --paper:#ffffff;
+    --ink:#33424e;
+    --ink-soft:#50606c;
+    --ink-muted:#8a97a0;
+    --rule:#e4e1d8;
+    --accent:#ff6a00;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Spectral',Georgia,serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:960px;}
+  .slide.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .kicker{font-family:'Catamaran',sans-serif;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Catamaran',sans-serif;font-weight:800;font-size:clamp(30px,5.4vw,58px);line-height:1.05;letter-spacing:-.01em;color:var(--ink);margin-bottom:22px;}
+  h2{font-family:'Catamaran',sans-serif;font-weight:800;font-size:clamp(24px,4vw,40px);line-height:1.12;color:var(--ink);margin-bottom:20px;}
+  p{font-size:clamp(17px,2.2vw,23px);line-height:1.6;color:var(--ink-soft);margin-bottom:16px;max-width:42ch;}
+  p.lead{font-size:clamp(19px,2.6vw,27px);color:var(--ink);}
+  ul{list-style:none;margin-top:10px;}
+  li{position:relative;font-size:clamp(17px,2.2vw,23px);line-height:1.5;color:var(--ink-soft);padding-left:34px;margin-bottom:16px;max-width:44ch;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent);}
+  .pillar-no{font-family:'Catamaran',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:14px;}
+  .disc{font-family:'Catamaran',sans-serif;font-size:13px;line-height:1.5;color:var(--ink-muted);margin-top:28px;max-width:54ch;}
+  .cta-box{border:2px solid var(--accent);border-radius:4px;padding:14px 26px;display:inline-block;font-family:'Catamaran',sans-serif;font-weight:800;font-size:clamp(18px,2.4vw,26px);color:var(--ink);margin-top:10px;}
+  .credit{font-family:'Catamaran',sans-serif;font-weight:600;font-size:15px;color:var(--ink-muted);margin-top:30px;letter-spacing:.02em;}
+  #nav{position:fixed;bottom:20px;right:28px;font-family:'Catamaran',sans-serif;font-size:13px;color:var(--ink-muted);display:flex;align-items:center;gap:16px;z-index:5;}
+  #nav button{font-family:inherit;font-size:13px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-soft);padding:6px 12px;border-radius:3px;cursor:pointer;}
+  #nav button:hover{border-color:var(--accent);color:var(--accent);}
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--accent);width:0;transition:width .3s ease;}
+  .brand{position:fixed;top:22px;left:28px;font-family:'Catamaran',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="brand">Justin James Golf</div>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',k:'A free live masterclass with Justin James',h:'Load to Launch: The Ground-Up Speed Method',lead:'How everyday golfers add real clubhead speed and driver distance without a new swing and without a new driver.',credit:'Presented live by Justin James, 2017 World Long Drive Champion'},
+  {t:'content',k:'Who this is for',h:'You still hit it the same as you did five years ago',b:['You practice, you buy the newest driver, you take the occasional lesson.','And your carry number has barely moved.','You are not doing anything wrong on purpose. You were just never taught where speed actually comes from.']},
+  {t:'content',k:'The trap',h:'Every tip you have been given manages your swing, not your speed',b:['Fix the takeaway. Fix the grip. Fix the position at the top.','You tinker for a season and the ball still goes the same distance.','The tips are not wrong. They are just aimed at the wrong thing.']},
+  {t:'content',k:'The hard truth',h:'More distance is not hiding in your swing path',b:['Positions only redistribute the speed you already have.','Speed is a force problem, not a positions problem.','That reframe is the whole hour. Once you see it you cannot unsee it.']},
+  {t:'part',k:'Part one',h:'Where clubhead speed is actually made',b:['The ground gives you force.','Your body sequences that force.','The club delivers it to the ball.','Get the order right and the same body swings the same club faster.']},
+  {t:'content',k:'Part one',h:'The chain is only as fast as its weakest link',b:['When those three events fire in the wrong order, you leak power at every junction.','Most golfers are not slow. They are out of sequence.','So the first job is finding where your speed is leaking.']},
+  {t:'content',k:'Leak point one',h:'The ground',b:['No push into the ground, no pressure shift, so there is nothing stored to launch.','You are swinging with your arms because your feet never joined the swing.']},
+  {t:'content',k:'Leak point two',h:'The transition',b:['The arms fire before the lower body, and the sequence collapses.','This is the single most common place amateurs give speed away.']},
+  {t:'content',k:'Leak point three',h:'The strike',b:['A steep, armsy delivery bleeds off whatever speed did survive.','And it shows up as a slice, not as yards.']},
+  {t:'part',k:'Part two',h:'Load to Launch: the method, four parts',lead:'Each part plugs one of the leaks. Together they turn your existing body into a faster engine.'},
+  {t:'pillar',pn:'01 / Load the ground',h:'Load',b:['Create pressure into the ground and store it. This is the power nobody tells amateurs about.','You feel the difference between swinging with your arms and loading with the ground on the first rep.']},
+  {t:'pillar',pn:'02 / Sequence the launch',h:'Launch',b:['Release the stored force in order: ground, then body, then club.','The named transition drills, the Drop Step, the Rocking Drill, the Double Step, train the sequence until it is automatic.','This is where the free speed lives.']},
+  {t:'pillar',pn:'03 / Steep to shallow',h:'Deliver it cleanly',b:['Shallow the club through the strike so the speed you built becomes ball speed, not a slice.','Speed with a clean strike is distance AND accuracy, not one at the cost of the other.']},
+  {t:'pillar',pn:'04 / Train the engine',h:'Strength and power',b:['A handful of rotational-power moves raise your ceiling so the technique has more to work with.','The same training that produced some of the highest ball speeds ever recorded in long drive, scaled to you.']},
+  {t:'content',k:'The why behind the how',h:'You learn the reason, not just the rep',b:['Most instruction hands you a drill and sends you home.','Here you learn why each piece works, so you own it.']},
+  {t:'part',k:'Part three',h:'What changes on the course',b:['Same practice time, same clubs. The ball comes off faster because the force finally arrives in order.','And because you understand the why, you can diagnose yourself instead of chasing the next tip.']},
+  {t:'content',k:'You become your own coach',h:'The skill that outlasts the lesson',b:['A good round no longer depends on remembering ten swing thoughts.','You know the chain, so when it slips you know exactly which link to go fix.']},
+  {t:'content',k:'Why me',h:'435 yards is just the proof',b:['I am the 2017 World Long Drive Champion with a 435-yard championship record.','TPI certified, CSCS, and a rotational-power specialist.','I did not get there with a secret swing. I got there by training where speed comes from, and that is exactly what I teach you.'],credit:'Justin James, 2017 World Long Drive Champion'},
+  {t:'content',k:'The recap',h:'Load, launch, deliver, train',b:['Store force in the ground.','Sequence it from the ground up.','Deliver it with a clean, shallow strike.','Train the engine so there is more to give.']},
+  {t:'cta',k:'Your next step',h:'Train where your speed actually comes from',b:['If you want the drills, the training, and the full method, the Load to Launch coaching program is where we build it together.'],cta:'Join Load to Launch coaching',disc:'Educational content only. No specific distance, yardage, or result is guaranteed. Results vary by golfer, starting point, and effort.'}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function tpl(s){
+  let h='<div class="slide">';
+  if(s.k) h+='<div class="kicker">'+s.k+'</div>';
+  if(s.pn) h+='<div class="pillar-no">'+s.pn+'</div>';
+  if(s.t==='title'){h+='<h1>'+s.h+'</h1>';} else {h+='<h2>'+s.h+'</h2>';}
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.b) h+='<ul>'+s.b.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  if(s.cta) h+='<div class="cta-box">'+s.cta+'</div>';
+  if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  if(s.credit) h+='<div class="credit">'+s.credit+'</div>';
+  return h+'</div>';
+}
+function render(){
+  stage.innerHTML=tpl(S[i]);
+  stage.firstChild.classList.add('active');
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+document.addEventListener('click',e=>{if(e.target.closest('#nav'))return;go(1);});
+render();
+</script>
+</body>
+</html>
