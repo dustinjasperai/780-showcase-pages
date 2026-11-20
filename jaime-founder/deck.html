@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Body Already Knows — a masterclass with Jaime Lauren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfaf6;
+    --panel:#f4f1eb;
+    --rule:#e3dccf;
+    --ink:#161e2a;
+    --body:#595959;
+    --accent:#c9a96e;
+    --accent2:#926858;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--body);font-family:"DM Sans",system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  #stage{position:relative;height:100vh;width:100%;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:8vh 9vw;opacity:0;transition:opacity .4s ease}
+  .slide.on{display:flex;opacity:1}
+  .kicker{font-family:"DM Sans";font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:clamp(11px,1.1vw,13px);color:var(--accent2)}
+  .kicker::after{content:"";display:block;width:46px;height:2px;background:var(--accent);margin-top:14px}
+  h1,h2{font-family:"Gilda Display",Georgia,serif;color:var(--ink);font-weight:400;line-height:1.08}
+  h1{font-size:clamp(34px,6vw,76px);margin-top:20px}
+  h2{font-size:clamp(26px,4.2vw,50px);margin-top:18px}
+  .sub{font-size:clamp(16px,1.7vw,22px);margin-top:26px;max-width:40ch;line-height:1.55}
+  p.lede{font-size:clamp(17px,1.8vw,23px);margin-top:22px;max-width:46ch;line-height:1.6}
+  .big{font-family:"Gilda Display",serif;color:var(--ink);font-size:clamp(30px,5vw,62px);line-height:1.12;max-width:20ch}
+  ul{margin-top:26px;max-width:48ch;list-style:none}
+  ul li{position:relative;padding-left:30px;margin:16px 0;font-size:clamp(15px,1.5vw,20px);line-height:1.5}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:10px;height:10px;border:1.6px solid var(--accent);border-radius:50%}
+  .seasons{display:flex;gap:22px;margin-top:34px;flex-wrap:wrap}
+  .season{flex:1 1 180px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:22px}
+  .season h3{font-family:"Gilda Display",serif;color:var(--ink);font-weight:400;font-size:clamp(18px,1.9vw,24px);margin-bottom:8px}
+  .season p{font-size:14px;line-height:1.5}
+  .credit{display:flex;gap:40px;margin-top:34px;flex-wrap:wrap}
+  .credit div{min-width:120px}
+  .credit .n{font-family:"Gilda Display",serif;color:var(--accent2);font-size:clamp(30px,4vw,48px)}
+  .credit .l{font-size:13px;letter-spacing:.04em;margin-top:4px}
+  .disc{margin-top:30px;font-size:12.5px;color:#8a8a84;max-width:60ch;line-height:1.5}
+  .cta-step{margin-top:26px;font-size:clamp(17px,1.9vw,23px);color:var(--ink);font-family:"Gilda Display",serif}
+  .pg{position:fixed;bottom:22px;right:30px;font-size:12px;letter-spacing:.12em;color:#b4ac9c}
+  .brand{position:fixed;bottom:22px;left:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#b4ac9c}
+  .nav{position:fixed;inset:0;display:flex;justify-content:space-between;pointer-events:none}
+  .nav button{pointer-events:auto;background:none;border:0;width:12vw;height:100%;cursor:pointer;color:transparent}
+  @media(max-width:640px){.slide{padding:7vh 8vw}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="brand">Cyclical Living Institute</div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button onclick="go(-1)" aria-label="previous"></button><button onclick="go(1)" aria-label="next"></button></div>
+<script>
+const S=[
+  {t:'title', k:'A live masterclass with Jaime Lauren', h:'The Body Already Knows', sub:'Why the women you work with are not broken or inconsistent, and how to lead them back to the intelligence of their own cycle.'},
+  {t:'audience', k:'Who this is for', h:'Women who hold space for women', body:'You coach, teach or facilitate. You feel the pull to work with women in a way that honours their body, not one that asks them to override it. This hour is for you, and for every woman who is tired of pushing through.'},
+  {t:'trap', k:'The trap', h:'A cyclical body in a linear world', body:'We are taught to show up the same every day: same energy, same output, same mood. So when a woman shifts across her month, she reads it as a flaw to fix instead of a rhythm to work with.'},
+  {t:'reframe', k:'The reframe', big:'You are not inconsistent. You are cyclical.'},
+  {t:'part', k:'Part one', h:'The real problem is not the cycle', body:'The problem is the belief that the cycle is the problem. Living against your own rhythm is what creates the exhaustion, the self-doubt and the sense that something is wrong with you.'},
+  {t:'cost', k:'What it costs', h:'The push-through tax', body:'When a woman overrides her body month after month, her nervous system pays for it: depletion, dysregulation, and a quiet disconnection from the body she lives in.', li:['Energy that never quite recovers','Decisions made from depletion, not clarity','A body that feels like an opponent, not a home']},
+  {t:'method', k:'Part two', h:'This is felt, not studied', body:'Most trainings teach you about the menstrual cycle. This one guides you through it somatically. You come to know your rhythm in your body, your nervous system, your own lived experience, so the knowing actually lands.'},
+  {t:'seasons', k:'The framework', h:'Inner Seasons', body:'Your cycle is four inner seasons. Each one carries its own energy, its own gifts, and its own invitation.', seasons:[['Inner winter','Rest, release, deep listening. The bleed as a threshold, not an inconvenience.'],['Inner spring','Fresh energy and curiosity returning. The time to begin.'],['Inner summer','Expression, connection, visibility. Full and outward.'],['Inner autumn','Discernment and honesty. What is true, what is finished.']]},
+  {t:'language', k:'The framework', h:'The Language of the Female Body', body:'Your body is always speaking in sensation, energy and need. Cyclical literacy is learning to read those signals across the month instead of talking over them.'},
+  {t:'capacity', k:'The framework', h:'The Cyclical Capacity Map', body:'Your capacity and resilience are not fixed. They rise and fall across your cycle. The map shows you where you are, so you can plan from your real capacity and regulate instead of forcing.'},
+  {t:'tools', k:'The framework', h:'Living cyclically in a non-cyclical world', body:'The world will not slow down for your cycle, so the work is practical: how to structure your weeks, hold your boundaries and meet deadlines in a body that changes, without going to war with either one.'},
+  {t:'somatic', k:'Why it works', h:'The nervous system is the doorway', body:'Insight alone does not change a pattern held in the body. Working somatically, with the nervous system, is what turns cycle knowledge into lived, trauma-informed change that stays.'},
+  {t:'practice', k:'Part three', h:'A week, led by your rhythm', body:'Not a rigid protocol. A felt sense of where you are, a handful of somatic practices, and permission to meet each season on its own terms instead of one relentless setting.'},
+  {t:'leadership', k:'For the space-holder', h:'Cycle-aware leadership', body:'When you understand how a woman shifts across her cycle, you can meet her exactly where she is. Your clients feel it: support that moves with them, not against them.'},
+  {t:'why', k:'Why me', h:'I have lived this and taught it', body:'I spent years believing I was the problem. Menstrual cycle awareness, held somatically, changed that. For seven years I have guided women and the practitioners who serve them back to the wisdom of the body.', credit:[['5,000+','women supported'],['70+','certified educators'],['25+','countries']]},
+  {t:'path', k:'Where this goes', h:'From one class to a whole practice', body:'This masterclass is the doorway. From here, The Womb Room goes deeper, and the Embodied Menstrual Cycle Educator path is for those ready to bring this work into the heart of how they serve women.'},
+  {t:'cta', k:'Your next step', h:'Come learn it in your body', cta:'Join the next live session and take your first cycle-aware step.', disc:'This masterclass is educational. It is not medical advice and is not a substitute for care from a qualified provider. No specific health, business or income result is guaranteed, and individual results vary.'}
+];
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+S.forEach((s)=>{
+  const d=document.createElement('section');d.className='slide';
+  let html='';
+  if(s.k)html+=`<div class="kicker">${esc(s.k)}</div>`;
+  if(s.big){html+=`<div class="big">${esc(s.big)}</div>`;}
+  if(s.h)html+=(s.t==='title'?`<h1>${esc(s.h)}</h1>`:`<h2>${esc(s.h)}</h2>`);
+  if(s.sub)html+=`<div class="sub">${esc(s.sub)}</div>`;
+  if(s.body)html+=`<p class="lede">${esc(s.body)}</p>`;
+  if(s.li){html+='<ul>'+s.li.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';}
+  if(s.seasons){html+='<div class="seasons">'+s.seasons.map(x=>`<div class="season"><h3>${esc(x[0])}</h3><p>${esc(x[1])}</p></div>`).join('')+'</div>';}
+  if(s.credit){html+='<div class="credit">'+s.credit.map(x=>`<div><div class="n">${esc(x[0])}</div><div class="l">${esc(x[1])}</div></div>`).join('')+'</div>';}
+  if(s.cta)html+=`<div class="cta-step">${esc(s.cta)}</div>`;
+  if(s.disc)html+=`<div class="disc">${esc(s.disc)}</div>`;
+  d.innerHTML=html;stage.appendChild(d);
+});
+let i=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=slides.length;
+function show(n){slides.forEach((s,k)=>s.classList.toggle('on',k===n));document.getElementById('cur').textContent=n+1;}
+function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));show(i);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show(0);
+</script>
+</body>
+</html>
