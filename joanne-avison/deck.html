@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading the Body - A Masterclass with Joanne Avison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4efe8;      /* warm paper, lifted from brand light neutrals #e1e1e1/#d0d0d0 */
+    --ink:#2e2b29;     /* brand dominant warm near-black (61 uses) */
+    --accent:#502c2c;  /* brand documented oxblood (ranked hex) */
+    --mut:#6f6a64;     /* warm grey, from brand #808080/#555 */
+    --rule:#d8cfc3;    /* paper rule */
+    --panel:#efe8de;   /* slightly deeper paper panel */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--mut);font-family:'Montserrat',Arial,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+  .stage{width:100%;max-width:960px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:4px;
+    padding:66px 70px;min-height:600px;display:none;position:relative;overflow:hidden}
+  .slide.on{display:block}
+  .tag{font-family:'Quicksand',sans-serif;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:26px}
+  h1{font-family:'Quicksand',sans-serif;font-weight:700;font-size:52px;line-height:1.06;
+    letter-spacing:-.01em;margin-bottom:22px}
+  h2{font-family:'Quicksand',sans-serif;font-weight:600;font-size:38px;line-height:1.12;
+    margin-bottom:20px}
+  p{font-size:19px;line-height:1.62;color:var(--ink);max-width:42em;font-weight:400}
+  p.lead{font-size:22px;color:var(--mut);font-weight:300}
+  .sub{font-size:20px;color:var(--mut);margin-top:16px;font-weight:300}
+  ul{list-style:none;margin-top:14px}
+  li{font-size:19px;line-height:1.5;padding:11px 0 11px 30px;position:relative;
+    border-bottom:1px solid var(--rule);max-width:40em}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:0;top:20px;width:12px;height:2px;
+    background:var(--accent)}
+  .rs{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:30px;
+    border-top:2px solid var(--accent)}
+  .rs div{padding:20px 12px 0;border-right:1px solid var(--rule)}
+  .rs div:last-child{border-right:none}
+  .rs b{font-family:'Quicksand',sans-serif;font-weight:700;font-size:23px;color:var(--accent);
+    display:block;margin-bottom:8px}
+  .rs span{font-size:14.5px;color:var(--mut);line-height:1.45}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px}
+  .two .box{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:26px}
+  .two .box h3{font-family:'Quicksand',sans-serif;font-weight:700;font-size:22px;
+    color:var(--accent);margin-bottom:10px}
+  .two .box p{font-size:17px;color:var(--mut);font-weight:300}
+  .cred li{font-size:18px}
+  .big{font-family:'Quicksand',sans-serif;font-weight:700;font-size:44px;line-height:1.1;
+    color:var(--ink)}
+  .big em{font-style:normal;color:var(--accent)}
+  .disc{position:absolute;left:70px;right:70px;bottom:30px;font-size:12.5px;color:var(--mut);
+    font-weight:300;border-top:1px solid var(--rule);padding-top:12px;max-width:none}
+  .num{position:absolute;right:30px;bottom:22px;font-size:12px;color:var(--mut);
+    font-family:'Quicksand',sans-serif;letter-spacing:.1em}
+  .motif{position:absolute;right:-60px;top:-60px;width:320px;height:320px;opacity:.5;
+    pointer-events:none}
+  .motif line{stroke:var(--accent);stroke-width:1;opacity:.35}
+  .motif circle{fill:var(--accent);opacity:.5}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+    z-index:10}
+  .nav button{font-family:'Quicksand',sans-serif;font-weight:600;background:var(--bg);
+    color:var(--ink);border:1px solid var(--ink);border-radius:30px;padding:8px 20px;
+    cursor:pointer;font-size:13px}
+  .nav button:hover{background:var(--ink);color:var(--bg)}
+  .cta h1{font-size:46px}
+  .cta .step{font-family:'Quicksand',sans-serif;font-weight:700;font-size:24px;
+    color:var(--accent);margin-top:26px}
+</style>
+</head>
+<body>
+<div class="stage">
+<div id="deck"></div>
+</div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const MOTIF = `<svg class="motif" viewBox="0 0 320 320">
+  <line x1="40" y1="20" x2="300" y2="140"/><line x1="300" y1="140" x2="120" y2="300"/>
+  <line x1="120" y1="300" x2="20" y2="90"/><line x1="20" y1="90" x2="300" y2="140"/>
+  <line x1="40" y1="20" x2="120" y2="300"/><line x1="40" y1="20" x2="20" y2="90"/>
+  <circle cx="40" cy="20" r="4"/><circle cx="300" cy="140" r="4"/>
+  <circle cx="120" cy="300" r="4"/><circle cx="20" cy="90" r="4"/></svg>`;
+
+const S = [
+  {t:'title', html:`
+    <div class="tag">A Masterclass for Movement Teachers and Manual Therapists</div>
+    <h1>Reading the Body</h1>
+    <p class="lead">Why the same protocol helps one client and fails the next, and how to profile the body in front of you before you program a single movement.</p>
+    <p class="sub">With Joanne Avison, author of Myofascial Magic in Action</p>`},
+
+  {t:'promise', html:`
+    <div class="tag">What you will walk away with</div>
+    <h2>One hour, three things you keep</h2>
+    <ul>
+      <li>A way to read any body as fixed, flexi, or where between, in the first two minutes.</li>
+      <li>The 5 Rs of Myofascial Magic, so you always know which quality to work.</li>
+      <li>Micromovement you can use in your very next session, with any client.</li>
+    </ul>`},
+
+  {t:'who', html:`
+    <div class="tag">Who this is for</div>
+    <h2>You were trained in protocols. Your clients did not read the manual.</h2>
+    <p>You teach yoga, Pilates, movement or bodywork. You know the cues, the sequences, the release work. Yet two clients can follow the exact same plan and get opposite results, and nobody taught you why.</p>
+    <p class="sub">By the end of this hour you will have a lens that explains it, and a way to act on it in your very next session.</p>`},
+
+  {t:'hook', html:`
+    <div class="tag">The reframe</div>
+    <div class="big">The protocol was never the problem.<br><em>The profile was.</em></div>
+    <p class="sub">A body is not a machine running a program. It is a living tensional structure, and it responds to what it already is, not to what the plan assumes it is.</p>`},
+
+  {t:'part', html:`
+    <div class="tag">Part One</div>
+    <h2>Why one-size protocols quietly fail</h2>
+    <p>Most movement education teaches positions and repetitions. It treats every spine, every shoulder, every hip as the same part needing the same fix. So the stiff client and the hypermobile client get handed the same stretch, and one of them gets worse.</p>
+    <ul>
+      <li>The stretch that frees a fixed body destabilises a flexi one.</li>
+      <li>The load that organises a flexi body shuts a fixed one down.</li>
+      <li>Progress stalls, and it looks like the client is not trying.</li>
+    </ul>`},
+
+  {t:'cost', html:`
+    <div class="tag">The hidden cost</div>
+    <div class="big">When the plan fails,<br><em>the client blames themselves.</em></div>
+    <p class="sub">They decide they are too stiff, too old, too broken, and they quietly stop coming. You never hear why. The method was wrong for their body, but it reads as their failure, and it costs you the retention your practice runs on.</p>`},
+
+  {t:'bio', html:`
+    <div class="tag">The principle underneath</div>
+    <h2>Biotensegrity: the body is a tension network</h2>
+    <p>Bones do not stack like bricks. They float inside a continuous web of fascia under tension, so a change anywhere travels everywhere. This is biotensegrity, the metaphysical geometry of living body architecture, and it is why the body moves as one piece, not as a chain of levers.</p>
+    <p class="sub">Once you see the body this way, the question stops being which muscle and becomes which structure, in front of me, today.</p>`},
+
+  {t:'spectrum', html:`
+    <div class="tag">The spectrum</div>
+    <h2>Fixed or flexi?</h2>
+    <div class="two">
+      <div class="box"><h3>The fixed body</h3><p>Dense, braced, slow to change. It feels strong but guards. It needs permission to yield before it will ever load well.</p></div>
+      <div class="box"><h3>The flexi body</h3><p>Loose, mobile, endlessly available. It feels free but cannot find an edge. It needs containment before it will ever feel safe.</p></div>
+    </div>
+    <p class="sub">Almost nobody is purely one. Reading where a client sits on this spectrum is the whole of the skill.</p>`},
+
+  {t:'part', html:`
+    <div class="tag">Part Two: the method</div>
+    <h2>Body Profiling, then micromovement</h2>
+    <p>Profiling is how you read the body before you touch it or teach it. Micromovement is how you work with what you find: small, precise, fascia-led movements that change how a body loads and recovers, instead of large drills it cannot integrate.</p>
+    <p class="sub">Profile first. Then micro-dose. The sequence is the method.</p>`},
+
+  {t:'tells', html:`
+    <div class="tag">How to profile</div>
+    <h2>Three tells, before a single cue</h2>
+    <ul>
+      <li>Breath: where does it move, and where does it stop? A fixed body holds the breath high and braced.</li>
+      <li>Bounce: offer a gentle rhythmic input. A flexi body keeps going; a fixed body refuses to give.</li>
+      <li>Brace: watch what guards under load. The pattern of guarding tells you where to start.</li>
+    </ul>
+    <p class="sub">None of this needs a table or a chart. You are reading tension, and the body shows you.</p>`},
+
+  {t:'fives', html:`
+    <div class="tag">Myofascial Magic</div>
+    <h2>The 5 Rs</h2>
+    <p>Healthy fascia does five things well. Each R is a quality you can profile for, and then train with micromovement.</p>
+    <div class="rs">
+      <div><b>Rebound</b><span>the spring that returns energy to the next step</span></div>
+      <div><b>Recoil</b><span>the elastic snap that moves you for free</span></div>
+      <div><b>Release</b><span>the letting-go that restores glide between layers</span></div>
+      <div><b>Restore</b><span>the recovery that rebuilds resilience over time</span></div>
+      <div><b>Refine</b><span>the precision that makes movement efficient and quiet</span></div>
+    </div>`},
+
+  {t:'micro', html:`
+    <div class="tag">Micromovement medicine</div>
+    <h2>Small inputs, whole-body change</h2>
+    <p>Because the body is one tensional web, you do not need large movements to change it. A millimetre of the right micromovement, placed where that specific body can receive it, reorganises load across the whole structure.</p>
+    <ul>
+      <li>For the fixed body: micromovement invites yield before you ever add range.</li>
+      <li>For the flexi body: micromovement builds the containment that range alone never gives.</li>
+      <li>For every body: the client feels the change inside one session, so they come back.</li>
+    </ul>`},
+
+  {t:'worked', html:`
+    <div class="tag">Same goal, two bodies</div>
+    <h2>One class, told two ways</h2>
+    <div class="two">
+      <div class="box"><h3>The fixed client</h3><p>Goal: a deeper forward fold. You do not chase range. You micro-dose Release and Rebound at the hips until the tissue agrees to yield, and the fold arrives on its own.</p></div>
+      <div class="box"><h3>The flexi client</h3><p>Same goal, opposite work. You skip the stretch entirely and micro-dose Recoil and Refine, so the body finds an edge to fold from instead of collapsing past it.</p></div>
+    </div>
+    <p class="sub">Same outcome, read from the body, not the plan.</p>`},
+
+  {t:'session', html:`
+    <div class="tag">Part Three</div>
+    <h2>Your next session, re-aimed</h2>
+    <ul>
+      <li>You profile in the first two minutes: fixed, flexi, or where between.</li>
+      <li>You choose the quality to work, one of the 5 Rs, not a generic sequence.</li>
+      <li>You micro-dose it, read the response, and adjust in real time.</li>
+      <li>The client leaves moving differently, not just stretched, and tells their friends.</li>
+    </ul>
+    <p class="sub">The same hour you already spend, aimed at the body actually in the room.</p>`},
+
+  {t:'mistake', html:`
+    <div class="tag">The one mistake to unlearn</div>
+    <h2>Stop releasing the flexi body</h2>
+    <p>The reflex of our whole field is to stretch and release everything. For a flexi body that is the opposite of help: more release where there is already too much gives the nervous system nothing to trust, and the client leaves looser and no better.</p>
+    <p class="sub">Profiling is what stops you doing the standard thing to the body that cannot afford it.</p>`},
+
+  {t:'why', html:`
+    <div class="tag">Why learn this from Joanne</div>
+    <h2>Three decades inside the fascia</h2>
+    <ul class="cred">
+      <li>Over 30 years as a movement and manual practitioner and somatic educator.</li>
+      <li>Trained in Structural Integration with Tom Myers (KMI, Anatomy Trains).</li>
+      <li>Certified Yoga Therapist (C-IAYT) and director of a London RYS-500 training school.</li>
+      <li>Author of Yoga, Fascia, Anatomy and Movement and Myofascial Magic in Action.</li>
+    </ul>`},
+
+  {t:'recap', html:`
+    <div class="tag">What you now have</div>
+    <h2>A lens, not another protocol</h2>
+    <ul>
+      <li>You can see the body as a tensional structure, not a stack of parts.</li>
+      <li>You can profile fixed versus flexi before you program anything.</li>
+      <li>You can work the 5 Rs with micromovement, matched to the body in front of you.</li>
+    </ul>
+    <p class="sub">This is the difference between running a plan and reading a person.</p>`},
+
+  {t:'cta', html:`
+    <div class="tag">Where to take this next</div>
+    <h1>Go deeper with the method</h1>
+    <p>If profiling and micromovement changed how you see the body today, the MMIA Specialist Program is where you learn to do it with every client: weekly live coaching, the full 5 Rs system, one to one guidance and a community of practitioners working the same way.</p>
+    <div class="step">Start with the free masterclass, then join the MMIA Specialist Program.</div>
+    <div class="disc">Educational content only. Individual results vary. Nothing here is medical advice or a guarantee of any clinical or business outcome. Always work within your scope of practice.</div>`}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className = 'slide' + (i===0?' on':'') + (s.t==='cta'?' cta':'');
+  d.innerHTML = (s.t==='title'||s.t==='hook'?MOTIF:'') + s.html +
+    '<div class="num">'+(i+1)+' / '+S.length+'</div>';
+  deck.appendChild(d);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+function go(n){slides[cur].classList.remove('on');cur=(cur+n+slides.length)%slides.length;slides[cur].classList.add('on');}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+</script>
+</body>
+</html>
