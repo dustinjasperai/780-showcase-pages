@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Commercial Edge — a CRE Success masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1b24;      /* deep navy ground, from dark site scheme + brand-blue hue */
+    --panel:#12242f;
+    --rule:#1f3a48;
+    --accent:#20b1e7;  /* brand blue, brand.json ranked_colors #20b1e7 */
+    --accent-soft:#a9d9f5;
+    --text:#eaf4fb;
+    --muted:#8fb0c4;
+    --disp:'Alegreya', Georgia, serif;
+    --body:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden}
+  #stage{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;position:relative}
+  .slide{display:none;width:min(1040px,92vw);max-height:92vh;overflow:auto;padding:56px 60px}
+  .slide.on{display:block;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--body);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(34px,5.4vw,62px);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;margin-bottom:8px}
+  p{font-size:clamp(17px,1.7vw,21px);line-height:1.6;color:var(--text);max-width:40ch;margin-top:16px}
+  p.lead{font-size:clamp(20px,2.1vw,26px);color:var(--accent-soft);max-width:34ch}
+  .sub{color:var(--muted);margin-top:18px;font-size:clamp(16px,1.6vw,20px);max-width:42ch}
+  ul{margin:22px 0 0 0;list-style:none;max-width:44ch}
+  li{position:relative;padding-left:30px;margin:14px 0;font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:var(--text)}
+  li:before{content:'';position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent)}
+  .big{font-family:var(--disp);font-weight:800;font-size:clamp(60px,9vw,120px);color:var(--accent);line-height:1}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:30px 32px;margin-top:26px}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}
+  .p-card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 16px}
+  .p-card .n{font-family:var(--disp);font-weight:800;color:var(--accent);font-size:30px}
+  .p-card .t{font-weight:600;margin-top:6px;font-size:16px}
+  .quote{font-family:var(--disp);font-style:italic;font-size:clamp(22px,2.6vw,32px);line-height:1.35;max-width:30ch}
+  .attrib{color:var(--muted);margin-top:18px;font-size:16px;font-weight:500}
+  .disc{color:var(--muted);font-size:13px;line-height:1.5;margin-top:30px;max-width:56ch;border-top:1px solid var(--rule);padding-top:16px}
+  .foot{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 28px;color:var(--muted);font-size:12px;letter-spacing:.04em}
+  .brand{font-family:var(--disp);font-weight:700;color:var(--accent-soft)}
+  .dots{display:flex;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+  .dot.on{background:var(--accent)}
+  .nav{position:fixed;bottom:16px;right:24px;display:flex;gap:8px;z-index:5}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--text);width:40px;height:40px;border-radius:10px;font-size:18px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+  .two{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  @media(max-width:760px){.two{grid-template-columns:1fr}.grid5{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="foot"><span class="brand">CRE Success</span><div class="dots" id="dots"></div><span id="pg">1</span></div>
+<div class="nav"><button onclick="go(-1)">&#8249;</button><button onclick="go(1)">&#8250;</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'A CRE Success masterclass',h:'The Commercial Edge',lead:'How top commercial real estate agents add six figures to their GCI by working smarter, not harder.',sub:'Presented live by Darren Krakowiak, Founder of CRE Success'},
+  {t:'who',kicker:'Who this is for',h:'You close deals. You just want more of them, with less chaos.',items:['Commercial real estate agents and brokers who are good at the job but stuck at a GCI ceiling','Principals who want a team that produces without them in every deal','Anyone tired of being told to just work harder and prospect more']},
+  {t:'trap',kicker:'The trap',h:'More hours went in. The income did not follow.',p:['You answer every call, inspect every property, chase every lead. The diary is full and the pipeline still feels thin the moment a deal settles.','The market tells you the fix is more activity. So you add more hours, and the ceiling stays exactly where it was.']},
+  {t:'reframe',kicker:'The reframe',h:'The problem is not effort. It is that the pipeline depends on you.',lead:'Commercial is a different game from residential. Longer cycles, fewer transactions, bigger fees. The agents who win it build a system, not a sprint.'},
+  {t:'part',kicker:'Part One',h:'Why your income has a ceiling',lead:'It is not your effort. It is the shape of your pipeline.'},
+  {t:'loop',kicker:'The core problem',h:'The Pipeline Dependency Loop',p:['When you live deal to deal, prospecting stops the moment a big one lands. You service it, it settles, and the pipeline is empty again.','So you prospect in a panic, win work, go quiet, and repeat. Your income swings with the loop instead of climbing past it.'],quote:'Busy, then broke, then busy again. The loop feels like hustle. It is really a system with no buffer.'},
+  {t:'buffer',kicker:'At the team level',h:'The Buffer Effect',p:['On a team, the loop hides. One person’s strong month covers another’s quiet one, so nobody sees the prospecting gap until three agents go dry at once.','A commercial business that scales needs prospecting that does not depend on who happens to be motivated this week.']},
+  {t:'part',kicker:'Part Two',h:'The 5 Ps of Commercial Real Estate Success',lead:'The five traits that separate top performers from everyone chasing the next deal.'},
+  {t:'p',kicker:'The 5 Ps',n:'1',h:'Passion',p:['Where the industry’s top performers actually get their motivation from, and how to keep it when the market turns.']},
+  {t:'p',kicker:'The 5 Ps',n:'2',h:'Persistence',p:['Trading a reactive, deal-to-deal scramble for a proactive approach that gets you what you want.']},
+  {t:'p',kicker:'The 5 Ps',n:'3',h:'Positive Attitude',p:['The key ingredient to a success mindset, and why it compounds across a long commercial sales cycle.']},
+  {t:'p',kicker:'The 5 Ps',n:'4',h:'Preparation',p:['Why proactivity, not luck, leads to consistent results and listings you win before the pitch.']},
+  {t:'p',kicker:'The 5 Ps',n:'5',h:'Professionalism',p:['Becoming the person who sets the example others in the market want to emulate.']},
+  {t:'part',kicker:'Part Three',h:'What a commercial edge looks like',lead:'Strategy, sustainability and scalability, instead of hustle.'},
+  {t:'day',kicker:'Strategy, sustainability, scalability',h:'A week with a commercial edge',items:['Prospecting runs on a schedule, not a mood, so the pipeline stays full through a settlement','You work the few activities that actually move GCI, and drop the busywork that only feels productive','The business keeps producing on the weeks you step away, because it runs on a method, not on you']},
+  {t:'whyme',kicker:'Why listen to me',h:'Twenty years in commercial, not a generic coach',p:['I spent over 20 years in commercial real estate, in pivotal roles at CBRE and JLL across Australia and South Korea, before founding CRE Success in 2020.','Everything here is built for commercial agency specifically: the cycles, the fee structure, the way listings are really won. Not residential tactics in a new suit.']},
+  {t:'proof',kicker:'What it has done',quote:'“Darren helped me to become a $2,000,000 GCI agent.”',attrib:'Ben Curran, Colliers',p:['Results like this come from working the method consistently over time. They are illustrative examples, not a promise of what any individual will earn.']},
+  {t:'recap',kicker:'The method, in one view',h:'Break the loop. Run the 5 Ps.',cards:[['1','Passion'],['2','Persistence'],['3','Positive Attitude'],['4','Preparation'],['5','Professionalism']],p:['A pipeline that does not depend on you, built on the five traits top performers share.']},
+  {t:'cta',kicker:'Your next step',h:'Build your commercial edge',lead:'The Agent Accelerator is where we install this, program by program, with weekly coaching for commercial agents growing their GCI.',sub:'Apply at cresuccess.co, or start with the free 5 Ps workshop.',disc:'Educational content only. No income or result is guaranteed. Results vary with market conditions, effort and individual circumstances. Client results shared are illustrative examples, not a promise of what any individual will earn.'}
+];
+
+const stage=document.getElementById('stage');
+const dots=document.getElementById('dots');
+let i=0;
+
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function paras(d,arr){(arr||[]).forEach(x=>d.appendChild(el('p',null,x)));}
+
+function render(){
+  stage.innerHTML='';
+  const s=S[i];
+  const d=el('div','slide on');
+  if(s.kicker)d.appendChild(el('div','kicker',s.kicker));
+
+  if(s.t==='title'){
+    d.appendChild(el('h1',null,s.h));
+    d.appendChild(el('p','lead',s.lead));
+    d.appendChild(el('div','sub',s.sub));
+  }
+  else if(s.t==='p'){
+    const row=el('div','two');
+    const left=el('div');left.appendChild(el('div','big',s.n));left.appendChild(el('h2',null,s.h));
+    const right=el('div');paras(right,s.p);
+    row.appendChild(left);row.appendChild(right);
+    d.appendChild(row);
+  }
+  else if(s.t==='loop'){
+    d.appendChild(el('h2',null,s.h));
+    const two=el('div','two');
+    const left=el('div');paras(left,s.p);
+    const right=el('div','panel');right.appendChild(el('div','quote',s.quote));
+    two.appendChild(left);two.appendChild(right);
+    d.appendChild(two);
+  }
+  else if(s.t==='proof'){
+    d.appendChild(el('div','quote',s.quote));
+    d.appendChild(el('div','attrib',s.attrib));
+    paras(d,s.p);
+  }
+  else if(s.t==='recap'){
+    d.appendChild(el('h2',null,s.h));
+    const g=el('div','grid5');
+    s.cards.forEach(x=>{const c=el('div','p-card');c.appendChild(el('div','n',x[0]));c.appendChild(el('div','t',x[1]));g.appendChild(c);});
+    d.appendChild(g);
+    paras(d,s.p);
+  }
+  else if(s.t==='cta'){
+    d.appendChild(el('h2',null,s.h));
+    d.appendChild(el('p','lead',s.lead));
+    d.appendChild(el('div','sub',s.sub));
+    d.appendChild(el('div','disc',s.disc));
+  }
+  else{ /* who, trap, reframe, part, buffer, day */
+    if(s.h)d.appendChild(el('h2',null,s.h));
+    if(s.lead)d.appendChild(el('p','lead',s.lead));
+    paras(d,s.p);
+    if(s.items){const u=el('ul');s.items.forEach(x=>u.appendChild(el('li',null,x)));d.appendChild(u);}
+  }
+
+  stage.appendChild(d);
+  dots.innerHTML='';
+  S.forEach((_,k)=>{dots.appendChild(el('span','dot'+(k===i?' on':'')));});
+  document.getElementById('pg').textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
