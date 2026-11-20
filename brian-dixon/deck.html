@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Write the Book Only You Can Write | A Masterclass with Dr. Brian Dixon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Cabin:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --navy:#1b2740;
+    --navy-2:#23314d;
+    --slate:#34495e;
+    --copper:#a0652d;
+    --cream:#faf8e9;
+    --mist:#adbbca;
+    --ink:#161b26;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Cabin',system-ui,sans-serif;
+    background:var(--navy);
+    color:var(--cream);
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{
+    position:absolute;inset:0;display:none;
+    flex-direction:column;justify-content:center;
+    padding:7vh 9vw;
+  }
+  .slide.on{display:flex;}
+  h1,h2,h3{font-family:'Bitter',Georgia,serif;line-height:1.12;letter-spacing:-0.01em;}
+  .eyebrow{font-family:'Cabin',sans-serif;text-transform:uppercase;letter-spacing:0.22em;
+    font-size:clamp(11px,1.3vw,15px);color:var(--copper);font-weight:600;margin-bottom:22px;}
+  .title h1{font-size:clamp(34px,6.4vw,78px);font-weight:700;color:var(--cream);}
+  .title .sub{font-size:clamp(17px,2.3vw,27px);color:var(--mist);margin-top:26px;max-width:22ch;line-height:1.4;}
+  .title .by{margin-top:40px;font-size:clamp(13px,1.5vw,17px);color:var(--cream);letter-spacing:0.04em;}
+  .title .by b{color:var(--copper);}
+  h2{font-size:clamp(26px,4.2vw,52px);font-weight:600;color:var(--cream);max-width:20ch;}
+  .lead{font-size:clamp(17px,2.2vw,25px);color:var(--mist);margin-top:24px;max-width:30ch;line-height:1.5;}
+  .big{font-size:clamp(28px,4.6vw,58px);font-weight:600;color:var(--cream);max-width:18ch;}
+  .copper{color:var(--copper);}
+  ul{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:18px;max-width:34ch;}
+  li{display:flex;gap:16px;align-items:flex-start;font-size:clamp(16px,2vw,23px);color:var(--cream);line-height:1.4;}
+  li .n{flex:none;width:1.9em;height:1.9em;border-radius:50%;background:var(--copper);color:var(--navy);
+    font-family:'Bitter',serif;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:0.8em;}
+  li small{display:block;color:var(--mist);font-size:0.78em;margin-top:4px;line-height:1.4;}
+  .panel{background:var(--cream);color:var(--ink);}
+  .panel .eyebrow{color:var(--copper);}
+  .panel h2,.panel .big{color:var(--ink);}
+  .panel .lead{color:var(--slate);}
+  .panel li{color:var(--ink);}
+  .panel li small{color:var(--slate);}
+  .quote{font-family:'Bitter',serif;font-size:clamp(24px,3.8vw,46px);font-weight:600;line-height:1.3;max-width:24ch;}
+  .quote .mark{color:var(--copper);}
+  .cite{margin-top:26px;font-size:clamp(14px,1.6vw,18px);color:var(--mist);letter-spacing:0.03em;}
+  .panel .cite{color:var(--slate);}
+  .step-head{display:flex;align-items:baseline;gap:18px;margin-bottom:10px;}
+  .step-head .idx{font-family:'Bitter',serif;font-size:clamp(30px,5vw,64px);font-weight:700;color:var(--copper);}
+  .creds{margin-top:28px;display:flex;flex-direction:column;gap:12px;max-width:32ch;}
+  .creds div{font-size:clamp(15px,1.9vw,21px);color:var(--cream);}
+  .panel .creds div{color:var(--ink);}
+  .cta h2{font-size:clamp(30px,5vw,62px);}
+  .cta .step{margin-top:26px;font-size:clamp(18px,2.3vw,27px);color:var(--copper);font-weight:600;}
+  .disc{margin-top:40px;font-size:clamp(11px,1.25vw,14px);color:var(--mist);max-width:52ch;line-height:1.5;}
+  footer{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:space-between;
+    padding:0 9vw;font-size:12px;color:var(--mist);letter-spacing:0.04em;font-family:'Cabin',sans-serif;}
+  .panel ~ footer{color:var(--mist);}
+  .bar{position:fixed;top:0;left:0;height:4px;background:var(--copper);width:0;transition:width .3s;}
+  .hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--mist);opacity:.6;}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div id="stage"></div>
+<footer><span>Write the Book Only You Can Write</span><span id="pg"></span></footer>
+<div class="hint">Use arrow keys or click to advance</div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A Live Masterclass', h1:'Write the Book Only You Can Write',
+   sub:'Turn the message you carry into a published book, in a year, without guessing.',
+   by:'with <b>Dr. Brian Dixon</b> &nbsp;&middot;&nbsp; hope*books'},
+
+  {t:'lead', eyebrow:'Who this is for', h2:'You already know you have something to say.',
+   lead:'You have a story, a hard-won lesson, a message people keep asking you about. The book just never gets written.'},
+
+  {t:'bullets', eyebrow:'The trap', h2:'So it stays stuck here:', items:[
+    {h:'Overwhelmed by where to even start.'},
+    {h:'Quietly unsure your story is "good enough."'},
+    {h:'Afraid of what people might think if you actually said it.'}]},
+
+  {t:'quote', q:'The world does not need another expert. It needs the one message only <span class="mark">you</span> can tell.',
+   cite:'And every year it stays unwritten, someone who needed it never gets to read it.'},
+
+  {t:'quote', panel:true, q:'What is obvious to you is <span class="mark">magic</span> to other people.',
+   cite:'The thing you undervalue because it comes easily to you is the exact thing your reader is searching for.'},
+
+  {t:'lead', eyebrow:'Part one: the real problem', h2:'It was never a writing problem.',
+   lead:'Most messengers do not lack words. They lack clarity and a path. Without those, the blank page wins every time.'},
+
+  {t:'bullets', panel:true, eyebrow:'What clarity actually is', h2:'Clarity rejects the overwhelm.', items:[
+    {h:'Clarity is powerful.', s:'You stop writing for everyone and start writing for your one reader.'},
+    {h:'Clarity is direction.', s:'You know the next step, so momentum replaces second-guessing.'},
+    {h:'One step at a time.', s:'A book is not written in a weekend. It is written in a rhythm you can keep.'}]},
+
+  {t:'lead', eyebrow:'Part two: the pathway', h2:'The hope*books Publishing Pathway',
+   lead:'Three movements that carry you from a message in your head to a book in your hands.'},
+
+  {t:'step', idx:'01', h2:'Discover your Message', lead:'Name your one reader and the single promise your book makes to them. This is where "obvious to you, magic to them" becomes your title, your hook, and your spine.'},
+
+  {t:'step', panel:true, idx:'02', h2:'Build your Network and Accountability', lead:'A book finishes because of the people around it. You set up the circle, the deadlines, and the beta readers that carry you past the middle, where most books quietly die.'},
+
+  {t:'step', idx:'03', h2:'Envision, Write and Publish', lead:'Outline, draft, revise with real feedback, then launch. Writing, editing, design and a launch plan, in one guided rhythm instead of a dozen open tabs.'},
+
+  {t:'bullets', eyebrow:'From message to momentum', h2:'The Problem Promise Path', items:[
+    {h:'Start at your reader’s problem.', s:'Not your resume. The ache they already feel.'},
+    {h:'Make one clear promise.', s:'The transformation your book delivers, in a sentence.'},
+    {h:'Build the ladder.', s:'Your book becomes the front door to everything else you offer.'}]},
+
+  {t:'big', eyebrow:'Part three: a dated finish line', big:'From idea to book in hand in <span class="copper">365 days</span>.',
+   lead:'Not someday. A dated finish line, with a path you can actually walk.'},
+
+  {t:'creds', panel:true, eyebrow:'Why listen to me', h2:'I have walked thousands of writers through this.',
+   creds:[
+     'I founded hope*writers, a community of writers building their craft and their platform.',
+     'I wrote Start with Your People, a book on the people-first decision that drives real work.',
+     'I coach messengers, authors, podcasters and speakers to share their message and build a living from it.']},
+
+  {t:'quote', q:'You were not given this message to keep it in a drawer.',
+   cite:'The next step is smaller than you think, and you do not take it alone.'},
+
+  {t:'cta', eyebrow:'Your next step', h2:'Say yes to your book.',
+   step:'Join the next hope*books cohort and start your 365-day path.',
+   disc:'Educational content only. No outcome, income, publishing or results are guaranteed. Every writer’s path and results vary with effort, market and circumstances.'}
+];
+
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.panel?' panel':'')+(' '+(s.t==='title'?'title':s.t==='cta'?'cta':''));
+  let html='';
+  if(s.eyebrow) html+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.t==='title'){ html+='<h1>'+s.h1+'</h1><div class="sub">'+s.sub+'</div><div class="by">'+s.by+'</div>'; }
+  else if(s.t==='quote'){ html+='<div class="quote">'+s.q+'</div>'+(s.cite?'<div class="cite">'+s.cite+'</div>':''); }
+  else if(s.t==='big'){ html+='<div class="big">'+s.big+'</div>'+(s.lead?'<div class="lead">'+s.lead+'</div>':''); }
+  else if(s.t==='step'){ html+='<div class="step-head"><span class="idx">'+s.idx+'</span><h2>'+s.h2+'</h2></div><div class="lead">'+s.lead+'</div>'; }
+  else if(s.t==='creds'){ html+='<h2>'+s.h2+'</h2><div class="creds">'+s.creds.map(c=>'<div>'+c+'</div>').join('')+'</div>'; }
+  else if(s.t==='cta'){ html+='<h2>'+s.h2+'</h2><div class="step">'+s.step+'</div><div class="disc">'+s.disc+'</div>'; }
+  else { if(s.h2) html+='<h2>'+s.h2+'</h2>'; if(s.lead) html+='<div class="lead">'+s.lead+'</div>';
+    if(s.items) html+='<ul>'+s.items.map((it,k)=>'<li><span class="n">'+(k+1)+'</span><span>'+it.h+(it.s?'<small>'+it.s+'</small>':'')+'</span></li>').join('')+'</ul>'; }
+  d.innerHTML=html;
+  stage.appendChild(d);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const bar=document.getElementById('bar'),pg=document.getElementById('pg');
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';pg.textContent=(cur+1)+' / '+slides.length;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+document.addEventListener('click',e=>{show(cur + (e.clientX < innerWidth*0.28 ? -1 : 1));});
+show(0);
+</script>
+</body>
+</html>
