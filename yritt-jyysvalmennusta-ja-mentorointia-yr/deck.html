@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Build a 5-Star Business That Runs Without You | Bisnesmentoring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#f9f9f2;
+    --panel:#172a28;
+    --ink:#172a28;
+    --accent:#ff613e;
+    --rule:#696c74;
+    --grey:#696c74;
+    --dim:#696c74;
+  }
+  html,body{height:100%;}
+  body{font-family:'Lato',-apple-system,sans-serif;background:var(--grey);color:var(--ink);}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 9vw;background:var(--bg);}
+  .slide.on{display:flex;}
+  .slide.dark{background:var(--panel);color:var(--bg);}
+  .kick{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:14px;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;margin-bottom:22px;}
+  h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:40px;line-height:1.12;margin-bottom:20px;}
+  p.sub{font-size:22px;line-height:1.5;max-width:40ch;color:var(--ink);}
+  .slide.dark p.sub{color:var(--bg);}
+  .lead{font-size:26px;line-height:1.5;max-width:34ch;}
+  ul{list-style:none;margin-top:10px;max-width:46ch;}
+  li{font-size:21px;line-height:1.45;padding-left:28px;position:relative;margin-bottom:14px;}
+  li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;background:var(--accent);
+    transform:rotate(45deg);}
+  .big{font-family:'Oswald',sans-serif;font-weight:700;font-size:72px;color:var(--accent);line-height:1;}
+  .star{color:var(--accent);}
+  .brandline{margin-top:30px;font-family:'Oswald',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    font-size:15px;color:var(--rule);}
+  .slide.dark .brandline{color:var(--bg);}
+  .num{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;color:var(--accent);
+    border:2px solid var(--accent);width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+    border-radius:50%;margin-bottom:20px;}
+  .disc{margin-top:26px;font-size:15px;line-height:1.5;color:var(--rule);max-width:52ch;}
+  .slide.dark .disc{color:var(--bg);opacity:.75;}
+  #nav{position:fixed;bottom:18px;right:24px;font-family:'Oswald',sans-serif;font-size:13px;
+    letter-spacing:.1em;color:var(--bg);opacity:.8;z-index:5;}
+  #bar{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);width:0;z-index:5;transition:width .2s;}
+  button.n{position:fixed;top:0;bottom:0;width:18vw;border:0;background:transparent;cursor:pointer;z-index:4;}
+  #prev{left:0;} #next{right:0;}
+  @media(max-width:700px){h1{font-size:34px;}h2{font-size:27px;}p.sub{font-size:18px;}.lead{font-size:20px;}li{font-size:17px;}.big{font-size:48px;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<button class="n" id="prev" aria-label="previous"></button>
+<button class="n" id="next" aria-label="next"></button>
+<div id="nav"></div>
+<div id="bar"></div>
+<script>
+const S=[
+  {t:'title',kick:'A live masterclass with Emma Ruotsala',h:'How to Build a 5<span class="star">★</span> Business That Runs Without You',sub:'The structure that lets your income stop equalling your hours.',brand:'Bisnesmentoring'},
+  {t:'promise',kick:'What you will leave with',h:'By the end of this hour',bullets:['A clear picture of why a fuller calendar has not made you more money','The five cores every business needs to run lighter','The one core to fix first in your own business']},
+  {t:'whofor',kick:'Who this is for',h:'You are the engine, and you are tired',sub:'Your business runs. Clients come. But the calendar is full, the income is uneven, and every month feels like it starts from zero.'},
+  {t:'reframe',dark:true,kick:'The reframe',h:'You do not need more clients.',sub:'You need structure. More clients on top of a business with no backbone just means more chaos, more hours, and the same bank balance.'},
+  {t:'parthdr',dark:true,kick:'Part one',h:'Why your calendar is full and your account is not'},
+  {t:'point',kick:'The invisible handbrake',h:'Doing more is not the problem',sub:'Most entrepreneurs respond to a plateau by adding a channel, a tactic, or a new service. It feels productive. It is the handbrake staying on.'},
+  {t:'point',kick:'The real cost',h:'A business built on reacting',bullets:['You sell a little of everything to everyone','Marketing happens only when you have time','Income is tied directly to the hours you put in','Time off means income stops']},
+  {t:'parthdr',dark:true,kick:'Part two',h:'The 5<span class="star">★</span> Business'},
+  {t:'core',num:'1',kick:'5★ Ydin',h:'A core clients already believe in',sub:'A client and value definition sharp enough that people arrive convinced. No more proving why they need you, or guessing what to sell and at what price.'},
+  {t:'core',num:'2',kick:'5★ Palvelukokonaisuus',h:'A service package priced to earn',sub:'Productized services with clear pricing, so you earn a real wage without selling in huge volume. You know what to sell, and what to let go of.'},
+  {t:'core',num:'3',kick:'5★ Markkinointisysteemi',h:'A marketing system, not a scramble',sub:'A steady client flow that runs without you inventing a new post every morning. People find you already interested, before the first conversation.'},
+  {t:'core',num:'4',kick:'5★ Myyntimalli',h:'A sales model that feels natural',sub:'Clients buy because they want to, not because you pushed or discounted. They value your expertise and pay for it without haggling.'},
+  {t:'core',num:'5',kick:'5★ Vapaus & Hallinta',h:'Freedom and control',sub:'You can take a lighter week or a holiday and the income does not collapse. You know how the revenue works and what to expect. The business supports your life.'},
+  {t:'point',kick:'The build order',h:'They go in, in order',sub:'The cores are not a menu. A validated core comes first, then the package, then the marketing and sales system, and freedom is what the structure produces.'},
+  {t:'parthdr',dark:true,kick:'Part three',h:'What a 5<span class="star">★</span> week feels like'},
+  {t:'point',kick:'A week in a 5★ business',h:'Calm, not quiet',bullets:['Clients find you without a daily scramble','You sell a clear package without explaining yourself','The numbers are predictable enough to plan around','A day off is a normal part of the work, not a risk']},
+  {t:'why',kick:'Why listen to me',h:'I rebuilt my own structure six times',sub:'I am Emma Ruotsala, a business architect and entrepreneur mentor. I have founded six companies since 2008 and been through four exits, and rebuilt my own business until it was lighter and more profitable at the same time. I call that model 5★ Bisnes, and I have helped hundreds of entrepreneurs build it.'},
+  {t:'recap',kick:'The five cores',h:'One structure',bullets:['Core clients already believe in','Service package priced to earn','Marketing system that runs itself','Sales model that feels natural','Freedom and control over your time']},
+  {t:'point',kick:'Your next step',h:'Build it with me',sub:'The masterclass shows you the map. 5★ Bisnes mentoring is where we build your version of it together, core by core, around your real business.'},
+  {t:'cta',kick:'Work with Emma',h:'Ready to build a business that runs without you?',sub:'Book a 5★ Bisnes mentoring conversation at bisnesmentoring.fi and we will look at which core to fix first.',disc:'This masterclass is educational. No specific income or business result is guaranteed. Results vary with your market, your effort, and your situation.',brand:'Bisnesmentoring'}
+];
+const stage=document.getElementById('stage');
+function esc(x){return x||'';}
+function render(s){
+  let c='';
+  if(s.kick)c+='<div class="kick">'+esc(s.kick)+'</div>';
+  if(s.num)c='<div class="num">'+s.num+'</div>'+c;
+  if(s.t==='title'){c+='<h1>'+s.h+'</h1>';if(s.sub)c+='<p class="sub">'+esc(s.sub)+'</p>';if(s.brand)c+='<div class="brandline">'+esc(s.brand)+'</div>';}
+  else if(s.t==='cta'){c+='<h2>'+s.h+'</h2>';if(s.sub)c+='<p class="lead">'+esc(s.sub)+'</p>';if(s.disc)c+='<div class="disc">'+esc(s.disc)+'</div>';if(s.brand)c+='<div class="brandline">'+esc(s.brand)+'</div>';}
+  else if(s.t==='parthdr'){c+='<h2>'+s.h+'</h2>';}
+  else {c+='<h2>'+s.h+'</h2>';if(s.sub)c+='<p class="sub">'+esc(s.sub)+'</p>';}
+  if(s.bullets){c+='<ul>';s.bullets.forEach(b=>c+='<li>'+esc(b)+'</li>');c+='</ul>';}
+  return c;
+}
+let i=0;
+function show(){
+  stage.innerHTML='';
+  const d=document.createElement('div');
+  d.className='slide on'+(S[i].dark?' dark':'');
+  d.innerHTML=render(S[i]);
+  stage.appendChild(d);
+  document.getElementById('nav').textContent=(i+1)+' / '+S.length;
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));show();}
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
