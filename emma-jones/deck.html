@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remember Who You Are — A Masterclass with Emma Jones, MD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fffbf0;      /* warm cream ground (brand.json ranked hex, her button-text cream) */
+    --panel:#f9f8f4;    /* bone card (brand.json ground hex) */
+    --ink:#083b4c;      /* deep petrol teal (brand.json dominant, 53 uses) */
+    --accent:#083b4c;   /* the one brand color she uses */
+    --muted:#5a6f78;    /* desaturated teal for secondary text */
+    --rule:#d8ded9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Mulish',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:64px 60px;margin:0 0 28px;min-height:460px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+  .eyebrow{font-family:'Mulish';font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Playfair Display';font-weight:700;font-size:52px;line-height:1.08;letter-spacing:-.01em;margin-bottom:20px}
+  h2{font-family:'Playfair Display';font-weight:600;font-size:38px;line-height:1.12;margin-bottom:18px}
+  h3{font-family:'Playfair Display';font-weight:600;font-size:26px;line-height:1.2;margin:0 0 10px}
+  p{font-size:20px;line-height:1.58;color:var(--ink);max-width:42em;margin-bottom:14px}
+  p.lead{font-size:23px;color:var(--muted)}
+  .big{font-family:'Playfair Display';font-weight:600;font-size:40px;line-height:1.18;letter-spacing:-.01em}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:20px;line-height:1.5;padding:14px 0 14px 34px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:0;top:22px;width:12px;height:12px;border:2px solid var(--accent);border-radius:50%}
+  li b{font-family:'Mulish';font-weight:700}
+  .step li::before{content:counter(step);counter-increment:step;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--bg);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;top:12px;border:none}
+  ul.step{counter-reset:step}
+  ul.step li{padding-left:48px}
+  .kicker{font-family:'Playfair Display';font-size:72px;font-weight:700;color:var(--accent);opacity:.18;position:absolute;right:48px;top:30px}
+  .foot{font-size:14px;color:var(--muted);margin-top:28px}
+  .disc{font-size:13px;color:var(--muted);line-height:1.5;margin-top:22px;max-width:46em}
+  .byline{font-family:'Mulish';font-weight:600;font-size:17px;color:var(--muted);margin-top:26px;letter-spacing:.02em}
+  .cta-btn{display:inline-block;margin-top:22px;background:var(--accent);color:var(--bg);font-family:'Mulish';font-weight:700;font-size:18px;padding:16px 34px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for physicians &amp; clinical leaders',
+   h1:'Remember Who You Are',
+   lead:'The self-trust map for doctors who are done just pushing through.',
+   byline:'with Emma Jones, MD &nbsp;&middot;&nbsp; pediatric oncology &rarr; palliative &rarr; hospice'},
+
+  {t:'who', eyebrow:'Who this is for', h2:'You are very good at this. And you are running on empty.',
+   p:'This hour is for physicians, nurses, and clinical leaders who still love the work and are quietly exhausted by it. The ones who hold it together all day and have nothing left by the time they get home.',
+   lead:'If you have ever thought "I cannot keep doing it like this, but I do not know who I would be if I stopped," you are in the right room.'},
+
+  {t:'trap', eyebrow:'The trap', h2:'You did everything right. That is the problem.',
+   p:'You trained to override yourself. To keep going when you were tired, to stay calm when you were not, to put the patient first every single time. It made you excellent.',
+   lead:'And it taught you that your own signals do not count. That is not a character flaw. It is exactly what the system asked of you.'},
+
+  {t:'hook', eyebrow:'The reframe', k:'1',
+   big:'The exhaustion you feel is a rational response to an irrational system.',
+   p:'You are not weak, and you are not failing. The very thing that makes you extraordinary, your capacity to care fully, has quietly become the source of your depletion.'},
+
+  {t:'part', eyebrow:'Part one', h1:'Why caring harder stops working'},
+
+  {t:'content', eyebrow:'The core problem', h2:'Compassion wired toward everyone but you.',
+   p:'The reflex that lets you absorb a family\'s worst day is the same reflex that will not let you rest while a chart is open. It does not have an off switch. Left alone, it points at you.',
+   lead:'So the fix is not more willpower or a better morning routine. It is rewiring the relationship between your compassion and your sense of self.'},
+
+  {t:'content', eyebrow:'The cost of waiting', h2:'What "push through" actually costs.',
+   ul:[
+     {b:'The slow fade', x:'You stop noticing what you want, because wanting felt unsafe to track.'},
+     {b:'The resentment', x:'The work you chose starts to feel like the thing being done to you.'},
+     {b:'The quiet exit', x:'Good clinicians do not burn out loudly. They leave, or go numb, on a Tuesday.'}
+   ]},
+
+  {t:'part', eyebrow:'Part two', h1:'The 5-Stage Internal Map'},
+
+  {t:'content', eyebrow:'The method', h2:'Self-trust gets built the way a body gets stronger.',
+   p:'Not in one dramatic decision. A little at a time, in reps. The map is how you find your current starting point and the next honest move, instead of grading yourself against where you think you should be.',
+   lead:'It begins with the Thriving Scale: most assessments measure what is wrong. This one measures what is available.'},
+
+  {t:'framework', eyebrow:'The 5-Stage Internal Map', h2:'From "I am not a leader" to leading with ease.',
+   steps:[
+     'Notice. Catch the signal you were trained to override, before it becomes a symptom.',
+     'Name. Say what is true without translating it into what is acceptable.',
+     'Allow. Let the feeling exist without needing to fix, earn, or apologize for it.',
+     'Choose. Make the next move from your own values, not the system\'s defaults.',
+     'Trust. Act, watch it hold, and let the evidence rebuild your faith in yourself.'
+   ]},
+
+  {t:'framework', eyebrow:'The four skills of self-trust', h2:'The muscles the map trains.',
+   ul:[
+     {b:'Interoception', x:'Reading your own signals as data you are allowed to use.'},
+     {b:'Boundaries', x:'Protecting your capacity without abandoning your patients or your team.'},
+     {b:'Self-compassion', x:'Turning the care you give freely back toward yourself, on purpose.'},
+     {b:'Discernment', x:'Knowing which demands are yours to carry and which were never yours.'}
+   ]},
+
+  {t:'content', eyebrow:'Leadership', h2:'Leadership has nothing to do with a title.',
+   p:'People already follow your decisions every day. The question is whether you lead from who you are, or from who the system told you to be. Self-trust is what lets you do the former without denying your own power.',
+   lead:'You can lead powerfully without burning out to prove you deserve the seat.'},
+
+  {t:'part', eyebrow:'Part three', h1:'When it holds'},
+
+  {t:'content', eyebrow:'The shift', h2:'Go slow so you can go fast, sustainably.',
+   ul:[
+     {b:'Your signals count again', x:'You catch depletion early instead of discovering it in a parking lot.'},
+     {b:'The work feels chosen', x:'Same job, different relationship to it, because you are in it on purpose.'},
+     {b:'You last', x:'Not by caring less, but by caring without disappearing.'}
+   ]},
+
+  {t:'content', eyebrow:'A reframe to keep', h2:'This is not indulgence. It is infrastructure.',
+   p:'You would never tell a patient to just push through. The inner work that keeps you steady is not a luxury you earn after everything else is handled. It is the load-bearing wall everything else stands on.'},
+
+  {t:'why', eyebrow:'Why me', h2:'I did not read about this. I lived it.',
+   p:'I am a physician. Pediatric oncology, then palliative care, then hospice. I sat at the bedsides of dying children and adults and I burned out quietly and thoroughly while doing work I believed in.',
+   lead:'What brought me back was not working less. It was rebuilding the relationship between my compassion and myself. That method is what I teach now, and it is what this hour is drawn from.'},
+
+  {t:'content', eyebrow:'The one line', h2:'The doctors who last are not the ones who work the hardest.',
+   big:'They are the ones who remember who they are.'},
+
+  {t:'cta', eyebrow:'Your next step', h2:'Keep going, with support.',
+   p:'If this is the work you want to do properly, the next step is 1:1 coaching. We start by finding your real starting point and build self-trust from there, a little at a time, together.',
+   cta:'Apply to work with Emma',
+   disc:'Educational content only. This masterclass is for professional development and general education. It is not medical, psychological, or financial advice, and it is not a substitute for individual clinical or mental-health care. No specific outcome, income, or result is promised or guaranteed; individual experiences vary.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(s){return s;}
+S.forEach(s=>{
+  const d=document.createElement('section');
+  d.className='slide';
+  let h='';
+  if(s.k) h+='<div class="kicker">'+s.k+'</div>';
+  if(s.eyebrow) h+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.h1) h+='<h1>'+s.h1+'</h1>';
+  if(s.h2) h+='<h2>'+s.h2+'</h2>';
+  if(s.big && !s.h2) h+='<div class="big">'+s.big+'</div>';
+  if(s.lead && s.t==='title'){h+='<p class="lead">'+s.lead+'</p>';}
+  if(s.p) h+='<p>'+s.p+'</p>';
+  if(s.big && s.h2) h+='<div class="big">'+s.big+'</div>';
+  if(s.lead && s.t!=='title') h+='<p class="lead">'+s.lead+'</p>';
+  if(s.steps){h+='<ul class="step">';s.steps.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+  if(s.ul){h+='<ul>';s.ul.forEach(i=>h+='<li><b>'+i.b+'.</b> '+i.x+'</li>');h+='</ul>';}
+  if(s.byline) h+='<div class="byline">'+s.byline+'</div>';
+  if(s.cta) h+='<div><span class="cta-btn">'+s.cta+'</span></div>';
+  if(s.disc) h+='<div class="disc">'+s.disc+'</div>';
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>
