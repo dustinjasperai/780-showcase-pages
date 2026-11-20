@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train Your Own Detection Dog — Delta Tails Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfbfe;
+    --panel:#eef0fb;
+    --rule:#d3daf7;
+    --ink:#1f2740;
+    --muted:#546486;
+    --accent:#8377ff;
+    --display:'Poppins',sans-serif;
+    --text:'Lato',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--panel);font-family:var(--text);color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #deck{width:min(960px,94vw);aspect-ratio:16/9;background:var(--bg);border:1px solid var(--rule);border-radius:16px;box-shadow:0 18px 60px rgba(31,39,64,.14);position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center;gap:18px}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent)}
+  h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1.08;color:var(--ink)}
+  h2{font-family:var(--display);font-weight:600;font-size:32px;line-height:1.15;color:var(--ink)}
+  p,li{font-size:20px;line-height:1.5;color:var(--ink);max-width:46ch}
+  .muted{color:var(--muted)}
+  .big{font-size:26px;line-height:1.4}
+  ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+  li{position:relative;padding-left:30px}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  .steps{display:flex;flex-direction:column;gap:10px}
+  .step{display:flex;gap:16px;align-items:flex-start;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:14px 18px}
+  .step .n{font-family:var(--display);font-weight:700;color:var(--accent);font-size:22px;min-width:34px}
+  .step .b{font-size:18px;line-height:1.35}
+  .step .b b{font-family:var(--display);font-weight:600}
+  .pill{display:inline-block;align-self:flex-start;background:var(--accent);color:#fff;font-family:var(--display);font-weight:600;font-size:14px;padding:7px 14px;border-radius:999px}
+  .quote{font-size:24px;line-height:1.45;font-style:italic;border-left:4px solid var(--accent);padding-left:22px;color:var(--ink)}
+  .attrib{font-family:var(--display);font-weight:600;color:var(--muted);font-size:16px}
+  .disclaimer{font-size:14px;color:var(--muted);max-width:60ch;margin-top:8px}
+  .cta-row{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .cta-row .big{font-family:var(--display);font-weight:600;color:var(--accent)}
+  footer{position:absolute;bottom:20px;right:28px;font-family:var(--display);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+  .count{position:absolute;bottom:20px;left:28px;font-family:var(--display);font-size:12px;color:var(--muted)}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+  .nav button{font-family:var(--display);font-weight:600;border:1px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px}
+  .nav button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'A Delta Tails Masterclass with Blythe',h1:'Train Your Own Medical-Alert or Allergen Detection Dog',sub:'Without handler bias, and in 10 to 15 minutes a day. The exact method that has trained over 100 handler and dog teams.'},
+  {t:'audience',kicker:'Who this is for',h2:'You need a detection dog you can actually trust',body:'You live with POTS, seizures, migraines, low blood sugar, or a serious allergy to gluten, peanuts, or latex. You do not have the energy for daily board-and-train drop-offs, and you do not have thousands of dollars to hand your dog to a stranger for a year.',foot:'This is for owner-trainers who want to do it themselves, the right way.'},
+  {t:'content',kicker:'What is at stake',h2:'A detection dog is a medical device with a heartbeat',body:'When the dog is right, you get the warning in time. You make it home before the episode hits. You catch the gluten before it reaches your plate.',foot:'When the dog is wrong, you stop trusting it. And a dog you cannot trust is worse than no dog at all.'},
+  {t:'reframe',kicker:'The hard truth',h2:'Most detection dogs are not detecting',body:'Here is the thing almost nobody tells owner-trainers.',big:'If you teach the alert first, your dog learns to watch your face and your body for the cue, not the scent. It looks like detection. It is not. And you will not know until the day it matters.'},
+  {t:'part',pill:'Part one',h2:'The core problem: handler bias',body:'Why so many owner-trained detection dogs look trained and still fail when it counts.'},
+  {t:'content',kicker:'The silent failure',h2:'A biased dog reads you, not the odor',body:'A dog that reads your body language will alert when you are anxious, when you reach for a snack, when you glance at the clock. It flags a dozen false alarms and misses the one real episode.',foot:'False alerts are not harmless. Every one teaches you to ignore the next alert, until you ignore the one that mattered.'},
+  {t:'content',kicker:'What accuracy requires',h2:'The dog has to find it alone',body:'An accurate detection dog finds the odor on its own, with no help from you, in any room, around any distraction.',foot:'That single standard is not a detail you add at the end. It changes how the entire training has to be built, from the very first session.'},
+  {t:'part',pill:'Part two',h2:'The Delta Tails method: alerts taught late, accuracy proven',body:'A five-phase curriculum built so your dog detects the actual scent, and so you can prove it.'},
+  {t:'steps',kicker:'The five phases',h2:'How the training is sequenced',steps:[
+    {n:'1',b:'<b>Odor Recognition.</b> Your dog learns to search independently and imprint on your target odor, then recognize it with two distractors present. 12 weeks minimum.'},
+    {n:'2',b:'<b>Proofing.</b> The longest phase. Expose your dog to as many allergen and non-allergen items and real situations as possible so the odor means the same thing everywhere.'},
+    {n:'3',b:'<b>The Alerts.</b> Only now do we add the paw nudge or nose touch. Taught late, on purpose, so the behavior rides on real detection, not on you.'},
+    {n:'4',b:'<b>Simulations.</b> Blind training and tracking live alerts, finishing with a home detection exam.'},
+    {n:'5',b:'<b>Public Work.</b> Transfer the skill to restaurants, shopping, and travel, finishing with a public detection exam.'}
+  ]},
+  {t:'content',kicker:'Why the order matters',h2:'Teaching the alert late is the whole method',body:'Putting the alert in phase three, not phase one, is what removes handler bias from the picture. By the time your dog tells you something is there, it has been finding that odor on its own for months.',foot:'This is the piece that is unique to this system, and it is the piece that makes the dog trustworthy.'},
+  {t:'content',kicker:'Proof, not hope',h2:'Blind exams scored by three trainers',body:'You do not get to decide your own dog is accurate. Every detection exam is evaluated by one internal trainer and two outside trainers, so handler bias cannot sneak back in at the finish line.',foot:'A home detection exam, then a public detection exam. Clear stages, a clear finish, and a dog you can stake your health on.'},
+  {t:'content',kicker:'Built for your body',h2:'10 to 15 minutes a day, by design',body:'Practice sessions stay short on purpose. That is the ideal, not a compromise. The training is broken into the next best small step so progress never depends on a good health day.',foot:'With the right support, training your own service dog is possible for anyone.'},
+  {t:'part',pill:'Part three',h2:'Real alerts from real handlers',body:'What this method produces once the dog is detecting on its own.'},
+  {t:'quote',kicker:'A win from the pack',quote:'Fully alerted to an episode and woke me up. She convinced me she was alerting, not asking for attention. I got emergency meds.',attrib:'Arianna and Panda, service dog in training'},
+  {t:'quote',kicker:'A win from the pack',quote:'I am training my dog as a gluten detection dog under their direction. It would not be possible without them.',attrib:'Amanda and Journey, graduated service dog'},
+  {t:'credibility',kicker:'Why me',h2:'I built this because it did not exist',body:'I am Blythe. I have trained over 100 dog and handler teams for medical alerts and allergen detection, with certifications from the leading organizations in the industry including the CNWI program through NACSW.',foot:'I started Delta Tails because I could not find an allergen and medical detection program for owner-trainers that was actually eliminating handler bias and rigorously testing the dogs. So I developed one, and the tests to prove it.'},
+  {t:'content',kicker:'The next best small step',h2:'What you get when you join',body:'The full five-phase curriculum, weekly personalized video feedback on your own dog, twice-monthly text-a-trainer days, and a community of over 100 handler and dog teams.',big:'You have seen the method: detection first, alerts last, accuracy proven by blind exams, all in short daily sessions built around your health.'},
+  {t:'cta',kicker:'Start training',h1:'Train your own accurate detection dog',sub:'Apply for the Delta Tails Scent Detection Program and get your dog searching in the first week.',cta:'deltatails.com/scent-training',disclaimer:'Educational information only. Training timelines and results vary by dog, handler, and condition. No specific medical, detection, or public-access outcome is guaranteed. Service dogs are not a substitute for medical care.'}
+];
+const deck=document.getElementById('deck');
+function slideHTML(s,i){
+  let inner='';
+  if(s.kicker) inner+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.pill) inner+=`<span class="pill">${s.pill}</span>`;
+  if(s.h1) inner+=`<h1>${s.h1}</h1>`;
+  if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+  if(s.sub) inner+=`<p class="big muted">${s.sub}</p>`;
+  if(s.body) inner+=`<p>${s.body}</p>`;
+  if(s.big) inner+=`<p class="big">${s.big}</p>`;
+  if(s.steps){inner+='<div class="steps">';s.steps.forEach(st=>inner+=`<div class="step"><div class="n">${st.n}</div><div class="b">${st.b}</div></div>`);inner+='</div>';}
+  if(s.quote) inner+=`<div class="quote">${s.quote}</div>`;
+  if(s.attrib) inner+=`<div class="attrib">${s.attrib}</div>`;
+  if(s.foot) inner+=`<p class="muted">${s.foot}</p>`;
+  if(s.cta) inner+=`<div class="cta-row"><div class="big">${s.cta}</div></div>`;
+  if(s.disclaimer) inner+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  inner+=`<div class="count">${i+1} / ${S.length}</div><footer>Delta Tails</footer>`;
+  return `<div class="slide${i===0?' on':''}" data-i="${i}">${inner}</div>`;
+}
+deck.innerHTML=S.map(slideHTML).join('');
+let cur=0;
+function show(n){document.querySelectorAll('.slide').forEach(e=>e.classList.remove('on'));cur=(n+S.length)%S.length;document.querySelector(`.slide[data-i="${cur}"]`).classList.add('on');}
+function go(d){show(cur+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+</script>
+</body>
+</html>
