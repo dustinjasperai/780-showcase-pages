@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climb Harder on the Schedule You Actually Have | Good Spray Climbing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#15181d;
+    --panel:#1e2228;
+    --rule:#343a42;
+    --ink:#f4f1ec;
+    --ink-soft:#b9c0c9;
+    --ink-muted:#7f8893;
+    --accent:#fd355c;
+    --accent-2:#ff992a;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Montserrat',-apple-system,sans-serif;
+    line-height:1.5;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;}
+  .slide{display:none;width:100%;max-width:980px;}
+  .slide.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .eyebrow{font-family:'Montserrat';font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Archivo Black';font-size:clamp(34px,6vw,62px);line-height:1.02;letter-spacing:-.01em;margin-bottom:24px;}
+  h2{font-family:'Archivo Black';font-size:clamp(26px,4vw,42px);line-height:1.08;margin-bottom:20px;}
+  .lead{font-size:clamp(18px,2.4vw,24px);color:var(--ink-soft);max-width:760px;}
+  .lead strong{color:var(--ink);font-weight:700;}
+  p.body{font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:740px;margin-bottom:16px;}
+  .accent{color:var(--accent);}
+  .accent2{color:var(--accent-2);}
+  ul.points{list-style:none;margin-top:10px;max-width:760px;}
+  ul.points li{position:relative;padding-left:30px;margin-bottom:16px;font-size:clamp(16px,2vw,20px);color:var(--ink-soft);}
+  ul.points li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px;transform:rotate(45deg);}
+  ul.points li strong{color:var(--ink);font-weight:700;}
+  .five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px;}
+  .five .cell{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:16px 12px;text-align:center;}
+  .five .cell .n{font-family:'Archivo Black';color:var(--accent);font-size:22px;}
+  .five .cell .t{font-size:13px;color:var(--ink-soft);margin-top:8px;font-weight:600;}
+  .frame{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:10px;padding:26px 30px;max-width:760px;}
+  .frame .k{font-family:'Archivo Black';font-size:20px;color:var(--ink);margin-bottom:8px;}
+  .big-num{font-family:'Archivo Black';font-size:clamp(44px,8vw,88px);color:var(--accent);line-height:1;}
+  .disclaimer{font-size:13px;color:var(--ink-muted);margin-top:26px;max-width:720px;line-height:1.5;}
+  .cta-steps{margin-top:20px;}
+  .cta-steps .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:720px;}
+  .cta-steps .step .num{font-family:'Archivo Black';color:var(--accent);font-size:20px;min-width:28px;}
+  .brandline{margin-top:34px;font-size:14px;color:var(--ink-muted);letter-spacing:.04em;}
+  .brandline b{color:var(--ink);font-family:'Archivo Black';font-weight:400;letter-spacing:0;}
+  #hud{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:18px;font-size:12px;color:var(--ink-muted);font-weight:600;letter-spacing:.08em;}
+  #hud .bar{width:160px;height:3px;background:var(--rule);border-radius:3px;overflow:hidden;}
+  #hud .bar span{display:block;height:100%;background:var(--accent);transition:width .3s;}
+  .nav{position:fixed;top:0;bottom:0;width:22vw;cursor:pointer;z-index:5;}
+  .nav.left{left:0;} .nav.right{right:0;}
+  @media(max-width:640px){.five{grid-template-columns:repeat(2,1fr);}#stage{padding:5vh 7vw;}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav left" onclick="prev()"></div>
+<div class="nav right" onclick="next()"></div>
+<div id="hud"><span id="label"></span><div class="bar"><span id="prog"></span></div><span id="count"></span></div>
+<script>
+const S=[
+ {t:'title',eyebrow:'Good Spray Climbing · Live Masterclass',h1:'Climb Harder on the Schedule You Actually Have',lead:'How busy adults send their first (or next) 5.11 and 5.12 without training like a pro, quitting their job, or living at the crag. Hosted live by <strong>Lauren Abernathy</strong>.'},
+
+ {t:'who',eyebrow:'Who this is for',h2:'You have a real life and a real send list',body:'If this sounds like you, you are exactly who this hour is built for:',points:['You climb <strong>2 to 3 times a week</strong> around a job, a family, or a long drive to the crag.','You have been climbing a while but feel <strong>stuck at the same grade</strong>.','You have tried training plans before and <strong>fallen off them</strong> the first week life got weird.','You want to climb harder but you are <strong>not willing to make climbing your whole personality</strong>.']},
+
+ {t:'trap',eyebrow:'The trap',h2:'The advice was written for someone else',lead:'Almost every training plan online was built for a 22 year old with six free afternoons a week. So you copy the pro, miss two sessions when work explodes, feel like you failed, and quit. <strong>The plan did not fail you. It was never built for your week.</strong>'},
+
+ {t:'reframe',eyebrow:'The reframe',h2:'The problem was never your fingers',lead:'Most adult climbers who plateau are not weak. They are <strong>inconsistent, and they are inconsistent because their plan is rigid.</strong> Fix the rigidity and the consistency comes back. Fix the consistency and the grades come back.'},
+
+ {t:'part',eyebrow:'Part One',h2:'Why strong-but-stuck is so common',body:'Finger strength and pull up numbers are easy to measure, so that is what everyone chases. But they tell you very little about who you are as a climber or what is actually holding you back.',points:['<strong>Hard numbers are the easy 20%.</strong> They are real, but they are not usually the thing in your way.','<strong>The other 80% goes uncoached.</strong> Movement, nerves, tactics and your weekly habits almost never get a plan.','<strong>So you train the part you can count,</strong> and stay stuck on the part you cannot.']},
+
+ {t:'frame',eyebrow:'Part One',h2:'Consistency beats intensity',frame:{k:'What the research says',v:'Athletes who stay <span class="accent">flexible</span> about how and when they complete training get higher quality sessions and simply get more training done over time (McNamara and Stearne, 2010). The climber who trains <span class="accent">pretty well most weeks</span> crushes the one who trains perfectly for three weeks and then disappears.'}},
+
+ {t:'part',eyebrow:'Part Two',h2:'The Forgotten Five',lead:'The five areas that actually move an adult climber forward, and the four that almost no plan ever touches. This is the framework I coach every athlete through.',five:['Movement','Mental Game','Tactics','Physical Development','Routines & Habits']},
+
+ {t:'five1',eyebrow:'The Forgotten Five · 01',h2:'Movement',body:'Strength you cannot use on the wall is wasted. Most adults are leaving grades on the table with footwork, body positioning and how they actually move through a sequence, not with a weak pull.',points:['Efficiency so you stop over gripping and pumping out.','Positions that make hard moves feel possible instead of desperate.']},
+
+ {t:'five1',eyebrow:'The Forgotten Five · 02',h2:'Mental Game',body:'The nervous system is part of the training plan. Fear of falling and the stories you tell yourself mid route cost more sends than any missing finger strength.',points:['A real relationship with falling and committing.','Self compassion, so a bad session does not snowball into a bad month.']},
+
+ {t:'five1',eyebrow:'The Forgotten Five · 03',h2:'Tactics',body:'Knowing how to attack a project, read a route, rest, and pick the right days is a trainable skill. Strong climbers waste seasons by being tactically sloppy.',points:['Projecting strategy instead of random burns.','Reading sequences and managing rest like it matters, because it does.']},
+
+ {t:'five1',eyebrow:'The Forgotten Five · 04',h2:'Physical Development',body:'Yes, we train strength, finger strength, and energy systems. But we do it in blocks that fit a real schedule and real facilities, not an imaginary perfect week.',points:['Strength and hangboarding programmed to your actual equipment.','Energy systems work so you can keep trying hard deep into a session.']},
+
+ {t:'five1',eyebrow:'The Forgotten Five · 05',h2:'Supportive Routines & Habits',body:'The quiet one that holds it all together. A weekly planning ritual, remembering snacks, protecting your sessions. Unsexy, and the reason some climbers stay consistent for years.',points:['A weekly planning habit that survives a chaotic week.','Small systems that make showing up automatic.']},
+
+ {t:'part',eyebrow:'Part Three',h2:'What flexible training looks like',body:'This is the opposite of a rigid 12 week spreadsheet you will abandon by week two.',points:['Programming in <strong>4 to 6 week blocks</strong> built around your real schedule, equipment and goals.','When life hands you a wrecked week, we <strong>adapt the plan instead of breaking it.</strong>','Weekly video review and regular check ins so you are <strong>never guessing if you are doing it right.</strong>']},
+
+ {t:'frame',eyebrow:'Part Three',h2:'The adaptable week',frame:{k:'Two climbers, same busy life',v:'One follows a perfect plan, misses three sessions to a work trip, and quits. The other has a plan that <span class="accent">bends</span> around the trip and keeps rolling. A year later they are not at the same grade. <span class="accent2">Adaptable beats perfect, every single time.</span>'}},
+
+ {t:'why',eyebrow:'Why listen to me',h2:'I built this as the busy climber, not the prodigy',lead:'I started climbing at 19 in a college gym. I cried on top rope and could not do a pull up. I was not a natural and I lived far from real rock for years. I still redpointed multiple 5.12s, including a 5.12a deep water solo in Mallorca, by training around a real life. <strong>Now I have coached hundreds of climbers all over the world to do the same.</strong>'},
+
+ {t:'frame',eyebrow:'Does it stick',h2:'This is a long game, and it holds',frame:{k:'From my own coaching roster',v:'As of September 2026, <span class="accent">78% of my athletes</span> have worked with me for six months or more, and <span class="accent">29% for over two years.</span> People do not stay that long for a spreadsheet. They stay because the approach keeps working around their real life.'}},
+
+ {t:'cta',eyebrow:'Your next step',h2:'Let us build your version of this',lead:'If you want programming built around the Forgotten Five and your actual week, here is how we work together:',steps:[['1','Start with the free weekly newsletter and the Fast Track Movement Course to feel the approach.'],['2','When you are ready for a plan, join the Custom Training Plan or Good Spray coaching and we build it around your life.'],['3','We train in blocks, review your climbing every week, and adapt as your life changes.']],disclaimer:'This masterclass is for education only. Climbing involves inherent risk. Progress depends on your starting point, consistency and individual circumstances, and no specific result or grade is promised or guaranteed. Train within your ability and seek qualified guidance.',brand:'Good Spray Climbing · Lauren Abernathy · goodsprayclimbing.com'}
+];
+let i=0;const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  const s=S[i];const d=document.createElement('div');d.className='slide active';
+  let h='';
+  if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.h1)h+=`<h1>${s.h1}</h1>`;
+  if(s.h2)h+=`<h2>${s.h2}</h2>`;
+  if(s.lead)h+=`<p class="lead">${s.lead}</p>`;
+  if(s.body)h+=`<p class="body">${s.body}</p>`;
+  if(s.points){h+='<ul class="points">';s.points.forEach(p=>h+=`<li>${p}</li>`);h+='</ul>';}
+  if(s.five){h+='<div class="five">';s.five.forEach((f,n)=>h+=`<div class="cell"><div class="n">0${n+1}</div><div class="t">${f}</div></div>`);h+='</div>';}
+  if(s.frame)h+=`<div class="frame"><div class="k">${s.frame.k}</div><div class="lead">${s.frame.v}</div></div>`;
+  if(s.steps){h+='<div class="cta-steps">';s.steps.forEach(st=>h+=`<div class="step"><div class="num">${st[0]}</div><div>${st[1]}</div></div>`);h+='</div>';}
+  if(s.disclaimer)h+=`<div class="disclaimer">${s.disclaimer}</div>`;
+  if(s.brand)h+=`<div class="brandline"><b>${s.brand}</b></div>`;
+  d.innerHTML=h;stage.appendChild(d);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length;
+  document.getElementById('label').textContent=(s.eyebrow||'').split('·')[0].trim();
+  document.getElementById('prog').style.width=((i+1)/S.length*100)+'%';
+}
+function next(){if(i<S.length-1){i++;render();}}
+function prev(){if(i>0){i--;render();}}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')next();if(e.key==='ArrowLeft')prev();});
+render();
+</script>
+</body>
+</html>
