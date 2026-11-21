@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story to Stage — The Empowered Woman Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,500&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0807;        /* from brand.json dominant #030200 */
+    --panel:#141010;
+    --rule:#2b2321;
+    --accent:#d3003a;    /* her crimson, brand.json ranked_colors */
+    --ink:#f4efe9;
+    --muted:#b3a79f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#050403;color:var(--ink);font-family:"Open Sans",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:min(960px,94vw)}
+  .slide{display:none;background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+    padding:64px 60px;min-height:560px;position:relative;overflow:hidden}
+  .slide.on{display:flex;flex-direction:column;justify-content:center}
+  .slide::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--accent)}
+  .eyebrow{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:22px}
+  h1{font-family:"Bodoni Moda",serif;font-weight:900;font-size:60px;line-height:1.02;
+    letter-spacing:-.01em}
+  h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:40px;line-height:1.08;
+    margin-bottom:6px}
+  .rule{width:64px;height:3px;background:var(--accent);margin:20px 0 26px}
+  p.lead{font-size:21px;line-height:1.5;color:var(--ink);max-width:42ch}
+  p.sub{font-size:18px;line-height:1.6;color:var(--muted);max-width:52ch;margin-top:14px}
+  .big{font-family:"Bodoni Moda",serif;font-style:italic;font-weight:500;font-size:40px;
+    line-height:1.2;max-width:24ch}
+  ul{list-style:none;margin-top:14px}
+  ul li{font-size:19px;line-height:1.5;padding:12px 0 12px 30px;position:relative;
+    border-bottom:1px solid var(--rule);max-width:46ch}
+  ul li::before{content:"";position:absolute;left:0;top:20px;width:10px;height:10px;
+    background:var(--accent);border-radius:2px}
+  .step{font-family:"Bodoni Moda",serif;font-weight:900;font-size:22px;color:var(--accent);
+    letter-spacing:.04em}
+  .pillars{display:flex;gap:18px;margin-top:26px;flex-wrap:wrap}
+  .pillar{flex:1;min-width:200px;background:var(--panel);border:1px solid var(--rule);
+    border-radius:10px;padding:22px}
+  .pillar h3{font-family:"Bodoni Moda",serif;font-size:24px;color:var(--accent);margin-bottom:8px}
+  .pillar p{font-size:15px;color:var(--muted);line-height:1.5}
+  .cta{font-size:22px;line-height:1.5;max-width:40ch}
+  .cta .act{display:inline-block;margin-top:24px;font-family:"Bodoni Moda",serif;
+    font-weight:700;font-size:26px;color:var(--accent)}
+  .disc{position:absolute;left:60px;right:60px;bottom:26px;font-size:12px;color:#6f655f;
+    line-height:1.5;max-width:70ch}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:16px;
+    align-items:center;color:var(--muted);font-size:13px;z-index:10}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}
+  .count{font-variant-numeric:tabular-nums}
+  .foot{position:absolute;right:60px;top:60px;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:#6f655f}
+  @media(max-width:620px){.slide{padding:42px 28px}h1{font-size:40px}h2{font-size:30px}.big{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">0</span></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S=[
+  {t:'title',eyebrow:'The Empowered Woman · Live Masterclass',h:'Story to Stage',
+   lead:'Turn your story into a signature talk that enrolls clients.',
+   sub:'A live session with Marta Spirk for women entrepreneurs ready to be seen.'},
+
+  {t:'who',eyebrow:'Who this is for',h2:'You are brilliant at what you do.',
+   lead:'And still, the right people have not met you yet.',
+   sub:'This is for the woman entrepreneur who knows her work changes lives, but whose calendar does not reflect it yet.'},
+
+  {t:'trap',eyebrow:'The trap',h2:'You keep buying the next thing.',
+   list:['Another funnel','Another template','Another tactic','And still, nobody books.'],
+   sub:'The resources were never the problem.'},
+
+  {t:'reframe',eyebrow:'The reframe',
+   big:'Your strategy is not broken. You just have not been seen yet.'},
+
+  {t:'p1',eyebrow:'Part one',h2:'Visibility comes before the sale.',
+   lead:'People do not buy from the best marketer. They buy from the person they have seen, heard, and trusted.',
+   sub:'Before anyone enrolls, they have to encounter you and your message in a room, on a stage, in their ears.'},
+
+  {t:'p1b',eyebrow:'Part one',h2:'You are your most valuable resource.',
+   lead:'Not the next course. Not the next guru. You, and the story only you can tell.',
+   sub:'This is the ME FIRST premise: name the insecurity, reframe it, and move forward from it.'},
+
+  {t:'p2',eyebrow:'Part two · the method',h2:'Story to Stage',
+   lead:'Five moves that turn your story into a signature talk and paid visibility.',
+   sub:'Each one builds on the last. Together they are the on-ramp from invisible to in-demand.'},
+
+  {t:'step',eyebrow:'Story to Stage',step:'Step 1',h2:'Refine your core message.',
+   lead:'Get clear on the one thing you want to be known for, in words your ideal client already uses.'},
+
+  {t:'step',eyebrow:'Story to Stage',step:'Step 2',h2:'Craft your signature talk.',
+   lead:'Shape your story into a talk that showcases your authority and carries your method, start to finish.'},
+
+  {t:'step',eyebrow:'Story to Stage',step:'Step 3',h2:'Own the stage.',
+   lead:'Master presence and audience connection, whether the stage is a live room, a podcast, or a camera.'},
+
+  {t:'step',eyebrow:'Story to Stage',step:'Step 4',h2:'Pitch yourself for visibility.',
+   lead:'Put a repeatable pitching strategy in place so the stages, shows, and rooms come to you.'},
+
+  {t:'step',eyebrow:'Story to Stage',step:'Step 5',h2:'Turn attention into clients.',
+   lead:'Guide the people who just met you into your programs, so visibility becomes real revenue.'},
+
+  {t:'pillars',eyebrow:'The Engage to Serve Method',h2:'Know where you are, and the next step.',
+   sub:'Identify where you are on the path, what your next stage is, and the specific steps to get there, held up by three pillars.',
+   pillars:[
+     {h:'Content',p:'Practical, actionable material you can use the same week.'},
+     {h:'Coaching',p:'Personalized guidance so you apply it to your business, not a generic one.'},
+     {h:'Community',p:'A room of women entrepreneurs doing the same work beside you.'}]},
+
+  {t:'p3',eyebrow:'Part three · from invisible to in-demand',h2:'From invisible to in-demand.',
+   lead:'You stop chasing tactics and start being invited. Your story does the work of a hundred cold pitches.',
+   sub:'The same message, now landing in rooms full of the people you are meant to serve.'},
+
+  {t:'why',eyebrow:'Why learn this from me',h2:'Marta Spirk',
+   list:['TEDx speaker and host of The Empowered Woman podcast',
+         'Author of The Empowered Woman: The Ultimate Roadmap to Business Success',
+         'Over twenty years in communication as a teacher, translator, and interpreter',
+         'Built a six-figure coaching business helping women get visible and profitable'],
+   sub:'I teach what I have lived: moving past perfectionism and comparison into visibility, credibility, and profit.'},
+
+  {t:'cta',eyebrow:'Your next step',h2:'Ready to go from story to stage?',
+   cta:'Book a free clarity call and we will map your signature talk and the path to your next stage.',
+   act:'Book your clarity call',
+   disc:'Educational content only. Results vary and are not guaranteed. Nothing here is a promise of income or specific outcomes. Any examples reflect individual effort and circumstances.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let inner='';
+  if(s.eyebrow) inner+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.step) inner+=`<div class="step">${s.step}</div>`;
+  if(s.h) inner+=`<h1>${s.h}</h1>`;
+  if(s.h2) inner+=`<h2>${s.h2}</h2>`;
+  if(s.h||s.h2) inner+=`<div class="rule"></div>`;
+  if(s.big) inner+=`<p class="big">${s.big}</p>`;
+  if(s.lead) inner+=`<p class="lead">${s.lead}</p>`;
+  if(s.list){inner+='<ul>';s.list.forEach(li=>inner+=`<li>${li}</li>`);inner+='</ul>';}
+  if(s.pillars){inner+='<div class="pillars">';s.pillars.forEach(p=>inner+=`<div class="pillar"><h3>${p.h}</h3><p>${p.p}</p></div>`);inner+='</div>';}
+  if(s.sub) inner+=`<p class="sub">${s.sub}</p>`;
+  if(s.cta) inner+=`<p class="cta">${s.cta}<span class="act">${s.act}</span></p>`;
+  inner+=`<div class="foot">Story to Stage</div>`;
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=inner;
+  deck.appendChild(d);
+});
+let i=0;const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function go(n){slides[i].classList.remove('on');i=Math.max(0,Math.min(S.length-1,i+n));
+  slides[i].classList.add('on');document.getElementById('cur').textContent=i+1;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+</script>
+</body>
+</html>
