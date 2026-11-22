@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Overwork Pattern — A Masterclass with Neill Williams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600;6..96,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ed;        /* her brand cream (brand.json, light scheme) */
+    --panel:#fcf7fb;     /* barely-there plum-white, from accent family */
+    --ink:#3f434f;       /* her slate */
+    --muted:#73707e;
+    --rule:#e7ddd0;
+    --accent:#9e0b81;    /* her dominant plum (brand.json top rank, 12 uses) */
+    --accent-2:#36d2c9;  /* her teal */
+    --display:'Bodoni Moda', Georgia, serif;
+    --body:'Hanken Grotesk', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 8vw;position:relative;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.03;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.1;margin-bottom:1.3rem}
+  p{font-size:clamp(1.05rem,1.7vw,1.3rem);max-width:60ch;color:var(--ink)}
+  p.lead{font-size:clamp(1.18rem,2.1vw,1.55rem);color:var(--muted);margin-top:1.5rem;max-width:54ch}
+  .big{font-family:var(--display);font-size:clamp(2.1rem,5vw,3.3rem);line-height:1.12;max-width:21ch;font-weight:600}
+  .kicker{color:var(--muted);font-size:1rem;margin-top:2.4rem;max-width:52ch}
+  ul{list-style:none;margin-top:1.8rem;max-width:44ch}
+  li{display:flex;gap:1rem;align-items:flex-start;padding:.85rem 0;border-top:1px solid var(--rule);font-size:clamp(1.05rem,1.7vw,1.28rem)}
+  li:first-child{border-top:0}
+  li .mk{font-family:var(--display);color:var(--accent);font-weight:700;min-width:1.8ch}
+  .pillars{display:grid;gap:1.1rem;margin-top:2rem;max-width:54ch}
+  .pillar{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    border-radius:10px;padding:1.3rem 1.5rem}
+  .pillar h3{font-family:var(--display);font-weight:600;font-size:1.3rem;margin-bottom:.3rem}
+  .pillar span{color:var(--muted);font-size:1rem;line-height:1.5}
+  .step{display:flex;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-top:1px solid var(--rule);max-width:58ch}
+  .step .n{font-family:var(--display);color:var(--accent-2);font-weight:700;font-size:1.8rem;min-width:2ch}
+  .step h3{font-family:var(--display);font-weight:600;font-size:1.35rem}
+  .step p{font-size:1.02rem;color:var(--muted);margin-top:.2rem}
+  .quotemark{font-family:var(--display);color:var(--accent);font-size:3rem;line-height:0;display:block;margin-bottom:1.2rem}
+  .cta-card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:2.4rem;max-width:42ch;margin-top:1.8rem}
+  .cta-card a{display:inline-block;margin-top:1.3rem;background:var(--accent);color:#fff;text-decoration:none;
+    font-weight:600;padding:.85rem 1.7rem;border-radius:8px;font-size:1rem}
+  .disclaimer{color:var(--muted);font-size:.8rem;margin-top:2.2rem;max-width:56ch;line-height:1.55}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:9}
+  .brandline{position:absolute;bottom:3.4vh;left:8vw;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  @media(max-width:640px){.slide{padding:7vh 7vw}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<main id="deck"></main>
+<script>
+/* The masterclass, as a live teaching deck. Neill Williams to her own audience. */
+const S = [
+  {t:'title', eyebrow:'A Live Masterclass · Neill Williams',
+    h:'The Overwork<br>Pattern',
+    lead:'How to build a successful business without giving it your whole life.',
+    brand:'Neill Williams Coaching' },
+
+  {t:'promise', eyebrow:'What this hour is for', h:'By the end, you will have one thing.',
+    body:'Not a new app. Not a color-coded calendar. One pattern named, and one different choice you can practice the next time the pull to overwork shows up.',
+    lead:'That is the smallest change that actually sticks, which is exactly why it works.' },
+
+  {t:'who', eyebrow:'Who this is for', h:'You are already good at this.',
+    body:'You run an established online business. The revenue is real, the clients are real, the results are real. And you are tired in a way a weekend off does not fix.',
+    lead:'This hour is for the woman whose business works, but whose schedule has quietly taken over everything else.' },
+
+  {t:'trap', eyebrow:'The trap',
+    big:'So you do the obvious thing. You go looking for a better system.',
+    kicker:'A new planner. Time-blocking. The app everyone swears by. It works for about three weeks, and then you are back to answering email at 10pm.' },
+
+  {t:'cost', eyebrow:'The real stakes', h:'Count what it is actually costing.',
+    body:'I was an actuary, so I think in costs. The late nights cost you the evening. The redone work costs you the margin. The always-on mind costs you the part of you your family actually wants.',
+    lead:'Overwork is not free productivity. It is a bill you are paying in a currency you cannot earn back.' },
+
+  {t:'reframe', eyebrow:'The reframe', h:'Overwork is not a scheduling problem.',
+    body:'If a calendar could fix it, it would have fixed it by now. The hours keep creeping back because something underneath keeps putting them there.',
+    lead:'Overwork is a pattern. And a pattern can be examined.' },
+
+  {t:'part1a', eyebrow:'Part one · The real driver', h:'Seven patterns behind overwork.',
+    body:'After years coaching capable women entrepreneurs, I kept seeing the same seven drivers. Most people are run by two or three of them without ever naming it.',
+    bullets:['Control and overplanning','Overresponsibility','Perfectionism','Approval and accommodation'], numbered:true },
+
+  {t:'part1b', eyebrow:'Part one · The real driver', h:'The pattern is the point.',
+    bullets:['Achievement tied to self-worth','Fear of failure','Compulsive overworking'], numbered:true, startAt:5,
+    kicker:'You do not fix a pattern with a better to-do list. You fix it by seeing it clearly enough to make a different choice.' },
+
+  {t:'turn', eyebrow:'The good news', h:'A pattern you can see is a pattern you can change.',
+    body:'You do not have to overhaul your personality or your business. You have to catch one loop in the act, often enough that catching it becomes the new default.',
+    lead:'That is a skill, not a trait. It is coachable, and it is faster than you think.' },
+
+  {t:'part2a', eyebrow:'Part two · The method', h:'How I coach the shift.',
+    body:'Three moves, repeated until they hold under pressure. This is the whole practice.',
+    steps:[
+      ['Notice','Look at what actually happened the last four weeks. The behavior, not the story you tell about how you should feel.'],
+      ['Connect','See how the patterns feed each other. Perfectionism feeds overresponsibility feeds the 10pm email. It is one loop.'],
+      ['Experiment','Leave with one small different choice to practice. Not ten. One, rehearsed until it is yours.']
+    ] },
+
+  {t:'part2b', eyebrow:'Part two · The method', quote:true,
+    big:'Name what is costing too much. See what is driving it. Practice a different choice.',
+    kicker:'That is the sentence I give every client. It is simple on purpose, because you will use it in the exact moment you would normally overwork.' },
+
+  {t:'part3a', eyebrow:'Part three · The choice point', h:'Where the change actually lives.',
+    body:'Inside every pattern there is a single moment where you feel the old pull and you still have a choice. I call it the choice point.',
+    pillars:[
+      ['Before','The pull is automatic. You say yes, you redo it, you stay late, and you call it just being responsible.'],
+      ['At the choice point','You notice the pull, name what it is costing, and pick the choice that protects the business and your life at once.']
+    ] },
+
+  {t:'notless', eyebrow:'What this is not', h:'This is not about caring less.',
+    body:'You will not become lazy, checked out, or less ambitious. The opposite. When you stop spending yourself on the patterns, you have more left for the work that only you can do.',
+    lead:'Ambition is fine. It is the autopilot overwork tax on it that we are removing.' },
+
+  {t:'part3b', eyebrow:'Part three · What changes', h:'A business that does not need all of you.',
+    bullets:[
+      'The week is planned in under thirty minutes, and it holds.',
+      'Evenings and weekends come back, without the revenue dipping.',
+      'Decisions get made once, not re-litigated at midnight.',
+      'You stop proving your worth with hours.'
+    ] },
+
+  {t:'week', eyebrow:'Part three · In a real week', h:'What one changed choice looks like.',
+    body:'A client who always redid her team’s work caught the perfectionism pull on a Tuesday, named what it was costing, and sent the good-enough version. The sky did not fall. She got her evening back, and the next week it was easier.',
+    lead:'Multiply that by one small choice at a time, and the whole shape of the week changes.' },
+
+  {t:'why', eyebrow:'Why me', h:'I measured the cost for a living.',
+    body:'I spent years as an actuary, so I am not sentimental about time. I built my own multiple-six-figure business working around ten to twenty-five hours a week, and I now hold the Master Certified Coach credential, the top certification in the field.',
+    lead:'The Success Genius podcast and the Seven Patterns tool came out of the same question: what is this actually costing, and what would I choose instead?' },
+
+  {t:'recap', eyebrow:'The whole hour in four lines', h:'If you remember nothing else.',
+    bullets:[
+      'Overwork is a pattern, not a scheduling problem.',
+      'There are seven common patterns; you run two or three.',
+      'Notice, connect, experiment, at the choice point.',
+      'One different choice, practiced, beats one more system.'
+    ] },
+
+  {t:'cta', eyebrow:'Your next step', h:'If this is the work you want to do.',
+    card:'Private coaching with me starts with a short written inquiry. No sales call. You tell me what you want help with, and we find the one pattern worth changing first.',
+    cta_label:'Inquire about private coaching', cta_href:'https://neillwilliams.com/coaching/',
+    disclaimer:'This masterclass is educational. It describes a coaching approach and one coach’s experience. No specific income, business, or personal result is guaranteed. Results vary from person to person, and nothing here is psychological or medical advice.',
+    brand:'Neill Williams Coaching · neillwilliams.com' }
+];
+
+function esc(s){return s;}
+function render(){
+  const deck=document.getElementById('deck');
+  S.forEach(function(s){
+    const sec=document.createElement('section'); sec.className='slide';
+    let html='';
+    if(s.eyebrow) html+='<div class="eyebrow">'+s.eyebrow+'</div>';
+    if(s.quote) html+='<span class="quotemark">“</span>';
+    if(s.h) html+='<h1'+(s.t!=='title'?' style="display:none"':'')+'>'+s.h+'</h1>';
+    if(s.h && s.t!=='title') html+='<h2>'+s.h+'</h2>';
+    if(s.big) html+='<p class="big">'+s.big+'</p>';
+    if(s.body) html+='<p>'+s.body+'</p>';
+    if(s.steps){ s.steps.forEach(function(st,i){ html+='<div class="step"><span class="n">'+(i+1)+'</span><div><h3>'+st[0]+'</h3><p>'+st[1]+'</p></div></div>'; }); }
+    if(s.pillars){ html+='<div class="pillars">'; s.pillars.forEach(function(p){ html+='<div class="pillar"><h3>'+p[0]+'</h3><span>'+p[1]+'</span></div>'; }); html+='</div>'; }
+    if(s.bullets){ html+='<ul>'; const start=s.startAt||1; s.bullets.forEach(function(b,i){ const mk=s.numbered?(start+i):'•'; html+='<li><span class="mk">'+mk+'</span>'+b+'</li>'; }); html+='</ul>'; }
+    if(s.lead) html+='<p class="lead">'+s.lead+'</p>';
+    if(s.card){ html+='<div class="cta-card"><p>'+s.card+'</p><a href="'+s.cta_href+'">'+s.cta_label+'</a></div>'; }
+    if(s.kicker) html+='<p class="kicker">'+s.kicker+'</p>';
+    if(s.disclaimer) html+='<p class="disclaimer">'+s.disclaimer+'</p>';
+    if(s.brand) html+='<div class="brandline">'+s.brand+'</div>';
+    sec.innerHTML=html; deck.appendChild(sec);
+  });
+}
+render();
+var prog=document.getElementById('prog');
+addEventListener('scroll',function(){
+  var h=document.documentElement;
+  prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+},{passive:true});
+</script>
+<noscript>
+<section class="slide"><h2>The Overwork Pattern</h2><p>A live masterclass with Neill Williams on building a successful business without giving it your whole life. Enable JavaScript to view the slides, or inquire about private coaching at neillwilliams.com.</p></section>
+</noscript>
+</body>
+</html>
