@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Natural-Results Injector | RUMA Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F3EF;        /* warm off-white ground, from RUMA brand world */
+    --panel:#EFE7DF;     /* soft greige panel */
+    --rule:#D9CABC;      /* hairline */
+    --ink:#2B2420;       /* warm near-black */
+    --muted:#6E6258;     /* muted taupe text */
+    --accent:#A9745B;    /* RUMA rose-gold / terracotta-mauve accent */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Figtree',system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #deck{width:100%;max-width:960px;aspect-ratio:16/9;position:relative;
+    background:var(--bg);border:1px solid var(--rule);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1.1rem}
+  h1{font-family:'Playfair Display',serif;font-weight:700;font-size:3.5rem;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:'Playfair Display',serif;font-weight:600;font-size:2.5rem;line-height:1.08;margin-bottom:1rem}
+  p{font-size:1.06rem;line-height:1.6;color:var(--muted);max-width:40ch}
+  p.lead{color:var(--ink);font-size:1.18rem;max-width:42ch}
+  .rule{height:1px;background:var(--rule);margin:1.4rem 0;width:120px}
+  ul{list-style:none;margin-top:.6rem}
+  li{font-size:1.05rem;line-height:1.5;color:var(--ink);padding:.55rem 0 .55rem 1.5rem;position:relative;border-bottom:1px solid var(--rule);max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:1.15rem;width:8px;height:8px;background:var(--accent);border-radius:50%}
+  li small{display:block;color:var(--muted);font-size:.9rem;padding-top:.2rem}
+  .pillar-no{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent);font-weight:600}
+  .big{font-family:'Playfair Display',serif;font-size:2.9rem;line-height:1.1;color:var(--ink);max-width:22ch}
+  .brandline{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2rem}
+  .cta-box{background:var(--panel);border:1px solid var(--rule);padding:2rem;max-width:34ch}
+  .disclaimer{font-size:.72rem;color:var(--muted);margin-top:1.6rem;max-width:52ch;line-height:1.5}
+  footer{position:absolute;bottom:3.4%;left:8%;right:8%;display:flex;justify-content:space-between;
+    font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  #nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-size:.8rem;color:var(--muted)}
+  #nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);padding:6px 12px;cursor:pointer;font-family:inherit;border-radius:3px}
+  .two{display:flex;gap:3rem;align-items:center}
+  .two .col{flex:1}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div id="nav"><button onclick="go(-1)">Prev</button><span id="count"></span><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'promise', eyebrow:'What you will leave with', h:'Results your patients cannot name, only notice',
+    p:'By the end of this live session you will know how to assess a face, choose the right product for the right layer, and inject it safely. The outcome is natural, proportionate, and unmistakably yours.'},
+  {t:'for', eyebrow:'Who this is for', h:'Licensed providers who can already inject',
+    items:['You are an RN, NP, PA, or physician injecting now','Your results are safe, but they do not look as natural as you want','You are tired of the quick-certification, more-product playbook']},
+  {t:'trap', eyebrow:'The trap', h:'The look everyone is trying to undo',
+    p:'Patients walk in asking you to fix work that looks done. The overfilled face has become the thing people point to and say they never want. When your results read as obvious, the next appointment does not get booked, and it does not get referred.'},
+  {t:'reframe', eyebrow:'The reframe', big:'The problem is almost never your hand. It is the method behind it.'},
+  {t:'part', eyebrow:'Part one', h:'The core problem', p:'Most training teaches you where to put product. Very little teaches you how to decide, for this face, what belongs where, in what amount, and why.'},
+  {t:'problem', eyebrow:'Injecting by habit', h:'Same syringe, different face',
+    items:['Product chosen by habit, not by anatomy','Volume added to chase a look, not restore proportion','No shared language for assessing what a face actually needs']},
+  {t:'part', eyebrow:'Part two', h:'The RUMA method', p:'Three disciplines, taught in order. This is the framework behind every natural result my patients and my trainees produce.'},
+  {t:'pillar', no:'01', eyebrow:'Read the face', h:'Consultation and assessment',
+    items:['A repeatable way to read proportion and structure','Set expectations that protect the natural result','Build the plan before you touch a syringe']},
+  {t:'pillar', no:'02', eyebrow:'Match the medium', h:'Product selection and rheology',
+    items:['Why rheology, not brand habit, decides the result','Match how a product behaves to the layer and the area','Less product, placed correctly, outperforms more']},
+  {t:'pillar', no:'03', eyebrow:'Inject safely', h:'Ultrasound-guided technique',
+    items:['Map anatomy and avoid vessels with confidence','Ultrasound guidance as the emerging safety standard','Recognize and manage complications early']},
+  {t:'quote', big:'Natural is not a style. It is what happens when anatomy, product, and safety all agree.'},
+  {t:'part', eyebrow:'Part three', h:'In the chair, then in the practice', p:'When the method is in place, the work changes, and so does the practice around it.'},
+  {t:'outcome', eyebrow:'The shift', h:'From results that look done to results that get referred',
+    items:['Patients return because nothing looks overdone','Referrals replace discounting as your growth engine','You inject a wider menu with less second-guessing']},
+  {t:'why', eyebrow:'Why learn this from me', h:'Shelby Miller, DNP, FNP-C',
+    items:['Board-certified nurse practitioner, doctorate from Gonzaga University','Has personally trained hundreds of providers across 30-plus states and internationally','GEN Now faculty for Galderma; key opinion leader for Allergan Aesthetics, Aesthetics Biomedical, and Sciton','Founder of RUMA Academy and RUMA Medical Aesthetics']},
+  {t:'path', eyebrow:'Where this goes next', h:'Keep going with RUMA Academy',
+    items:['Hands-on beginner, intermediate, and advanced courses','Ultrasound 101 and specialized technique training','The Aesthetic Alliance Mastermind for growing your practice']},
+  {t:'cta', disclaimer:'Educational content for licensed medical professionals. Techniques shown require appropriate licensure, training, and clinical judgment. No specific clinical or financial result is guaranteed. Results vary by provider, patient, and practice.'}
+];
+
+const deck = document.getElementById('deck');
+function slideHTML(s){
+  const foot = '<footer><span>RUMA Academy</span><span>The Natural-Results Injector</span></footer>';
+  if(s.t==='title'){
+    return `<div class="slide"><div class="eyebrow">A live masterclass for aesthetic injectors</div>
+      <h1>The Natural-Results Injector</h1>
+      <div class="rule"></div>
+      <p class="lead">How anatomy, product rheology, and ultrasound safety separate the injectors patients refer from the ones whose work looks done.</p>
+      <div class="brandline">RUMA Academy &nbsp;&middot;&nbsp; Shelby Miller, DNP, FNP-C</div></div>`;
+  }
+  if(s.t==='reframe'||s.t==='quote'){
+    return `<div class="slide"><div class="eyebrow">${s.eyebrow||'&nbsp;'}</div><div class="big">${s.big}</div>${foot}</div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide"><div class="eyebrow">Your next step</div>
+      <h2>Train with RUMA Academy</h2>
+      <div class="cta-box"><p class="lead" style="margin-bottom:.8rem">Choose the course that fits where you are, or join the Aesthetic Alliance Mastermind to grow the whole practice.</p>
+      <div class="brandline" style="margin-top:.4rem">rumaacademy.com</div></div>
+      <p class="disclaimer">${s.disclaimer}</p>${foot}</div>`;
+  }
+  let body = `<div class="eyebrow">${s.eyebrow||'&nbsp;'}</div>`;
+  if(s.no) body = `<div class="eyebrow"><span class="pillar-no">${s.no}</span> &nbsp; ${s.eyebrow}</div>`;
+  if(s.h) body += `<h2>${s.h}</h2>`;
+  if(s.p) body += `<p class="lead">${s.p}</p>`;
+  if(s.items){ body += '<ul>'; s.items.forEach(i=>{ body += `<li>${i}</li>`; }); body += '</ul>'; }
+  return `<div class="slide">${body}${foot}</div>`;
+}
+deck.innerHTML = S.map(slideHTML).join('');
+const slides = [...document.querySelectorAll('.slide')];
+let i = 0;
+function render(){ slides.forEach((el,n)=>el.classList.toggle('on', n===i)); document.getElementById('count').textContent = (i+1)+' / '+slides.length; }
+function go(d){ i = Math.max(0, Math.min(slides.length-1, i+d)); render(); }
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'||e.key===' ')go(1); if(e.key==='ArrowLeft')go(-1); });
+render();
+</script>
+</body>
+</html>
