@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuehren aus der Stille | Gottfried Prinz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2e4d7;
+    --panel:#faf3ea;
+    --ink:#3b3b39;
+    --rule:#c9b9a6;
+    --accent:#971b81;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.5}
+  .deck{max-width:960px;margin:0 auto}
+  .slide{min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 7vw;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-family:'Space Grotesk';font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.78rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:'Merriweather';font-weight:900;font-size:clamp(2.3rem,6vw,4rem);line-height:1.08;color:var(--ink)}
+  h2{font-family:'Merriweather';font-weight:700;font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.15;color:var(--ink)}
+  p{font-size:clamp(1.05rem,2vw,1.3rem);max-width:60ch;margin-top:1.3rem;color:var(--ink)}
+  .lede{font-family:'Merriweather';font-size:clamp(1.3rem,2.6vw,1.8rem);font-style:italic;color:var(--accent)}
+  ul{margin-top:1.6rem;max-width:62ch;list-style:none}
+  li{font-size:clamp(1.02rem,1.9vw,1.22rem);padding:.7rem 0 .7rem 1.6rem;border-bottom:1px solid var(--rule);position:relative}
+  li:before{content:"";position:absolute;left:0;top:1.25rem;width:.55rem;height:.55rem;background:var(--accent);border-radius:50%}
+  .num{font-family:'Merriweather';font-weight:900;font-size:3rem;color:var(--accent);opacity:.9}
+  .dark{background:var(--ink);color:var(--bg)}
+  .dark h1,.dark h2,.dark p{color:var(--bg)}
+  .dark .lede{color:#e7a8d7}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:2.2rem;margin-top:1.8rem}
+  .foot{font-family:'Space Grotesk';font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-top:2.4rem}
+  .disc{font-size:.92rem;color:var(--ink);opacity:.72;margin-top:1.8rem;max-width:60ch}
+  .btn{display:inline-block;margin-top:1.8rem;background:var(--accent);color:#fff;font-family:'Space Grotesk';
+    font-weight:700;padding:.95rem 1.8rem;border-radius:10px;text-decoration:none;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'Live-Masterclass mit Gottfried Prinz', h:'Fuehren aus der Stille.', lede:'Klarheit statt reaktiver Hektik, fuer Manager der neuen Zeit.'},
+  {t:'promise', eyebrow:'Worum es in dieser Stunde geht', h:'In 60 Minuten von Verzettelung zu Fokus.', p:'Wie die wichtigsten Entscheidungen aus innerer Klarheit entstehen, nicht aus Druck. Das Erfolgsmodell hinter ueber 80 Unternehmenssanierungen, uebersetzt fuer Ihr Unternehmen und Ihr Leben.'},
+  {t:'forwho', eyebrow:'Fuer wen das hier ist', h:'Geschaeftsfuehrer und Fuehrungskraefte, die zu viel tragen.', p:'Sie fuehren ein Unternehmen, treffen taeglich Entscheidungen und sind trotzdem staendig im Reaktionsmodus. Mehr Meetings, mehr Feuerloeschen, weniger Richtung.'},
+  {t:'trap', eyebrow:'Die Falle', h:'Noch ein Tool loest das Problem nicht.', p:'Die meisten Fuehrungskraefte suchen nach der naechsten Methode, der naechsten Software, dem naechsten Framework. Dabei fehlt das Fundament: zu wissen, wo Sie und Ihr Unternehmen wirklich stehen.'},
+  {t:'cost', eyebrow:'Was es kostet', h:'Hektik frisst Ihre beste Ressource.', p:'Wer aus Druck entscheidet, entscheidet kurzfristig. Energie verpufft, das Team sucht Sicherheit, und die Vision bleibt im Alltag stecken. Mitarbeiter der neuen Zeit brauchen Manager der neuen Zeit.'},
+  {t:'reframe', eyebrow:'Der Perspektivwechsel', h:'Stille ist kein Rueckzug. Stille ist ein Werkzeug.', lede:'Die staerksten Entscheidungen entstehen nicht im Laerm, sondern in der Klarheit danach.'},
+  {t:'section', num:'01', eyebrow:'Teil eins', h:'Das eigentliche Problem: fehlende Standortklaerung.'},
+  {t:'point', eyebrow:'Standortklaerung', h:'Erst sehen, wo Sie stehen.', p:'Transformation beginnt mit Klarheit. Bevor Strategie moeglich ist, braucht es einen ehrlichen Blick auf die Lage, ueber neun Lebens- und Fuehrungsbereiche hinweg.', b:['Reflexion ueber 9 Lebens- und Fuehrungsbereiche','Lebensweg und Unternehmensphase verstehen','Blockaden und Muster erkennen und loesen']},
+  {t:'section', num:'02', eyebrow:'Teil zwei', h:'Die Methode: Herz, Haltung und Klarheit.'},
+  {t:'framework', eyebrow:'Der Aufbau', h:'Ein strukturierter Prozess, nach innen und nach aussen.', p:'Reise nach innen, Wirkung nach aussen. Vier Phasen, die Berufliches und Persoenliches verbinden, fuer Klarheit in dem, was wesentlich ist.'},
+  {t:'phase', num:'1', eyebrow:'Phase eins', h:'Selbstfuehrung und Standortklaerung.', p:'Energiequellen aktivieren, den Fokus justieren, die eigene Bestimmung erkennen und eine erste Vision entwerfen.'},
+  {t:'phase', num:'2', eyebrow:'Phase zwei', h:'Strategie und Umsetzung.', p:'Ein individueller Strategiekatalog, starke Entscheidungen und der Transfer der Vision vom Innen ins Unternehmen.'},
+  {t:'phase', num:'3', eyebrow:'Phase drei', h:'Der Schweigetag: die Kraft der Stille.', p:'Tiefe Integration der Erkenntnisse, Verbindung mit der Intuition, Koerper, Geist und Seele im Einklang. Entscheidungen manifestieren.'},
+  {t:'phase', num:'4', eyebrow:'Phase vier', h:'Transfer und Rituale.', p:'Rituale fuer nachhaltigen Umsetzungserfolg und ein konkreter Plan fuer die Zeit danach. Ein neues Lebensgefuehl: klar, ruhig, fokussiert.'},
+  {t:'pillars', eyebrow:'Die Haltung dahinter', h:'Geerdet, fokussiert und bereichernd.', b:['Herz: fuehren aus echter Verbindung','Haltung: Entscheidungen aus innerer Ausrichtung','Klarheit: Sicherheit durch klare Prioritaeten']},
+  {t:'section', num:'03', eyebrow:'Teil drei', h:'Wie sich das im Alltag anfuehlt.'},
+  {t:'outcome', eyebrow:'Das Ergebnis', h:'Fuehrung mit Weitblick statt reaktiver Hektik.', b:['Fokus statt Verzettelung','Kultur und Bindung durch Klarheit staerken','Energie bewahren, aus Ausrichtung entscheiden']},
+  {t:'credibility', eyebrow:'Warum Gottfried Prinz', h:'Ein Sanierer, der aus der Stille fuehrt.', b:['Ueber 80 erfolgreiche Unternehmenssanierungen','Mehr als 800 Einzelcoachings mit Geschaeftsfuehrern','Jahrzehnte an der Schnittstelle von Leadership, Veraenderung und Klarheit']},
+  {t:'recap', eyebrow:'Der eine Gedanke', h:'Erkennen. Entscheiden. Umsetzen.', lede:'Erst Klarheit ueber den Standort, dann die starke Entscheidung, dann die Rituale, die sie tragen.'},
+  {t:'cta', eyebrow:'Ihr naechster Schritt', h:'Bereit fuer Ihre Transformation?', p:'Sichern Sie sich ein kurzes Gespraech mit Gottfried Prinz und finden Sie heraus, ob die TRANSFORMATION DAYS der richtige Raum fuer Sie sind.', cta:'Platz sichern', disc:'Dies ist ein Bildungsformat. No specific result is guaranteed. Results vary by individual effort and circumstance.'}
+];
+
+const deck = document.getElementById('deck');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function list(b){return b && b.length ? '<ul>'+b.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>' : '';}
+S.forEach(s=>{
+  const dark = (s.t==='reframe' || s.t==='recap');
+  let inner = '';
+  if(s.eyebrow) inner += '<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+  if(s.num) inner += '<div class="num">'+esc(s.num)+'</div>';
+  if(s.t==='title' && s.h) inner += '<h1>'+esc(s.h)+'</h1>';
+  else if(s.h) inner += '<h2>'+esc(s.h)+'</h2>';
+  if(s.lede) inner += '<p class="lede">'+esc(s.lede)+'</p>';
+  if(s.p) inner += '<p>'+esc(s.p)+'</p>';
+  inner += list(s.b);
+  if(s.cta) inner += '<a class="btn" href="#">'+esc(s.cta)+'</a>';
+  if(s.disc) inner += '<p class="disc">'+esc(s.disc)+'</p>';
+  const sec = document.createElement('section');
+  sec.className = 'slide' + (dark ? ' dark' : '');
+  sec.innerHTML = inner;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
