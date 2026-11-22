@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Survival Mode to Thriving : A Masterclass for Private School Leaders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141C27;        /* brand navy ground (brand.json #161E2A, deepened) */
+    --panel:#1E2836;     /* panel */
+    --rule:#2C3A4C;      /* hairline */
+    --accent:#17876A;    /* brand green (brand.json #127059, lifted) */
+    --ink:#EAF0F4;       /* warm off-white */
+    --muted:#9FB0BE;     /* muted */
+    --serif:'PT Serif', Georgia, serif;
+    --sans:'Hanken Grotesk', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
+  #deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.active{display:flex;opacity:1}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-size:clamp(11px,1.1vw,15px);margin-bottom:2.4vh}
+  h1{font-family:var(--serif);font-weight:700;line-height:1.08;font-size:clamp(30px,5.4vw,70px)}
+  h2{font-family:var(--serif);font-weight:700;line-height:1.12;font-size:clamp(26px,4.2vw,52px)}
+  .lede{font-family:var(--serif);font-size:clamp(18px,2.1vw,27px);line-height:1.45;color:var(--ink);
+    max-width:46ch;margin-top:3vh}
+  .sub{font-size:clamp(15px,1.5vw,20px);line-height:1.5;color:var(--muted);max-width:52ch;margin-top:2.6vh}
+  .big{font-family:var(--serif);font-size:clamp(30px,4.4vw,56px);line-height:1.18;max-width:20ch}
+  ul{list-style:none;margin-top:3vh;max-width:60ch}
+  li{position:relative;padding-left:2.4ch;margin:1.5vh 0;font-size:clamp(16px,1.7vw,23px);line-height:1.4}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:1.1ch;height:1.1ch;border-radius:50%;
+    background:var(--accent)}
+  .letter{font-family:var(--serif);color:var(--accent);font-weight:700;display:inline-block;width:1.6ch}
+  .kv{display:flex;gap:1.2ch;align-items:baseline;margin:1.7vh 0;max-width:58ch}
+  .kv .k{font-family:var(--serif);color:var(--accent);font-weight:700;font-size:clamp(20px,2.4vw,30px);
+    min-width:2.2ch}
+  .kv .v{font-size:clamp(15px,1.6vw,21px);line-height:1.4;color:var(--ink)}
+  .kv .v b{color:var(--ink)}
+  .quote{font-family:var(--serif);font-style:italic;font-size:clamp(22px,3vw,40px);line-height:1.25;
+    max-width:24ch}
+  .attrib{color:var(--muted);margin-top:3vh;font-size:clamp(14px,1.3vw,18px)}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:4vh 4vw;
+    max-width:60ch}
+  .cta-steps{margin-top:3vh}
+  .disclaimer{color:var(--muted);font-size:clamp(11px,1vw,13px);line-height:1.5;margin-top:5vh;max-width:60ch}
+  .foot{position:absolute;left:9vw;bottom:4vh;color:var(--muted);font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase}
+  .count{position:absolute;right:9vw;bottom:4vh;color:var(--muted);font-size:12px}
+  .brandline{position:absolute;left:9vw;top:4vh;color:var(--muted);font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase}
+  .accent{color:var(--accent)}
+  .nav{position:absolute;inset:0;display:flex;z-index:5}
+  .nav div{flex:1;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav"><div id="prev"></div><div id="next"></div></div>
+<script>
+const BRAND = "The Private School Leader";
+const S = [
+  {t:'title', eyebrow:'A Live Masterclass with Mark Minkus',
+   h1:'From Survival Mode to Thriving',
+   lede:'The seven shifts that let a private school leader stop running their school and start leading it.'},
+
+  {t:'point', eyebrow:'Who this is for',
+   h2:'You did not take this job to drown in it.',
+   sub:'This is for the head of school, principal, or division head who still loves the work, but ends most weeks running on empty, behind on the things that actually matter, and quietly wondering how long this pace can last.'},
+
+  {t:'point', eyebrow:'The trap',
+   h2:'Busy and reactive looks exactly like doing a great job.',
+   sub:'So nobody at your school can see the cost. The board sees a leader who answers every email. The parents see someone who always picks up. You see the version of this that shows up at home, exhausted, with nothing left to give the people you love most.'},
+
+  {t:'reframe', eyebrow:'The real diagnosis',
+   big:'Survival mode is not a time-management problem. It is an operating-system problem.'},
+
+  {t:'point', eyebrow:'Part One : The core problem',
+   h2:'The urgent has quietly taken over the important.',
+   sub:'Every crisis that lands on your desk feels like it has to be handled by you, right now. Handled enough times, that becomes the whole job. The strategic work, the classrooms, your own health, and your family all move to "later." Later never comes, because the urgent never runs out.'},
+
+  {t:'list', eyebrow:'What survival mode actually costs',
+   h2:'The slow leak you stopped noticing',
+   items:[
+     'Your calendar belongs to whoever emailed last, not to what the school needs most.',
+     'You are in classrooms far less than the year you started, and you feel it.',
+     'The decisions only you can make keep getting postponed.',
+     'Home gets the leftover version of you, if anything is left at all.'
+   ]},
+
+  {t:'reframe', eyebrow:'The turn',
+   big:'Thriving is not doing more. It is leading from a different operating system.'},
+
+  {t:'point', eyebrow:'Part Two : The framework',
+   h2:'The 7 Essentials to THRIVE',
+   sub:'Thirty-three years as a head of school, distilled into seven shifts. Not theory, not another binder. Seven practical moves that take you from surviving the week to leading the school.'},
+
+  {t:'thrive', eyebrow:'The 7 Essentials',
+   h2:'T · H · R · I · V · E',
+   rows:[
+     ['T','Travel the path to real fulfillment','Reconnect to why you took this job, so your days point somewhere again.'],
+     ['H','Hijack the tyranny of the urgent','Reclaim calendar white space and get back into classrooms, on purpose.'],
+     ['R','Realize work-life blend with boundaries','Set the priorities and the lines that make the pace survivable for years.'],
+     ['I','Increase your energy level','Build the restorative habits and gratitude practices that refill the tank.'],
+     ['V','Vitalize your relationships','Listen, empathize, and repair the connections the job keeps eroding.'],
+     ['E','Engage in effective leadership','Lead as a servant to your staff, tuned to what each of them needs.']
+   ]},
+
+  {t:'point', eyebrow:'Start here : Essential #2',
+   h2:'Hijack the tyranny of the urgent.',
+   sub:'This is the first domino. Before boundaries, before energy, before anything else, you have to win back the white space on your calendar. When the urgent stops owning every hour, the important finally has somewhere to live, and the other six essentials become possible.'},
+
+  {t:'list', eyebrow:'What that looks like in a real week',
+   h2:'Three moves that create white space',
+   items:[
+     'Redefine urgent: most "emergencies" are someone else\'s poor planning arriving on your desk.',
+     'Protect two blocks a week for the work only you can do, and defend them like a parent meeting.',
+     'Put classroom time on the calendar first, so it stops being the thing that gets cut.'
+   ]},
+
+  {t:'reframe', eyebrow:'The shift underneath all seven',
+   big:'Stop being the reactive manager. Become the proactive leader.'},
+
+  {t:'point', eyebrow:'Part Three : After the shift',
+   h2:'From firefighting to architecting.',
+   sub:'A proactive leader is the architect of the school\'s future, not its full-time emergency responder. You still care just as much. You are just no longer the single point of failure for every problem in the building, and the school grows because of it instead of staying stuck.'},
+
+  {t:'list', eyebrow:'The other side',
+   h2:'What thriving actually feels like',
+   items:[
+     'You leave most days with something left for the people at home.',
+     'You are back in classrooms enough to remember why you started.',
+     'The big decisions get made, on time, by you.',
+     'You lead the school instead of being run by it.'
+   ]},
+
+  {t:'quote', eyebrow:'Why me',
+   quote:'I want to help private school leaders learn from the mistakes I made, bring their best selves to school, and avoid burnout.',
+   attrib:'Mark Minkus : 21 years as Head of School, 33 years in private school leadership.'},
+
+  {t:'point', eyebrow:'The honest part',
+   h2:'You are not supposed to do this alone.',
+   sub:'The hardest part of this job is that the decisions only you can make are the ones you cannot talk about with anyone inside the building. Thriving leaders are not the ones who need no help. They are the ones who stopped trying to carry it by themselves.'},
+
+  {t:'cta', eyebrow:'Your next step',
+   h2:'Let\'s get you from surviving to thriving.',
+   sub:'If this is the year you stop running on empty, the next step is a short, no-pressure conversation about where you are and what one shift would change the most.',
+   steps:[
+     'Book a free 20-minute discovery call at theprivateschoolleader.com.',
+     'We map your biggest source of survival-mode pressure.',
+     'If it is a fit, we build your path out together, through coaching or the Proactive Leader Mastermind.'
+   ],
+   disclaimer:'This masterclass is for educational purposes only. It shares leadership principles and practices, not guarantees. Results vary by leader, school, and circumstance; no specific outcome is promised.'}
+];
+
+const deck = document.getElementById('deck');
+function slideHTML(s, i, n){
+  let inner = '';
+  const brand = '<div class="brandline">'+BRAND+'</div>';
+  const foot = '<div class="foot">From Survival Mode to Thriving</div>';
+  const count = '<div class="count">'+(i+1)+' / '+n+'</div>';
+  if(s.t==='title'){
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><h1>'+s.h1+'</h1><p class="lede">'+s.lede+'</p>';
+  } else if(s.t==='point'){
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2><p class="sub">'+s.sub+'</p>';
+  } else if(s.t==='reframe'){
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><p class="big">'+s.big+'</p>';
+  } else if(s.t==='list'){
+    let li = s.items.map(x=>'<li>'+x+'</li>').join('');
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2><ul>'+li+'</ul>';
+  } else if(s.t==='thrive'){
+    let rows = s.rows.map(r=>'<div class="kv"><span class="k">'+r[0]+'</span><span class="v"><b>'+r[1]+'</b><br>'+r[2]+'</span></div>').join('');
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2><div style="margin-top:2vh">'+rows+'</div>';
+  } else if(s.t==='quote'){
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><p class="quote">"'+s.quote+'"</p><p class="attrib">'+s.attrib+'</p>';
+  } else if(s.t==='cta'){
+    let steps = s.steps.map(x=>'<li>'+x+'</li>').join('');
+    inner = '<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2><p class="sub">'+s.sub+'</p>'+
+      '<ul class="cta-steps">'+steps+'</ul><p class="disclaimer">'+s.disclaimer+'</p>';
+  }
+  return '<section class="slide" data-i="'+i+'">'+brand+inner+foot+count+'</section>';
+}
+deck.innerHTML = S.map((s,i)=>slideHTML(s,i,S.length)).join('');
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+function show(n){ cur=Math.max(0,Math.min(S.length-1,n)); slides.forEach((el,i)=>el.classList.toggle('active',i===cur)); }
+show(0);
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') show(cur+1);
+  if(e.key==='ArrowLeft') show(cur-1);
+});
+</script>
+</body>
+</html>
