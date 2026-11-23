@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timely TAD Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f2a52;        /* deep navy ground, from brand.json #123b73 family */
+    --panel:#15335f;     /* raised navy panel */
+    --rule:#2c4a7a;      /* muted navy rule */
+    --accent:#5291e3;    /* clinical blue, brand.json dominant (21 uses) */
+    --ink:#f5faff;       /* near-white, from brand.json */
+    --muted:#a9c0e0;     /* muted blue-grey ink */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#081a33;color:var(--ink);font-family:"IBM Plex Sans",sans-serif;-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  .slide{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:54px 54px;margin:0 0 20px;min-height:430px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide .num{position:absolute;top:18px;right:22px;font-size:12px;color:var(--muted);letter-spacing:.14em}
+  .eyebrow{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:"Spectral",serif;font-weight:600;font-size:52px;line-height:1.04;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:"Spectral",serif;font-weight:600;font-size:38px;line-height:1.1;margin-bottom:16px}
+  .lede{font-size:21px;line-height:1.5;color:var(--muted);max-width:44ch}
+  .big{font-family:"Spectral",serif;font-size:34px;line-height:1.22;max-width:30ch}
+  p.body{font-size:18px;line-height:1.6;color:var(--ink);max-width:52ch;margin-top:10px}
+  ul{list-style:none;margin-top:22px}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 30px;border-top:1px solid var(--rule);position:relative;color:var(--ink)}
+  li:first-child{border-top:none}
+  li:before{content:"";position:absolute;left:4px;top:19px;width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  li b{font-weight:600}
+  li span{display:block;color:var(--muted);font-size:16px;margin-top:3px}
+  .part .kicker{font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px}
+  .credits{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}
+  .credits div{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;flex:1 1 180px}
+  .credits b{font-family:"Spectral",serif;font-size:30px;display:block;color:var(--accent)}
+  .credits span{font-size:14px;color:var(--muted)}
+  .cta h1{margin-bottom:14px}
+  .disclaimer{font-size:13px;color:var(--muted);line-height:1.5;margin-top:26px;max-width:58ch}
+  .foot{font-size:14px;color:var(--muted);margin-top:22px}
+  .timeline{display:flex;gap:8px;margin-top:26px}
+  .timeline div{flex:1;text-align:center;padding:14px 6px;border-radius:9px;background:var(--panel);border:1px solid var(--rule);font-size:15px;color:var(--muted)}
+  .timeline div.on{background:var(--accent);color:#06203f;border-color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for dentists and orthodontists',
+   h1:'Timely TAD',
+   lede:'Three-dimensional arch development in the early mixed dentition, and how to recognize, select, and plan these cases before the permanent teeth lock in.'},
+
+  {t:'audience', eyebrow:'Who this is for',
+   big:'You already place aligners. You keep seeing six to ten year olds with narrow arches and crossbites, and you keep deferring them.',
+   body:'This hour is for the clinician who wants to treat the growing patient now, with a method and a plan, instead of watching and waiting.'},
+
+  {t:'trap', eyebrow:'The default',
+   h2:'Watchful waiting is a decision too.',
+   body:'The standard move is to wait until the full permanent dentition arrives before starting orthodontics. It feels safe. It also lets the arch develop on its own, in whatever direction it is already heading.'},
+
+  {t:'reframe', eyebrow:'The reframe',
+   big:'Arch development is happening with you or without you. The early mixed dentition is the one window where you can still shape it in three dimensions.'},
+
+  {t:'part', kicker:'Part One', h2:'The core problem', body:'Why the easy cases get harder the longer you wait.'},
+
+  {t:'body', eyebrow:'The cost of deferral',
+   h2:'Constriction, crossbites, and asymmetry compound.',
+   body:'A narrow arch at seven is not a narrow arch that stays the same. Eruption continues into the space you did not create. By adolescence the same correction asks more of the patient, the appliance, and the chair time.'},
+
+  {t:'body', eyebrow:'The real blocker',
+   h2:'It is rarely the clinical skill. It is the plan.',
+   body:'Most clinicians can run an aligner case. What stops them starting pediatric ones is case selection and a predictable setup: who is a timely candidate, who to watch, and how to stage the ClinCheck so the arch develops the way you intend.'},
+
+  {t:'part', kicker:'Part Two', h2:'Timely TAD', body:'Timely three-dimensional arch development, the method behind thousands of early cases.'},
+
+  {t:'pillars', eyebrow:'The five things you are developing',
+   h2:'What you build in the early window',
+   items:[
+     {b:'Space', s:'Create room for the permanent teeth before they erupt into a deficit.'},
+     {b:'Symmetry', s:'Correct asymmetry while the arch is still adaptable.'},
+     {b:'Arch form', s:'Set a broad, physiologic arch form that the dentition erupts into.'},
+     {b:'Vertical control', s:'Manage overbite and eruption vertically, not just side to side.'},
+     {b:'Sagittal balance', s:'Address the anteroposterior relationship as growth unfolds.'}]},
+
+  {t:'body', eyebrow:'Timing',
+   h2:'Why six to ten, and not later.',
+   body:'The early mixed dentition is adaptable in a way the adolescent arch is not. Staged correctly, you are guiding eruption as it happens, which is why balanced development often shows within six to twelve months.'},
+
+  {t:'calendar', eyebrow:'The timely window',
+   h2:'Ages six to ten.',
+   body:'Most practices wait this window out. It is the window where three-dimensional development is still on the table.'},
+
+  {t:'body', eyebrow:'Case selection',
+   h2:'The first question is who, not how.',
+   body:'A timely candidate is not every young patient. Reading the arch, the crossbite, the airway signs, and the eruption sequence tells you who to start now, who to monitor, and who to refer. Getting this right is what makes the first cases predictable.'},
+
+  {t:'body', eyebrow:'The ClinCheck',
+   h2:'A pediatric setup is planned differently.',
+   body:'The staging that works on an adult does not map onto a developing arch. Planning the ClinCheck for three-dimensional development, and knowing the moves that keep it predictable, is the difference between a case you are proud of and one you abandon.'},
+
+  {t:'part', kicker:'Part Three', h2:'From deferral to a developed arch', body:'From selection to a balanced arch, and how clinicians build the confidence to do it.'},
+
+  {t:'body', eyebrow:'The outcome',
+   h2:'Balanced development, often inside a year.',
+   body:'Across thousands of early mixed-dentition cases, profound balanced arch development was often evident within six to twelve months: broader form, resolved crossbites, and room for the teeth still to come.'},
+
+  {t:'proof', eyebrow:'Why learn this here',
+   h2:'The method comes from the cases.',
+   credits:[
+     {b:'4,000+', s:'Early mixed-dentition cases treated since 2019'},
+     {b:'Blue Diamond', s:'Invisalign provider'},
+     {b:'Align', s:'Global clinical speaker and educator'}],
+   foot:'This is not theory borrowed from a textbook. It is a protocol refined on the cases you are deferring right now.'},
+
+  {t:'body', eyebrow:'How you build it',
+   h2:'You should not plan your first ones alone.',
+   body:'The path is a structured curriculum on timing, case selection, and planning, then live case review where you submit your own cases and get them planned with you until the setups are second nature.'},
+
+  {t:'cta', eyebrow:'Your next step',
+   h1:'Start treating the timely window.',
+   body:'If you want to bring three-dimensional arch development into your practice, book a discovery call and we will map your first cases together.',
+   foot:'PediatricAligners.com',
+   disclaimer:'This presentation is for professional education only. Clinical outcomes vary by patient, diagnosis, and provider. Nothing here guarantees a specific result. Treat within your scope and judgment.'}
+];
+
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+var deck=document.getElementById('deck');
+S.forEach(function(s,i){
+  var sl=el('div','slide '+s.t);
+  sl.appendChild(el('div','num',('0'+(i+1)).slice(-2)+' / '+('0'+S.length).slice(-2)));
+  if(s.eyebrow) sl.appendChild(el('div','eyebrow',s.eyebrow));
+  if(s.kicker) sl.appendChild(el('div','kicker',s.kicker));
+  if(s.h1) sl.appendChild(el('h1',null,s.h1));
+  if(s.h2) sl.appendChild(el('h2',null,s.h2));
+  if(s.big) sl.appendChild(el('div','big',s.big));
+  if(s.lede) sl.appendChild(el('div','lede',s.lede));
+  if(s.items){var ul=el('ul');s.items.forEach(function(it){var li=el('li',null,'<b>'+it.b+'</b><span>'+it.s+'</span>');ul.appendChild(li);});sl.appendChild(ul);}
+  if(s.t==='calendar'){var tl=el('div','timeline');['Age 6','Age 7','Age 8','Age 9','Age 10'].forEach(function(a){tl.appendChild(el('div','on',a));});sl.appendChild(tl);}
+  if(s.credits){var cr=el('div','credits');s.credits.forEach(function(c){cr.appendChild(el('div',null,'<b>'+c.b+'</b><span>'+c.s+'</span>'));});sl.appendChild(cr);}
+  if(s.body) sl.appendChild(el('p','body',s.body));
+  if(s.foot) sl.appendChild(el('div','foot',s.foot));
+  if(s.disclaimer) sl.appendChild(el('div','disclaimer',s.disclaimer));
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
