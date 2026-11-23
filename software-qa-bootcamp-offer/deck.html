@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Real-Experience Path — Codemify Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1730;        /* brand navy (brand.json #0f1730) */
+    --panel:#13203f;     /* panel on navy */
+    --rule:#27365f;      /* hairline */
+    --primary:#034684;   /* brand blue, dominant 46 uses */
+    --accent:#fee600;    /* brand signal-yellow, 13 uses */
+    --ink:#f2f2f7;       /* near-white text */
+    --muted:#c7d2e9;     /* pale blue muted */
+    --pass:#3ad29f;      /* test-runner pass green */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:980px}
+  .slide.on{display:block;animation:f .4s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-family:"DM Mono",monospace;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .kicker .pass{color:var(--pass)}
+  h1{font-size:clamp(2.1rem,5.4vw,3.9rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:.5rem 0}
+  h2{font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:1.1;font-weight:700;letter-spacing:-.01em;margin:.3rem 0 1rem}
+  p.lead{font-size:clamp(1.05rem,1.8vw,1.35rem);color:var(--muted);line-height:1.5;max-width:46ch}
+  p.big{font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.35;max-width:40ch}
+  .accent{color:var(--accent)}
+  ul{list-style:none;margin:1.2rem 0 0}
+  li{font-size:clamp(1rem,1.7vw,1.25rem);line-height:1.4;padding:.55rem 0 .55rem 2rem;position:relative;border-top:1px solid var(--rule)}
+  li:before{content:"PASS";font-family:"DM Mono",monospace;font-size:.62rem;letter-spacing:.1em;color:var(--pass);position:absolute;left:0;top:.95rem}
+  li.x:before{content:"FAIL";color:#ff6b6b}
+  .num{font-family:"DM Mono",monospace;color:var(--primary);background:var(--accent);display:inline-block;padding:.1rem .5rem;border-radius:4px;font-weight:500;font-size:.9rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.4rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:1.1rem 1.2rem}
+  .card .t{font-family:"DM Mono",monospace;color:var(--accent);font-size:.8rem;letter-spacing:.08em}
+  .card p{color:var(--muted);margin-top:.4rem;font-size:1rem;line-height:1.4}
+  .statusbar{font-family:"DM Mono",monospace;color:var(--muted);font-size:.8rem;margin-top:1.6rem;border-top:1px solid var(--rule);padding-top:.7rem}
+  .disclaimer{font-size:.8rem;color:var(--muted);margin-top:1.3rem;line-height:1.4;max-width:60ch}
+  .cta-btn{display:inline-block;margin-top:1.3rem;background:var(--accent);color:#0f1730;font-weight:700;padding:.85rem 1.5rem;border-radius:8px;font-size:1.05rem}
+  .nav{position:fixed;bottom:18px;right:22px;font-family:"DM Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:.6rem;align-items:center}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;padding:.3rem .7rem;cursor:pointer;font-family:inherit}
+  .brandline{font-family:"DM Mono",monospace;color:var(--muted);font-size:.85rem;margin-top:2rem;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="stage"><div id="deck"></div></div>
+<div class="nav"><button onclick="go(-1)">prev</button><span id="count"></span><button onclick="go(1)">next</button></div>
+<script>
+const S=[
+  {t:'title',k:'// masterclass.run()',h:'The Real-Experience Path',sub:'How beginners break into QA before they ever apply.',brand:'Codemify · with Sergii Khromchenko, Senior SDET & Engineering Manager'},
+  {t:'who',k:'who this is for',h:'This is for you if',items:['You want a QA or AI-testing job and have no tech background','You are tired of courses that end at a certificate','You keep hearing "we only hire people with experience"'],x:2},
+  {t:'trap',k:'the trap',h:'You were told the plan is simple',big:'Take a course. Get a certificate. Start applying. Then wait.',sub:'So you did the course. You sent the applications. And the replies all said the same thing.'},
+  {t:'hook',k:'the hard truth',h:'Employers do not hire certificates.',big:'They hire <span class="accent">experience</span>. But you cannot get experience without a job, and you cannot get a job without experience.',sub:'That loop is where almost every career-changer gets stuck. It is not a you problem. It is a sequence problem.'},
+  {t:'obj',k:'the doubt',h:'"But I am not technical enough"',big:'Manual QA starts with <span class="accent">zero coding</span>. You begin by thinking like a user who breaks things on purpose, then add the technical skills one layer at a time.'},
+  {t:'p1',k:'part one · the problem',h:'The experience paradox',lead:'Every entry-level QA posting asks for experience you have not been allowed to earn yet. Most training leaves you exactly here: knowledge in your head, nothing on your resume, and an interview you have never rehearsed.',items:['Theory without a real project to point to','A certificate every other applicant also has','First real interview happening when it counts most'],xall:true},
+  {t:'p1b',k:'part one · the problem',h:'A certificate is a starting line, not a finish line',big:'The gap is not what you know. The gap is proof that you can do the work, and reps at the thing that actually gets you hired: the interview.'},
+  {t:'p1c',k:'part one · the problem',h:'Why most training stops short',lead:'Plenty of courses teach you what a test case is. Far fewer put you on a real team, and almost none drill the interview with you until it stops being scary. The finish line they aim at is the certificate, not the offer.',items:['Teaches the concepts, then stops there','Hands you a certificate at the door','Leaves the real team and the interview to you'],xall:true},
+  {t:'section',k:'part two · the method',h:'So we built the sequence backwards',lead:'Start with real experience and interview reps from the first week, so by the time you apply you already have both. At Codemify we call the core of it Real Practice.'},
+  {t:'pillars',k:'part two · the method',h:'Three pillars, running in parallel',grid:[['Real Practice','From week one you join a real startup team with a QA mentor, real assignments, and weekly releases. Real work on your resume, not a mock project.'],['The interview machine','Live weekly interview practice, plus 1-on-1 HR and technical mock exams, until the real interview feels like one more rep.'],['Course + community + coaching','Structured lessons, the CodeFamily community for life, and live coaching with me through the week. Never stuck alone.'],['The AI-testing edge','Add the fastest-growing skill in QA with a 6-week roadmap, so you are relevant for where testing is going, not just where it was.']]},
+  {t:'deep',k:'pillar 01 · real practice',h:'You get the experience by doing the work',lead:'On day one you are onboarded into a startup like a new hire: documentation, test environments, real features to break. You are not watching someone test. You are testing, with a mentor watching your back.',status:'real_practice: ACTIVE  ·  week 01  ·  mentor assigned'},
+  {t:'deep',k:'pillar 02 · the interview machine',h:'You rehearse the hard part until it is easy',lead:'Most capable testers still freeze in interviews because they have never done one. You will have done dozens: HR rounds, technical rounds, live practice every week, feedback every time. The real one becomes routine.',status:'mock_interviews: PASS  ·  HR + technical  ·  feedback logged'},
+  {t:'deep',k:'pillar 03 · the AI-testing edge',h:'Train for where QA is going',lead:'AI is changing how software is tested. The QAs who add AI testing now are the ones recruiters chase next. The roadmap takes you from zero to job-ready on practical AI testing in about six weeks.',status:'ai_testing_track: ENABLED  ·  roadmap 6 weeks'},
+  {t:'tools',k:'the toolkit',h:'Real tools, the way teams use them',grid:[['Find and track','Jira and Qase for bug tracking and test cases, the way real teams run them.'],['Test the system','API testing with Postman, SQL for the database, client-server architecture.'],['Automate it','JavaScript with Playwright and Cypress, version control in Git, CI/CD pipelines.'],['Ship with the team','Agile and Scrum ceremonies, release cycles, real weekly deploys.']]},
+  {t:'deep',k:'the room',h:'You are never testing alone',lead:'Three live sessions a week, a private community you keep for life, and chat support that does not switch off the day you get hired. When you are stuck at 11pm, someone is there.',status:'codefamily: lifetime  ·  live_sessions: 3/week  ·  support: post-hire'},
+  {t:'p3',k:'part three · your two-month climb',h:'From zero to job-ready',lead:'A clear path, not a pile of videos. Each stage leaves you with something real to show.',items:['Weeks 1 to 2: foundations plus your startup onboarding','Mid-program: real features tested, bugs logged, portfolio building','Final stretch: resume, LinkedIn, and interview reps on repeat','Then: you apply with experience and rehearsed answers'],xall:false},
+  {t:'why',k:'why me',h:'Who you would be learning with',lead:'I am Sergii Khromchenko, a Senior Engineering Manager and SDET with over ten years in the field, and I have helped thousands of students move into IT careers. I run the live sessions and the interview practice myself.',status:'mentor: verified  ·  10+ years SDET  ·  sessions: live'},
+  {t:'recap',k:'recap',h:'The whole idea in one line',big:'Do not apply and hope. Get the <span class="accent">experience</span> and the <span class="accent">reps</span> first, then apply already proven.',items:['Real Practice: experience from week one','The interview machine: reps before it counts','The AI-testing edge: relevant for what is next']},
+  {t:'cta',k:'// register()',h:'Come see how it works, live',sub:'Join the free live masterclass and I will walk you through the Real-Experience Path, then show you exactly how the Codemify program takes you from zero to hired.',btn:'Reserve your free spot',disc:'Educational only. Codemify teaches skills and job-search methods; it does not guarantee a job, a salary, or any specific income or result. Outcomes vary and depend on your own effort and the market.'}
+];
+const deck=document.getElementById('deck');
+function render(){
+  deck.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+    let h='';
+    if(s.k)h+='<div class="kicker">'+s.k+'</div>';
+    if(s.h)h+='<h'+(s.t==='title'?'1':'2')+'>'+s.h+'</h'+(s.t==='title'?'1':'2')+'>';
+    if(s.sub&&s.t==='title')h+='<p class="lead">'+s.sub+'</p>';
+    if(s.big)h+='<p class="big">'+s.big+'</p>';
+    if(s.lead)h+='<p class="lead" style="max-width:58ch">'+s.lead+'</p>';
+    if(s.grid){h+='<div class="grid">';s.grid.forEach(c=>{h+='<div class="card"><div class="t">'+c[0]+'</div><p>'+c[1]+'</p></div>';});h+='</div>';}
+    if(s.items){h+='<ul>';s.items.forEach((it,idx)=>{const fail=s.xall||(s.x!==undefined&&idx===s.x);h+='<li'+(fail?' class="x"':'')+'>'+it+'</li>';});h+='</ul>';}
+    if(s.status)h+='<div class="statusbar">'+s.status+'</div>';
+    if(s.sub&&s.t!=='title')h+='<p class="lead" style="margin-top:1rem">'+s.sub+'</p>';
+    if(s.btn)h+='<div><span class="cta-btn">'+s.btn+'</span></div>';
+    if(s.disc)h+='<div class="disclaimer">'+s.disc+'</div>';
+    if(s.brand)h+='<div class="brandline">'+s.brand+'</div>';
+    d.innerHTML=h;deck.appendChild(d);
+  });
+  document.getElementById('count').textContent='01 / '+String(S.length).padStart(2,'0');
+}
+let cur=0;
+function go(n){const s=deck.children;s[cur].classList.remove('on');cur=Math.max(0,Math.min(S.length-1,cur+n));s[cur].classList.add('on');document.getElementById('count').textContent=String(cur+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0');}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
