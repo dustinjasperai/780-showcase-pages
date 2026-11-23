@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Spiral Path | A Live Masterclass with Uma · Hera's Fruit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Imprima&family=Chivo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0d2c38;
+    --panel: #103543;
+    --rule: #2d5563;
+    --ink: #f3efe6;
+    --ink-soft: #cdd9dd;
+    --ink-muted: #8aa6b0;
+    --accent: #d8a24a;
+  }
+  html, body { height:100%; }
+  body {
+    font-family:'Chivo', -apple-system, sans-serif;
+    background:#06181f;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage { max-width:960px; margin:0 auto; }
+  .slide {
+    display:none;
+    min-height:100vh;
+    padding:84px 72px 96px;
+    flex-direction:column;
+    justify-content:center;
+    background:var(--bg);
+    border-left:1px solid var(--rule);
+    border-right:1px solid var(--rule);
+  }
+  .slide.active { display:flex; }
+  .kicker {
+    font-size:13px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:26px; font-weight:600;
+  }
+  h1 { font-family:'Imprima', serif; font-weight:400; font-size:58px; line-height:1.08; letter-spacing:-0.01em; margin-bottom:22px; }
+  h2 { font-family:'Imprima', serif; font-weight:400; font-size:40px; line-height:1.15; margin-bottom:22px; }
+  .lede { font-size:22px; line-height:1.5; color:var(--ink-soft); max-width:40ch; }
+  .sub { font-size:17px; color:var(--ink-soft); margin-top:30px; letter-spacing:0.01em; }
+  ul { list-style:none; margin-top:12px; }
+  li { font-size:20px; line-height:1.45; color:var(--ink-soft); padding:12px 0 12px 30px; position:relative; border-bottom:1px solid var(--rule); max-width:46ch; }
+  li:last-child { border-bottom:none; }
+  li::before { content:''; position:absolute; left:2px; top:21px; width:9px; height:9px; border-radius:50%; background:var(--accent); }
+  .spin { display:flex; align-items:baseline; gap:18px; padding:14px 0; border-bottom:1px solid var(--rule); max-width:52ch; }
+  .spin:last-child { border-bottom:none; }
+  .spin .wk { font-family:'Imprima', serif; color:var(--accent); font-size:15px; min-width:92px; letter-spacing:0.04em; }
+  .spin .bd { font-size:19px; color:var(--ink-soft); }
+  .spin .bd b { color:var(--ink); font-weight:600; }
+  .big { font-family:'Imprima', serif; font-size:46px; line-height:1.18; max-width:22ch; }
+  .accentword { color:var(--accent); }
+  .cta-box { margin-top:34px; padding:26px 30px; background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--accent); max-width:50ch; }
+  .cta-box .step { font-size:20px; color:var(--ink); line-height:1.5; }
+  .disclaimer { margin-top:30px; font-size:13px; color:var(--ink-soft); opacity:0.75; max-width:52ch; line-height:1.5; }
+  .pagemark { position:fixed; bottom:22px; right:28px; font-size:12px; letter-spacing:0.18em; color:var(--accent); text-transform:uppercase; }
+  .brandmark { position:fixed; bottom:22px; left:28px; font-size:12px; letter-spacing:0.18em; color:var(--ink-soft); text-transform:uppercase; opacity:0.8; }
+  .nav { position:fixed; inset:0; display:flex; pointer-events:none; }
+  .nav button { flex:1; background:none; border:none; cursor:pointer; pointer-events:auto; }
+  @media (max-width:640px){ .slide{ padding:56px 26px 80px; } h1{ font-size:38px; } h2{ font-size:30px; } .lede{ font-size:19px; } .big{ font-size:32px; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="brandmark">Hera's Fruit</div>
+<div class="pagemark" id="pm"></div>
+<div class="nav"><button onclick="go(-1)"></button><button onclick="go(1)"></button></div>
+<script>
+const S = [
+  {t:'title',
+    kicker:'A live masterclass with Uma',
+    h1:'The Spiral Path',
+    lede:'Why shamanic mastery is a spiral, not a ladder.',
+    sub:"Hera's Fruit · for practitioners ready to go deeper" },
+
+  {t:'content',
+    kicker:'Who this is for',
+    h2:'You have already walked a long way',
+    bullets:[
+      'Healers, coaches, therapists and teachers, not beginners',
+      'Years of training and a shelf full of modalities',
+      'And a quiet sense that you have stopped going deeper' ] },
+
+  {t:'content',
+    kicker:'The trap',
+    h2:'You keep reaching for the next technique',
+    lede:'Another certification, another method, another weekend. Each one helps for a while. Then the same ceiling returns, in a slightly different shape.' },
+
+  {t:'statement',
+    kicker:'The reframe',
+    big:'You do not need another technique. You need <span class="accentword">initiation</span>.' },
+
+  {t:'content',
+    kicker:'Part one · the real problem',
+    h2:'Depth is not additive',
+    lede:'Linear learning stacks information. But the places you are stuck are not missing information. They are thresholds you have not yet been taken across. Stacking more on top of a threshold does not move it.' },
+
+  {t:'content',
+    kicker:'Part one · what stuck really is',
+    h2:'The ceiling is a doorway you walked past',
+    bullets:[
+      'The body still holds what the mind has understood',
+      'The same ancestor, the same wound, the same fear returns',
+      'Not because you failed, but because it is time to go around again' ] },
+
+  {t:'content',
+    kicker:'Part two · the method',
+    h2:'The Spin: an initiatory spiral',
+    lede:'Shadow and Flame moves through 42 weeks, mapped to the arc of a pregnancy. You do not climb it. You spiral through it, returning to the same ground each time at greater depth.' },
+
+  {t:'spins',
+    kicker:'Part two · the stages',
+    h2:'Walking the spiral',
+    spins:[
+      { wk:'Preparation', bd:'<b>Clearing.</b> Removing the influences that block readiness.' },
+      { wk:'Inner Circle', bd:'<b>Ground.</b> Earth connection, ancestors and family work.' },
+      { wk:'First Spin', bd:'<b>Body.</b> Breath, emotion and energy.' } ] },
+
+  {t:'spins',
+    kicker:'Part two · the stages',
+    h2:'Deeper each turn',
+    spins:[
+      { wk:'Second Spin', bd:'<b>Evolution.</b> Your needs, your growth, trauma held with care.' },
+      { wk:'Third Spin', bd:'<b>Perception.</b> Organ-level sensing and the art of containment.' },
+      { wk:'Last Spin', bd:'<b>Threshold.</b> Sexuality, birth, death and clarity of path.' } ] },
+
+  {t:'statement',
+    kicker:'The principle',
+    big:'Transformation is <span class="accentword">return</span>, not completion.' },
+
+  {t:'content',
+    kicker:'Part two · the inner engine',
+    h2:'The Mystical Marriage',
+    lede:'Outer technique without inner union stays brittle and tiring. The real engine of power is the marriage of the divine masculine and feminine within you. That union is what the spiral is quietly building.' },
+
+  {t:'content',
+    kicker:'Part two · the ground beneath it',
+    h2:'Emotional literacy comes first',
+    lede:'You cannot safely touch the other world until you are literate in your own feeling. Before depth there is boundary, and the honest art of feeling deeply. This is where safe mastery begins.' },
+
+  {t:'content',
+    kicker:'Part three · the practitioner you become',
+    h2:'From practitioner to master',
+    bullets:[
+      'Your practice stops shaking under pressure',
+      'You meet your clients from union, not performance',
+      'You begin to initiate others, because you were initiated' ] },
+
+  {t:'content',
+    kicker:'Why walk it with me',
+    h2:'A bridge, built over 21 years',
+    lede:'I was recognized and initiated as a shaman, then trained for more than twenty years in classical tradition until my teachers named me Master. For over a decade I have taught and initiated others, bridging that lineage with modern psychology and embodied science.' },
+
+  {t:'content',
+    kicker:'The living field',
+    h2:'You do not spiral alone',
+    lede:'Shadow and Flame is held inside a living field: weekly circles, mentors beside you, and a global community of seekers, teachers and visionaries walking the same path.' },
+
+  {t:'cta',
+    kicker:'Your next step',
+    h2:'Walk the spiral',
+    step:'If this is your time, the next turn is Shadow and Flame, the 42-week initiatory training. Join the next live circle, or book a conversation with the team to see if the path is right for you.',
+    disclaimer:'This masterclass is for education and personal and spiritual development. It is not therapy, medical care, or mental-health treatment, and it is not a substitute for them. Shamanic and spiritual work carries no guaranteed outcome, and every person’s path unfolds differently.' }
+];
+
+let i = 0;
+const stage = document.getElementById('stage');
+function esc(s){ return s; }
+function render(){
+  stage.innerHTML = '';
+  const s = S[i];
+  const d = document.createElement('div');
+  d.className = 'slide active';
+  let h = '';
+  if (s.kicker) h += '<div class="kicker">'+s.kicker+'</div>';
+  if (s.t === 'title'){
+    h += '<h1>'+s.h1+'</h1>';
+    if (s.lede) h += '<div class="lede">'+s.lede+'</div>';
+    if (s.sub) h += '<div class="sub">'+s.sub+'</div>';
+  } else if (s.t === 'statement'){
+    h += '<div class="big">'+s.big+'</div>';
+  } else if (s.t === 'spins'){
+    if (s.h2) h += '<h2>'+s.h2+'</h2>';
+    s.spins.forEach(function(sp){
+      h += '<div class="spin"><div class="wk">'+sp.wk+'</div><div class="bd">'+sp.bd+'</div></div>';
+    });
+  } else if (s.t === 'cta'){
+    if (s.h2) h += '<h2>'+s.h2+'</h2>';
+    h += '<div class="cta-box"><div class="step">'+s.step+'</div></div>';
+    if (s.disclaimer) h += '<div class="disclaimer">'+s.disclaimer+'</div>';
+  } else {
+    if (s.h2) h += '<h2>'+s.h2+'</h2>';
+    if (s.lede) h += '<div class="lede">'+s.lede+'</div>';
+    if (s.bullets){ h += '<ul>'; s.bullets.forEach(function(b){ h += '<li>'+b+'</li>'; }); h += '</ul>'; }
+  }
+  d.innerHTML = h;
+  stage.appendChild(d);
+  document.getElementById('pm').textContent = (i+1) + ' / ' + S.length;
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, i+n)); render(); }
+document.addEventListener('keydown', function(e){
+  if (e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+render();
+</script>
+</body>
+</html>
