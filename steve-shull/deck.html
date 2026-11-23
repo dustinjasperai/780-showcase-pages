@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Full Fee Agent | A Masterclass with Steve Shull</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#0a1a3f;        /* brand deep navy ground (brand.json #041e52 darkened for slides) */
+    --panel:#102449;     /* panel */
+    --rule:#1d3461;      /* hairline */
+    --accent:#00d4cd;    /* brand teal (brand.json rgb(0,212,205)) */
+    --ink:#f4f6fb;
+    --ink-soft:#c2cbe0;
+    --ink-mute:#8695b8;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Hind',system-ui,sans-serif;
+    background:#06112b;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{ width:min(100%,1040px); aspect-ratio:16/9; position:relative;
+    background:var(--bg); overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.45); }
+  .slide{ position:absolute; inset:0; padding:64px 72px; display:none;
+    flex-direction:column; }
+  .slide.on{ display:flex; }
+  .kicker{ font-size:13px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:18px; }
+  h1{ font-family:'Bitter',Georgia,serif; font-weight:700; font-size:52px;
+    line-height:1.08; letter-spacing:-.01em; margin-bottom:20px; }
+  h2{ font-family:'Bitter',Georgia,serif; font-weight:600; font-size:34px;
+    line-height:1.14; margin-bottom:22px; }
+  .sub{ font-size:22px; color:var(--ink-soft); line-height:1.4; max-width:44ch; }
+  p.body{ font-size:20px; color:var(--ink-soft); line-height:1.5; margin-bottom:14px; max-width:52ch; }
+  ul{ list-style:none; margin-top:8px; }
+  li{ font-size:19px; color:var(--ink-soft); line-height:1.4; padding-left:26px;
+    position:relative; margin-bottom:14px; max-width:50ch; }
+  li::before{ content:""; position:absolute; left:0; top:12px; width:9px; height:9px;
+    background:var(--accent); border-radius:1px; }
+  li b{ color:var(--ink); font-weight:600; }
+  .big{ font-family:'Bitter',Georgia,serif; font-size:40px; line-height:1.18;
+    font-weight:600; max-width:22ch; }
+  .big .accent{ color:var(--accent); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px 40px; margin-top:10px; }
+  .card{ background:var(--panel); border:1px solid var(--rule); border-radius:10px;
+    padding:20px 22px; }
+  .card .n{ font-family:'Bitter',serif; color:var(--accent); font-size:15px; font-weight:700;
+    letter-spacing:.08em; }
+  .card h3{ font-family:'Bitter',serif; font-size:19px; font-weight:600; margin:6px 0 6px; }
+  .card p{ font-size:15px; color:var(--ink-mute); line-height:1.38; }
+  .spacer{ flex:1; }
+  .foot{ font-size:13px; color:var(--ink-mute); letter-spacing:.04em; }
+  .disclaimer{ font-size:13px; color:var(--ink-mute); line-height:1.4; max-width:60ch; margin-top:20px; }
+  .credit{ display:flex; gap:40px; margin-top:16px; flex-wrap:wrap; }
+  .credit div{ }
+  .credit .num{ font-family:'Bitter',serif; font-size:34px; color:var(--accent); font-weight:700; }
+  .credit .lbl{ font-size:14px; color:var(--ink-mute); }
+  .center{ justify-content:center; }
+  #nav{ position:fixed; bottom:18px; right:22px; font-family:'Hind',sans-serif;
+    font-size:13px; color:#9fb0d6; display:flex; gap:14px; align-items:center; }
+  #nav button{ background:var(--panel); color:var(--ink); border:1px solid var(--rule);
+    border-radius:6px; padding:6px 12px; cursor:pointer; font-size:14px; }
+  .count{ color:#6076a6; }
+  @media (max-width:760px){ .slide{ padding:34px 30px; } h1{ font-size:34px; } h2{ font-size:26px; }
+    .sub{ font-size:18px; } p.body{ font-size:17px; } .grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">Prev</button><span class="count" id="count"></span><button id="next">Next</button></div>
+<script>
+const S = [
+  {t:'title' },
+  {t:'list', kicker:'Who this is for',
+    h:'If this is your business, this hour is for you.',
+    items:[
+      'You are an experienced agent, not a beginner, and you are still doing the work yourself.',
+      'You are busy but not free. The calendar is full and the mind never stops.',
+      'You cut your fee to win the listing more often than you would like to admit.',
+      'You keep buying leads, tools and scripts, and the chase never actually ends.'
+    ]},
+  {t:'big', kicker:'The trap',
+    html:'Real estate taught you one move when business gets slow. <span class="accent">Chase harder.</span> More leads. More calls. More convincing. More discounting.' },
+  {t:'big', kicker:'The reframe',
+    html:'More leads was never the problem to solve. <span class="accent">The chase itself is the problem.</span>' },
+  {t:'part', kicker:'Part one', h:'The agent’s doom loop',
+    sub:'Why working harder keeps producing the same stress and the same discount.' },
+  {t:'body', kicker:'The core problem', h:'Chase, convince, close, repeat.',
+    paras:[
+      'The industry hands every agent the same loop. Chase a lead. Convince them you are worth it. Close the deal, often by cutting your fee to get it over the line. Then wake up empty and chase the next one.',
+      'It feels like hard work, so nobody questions it. But the loop guarantees two things: your fee is always under pressure, and your business depends on you running faster every month.'
+    ]},
+  {t:'body', kicker:'The core problem', h:'Discounting is a symptom, not a strategy.',
+    paras:[
+      'When you chase, you arrive needing the deal. The client feels it, and the only lever left is price. So you give up commission to close, and you teach the market that your fee is negotiable.',
+      'Full fee is not won in the pricing conversation. It is won long before it, by how you show up and who you are to the client.'
+    ]},
+  {t:'big', kicker:'The shift',
+    html:'You do not earn full fee by articulating your value. <span class="accent">You earn it by making the client feel understood.</span>' },
+  {t:'part', kicker:'Part two', h:'The Performance Six',
+    sub:'The six building blocks that let agents cultivate business instead of chasing it.' },
+  {t:'cards', kicker:'The framework', h:'Six blocks. One operating system.',
+    cards:[
+      ['01','A mindset of harmony','Detach from the outcome so you can perform in the moment instead of reacting to it.'],
+      ['02','Time blocking','Protect the few hours that actually produce, and stop letting the day run you.'],
+      ['03','Relationship database','A living CRM of the people who already know you, worked consistently, not sporadically.'],
+      ['04','Process management','Repeatable systems so the business does not live and die on your memory.'],
+      ['05','Tactical empathy','Make the client feel understood before you ever talk about price.'],
+      ['06','Numbers tracking','Face the real data weekly, because behavior is the only thing that moves results.']
+    ]},
+  {t:'body', kicker:'Tactical empathy', h:'Articulate what they feel, not what you offer.',
+    paras:[
+      'Adapted from Chris Voss and the Black Swan Group, tactical empathy flips the sales conversation. Instead of listing why you are the right agent, you say out loud what the client is already thinking and worrying about.',
+      'Accusation audits, labeling and mirroring take the fight out of the room. The client stops defending and starts trusting, and trust is what pays full fee.'
+    ]},
+  {t:'body', kicker:'Tactical empathy', h:'The favorite or the fool.',
+    paras:[
+      'In every listing situation you are either the favorite or the fool. The favorite has the relationship and the trust. The fool is being used to set a price or pressure another agent.',
+      'Knowing which one you are, early, is how you stop pouring energy into deals you were never going to win, and put it where full fee is actually on the table.'
+    ]},
+  {t:'body', kicker:'The skills', h:'Three conversations, drilled under pressure.',
+    paras:[
+      'Everything comes down to three repeatable conversations: the new client discovery call, the full fee conversation, and the pricing conversation.',
+      'The goal is not to remove pressure from these moments. The goal is to perform inside it, so you hold your standard when it matters most instead of folding to relief.'
+    ]},
+  {t:'big', kicker:'The operating system',
+    html:'Relief changes how you feel. <span class="accent">Resolution changes what is true.</span> Full fee agents choose resolution, on purpose, under pressure.' },
+  {t:'part', kicker:'Part three', h:'The full fee agent, in practice',
+    sub:'A business that comes to you, a fee you no longer defend, and a life you are present for.' },
+  {t:'list', kicker:'The full fee agent', h:'The week looks different.',
+    items:[
+      'You work your relationships instead of chasing strangers, so the pipeline fills itself.',
+      'You walk into listing appointments without needing the deal, so your fee holds.',
+      'You say the hard thing about price because your standard is not for sale.',
+      'You stop at the end of the day, because the business runs on a system, not on your adrenaline.'
+    ]},
+  {t:'credit', kicker:'Why listen to me',
+    h:'I have spent thirty years on one question: how agents actually perform.',
+    paras:['Former NFL linebacker, founder of the first real estate coaching program, and co-author of The Full Fee Agent with Chris Voss. The method below is not theory. It is what has worked in the room.'],
+    stats:[['30+','years coaching agents'],['70,000+','hours one on one'],['1st','real estate coaching program']]},
+  {t:'cta' }
+];
+
+const DECK = {
+  title:'The Full Fee Agent',
+  subtitle:'How to earn full commission without chasing a single lead',
+  presenter:'A live masterclass with Steve Shull, Performance Coaching',
+  ctaKicker:'Your next step',
+  ctaHead:'Ready to stop chasing?',
+  ctaBody:'Come see the method in action. Join a live Performance Six coaching call on a complimentary 14-day trial and watch how full fee agents work, every morning, together.',
+  ctaButton:'Start your 14-day trial at performancecoaching.com',
+  disclaimer:'This masterclass is educational. It shares a coaching methodology and is not a guarantee of income, commission, or sales results. Outcomes depend on your own market, effort, and execution.'
+};
+
+const stage = document.getElementById('stage');
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="slide center">
+      <div class="kicker">A masterclass</div>
+      <h1>${DECK.title}</h1>
+      <div class="sub">${DECK.subtitle}.</div>
+      <div class="spacer"></div>
+      <div class="foot">${DECK.presenter}</div></div>`;
+  }
+  if(s.t==='big'){
+    return `<div class="slide center">${s.kicker?`<div class="kicker">${s.kicker}</div>`:''}
+      <div class="big">${s.html}</div></div>`;
+  }
+  if(s.t==='part'){
+    return `<div class="slide center"><div class="kicker">${s.kicker}</div>
+      <h1>${s.h}</h1><div class="sub">${s.sub}</div></div>`;
+  }
+  if(s.t==='body'){
+    return `<div class="slide"><div class="kicker">${s.kicker}</div><h2>${s.h}</h2>
+      ${s.paras.map(p=>`<p class="body">${p}</p>`).join('')}<div class="spacer"></div></div>`;
+  }
+  if(s.t==='list'){
+    return `<div class="slide"><div class="kicker">${s.kicker}</div><h2>${s.h}</h2>
+      <ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul><div class="spacer"></div></div>`;
+  }
+  if(s.t==='cards'){
+    return `<div class="slide"><div class="kicker">${s.kicker}</div><h2>${s.h}</h2>
+      <div class="grid">${s.cards.map(c=>`<div class="card"><div class="n">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('')}</div></div>`;
+  }
+  if(s.t==='credit'){
+    return `<div class="slide"><div class="kicker">${s.kicker}</div><h2>${s.h}</h2>
+      ${s.paras.map(p=>`<p class="body">${p}</p>`).join('')}
+      <div class="credit">${s.stats.map(st=>`<div><div class="num">${st[0]}</div><div class="lbl">${st[1]}</div></div>`).join('')}</div>
+      <div class="spacer"></div></div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="slide center"><div class="kicker">${DECK.ctaKicker}</div>
+      <h1>${DECK.ctaHead}</h1><div class="sub">${DECK.ctaBody}</div>
+      <div class="spacer"></div>
+      <div class="big" style="font-size:24px;max-width:40ch;">${DECK.ctaButton}</div>
+      <div class="disclaimer">${DECK.disclaimer}</div></div>`;
+  }
+  return '<div class="slide"></div>';
+}
+stage.innerHTML = S.map(slideHTML).join('');
+const slides = [...document.querySelectorAll('.slide')];
+let i=0;
+const count=document.getElementById('count');
+function show(n){ slides[i].classList.remove('on'); i=Math.max(0,Math.min(slides.length-1,n));
+  slides[i].classList.add('on'); count.textContent=(i+1)+' / '+slides.length; }
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft')show(i-1); });
+stage.addEventListener('click',()=>show(i+1));
+show(0);
+</script>
+</body>
+</html>
