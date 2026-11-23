@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flirt With Your Followers — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800;900&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#241612;        /* dark warm-clay ground, derived from brand #a7664e */
+    --panel:#33201a;
+    --rule:rgba(230,192,168,0.18);
+    --ink:#f4e9e2;       /* warm off-white */
+    --muted:#c9b2a6;
+    --accent:#e6c0a8;    /* blush, verbatim brand hex */
+    --accent2:#a7664e;   /* terracotta, dominant brand hex */
+    --head:'Libre Franklin',system-ui,sans-serif;
+    --body:'Rubik',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 8vw}
+  .slide{display:none;width:100%;max-width:1040px}
+  .slide.on{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:var(--body);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.8rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:900;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:800;font-size:clamp(1.8rem,4.4vw,3rem);line-height:1.08;letter-spacing:-.01em}
+  .lede{font-size:clamp(1.1rem,2.1vw,1.5rem);color:var(--muted);margin-top:1.4rem;max-width:40ch;line-height:1.5}
+  .big{font-family:var(--head);font-weight:800;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.12;max-width:20ch}
+  .kicker{color:var(--accent);font-weight:700}
+  ul{list-style:none;margin-top:1.8rem;display:grid;gap:1rem;max-width:44ch}
+  li{position:relative;padding-left:2.2rem;font-size:clamp(1.05rem,2vw,1.3rem);color:var(--ink);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:1.1rem;height:3px;background:var(--accent);border-radius:2px}
+  .phase{display:flex;align-items:baseline;gap:1rem}
+  .pnum{font-family:var(--head);font-weight:900;font-size:clamp(3rem,8vw,6rem);color:var(--accent2);line-height:1}
+  .part{font-family:var(--body);font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-size:.85rem;margin-bottom:1rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:2.2rem 2.4rem}
+  .disclaimer{margin-top:2rem;font-size:.82rem;color:var(--muted);max-width:52ch;line-height:1.5}
+  .cta-row{margin-top:2rem;display:inline-block;background:var(--accent);color:#2a1712;font-family:var(--head);font-weight:800;padding:.9rem 1.6rem;border-radius:999px;font-size:1.05rem}
+  .nav{position:fixed;bottom:22px;right:26px;display:flex;gap:10px;align-items:center;z-index:10}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:.5rem .8rem;font-family:var(--body);font-size:.9rem;cursor:pointer}
+  .count{position:fixed;bottom:26px;left:26px;color:var(--muted);font-size:.85rem;letter-spacing:.08em}
+  .brandline{position:fixed;top:24px;left:26px;font-family:var(--head);font-weight:800;color:var(--accent);letter-spacing:.02em;font-size:.95rem}
+</style>
+</head>
+<body>
+<div class="brandline">Cailin Tokarczyk</div>
+<div class="stage" id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',eyebrow:'A live masterclass with Cailin Tokarczyk',h1:'Flirt With Your Followers',lede:'How to turn the audience you already have into consistent, daily buyers.'},
+ {t:'who',part:'Who this is for',h2:'For the business owner who shows up every day and still hears crickets.',lede:'Coaches, service providers, and online business owners who post, go live, and DM, and know they are capable of so much more.'},
+ {t:'trap',part:'The trap',big:'You were told the answer was simple: just post more, grow a bigger audience, and the sales will follow.'},
+ {t:'reframe',big:'Your problem was never your follower count. It is that nobody ever taught your audience to buy.',kicker:true},
+ {t:'part',part:'Part one',h2:'The real problem with growth-at-all-costs.'},
+ {t:'point',h2:'A bigger audience of cold strangers does not sell.',lede:'More reach without a way to warm people up just means more people who scroll past you. Volume is not the lever. Relationship is.'},
+ {t:'point',h2:'There is a gap between a follower and a buyer.',lede:'Most people never close it. They wait for the audience to decide to buy on their own, instead of guiding them there on purpose.'},
+ {t:'part',part:'Part two',h2:'The method: Flirt With Your Followers.'},
+ {t:'phase',pnum:'01',h2:'Are They Hot or Not?',lede:'Read exactly where each follower sits on the journey, from brand new to ready to buy, and speak to them accordingly.'},
+ {t:'phase',pnum:'02',h2:'The Art of Seduction.',lede:'Keep your audience engaged, entertained, and bought in, so attention turns into desire for what you sell.'},
+ {t:'phase',pnum:'03',h2:'Crank Up the Heat.',lede:'Establish your expertise, build trust, warm people to your offers, and drive sales daily so your audience is always ready.'},
+ {t:'point',h2:'Why people follow you, and why they buy.',lede:'When you understand the psychology underneath the scroll, you can intentionally move someone from a random follower to a raving fan on purpose.'},
+ {t:'point',h2:'A simple strategy that sells every single day.',lede:'No song and dance. Content and stories that establish authority and invite the sale, so buying feels like the natural next step.'},
+ {t:'part',part:'Part three',h2:'When your audience stays warm all year.'},
+ {t:'point',h2:'From sporadic sales to consistent cash months.',lede:'When followers arrive already sold on your method, launches stop feeling like a gamble and selling stops feeling like begging.'},
+ {t:'why',part:'Why me',h2:'I built this from the exact shift I made.',lede:'I went from landing a few clients a month to multiple five-figure months, with most of it coming directly from Instagram. I teach what actually moved the needle inside the Power Move Mastermind and Sell the $ex.'},
+ {t:'recap',part:'The method, in one view',h2:'Hot or Not, then Seduction, then Heat.',lede:'Read the room, build the desire, drive the daily sale. That is how the audience you already have becomes your most reliable revenue.'},
+ {t:'cta',eyebrow:'Your next step',h1:'Ready to flirt with your followers?',lede:'If you want help building this inside your own business, come work with me inside the Power Move Mastermind.',cta:'Work with me',disc:'This masterclass is for educational purposes only. No income or result is guaranteed. Results vary from person to person.'},
+];
+let i=0;const stage=document.getElementById('stage');const count=document.getElementById('count');
+function render(){
+ stage.innerHTML='';
+ const s=S[i];const d=document.createElement('div');d.className='slide on';
+ let h='';
+ if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+ if(s.part)h+=`<div class="part">${s.part}</div>`;
+ if(s.h1)h+=`<h1>${s.h1}</h1>`;
+ if(s.t==='phase'){h+=`<div class="phase"><div class="pnum">${s.pnum}</div><div><h2>${s.h2}</h2>${s.lede?`<div class="lede">${s.lede}</div>`:''}</div></div>`;}
+ else{
+   if(s.big)h+=`<div class="big ${s.kicker?'kicker':''}">${s.big}</div>`;
+   if(s.h2)h+=`<h2>${s.h2}</h2>`;
+   if(s.lede)h+=`<div class="lede">${s.lede}</div>`;
+ }
+ if(s.list){h+='<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+ if(s.cta)h+=`<div class="cta-row">${s.cta}</div>`;
+ if(s.disc)h+=`<div class="disclaimer">${s.disc}</div>`;
+ d.innerHTML=h;stage.appendChild(d);
+ count.textContent=(i+1)+' / '+S.length;
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
