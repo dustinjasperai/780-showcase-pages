@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>College Smart Start Masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Zilla+Slab:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1942;
+    --panel:#29276b;
+    --rule:#3a3780;
+    --accent:#7d1417;
+    --ink:#f4f3fb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Zilla Slab',Georgia,serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,94vw);aspect-ratio:16/10;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:clamp(28px,5vw,64px);position:relative;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+  #stage:before{content:"";position:absolute;inset:0;background:radial-gradient(130% 90% at 100% 0%, rgba(125,20,23,.22), transparent 60%);pointer-events:none}
+  .kicker{font-family:'Poppins';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(11px,1.4vw,13px);color:var(--accent);margin-bottom:18px}
+  h1{font-family:'Poppins';font-weight:700;font-size:clamp(28px,5.2vw,52px);line-height:1.08;margin-bottom:18px}
+  h2{font-family:'Poppins';font-weight:600;font-size:clamp(22px,3.8vw,38px);line-height:1.14;margin-bottom:16px}
+  p{font-size:clamp(15px,2vw,21px);line-height:1.5;max-width:40ch;color:#d9d7ef}
+  .big{font-family:'Poppins';font-weight:700;font-size:clamp(30px,6vw,60px);line-height:1.05}
+  ul{list-style:none;margin-top:10px}
+  li{font-size:clamp(15px,2vw,20px);line-height:1.5;padding-left:22px;position:relative;margin-bottom:10px;color:#d9d7ef}
+  li:before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;background:var(--accent);border-radius:2px}
+  .part-n{font-family:'Poppins';font-weight:700;font-size:clamp(50px,11vw,120px);color:var(--rule);line-height:1}
+  .foot{position:absolute;bottom:18px;left:clamp(28px,5vw,64px);right:clamp(28px,5vw,64px);display:flex;justify-content:space-between;font-size:12px;color:#8e8cc0;font-family:'Poppins'}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+  button{font-family:'Poppins';font-weight:600;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px}
+  button:hover{border-color:var(--accent)}
+  #count{font-size:13px;color:#8e8cc0;font-family:'Poppins'}
+  .disc{font-size:clamp(11px,1.4vw,13px);color:#8e8cc0;max-width:52ch;margin-top:18px}
+  .cta-step{font-family:'Poppins';font-weight:600;color:var(--accent);font-size:clamp(17px,2.4vw,24px);margin-top:8px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', kicker:'A College Smart Start Masterclass', h:'Create Your Own Box', s:'How to build a standout college application without turning your house into a pressure cooker.'},
+  {t:'title', kicker:'Who this is for', h:'Parents and students, 9th grade to senior year', s:'If applications feel like a maze and the deadline anxiety has already started, this hour is for you.'},
+  {t:'point', kicker:'The trap', h:'Everyone treats admissions like a math equation', bullets:['Chase the highest GPA and test score','Pad the resume with as many clubs as possible','Apply everywhere and hope one says yes']},
+  {t:'point', kicker:'The reframe', h:'Getting in is not a math equation', s:'High grades and scores alone do not guarantee admission. It takes a focus on what makes a student special, and showing it clearly.'},
+  {t:'part', n:'01', h:'Why most applications blur together'},
+  {t:'point', kicker:'Problem one', h:'Ticking boxes instead of telling a story', s:'When a student tries to look like everyone else, the application reads like everyone else. Committees remember the student who sounds like themselves.'},
+  {t:'point', kicker:'Problem two', h:'One tired advisor, one pair of eyes', s:'Most families get paired with a single counselor juggling dozens of students. Essays get a quick read, and small mistakes slip through at the worst moment.'},
+  {t:'point', kicker:'Problem three', h:'The whole family ends up stressed', s:'Without a system, the process leaks into dinner, weekends, and every conversation. The panic does not improve the application.'},
+  {t:'part', n:'02', h:'The method we teach'},
+  {t:'point', kicker:'Pillar', h:'Identify your brand', s:'Find what already makes a student unique, then deepen, broaden, and amplify it. Create your own box instead of squeezing into someone else\'s.'},
+  {t:'point', kicker:'Pillar', h:'Build a real college list', s:'A balanced, thoughtfully researched list of matches, reaches, and safeties from nearly 6,000 schools, aimed at fit and at merit and financial aid.'},
+  {t:'point', kicker:'Pillar', h:'Write the essay that sounds like you', s:'The personal statement is where a student becomes a person. We help them stay authentic and memorable, and we chunk essays into manageable sections.'},
+  {t:'point', kicker:'Pillar', h:'Supplementals and the activities list', s:'School-specific essays and a sharp activities list that shows depth, not just a long list. These are where good applications become strong ones.'},
+  {t:'point', kicker:'Pillar', h:'Make college affordable', s:'Merit scholarships, need-based aid, FAFSA, the Net Price Calculator, and the CSS Profile, so fit never gets priced out of reach.'},
+  {t:'point', kicker:'The difference', h:'A whole team, not one advisor', bullets:['Every piece is seen, reviewed, and approved by multiple people','Strategy, essays, and editing each handled by a specialist','Nothing gets sent until the team signs off']},
+  {t:'part', n:'03', h:'Your own box, start to finish'},
+  {t:'point', kicker:'The experience', h:'Bite-sized, time-efficient, destressed', s:'We simplify, streamline, and personalize the process. The work gets done in manageable pieces, and the panic leaves the dinner table.'},
+  {t:'point', kicker:'Why trust us', h:'30 years of this, done right', s:'Jodi Furman has advised applicants for three decades. Dr. Sarah Rothschild leads curriculum and writing. Students have landed at Ivy League, selective, and international schools.'},
+  {t:'point', kicker:'The outcome', h:'The just-right school for YOU', s:'Not the most boxes ticked. The school that fits the student, that they are proud to attend, and that they can afford.'},
+  {t:'cta', kicker:'Your next step', h:'Start with College Smart Start', step:'Join the Admissions Academy or book a Full Service consultation to build your application with our team.', disc:'No admissions outcome or result is guaranteed. Results vary by student, effort, and individual circumstances. This masterclass is educational and informational only.'}
+];
+let i=0;
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+function slide(d){
+  let inner='';
+  if(d.kicker) inner+=`<div class="kicker">${d.kicker}</div>`;
+  if(d.t==='part'){ inner+=`<div class="part-n">${d.n}</div><h2>${d.h}</h2>`; }
+  else if(d.t==='title'){ inner+=`<h1>${d.h}</h1>`; if(d.s) inner+=`<p>${d.s}</p>`; }
+  else if(d.t==='cta'){ inner+=`<h1>${d.h}</h1>`; if(d.step) inner+=`<div class="cta-step">${d.step}</div>`; if(d.disc) inner+=`<div class="disc">${d.disc}</div>`; }
+  else { inner+=`<h2>${d.h}</h2>`; if(d.s) inner+=`<p>${d.s}</p>`; if(d.bullets){ inner+='<ul>'+d.bullets.map(b=>`<li>${b}</li>`).join('')+'</ul>'; } }
+  inner+=`<div class="foot"><span>College Smart Start</span><span>collegesmartstart.com</span></div>`;
+  stage.innerHTML=inner;
+  count.textContent=(i+1)+' / '+S.length;
+}
+function go(n){ i=Math.max(0,Math.min(S.length-1,i+n)); slide(S[i]); }
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')go(1); if(e.key==='ArrowLeft')go(-1); });
+slide(S[0]);
+</script>
+</body>
+</html>
