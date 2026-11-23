@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moving Through Your Expansion Edge - Brenda Terry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Hanken+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf5f1;       /* lifted blush, from brand #f8f0ed */
+    --panel:#f3e9e3;    /* deeper blush card */
+    --ink:#633137;      /* burgundy, her dominant (63 uses) */
+    --accent:#d48e93;   /* dusty rose, her link color (7 uses) */
+    --body:#4a4038;     /* warm brown-gray body text */
+    --rule:#633137;
+    --display:'Spectral',Georgia,serif;
+    --sans:'Hanken Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--body);font-family:var(--sans);font-weight:400;
+    -webkit-font-smoothing:antialiased;}
+  .deck{scroll-snap-type:y mandatory;overflow-y:auto;height:100vh}
+  .slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;padding:8vh 9vw;position:relative;border-bottom:1px solid #eaddd5}
+  .edge{position:absolute;left:9vw;top:7vh;width:56px;height:2px;background:var(--rule)}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.72rem;color:var(--accent);margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:600;color:var(--ink);line-height:1.02;
+    font-size:clamp(2.6rem,6vw,5rem);letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;color:var(--ink);line-height:1.06;
+    font-size:clamp(2rem,4.4vw,3.4rem);margin-bottom:1.3rem}
+  .lede{font-family:var(--display);font-style:italic;font-size:clamp(1.3rem,2.4vw,1.9rem);
+    color:var(--body);max-width:40ch;margin-top:1.4rem;line-height:1.3}
+  p.body{font-size:clamp(1.02rem,1.4vw,1.2rem);max-width:46ch;line-height:1.6;margin-top:1rem}
+  ul{list-style:none;margin-top:1.6rem;max-width:48ch}
+  li{font-size:clamp(1rem,1.4vw,1.18rem);line-height:1.5;padding:.55rem 0 .55rem 1.5rem;
+    position:relative;border-bottom:1px solid #ecdfd7}
+  li:before{content:"";position:absolute;left:0;top:1.15rem;width:9px;height:9px;
+    background:var(--accent);border-radius:50%}
+  .phase{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem;max-width:62rem}
+  .phase .step{background:var(--panel);border-left:3px solid var(--ink);padding:1.2rem 1.1rem;border-radius:4px}
+  .phase .step .n{font-family:var(--display);font-size:1.6rem;color:var(--accent);font-weight:600}
+  .phase .step h3{font-family:var(--sans);font-weight:700;font-size:1.02rem;color:var(--ink);margin:.3rem 0 .4rem}
+  .phase .step p{font-size:.92rem;line-height:1.45}
+  .brandline{margin-top:2.6rem;font-family:var(--sans);font-weight:600;letter-spacing:.04em;
+    font-size:.95rem;color:var(--ink)}
+  .cta-wrap{background:var(--ink);color:var(--bg);border-radius:6px;padding:clamp(2rem,4vw,3rem);
+    max-width:54rem}
+  .cta-wrap .eyebrow{color:var(--accent)}
+  .cta-wrap h2{color:var(--bg)}
+  .cta-wrap p{color:#f2e4dd;font-size:1.08rem;line-height:1.6;max-width:44ch;margin-top:.8rem}
+  .cta-steps{margin-top:1.6rem}
+  .cta-steps li{color:#f6ece7;border-bottom:1px solid #7a4a50}
+  .cta-steps li:before{background:var(--accent)}
+  .disclaimer{margin-top:1.8rem;font-size:.78rem;line-height:1.5;color:#caa7a2;max-width:60ch}
+  .credit{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:1.8rem}
+  .credit div{max-width:16rem}
+  .credit .big{font-family:var(--display);font-size:2.6rem;color:var(--ink);line-height:1}
+  .credit .lbl{font-size:.9rem;margin-top:.4rem;line-height:1.4}
+  .pager{position:fixed;right:1.4rem;bottom:1.1rem;font-size:.75rem;color:var(--accent);
+    font-family:var(--sans);letter-spacing:.1em}
+  .kicker{font-family:var(--sans);font-weight:700;color:var(--accent);font-size:.95rem;
+    letter-spacing:.06em;margin-bottom:.8rem}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="pager" id="pager"></div>
+<script>
+const S=[
+  {t:'title',eyebrow:'A live masterclass for women in business',
+   h:'Moving Through Your Expansion Edge',
+   lede:'When pushing harder stops working, there is another way through.',
+   brand:'Brenda Terry · For Women in Business'},
+
+  {t:'copy',eyebrow:'Who this is for',
+   h:'You already know how to make things happen.',
+   body:"You have vision, and you do whatever it takes to bring it to life. You find your way forward even when there is no map for it. You show up for the people who count on you, even when there is nothing left to give."},
+
+  {t:'list',eyebrow:'The trap',
+   h:'Lately, the same effort takes more out of you.',
+   items:['The decisions you used to make quickly now sit with you longer.',
+          'Things that felt manageable leave you more tired than they should.',
+          'This one thing will not budge, no matter what you try.',
+          'And you cannot seem to recover as fast as you used to.']},
+
+  {t:'hook',kicker:'The question you keep asking',
+   h:'"What am I doing to cause this?"',
+   lede:'It is the wrong question. The problem is not what you are doing. It is what you are holding, and what it costs you to keep holding it.'},
+
+  {t:'part',eyebrow:'Part one',
+   h:'The friction is not personal. It is structural.'},
+
+  {t:'copy',eyebrow:'The signal',
+   h:'Friction is information.',
+   body:"When what should work does not work, you blame yourself for not solving it on your own. But friction is a signal that demand has outgrown the capacity you are carrying. More positivity will not touch it. More effort makes it louder."},
+
+  {t:'copy',eyebrow:'Why insight is not enough',
+   h:'Knowing is not the same as changing.',
+   body:"You have read the books and done the mindset work. Insight shows you the pattern, but it does not automatically produce lasting change. That is why the relief never holds: you are managing around the pattern instead of resolving it."},
+
+  {t:'part',eyebrow:'Part two',
+   h:'The layer underneath.'},
+
+  {t:'copy',eyebrow:'The Layer Underneath',
+   h:'Old rules, new access.',
+   body:"You have earned new access to money, power, and visibility. But the old rules you inherited about how a woman is allowed to take up space are still running underneath it. The friction lives in that gap, below the behavior most coaching tries to fix."},
+
+  {t:'copy',eyebrow:'Living in the Middle',
+   h:'You are operating in two systems at once.',
+   body:"Living in the Middle is the place where you are still adapting to the old rules while reaching for the new possibility. It is not a character flaw. It is a structure, and once you can locate yourself inside it, you can do something about it."},
+
+  {t:'copy',eyebrow:'Impossible Assignments',
+   h:'Be visible, but not too much.',
+   body:"Grow, but do not change. Lead, but stay likeable. When the old expectation and the new choice are both active at once, they hand you contradictions you cannot win. Naming the Impossible Assignment is how the invisible bind becomes visible."},
+
+  {t:'part',eyebrow:'Part three',
+   h:'Capacity Recalibration.'},
+
+  {t:'copy',eyebrow:'The Capacity Recalibration System',
+   h:'You do not push harder. You free up what you are holding.',
+   body:"Recalibration works with the deeper structures that drive your patterns and responses, so the energy they tie up comes back to you. It is not a breakthrough you have to force. It is a bigger container for the business and the life you are already building."},
+
+  {t:'phase',eyebrow:'How the work moves',
+   h:'Four phases, in order.',
+   steps:[
+     {n:'1',title:'Pattern Recognition',p:'See the friction as structural, not as personal failure.'},
+     {n:'2',title:'System Preparation',p:'Ready your capacity for change. The step most approaches skip.'},
+     {n:'3',title:'Root Resolution',p:'Work the friction at its source instead of managing around it.'},
+     {n:'4',title:'Integration',p:'Let the new capacity become steady, sustainable, and yours.'}]},
+
+  {t:'list',eyebrow:'What becomes available',
+   h:'This is what more room looks like.',
+   items:['Clarity about what is actually going on, so you know what to do.',
+          'Movement on the thing that would not budge.',
+          'Decisions that feel lighter, because you are not carrying the old rule into them.',
+          'Capacity to handle what comes up without it taking you out.']},
+
+  {t:'credit',eyebrow:'Why me',
+   h:'I have spent a career inside this pattern.',
+   credits:[
+     {big:'30+',lbl:'years building and running my own companies as an entrepreneur.'},
+     {big:'~20',lbl:'years in coaching and human-change work with women in business.'},
+     {big:'5',lbl:'bodies of training: NLP, coaching, hypnosis, EFT, and trauma-informed practice.'}],
+   note:'This is the same model I use in my own life, with my private clients, and inside my group work, to create change that holds.'},
+
+  {t:'hook',kicker:'The promise',
+   h:'Not made small.',
+   lede:'Made stable, accessible, and yours. What you are capable of was never in question. What you have been holding is not random, and there is a way through it.'},
+
+  {t:'cta',eyebrow:'Your next step',
+   h:'Let us work through it together.',
+   body:'If this is the layer you have been circling, we go further than a masterclass can. Choose the path that fits where you are now.',
+   steps:['Breakthroughs Made Simple: a 15-week group program with private support, to resolve the pattern at the root.',
+          'Business Foundations: one-on-one work on your offers, messaging, and the way clients find and say yes to you.',
+          'Private Breakthrough Work: a six-month one-on-one intensive for the deeper work.'],
+   disclaimer:'I am not a licensed psychologist or healthcare professional, and this masterclass does not replace medical or therapeutic care. It provides educational insight and support only. Results will vary based on your participation, application, and individual circumstances. Any examples or reflections shared are personal experiences and are not guarantees of specific outcomes.',
+   brand:'Brenda Terry · brendaterry.co'}
+];
+
+function esc(x){return (x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  const deck=document.getElementById('deck');
+  S.forEach(s=>{
+    const sec=document.createElement('section');
+    sec.className='slide';
+    let inner='<span class="edge"></span>';
+    if(s.t==='title'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h1>${esc(s.h)}</h1>`+
+             `<div class="lede">${esc(s.lede)}</div><div class="brandline">${esc(s.brand)}</div>`;
+    } else if(s.t==='copy'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2>${esc(s.h)}</h2>`+
+             `<p class="body">${esc(s.body)}</p>`;
+    } else if(s.t==='list'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2>${esc(s.h)}</h2><ul>`+
+             s.items.map(i=>`<li>${esc(i)}</li>`).join('')+`</ul>`;
+    } else if(s.t==='hook'){
+      inner+=`<div class="kicker">${esc(s.kicker)}</div><h1>${esc(s.h)}</h1>`+
+             `<div class="lede">${esc(s.lede)}</div>`;
+    } else if(s.t==='part'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h1>${esc(s.h)}</h1>`;
+    } else if(s.t==='phase'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2>${esc(s.h)}</h2><div class="phase">`+
+             s.steps.map(st=>`<div class="step"><div class="n">${esc(st.n)}</div><h3>${esc(st.title)}</h3><p>${esc(st.p)}</p></div>`).join('')+`</div>`;
+    } else if(s.t==='credit'){
+      inner+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2>${esc(s.h)}</h2><div class="credit">`+
+             s.credits.map(c=>`<div><div class="big">${esc(c.big)}</div><div class="lbl">${esc(c.lbl)}</div></div>`).join('')+
+             `</div><p class="body">${esc(s.note)}</p>`;
+    } else if(s.t==='cta'){
+      inner+=`<div class="cta-wrap"><div class="eyebrow">${esc(s.eyebrow)}</div><h2>${esc(s.h)}</h2>`+
+             `<p>${esc(s.body)}</p><ul class="cta-steps">`+
+             s.steps.map(i=>`<li>${esc(i)}</li>`).join('')+`</ul>`+
+             `<div class="disclaimer">${esc(s.disclaimer)}</div>`+
+             `<div class="brandline" style="color:var(--accent)">${esc(s.brand)}</div></div>`;
+    }
+    sec.innerHTML=inner;
+    deck.appendChild(sec);
+  });
+}
+render();
+const pager=document.getElementById('pager');
+const deck=document.getElementById('deck');
+function upd(){const i=Math.round(deck.scrollTop/window.innerHeight)+1;pager.textContent=i+' / '+S.length;}
+deck.addEventListener('scroll',upd);upd();
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'||e.key==='PageDown'){deck.scrollBy({top:window.innerHeight,behavior:'smooth'});e.preventDefault();}
+  if(e.key==='ArrowUp'||e.key==='PageUp'){deck.scrollBy({top:-window.innerHeight,behavior:'smooth'});e.preventDefault();}
+});
+</script>
+</body>
+</html>
