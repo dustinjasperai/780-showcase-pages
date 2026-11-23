@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Anchor — A Leadership Masterclass with Dr. Denise Simpson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f8;      /* her dominant warm off-white ground */
+    --panel:#eef1f4;   /* light slate tint of her #38476b */
+    --ink:#004369;     /* her deep teal-navy, most-used brand color */
+    --accent:#83152d;  /* her burgundy, distinctive warm signal */
+    --muted:#38476b;   /* her slate blue */
+    --line:#d9dfe6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--muted);font-family:'Karla',system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,96vw);aspect-ratio:16/9;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.35);border-radius:6px}
+  .slide{position:absolute;inset:0;padding:60px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  h1{font-family:'Lora',serif;font-weight:700;font-size:54px;line-height:1.05;color:var(--ink)}
+  h2{font-family:'Lora',serif;font-weight:700;font-size:37px;line-height:1.14;color:var(--ink);margin-bottom:16px}
+  .eyebrow{font-family:'Karla',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--accent);margin-bottom:16px}
+  p{font-size:22px;line-height:1.5;color:var(--muted);max-width:42ch;margin-top:12px}
+  .big{font-family:'Lora',serif;font-size:30px;color:var(--ink);max-width:36ch;line-height:1.25}
+  ul{margin:14px 0 0 0;list-style:none}
+  li{font-size:21px;line-height:1.45;color:var(--muted);padding-left:28px;position:relative;margin:12px 0;max-width:46ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:11px;height:11px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .step{font-family:'Karla',sans-serif;font-weight:700;font-size:19px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+  .rule{width:64px;height:4px;background:var(--accent);margin:22px 0}
+  .credit{font-size:17px;color:var(--muted);margin-top:26px}
+  .panel{background:var(--panel);border-left:5px solid var(--accent);padding:20px 24px;border-radius:4px;margin-top:14px;font-size:20px;color:var(--ink);max-width:44ch}
+  .disc{font-size:14px;color:var(--muted);margin-top:24px;max-width:54ch;line-height:1.45}
+  .cta{font-family:'Karla',sans-serif;font-weight:700;font-size:20px;color:#fff;background:var(--accent);display:inline-block;padding:14px 26px;border-radius:4px;margin-top:20px}
+  .foot{position:absolute;bottom:22px;left:72px;font-family:'Karla',sans-serif;font-size:12px;letter-spacing:.09em;color:var(--muted);text-transform:uppercase}
+  #nav{position:fixed;bottom:18px;right:22px;color:#fff;font-family:'Karla',sans-serif;font-size:14px;opacity:.9}
+  #nav button{font:inherit;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:4px;padding:6px 12px;cursor:pointer;margin-left:6px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><span id="count"></span><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title'},
+ {t:'promise',eyebrow:'What you will leave with',h:'This hour is for the leader who is doing everything right and still feels off-purpose.',p:'By the end you will have a method for leading from who you are, not the role you hold, so you can carry the weight without losing yourself in it.'},
+ {t:'audience',eyebrow:'Who this is for',h:'You lead a team, a family, a community, or a movement.',list:['You hit the targets and still feel overwhelmed and unseen','You are performing a version of yourself you no longer recognize','You suspect there has to be another way to lead, you just have not been shown it']},
+ {t:'trap',eyebrow:'The trap',h:'The harder you push, the more the pressure wins.',p:'So you add more hours, more control, more hustle. And the gap between who you are and how you lead grows wider every quarter.'},
+ {t:'problem',eyebrow:'The real problem',big:'The cost is not your capacity. It is separating who you are from how you lead.',p:'When identity and leadership split, every decision gets heavier, because you are leading from the title instead of from yourself.'},
+ {t:'part1',eyebrow:'Part one',h:'Leadership from the role is borrowed.',p:'A title can be taken. Your presence, your values, and your clarity cannot. Leaders who lead from the role burn out because they are running on something that was never theirs to begin with.'},
+ {t:'method',eyebrow:'Part two',h:'The Anchor Method',step:'Descend · Anchor · Ascend',p:'A three-part practice for going deep before you rise, so you lead from a grounded place instead of a reactive one.'},
+ {t:'descend',eyebrow:'Anchor Method',step:'1 · Descend',h:'Look beneath the surface of the challenge.',p:'Most leaders manage the symptom on the surface. Descend goes under it, to the belief and the pattern actually driving how you are responding.'},
+ {t:'anchor',eyebrow:'Anchor Method',step:'2 · Anchor',h:'Reconnect with what matters most.',p:'Before you decide or react, you anchor into your values and your center. This is where reactivity turns into intention.'},
+ {t:'ascend',eyebrow:'Anchor Method',step:'3 · Ascend',h:'Return ready to lead with intention.',p:'You come back to the team, the room, and the decision grounded, clear, and fully yourself, carrying the weight without being crushed by it.'},
+ {t:'five',eyebrow:'The framework',h:'The Five Anchors',p:'Five points of ground that let you decide from values instead of pressure, especially when the stakes and the noise are highest.',panel:'Grounded decisions come from descent into stillness and a return to centered presence, not from reacting faster.'},
+ {t:'pressure',eyebrow:'Under pressure',h:'React less. Lead more.',list:['Name the pressure instead of absorbing it','Return to your anchors before you respond','Choose the decision your values would make, not the one fear would']},
+ {t:'integration',eyebrow:'The integration',h:'Mindset, skill set, strategy.',list:['Mindset, the inner game most leadership training skips','Skill set, the capability to lead people, not just manage tasks','Strategy, the execution that turns clarity into results']},
+ {t:'wholeness',eyebrow:'Integrated leadership',big:'Lead from wholeness, not performance.',p:'When values, inner clarity, and impact are aligned instead of compartmentalized, results come without self-sacrifice. That is the whole point.'},
+ {t:'shift',eyebrow:'The shift in practice',h:'A week later, the difference is visible.',list:['Decisions feel lighter because they come from your center','Your team feels led by a person, not managed by a role','You end the day tired in a good way, still recognizing yourself']},
+ {t:'whyme',eyebrow:'Why me',h:'I spent 27 years inside the system this method replaces.',p:'Ph.D. in Leadership Studies. Master Certified Coach. Fifteen years in higher-education administration. I left because I knew there had to be another way, and I built it.',credit:'Dr. Denise Simpson · Masters of Leadership Institute'},
+ {t:'recap',eyebrow:'Recap',h:'You now have the map.',list:['Descend beneath the pressure','Anchor in what matters most','Ascend and lead with intention']},
+ {t:'cta',eyebrow:'Your next step',h:'Ready to do this work for real?',p:'If this hour gave you a different way to lead, the next step is to go deeper, together. Apply to work with me one-on-one, or begin the Mastery Certification.',cta:'Apply for private coaching',disc:'Educational content only. No specific result is guaranteed. Results vary based on your own effort, context, and circumstances.'}
+];
+
+const stage=document.getElementById('stage');
+function slideHTML(s){
+  if(s.t==='title'){
+    return `<div class="eyebrow">A live leadership masterclass</div>
+      <h1>Find Your Anchor</h1><div class="rule"></div>
+      <p class="big">Leading without losing yourself.</p>
+      <div class="credit">With Dr. Denise Simpson, Ph.D. and Master Certified Coach</div>
+      <div class="foot">The Anchor Method</div>`;
+  }
+  if(s.t==='cta'){
+    return `<div class="eyebrow">${s.eyebrow}</div>
+      <h2>${s.h}</h2>
+      <p>${s.p}</p>
+      <span class="cta">${s.cta}</span>
+      <div class="disc">${s.disc}</div>
+      <div class="foot">Dr. Denise Simpson · Masters of Leadership Institute</div>`;
+  }
+  let h='';
+  if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.step)h+=`<div class="step">${s.step}</div>`;
+  if(s.h)h+=`<h2>${s.h}</h2>`;
+  if(s.big)h+=`<p class="big">${s.big}</p>`;
+  if(s.p)h+=`<p>${s.p}</p>`;
+  if(s.panel)h+=`<div class="panel">${s.panel}</div>`;
+  if(s.list){h+=`<ul>`;s.list.forEach(x=>h+=`<li>${x}</li>`);h+=`</ul>`;}
+  if(s.credit)h+=`<div class="credit">${s.credit}</div>`;
+  return h;
+}
+let i=0;
+function render(){
+  stage.innerHTML='';
+  const d=document.createElement('section');
+  d.className='slide on';
+  d.innerHTML=slideHTML(S[i]);
+  stage.appendChild(d);
+  document.getElementById('count').textContent=(i+1)+' / '+S.length+'  ';
+}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
