@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Some Stories Land in the Body, a masterclass by Casey Erin Wood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Mulish:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ee; --panel:#efe7dc; --ink:#212121; --accent:#d9356d;
+    --muted:#6b645c; --rule:#d8cfc2;
+    --serif:'Prata',Georgia,serif;
+    --sans:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#1c1a17;color:var(--ink);font-family:var(--sans);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,96vw);aspect-ratio:16/10;position:relative}
+  .slide{position:absolute;inset:0;background:var(--bg);border:1px solid var(--rule);
+    padding:7% 8%;display:none;flex-direction:column;justify-content:center;overflow:hidden}
+  .slide.on{display:flex}
+  .slide.dark{background:var(--ink);color:var(--bg);border-color:#000}
+  .slide.panel{background:var(--panel)}
+  .kick{font-family:var(--sans);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:22px}
+  .slide.dark .kick{color:var(--accent)}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,6vw,62px);line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,46px);line-height:1.08}
+  .sub{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(18px,2.6vw,27px);color:var(--muted);margin-top:18px;max-width:30ch}
+  .slide.dark .sub{color:#d9cfc4}
+  .body{font-size:clamp(15px,1.8vw,19px);line-height:1.6;margin-top:22px;max-width:42ch;color:var(--ink)}
+  .slide.dark .body{color:#efe7dc}
+  ul{list-style:none;margin-top:26px;max-width:40ch}
+  li{font-size:clamp(15px,1.9vw,20px);line-height:1.45;padding-left:26px;position:relative;margin:13px 0}
+  li:before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--accent);
+    border-radius:50% 50% 50% 0;transform:rotate(45deg)}
+  .quote{font-family:var(--serif);font-weight:500;font-size:clamp(28px,4.8vw,52px);line-height:1.12;max-width:20ch}
+  .quote .accent{color:var(--accent)}
+  .cite{font-family:var(--sans);font-size:14px;letter-spacing:.04em;color:var(--muted);margin-top:28px}
+  .slide.dark .cite{color:#c9bfb4}
+  .part-num{font-family:var(--serif);font-size:clamp(60px,12vw,150px);color:var(--accent);line-height:.9;font-weight:400}
+  .part-label{font-family:var(--serif);font-size:clamp(24px,4vw,42px);margin-top:10px}
+  .disc{font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:34px;max-width:50ch;line-height:1.5}
+  .cta-step{display:inline-block;margin-top:26px;font-family:var(--sans);font-weight:700;letter-spacing:.04em;
+    border:2px solid var(--accent);color:var(--accent);padding:14px 26px;border-radius:2px;font-size:16px}
+  .brandline{position:absolute;left:8%;bottom:5.4%;font-family:var(--sans);font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted)}
+  .slide.dark .brandline{color:#9b9188}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:16px;align-items:center;
+    font-family:var(--sans);color:#cdbfae;font-size:13px;z-index:5}
+  .nav button{background:none;border:1px solid #4a443d;color:#e7dccd;border-radius:3px;padding:7px 14px;cursor:pointer;font-size:13px}
+  .nav button:hover{border-color:var(--accent);color:#fff}
+  .count{min-width:54px;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev">&larr; Prev</button>
+  <span class="count" id="count"></span>
+  <button id="next">Next &rarr;</button>
+</div>
+<script>
+const S=[
+  {t:'title',cls:'',k:'A live masterclass · Ruby Slipper School of Magic',
+   h:'Why Some Stories Land in the Body',sub:'and others just lie there on the page'},
+  {t:'promise',cls:'panel',k:'The next hour',
+   h:'Why the book you are meant to write has stalled, and the practice that gets it moving again.',
+   sub:'No word-count hacks. No pushing harder. A different door in.'},
+  {t:'who',cls:'',k:'Who this is for',h:'The smart woman with a book in her',
+   b:['You have started it two or three times already',
+      'You refuse a ghostwriter and you refuse to fake it with AI',
+      'You know, quietly, that this book matters',
+      'And it is still not on the page']},
+  {t:'trap',cls:'',k:'The trap',h:'You have been told it is a discipline problem',
+   body:'Write a thousand words a day. Outline harder. Just push through. So you push. You set the alarm, you clear the morning, you sit down. And the writing still will not come. The conclusion you reach is that something is wrong with you.'},
+  {t:'reframe',cls:'dark',k:'The reframe',
+   h:'The stuck was never on the page.',sub:'It is in the writer.'},
+  {t:'part',cls:'panel',num:'One',label:'Why the book will not come'},
+  {t:'problem',cls:'',k:'Part one',h:'Craft is not your bottleneck',
+   body:'You already know how to write a sentence. You have written beautifully before. The block is older and deeper than craft, which is exactly why every craft fix has quietly failed you.'},
+  {t:'problem',cls:'',k:'Part one',h:'The body keeps the score',
+   body:'The story you keep circling touches something your nervous system has decided is unsafe to say out loud. So it protects you. The inner critic shows up right on schedule, the chair gets uncomfortable, the laundry suddenly needs doing. That is not weakness. That is a body doing its job.'},
+  {t:'quote',cls:'dark',q:['Why do some stories land in the body,','and others just ',{a:'lie there on the page?'}],
+   cite:'The answer lives in the writer.'},
+  {t:'part',cls:'panel',num:'Two',label:'The Ruby Slipper method'},
+  {t:'pillar',cls:'',k:'Pillar one',h:'You already have the power',
+   body:'The ruby slippers were on her feet the whole time. Nobody is arriving to grant you permission to call yourself a Writer. The capacity was always yours. We start by naming that out loud, because the rest does not work until you do.'},
+  {t:'pillar',cls:'',k:'Pillar two',h:'Find the real obstacle',
+   body:'A manuscript rarely stalls on plot. It stalls on a fear, an identity, or a single true sentence you are not yet ready to write. We locate the actual obstacle under the stall, because you cannot move what you have not named.'},
+  {t:'pillar',cls:'',k:'Pillar three',h:'Quiet the critic',
+   body:'You write in response to a gentle prompt, alone among others, with no fixing and no performance. The nervous system settles. The guard comes down. And the truest line, the one you could not reach by force, surfaces on its own.'},
+  {t:'pillar',cls:'',k:'Pillar four',h:'Trust. Surrender. Leap.',
+   body:'Trust yourself and the magic of the thing. Surrender the outcome, the reviews, the fear of who reads it. Then leap, get your body into the chair and into the work. This is the move from circling the book to actually writing it.'},
+  {t:'part',cls:'panel',num:'Three',label:'What the writing becomes'},
+  {t:'look',cls:'',k:'Part three',h:'A practice, not a sprint',
+   body:'The goal is not a heroic weekend you cannot repeat. It is a sustainable practice where the pages keep coming after the session ends, and the writing stops being a fight you brace for.'},
+  {t:'reframe',cls:'dark',k:'The shift',
+   h:'You stop writing about the book.',sub:'You start writing the book.'},
+  {t:'why',cls:'',k:'Why me',h:'Casey Erin Wood',
+   b:['Founder of the Ruby Slipper School of Magic; over a decade with hundreds of women',
+      'Gateless-trained writing teacher, certified life coach, breathwork facilitator',
+      'Essays in The New York Times, HuffPost, The Muse, and Scary Mommy',
+      'From a long line of Irish Seanchai, the old keepers of story']},
+  {t:'proof',cls:'panel',k:'In their words',
+   q:['I fell back in love with my book. Not just the idea of it. The actual writing.'],
+   cite:'Tanya Geisler, Leadership Coach and Keynote Speaker',
+   extra:'She listens in a way that goes beyond the page, beyond the words.  (Sara Alvarado, Speaker and Author)'},
+  {t:'cta',cls:'',k:'If this is your book’s year',h:'Start with a Fit Check',
+   body:'A free fifteen-minute conversation about where your book actually is and what it needs next. No pressure, no pitch. Just a clear read on your next real step.',
+   step:'Book your free Fit Check',
+   disc:'This masterclass is educational. It shares a writing method and a practice; it is not a guarantee of publication, income, or any specific outcome. Results vary with the writer and the work.'}
+];
+
+function h(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function render(slide){
+  const el=h('div','slide '+(slide.cls||''));
+  if(slide.k) el.appendChild(h('div','kick',slide.k));
+  if(slide.t==='part'){
+    el.appendChild(h('div','part-num',slide.num));
+    el.appendChild(h('div','part-label',slide.label));
+  } else if(slide.t==='quote'||(slide.t==='proof'&&slide.q)){
+    const q=h('div','quote');
+    q.innerHTML = slide.q.map(p=> typeof p==='string'? p+' ' : '<span class="accent">'+p.a+'</span>').join('');
+    el.appendChild(q);
+    if(slide.cite) el.appendChild(h('div','cite',slide.cite));
+    if(slide.extra) el.appendChild(h('div','sub','&ldquo;'+slide.extra));
+  } else {
+    if(slide.h) el.appendChild(h(slide.t==='title'?'h1':'h2',null,slide.h));
+    if(slide.sub) el.appendChild(h('div','sub',slide.sub));
+    if(slide.body) el.appendChild(h('div','body',slide.body));
+    if(slide.b){const ul=h('ul');slide.b.forEach(x=>ul.appendChild(h('li',null,x)));el.appendChild(ul);}
+    if(slide.step) el.appendChild(h('div','cta-step',slide.step));
+    if(slide.disc) el.appendChild(h('div','disc',slide.disc));
+  }
+  el.appendChild(h('div','brandline','Ruby Slipper School of Magic'));
+  return el;
+}
+const stage=document.getElementById('stage');
+S.forEach(s=>stage.appendChild(render(s)));
+const slides=[...stage.children];
+let i=0;
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('count').textContent=(i+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
