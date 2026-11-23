@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Idea to Income — A Masterclass with Jess Glazer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f3a47;        /* deeper shade of brand teal #114f63 */
+    --panel:#15495a;     /* brand teal panel */
+    --rule:#5f8a96;      /* desaturated teal */
+    --accent:#b56f3b;    /* brand copper */
+    --mint:#94eeb8;      /* brand mint, used sparingly */
+    --ink:#f4f5f1;       /* brand off-white */
+    --muted:#bcd0d6;
+    --display:'DM Serif Display', Georgia, serif;
+    --body:'Mulish', -apple-system, system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{position:relative;height:100vh;width:100vw;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .eyebrow{font-size:clamp(.8rem,1.3vw,1rem);letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:1.6rem}
+  .kicker{font-size:clamp(.8rem,1.3vw,1rem);letter-spacing:.22em;text-transform:uppercase;
+    color:var(--mint);font-weight:700;margin-bottom:1.2rem}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6.5vw,5.2rem);line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,4.6vw,3.6rem);line-height:1.08}
+  .sub{font-size:clamp(1.05rem,2.1vw,1.6rem);color:var(--muted);margin-top:1.6rem;max-width:40ch;font-weight:300;line-height:1.5}
+  .big{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,4rem);line-height:1.1;max-width:20ch}
+  p.body{font-size:clamp(1.05rem,2vw,1.5rem);color:var(--ink);margin-top:1.4rem;max-width:44ch;line-height:1.55;font-weight:300}
+  ul.pts{margin-top:2rem;list-style:none;max-width:48ch}
+  ul.pts li{font-size:clamp(1rem,1.9vw,1.45rem);padding:.55rem 0 .55rem 2.2rem;position:relative;
+    border-bottom:1px solid rgba(95,138,150,.3);font-weight:300;line-height:1.4}
+  ul.pts li:before{content:"";position:absolute;left:0;top:1.15rem;width:.9rem;height:.9rem;
+    border:2px solid var(--accent);border-radius:50%}
+  .elems{margin-top:2.2rem;display:grid;gap:1rem;max-width:62ch}
+  .elem{display:grid;grid-template-columns:auto 1fr;gap:1.4rem;align-items:baseline;
+    padding:1rem 1.3rem;background:var(--panel);border-left:4px solid var(--accent);border-radius:6px}
+  .elem .n{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,2.4vw,1.8rem);color:var(--accent)}
+  .elem .d{font-size:clamp(.95rem,1.7vw,1.25rem);color:var(--ink);font-weight:300;line-height:1.4}
+  .quote{font-family:var(--display);font-weight:600;font-size:clamp(1.8rem,4.4vw,3.2rem);line-height:1.2;max-width:24ch}
+  .quote:before{content:"\201C";color:var(--accent)}
+  .quote:after{content:"\201D";color:var(--accent)}
+  .cta-note{margin-top:2.4rem;display:inline-block;background:var(--accent);color:#1a120b;
+    font-weight:700;font-size:clamp(1rem,1.9vw,1.35rem);padding:1rem 2rem;border-radius:999px}
+  .disclaimer{margin-top:2.6rem;font-size:.82rem;color:var(--rule);max-width:52ch;line-height:1.5}
+  .nav{position:fixed;bottom:2.2vh;right:3vw;display:flex;gap:.6rem;align-items:center;z-index:10}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);
+    width:2.6rem;height:2.6rem;border-radius:50%;font-size:1.1rem;cursor:pointer}
+  .count{position:fixed;bottom:2.5vh;left:3vw;color:var(--rule);font-size:.85rem;letter-spacing:.1em;z-index:10}
+  .brandline{position:fixed;top:3vh;left:3vw;color:var(--muted);font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;z-index:10}
+</style>
+</head>
+<body>
+<div class="brandline">Digital Business Evolution</div>
+<div id="deck"></div>
+<div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8592;</button><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+ {t:'title', eyebrow:'A free masterclass with Jess Glazer', h:'From Idea to Income', sub:'How to map a digital product so irresistible it practically sells itself.'},
+ {t:'for', h:'This is for you if...', items:[
+   'You are an expert, coach, or creator who genuinely knows your stuff',
+   'You have tried to sell online but stalled on what to actually offer',
+   'You do not have a huge list, a big following, or an ad budget',
+   'You are tired of watching other people crush it while your best ideas sit in your head'
+ ]},
+ {t:'trap', h:'Here is the trap', body:'You think you need more. More followers. A bigger list. A fancier funnel. So you keep learning, keep posting, and keep waiting to feel ready. Meanwhile the one thing that would actually change your income never gets built.'},
+ {t:'reframe', big:'Your great ideas are not making you a penny living in your head.', sub:'The gap is never your knowledge. It is a clear, irresistible offer and the confidence to sell it.'},
+ {t:'agenda', h:'What you will walk away with', items:[
+   'A single offer you can describe in one sentence',
+   'The 5 Foundational E+lements of a business that runs without a big audience',
+   'A simple way to talk about it so the right person says yes',
+   'A plan to go from idea to income in days, not years'
+ ]},
+ {t:'section', kicker:'Part One', h:'Why "just post more" never turns into income'},
+ {t:'point', h:'Busy is not the same as paid', body:'Most creators are drowning in content and starving for sales. You can show up every single day and still have nothing people can actually buy. Activity feels like progress. It is not the same as a clear offer.'},
+ {t:'point', h:'The real problem', body:'You have never been shown how to take what is already in your head and shape it into one offer that is so clear and so needed that the right person says yes the moment they see it.'},
+ {t:'section', kicker:'Part Two', h:'The 5 Foundational E+lements'},
+ {t:'elems', h:'The 5 Foundational E+lements', sub:'The spine of a digital business that runs without a big audience.', items:[
+   {n:'Extract', d:'Pull the expertise you already have out of your head and onto the page.'},
+   {n:'Identify', d:'Get crystal clear on exactly who it is for and the result they want.'},
+   {n:'Share', d:'Say it so the right person leans in and feels understood.'},
+   {n:'Create', d:'Shape it into one irresistible offer, not ten half-built ones.'},
+   {n:'Generate', d:'Put it in front of people and let it generate income from day one.'}
+ ]},
+ {t:'point', h:'Post-It to Profit', body:'You do not map an offer in a 40-tab document. You map it on sticky notes. One idea per note, moved around until the shape of a sellable program appears. It is simple on purpose, because simple is what actually ships.'},
+ {t:'point', h:'The Sandwich Method', body:'Then you learn to talk about it so it sells. A simple structure for your content that turns a casual follower into someone reaching for their card, with no sleazy tactics and no big list required.'},
+ {t:'point', h:'15 Seconds to Sell', body:'Attention is short. So we build the skill of earning it fast and moving to the sale, so a 15-second moment of scroll becomes a reason for the right person to buy.'},
+ {t:'section', kicker:'Part Three', h:'Idea to income, start to finish'},
+ {t:'point', h:'From blank page to clients at your door', body:'In a matter of days you go from "I think I could sell something" to a mapped offer you can describe in one sentence and start enrolling people into. That is the whole difference between the stuck expert and the one living the freedom life.'},
+ {t:'credibility', h:'Why me', body:'I went from an elementary-school classroom and personal training to building a multi-million-dollar digital business, and I have helped my clients create over $11 million in revenue and nine millionaires along the way. Not because I had a secret list or a big ad budget. Because I learned to build an offer that sells itself, and now I teach it.'},
+ {t:'quote', q:'You deserve to stand out and be seen. Your ideas deserve to reach the people who need them.'},
+ {t:'cta', h:'Ready to go from idea to income?', body:'Join E+mpower, my 90-day program, and we will map, build, and launch your irresistible offer together.', cta:'Enroll in E+mpower', disclaimer:'This masterclass is for educational purposes only. Results vary and depend on your effort, your market, and your execution. Nothing here is a promise or guarantee of income.'}
+];
+
+function render(s){
+  if(s.t==='title') return `<div class="eyebrow">${s.eyebrow}</div><h1>${s.h}</h1><div class="sub">${s.sub}</div>`;
+  if(s.t==='for'||s.t==='agenda') return `<h2>${s.h}</h2><ul class="pts">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(s.t==='trap') return `<h2>${s.h}</h2><p class="body">${s.body}</p>`;
+  if(s.t==='reframe') return `<div class="big">${s.big}</div><div class="sub">${s.sub}</div>`;
+  if(s.t==='section') return `<div class="kicker">${s.kicker}</div><h1>${s.h}</h1>`;
+  if(s.t==='point') return `<h2>${s.h}</h2><p class="body">${s.body}</p>`;
+  if(s.t==='elems') return `<h2>${s.h}</h2><div class="sub">${s.sub}</div><div class="elems">${s.items.map(e=>`<div class="elem"><div class="n">${e.n}</div><div class="d">${e.d}</div></div>`).join('')}</div>`;
+  if(s.t==='credibility') return `<div class="kicker">Credibility</div><h2>${s.h}</h2><p class="body">${s.body}</p>`;
+  if(s.t==='quote') return `<div class="quote">${s.q}</div>`;
+  if(s.t==='cta') return `<h2>${s.h}</h2><p class="body">${s.body}</p><span class="cta-note">${s.cta}</span><div class="disclaimer">${s.disclaimer}</div>`;
+  return '';
+}
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{const d=document.createElement('section');d.className='slide'+(i===0?' on':'');d.innerHTML=render(s);deck.appendChild(d);});
+let idx=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function go(n){slides[idx].classList.remove('on');idx=Math.max(0,Math.min(S.length-1,n));slides[idx].classList.add('on');document.getElementById('cur').textContent=idx+1;}
+document.getElementById('next').onclick=()=>go(idx+1);
+document.getElementById('prev').onclick=()=>go(idx-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(idx+1);if(e.key==='ArrowLeft')go(idx-1);});
+</script>
+</body>
+</html>
