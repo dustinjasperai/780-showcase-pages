@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Corporate Exit Plan — a live masterclass with Barbara Williams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f1; --panel:#ffffff; --rule:#e7ddd2;
+    --ink:#241f1c; --muted:#6c6158;
+    --accent:#f95e45; --teal:#2b808b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#1c1713;font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(960px,96vw);aspect-ratio:16/10;position:relative}
+  .slide{position:absolute;inset:0;background:var(--bg);border-radius:14px;
+    padding:60px 66px;display:none;flex-direction:column;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.42)}
+  .slide.on{display:flex}
+  .eye{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:16px}
+  h1{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.03;color:var(--ink)}
+  .d1{font-size:60px}.d2{font-size:45px}.d3{font-size:33px}
+  .lede{font-size:21px;line-height:1.5;color:var(--muted);margin-top:20px;max-width:42ch}
+  .sub{font-size:17px;color:var(--muted);margin-top:22px;max-width:46ch}
+  .spacer{flex:1}
+  .foot{display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:15px;margin-top:10px}
+  .foot b{color:var(--accent);font-weight:600}
+  ul{list-style:none;margin-top:12px}
+  li{font-size:19px;line-height:1.3;padding:13px 0;border-bottom:1px solid var(--rule);
+    display:flex;gap:16px;align-items:flex-start}
+  li:last-child{border-bottom:none}
+  .mk{color:var(--accent);font-family:'DM Serif Display',serif;font-size:21px;line-height:1;flex:none;width:28px}
+  .pill{display:inline-block;font-size:14px;color:var(--teal);border:1px solid var(--teal);
+    border-radius:999px;padding:5px 14px;margin-bottom:18px;letter-spacing:.04em;align-self:flex-start}
+  .big{font-family:'DM Serif Display',serif;font-size:39px;line-height:1.12;max-width:25ch}
+  .big i{color:var(--accent)}
+  .step{display:flex;gap:18px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--rule)}
+  .step .n{font-family:'DM Serif Display',serif;color:var(--teal);font-size:20px;width:34px}
+  .step .t{font-size:19px}
+  .step .when{margin-left:auto;font-size:14px;color:var(--muted)}
+  .cred{font-size:19px;line-height:1.55;color:var(--ink);max-width:48ch;margin-top:6px}
+  .cred b{color:var(--accent);font-weight:600}
+  .ctabox{background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:28px 32px;margin-top:20px}
+  .ctabox h3{font-family:'DM Serif Display',serif;font-size:25px;font-weight:400;margin-bottom:9px}
+  .ctabox p{font-size:17px;color:var(--muted);line-height:1.5}
+  .disc{font-size:12px;color:#9a9089;margin-top:18px;line-height:1.55;max-width:62ch}
+  .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;
+    align-items:center;color:#cbb;font-size:13px}
+  .nav button{background:#2a221c;color:#f5e9df;border:1px solid #3a2f26;border-radius:8px;
+    padding:7px 14px;font-size:13px;cursor:pointer}
+  .count{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button onclick="go(-1)">&larr;</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">1</span></span>
+  <button onclick="go(1)">&rarr;</button></div>
+<script>
+const S=[
+  {t:'title', eye:'A live masterclass with Barbara Williams',
+   h:'The Corporate<br>Exit Plan', cls:'d1',
+   lede:'How to leave your 9-5 for work that matters, without the financial freefall.',
+   foot:'actlikebarbara.com', footb:'Live, with a certified financial coach'},
+
+  {t:'statement', eye:'What you leave with', h:'In the next hour, you get the plan.', cls:'d2',
+   lede:'Not more motivation. The three-part plan to leave an unfulfilling job on purpose, with the money runway already in place. A calculated exit, not a leap of faith.',
+   foot:'The promise'},
+
+  {t:'list', eye:'Who this is for', h:'You are in the right room if', cls:'d3',
+   items:['You are good at your job and quietly miserable in it.',
+          'The salary is real, so you keep telling yourself someday.',
+          'You want work that actually helps people.',
+          'You are too responsible to quit on a whim, and too restless to stay.'],
+   foot:'Who this is for'},
+
+  {t:'statement', pill:'The trap', h:'The golden handcuffs.', cls:'d2',
+   lede:'Every raise makes the job harder to leave. You become too successful to walk away and too unhappy to stay. So the years pass, and someday keeps moving.',
+   foot:'The customer world'},
+
+  {t:'quote', eye:'The uncomfortable truth',
+   big:'"Follow your passion" is the advice that keeps high achievers <i>broke and back in a cubicle.</i>',
+   sub:'Passion with no runway is how smart people end up right back where they started, only poorer and more afraid to try again.',
+   foot:'The reframe'},
+
+  {t:'list', pill:'Part one', h:'It was never a courage problem.', cls:'d3',
+   lede:'You are not stuck because you are weak. You are stuck because nobody ever built you a plan. Three pieces are missing:',
+   items:['No clear vision of the work you actually want.',
+          'No money runway, so leaving feels like jumping.',
+          'No proof yet that anyone will pay you for it.'],
+   numbered:true, foot:'The core problem'},
+
+  {t:'quote', eye:'The someday loop',
+   big:'Someday is not a date. It is a <i>feeling</i> you use to avoid making a plan.',
+   sub:'The plan is what turns someday into a day on the calendar. That is the whole job of the next three parts.',
+   foot:'Why you stay'},
+
+  {t:'section', pill:'Part two', h:'The plan,<br>in three parts.', cls:'d1',
+   lede:'Vision. Runway. Credibility. In that order, on purpose.', foot:'The framework'},
+
+  {t:'statement', eye:'Part two, one of three', h:'Articulate the vision.', cls:'d3',
+   lede:'We start with the right questions, not a vision board. What does the work look like on a Tuesday. Who do you help, and with what. We turn a vague "I want out" into a specific picture clear enough to plan against.',
+   foot:'Pillar 1'},
+
+  {t:'statement', eye:'Part two, two of three', h:'Build the money runway.', cls:'d3',
+   lede:'This is the part most career advice skips, and the reason most exits fail. We build the real financial exit plan: how much runway you need, the timeline, and the numbers that make leaving a calculated decision instead of a panic. This is the certified-financial-coach part.',
+   foot:'Pillar 2'},
+
+  {t:'statement', eye:'Part two, three of three', h:'Build credibility before you leap.', cls:'d3',
+   lede:'You start helping real people while you are still employed. First clients, first proof, first income, all before the resignation letter. The exit lands on evidence, not hope.',
+   foot:'Pillar 3'},
+
+  {t:'runway', eye:'How the plan runs', h:'Someday becomes a date.', cls:'d3',
+   steps:[['01','Name the vision','Weeks 1-2'],
+          ['02','Build the money runway','Weeks 3-5'],
+          ['03','First clients while employed','Weeks 6-10'],
+          ['04','Plan the exit, pick the date','Weeks 11-12']],
+   foot:'Measurable steps'},
+
+  {t:'section', pill:'Part three', h:'What the first<br>90 days<br>look like.', cls:'d1',
+   foot:'Your first 90 days'},
+
+  {t:'list', eye:'On the other side', h:'The shift is quiet, then total.', cls:'d3',
+   items:['You stop dreading Sunday nights.',
+          'You have a number, a date, and a plan you trust.',
+          'You are already helping people and getting paid for it.',
+          'Leaving becomes the obvious next step, not the scary one.'],
+   foot:'The outcome'},
+
+  {t:'quote', eye:'The difference',
+   big:'A leap of faith has a landing you cannot see. <i>A plan has a date you can count on.</i>',
+   foot:'Plan vs leap'},
+
+  {t:'cred', eye:'Why listen to me', h:'I have done the thankless jobs too.', cls:'d3',
+   cred:'I spent years in a string of jobs that paid fine and meant nothing. Since then I have helped <b>hundreds of high achievers</b> plan their way out of an unfulfilling 9-5 and into work they love. I am a <b>certified financial coach through Ramsey Solutions</b>, which is why the money runway is never an afterthought here.',
+   foot:'Credibility'},
+
+  {t:'quote', eye:'Who I work with',
+   big:'The ones who want to <i>make an impact by helping others,</i> not just escape a cubicle.',
+   sub:'If the goal is meaningful work that serves people, this plan is built for you.',
+   foot:'Coaching for impact'},
+
+  {t:'list', eye:'If you want help with the plan', h:'Two ways we can work on it together.', cls:'d3',
+   items:['<b>The 12-week group.</b> A small group, capped at 12, building the exit plan together with calls, community, and support between sessions.',
+          '<b>1:1 coaching.</b> The same plan, built around your numbers and your timeline, one on one with me.'],
+   foot:'The programs'},
+
+  {t:'cta', eye:'Your next step', h:'Let us build your exit plan.', cls:'d2',
+   boxh:'Book your free 1-hour exploration call',
+   boxp:'We discover your vision and identify exactly what is getting in the way. You leave with the first piece of your plan, whether or not we work together.',
+   disc:'This masterclass is educational. No income or result is guaranteed. Results vary from person to person, and every career and financial situation is different. It is not financial, legal, or career advice. Act Like Barbara, actlikebarbara.com'}
+];
+
+function foot(s){
+  if(!s.foot) return '';
+  const r = s.footb ? '<span><b>'+s.footb+'</b></span>' : '<span>'+s.foot+'</span>';
+  const l = s.footb ? '<span>'+s.foot+'</span>' : '<span>Act Like Barbara</span>';
+  return '<div class="spacer"></div><div class="foot">'+l+r+'</div>';
+}
+function head(s){
+  let h='';
+  if(s.pill) h+='<div class="pill">'+s.pill+'</div>';
+  if(s.eye) h+='<div class="eye">'+s.eye+'</div>';
+  return h;
+}
+function render(s){
+  switch(s.t){
+    case 'title':
+    case 'section':
+      return head(s)+'<div class="spacer"></div><h1 class="'+(s.cls||'d1')+'">'+s.h+'</h1>'+
+        (s.lede?'<p class="lede">'+s.lede+'</p>':'')+foot(s);
+    case 'statement':
+      return head(s)+'<h1 class="'+(s.cls||'d2')+'">'+s.h+'</h1>'+
+        (s.lede?'<p class="lede">'+s.lede+'</p>':'')+foot(s);
+    case 'list':
+      let li=s.items.map((x,k)=>'<li><span class="mk">'+(s.numbered?(k+1):'&#10022;')+'</span><span>'+x+'</span></li>').join('');
+      return head(s)+'<h1 class="'+(s.cls||'d3')+'">'+s.h+'</h1>'+
+        (s.lede?'<p class="lede">'+s.lede+'</p>':'')+'<ul>'+li+'</ul>'+foot(s);
+    case 'quote':
+      return head(s)+'<p class="big">'+s.big+'</p>'+(s.sub?'<p class="sub">'+s.sub+'</p>':'')+foot(s);
+    case 'runway':
+      let st=s.steps.map(r=>'<div class="step"><span class="n">'+r[0]+'</span><span class="t">'+r[1]+'</span><span class="when">'+r[2]+'</span></div>').join('');
+      return head(s)+'<h1 class="'+(s.cls||'d3')+'">'+s.h+'</h1><div style="margin-top:20px">'+st+'</div>'+foot(s);
+    case 'cred':
+      return head(s)+'<h1 class="'+(s.cls||'d3')+'">'+s.h+'</h1><p class="cred">'+s.cred+'</p>'+foot(s);
+    case 'cta':
+      return head(s)+'<h1 class="'+(s.cls||'d2')+'">'+s.h+'</h1>'+
+        '<div class="ctabox"><h3>'+s.boxh+'</h3><p>'+s.boxp+'</p></div>'+
+        '<p class="disc">'+s.disc+'</p>';
+  }
+}
+let i=0;const stage=document.getElementById('stage');
+function draw(){stage.innerHTML='<div class="slide on">'+render(S[i])+'</div>';
+  document.getElementById('cur').textContent=i+1;document.getElementById('tot').textContent=S.length;}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));draw();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+draw();
+</script>
+</body>
+</html>
