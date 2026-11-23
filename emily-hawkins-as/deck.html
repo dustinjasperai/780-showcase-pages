@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeaderSHIFT Masterclass — The Owner Bottleneck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1e3a4a;        /* ground: their dominant slate (#284e64/#364f62 family) */
+    --panel:#264656;
+    --ink:#f4f6f5;
+    --ink-soft:#c3d0d6;
+    --accent:#f1e75d;    /* brand yellow, from brand.json button bg */
+    --accent-ink:#1e3a4a;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Roboto',system-ui,sans-serif;overflow:hidden;}
+  .stage{width:100vw;height:100vh;position:relative;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:8vh 10vw;}
+  .slide.active{display:flex;}
+  .eyebrow{font-family:'Sora',sans-serif;font-weight:600;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Sora',sans-serif;font-weight:700;font-size:54px;line-height:1.08;letter-spacing:-.01em;margin-bottom:24px;max-width:18ch;}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:40px;line-height:1.14;margin-bottom:22px;max-width:20ch;}
+  p{font-size:23px;line-height:1.55;color:var(--ink-soft);max-width:42ch;margin-bottom:16px;}
+  .lead{font-size:26px;color:var(--ink);max-width:36ch;}
+  .big{font-size:30px;color:var(--ink);font-weight:500;max-width:30ch;}
+  ul{list-style:none;max-width:46ch;}
+  li{font-size:23px;line-height:1.5;color:var(--ink-soft);padding-left:30px;position:relative;margin-bottom:16px;}
+  li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:12px;background:var(--accent);border-radius:2px;}
+  .num{font-family:'Sora',sans-serif;font-weight:700;font-size:20px;color:var(--accent-ink);background:var(--accent);width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:24px;}
+  .panel{background:var(--panel);border-left:6px solid var(--accent);padding:26px 30px;border-radius:6px;max-width:44ch;margin-top:8px;}
+  .kicker{font-family:'Sora',sans-serif;color:var(--ink);font-weight:600;font-size:24px;margin-bottom:8px;}
+  .btn{display:inline-block;font-family:'Sora',sans-serif;font-weight:600;font-size:22px;background:var(--accent);color:var(--accent-ink);padding:16px 34px;border-radius:8px;margin-top:6px;}
+  .disclaimer{margin-top:36px;font-size:15px;color:var(--ink-soft);max-width:62ch;opacity:.8;}
+  .brand{position:absolute;bottom:4vh;left:10vw;font-family:'Sora',sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);opacity:.6;}
+  .count{position:absolute;bottom:4vh;right:10vw;font-size:13px;color:var(--ink-soft);opacity:.5;font-family:'Sora',sans-serif;}
+  .nav{position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:5;}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--accent);width:46px;height:40px;border-radius:7px;font-size:18px;cursor:pointer;}
+  @media(max-width:700px){h1{font-size:34px;}h2{font-size:27px;}p,li,.lead{font-size:18px;}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&#8592;</button><button id="next" aria-label="Next">&#8594;</button></div>
+
+<script>
+const S = [
+  {t:'title', eyebrow:'A LeaderSHIFT Masterclass', h:'The Owner Bottleneck',
+   sub:'How to step back from the day to day so your business grows without you in every decision.'},
+
+  {t:'point', eyebrow:'Who this is for', h:'You built it. Now it needs you for everything.',
+   body:['You own a small business, maybe in the trades or home services, and the company runs on you being in the middle of all of it.',
+         'Growth just means more things landing on your desk.']},
+
+  {t:'bullets', eyebrow:'Does this sound familiar', h:'The day runs you.',
+   bullets:['Inefficient processes eat your time','The team is out of sync and waiting on you',
+            'You feel stuck on the next move','The daily grind blurs the bigger vision']},
+
+  {t:'point', eyebrow:'The trap', h:'Being needed feels like being valuable.',
+   body:['So you answer every question, approve every quote, and fix every problem.'],
+   big:'The busier you get, the more the business proves it cannot run without you.'},
+
+  {t:'point', eyebrow:'The reframe', h:'A business that depends on you is a ceiling, not a win.',
+   body:['If every result runs through you, you have not built a company. You have built a very demanding job.']},
+
+  {t:'point', eyebrow:'Part one', h:'The problem is structure, not effort.',
+   body:['You do not need to work harder or care more. You care plenty.',
+         'The business was built around you by default, so stepping back feels like dropping the ball. That is a design problem, and design problems can be fixed.']},
+
+  {t:'bullets', eyebrow:'The shift', h:'LeaderSHIFT: three changes that take you out of the middle.',
+   bullets:['Simplified Structure','Only Needle-Moving Action','Enhanced Communication']},
+
+  {t:'num', n:'1', h:'Simplified Structure',
+   body:['Cut through the clutter. We simplify how the business actually runs so it can operate with ease instead of relying on you to hold it together.'],
+   kicker:'What changes', note:'Fewer moving parts, clear ownership, a structure a team can run.'},
+
+  {t:'num', n:'2', h:'Only Needle-Moving Action',
+   body:['Busy work does not equal progress. We find the few actions that truly drive growth and protect your time for those.'],
+   kicker:'What changes', note:'Your week shrinks to the handful of things only you should touch. The rest goes to the team.'},
+
+  {t:'num', n:'3', h:'Enhanced Communication',
+   body:['Everyone knows their role and works together without you relaying every message. Handbooks, job descriptions, and clear expectations carry it.'],
+   kicker:'What changes', note:'The team stops waiting on you to make the next move.'},
+
+  {t:'bullets', eyebrow:'After the shift', h:'A week on the other side of it.',
+   bullets:['One or two decisions that are genuinely yours','The team running the day to day',
+            'Time to work on the business, not in it','Friday spent on the numbers, not the fires']},
+
+  {t:'point', eyebrow:'The payoff', h:'Keep more money. Keep more of your life.',
+   body:['When the structure holds without you, margins stop leaking into chaos and your hours stop disappearing into the grind.'],
+   big:'The business grows. You get your calendar back.'},
+
+  {t:'point', eyebrow:'The honest objection', h:'But what if it falls apart when I step back?',
+   body:['That fear is exactly the signal the structure is missing. We build the structure first, hand off in stages, and you step back as the team proves it holds.',
+         'Stepping back is the result of the work, not a leap of faith.']},
+
+  {t:'point', eyebrow:'Why me', h:'I have walked owners through this shift.',
+   body:['I have had the honor of coaching over 2,500 individuals and business owners, and I was featured in Forbes in 2020 for this work.',
+         'My background is an MBA and supply chain, so simplifying how a business runs is the thing I am built for.']},
+
+  {t:'bullets', eyebrow:'The recap', h:'Three shifts. One result.',
+   bullets:['Simplify the structure','Protect only the needle-moving action','Tighten how the team communicates'],
+   big:'A business that runs without you in the middle of it.'},
+
+  {t:'cta', eyebrow:'Your next step', h:"Find out your Business Owner Type, then let's shift.",
+   body:['Take the 8 question assessment to see your leadership style, then apply to LeaderSHIFT to build the structure that runs without you.'],
+   btn:'Apply to LeaderSHIFT',
+   disclaimer:'Educational content only. LeaderSHIFT shares coaching frameworks and strategies, not promises of specific income or business results. Outcomes vary by owner and are not guaranteed.'}
+];
+
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function build(s){
+  let h='';
+  if(s.eyebrow) h+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+  if(s.t==='title'){h+='<h1>'+esc(s.h)+'</h1>';if(s.sub)h+='<p class="lead">'+esc(s.sub)+'</p>';h+='<div class="brand">Your Life, Your Coach</div>';return h;}
+  if(s.n) h+='<div class="num">'+esc(s.n)+'</div>';
+  h+='<h2>'+esc(s.h)+'</h2>';
+  (s.body||[]).forEach(b=>h+='<p>'+esc(b)+'</p>');
+  if(s.bullets){h+='<ul>';s.bullets.forEach(b=>h+='<li>'+esc(b)+'</li>');h+='</ul>';}
+  if(s.big) h+='<p class="big">'+esc(s.big)+'</p>';
+  if(s.note) h+='<div class="panel"><div class="kicker">'+esc(s.kicker||'')+'</div>'+esc(s.note)+'</div>';
+  if(s.btn) h+='<span class="btn">'+esc(s.btn)+'</span>';
+  if(s.disclaimer) h+='<p class="disclaimer">'+esc(s.disclaimer)+'</p>';
+  if(s.t==='cta') h+='<div class="brand">Your Life, Your Coach</div>';
+  return h;
+}
+const stage=document.getElementById('stage');
+S.forEach((s,idx)=>{const d=document.createElement('section');d.className='slide'+(idx===0?' active':'');d.innerHTML=build(s)+'<div class="count">'+(idx+1)+' / '+S.length+'</div>';stage.appendChild(d);});
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){slides[i].classList.remove('active');i=(n+slides.length)%slides.length;slides[i].classList.add('active');}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+</script>
+</body>
+</html>
