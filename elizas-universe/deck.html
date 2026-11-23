@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fra mørke til lys — Masterclass med Eliza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8e1cd;        /* apricot ground, brand.json #f8e1cd (light scheme) */
+    --panel:#fffaf5;
+    --rule:#eddad4;      /* soft rose, brand.json #eddad4 */
+    --accent:#df893d;    /* amber, brand.json dominant (54 uses) */
+    --gold:#cda565;      /* brand.json #cda565 */
+    --ink:#22194d;       /* deep indigo, the "darkness" anchor, brand.json #22194d */
+    --muted:#6b647e;
+    --serif:'PT Serif',Georgia,serif;
+    --sans:'Open Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .wrap{max-width:960px;margin:0 auto;padding:48px 24px 96px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:52px 56px;margin:0 0 30px;min-height:420px;display:flex;flex-direction:column;
+    justify-content:center;box-shadow:0 10px 30px rgba(34,25,77,.06)}
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.1;color:var(--ink)}
+  h2{font-family:var(--serif);font-weight:700;font-size:38px;line-height:1.15;color:var(--ink)}
+  .sub{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--muted);margin-top:20px;line-height:1.4}
+  p.lead{font-size:19px;line-height:1.6;margin-top:18px;max-width:46ch}
+  ul{margin-top:22px;list-style:none}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 34px;position:relative;border-top:1px solid var(--rule)}
+  li:first-child{border-top:none}
+  li:before{content:"";position:absolute;left:4px;top:20px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent)}
+  .big{font-family:var(--serif);font-size:34px;line-height:1.25;color:var(--ink);max-width:22ch}
+  .label{font-family:var(--sans);font-weight:700;color:var(--accent)}
+  .present{margin-top:36px;font-size:17px;color:var(--muted)}
+  .num{position:absolute;top:22px;right:28px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.1em}
+  .slide{position:relative}
+  .cta-box{background:var(--ink);color:#fdf3e8;border-color:var(--ink)}
+  .cta-box h2,.cta-box h1{color:#fdf3e8}
+  .cta-box .eyebrow{color:var(--gold)}
+  .cta-btn{display:inline-block;margin-top:26px;background:var(--accent);color:#fff;font-weight:700;
+    padding:16px 30px;border-radius:999px;font-size:18px}
+  .disc{margin-top:28px;font-size:13px;color:#cbbfe0;max-width:52ch;line-height:1.5}
+  .kicker{font-family:var(--serif);font-size:26px;color:var(--accent);margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<script>
+const S=[
+ {t:'title',eyebrow:'Gratis live masterclass',h:'Fra mørke til lys',
+  sub:'Sådan heler du traumeenergi ved roden, og vækker dine spirituelle evner',
+  present:'Med Elisabeth "Eliza" Fossheim, shamanistisk clairvoyant medie og healer'},
+ {t:'lead',eyebrow:'Hvad du går herfra med',h:'Tre ting, en time',
+  lead:'Du forstår hvorfor healing ofte stopper ved symptomet, du får landkortet over dine 13 chakraer, og du mærker hvordan energi kan forløses uden at du genoplever traumet.'},
+ {t:'list',eyebrow:'Til dig der mærker kaldet',h:'Er det her for dig?',
+  items:['Du fornemmer mere end du kan forklare, og vil forstå det','Du vil hele dig selv ved roden, ikke kun dæmpe symptomer','Du overvejer at arbejde som clairvoyant eller healer']},
+ {t:'big',eyebrow:'Fælden',big:'De fleste forsøg på healing behandler symptomet, og genopliver smerten for at nå den.'},
+ {t:'big',eyebrow:'Et andet syn',kicker:'Reframe',big:'Dine symptomer er ikke problemet. Det er energien, der sidder fast bag dem.'},
+ {t:'part',eyebrow:'Del 1',h:'Problemet: hvorfor healing ofte fejler'},
+ {t:'list',eyebrow:'Del 1',h:'Symptom eller rod',
+  items:['Smerter, stress og uro er signaler, ikke årsager','At genopleve traumet igen og igen fastholder energien','Roden sidder i chakraerne, og det er dér vi arbejder']},
+ {t:'part',eyebrow:'Del 2',h:'Metoden: de 13 chakraer'},
+ {t:'list',eyebrow:'Del 2',h:'Landkortet de fleste aldrig får',
+  items:['13 energicentre fra Rod til Stellar Gateway, ikke kun de syv','Hvert center ud fra krop, sind og ånd','Signalerne på ubalance, så du kan læse dem']},
+ {t:'list',eyebrow:'Del 2',h:'Værktøjerne i arbejdet',
+  items:['Lyssprog, et kanaliseret healingssprog til chakraerne','Clairvoyant rådgivning, fra fornemmelse til klar besked','Healing i klinik og på afstand, samt husrensning']},
+ {t:'part',eyebrow:'Del 3',h:'Fra mørke til lys i praksis'},
+ {t:'list',eyebrow:'Del 3',h:'Forløsning uden genoplevelse',
+  items:['Vi møder energien dér hvor den sidder, blidt','Traumeenergi forløses ved roden, uden at du skal genopleve den','Energien løftes, og evnerne åbner sig i samme bevægelse']},
+ {t:'lead',eyebrow:'Del 3',h:'Også pengeblokeringer',
+  lead:'Mangel og "pengeblokeringer" er ofte energi, der sidder fast i et chakra. Når roden forløses, åbner overflod sig som en naturlig følge, ikke som et trick.'},
+ {t:'lead',eyebrow:'Hvorfor mig',h:'Min egen vej',
+  lead:'Jeg var selv tæt på at forlade Moder Jord i menneskeform, før jeg forstod sammenhængen mellem mine symptomer og min energi. Chakrahealing vendte skuden. I dag underviser jeg andre, og Chakrahealer Uddannelsen kører nu på fjerde år.'},
+ {t:'list',eyebrow:'Vejen videre',h:'At blive lysarbejder',
+  items:['Fra "jeg mærker et kald" til at kunne arbejde med andre','En struktureret uddannelse med mentorstøtte','Et fællesskab der går vejen sammen med dig']},
+ {t:'list',eyebrow:'Opsamling',h:'Det vi lige har været igennem',
+  items:['Healing virker når vi går til roden, ikke symptomet','De 13 chakraer er landkortet','Fra mørke til lys, uden at genopleve smerten']},
+ {t:'cta',eyebrow:'Næste skridt',h:'Vil du gå vejen?',
+  lead:'Hvis du mærker kaldet, så lad os tage en samtale om dit næste skridt, og om Lysarbejder Uddannelsen eller Light og Flow Chakra Healer uddannelsen er noget for dig.',
+  btn:'Book en session med Eliza',
+  disc:'Til personlig og spirituel udvikling. Ikke en erstatning for lægelig eller psykologisk behandling. No specific result is guaranteed, and results vary from person to person. Din rejse er din egen.'}
+];
+const el=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(s.t==='cta'?' cta-box':'');
+  let html='<div class="num">'+String(i+1).padStart(2,'0')+' / '+S.length+'</div>';
+  if(s.eyebrow) html+='<div class="eyebrow">'+s.eyebrow+'</div>';
+  if(s.kicker) html+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){html+='<h1>'+s.h+'</h1><div class="sub">'+s.sub+'</div><div class="present">'+s.present+'</div>';}
+  else if(s.t==='big'){html+='<div class="big">'+s.big+'</div>';}
+  else if(s.t==='part'){html+='<h2>'+s.h+'</h2>';}
+  else {
+    if(s.h) html+='<h2>'+s.h+'</h2>';
+    if(s.lead) html+='<p class="lead">'+s.lead+'</p>';
+    if(s.items){html+='<ul>';s.items.forEach(x=>html+='<li>'+x+'</li>');html+='</ul>';}
+  }
+  if(s.t==='cta'){html+='<span class="cta-btn">'+s.btn+'</span><div class="disc">'+s.disc+'</div>';}
+  d.innerHTML=html;
+  el.appendChild(d);
+});
+</script>
+</body>
+</html>
