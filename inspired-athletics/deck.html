@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The 7 Crucibles Masterclass · Alec Ingold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#131b1e; --panel:#1c262a; --rule:#2c383d;
+    --gold:#efbd50; --steel:#8aa2ac; --chalk:#f3f1ea; --grey:#c3ccce; --dim:#6b7d84;
+  }
+  html,body{height:100%}
+  body{background:#000;font-family:'Karla',-apple-system,sans-serif;color:var(--chalk);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-family:'Oswald',sans-serif;font-size:1.05vw;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:2.4vh}
+  h1{font-family:'Oswald',sans-serif;font-weight:500;color:var(--chalk);line-height:1.08;letter-spacing:.005em;text-transform:uppercase}
+  .t-title h1{font-size:5.4vw;font-weight:600}
+  .t-normal h1{font-size:3.3vw;max-width:86%}
+  .t-normal .body{font-family:'Karla',sans-serif;font-size:1.5vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.55;font-weight:300;text-transform:none}
+  .sub{font-family:'Karla',sans-serif;font-size:1.8vw;color:var(--grey);margin-top:3.2vh;max-width:78%;line-height:1.46;font-weight:300;text-transform:none}
+  .t-section{align-items:flex-start}
+  .t-section .idx{font-family:'Oswald',sans-serif;font-size:1.4vw;font-weight:600;color:var(--steel);margin-bottom:2vh;letter-spacing:.16em;text-transform:uppercase}
+  .t-section h1{font-size:4.8vw;max-width:88%}
+  .t-section .rule{width:16vw;height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#20313a 0%,#0a1013 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:3.7vw;max-width:88%;color:#f6f3ec}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#20313a 0%,#0a1013 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4vw;max-width:84%}
+  .chips{display:flex;gap:1vw;margin-top:4vh;flex-wrap:wrap;justify-content:center}
+  .chip{font-family:'Oswald',sans-serif;border:1px solid var(--gold);color:#f4dca7;border-radius:4px;padding:1.3vh 1.6vw;font-size:1.22vw;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.4vh;font-family:'Karla',sans-serif;font-size:.92vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.4;text-transform:none}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .forge-motif{position:absolute;pointer-events:none;opacity:.92}
+  .title-forge{right:7.5%;bottom:8%;width:22vw}
+  .corner-forge{right:6%;bottom:7.5%;width:10vw;opacity:.42}
+  .brandline{font-family:'Oswald',sans-serif;font-size:1.3vw;color:var(--grey);margin-top:3.4vh;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+  .brandline b{color:var(--gold);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.06);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:14px;right:18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.4vw}.t-normal h1{font-size:5.4vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:7vw}.t-dark h1{font-size:6vw}
+    .t-cta h1{font-size:7vw}.chip{font-size:2.6vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 20</div>
+<div class="brand-foot">7 Crucibles</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- forge motif: a vessel with seven rising sparks (the seven crucibles) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="forge" viewBox="0 0 260 150">
+  <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 138 H190 L176 112 H84 Z" stroke="#8aa2ac" opacity="0.5"/>
+    <line x1="92" y1="100" x2="92" y2="78" stroke="#efbd50" opacity="0.9"/>
+    <line x1="112" y1="100" x2="112" y2="64" stroke="#efbd50" opacity="0.9"/>
+    <line x1="132" y1="100" x2="132" y2="50" stroke="#efbd50" opacity="0.95"/>
+    <line x1="152" y1="100" x2="152" y2="62" stroke="#efbd50" opacity="0.9"/>
+    <line x1="172" y1="100" x2="172" y2="80" stroke="#efbd50" opacity="0.9"/>
+    <circle cx="132" cy="40" r="5" fill="none" stroke="#efbd50" stroke-width="2.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'The 7 Crucibles',sub:'The mindset that decides who rises under pressure, and who folds.',brand:true,forge:'title'},
+ {t:'normal',k:'Who this is for',title:'You train your body harder than anyone.',body:'You put in the reps, the film, and the extra work after practice. But the moment that decides the game is the one between your ears, and nobody ever coached you for that.'},
+ {t:'dark',title:'You do not have a talent problem. You have a mindset that has never been trained.'},
+
+ {t:'section',idx:'Part One',title:'The Moment Under Pressure'},
+ {t:'normal',k:'Why talent stalls',title:'Pressure finds the athlete who was never prepared for it.',body:'Nerves, doubt, a bad call, an injury. The body is ready and the mind is not, so the performance leaks out at the exact moment it matters most.'},
+ {t:'normal',k:'The real opponent',title:'The game is won or lost before you take the field.',body:'Confidence, focus, and composure are not things you are born with. They are forged the same way strength is, through deliberate trials you learn to meet.'},
+ {t:'dark',title:'A crucible is a trial that forges you. Champions are not spared them. They are made by them.'},
+
+ {t:'section',idx:'Part Two',title:'The Seven Crucibles'},
+ {t:'normal',k:'Crucible 1 · Purpose',title:'Know why you compete.',body:'When the deeper why is clear, motivation outlasts a loss, a benching, or a long season. Purpose is the anchor every other crucible holds to.'},
+ {t:'normal',k:'Crucible 2 · Competition',title:'Let pressure sharpen you, not shrink you.',body:'The opponent, the stakes, the adversity, these are the forge. Athletes who reframe pressure as the thing that reveals them stop fearing it.'},
+ {t:'normal',k:'Crucible 3 · Grindset',title:'Do the work when no one is watching.',body:'The unglamorous reps, done daily, separate the athlete who peaks from the one who plateaus. Grindset is the discipline you choose before anyone claps.'},
+ {t:'normal',k:'Crucible 4 · Support',title:'Strength is knowing when to lean on your team.',body:'No one rises alone. Building the right people around you, and letting them in, is a skill you train, not a weakness you hide.'},
+ {t:'normal',k:'Crucible 5 · Leadership',title:'Earn trust before you earn a title.',body:'Real leaders set the standard by how they show up every day. Teammates follow the example long before they follow the captain.'},
+ {t:'normal',k:'Crucible 6 · Discipline',title:'Stay consistent when it stops being fun.',body:'Fatigue, losses, and the temptation to cut corners test everyone. Discipline is holding the standard on the days motivation is gone.'},
+ {t:'normal',k:'Crucible 7 · Perspective',title:'Control how you respond to what you cannot control.',body:'Setbacks, losses, and injuries are certain. The athlete who owns the response, not the result, is the one who comes back stronger.'},
+ {t:'dark',title:'Purpose. Competition. Grindset. Support. Leadership. Discipline. Perspective. The mindset that rises under pressure.'},
+
+ {t:'section',idx:'Part Three',title:'The Athlete Who Trained It'},
+ {t:'normal',k:'The athlete who has trained this',title:'Composed under pressure. Unshaken by setbacks.',body:'They play with confidence built on preparation, respond to losses and injuries productively, and lead by example. Same body, with a mind that finally matches it.'},
+ {t:'normal',k:'Why me',title:'I was adopted, undrafted, and told no more than yes.',body:'I made the NFL and a Pro Bowl by living these seven crucibles, not by being handed anything. I wrote the book on them, and now I coach athletes through every one.'},
+ {t:'cta',title:'Ready to train the mindset that rises under pressure?',chips:['Start the 7 Crucibles Course','Book a clarity call'],disc:'Educational content for student athletes. No performance, recruiting, scholarship, or career result is guaranteed. Results vary by athlete, sport, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function forge(kind){return `<svg class="forge-motif ${kind==='title'?'title-forge':'corner-forge'}"><use href="#forge"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">Inspired <b>Athletics</b> · Alec Ingold</div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.forge) h+=forge(s.forge);
+  else if(s.t==='title') h+=forge('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
