@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Sueno a Negocio — Masterclass de Oh Sandra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff5f3;        /* warm white ground (brand ranked #4) */
+    --panel:#fae6e1;     /* blush panel (brand ranked #2) */
+    --ink:#375168;       /* dominant slate (brand ranked #1) */
+    --muted:#7d7d7d;     /* grey (brand) */
+    --accent:#ff8782;    /* coral (brand button family) */
+    --rule:#375168;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--ink);
+    font-family:'Quattrocento Sans',system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #stage{
+    width:min(960px,96vw);
+    aspect-ratio:16/9;
+    background:var(--bg);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);
+    border-radius:6px;
+  }
+  .slide{
+    position:absolute;inset:0;
+    padding:7% 8%;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:1.05rem;
+  }
+  .slide.on{display:flex}
+  .kicker{
+    font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;font-family:'Fjalla One',sans-serif;
+  }
+  h1{font-family:'Fjalla One',sans-serif;font-weight:400;font-size:3.5rem;line-height:1.02;color:var(--ink);letter-spacing:.01em}
+  h2{font-family:'Fjalla One',sans-serif;font-weight:400;font-size:2.4rem;line-height:1.08;color:var(--ink)}
+  p{font-size:1.12rem;line-height:1.55;max-width:46ch;color:var(--ink)}
+  p.sub{font-size:1.3rem;color:var(--ink);font-style:italic;font-weight:400;max-width:42ch}
+  .lead{font-size:1.45rem;line-height:1.42;max-width:44ch}
+  ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;max-width:50ch}
+  li{position:relative;padding-left:1.6rem;font-size:1.06rem;line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:.7rem;height:.7rem;background:var(--accent);border-radius:50%}
+  .stages{display:flex;gap:.6rem;flex-wrap:wrap}
+  .stage{
+    flex:1 1 0;min-width:140px;background:var(--panel);border-top:4px solid var(--accent);
+    padding:1rem;border-radius:4px;
+  }
+  .stage .n{font-family:'Fjalla One',sans-serif;font-size:1.1rem;color:var(--accent)}
+  .stage .t{font-weight:700;font-size:1.05rem;margin:.2rem 0 .3rem}
+  .stage .d{font-size:.9rem;color:var(--muted)}
+  .big{font-family:'Fjalla One',sans-serif;font-size:4rem;color:var(--accent);line-height:1}
+  .disc{font-size:.78rem;color:var(--muted);max-width:66ch;line-height:1.5}
+  .cta-step{font-size:1.3rem;color:var(--ink);font-weight:700;max-width:46ch}
+  .brandline{position:absolute;bottom:4%;left:8%;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-family:'Fjalla One',sans-serif}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;color:#fff5f3;font-family:'Quattrocento Sans';font-size:.85rem}
+  #nav button{background:var(--accent);color:#fff;border:0;width:38px;height:38px;border-radius:50%;font-size:1.1rem;cursor:pointer}
+  #count{min-width:54px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev" aria-label="anterior">&#8592;</button><span id="count"></span><button id="next" aria-label="siguiente">&#8594;</button></div>
+<script>
+const S=[
+  {t:'title',kicker:'Masterclass en vivo con Sandra',h:'De Sueno a Negocio',sub:'Como construir un negocio en linea alrededor de la vida que quieres, empezando desde cero.'},
+
+  {t:'agenda',kicker:'Lo que te llevas hoy',h:'En la proxima hora vas a salir con un camino, no con mas dudas',list:['El orden correcto para arrancar un negocio en linea.','Las cuatro etapas del camino, de la idea a crecer.','El metodo de mentalidad que sostiene todo lo demas.','Tu siguiente paso concreto, sea cual sea tu etapa.']},
+
+  {t:'who',kicker:'Para quien es esto',h:'Para la mujer que sabe que esta hecha para mas',body:'Eres creativa, sonadora, con grandes ideales. Estas cansada de la vida de "esto es lo que hay" y sabes que esta vida es para disfrutarla al maximo. Tienes la idea de un negocio propio dando vueltas desde hace tiempo.'},
+
+  {t:'trap',kicker:'La trampa',h:'Y sin embargo, sigues esperando',list:['Esperas el "momento correcto" que nunca llega.','Crees que necesitas un titulo, experiencia o mucho dinero.','Cada ano te pones el proposito, y cada ano se queda en el bau de los recuerdos.']},
+
+  {t:'reframe',kicker:'La verdad incomoda',h:'El obstaculo no es lo que crees',lead:'No te falta talento, ni dinero, ni permiso. Lo que falta es un metodo y una decision. Yo empece con $100 usd, sin titulo y sin experiencia. Y pude. Asi que tu tambien puedes.'},
+
+  {t:'myth',kicker:'Lo que no necesitas',h:'Tres mitos que te estan frenando',list:['Mito: necesitas habilidades tecnologicas. Realidad: aprendes lo justo, paso a paso.','Mito: necesitas experiencia en negocios. Realidad: empiezas desde donde estas.','Mito: necesitas mucho dinero. Realidad: yo empece con cien dolares.']},
+
+  {t:'problem',kicker:'Parte uno: el problema real',h:'Casi todas empiezan al reves',body:'Empiezan por la tactica: que plataforma, que logo, que nombre, que colores. Se pierden meses ahi y el negocio nunca arranca. El orden correcto es otro: primero claridad, despues decision, despues ejecucion.'},
+
+  {t:'map',kicker:'El camino completo',h:'Cuatro etapas, un solo mapa',stages:[
+    {n:'01',t:'DESCUBRIR',d:'Encontrar la idea alineada a tu talento y proposito.'},
+    {n:'02',t:'DECIDIR',d:'Pasar tus ideas por filtros y elegir una.'},
+    {n:'03',t:'ARRANCAR',d:'Lanzar tu negocio en 6 fases.'},
+    {n:'04',t:'CRECER',d:'Escalar y crear productos digitales.'}
+  ]},
+
+  {t:'stage',kicker:'Etapa uno',h:'DESCUBRIR',body:'Antes de elegir un negocio, descubres tus fortalezas y exploras ideas que de verdad encajan contigo. El negocio correcto no es el que esta de moda, es el que puedes sostener porque nace de quien eres.'},
+
+  {t:'stage',kicker:'Etapa dos',h:'DECIDIR',body:'Tomas tus ideas y las pasas por filtros claros: encaje con tu vida, demanda real, lo que disfrutas. Sales con una sola idea y la certeza de por que es esa y no otra. Decidir es el paso que casi nadie da.'},
+
+  {t:'stage',kicker:'Etapa tres',h:'ARRANCAR, en 6 fases',list:['Montaje del negocio y lo esencial para empezar.','Estrategia: a quien sirves y como.','Marca: tu identidad, tu voz.','Tu pagina web, paso a paso.','Estrategia de contenido que atrae.','Marketing para conseguir tus primeras clientas.']},
+
+  {t:'why-method',kicker:'Parte dos: lo que sostiene todo',h:'La mentalidad va primero',body:'Puedes tener la mejor estrategia del mundo, pero si tus metas se desvanecen en dos semanas y tus habitos te sabotean, el negocio no despega. Por eso ensen el metodo Apretando Reset antes que la tactica.'},
+
+  {t:'pillar',kicker:'Apretando Reset, pilar uno',h:'Metas INEVITABLES',body:'Pasas de una lista de "deseos" de ano nuevo a un mapa claro y concreto: el que, el donde, el cuando y el como. Metas que se vuelven inevitables porque tienen un plan detras, no solo buena intencion.'},
+
+  {t:'pillar',kicker:'Apretando Reset, pilar dos',h:'Habitos segun tu personalidad',body:'No hay un solo metodo de habitos para todas. Conoces tu tipo de personalidad y construyes habitos que encajan con como eres de verdad, para que esta vez si se queden.'},
+
+  {t:'pillar',kicker:'Apretando Reset, pilar tres',h:'Manejo de tiempo y agenda',body:'Como mujer multitask, el tiempo nunca alcanza. Aprendes a "hacer tiempo" para tu negocio, a usar tu agenda a tu favor y a proteger el espacio donde construyes tus suenos.'},
+
+  {t:'picture',kicker:'Parte tres: como se ve',h:'Una vida por diseno, no por default',body:'Imagina despertar y trabajar en algo que amas, desde donde quieras, con tiempo para tu familia y para ti. No es suerte. Es el resultado de descubrir, decidir, arrancar y crecer, con metodo.'},
+
+  {t:'community',kicker:'No lo haces sola',h:'Un camino acompanado',body:'Miles de mujeres ya estan Apretando Reset juntas, construyendo el negocio y la vida que sonaron. El camino es tuyo, pero no tienes que recorrerlo en soledad.'},
+
+  {t:'why-me',kicker:'Por que yo',h:'Lo vivi antes de ensenarlo',body:'Hace anos vivia al dia, con las tarjetas al tope y en automatico. Decidi "no mas", aprendi el metodo y hoy vivo del negocio que construi. Soy autora del best seller Tu Propia Jefa y acompan a cientos de mujeres en la comunidad Apretando Reset.'},
+
+  {t:'recap',kicker:'En una frase',h:'No necesitas mas informacion. Necesitas un camino.',lead:'Descubrir tu idea. Decidir una. Arrancar con las 6 fases. Y sostenerlo con metas, habitos y tiempo. Ese es el camino completo.'},
+
+  {t:'cta',kicker:'Tu siguiente paso',h:'Lista para Apretar Reset?',step:'Agenda una llamada conmigo y veamos juntas en que etapa estas y cual es tu siguiente paso hacia el negocio y la vida que quieres.',disc:'Esta masterclass es solo con fines educativos. No se garantizan ingresos ni resultados. No income or result is guaranteed. Results vary from person to person and depend on your own work, context and consistency.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('section');
+    d.className='slide'+(i===cur?' on':'');
+    let h='';
+    if(s.kicker) h+=`<div class="kicker">${s.kicker}</div>`;
+    if(s.t==='title'){h+=`<h1>${s.h}</h1><p class="sub">${s.sub}</p>`;}
+    else{h+=`<h2>${s.h}</h2>`;}
+    if(s.lead) h+=`<p class="lead">${s.lead}</p>`;
+    if(s.body) h+=`<p>${s.body}</p>`;
+    if(s.list) h+=`<ul>${s.list.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    if(s.stages) h+=`<div class="stages">${s.stages.map(x=>`<div class="stage"><div class="n">${x.n}</div><div class="t">${x.t}</div><div class="d">${x.d}</div></div>`).join('')}</div>`;
+    if(s.step) h+=`<p class="cta-step">${s.step}</p>`;
+    if(s.disc) h+=`<p class="disc">${s.disc}</p>`;
+    h+=`<div class="brandline">Oh Sandra &middot; ohsandra.com</div>`;
+    d.innerHTML=h;
+    stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(cur+1)+' / '+S.length;
+}
+let cur=0;
+function go(n){cur=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);});
+render();
+</script>
+</body>
+</html>
