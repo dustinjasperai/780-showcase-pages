@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finish the Song: The Static Mix Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0D0F13;        /* near-black DAW canvas, darkened from brand navy */
+    --panel:#1A2230;     /* brand navy #161E2A, lifted */
+    --rule:#27323F;
+    --ink:#F2F5F8;
+    --ink-soft:#AEBAC6;
+    --ink-muted:#73818E;
+    --accent:#27ae60;    /* Home Studio Corner brand green (brand.json) */
+  }
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Open Sans',-apple-system,sans-serif;
+    line-height:1.55;overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:960px;animation:fade .35s ease}
+  .slide.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,6vw,64px);line-height:1.04;letter-spacing:.005em;margin-bottom:22px;text-transform:uppercase}
+  h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(26px,4vw,42px);line-height:1.1;margin-bottom:20px;text-transform:uppercase;letter-spacing:.01em}
+  .lead{font-size:clamp(17px,2vw,21px);color:var(--ink-soft);max-width:48ch}
+  p.body{font-size:clamp(16px,1.7vw,19px);color:var(--ink-soft);max-width:54ch;margin-bottom:14px}
+  ul{list-style:none;max-width:54ch}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,1.7vw,19px);color:var(--ink-soft);margin-bottom:16px}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .num{font-family:'Oswald',sans-serif;color:var(--accent);font-weight:700;margin-right:10px}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);padding:26px 30px;border-radius:4px;max-width:60ch}
+  .kicker{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:14px;color:var(--ink-muted);margin-bottom:16px}
+  .big{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(40px,8vw,88px);color:var(--accent);line-height:1}
+  .disclaimer{font-size:13px;color:var(--ink-muted);margin-top:26px;max-width:60ch;font-style:italic}
+  .cta-step{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(18px,2.4vw,26px);color:var(--ink);margin-top:8px}
+  footer{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 7vw;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
+  .meter{display:inline-flex;gap:4px;vertical-align:middle;margin-left:10px}
+  .meter i{width:6px;height:16px;background:var(--rule);display:inline-block;border-radius:1px}
+  .meter i.lit{background:var(--accent)}
+  .nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink-soft);font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.08em;padding:8px 16px;border-radius:3px;cursor:pointer;text-transform:uppercase}
+  .nav button:hover{border-color:var(--accent);color:var(--ink)}
+  @media(max-width:600px){#stage{padding:8vh 8vw}footer{font-size:10px}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer><span>Home Studio Corner</span><span>Finish the Song<span class="meter"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i></i><i></i></span></span></footer>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S=[
+ {t:'title',eyebrow:'A Home Studio Corner Masterclass',h1:'Finish the Song',lead:'Make a record you are proud of with the gear you already own. No new plugins. No multi-million-dollar room. The method that gets the mix 80% of the way there before you touch a single effect.'},
+
+ {t:'who',h2:'Who this is for',body:'You write songs. You have an interface, a mic, and a laptop. You have watched hours of tutorials. And you still have a folder full of half-finished tracks you have never released.',list:['You are a home recording musician, not a studio engineer','You are tired of being told the fix is more gear','You want to actually finish and share your music']},
+
+ {t:'trap',h2:'The trap',body:'The whole internet points you at the same answer when a mix sounds amateur: buy the better interface, the famous compressor plugin, the $300 reverb. So you buy it. And the mix still sounds the same. Because gear was never the thing standing between you and a finished song.'},
+
+ {t:'myth',h2:'Three myths that keep you stuck',list:['You need expensive gear to sound professional','You need to master every plugin before you start','You need years of training before you release anything'],body:'All three are false, and all three keep you buying and watching instead of finishing.'},
+
+ {t:'reframe',kicker:'The uncomfortable reframe',big:'80%',body:'Roughly 80 percent of a professional-sounding mix is decided before a single plugin is loaded. It is decided by balance. Most home recordists skip straight past that part, reaching for plugins to fix a problem that was really a volume problem.'},
+
+ {t:'part',eyebrow:'Part One',h1:'Why your mix fights you'},
+ {t:'point',h2:'Plugins cannot fix a balance problem',body:'When the vocal is buried, the instinct is to EQ it, compress it, add an exciter. But if the fader is simply too low against the guitars, no plugin on earth saves it. You end up stacking processing on top of a problem that a 3 dB fader move would have solved. That is why your mixes feel like a losing battle.'},
+ {t:'point',h2:'Overwhelm is a workflow problem',body:'A blank session with 24 tracks and a thousand possible moves is paralysing. The answer is not more options. It is a fixed, repeatable order of operations, so every song starts the same way and you always know the next move.'},
+
+ {t:'part',eyebrow:'Part Two',h1:'The Static Mix'},
+ {t:'point',h2:'What a static mix is',body:'A static mix is the whole song balanced with volume faders alone. No automation, no plugins, nothing moving. Just every element sitting at the right level against every other element. Done well, the song already sounds finished in mono before you add a thing.'},
+ {t:'steps',h2:'The method, in order',list:['<span class="num">1</span>Set a rough level for every track with faders only','<span class="num">2</span>Build around the most important element, usually the lead vocal','<span class="num">3</span>Check the balance in mono so nothing hides behind stereo width','<span class="num">4</span>Only now reach for EQ and compression, to serve the balance you already have']},
+ {t:'point',h2:'Why this changes everything',body:'When the static mix is right, plugins stop being rescue tools and start being seasoning. You are no longer fixing. You are enhancing a song that already works. That is the difference between a hobbyist mix and a release.'},
+
+ {t:'part',eyebrow:'Part Three',h1:'From method to released song'},
+ {t:'point',h2:'The simple production sequence',body:'The same balance-first thinking runs the whole process: write fast with a repeatable songwriting process, record only what the song needs, balance it static, then finish. Fewer tracks, fewer decisions, more finished songs.'},
+ {t:'point',h2:'Finish beats perfect',body:'A released song you are 90 percent happy with teaches you more than a perfect one that never leaves your hard drive. The musicians who improve fastest are the ones who finish the most, not the ones who own the most.'},
+ {t:'momentum',h2:'Momentum comes from finishing',body:'One finished song makes the next one easier. A monthly challenge and a community of people shipping music turns finishing from a rare event into a habit. That is the real accelerator, not the next purchase.'},
+
+ {t:'why',h2:'Why learn this here',body:'Home Studio Corner has taught this balance-first approach since 2009 to a community of hundreds of thousands of home recording musicians, through courses, monthly challenges, and live coaching. The whole philosophy is one idea: you already have what you need.'},
+
+ {t:'cta',eyebrow:'Your next step',h1:'Join the VIP Community',cta:'Get coaching, monthly challenges, and the full method, and finally finish your songs.',disclaimer:'This masterclass is educational. It teaches a recording and mixing method. No specific musical, career, or financial result is guaranteed. Results vary with the work you put in.'}
+];
+
+let i=0;const stage=document.getElementById('stage');
+function render(){
+ stage.innerHTML='';
+ const s=S[i];const d=document.createElement('div');d.className='slide on';
+ let h='';
+ if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+ if(s.h1)h+=`<h1>${s.h1}</h1>`;
+ if(s.h2)h+=`<h2>${s.h2}</h2>`;
+ if(s.kicker)h+=`<div class="kicker">${s.kicker}</div>`;
+ if(s.big)h+=`<div class="big">${s.big}</div>`;
+ if(s.lead)h+=`<p class="lead">${s.lead}</p>`;
+ if(s.body)h+=`<p class="body">${s.body}</p>`;
+ if(s.list){h+='<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>';}
+ if(s.cta)h+=`<div class="cta-step">${s.cta}</div>`;
+ if(s.disclaimer)h+=`<div class="disclaimer">${s.disclaimer}</div>`;
+ d.innerHTML=h;stage.appendChild(d);
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
