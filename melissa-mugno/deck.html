@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Airway Practice - Melissa Mugno Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a281f;      /* her deep forest-green ground */
+    --panel:#223027;   /* forest green, one step lighter (derived) */
+    --rule:#a8893a;    /* her bronze */
+    --accent:#d5c186;  /* her soft gold (site H2/link color) */
+    --text:#f7f5ed;    /* her ivory */
+    --muted:#b9c2b7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#10160f;color:var(--text);font-family:"Roboto Condensed",sans-serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:min(960px,96vw)}
+  .slide{background:var(--bg);border:1px solid #2d3a30;border-radius:14px;
+    padding:64px 60px;min-height:540px;display:none;flex-direction:column;
+    justify-content:center;position:relative;overflow:hidden}
+  .slide.on{display:flex}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;
+    background:linear-gradient(var(--rule),var(--accent))}
+  .kicker{font-family:"Roboto Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.32em;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:22px}
+  h1{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:58px;line-height:1.04;
+    letter-spacing:.3px}
+  h2{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:42px;line-height:1.08;
+    margin-bottom:20px}
+  .em{font-style:italic;color:var(--accent)}
+  p{font-size:20px;line-height:1.6;color:var(--text);max-width:62ch;margin-top:14px}
+  p.lead{font-size:23px;color:var(--muted)}
+  ul{margin-top:22px;max-width:60ch;list-style:none}
+  li{font-size:20px;line-height:1.5;padding-left:26px;position:relative;margin-bottom:16px}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;
+    background:var(--accent);border-radius:50%}
+  .pill{display:inline-block;font-family:"Cormorant Garamond",serif;font-style:italic;
+    font-size:26px;color:var(--accent);border:1px solid var(--rule);border-radius:999px;
+    padding:6px 20px;margin:0 10px 12px 0}
+  .big{font-family:"Cormorant Garamond",serif;font-size:140px;line-height:1;color:var(--accent);
+    font-weight:600}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 40px;margin-top:26px}
+  .grid h3{font-family:"Cormorant Garamond",serif;font-size:27px;color:var(--accent);margin-bottom:4px}
+  .grid p{font-size:17px;margin-top:4px;color:var(--muted)}
+  .foot{position:absolute;bottom:22px;right:30px;font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:#6f7a6c}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;
+    gap:14px;align-items:center;z-index:10}
+  .nav button{background:var(--panel);color:var(--text);border:1px solid var(--rule);
+    border-radius:8px;padding:8px 16px;font-family:"Roboto Condensed",sans-serif;cursor:pointer;
+    font-size:14px}
+  .count{font-size:13px;color:var(--muted);letter-spacing:.15em}
+  .disclaimer{font-size:13px;color:#8a9487;margin-top:26px;max-width:66ch;line-height:1.5}
+  .cta-step{font-family:"Cormorant Garamond",serif;font-size:30px;color:var(--text);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span class="count" id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S=[
+ {t:'title',kicker:'A Masterclass with Melissa Mugno',h:'The Airway Practice',
+  p:'How a dental team builds an airway program patients actually say yes to - without adding a single new chair or chasing another certification alone.'},
+
+ {t:'lead',kicker:'What this hour is for',h:'By the end, you will see airway as a workflow, not a wish.',
+  p:'Not more science about why the airway matters. You already believe that. This is the part nobody teaches: how to make airway something your whole team does on every patient, so the cases you find actually turn into care.'},
+
+ {t:'who',kicker:'Who this is for',h:'You already know the airway is the missing piece.',
+  p:'This is for the dentist, hygienist or practice owner who has seen the research, believes the mouth is connected to sleep, posture and the whole body, and wants airway to be part of how the practice works - not a side project one person runs on their lunch break.'},
+
+ {t:'trap',kicker:'The trap',h:'One trained clinician is not an airway program.',
+  p:'Most practices try to "add airway" by sending one person to a course. They come back fired up, start screening, and three months later nothing has changed. The schedule is full, the team never got trained, and the cases die in the hand-off. The knowledge was never the problem.'},
+
+ {t:'reframe',kicker:'The reframe',h:'Airway is a <span class="em">team</span> behavior, not a solo skill.',
+  p:'A patient decides to pursue airway care in the small moments: how the front desk answers the phone, what the hygienist says during the probe, whether the doctor sounds certain. If the whole team is not saying the same thing, the best screening protocol in the world leaks every case it finds.'},
+
+ {t:'part',kicker:'Part One',h:'The core problem',
+  p:'Airway cases fall apart at the hand-off, not the diagnosis. You can spot the signs perfectly and still lose the patient because the next person in the chair does not know what to say, the paperwork is not ready, and nobody owns the follow-up.'},
+ {t:'bullets',kicker:'Part One',h:'Where cases leak',
+  items:['The hygienist screens, but nobody is trained to explain what they found','The doctor presents, but the team cannot answer the airway question that follows','The patient is interested, but the next appointment is never booked','One person carries the whole program, so it stops the week they are out']},
+ {t:'lead',kicker:'Part One',h:'The leak has a number on it.',
+  p:'Every interested patient who walks out without a next step is a case you diagnosed and then gave away. Multiply it across a year of hygiene visits and the airway program you meant to build is already paying for itself in the cases you are currently losing.'},
+
+ {t:'part',kicker:'Part Two',h:'The AIR system',
+  p:'AIR is how we turn airway from a solo interest into a workflow the whole practice runs. Four moving parts, each owned by the team, not one person.'},
+ {t:'grid',kicker:'Part Two - AIR',h:'The four parts of AIR',
+  cells:[
+   ['Screen','Simple, repeatable airway screening every team member can run on every patient, every visit.'],
+   ['Educate','Plain-language patient education that connects breathing, sleep and oral function so the patient understands before you present.'],
+   ['Communicate','Defined team roles and scripts so the front desk, hygienist and doctor all say the same thing.'],
+   ['Workflow','Patient-centered clinical pathways and follow-up so a found case actually becomes a booked case.']]},
+ {t:'lead',kicker:'Part Two',h:'The moment of yes is a team moment.',
+  p:'A patient says yes to airway care when every touchpoint lines up: the screening felt routine, the explanation made sense, and three different people sounded like they were describing the same thing. AIR is how you engineer that, deliberately, instead of hoping for it.'},
+
+ {t:'part',kicker:'Part Two',h:'The Four Pillars behind it',
+  p:'The AIR workflow sits inside a bigger idea I teach: you cannot build an aligned practice from a dysregulated state. Four pillars hold the work together.'},
+ {t:'grid',kicker:'Part Two - Four Pillars',h:'Mind Your Mouth. Mind Your Mind. Mind Your Body. Mind Your Business.',
+  cells:[
+   ['Mind Your Mouth','The clinical foundation - breathing, oral function and how you communicate the work to patients.'],
+   ['Mind Your Mind','The beliefs and inner dialogue that decide whether you present airway with conviction or hesitation.'],
+   ['Mind Your Body','Breath and nervous-system regulation - treating the whole patient, and keeping yourself out of burnout.'],
+   ['Mind Your Business','The systems and team structure that let airway scale past one motivated person.']]},
+
+ {t:'part',kicker:'Part Three',h:'When the whole team owns it',
+  p:'Here is what a practice feels like once AIR is running and the Four Pillars are in place. Not a someday vision - the specific, boring, repeatable things that tell you it is working.'},
+ {t:'bullets',kicker:'Part Three',h:'When the whole team owns it',
+  items:['Every patient is screened the same way, by whoever is in the room','The team answers airway questions without looking at the doctor','Interested patients leave with the next step already booked','The program keeps running the week you are on vacation','Airway becomes a reason patients choose your practice, and tell others']},
+ {t:'lead',kicker:'Part Three',h:'A Tuesday in an airway practice.',
+  p:'The hygienist flags a sleep-and-breathing pattern and the patient already understands why it matters, because the front desk set it up before they sat down. The doctor confirms, the coordinator books the pathway, and nobody scrambled. It is quieter, not busier. That calm is the system working.'},
+
+ {t:'lead',kicker:'Why me',h:'I have spent a decade building this inside real practices.',
+  p:'I am a registered dental hygienist and orofacial myologist, a pioneer of the modern myofunctional movement, and I have spent over ten years implementing airway protocols inside dental practices and training the teams who run them. This is not theory I read - it is the system I built, case by case, chair by chair.'},
+
+ {t:'quote',kicker:'The idea in one line',h:'"You can’t build an aligned practice from a dysregulated state."',
+  p:'Airway is not one more service to bolt on. It is a different way of running the practice - calmer, more connected, and built to last past any one person.'},
+
+ {t:'bullets',kicker:'Recap',h:'What you walk away knowing',
+  items:['Why airway programs leak at the hand-off, not the diagnosis','The four parts of AIR - Screen, Educate, Communicate, Workflow','The Four Pillars that hold the work together','What a practice looks like when the whole team runs airway']},
+
+ {t:'cta',kicker:'Your next step',h:'Bring AIR into your practice.',
+  step:'If you want the whole-team system - the screening, the scripts, the workflow and the Four Pillars behind it - the AIR Certification is where we build it with you.',
+  disclaimer:'This masterclass is for educational purposes only. It is not clinical, financial or professional advice, and it is not a guarantee of any specific result. Outcomes vary by practice, team and implementation.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let html='';
+  if(s.kicker) html+='<div class="kicker">'+s.kicker+'</div>';
+  if(s.t==='title'){ html+='<h1>'+s.h+'</h1><p class="lead">'+s.p+'</p>'; }
+  else if(s.t==='grid'){
+    html+='<h2>'+s.h+'</h2><div class="grid">';
+    s.cells.forEach(c=>{html+='<div><h3>'+c[0]+'</h3><p>'+c[1]+'</p></div>';});
+    html+='</div>';
+  }
+  else if(s.t==='bullets'){
+    html+='<h2>'+s.h+'</h2><ul>';
+    s.items.forEach(it=>{html+='<li>'+it+'</li>';});
+    html+='</ul>';
+  }
+  else if(s.t==='cta'){
+    html+='<h2>'+s.h+'</h2><div class="cta-step">'+s.step+'</div><div class="disclaimer">'+s.disclaimer+'</div>';
+  }
+  else { html+='<h2>'+s.h+'</h2>'; if(s.p) html+='<p'+(s.t==='lead'||s.t==='quote'?' class="lead"':'')+'>'+s.p+'</p>'; }
+  html+='<div class="foot">Melissa Mugno · The Airway Practice</div>';
+  d.innerHTML=html;
+  deck.appendChild(d);
+});
+let cur=0;
+function go(n){document.querySelectorAll('.slide')[cur].classList.remove('on');
+  cur=Math.max(0,Math.min(S.length-1,cur+n));
+  document.querySelectorAll('.slide')[cur].classList.add('on');
+  document.getElementById('count').textContent=(cur+1)+' / '+S.length;}
+document.getElementById('count').textContent='1 / '+S.length;
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+</script>
+</body>
+</html>
