@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Capacity Equation | A Masterclass with Emily Grey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#181816;
+    --panel:#241f24;
+    --rule:#3a333a;
+    --ink:#f5eef3;
+    --ink-soft:#cbbfc7;
+    --ink-muted:#938792;
+    --accent:#942982;
+    --gold:#e9c235;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Josefin Sans',-apple-system,sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .slide{
+    display:none;
+    width:100%;height:100%;
+    padding:8vh 9vw;
+    flex-direction:column;justify-content:center;
+    max-width:1100px;margin:0 auto;
+  }
+  .slide.on{display:flex;}
+  .kicker{font-family:'Josefin Sans';font-weight:600;font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;}
+  h1{font-family:'Rozha One';font-weight:400;font-size:clamp(38px,7vw,78px);line-height:1.04;letter-spacing:.005em;margin-bottom:26px;}
+  h2{font-family:'Rozha One';font-weight:400;font-size:clamp(30px,5vw,54px);line-height:1.1;margin-bottom:22px;}
+  .sub{font-size:clamp(18px,2.4vw,26px);color:var(--ink-soft);font-weight:300;line-height:1.5;max-width:760px;}
+  .big{font-family:'Rozha One';font-size:clamp(34px,6vw,64px);line-height:1.08;}
+  .big .hl{color:var(--accent);}
+  .num{font-family:'Rozha One';color:var(--gold);font-size:clamp(44px,9vw,96px);line-height:1;margin-bottom:10px;}
+  ul{list-style:none;margin-top:14px;}
+  li{font-size:clamp(17px,2.2vw,24px);color:var(--ink-soft);padding:12px 0;border-bottom:1px solid var(--rule);display:flex;gap:16px;align-items:baseline;}
+  li:last-child{border-bottom:none;}
+  li b{font-family:'Josefin Sans';font-weight:600;color:var(--ink);}
+  li .lv{color:var(--accent);font-weight:600;min-width:28px;}
+  .label{font-family:'Rozha One';font-size:clamp(22px,3vw,34px);color:var(--ink-muted);}
+  .part{color:var(--accent);}
+  .grid6{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 34px;margin-top:18px;}
+  .grid6 .cell{padding:14px 0;border-top:2px solid var(--rule);}
+  .grid6 .cell .lv{font-family:'Rozha One';color:var(--accent);font-size:22px;}
+  .grid6 .cell .nm{font-weight:600;color:var(--ink);font-size:clamp(16px,2vw,21px);margin-top:4px;}
+  .grid6 .cell .de{color:var(--ink-muted);font-size:15px;margin-top:4px;}
+  .disclaimer{font-size:13px;color:var(--ink-muted);margin-top:30px;max-width:720px;line-height:1.5;}
+  .cta-steps{margin-top:18px;}
+  .cta-steps li{border:none;padding:8px 0;}
+  footer{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:space-between;padding:0 24px;font-size:12px;color:var(--ink-muted);letter-spacing:.06em;}
+  .brandmark{font-family:'Rozha One';color:var(--ink-soft);}
+  .hint{opacity:.6;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<footer>
+  <span class="brandmark">Emily Grey</span>
+  <span class="hint">Use arrow keys to move through the masterclass</span>
+  <span id="pg"></span>
+</footer>
+<script>
+const S = [
+  {t:'title', kicker:'A Masterclass with Emily Grey',
+   h:'The Capacity Equation',
+   sub:'How seven-figure women grow revenue, impact, and life without adding more hours to the day.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You built the business. Now it is building on you.',
+   sub:'You run a six or seven-figure company. Revenue is growing, the team is growing, the decisions are growing. And somehow there is never enough time, energy, or bandwidth left for you.'},
+
+  {t:'trap', kicker:'The trap',
+   big:'You keep solving it with <span class="hl">more hours</span>. The hours keep running out.'},
+
+  {t:'hook', kicker:'A hard reframe',
+   big:'Working harder is <span class="hl">biologically guaranteed</span> to make this worse.',
+   sub:'Your brain treats a maxed-out founder as a threat state. In a threat state you react instead of lead, you execute instead of think, and you become the bottleneck you are trying to remove.'},
+
+  {t:'label', part:'Part One', label:'You are optimizing the wrong variable.'},
+
+  {t:'two', kicker:'Time versus capacity',
+   h:'You do not need more time.',
+   sub:'Everyone has the same hours. High-capacity leaders do not find more time, they build more capacity: the time, energy, and bandwidth available to think, decide, and lead at the top of their ability.'},
+
+  {t:'two', kicker:'You being the bottleneck',
+   h:'The bottleneck is a nervous-system problem first.',
+   sub:'When every decision routes through you, your capacity becomes the ceiling on the whole company. The fix is not a better calendar. It is changing what runs through you and how your brain meets it.'},
+
+  {t:'list', kicker:'The silent bandwidth killers',
+   h:'Where your capacity leaks',
+   items:[['','Decisions you have not actually delegated, only the tasks'],['','Context you hold in your head that no system holds for you'],['','Reactive work dressed up as leadership'],['','A pace your body has quietly started to resist']]},
+
+  {t:'label', part:'Part Two', label:'The method: the Capacity Levers.'},
+
+  {t:'levers', kicker:'The Capacity Levers',
+   h:'Six levers, not sixty tactics.',
+   sub:'Capacity is not willpower. It is a small set of levers you pull on purpose. Pull the right one and time, energy, and bandwidth open up without slowing growth.',
+   cells:[
+     ['01','Decisions','What routes through you, and what no longer should'],
+     ['02','Rhythms','The weekly structure that protects strategic thinking'],
+     ['03','Boundaries','The lines that keep growth from consuming you'],
+     ['04','Team and AI','Capacity you build outside your own hours'],
+     ['05','Energy','Leading from a regulated state, not a threat state'],
+     ['06','Focus','The few outcomes that actually move the company']]},
+
+  {t:'two', kicker:'The Capacity Diagnostic',
+   h:'First we find the leak.',
+   sub:'Before you pull a single lever, you map exactly where your bandwidth is leaking and which one thing to cut first. Most owners are over-resourced in information and under-resourced in capacity.'},
+
+  {t:'metrics', kicker:'The Metrics for Spacious Success',
+   h:'Track these instead of time.',
+   num:'6',
+   sub:'High-capacity leaders stop measuring hours worked and start measuring the six signals that predict more revenue, more impact, and more life at the same time.'},
+
+  {t:'label', part:'Part Three', label:'What spacious success looks like.'},
+
+  {t:'two', kicker:'The proof of concept',
+   h:'Lead the business. Live the life it is making possible.',
+   sub:'Capacity-first means you can step back from the inbox for weeks at a time, take real time off, and still grow. The point was never to work less for its own sake. It is to lead instead of react.'},
+
+  {t:'why', kicker:'Why me',
+   h:'I built this because I needed it.',
+   sub:'I left Wall Street in 2015, founded The Flourish Market, and scaled it past seven figures into a multi-business ecosystem. I reach more than 55,000 women every week, and I teach the exact capacity method that let me grow while getting my life back.'},
+
+  {t:'recap', kicker:'The whole idea in one line',
+   big:'Build <span class="hl">capacity</span>, not calendars. The growth follows.'},
+
+  {t:'cta', kicker:'From here',
+   h:'Keep building your capacity.',
+   steps:['Listen to the free At Capacity podcast to take the method for a test drive.',
+          'If you lead a seven-figure business and want to go deeper, apply to the Flourish Mastermind.',
+          'Bring your biggest bottleneck. We will find the lever that moves it.'],
+   disclaimer:'This masterclass is educational. It shares frameworks and perspective, not a promise of specific business or financial results. Outcomes vary with your market, your decisions, and your execution.'}
+];
+
+const stage=document.getElementById('stage');
+const pg=document.getElementById('pg');
+function esc(s){return s||'';}
+function build(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='slide'+(i===0?' on':'');
+    let html='';
+    if(s.kicker) html+='<div class="kicker">'+esc(s.kicker)+'</div>';
+    if(s.t==='title'){html+='<h1>'+s.h+'</h1><p class="sub">'+esc(s.sub)+'</p>';}
+    else if(s.t==='label'){html+='<div class="kicker part">'+esc(s.part)+'</div><div class="label">'+esc(s.label)+'</div>';}
+    else if(s.t==='trap'||s.t==='hook'||s.t==='recap'){html+='<div class="big">'+s.big+'</div>';if(s.sub)html+='<p class="sub" style="margin-top:22px">'+esc(s.sub)+'</p>';}
+    else if(s.t==='levers'){
+      html+='<h2>'+s.h+'</h2><p class="sub">'+esc(s.sub)+'</p><div class="grid6">';
+      s.cells.forEach(c=>{html+='<div class="cell"><div class="lv">'+c[0]+'</div><div class="nm">'+c[1]+'</div><div class="de">'+c[2]+'</div></div>';});
+      html+='</div>';
+    }
+    else if(s.t==='metrics'){html+='<div class="num">'+s.num+'</div><h2>'+s.h+'</h2><p class="sub">'+esc(s.sub)+'</p>';}
+    else if(s.t==='list'){
+      html+='<h2>'+s.h+'</h2><ul>';
+      s.items.forEach(it=>{html+='<li><span class="lv">'+(it[0]||'&bull;')+'</span><span>'+it[1]+'</span></li>';});
+      html+='</ul>';
+    }
+    else if(s.t==='cta'){
+      html+='<h2>'+s.h+'</h2><ul class="cta-steps">';
+      s.steps.forEach(st=>{html+='<li><span class="lv">&bull;</span><span>'+st+'</span></li>';});
+      html+='</ul><p class="disclaimer">'+esc(s.disclaimer)+'</p>';
+    }
+    else {html+='<h2>'+esc(s.h)+'</h2><p class="sub">'+esc(s.sub)+'</p>';}
+    d.innerHTML=html;
+    stage.appendChild(d);
+  });
+}
+let cur=0;
+function show(n){
+  const sl=document.querySelectorAll('.slide');
+  if(n<0||n>=sl.length)return;
+  sl[cur].classList.remove('on');
+  cur=n;sl[cur].classList.add('on');
+  pg.textContent=(cur+1)+' / '+sl.length;
+}
+build();
+show(0);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft')show(cur-1);
+});
+document.addEventListener('click',()=>show(cur+1));
+</script>
+</body>
+</html>
