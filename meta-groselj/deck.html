@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speak to Convert | A live masterclass with Meta Grošelj</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#faf8f5;
+    --panel:#f3efe9;
+    --rule:#e7e0d6;
+    --ink:#22242a;
+    --ink-soft:#55636f;
+    --accent:#e74c3c;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Mulish',-apple-system,sans-serif;
+    background:#ddd6cc;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px;
+  }
+  .stage{width:100%;max-width:960px;}
+  .slide{
+    display:none;background:var(--bg);border:1px solid var(--rule);
+    aspect-ratio:16/9;width:100%;padding:64px 72px;position:relative;
+    flex-direction:column;overflow:hidden;
+  }
+  .slide.active{display:flex;}
+  .voiceline{width:46px;height:4px;background:var(--accent);border-radius:2px;margin-bottom:28px;}
+  .eyebrow{font-family:'Montserrat',sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+  h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:58px;line-height:1.04;letter-spacing:-.015em;color:var(--ink);}
+  h2{font-family:'Montserrat',sans-serif;font-weight:700;font-size:40px;line-height:1.1;letter-spacing:-.01em;color:var(--ink);}
+  .sub{font-family:'Montserrat',sans-serif;font-weight:500;font-size:24px;color:var(--ink-soft);margin-top:18px;line-height:1.3;}
+  p.body{font-size:21px;line-height:1.5;color:var(--ink-soft);max-width:48ch;margin-top:18px;}
+  .brandline{margin-top:auto;font-family:'Montserrat',sans-serif;font-weight:600;font-size:16px;color:var(--ink);letter-spacing:.02em;}
+  .brandline span{color:var(--accent);}
+  .kicker{font-family:'Montserrat',sans-serif;font-weight:800;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);}
+  .part-num{font-family:'Montserrat',sans-serif;font-weight:800;font-size:120px;line-height:1;color:var(--accent);opacity:.18;position:absolute;right:56px;bottom:28px;}
+  ul.pts{list-style:none;margin-top:26px;}
+  ul.pts li{font-size:21px;line-height:1.4;color:var(--ink-soft);padding-left:26px;position:relative;margin-bottom:16px;max-width:52ch;}
+  ul.pts li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;background:var(--accent);border-radius:50%;}
+  ul.pts li b{color:var(--ink);font-weight:700;}
+  .big-quote{font-family:'Montserrat',sans-serif;font-weight:700;font-size:44px;line-height:1.12;letter-spacing:-.01em;color:var(--ink);max-width:20ch;}
+  .big-quote .hl{color:var(--accent);}
+  .cta-box{margin-top:26px;background:var(--panel);border:1px solid var(--rule);border-left:5px solid var(--accent);padding:26px 30px;max-width:40ch;}
+  .cta-box .step{font-family:'Montserrat',sans-serif;font-weight:700;font-size:23px;color:var(--ink);}
+  .cta-box .note{font-size:17px;color:var(--ink-soft);margin-top:8px;}
+  .disc{position:absolute;left:72px;bottom:26px;font-size:12px;color:var(--ink-soft);opacity:.8;max-width:60ch;}
+  .credit .row{display:flex;gap:14px;margin-top:14px;align-items:flex-start;}
+  .credit .row .b{min-width:150px;font-family:'Montserrat',sans-serif;font-weight:700;color:var(--ink);font-size:18px;}
+  .credit .row .t{font-size:18px;color:var(--ink-soft);}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-family:'Montserrat',sans-serif;font-size:14px;color:#6b6b6b;background:#faf8f5;border:1px solid var(--rule);border-radius:40px;padding:8px 18px;}
+  .nav button{border:none;background:var(--accent);color:#fff;font-weight:700;border-radius:20px;padding:6px 14px;cursor:pointer;font-family:'Montserrat',sans-serif;}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  @media(max-width:720px){.slide{padding:36px 30px;}h1{font-size:36px;}h2{font-size:27px;}.big-quote{font-size:30px;}p.body,ul.pts li{font-size:17px;}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <span id="count"></span>
+  <button id="next">Next</button>
+</div>
+<script>
+const S=[
+  {t:'title'},
+  {t:'promise'},
+  {t:'who'},
+  {t:'trap'},
+  {t:'reframe'},
+  {t:'section',kicker:'Part One',h:'Why confident delivery still does not close'},
+  {t:'content',eyebrow:'The real gap',h:'Polish is not persuasion',body:'You can have clean slides, a steady voice and good eye contact, and still hear "let me think about it." Influence is not how well you perform. It is how you are structured to move a specific person to act.'},
+  {t:'content',eyebrow:'The hidden driver',h:'The voice inside runs the voice on stage',pts:[
+    '<b>The loop:</b> "They will see I am nervous. I will forget my point."',
+    '<b>What it does:</b> pulls your attention onto yourself and off the room.',
+    '<b>The work:</b> reset the inner dialogue first, then the delivery takes care of itself.'
+  ]},
+  {t:'section',kicker:'Part Two',h:'The method: speaking that converts'},
+  {t:'content',eyebrow:'Pillar 1',h:'Inner authority',body:'Before technique, we rebuild the self-talk. We reframe the limiting story into a strong, grounded inner authority. This is the heart of Verjemi v svoj glas, and it is where real presence comes from.'},
+  {t:'content',eyebrow:'Pillar 2',h:'The Formula format',body:'A repeatable scenario formula for writing a talk. It shortens your preparation time and frees you from the pressure before you present, whether it is a planned keynote or an unexpected two minutes on your feet.'},
+  {t:'content',eyebrow:'Pillar 3',h:'Read the room, find the yes',body:'Audience analysis by the method of influential communication. You learn to understand the one person whose problem you solve, so the talk is built for them, not broadcast at everyone.'},
+  {t:'content',eyebrow:'Pillar 4',h:'Conversion stories and calls to action',pts:[
+    '<b>Stories:</b> structured so the listener sees themselves in them.',
+    '<b>Your story:</b> introduce yourself as the expert, short and clear.',
+    '<b>The ask:</b> a call to action that respects the listener and still moves them.'
+  ]},
+  {t:'content',eyebrow:'Pillar 5',h:'The grounded, sovereign stance',body:'Charismatic communication under pressure: self regulation, a stance that holds when it matters, and a voice trained for range, melody, dynamics and tempo so you hold attention without forcing it.'},
+  {t:'section',kicker:'Part Three',h:'When the pitch finally lands'},
+  {t:'content',eyebrow:'Before and after',h:'The same pitch, now landing',body:'The old version earned a polite nod. The new one is built on inner authority, a clear scenario and a story the listener feels. Same person, same room. This time they lean in, and they act.'},
+  {t:'credit'},
+  {t:'recap'},
+  {t:'cta',disc:'Educational content only. Examples are illustrative. No specific result or income is guaranteed. Results vary by person and effort.'}
+];
+
+function render(s){
+  const a=s.accent;
+  if(s.t==='title') return `<div class="voiceline"></div><div class="eyebrow">A live masterclass</div><h1>Speak to Convert</h1><div class="sub">The rhetoric that moves a room to act.</div><div class="brandline">with <span>Meta Grošelj</span> &middot; Shaping Future Voices</div>`;
+  if(s.t==='promise') return `<div class="voiceline"></div><div class="eyebrow">What you leave with</div><h2>In the next hour</h2><ul class="pts"><li>Why confident delivery still does not get the yes.</li><li>The inner reset that steadies you before you speak.</li><li>A repeatable way to build a talk that converts.</li></ul>`;
+  if(s.t==='who') return `<div class="voiceline"></div><div class="eyebrow">Who this is for</div><h2>You already speak. You want it to land.</h2><p class="body">For professionals, leaders and entrepreneurs who present in meetings, in sales, on social media and on stage, and who are tired of speaking well but not persuading.</p>`;
+  if(s.t==='trap') return `<div class="voiceline"></div><div class="eyebrow">The trap</div><div class="big-quote">You prepared. You delivered cleanly. And the room still said, <span class="hl">"let me think about it."</span></div>`;
+  if(s.t==='reframe') return `<div class="voiceline"></div><div class="eyebrow">The reframe</div><div class="big-quote">Delivery gets attention. <span class="hl">Rhetoric gets the yes.</span></div><p class="body">Most training stops at how you look and sound. The persuasion lives one layer deeper.</p>`;
+  if(s.t==='section') return `<div class="voiceline"></div><div class="kicker">${s.kicker}</div><h1 style="margin-top:14px;max-width:18ch">${s.h}</h1><div class="part-num">${s.kicker.split(' ')[1]||''}</div>`;
+  if(s.t==='content'){
+    const b = s.body?`<p class="body">${s.body}</p>`:'';
+    const l = s.pts?`<ul class="pts">${s.pts.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+    return `<div class="voiceline"></div><div class="eyebrow">${s.eyebrow}</div><h2>${s.h}</h2>${b}${l}`;
+  }
+  if(s.t==='credit') return `<div class="voiceline"></div><div class="eyebrow">Who is teaching this</div><h2>Meta Grošelj</h2><div class="credit"><div class="row"><div class="b">Author</div><div class="t">Verjemi v svoj glas (on voice and inner authority) and Fokus.</div></div><div class="row"><div class="b">Practice</div><div class="t">Rhetoric coach and trainer; runs live group trainings every month.</div></div><div class="row"><div class="b">Approach</div><div class="t">Rhetoric as the psychology of influence, built on the speaker's inner dialogue first.</div></div></div>`;
+  if(s.t==='recap') return `<div class="voiceline"></div><div class="eyebrow">The three moves</div><h2>What converts a room</h2><ul class="pts"><li><b>Reset the inner dialogue</b> so your attention is on them, not on you.</li><li><b>Build the talk with the Formula format</b> for the one person you are there to move.</li><li><b>Close with a story and a clear ask</b> that respects the listener.</li></ul>`;
+  if(s.t==='cta') return `<div class="voiceline"></div><div class="eyebrow">Your next step</div><h2>Let us work on your voice</h2><div class="cta-box"><div class="step">Book a 30-minute e-coffee with me</div><div class="note">We will look at your next important talk and map the fastest way to make it convert. Or join the next live monthly training.</div></div><div class="disc">${s.disc}</div>`;
+  return '';
+}
+
+let i=0;
+const stage=document.getElementById('stage');
+function show(){
+  stage.innerHTML = S.map((s,idx)=>`<section class="slide ${idx===i?'active':''}">${render(s)}</section>`).join('');
+  document.getElementById('count').textContent=`${i+1} / ${S.length}`;
+  document.getElementById('prev').disabled=(i===0);
+  document.getElementById('next').disabled=(i===S.length-1);
+}
+document.getElementById('prev').onclick=()=>{if(i>0){i--;show();}};
+document.getElementById('next').onclick=()=>{if(i<S.length-1){i++;show();}};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){if(i<S.length-1){i++;show();}}
+  if(e.key==='ArrowLeft'){if(i>0){i--;show();}}
+});
+show();
+</script>
+</body>
+</html>
