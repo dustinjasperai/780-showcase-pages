@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grow the Leader, Not the Skillset - a live masterclass with Ben Pangas</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f2ea;      /* warm off-white ground, from brand.json body bg #f4f4f2 */
+    --panel:#fffdf8;   /* raised paper */
+    --ink:#22303f;     /* deep slate ink (from his #2c3e50) */
+    --muted:#5f6b74;   /* secondary ink */
+    --rule:#2c3e50;    /* his dominant slate */
+    --accent:#c69a43;  /* his muted gold accent (brand.json #cc9f4d, 10 uses) */
+    --head:'Newsreader', Georgia, serif;
+    --body:'Poppins', -apple-system, system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:#2a333c;font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .stage{max-width:1120px;margin:0 auto;padding:36px 20px 80px}
+  .slide{
+    position:relative;background:var(--bg);border-radius:14px;overflow:hidden;
+    aspect-ratio:16/9;margin:0 0 30px;padding:74px 86px;display:flex;flex-direction:column;
+    box-shadow:0 18px 50px rgba(0,0,0,.28);
+  }
+  .slide::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--accent)}
+  .num{position:absolute;right:40px;top:34px;font-size:15px;letter-spacing:.2em;color:#b9b2a4;font-weight:600}
+  .kick{font-size:17px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:26px}
+  h1{font-family:var(--head);font-weight:500;font-size:62px;line-height:1.06;letter-spacing:-.01em;max-width:16ch}
+  h2{font-family:var(--head);font-weight:500;font-size:48px;line-height:1.12;max-width:20ch}
+  .lead{font-size:26px;line-height:1.5;color:var(--muted);margin-top:28px;max-width:34ch;font-weight:300}
+  .big{font-family:var(--head);font-weight:400;font-size:52px;line-height:1.18;max-width:22ch}
+  .big .a{color:var(--accent);font-style:italic}
+  .sub{font-size:23px;line-height:1.5;color:var(--muted);margin-top:22px;max-width:40ch;font-weight:300}
+  .spacer{flex:1}
+  .marker{display:inline-flex;align-items:center;gap:12px;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--rule);font-weight:600}
+  .marker .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  ul.pts{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:20px;max-width:38ch}
+  ul.pts li{position:relative;padding-left:34px;font-size:23px;line-height:1.45;color:var(--ink);font-weight:300}
+  ul.pts li::before{content:'';position:absolute;left:0;top:11px;width:16px;height:2px;background:var(--accent)}
+  .part{font-family:var(--head);font-weight:300;font-size:30px;color:var(--muted)}
+  .part b{display:block;font-weight:500;font-size:66px;color:var(--ink);margin-top:10px;letter-spacing:-.01em}
+  .credit{display:flex;flex-direction:column;gap:14px;margin-top:24px;max-width:46ch}
+  .credit .r{font-size:21px;color:var(--ink);font-weight:300;position:relative;padding-left:30px}
+  .credit .r::before{content:'';position:absolute;left:0;top:11px;width:14px;height:2px;background:var(--accent)}
+  .cta-box{margin-top:30px;font-size:24px;line-height:1.5;color:var(--ink);font-weight:400;max-width:34ch}
+  .disc{margin-top:auto;font-size:14px;line-height:1.5;color:#8d8778;max-width:60ch;font-weight:300}
+  .present{margin-top:36px;font-size:20px;color:var(--ink);font-weight:500}
+  .present span{display:block;font-size:16px;color:var(--muted);font-weight:300;margin-top:4px}
+  svg.axis{position:absolute;right:76px;bottom:70px;opacity:.9}
+  @media (max-width:760px){
+    .slide{padding:44px 38px}h1{font-size:40px}h2{font-size:34px}.big{font-size:34px}
+    .part b{font-size:44px}.lead{font-size:20px}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<script>
+const S = [
+  {t:'title',
+    kick:'A live masterclass',
+    h:'Grow the Leader, Not the Skillset',
+    lead:'Why your strongest people stall, and the vertical shift that gets them unstuck.',
+    present:'Ben Pangas', presentSub:'Developmental and executive coaching' },
+
+  {t:'who',
+    kick:'Who this is for',
+    h:'For leaders carrying more than their training prepared them for',
+    pts:['Executives and senior leaders holding real complexity','Managers who keep getting sent to more training','Teams where the same patterns keep returning'] },
+
+  {t:'big',
+    kick:'The trap',
+    big:'You have done the courses. The 360s. The offsite. And the same patterns came back.',
+    sub:'More input did not change how you show up when it actually counts.' },
+
+  {t:'big',
+    kick:'The reframe',
+    big:'You were given more <span class="a">skills.</span> What you needed was more <span class="a">capacity.</span>',
+    sub:'You cannot train your way out of a capacity problem.' },
+
+  {t:'part', part:'Part One', title:'Horizontal vs Vertical' },
+
+  {t:'two',
+    kick:'Two kinds of growth',
+    h:'Adding to the leader, or growing the leader',
+    pts:['Horizontal: more skills, models, and knowledge. Useful, but it fills the same container.','Vertical: more awareness and capacity, so the container itself grows.','Most development is horizontal. The stall is almost always vertical.'] },
+
+  {t:'two',
+    kick:'The ceiling',
+    h:'The reactive ceiling',
+    pts:['Under pressure, every leader has reactive tendencies that cap their effect.','Controlling, complying, protecting: the habits that once kept you safe.','They do not yield to more technique. They yield to development.'] },
+
+  {t:'part', part:'Part Two', title:'The Four Shifts' },
+
+  {t:'two',
+    kick:'Shift one',
+    h:'Waking Up',
+    pts:['Expanding awareness and presence.','Seeing the pattern you are in while you are in it.','The ground every other shift stands on.'] },
+
+  {t:'two',
+    kick:'Shift two',
+    h:'Growing Up',
+    pts:['Increasing developmental capacity.','Holding complexity and more than one true perspective at once.','Where a leader stops needing it to be simple.'] },
+
+  {t:'two',
+    kick:'Shift three',
+    h:'Cleaning Up',
+    pts:['Integrating shadow and reactivity.','The difficult-leader behaviour almost always lives here.','Quiet, honest work, and the fastest lever of the four.'] },
+
+  {t:'two',
+    kick:'Shift four',
+    h:'Showing Up',
+    pts:['Embodying the shift in real decisions, conflict, and accountability.','Not an insight you had. A way you now lead.','Where the people around you feel the change.'] },
+
+  {t:'big',
+    kick:'How they fit',
+    big:'This is <span class="a">development</span>, not training.',
+    sub:'Inner growth that changes outer leadership. Four shifts, worked in order, over time.' },
+
+  {t:'two',
+    kick:'The map',
+    h:'Evidence, not vibes',
+    pts:['The Enneagram (iEQ9) surfaces the motivation and stress patterns driving behaviour.','The Leadership Circle Profile maps reactive and creative tendencies.','Adult-development stages locate where the next growth actually is.'] },
+
+  {t:'part', part:'Part Three', title:'What It Looks Like' },
+
+  {t:'two',
+    kick:'What changes',
+    h:'A steadier leader, in weeks you can feel',
+    pts:['Clearer inner authority, and less over-functioning.','More room in conflict instead of reaction.','Teams that come out fresher, grounded, and more effective.'] },
+
+  {t:'two',
+    kick:'How the work runs',
+    h:'Developmental, and paced for real life',
+    pts:['A rhythm of focused sessions and real-world application between them.','Honest reflection, not another content library to get through.','Space to practise the shift where it actually counts: at work.'] },
+
+  {t:'credit',
+    kick:'Why me',
+    h:'Ben Pangas',
+    rows:['MSc Coaching Psychology, University of Sydney','PACFA accredited counsellor, 10+ years','STAGES certified; accredited in the Leadership Circle Profile and the Integrative Enneagram','20+ years across construction, international development, and mental health'] },
+
+  {t:'big',
+    kick:'One belief',
+    big:'I do not believe you can lead someone to a place you have never been.',
+    sub:'The work I ask of leaders is work I have done myself.' },
+
+  {t:'cta',
+    kick:'Your next step',
+    h:'Start the shift',
+    body:'If your best people are stalling, the next step is a conversation about developmental coaching, not another course. Reach out and we will map where the growth actually is.',
+    disc:'This masterclass is educational. No income or result is guaranteed. Results vary and depend on your own context, effort, and circumstances.',
+    present:'Ben Pangas', presentSub:'benpangas.com' }
+];
+
+function esc(s){return s;}
+function render(){
+  const stage = document.getElementById('stage');
+  const axis = '<svg class="axis" width="160" height="80" viewBox="0 0 260 110" fill="none"><path d="M20 96 H80 V66 H140 V38 H200 V14" stroke="#c69a43" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="14" r="6" fill="none" stroke="#c69a43" stroke-width="3.2"/></svg>';
+  S.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'slide';
+    let inner = '<div class="num">' + String(i+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0') + '</div>';
+    if (s.kick) inner += '<div class="kick">' + s.kick + '</div>';
+    if (s.t === 'title') {
+      inner += '<h1>' + s.h + '</h1><div class="lead">' + s.lead + '</div><div class="spacer"></div>' + axis +
+        '<div class="present">' + s.present + '<span>' + s.presentSub + '</span></div>';
+    } else if (s.t === 'who') {
+      inner += '<h2>' + s.h + '</h2><ul class="pts">' + s.pts.map(p=>'<li>'+p+'</li>').join('') + '</ul>';
+    } else if (s.t === 'big') {
+      inner += '<div class="spacer"></div><div class="big">' + s.big + '</div><div class="sub">' + s.sub + '</div><div class="spacer"></div>';
+    } else if (s.t === 'part') {
+      inner += '<div class="spacer"></div><div class="part">' + s.part + '<b>' + s.title + '</b></div><div class="spacer"></div>' + axis;
+    } else if (s.t === 'two') {
+      inner += '<h2>' + s.h + '</h2><ul class="pts">' + s.pts.map(p=>'<li>'+p+'</li>').join('') + '</ul>';
+    } else if (s.t === 'credit') {
+      inner += '<h2>' + s.h + '</h2><div class="credit">' + s.rows.map(r=>'<div class="r">'+r+'</div>').join('') + '</div>';
+    } else if (s.t === 'cta') {
+      inner += '<h1>' + s.h + '</h1><div class="cta-box">' + s.body + '</div>' +
+        '<div class="present">' + s.present + '<span>' + s.presentSub + '</span></div>' +
+        '<div class="disc">' + s.disc + '</div>';
+    }
+    d.innerHTML = inner;
+    stage.appendChild(d);
+  });
+}
+render();
+</script>
+</body>
+</html>
