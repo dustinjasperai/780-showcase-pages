@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trust. Become. Share. | A Masterclass with Matthias Geysen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin:wght@500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#faf6ea;      /* lightened from brand dominant #f2e9c6 */
+    --panel:#f2e9c6;   /* brand cream (rank 1) */
+    --rule:#e3d6a8;    /* mid cream */
+    --ink:#2c3e50;     /* brand slate (rank 2) */
+    --ink-soft:#4a5a6a;
+    --accent:#2c3e50;  /* brand slate */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Roboto',-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  #deck{height:100vh; width:100vw; position:relative;}
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:8vh 10vw; opacity:0; transition:opacity .35s ease;
+  }
+  .slide.on{display:flex; opacity:1;}
+  h1{font-family:'Cabin',sans-serif; font-weight:700; font-size:clamp(34px,6vw,66px); line-height:1.08; letter-spacing:-0.01em;}
+  h2{font-family:'Cabin',sans-serif; font-weight:700; font-size:clamp(26px,4.4vw,46px); line-height:1.12; margin-bottom:22px;}
+  .kicker{font-family:'Cabin',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.22em; font-size:13px; color:var(--accent); margin-bottom:22px;}
+  p{font-size:clamp(17px,2.1vw,23px); line-height:1.6; color:var(--ink-soft); max-width:46ch; margin-bottom:16px;}
+  .lead{font-size:clamp(20px,2.6vw,28px); color:var(--ink); max-width:40ch;}
+  .big{font-size:clamp(26px,4vw,40px); font-family:'Cabin',sans-serif; font-weight:600; color:var(--ink); line-height:1.2; max-width:24ch;}
+  ul{list-style:none; max-width:44ch;}
+  li{font-size:clamp(17px,2.1vw,22px); line-height:1.5; color:var(--ink-soft); padding:12px 0 12px 30px; position:relative; border-bottom:1px solid var(--rule);}
+  li:last-child{border-bottom:none;}
+  li::before{content:""; position:absolute; left:0; top:21px; width:10px; height:10px; background:var(--accent); border-radius:50%;}
+  .pillars{display:flex; gap:28px; flex-wrap:wrap; margin-top:10px;}
+  .pillar{background:var(--panel); border:1px solid var(--rule); padding:26px 28px; border-radius:4px; max-width:260px;}
+  .pillar .n{font-family:'Cabin',sans-serif; font-weight:700; font-size:30px; color:var(--accent); margin-bottom:8px;}
+  .pillar p{font-size:16px; margin:0;}
+  .quote{font-family:'Cabin',sans-serif; font-weight:500; font-size:clamp(24px,3.6vw,40px); line-height:1.25; color:var(--ink); max-width:24ch;}
+  .by{margin-top:26px; font-size:15px; letter-spacing:0.04em; color:var(--ink-soft);}
+  .disc{font-size:14px; color:var(--ink-soft); max-width:60ch; margin-top:26px; line-height:1.5;}
+  .cta-line{font-family:'Cabin',sans-serif; font-weight:600; font-size:clamp(20px,2.6vw,26px); color:var(--accent); margin-top:8px;}
+  .nav{position:fixed; bottom:22px; right:28px; display:flex; gap:12px; align-items:center; font-family:'Cabin',sans-serif; font-size:14px; color:var(--ink-soft); z-index:10;}
+  .nav button{font-family:'Cabin',sans-serif; background:var(--panel); border:1px solid var(--rule); color:var(--ink); width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:17px;}
+  .nav button:hover{background:var(--accent); color:var(--bg);}
+  .count{position:fixed; bottom:28px; left:28px; font-family:'Cabin',sans-serif; font-size:13px; color:var(--ink-soft); letter-spacing:0.08em; z-index:10;}
+  .footer-brand{position:fixed; top:26px; left:28px; font-family:'Cabin',sans-serif; font-weight:600; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); z-index:10;}
+</style>
+</head>
+<body>
+<div class="footer-brand">Matthias Geysen</div>
+<div id="deck"></div>
+<div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div class="nav"><button id="prev">&#8249;</button><button id="next">&#8250;</button></div>
+
+<script>
+const S = [
+  {t:'title', h:'Trust. Become. Share.', lead:'How to connect with your horse without a bridle, a saddle, or force. A live masterclass with Matthias Geysen.'},
+
+  {t:'promise', k:'What this hour is', h:'The connection you have been reaching for', p:['Most of us were taught to manage the horse: more pressure, more gear, another technique for every problem.','This hour is the other path. We work on the connection first, and let the riding take care of itself.']},
+
+  {t:'for', k:'Who this is for', h:'You have tried everything, and the horse still braces', list:['You love your horse and you still feel like you are negotiating with them.','You have bought the tools, the courses, the quick fixes.','Something in the relationship feels one-sided, and you cannot name it.']},
+
+  {t:'reframe', k:'The reframe', quote:'Your horse is not a problem to fix. Your horse is a mirror.', by:'If the connection is off, it is almost never the horse.'},
+
+  {t:'part', k:'Part one', h:'Why control stops working', p:['Control gets you compliance. It does not get you trust.','A horse feels the gap between what you are asking and what you are actually feeling. Equipment hides that gap for a while, then it stops working.']},
+
+  {t:'point', k:'Part one', h:'What the bracing is actually telling you', lead:'When a horse braces, pulls, or shuts down, it is not defiance. It is feedback. The horse is responding to something in you that you may not have noticed yet.'},
+
+  {t:'point', k:'Part one', h:'The cost of overcomplicating', lead:'We overcomplicate so much. The more steps we add, the further we get from the simple thing the horse is waiting for: a person who is actually present.'},
+
+  {t:'part', k:'Part two', h:'The method: Trust, Become, Share', p:['Three movements, in order. Each one only works once the one before it is real.']},
+
+  {t:'pillars', k:'Part two', h:'The three pillars', pillars:[
+    {n:'1', title:'Trust', text:'Build a relationship where trust replaces control. The horse chooses you, instead of obeying you.'},
+    {n:'2', title:'Become', text:'Reconnect with yourself first. When you can meet your own state calmly, the horse responds.'},
+    {n:'3', title:'Share', text:'Carry it into the rest of your life, and into a community that lives the same way.'}
+  ]},
+
+  {t:'point', k:'Trust', h:'Let the horse choose you', lead:'Trust is not something you take. You set it up so the horse can offer it. You ask for one small thing, and you wait for a yes instead of forcing a surrender. That yes is where everything else grows from.'},
+
+  {t:'point', k:'Become', h:'Your own state comes first', lead:'Before I ask anything of a horse, I meet my own state. If I am rushed or reactive, the horse knows before I move. Becoming calm and honest in yourself is not a warm-up to the work. It is the work.'},
+
+  {t:'point', k:'Part two', h:'The horse as mirror', lead:'Horses read our inner state before they read our hands. They show us when we are too much in our head, or too reactive. The work is finding the balance between thinking and feeling, action and stillness.'},
+
+  {t:'point', k:'Part two', h:'Safety through being seen', lead:'The foundation is acceptance. When a horse feels genuinely seen for who they are, safety follows. The same is true for the person. Being seen is where trust starts.'},
+
+  {t:'point', k:'Part two', h:'Bridleless is the proof, not the goal', lead:'Riding without a bridle or saddle is not a trick. It is what is left when the connection is real and the gear is no longer doing the work. Presence replaces pressure.'},
+
+  {t:'part', k:'Part three', h:'A session, from the moment you arrive', list:['You slow down before you ever touch the horse.','You notice your own state, and you let it settle.','You ask for one small thing, and you wait for a yes, not a surrender.','The horse softens, and the two of you are in the same moment.']},
+
+  {t:'point', k:'Share', h:'What changes away from the barn', lead:'People come for the horse and leave with something bigger. The presence you practice in the field is the same presence that changes how you show up at home, at work, and with the people you love.'},
+
+  {t:'why', k:'Why me', h:'How I found this', p:['I started riding at ten, in the forests of Belgium with my father. I left horses, came back, and then stopped studying other trainers for three or four years so I could learn directly from my own herd.','Today I live in the Swiss Alps with thirty-five horses. Everything I teach, I learned from them.'], by:'Matthias Geysen'},
+
+  {t:'reframe', k:'The shift', quote:'The only way to improve the connection with your horse is to improve the connection with yourself.', by:'That is the whole method, in one line.'},
+
+  {t:'cta', k:'Your next step', h:'Come work on the connection', lead:'If this is the relationship you want with your horse, the next step is to spend time inside the method with me.', cta:'Join a retreat or the Discovery Program at matthiasgeysen.com', disc:'This masterclass is educational. It shares a philosophy and an approach to horsemanship and personal growth. It is not a guarantee of any specific result with your horse; every horse and every person is different, and outcomes vary.'}
+];
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('div'); el.className='slide'; el.dataset.i=i;
+  let html='';
+  if(s.k) html+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='title'){ html+=`<h1>${s.h}</h1>`; if(s.lead) html+=`<p class="lead" style="margin-top:24px">${s.lead}</p>`; }
+  else if(s.t==='reframe'){ html+=`<div class="quote">${s.quote}</div>`; if(s.by) html+=`<div class="by">${s.by}</div>`; }
+  else if(s.t==='pillars'){ html+=`<h2>${s.h}</h2><div class="pillars">`; s.pillars.forEach(p=>{ html+=`<div class="pillar"><div class="n">${p.n}</div><div style="font-family:Cabin;font-weight:600;font-size:21px;margin-bottom:8px">${p.title}</div><p>${p.text}</p></div>`; }); html+=`</div>`; }
+  else{
+    if(s.h) html+=`<h2>${s.h}</h2>`;
+    if(s.lead) html+=`<p class="lead">${s.lead}</p>`;
+    if(s.p) s.p.forEach(x=>html+=`<p>${x}</p>`);
+    if(s.list){ html+='<ul>'; s.list.forEach(x=>html+=`<li>${x}</li>`); html+='</ul>'; }
+    if(s.cta) html+=`<div class="cta-line">${s.cta}</div>`;
+    if(s.by) html+=`<div class="by">${s.by}</div>`;
+    if(s.disc) html+=`<div class="disc">${s.disc}</div>`;
+  }
+  el.innerHTML=html; deck.appendChild(el);
+});
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function show(n){ cur=Math.max(0,Math.min(S.length-1,n)); slides.forEach(s=>s.classList.remove('on')); slides[cur].classList.add('on'); document.getElementById('cur').textContent=cur+1; }
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(cur+1); if(e.key==='ArrowLeft')show(cur-1); });
+show(0);
+</script>
+</body>
+</html>
