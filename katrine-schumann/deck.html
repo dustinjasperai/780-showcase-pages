@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facilitating the Future, a masterclass by Katrine Schumann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette derived from katrineschumann.dk (extract_brand.js): light scheme,
+       dominant #79653f (brown-gold) + #78866b (sage); see 01-deep-research.md ## Palette */
+    --bg:#faf7f1;        /* warm parchment ground (her light scheme) */
+    --panel:#eef0e8;     /* pale sage panel */
+    --rule:#cdd3c2;      /* sage rule */
+    --ink:#2b2a26;       /* warm near-black */
+    --muted:#6f6d63;     /* warm grey */
+    --accent:#79653f;    /* brown-gold accent, from brand.json */
+    --accent2:#78866b;   /* sage secondary, from brand.json */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:"Fraunces",Georgia,serif;
+    -webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:48px 24px 96px}
+  .slide{min-height:84vh;display:flex;flex-direction:column;justify-content:center;
+    border-bottom:1px solid var(--rule);padding:56px 0;position:relative}
+  .eyebrow{font-family:"Figtree",system-ui,sans-serif;font-weight:600;font-size:13px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-family:"Figtree",system-ui,sans-serif;font-weight:700;font-size:clamp(34px,6vw,62px);
+    line-height:1.04;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:"Figtree",system-ui,sans-serif;font-weight:700;font-size:clamp(26px,4.4vw,42px);
+    line-height:1.08;margin-bottom:16px}
+  p{font-size:clamp(17px,2.2vw,22px);line-height:1.5;color:var(--ink);max-width:40ch;margin-bottom:14px}
+  p.lead{color:var(--muted)}
+  .kicker{font-family:"Figtree",sans-serif;font-weight:600;color:var(--accent2);
+    font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  ul{list-style:none;max-width:44ch}
+  li{font-size:clamp(16px,2.1vw,21px);line-height:1.45;padding:12px 0 12px 28px;position:relative;
+    border-top:1px solid var(--rule)}
+  li:before{content:"";position:absolute;left:0;top:20px;width:12px;height:12px;border-radius:2px;
+    background:var(--accent)}
+  .partnum{font-family:"Figtree",sans-serif;font-weight:700;font-size:15px;letter-spacing:.2em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+  .big{font-size:clamp(26px,4vw,40px);line-height:1.12;font-family:"Fraunces",serif;font-style:italic;
+    color:var(--ink);max-width:24ch}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:30px 32px;
+    max-width:48ch}
+  .cols{display:flex;gap:20px;flex-wrap:wrap}
+  .col{flex:1;min-width:210px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:22px}
+  .col h3{font-family:"Figtree",sans-serif;font-size:16px;font-weight:700;color:var(--accent);
+    margin-bottom:8px}
+  .col p{font-size:16px;margin-bottom:0}
+  .cta-box{background:var(--accent);color:#fdfbf6;border-radius:16px;padding:40px 36px;max-width:46ch}
+  .cta-box h2{color:#fdfbf6}
+  .cta-box p{color:#f3ece0}
+  .cta-step{font-family:"Figtree",sans-serif;font-weight:600;font-size:18px;margin-top:14px}
+  .disclaimer{font-family:"Figtree",sans-serif;font-size:12.5px;color:var(--muted);
+    margin-top:26px;max-width:52ch;line-height:1.5}
+  .num{position:absolute;top:18px;right:0;font-family:"Figtree",sans-serif;font-size:12px;
+    letter-spacing:.1em;color:var(--muted)}
+  .sig{font-family:"Figtree",sans-serif;font-weight:600;color:var(--accent2);margin-top:20px;font-size:15px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', eyebrow:'A live masterclass for internal consultants',
+   h:'Facilitating the Future',
+   p:'How to run meetings that move a public organization toward what is next, instead of rebuilding what already was.',
+   sig:'Katrine Schumann · Fremtidsfacilitering'},
+
+  {t:'promise', kicker:'The next 60 minutes',
+   h:'What you will leave with',
+   list:['Why most facilitation quietly keeps a team stuck in the past',
+         'The one shift that turns a meeting into a future-sensing space',
+         'A toolbox you can bring into your very next workshop']},
+
+  {t:'audience', kicker:'Who this is for',
+   h:'You lead change you were never given the authority for',
+   p:'Internal consultants, development and process consultants, and project leaders in public organizations. You carry responsibility for strategy and change across departments, levels and stakeholders, usually without a formal title to match.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'You are asked to facilitate change, so you tighten the room',
+   p:'Tighter agenda. Clearer slides. Firmer control, so nothing gets messy. It feels like good facilitation.',
+   p2:'And the meeting produces a slightly better version of what the organization already had.'},
+
+  {t:'hook',
+   big:'Every tool that controls, reduces and tames complexity is a tool for reproducing the past. The future never shows up in a room that is being tamed.'},
+
+  {t:'part', num:'Part One', h:'Facilitation built for the past'},
+
+  {t:'body', kicker:'Why it happens',
+   h:'Analysis and reflection both look backward',
+   p:'They draw on the experience in the room. Experience is, by definition, the past. A meeting that only analyses can only rebuild what already exists.',
+   p2:'That is exactly the right tool when the answer lives in your history. It is the wrong tool when it does not.'},
+
+  {t:'body', kicker:'What changed',
+   h:'The answers are not in the room’s memory anymore',
+   p:'Acceleration and complexity mean the next move is rarely a tidy lesson from last year. It lives in what the room can imagine, sense and test together, before anyone is certain.'},
+
+  {t:'part', num:'Part Two', h:'Fremtidsfacilitering: the method'},
+
+  {t:'body', kicker:'The core image',
+   h:'Steer the room from the safe shore to the future shore',
+   p:'Picture your job as steering a ship carrying the meeting’s participants. You move them from the safe, known coast toward something unknown and strange: the future.',
+   p2:'Two things make the crossing possible: enough psychological safety to not-know together, and real exploration of what is waiting on the far shore.'},
+
+  {t:'part2', kicker:'Inside the maskinrummet', h:'Your facilitation toolbox has three levels',
+   cols:[
+     {h:'Analyse & reflect', p:'Tools that make sense of experience. They draw on the past, and you still need them.'},
+     {h:'Create & imagine', p:'Tools that open new futures. We borrow from the method of play, framed as serious future-sense, never as silliness.'},
+     {h:'Transform', p:'Tools that build strong resonance with yourself, each other and the emerging future.'}]},
+
+  {t:'body', kicker:'Faciliteringskompasset',
+   h:'A compass for facilitating organizational nybrud',
+   p:'The compass points you to the tool a moment actually needs: reflection when the room needs grounding, imagination when it needs to move, transformation when something real is trying to shift.',
+   p2:'It is grounded in research: James March on the method of foolishness, Otto Scharmer’s Theory U, Lotte Darsø on innovation, Ann Charlotte Thorsted on the playing organization.'},
+
+  {t:'body', kicker:'The non-negotiable',
+   h:'No safety, no crossing',
+   p:'People will not step toward an unknown shore in a room where not-knowing feels unsafe. Building that safety is the first facilitation move, not a nice-to-have at the end.'},
+
+  {t:'body', kicker:'Forbundet Fremtid',
+   h:'Bring mønsterkraft into the room',
+   p:'Art and culture, nature and places, hand and materials. Used deliberately, they create pattern power that strengthens the connection to the task, to each other, and to oneself.',
+   p2:'A connected room can cross further than a merely well-run one.'},
+
+  {t:'part', num:'Part Three', h:'When the meeting actually moves'},
+
+  {t:'body', kicker:'The shift',
+   h:'From a day people dread to one they look forward to',
+   p:'The strategy day stops being a performance of alignment. It becomes a few hours where a real group senses a real future and leaves having moved something.',
+   p2:'That is the whole point of the method: change the world, one meeting at a time.'},
+
+  {t:'body', kicker:'Why me',
+   h:'Twenty-five years facilitating the future',
+   p:'Katrine Schumann. Cand.phil. in communication, MA, research-trained, external lecturer at Aalborg University.',
+   p2:'The Faciliteringskompasset was published in Dialogisk procesfacilitering (2018). I have spent my career helping public organizations meet the future on purpose.'},
+
+  {t:'cta', eyebrow:'Your next step',
+   h:'Learn to facilitate the future',
+   p:'If today landed, the Faciliteringsuddannelsen is where you build the whole method into your practice, with the maskinrummet and the compass in your hands.',
+   step:'Join the Faciliteringsuddannelsen waitlist, or start with the free Startkit to seriously better meetings.',
+   contact:'mail@katrineschumann.dk',
+   disclaimer:'This masterclass is educational. Facilitation outcomes depend on your context, your organization and the work you put in; no specific result is guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sec = document.createElement('section');
+  sec.className = 'slide';
+  let h = `<span class="num">${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}</span>`;
+  if(s.eyebrow) h += `<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.kicker) h += `<div class="kicker">${s.kicker}</div>`;
+  if(s.num) h += `<div class="partnum">${s.num}</div>`;
+  if(s.big){ h += `<p class="big">${s.big}</p>`; }
+  if(s.h) h += (s.t==='title'? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`);
+  if(s.p) h += `<p${s.t==='title'?' class="lead"':''}>${s.p}</p>`;
+  if(s.p2) h += `<p>${s.p2}</p>`;
+  if(s.list){ h += '<ul>'+s.list.map(x=>`<li>${x}</li>`).join('')+'</ul>'; }
+  if(s.cols){ h += '<div class="cols">'+s.cols.map(c=>`<div class="col"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')+'</div>'; }
+  if(s.t==='cta'){
+    h += `<div class="cta-box"><div class="cta-step">${s.step}</div><p style="margin-top:10px">Write to ${s.contact}</p></div>`;
+    h += `<div class="disclaimer">${s.disclaimer}</div>`;
+  }
+  if(s.sig) h += `<div class="sig">${s.sig}</div>`;
+  sec.innerHTML = h;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
