@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading the Body: The Function Pilates Teaching Method</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f3f6f6;        /* cool off-white ground, from brand panel #f1f1f1 shifted toward their aqua */
+    --panel:#e7eef0;
+    --rule:#cfd9db;
+    --ink:#3f4446;        /* deepened from brand #58595b for slide contrast */
+    --ink-soft:#58595b;   /* brand dominant */
+    --ink-muted:#8a9093;
+    --accent:#4cc1d3;     /* brand aqua, ranked_colors #2 */
+    --accent-deep:#2a9bad;
+  }
+  html,body{height:100%}
+  body{
+    font-family:'Poppins',-apple-system,sans-serif;
+    background:var(--ink-soft);
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  #deck{width:100%;max-width:1000px;aspect-ratio:16/9;background:var(--bg);
+    position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent-deep);margin-bottom:18px}
+  h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:52px;line-height:1.05;
+    color:var(--ink);letter-spacing:-.01em;margin-bottom:20px}
+  h2{font-family:'Archivo',sans-serif;font-weight:700;font-size:34px;line-height:1.12;
+    color:var(--ink);margin-bottom:18px}
+  p{font-size:20px;line-height:1.55;color:var(--ink-soft);max-width:44ch;margin-bottom:14px}
+  .big{font-size:26px;color:var(--ink);font-weight:500;max-width:40ch}
+  ul{list-style:none;margin-top:8px}
+  li{font-size:20px;line-height:1.5;color:var(--ink-soft);padding-left:30px;position:relative;margin-bottom:14px;max-width:46ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:12px;background:var(--accent);border-radius:2px}
+  .pill{display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;
+    letter-spacing:.06em;color:#fff;background:var(--accent-deep);padding:6px 14px;border-radius:4px;margin-bottom:22px}
+  .title-slide{background:
+    linear-gradient(180deg,rgba(76,193,211,.10),rgba(76,193,211,0) 60%),var(--bg)}
+  .title-slide h1{font-size:60px}
+  .rule{width:64px;height:5px;background:var(--accent);margin:4px 0 22px;border-radius:3px}
+  .stat{font-family:'Archivo',sans-serif;font-weight:900;font-size:76px;color:var(--accent-deep);line-height:1}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .card{background:var(--panel);border-left:5px solid var(--accent);padding:22px 24px;border-radius:4px}
+  .card h3{font-family:'Archivo',sans-serif;font-weight:700;font-size:20px;color:var(--ink);margin-bottom:8px}
+  .card p{font-size:16px;margin-bottom:0;max-width:none}
+  .muted{color:var(--ink-muted);font-size:15px;max-width:60ch;margin-top:10px}
+  .cta h1{font-size:46px}
+  .disc{font-family:'Poppins',sans-serif;font-size:13px;color:var(--ink-muted);line-height:1.5;
+    max-width:62ch;margin-top:26px}
+  #nav{position:fixed;bottom:18px;right:22px;font-family:'Archivo',sans-serif;font-size:13px;
+    color:#dfe7e8;letter-spacing:.08em}
+  #dots{position:fixed;bottom:20px;left:22px;display:flex;gap:6px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:#9aa6a8;display:block;opacity:.5}
+  #dots i.on{background:var(--accent);opacity:1}
+  .credit{font-size:16px;color:var(--ink-muted);margin-top:18px}
+  @media(max-width:720px){.slide{padding:34px 30px}h1{font-size:34px}.title-slide h1{font-size:38px}h2{font-size:24px}p,li{font-size:16px}.two{grid-template-columns:1fr}.stat{font-size:52px}}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div id="dots"></div>
+<div id="nav"></div>
+<script>
+const S=[
+ {t:'title',html:`<div class="pill">A Function Pilates Masterclass</div>
+   <h1>Reading the Body</h1>
+   <div class="rule"></div>
+   <p class="big">How to become a Pilates instructor who sees what a body needs, teaches real people from day one, and builds a career that actually pays.</p>
+   <div class="credit">With Vanessa Kelly, Founder &amp; Master Trainer, Function Pilates</div>`},
+
+ {t:'who',html:`<div class="kicker">Who this is for</div>
+   <h2>You love Pilates. You want to teach it.</h2>
+   <p>You have taken class for years, or you are changing careers, and you keep thinking the same thing: I could do this, and I would be good at it.</p>
+   <p>The thing standing in the way is not passion. It is not knowing which certification actually prepares you to stand in front of a real body and know what to do.</p>`},
+
+ {t:'promise',html:`<div class="kicker">The promise</div>
+   <h2>By the end of this hour you will know</h2>
+   <ul><li>Why the best instructors read bodies instead of reciting exercises</li>
+   <li>The three things a certification has to teach you, and what most skip</li>
+   <li>What a real path from first unit to first paid class looks like</li></ul>`},
+
+ {t:'trap',html:`<div class="kicker">The trap</div>
+   <h2>Most certifications teach the moves. Not the body.</h2>
+   <p>You memorize the repertoire, pass a written test, and walk out holding a certificate and almost no idea how to help the next person who walks in with a cranky lower back.</p>`},
+
+ {t:'cost',html:`<div class="kicker">What that costs you</div>
+   <h2>So new instructors freeze</h2>
+   <p>They cue the exercise they rehearsed instead of teaching the person in front of them. The client does not come back, and the new teacher quietly decides they are not good enough.</p>
+   <p class="muted">It was never a talent problem. It was a training problem.</p>`},
+
+ {t:'reframe',html:`<div class="kicker">The reframe</div>
+   <h2 style="max-width:16ch">Teaching Pilates is reading bodies, not reciting exercises.</h2>
+   <p class="big">The best instructors are not the ones who know the most moves. They are the ones who can look at how someone stands and know where to start.</p>`},
+
+ {t:'p1',html:`<div class="pill">Part One</div>
+   <h2>Why posture comes before repertoire</h2>
+   <p>Before a single reformer spring, you learn to assess the body: how this person holds their shoulders, where their hips sit, what their gait is telling you.</p>`},
+
+ {t:'p1b',html:`<div class="kicker">Posture before repertoire</div>
+   <h2>The first skill, not the last</h2>
+   <ul><li>Functional anatomy and posture assessment taught up front</li>
+   <li>Reading compensation patterns so your cue fixes the cause, not the symptom</li>
+   <li>Programming a session around the body in the room, not the plan on paper</li></ul>`},
+
+ {t:'stat',html:`<div class="kicker">What changes</div>
+   <div class="stat">450</div>
+   <p class="big" style="margin-top:14px">hours built around one idea: you should be able to teach a real person on day one, not just pass an exam.</p>`},
+
+ {t:'p2',html:`<div class="pill">Part Two</div>
+   <h2>The Function Pilates Method</h2>
+   <p>Three pillars run through every unit, from Mat to the full comprehensive path across Reformer, Chair, Cadillac, Ladder Barrel and Spine Corrector.</p>`},
+
+ {t:'pillar1',html:`<div class="kicker">Pillar one</div>
+   <h2>Read the body</h2>
+   <p>Functional movement and posture assessment come first, so you learn to teach the person in front of you, not the protocol on the page.</p>
+   <p class="muted">This is the Egoscue-informed, assessment-led core that separates a Function instructor from someone who only knows the moves.</p>`},
+
+ {t:'pillar2',html:`<div class="kicker">Pillar two</div>
+   <h2>Teach real people</h2>
+   <p>You practice on real bodies through the whole program and build real teaching hours. Confidence comes from reps with people, not from watching another video.</p>`},
+
+ {t:'pillar3',html:`<div class="kicker">Pillar three</div>
+   <h2>Build the career</h2>
+   <p>Pricing, programming, and finding clients live inside the curriculum, so your certificate turns into income instead of a framed piece of paper.</p>
+   <p class="muted">Most programs stop at the exam. A teaching career does not.</p>`},
+
+ {t:'grow',html:`<div class="kicker">After you certify</div>
+   <h2>A path that keeps going</h2>
+   <div class="two" style="margin-top:8px">
+     <div class="card"><h3>Continuing education</h3><p>Workshops that keep sharpening how you see and program movement.</p></div>
+     <div class="card"><h3>Master Trainer &amp; host studio</h3><p>Grow into training others and licensing the method in your own space.</p></div>
+   </div>`},
+
+ {t:'p3',html:`<div class="pill">Part Three</div>
+   <h2>Your path from here</h2>
+   <ul><li>Learn online with a structured, progressive path, 15 units released week by week</li>
+   <li>Practice where you are, on people you know, with Master Trainer coaching built in</li>
+   <li>Sit for the Nationally Certified Pilates Teacher exam with real confidence</li></ul>`},
+
+ {t:'ladder',html:`<div class="kicker">The 15-unit progression</div>
+   <h2>Mat to full comprehensive</h2>
+   <ul><li>Units 1 to 4: anatomy and Mat foundations</li>
+   <li>Units 5 to 11: Reformer</li>
+   <li>Units 12 to 15: Chair, Cadillac, Ladder Barrel and Spine Corrector</li></ul>
+   <p class="muted">Start where you are ready. Each tier stacks onto the last.</p>`},
+
+ {t:'firstclass',html:`<div class="kicker">The moment it pays off</div>
+   <h2>Your first paid class</h2>
+   <p class="big">You walk in, look at the bodies in the room, and know exactly what to do. That is the whole point, and it is a skill you can be taught.</p>`},
+
+ {t:'why',html:`<div class="kicker">Why learn it here</div>
+   <h2>Fifteen years of reading bodies</h2>
+   <p>Vanessa Kelly founded Function Pilates in 2014 and has been a Master Trainer since 2017, with contemporary certification through BASI and Pilates Sports Center and posture-alignment training through the Egoscue Method.</p>
+   <p>Three Arizona studios. Hundreds of certified instructors. One method that treats teaching as a skill you can actually learn.</p>`},
+
+ {t:'become',html:`<div class="kicker">Who you become</div>
+   <h2>The instructor people come back for</h2>
+   <p>Not the one reciting a sequence. The one who noticed the tight hip, adjusted the plan, and made a client feel better than they have in years.</p>`},
+
+ {t:'cta',cls:'cta',html:`<div class="pill">Your next step</div>
+   <h1>Start reading<br>bodies.</h1>
+   <div class="rule"></div>
+   <p class="big">Enrollment for the next Function Pilates certification cohort is open. Choose your path, from Mat to Full Comprehensive, and begin.</p>
+   <p class="credit">functionpilates.com &nbsp; &middot; &nbsp; Train. Teach. Transform.</p>
+   <p class="disc">Educational information only. Function Pilates makes no guarantee of income, employment, or specific business results; outcomes depend on each instructor's effort, market, and circumstances. Certification prepares candidates to sit for the Nationally Certified Pilates Teacher (NCPT) exam.</p>`}
+];
+const deck=document.getElementById('deck'),dots=document.getElementById('dots'),nav=document.getElementById('nav');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(s.t==='title'?' title-slide':'')+(s.cls?' '+s.cls:'');d.innerHTML=s.html;deck.appendChild(d);const dot=document.createElement('i');dots.appendChild(dot);});
+let cur=0;const slides=deck.querySelectorAll('.slide'),ds=dots.querySelectorAll('i');
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));ds.forEach((d,i)=>d.classList.toggle('on',i===cur));nav.textContent=(cur+1)+' / '+S.length;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+deck.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
