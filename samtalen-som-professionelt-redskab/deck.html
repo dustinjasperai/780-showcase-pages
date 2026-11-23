@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samtalen der baerer: masterclass med Birgitte Waern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4e9ec;      /* soft plum-blush ground, derived from her pale pink #f3e7e7 tinted toward her plum #7d2555 */
+    --panel:#fffafb;   /* warm near-white card, pink undertone from her palette */
+    --pink:#f3e7e7;    /* her pale pink, used sparingly */
+    --ink:#4f4335;     /* her warm taupe body text */
+    --slate:#55636f;   /* her slate secondary */
+    --accent:#7d2555;  /* her signature plum: footer + links + buttons on the live site */
+    --accent-deep:#741b47;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--slate);font-family:"Source Sans 3",system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  #stage{width:min(960px,96vw);aspect-ratio:16/9;background:var(--bg);border-radius:14px;overflow:hidden;position:relative;box-shadow:0 18px 50px rgba(0,0,0,.28)}
+  .slide{position:absolute;inset:0;padding:60px 72px 72px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  h1{font-family:"Jost",sans-serif;font-weight:700;color:var(--accent-deep);font-size:46px;line-height:1.08;letter-spacing:-.5px}
+  h2{font-family:"Jost",sans-serif;font-weight:700;color:var(--accent);font-size:30px;line-height:1.14;margin-bottom:16px}
+  .kicker{font-family:"Jost",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;font-size:13px;color:var(--slate);margin-bottom:16px}
+  p{font-size:21px;line-height:1.5;color:var(--ink);max-width:42ch;margin-top:10px}
+  .lead{font-size:24px;color:var(--slate);margin-top:16px;max-width:38ch}
+  ul{list-style:none;margin-top:8px}
+  li{font-size:21px;line-height:1.5;padding-left:26px;position:relative;margin:10px 0;max-width:44ch}
+  li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .big{font-family:"Jost",sans-serif;font-weight:700;color:var(--accent-deep);font-size:38px;line-height:1.14;max-width:26ch}
+  .part{font-family:"Jost",sans-serif;font-weight:700;font-size:16px;color:var(--accent);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px}
+  .card{background:var(--panel);border-left:5px solid var(--accent);border-radius:10px;padding:20px 24px;margin-top:14px;box-shadow:0 4px 16px rgba(79,67,53,.06)}
+  .card h3{font-family:"Jost",sans-serif;color:var(--accent-deep);font-size:21px;margin-bottom:5px}
+  .card p{font-size:18px;color:var(--slate);margin-top:0}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+  .grid .card{margin-top:0}
+  .num{font-family:"Jost",sans-serif;font-weight:700;color:var(--accent);font-size:15px;letter-spacing:1px;margin-bottom:6px}
+  .cta h1{font-size:42px}
+  .disc{font-size:13px;color:var(--slate);margin-top:26px;max-width:58ch;line-height:1.5}
+  .by{font-family:"Jost",sans-serif;color:var(--slate);font-size:17px;margin-top:20px}
+  .foot{position:absolute;bottom:18px;left:72px;right:72px;display:flex;justify-content:space-between;font-size:12px;color:var(--slate);font-family:"Jost",sans-serif;letter-spacing:1px}
+  .foot .brand{color:var(--accent)}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+  button{font-family:"Jost",sans-serif;background:var(--bg);color:var(--ink);border:none;border-radius:8px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+  #count{color:#fff;font-size:13px;font-family:"Jost",sans-serif;min-width:54px;text-align:center}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button onclick="go(-1)">‹</button><span id="count"></span><button onclick="go(1)">›</button></div>
+<script>
+const S=[
+ {t:'title', k:'Live masterclass', h:'Samtalen der bærer',
+   lead:'Konkrete redskaber til samtaler med psykisk sårbare og syge borgere.',
+   by:'Med Birgitte Wärn, cand. mag. i dansk og psykologi'},
+ {t:'for', k:'Hvem er det for', h2:'For dig, der rådgiver mennesker videre',
+   bullets:['Sagsbehandlere og socialrådgivere','Studievejledere og mentorer','Alle, der sidder i de samtaler, hvor borgeren er sårbar, syg eller i tvivl']},
+ {t:'trap', k:'Fælden', big:'Du vil hjælpe. Men samtalen går i hårdknude.',
+   lead:'Borgeren bliver afvisende, taler udenom, eller lukker helt i. Og du sidder tilbage med følelsen af, at I ikke kom videre.'},
+ {t:'reframe', k:'Et andet syn', big:'Problemet er ikke din empati. Det er, at du mangler et redskab til at styre samtalen.',
+   lead:'Gode intentioner holder ikke en samtale på sporet. Det gør en metode.'},
+ {t:'part', part:'Del 1', h:'Hvorfor de svære samtaler kører fast'},
+ {t:'saarbar', h2:'Det sårbare jeg',
+   p:'Når et menneske er psykisk sårbart, skifter samtalen karakter. Angst, skam og ambivalens styrer, før ordene gør.',
+   cards:[{h:'Pointen', p:'Du taler ikke bare til borgeren. Du taler til det sårbare jeg, der sidder foran dig. Det kræver andre greb.'}]},
+ {t:'ondecirkel', h2:'Depressionens onde cirkel og ambivalensen',
+   bullets:['Tanker, følelser og handlinger forstærker hinanden nedad','Borgeren vil og vil ikke forandring på samme tid','Presser du på, vokser modstanden'],
+   cards:[{p:'Når du kan genkende mønstret, kan du møde det, i stedet for at kæmpe imod det.'}]},
+ {t:'part', part:'Del 2', h:'Tre redskaber til at styre samtalen'},
+ {t:'balance', num:'REDSKAB 1', h2:'Balanceskemaet',
+   p:'Kortlæg sammen med borgeren, hvad der motiverer til forandring, og hvad der holder igen.',
+   cards:[{h:'Hvad det gør', p:'Flytter ambivalensen fra en følelse til noget konkret, I kan arbejde med, uden pres.'}]},
+ {t:'hjul', num:'REDSKAB 2', h2:'Samtalehjulet',
+   p:'En struktur til den vanskelige samtale, hvor du skal give et afslag eller stille et krav.',
+   cards:[{h:'Hvad det gør', p:'Holder fokus og retning, så samtalen ikke skrider, og I begge ved, hvor I er på vej hen.'}]},
+ {t:'motiverende', num:'REDSKAB 3', h2:'Den motiverende samtale',
+   p:'Rejs motivation uden at skubbe. Arbejd med modstand i stedet for mod den.',
+   cards:[{h:'Hvad det gør', p:'Borgeren hører sine egne grunde til forandring. Det er dem, der holder, når du ikke er i rummet.'}]},
+ {t:'angst', h2:'Når angsten sidder med i samtalen',
+   bullets:['Panik, generaliseret angst, fobier, OCD og PTSD ser forskellige ud i samtalen','Du behøver ikke være behandler for at tale roligt og trygt med en angst borger','Enkle greb sænker uroen, så I kan komme videre']},
+ {t:'part', part:'Del 3', h:'Sådan ser det ud i praksis'},
+ {t:'praksis', h2:'Fra hårdknude til handleplan',
+   p:'En borger, der afviser alt. Du bruger balanceskemaet, finder den ene grund, der betyder noget, og samtalehjulet til at sætte retning.',
+   cards:[{p:'Samme borger. Samme sag. En samtale, der faktisk flytter noget, fordi du havde en metode.'}]},
+ {t:'rum', h2:'Rådgiverens professionelle rum',
+   bullets:['Sæt grænsen, så du kan blive i arbejdet i mange år','De svære samtaler må ikke tære dig op','Redskaberne passer også på dig, ikke kun på borgeren']},
+ {t:'hvem', h2:'Hvorfor mig',
+   p:'Birgitte Wärn, cand. mag. i dansk og psykologi, med efteruddannelse i coaching og supervision.',
+   bullets:['Underviser og superviserer rådgivere siden 1998','Mere end 5.000 sagsbehandlere, socialrådgivere og mentorer på kurser','Over 300 har gennemført efteruddannelsen til psykiatrivejleder','Forfatter til flere erhvervshåndbøger i feltet']},
+ {t:'recap', h2:'Tre redskaber, du kan bruge i morgen',
+   grid:[{h:'Balanceskemaet', p:'Kortlæg motivationen'},{h:'Samtalehjulet', p:'Hold retning i den svære samtale'},{h:'Den motiverende samtale', p:'Rejs motivation uden pres'}]},
+ {t:'cta', k:'Næste skridt', h:'Vil du mestre hele værktøjskassen?',
+   lead:'Efteruddannelsen til psykiatrivejleder er den praksisnære vej til at håndtere samtaler med psykisk sårbare og syge borgere, fra ende til anden.',
+   by:'Skriv til Wärn Kompetenceudvikling på support@birgittewarn.dk for datoer og tilmelding.',
+   disc:'Undervisningen er af oplysende og kompetenceudviklende karakter. No income or result is guaranteed. Results vary from person to person and from workplace to workplace.'}
+];
+const stage=document.getElementById('stage');
+function foot(){return '<div class="foot"><span class="brand">WÄRN KOMPETENCEUDVIKLING</span><span>Samtalen som professionelt redskab</span></div>';}
+function render(s){
+ let b='';
+ if(s.part) b+=`<div class="part">${s.part}</div>`;
+ if(s.k) b+=`<div class="kicker">${s.k}</div>`;
+ if(s.num) b+=`<div class="num">${s.num}</div>`;
+ if(s.h) b+=`<h1>${s.h}</h1>`;
+ if(s.h2) b+=`<h2>${s.h2}</h2>`;
+ if(s.big) b+=`<p class="big">${s.big}</p>`;
+ if(s.p) b+=`<p>${s.p}</p>`;
+ if(s.lead) b+=`<p class="lead">${s.lead}</p>`;
+ if(s.bullets){ b+='<ul>'; s.bullets.forEach(x=>b+=`<li>${x}</li>`); b+='</ul>'; }
+ if(s.cards){ s.cards.forEach(c=>{ b+='<div class="card">'; if(c.h)b+=`<h3>${c.h}</h3>`; b+=`<p>${c.p}</p></div>`; }); }
+ if(s.grid){ b+='<div class="grid">'; s.grid.forEach(c=>{ b+=`<div class="card"><h3>${c.h}</h3><p>${c.p}</p></div>`; }); b+='</div>'; }
+ if(s.by) b+=`<div class="by">${s.by}</div>`;
+ if(s.disc) b+=`<p class="disc">${s.disc}</p>`;
+ const bare = (s.t==='title'||s.t==='cta');
+ return `<div class="slide on">${b}${bare?'':foot()}</div>`;
+}
+let i=0;
+function draw(){stage.innerHTML=render(S[i]);document.getElementById('count').textContent=(i+1)+' / '+S.length;}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));draw();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+draw();
+</script>
+</body>
+</html>
