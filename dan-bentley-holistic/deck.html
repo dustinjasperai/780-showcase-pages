@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The 6 Pillars of Transformation - Dan Bentley</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf8f1; --panel:#f3ede1; --rule:#e4dccb;
+    --ink:#1c2838; --muted:#5a6270; --accent:#f4bc1e; --accent2:#00b5c1;
+    --display:'EB Garamond',Georgia,serif; --body:'Work Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--ink);font-family:var(--body);}
+  #stage{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;background:var(--bg);}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    font-size:15px;color:var(--accent2);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:700;font-size:62px;line-height:1.06;letter-spacing:-.01em;color:var(--ink);max-width:16ch}
+  h2{font-family:var(--display);font-weight:700;font-size:44px;line-height:1.1;color:var(--ink);max-width:20ch}
+  .sub{font-size:26px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:40ch}
+  .lead{font-size:30px;line-height:1.5;color:var(--ink);margin-top:10px;max-width:38ch}
+  .big{font-family:var(--display);font-weight:700;font-size:92px;line-height:1.02;color:var(--accent)}
+  .rule{width:88px;height:6px;background:var(--accent);border-radius:4px;margin:30px 0}
+  .band{position:absolute;left:0;right:0;bottom:0;height:12px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  ul{list-style:none;margin-top:28px}
+  li{font-size:26px;line-height:1.5;color:var(--ink);padding-left:38px;position:relative;margin-bottom:18px;max-width:34ch}
+  li::before{content:'';position:absolute;left:0;top:11px;width:16px;height:16px;border-radius:5px;
+    border:3px solid var(--accent)}
+  .pillar-no{font-family:var(--display);font-weight:700;font-size:20px;color:var(--accent2);letter-spacing:.14em}
+  .pillar-h{font-family:var(--display);font-weight:700;font-size:50px;color:var(--ink);margin-top:12px}
+  .foot{position:absolute;left:9vw;bottom:5vh;font-family:var(--display);font-size:14px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .disc{font-size:16px;line-height:1.5;color:var(--muted);margin-top:30px;max-width:48ch}
+  .cta-step{font-family:var(--display);font-weight:600;font-size:24px;color:var(--ink);margin-top:18px}
+  .nav{position:fixed;right:18px;bottom:16px;font-family:var(--display);font-size:13px;color:#fff;opacity:.6;z-index:10}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:40px 44px;max-width:30ch}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S=[
+ {t:'title'},
+ {t:'who'},
+ {t:'trap'},
+ {t:'reframe'},
+ {t:'parthdr', k:'Part One', h:'Why growth stalls'},
+ {t:'bullets', k:'The three leaks', h:'Where the income quietly goes', items:[
+   'You undercharge, so every new client adds work faster than it adds income.',
+   'You stay invisible, because self-promotion feels like bragging.',
+   'You run on empty, so the work that would grow the business never gets the energy it needs.']},
+ {t:'statement', k:'The real cost', big:'Harder', lead:'is not a growth plan. It is how a good business slowly burns its owner out.'},
+ {t:'parthdr', k:'Part Two', h:'The 6 Pillars of Transformation'},
+ {t:'pillar', n:'Pillar 01', h:'Real fundamentals', s:'Build a business that actually makes a profit, with offers and prices that hold up, not just a busy calendar.'},
+ {t:'pillar', n:'Pillar 02', h:'Mindset and self-belief', s:'Name and dismantle the patterns that keep you small. Self-belief is the quiet engine under every sale you make.'},
+ {t:'pillar', n:'Pillar 03', h:'Tested strategy', s:'Trade the guesswork for a handful of moves that reliably bring the right people to you.'},
+ {t:'pillar', n:'Pillar 04', h:'Steady energy', s:'Regulate your nervous system first. A grounded system can sell, show up, and hold a full roster. A fried one cannot.'},
+ {t:'pillar', n:'Pillar 05', h:'An aligned money story', s:'Rewrite the beliefs about money that cap your rates, so charging what you are worth stops feeling like a fight.'},
+ {t:'pillar', n:'Pillar 06', h:'Presence and purpose', s:'Anchor the business in why you started. Presence is what makes creative work magnetic and clients stay.'},
+ {t:'parthdr', k:'Part Three', h:'What aligned growth looks like'},
+ {t:'bullets', k:'A week on the other side', h:'More income, more impact, same you', items:[
+   'You promote your work without flinching, because it reads as service, not noise.',
+   'You charge rates that match the result, and clients say yes.',
+   'You finish the week with energy left for your life, not just your clients.']},
+ {t:'cred'},
+ {t:'recap'},
+ {t:'cta', step:'Book a free strategy session with Dan at dan-bentley.com and we will map your first pillar together.', disc:'This masterclass is for education only. It is not financial, medical, or income advice. No income or specific result is guaranteed. Results vary from person to person and depend on your own effort and circumstances.'}
+];
+
+function slideHTML(d){
+ if(d.t==='title') return `<div class="kicker">A live masterclass with Dan Bentley</div>
+   <h1>The 6 Pillars of Transformation</h1>
+   <div class="rule"></div>
+   <div class="sub">How coaches and creative professionals grow their income and impact without burning out.</div>
+   <div class="band"></div>`;
+ if(d.t==='who') return `<div class="kicker">Who this is for</div>
+   <h2>You are brilliant at your craft. The business side is the part that drains you.</h2>
+   <div class="sub">Coaches and creative professionals who feel overwhelmed, undercharge, go quiet on self-promotion, and watch income swing month to month.</div>`;
+ if(d.t==='trap') return `<div class="kicker">The trap</div>
+   <h2>You were told the answer was more.</h2>
+   <div class="lead">More hours. More funnels. More content. More hustle. It works, right up until your energy breaks and the growth stalls with it.</div>`;
+ if(d.t==='reframe') return `<div class="kicker">The uncomfortable truth</div>
+   <h2>Burnout is not a time problem. It is a nervous-system problem.</h2>
+   <div class="sub">You cannot out-strategize a dysregulated system. That is why the usual advice keeps failing the people who work the hardest.</div>`;
+ if(d.t==='parthdr') return `<div class="kicker">${d.k}</div><h1>${d.h}</h1><div class="rule"></div><div class="band"></div>`;
+ if(d.t==='bullets') return `<div class="kicker">${d.k}</div><h2>${d.h}</h2>
+   <ul>${d.items.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+ if(d.t==='statement') return `<div class="kicker">${d.k}</div><div class="big">${d.big}</div>
+   <div class="lead">${d.lead}</div>`;
+ if(d.t==='pillar') return `<div class="panel"><div class="pillar-no">${d.n}</div>
+   <div class="pillar-h">${d.h}</div></div>
+   <div class="lead">${d.s}</div>`;
+ if(d.t==='cred') return `<div class="kicker">Why me</div>
+   <h2>I built a business, left it, and learned the full cost of growth the hard way.</h2>
+   <div class="sub">Business degree, then a London consultancy, then four years as a working musician in Ibiza. I retrained as a transformational coach and meditation teacher, and I now help coaches and creatives grow with their wellbeing intact, not in spite of it.</div>`;
+ if(d.t==='recap') return `<div class="kicker">The 6 Pillars</div><h2>Fundamentals. Mindset. Strategy. Energy. Money story. Presence.</h2>
+   <div class="sub">Pull on all six and growth stops costing you yourself. That is the whole method.</div>`;
+ if(d.t==='cta') return `<div class="kicker">Your next step</div>
+   <h2>Ready to build an aligned business?</h2>
+   <div class="cta-step">${d.step}</div>
+   <div class="disc">${d.disc}</div>
+   <div class="band"></div>`;
+ return '';
+}
+
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((d,i)=>`<section class="slide${i===0?' on':''}" data-i="${i}">${slideHTML(d)}<div class="foot">The 6 Pillars of Transformation</div></section>`).join('');
+let cur=0;const nav=document.getElementById('nav');
+function show(i){cur=Math.max(0,Math.min(S.length-1,i));
+ document.querySelectorAll('.slide').forEach(s=>s.classList.toggle('on',+s.dataset.i===cur));
+ nav.textContent=(cur+1)+' / '+S.length;}
+show(0);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+ if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',()=>show(cur+1));
+</script>
+</body>
+</html>
