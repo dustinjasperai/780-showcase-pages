@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Achievement Machine | Dawn Shrum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #1b1e1c;
+    --panel: #24282a;
+    --rule: #585e59;
+    --accent: #d8bf7a;
+    --ink: #eef0ec;
+    --ink-soft: #c4c8c1;
+    --ink-muted: #8c938a;
+  }
+  html,body { height:100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Mulish', -apple-system, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  #deck { position: relative; }
+  .slide {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 9vh 9vw;
+    border-top: 3px solid var(--accent);
+  }
+  .slide.active { display: flex; }
+  .kicker {
+    font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 26px;
+  }
+  h1 { font-family:'Libre Baskerville', Georgia, serif; font-weight:700; font-size: 66px; line-height:1.05; letter-spacing:-0.005em; margin-bottom: 24px; }
+  h2 { font-family:'Libre Baskerville', Georgia, serif; font-weight:600; font-size: 48px; line-height:1.12; margin-bottom: 22px; }
+  .sub { font-size: 22px; color: var(--ink-soft); max-width: 60ch; }
+  p.body { font-size: 20px; color: var(--ink-soft); max-width: 60ch; margin-bottom: 16px; }
+  .big { font-family:'Libre Baskerville', Georgia, serif; font-size: 44px; line-height:1.22; color: var(--ink); max-width: 24ch; font-weight:600; }
+  ul { list-style: none; max-width: 60ch; }
+  li { font-size: 20px; color: var(--ink-soft); padding: 14px 0 14px 34px; position: relative; border-bottom: 1px solid var(--panel); }
+  li::before { content: ''; position:absolute; left:0; top:24px; width:14px; height:14px; background: var(--accent); border-radius:2px; }
+  li b { color: var(--ink); font-weight:600; }
+  .name { font-family:'Libre Baskerville', Georgia, serif; font-size: 30px; color: var(--ink); margin-top: 30px; font-weight:600; }
+  .role { font-size: 16px; color: var(--ink-muted); margin-top: 4px; max-width: 56ch; }
+  .cta-step { font-family:'Libre Baskerville', Georgia, serif; font-size: 36px; color: var(--accent); margin: 18px 0; font-weight:600; }
+  .disclaimer { font-size: 13px; color: var(--ink-muted); max-width: 64ch; margin-top: 40px; line-height:1.55; }
+  .credit-grid { display:flex; flex-wrap:wrap; gap: 18px 44px; margin-top: 14px; }
+  .credit-grid div { font-size: 18px; color: var(--ink-soft); }
+  .credit-grid b { display:block; font-family:'Libre Baskerville',serif; font-size:36px; color:var(--accent); font-weight:700; }
+  .nav { position: fixed; bottom: 22px; right: 28px; font-size: 13px; color: var(--ink-muted); z-index: 10; }
+  .nav button { background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; font-size: 14px; cursor: pointer; margin-left: 6px; }
+  .pageno { position: fixed; bottom: 26px; left: 28px; font-size: 12px; color: var(--ink-muted); letter-spacing:0.1em; z-index:10; }
+  @media (max-width:640px){ h1{font-size:44px;} h2{font-size:32px;} .big{font-size:30px;} .slide{padding:8vh 8vw;} }
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="pageno" id="pageno"></div>
+<div class="nav">Arrow keys to move <button onclick="move(-1)">Prev</button><button onclick="move(1)">Next</button></div>
+<script>
+const S=[
+  {t:'title', kicker:'A Masterclass for Leaders', h1:'The Achievement Machine', sub:'How a few specific leadership behaviors, modeled at the top, turn an ordinary team into a culture of performance excellence.', name:'Dawn Shrum', role:'Organizational Behaviorist and Executive Performance Coach'},
+
+  {t:'content', kicker:'Who this is for', h2:'You lead the team. The targets keep moving.', body:['You are a senior leader. You have smart people, good products, and a plan. And still the quarter comes down to pressure, re-work, and a handful of people carrying the rest.']},
+
+  {t:'content', kicker:'Who this is for', h2:'The off-sites do not hold.', body:['You have tried the retreat, the new framework, the reorg. The lift lasts a few weeks, then the team quietly settles back to where it was.', 'It is not a motivation problem. The old behavior is still the one being modeled every Monday morning.']},
+
+  {t:'hook', kicker:'The reframe', big:'Your culture is not built by your policies. It is built by what your people watch you do every day.'},
+
+  {t:'content', kicker:'Part one - the real problem', h2:'Organizations only improve as people improve.', body:['Most leaders try to fix the organization with programs: a new process, a new tool, another set of values painted on the wall.', 'But the people walk a path forged by leadership. A team does not rise to the mission statement. It rises to the behavior it sees repeated at the top.']},
+
+  {t:'content', kicker:'Part one - the real problem', h2:'The gap is behavioral, not strategic.', body:['The greatest predictor of a company success is the ability of its leaders to both demonstrate and expect a few specific behaviors conducive to performance excellence.', 'When those behaviors are inconsistent at the top, no strategy survives contact with the week.']},
+
+  {t:'content', kicker:'Part one - the real problem', h2:'Why the program always fades.', body:['A program asks the team to change while the leadership stays the same. The team reads the mismatch instantly and waits it out.', 'Nothing permanent moves until the behavior at the top moves first.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Three disciplines that build the machine', body:['Over twenty years with executive teams, the work keeps coming back to three disciplines a leader can actually practice, not just announce.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Discipline one: performance coaching', body:['Systematically remove the obstacles in front of your people so they hit goals faster, with less stress, without breaking stride.', 'You stop being the bottleneck and start being the reason the work moves.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Discipline two: scale with focus', body:['Sustainable, compounding growth comes from a laser focus on the few outcomes you want most, not the many you could chase.', 'The leader protects that focus so the team is not pulled apart by everything that feels urgent.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Discipline three: strategic clarity', body:['A clear, executable roadmap so the team energy lands on the critical catalyst objectives and nothing else.', 'When the few things that matter are obvious, the right behavior gets easier to repeat.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'What "a few specific behaviors" means', body:['It is not a personality trait. It is a short, repeatable set of actions your team can see and copy.'], list:['How you respond the moment a target is missed.','What you recognize out loud, and what you let pass.','How decisions get made when the data is incomplete.','Whether the hard conversation happens this week or next quarter.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Demonstrate it, then expect it.', body:['You model the behavior first, in plain view. Then you hold the standard for the people around you.', 'Demonstrate and expect: that pairing is what turns a behavior into a norm instead of a mood.']},
+
+  {t:'content', kicker:'Part two - the method', h2:'Behavior cascades. Policy does not.', body:['When a leader runs these behaviors consistently, the team copies them long before anyone writes them down. That is how culture actually moves.', 'The standard permeates the organization on its own, floor by floor.']},
+
+  {t:'content', kicker:'Part three - the payoff', h2:'The team becomes an achievement machine.', body:['Goals are hit with confidence and consistency, not heroics. The pressure drops because the standard is shared, not carried by a few.']},
+
+  {t:'content', kicker:'Part three - the payoff', h2:'Growth stops depending on any one person.', body:['Results start compounding from the behavior the whole team now runs on, instead of the late nights of your best few.', 'That is the difference between a group that performs when you push and a machine that performs on its own.']},
+
+  {t:'credit', kicker:'Why trust this', h2:'Twenty years inside executive teams', body:['This is not theory borrowed from a book. It is drawn from two decades coaching senior leaders and their teams against real performance targets.'], credits:[['20+ yrs','coaching executives and teams'],['600+','leaders mentored each year'],['Fortune 500','to entrepreneurial ventures']], name:'Dawn Shrum', role:'MBA, Executive Leadership (Temple, Fox School of Business). Organizational Behaviorist and founder of cSuite Achieve.'},
+
+  {t:'cta', kicker:'Your next step', h2:'Build your achievement machine.', step:'Book a one-on-one strategy session with Dawn.', body:['We look at the specific behaviors your team is modeling now, and the few that would change your performance curve. You leave with a clear next move, whether or not we work together.'], disclaimer:'This presentation is for educational purposes only. It describes a leadership approach and an organizational-behavior method; it is not a guarantee of any specific business, revenue, or performance result. Outcomes vary with your team, market, and execution.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide' + (i===0 ? ' active':'');
+  let h = '';
+  if (s.kicker) h += '<div class="kicker">'+s.kicker+'</div>';
+  if (s.t==='title') {
+    h += '<h1>'+s.h1+'</h1><p class="sub">'+s.sub+'</p><div class="name">'+s.name+'</div><div class="role">'+s.role+'</div>';
+  } else if (s.t==='hook') {
+    h += '<p class="big">'+s.big+'</p>';
+  } else if (s.t==='cta') {
+    h += '<h2>'+s.h2+'</h2><div class="cta-step">'+s.step+'</div>';
+    (s.body||[]).forEach(p => h += '<p class="body">'+p+'</p>');
+    h += '<p class="disclaimer">'+s.disclaimer+'</p>';
+  } else if (s.t==='credit') {
+    h += '<h2>'+s.h2+'</h2>';
+    (s.body||[]).forEach(p => h += '<p class="body">'+p+'</p>');
+    h += '<div class="credit-grid">';
+    (s.credits||[]).forEach(c => h += '<div><b>'+c[0]+'</b>'+c[1]+'</div>');
+    h += '</div><div class="name">'+s.name+'</div><div class="role">'+s.role+'</div>';
+  } else {
+    if (s.h2) h += '<h2>'+s.h2+'</h2>';
+    (s.body||[]).forEach(p => h += '<p class="body">'+p+'</p>');
+    if (s.list) { h += '<ul>'; s.list.forEach(li => h += '<li>'+li+'</li>'); h += '</ul>'; }
+  }
+  d.innerHTML = h;
+  deck.appendChild(d);
+});
+
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const pageno = document.getElementById('pageno');
+function render(){ slides.forEach((s,i)=>s.classList.toggle('active', i===cur)); pageno.textContent = (cur+1)+' / '+slides.length; }
+function move(n){ cur = Math.max(0, Math.min(slides.length-1, cur+n)); render(); }
+document.addEventListener('keydown', e => { if(e.key==='ArrowRight'||e.key==='PageDown'){move(1);} if(e.key==='ArrowLeft'||e.key==='PageUp'){move(-1);} });
+document.addEventListener('click', e => { if(e.target.closest('.nav')) return; move(1); });
+render();
+</script>
+</body>
+</html>
