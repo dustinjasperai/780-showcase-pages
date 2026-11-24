@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Invisible Ceiling — A Masterclass with Brad Bizjack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Zalando+Sans+Expanded:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1f33;        /* derived from brand navy #10425d / #1f2b45 */
+    --panel:#16304d;
+    --rule:#24405f;
+    --ink:#eaf1f8;
+    --muted:#9db2c9;
+    --accent:#f96115;    /* their CTA orange (brand.json button bg) */
+    --signal:#05ccb9;    /* their teal (brand.json) */
+    --display:"Zalando Sans Expanded",system-ui,sans-serif;
+    --body:"Figtree",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #deck{height:100vh;width:100vw;position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+  .slide.on{display:flex;opacity:1}
+  .eyebrow{font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;
+    font-size:.78rem;color:var(--accent);font-weight:600;margin-bottom:1.4rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3.9rem);line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.12}
+  p{font-size:clamp(1.02rem,1.5vw,1.35rem);line-height:1.5;color:var(--ink);max-width:48ch;margin-top:1.1rem}
+  p.lead{color:var(--muted)}
+  .big{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1.08;max-width:20ch}
+  ul{margin-top:1.6rem;list-style:none;display:grid;gap:.9rem;max-width:44ch}
+  li{position:relative;padding-left:1.7rem;font-size:clamp(1rem,1.5vw,1.3rem);line-height:1.4}
+  li:before{content:"";position:absolute;left:0;top:.55em;width:.65rem;height:.65rem;
+    background:var(--accent);border-radius:2px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem;max-width:60rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:1.5rem}
+  .card .n{font-family:var(--display);color:var(--signal);font-weight:700;font-size:1.1rem}
+  .card h3{font-family:var(--display);font-size:1.15rem;margin:.5rem 0 .4rem;font-weight:600}
+  .card p{font-size:.98rem;margin-top:0;color:var(--muted)}
+  .step{display:flex;align-items:baseline;gap:1.1rem;margin-top:1.3rem;max-width:50ch}
+  .step .num{font-family:var(--display);color:var(--accent);font-weight:700;font-size:1.6rem;min-width:2.2rem}
+  .credit{display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
+  .stat{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--signal)}
+  .stat small{display:block;font-family:var(--body);font-weight:400;font-size:.9rem;color:var(--muted);letter-spacing:0}
+  .cta{background:var(--accent);color:#1a0d04;font-family:var(--display);font-weight:700;
+    display:inline-block;padding:.95rem 1.7rem;border-radius:999px;margin-top:1.8rem;font-size:1.05rem}
+  .disclaimer{position:absolute;left:9vw;right:9vw;bottom:3.4vh;color:var(--muted);font-size:.74rem;line-height:1.4;max-width:70ch}
+  .brandline{position:absolute;left:9vw;bottom:3.4vh;color:var(--muted);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-family:var(--display)}
+  .dot{color:var(--accent)}
+  #nav{position:absolute;right:2.2vw;bottom:2.2vh;display:flex;gap:.5rem;z-index:5}
+  #nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);
+    width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1rem;font-family:var(--body)}
+  #counter{position:absolute;left:9vw;top:3.4vh;color:var(--muted);font-size:.78rem;letter-spacing:.1em;font-family:var(--display)}
+  .accentbar{width:64px;height:5px;background:var(--accent);border-radius:3px;margin-bottom:1.6rem}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="disclaimer" style="position:fixed;left:9vw;bottom:1vh;font-size:.7rem;color:#9db2c9;max-width:70ch;z-index:1">This masterclass is educational and not therapy or medical advice. No specific result is guaranteed. Results vary from person to person.</div>
+<div id="nav"><button id="prev" aria-label="Previous">&larr;</button><button id="next" aria-label="Next">&rarr;</button></div>
+<script>
+const S = [
+  {t:'title'},
+  {t:'who'},
+  {t:'agenda'},
+  {t:'hook'},
+  {t:'p1'},
+  {t:'faces'},
+  {t:'hustle'},
+  {t:'cost'},
+  {t:'p2'},
+  {t:'rewire-1'},
+  {t:'rewire-2'},
+  {t:'rewire-3'},
+  {t:'permanent'},
+  {t:'mythtruth'},
+  {t:'p3'},
+  {t:'dailyedge'},
+  {t:'fulfilled'},
+  {t:'nextlevel'},
+  {t:'whyme'},
+  {t:'recap'},
+  {t:'cta', disclaimer:'Educational only. No specific result is guaranteed. Results vary from person to person. This is not therapy or medical advice.'}
+];
+
+const render = {
+  title: () => `
+    <div class="eyebrow">A live masterclass with Brad Bizjack</div>
+    <div class="accentbar"></div>
+    <h1>The Invisible Ceiling</h1>
+    <p class="lead">Why high performers get stuck doing everything right, and the subconscious rewiring that finally breaks through it.</p>`,
+  who: () => `
+    <div class="eyebrow">Who this is for</div>
+    <h2>You have your foot on the gas. Something invisible has the brakes on.</h2>
+    <p class="lead">You've read the books, hired the coaches, run the plays. You still keep hitting the same level, year after year, and no amount of trying harder moves it.</p>`,
+  agenda: () => `
+    <div class="eyebrow">What we'll cover</div>
+    <h2>Three things, one hour.</h2>
+    <ul>
+      <li>Why the ceiling on your results is subconscious, not strategic.</li>
+      <li>The rewiring that changes the pattern at the root, for good.</li>
+      <li>The daily practice that keeps the new wiring in place.</li>
+    </ul>`,
+  hook: () => `
+    <div class="eyebrow">The reframe</div>
+    <h1>You can't out-strategize it.<br>You can only rewire it.</h1>
+    <p class="lead">The ceiling on your results is not a strategy problem. It is a wiring problem. And strategy has never once fixed wiring.</p>`,
+  p1: () => `
+    <div class="eyebrow">Part one</div>
+    <h2>The real ceiling is subconscious.</h2>
+    <p>Your conscious mind sets the goal. Your subconscious mind decides what you'll actually allow, tolerate, and act on. When the two disagree, the subconscious wins every time. That gap is your invisible ceiling.</p>`,
+  faces: () => `
+    <div class="eyebrow">Part one</div>
+    <h2>Three faces of the invisible ceiling</h2>
+    <div class="cards">
+      <div class="card"><div class="n">01</div><h3>Hidden beliefs</h3><p>Rules about money, worth, and what's possible that you don't even know you're holding.</p></div>
+      <div class="card"><div class="n">02</div><h3>A capped identity</h3><p>A self-image quietly set below your goals, so you snap back the moment you get close.</p></div>
+      <div class="card"><div class="n">03</div><h3>Effort that stalls</h3><p>Work that used to move the needle and now just keeps you busy and exhausted.</p></div>
+    </div>`,
+  hustle: () => `
+    <div class="eyebrow">Part one</div>
+    <h2>This is why working harder makes it worse.</h2>
+    <p>More hustle on top of old wiring just reinforces the pattern that capped you. You get more tired, not more free. The fix isn't more effort. It's changing what the effort is built on.</p>`,
+  cost: () => `
+    <div class="eyebrow">Part one</div>
+    <h2>What the ceiling actually costs you.</h2>
+    <p>It isn't only the goal you don't hit. It's the years spent circling it, the energy burned fighting yourself, and the quiet belief that maybe this is just your level. None of that is true. It's wiring, and wiring can change.</p>`,
+  p2: () => `
+    <div class="eyebrow">Part two</div>
+    <h1>Rewired.</h1>
+    <p class="lead">A proven approach to change the pattern at the root, not paper over it with willpower.</p>`,
+  'rewire-1': () => `
+    <div class="eyebrow">The rewiring</div>
+    <h2>Step one. Find the pattern.</h2>
+    <div class="step"><div class="num">1</div><p>Name the specific belief and identity running underneath the result you keep repeating. You cannot change a pattern you can't see.</p></div>`,
+  'rewire-2': () => `
+    <div class="eyebrow">The rewiring</div>
+    <h2>Step two. Dismantle it at the root.</h2>
+    <div class="step"><div class="num">2</div><p>Interrupt the belief where it actually lives, in the subconscious, instead of arguing with it at the surface where it always wins.</p></div>`,
+  'rewire-3': () => `
+    <div class="eyebrow">The rewiring</div>
+    <h2>Step three. Install the success pattern.</h2>
+    <div class="step"><div class="num">3</div><p>Replace the old wiring with an identity and a set of beliefs that make your goal feel normal, not like a stretch you have to force.</p></div>`,
+  permanent: () => `
+    <div class="eyebrow">Part two</div>
+    <h2>Because the change happens at the root, it holds.</h2>
+    <p>Surface-level motivation fades by Wednesday. Root-level change doesn't need to be re-summoned every morning, because the pattern itself is different now.</p>`,
+  mythtruth: () => `
+    <div class="eyebrow">Part two</div>
+    <h2>The shift in one contrast.</h2>
+    <div class="cards">
+      <div class="card"><div class="n">The myth</div><h3>Push harder</h3><p>If I just want it more and work more, the ceiling will finally break.</p></div>
+      <div class="card"><div class="n">The truth</div><h3>Rewire deeper</h3><p>The ceiling breaks when the belief and identity underneath it change.</p></div>
+      <div class="card"><div class="n">The result</div><h3>It stays</h3><p>Root-level change doesn't snap back the way motivation does.</p></div>
+    </div>`,
+  p3: () => `
+    <div class="eyebrow">Part three</div>
+    <h1>Keeping the new wiring alive.</h1>
+    <p class="lead">Rewiring is the shift. Priming is how you protect it day to day.</p>`,
+  dailyedge: () => `
+    <div class="eyebrow">The Daily Edge</div>
+    <h2>Prime the mind before the day, in under five minutes.</h2>
+    <p>A short daily priming practice resolves the internal conflict before you act, so you move from flow instead of friction, and your effort turns back into results.</p>`,
+  fulfilled: () => `
+    <div class="eyebrow">Part three</div>
+    <h2>Fulfilled on the way up, not just at the finish.</h2>
+    <p>The old wiring says you'll feel it when you arrive. You won't, because the goalpost moves. Learning to feel fulfilled while you strive is what makes the striving sustainable.</p>`,
+  nextlevel: () => `
+    <div class="eyebrow">What changes</div>
+    <h2>What the next level actually looks like.</h2>
+    <ul>
+      <li>The goal you've chased for years stops feeling far away.</li>
+      <li>Decisions get faster because the internal argument is gone.</li>
+      <li>Your energy comes back, because you're not fighting yourself.</li>
+    </ul>`,
+  whyme: () => `
+    <div class="eyebrow">Your guide</div>
+    <h2>Brad Bizjack</h2>
+    <p>Certified High Performance Coach and host of the Rewire Your Mind podcast, with 300+ five-star reviews. Brad has spent over a decade helping high performers rewire the subconscious patterns behind their invisible ceiling.</p>`,
+  recap: () => `
+    <div class="eyebrow">In one line</div>
+    <h2>Stop managing the ceiling. Rewire what built it.</h2>
+    <p class="lead">Find the pattern, dismantle it at the root, install the success wiring, and prime it daily.</p>`,
+  cta: () => `
+    <div class="eyebrow">Your next step</div>
+    <h1>Ready to rewire it?</h1>
+    <p class="lead">Rewired is the proven 6-step system to rewire your subconscious mind for success, freedom, and fulfillment. Doors open soon.</p>
+    <span class="cta">Join the Rewired waitlist</span>
+    <div class="disclaimer">This masterclass is educational. It shares principles and a method for personal growth and performance. It is not therapy or medical advice. No specific result is guaranteed. Results vary from person to person.</div>`
+};
+
+const deck = document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('section');
+  el.className='slide';
+  const inner = render[s.t] ? render[s.t]() : '';
+  el.innerHTML = `<div id="counter">${String(i+1).padStart(2,'0')} <span class="dot">/</span> ${String(S.length).padStart(2,'0')}</div>`
+    + inner
+    + (s.t!=='cta' ? `<div class="brandline">Brad Bizjack <span class="dot">&middot;</span> Rewired</div>` : '');
+  deck.appendChild(el);
+});
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
