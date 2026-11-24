@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Improvements Don't Stick | Point of Volition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#edf0f5;        /* light paper ground, from brand.json ranked colors (inverted dark default) */
+    --panel:#ffffff;
+    --ink:#161e2a;       /* her dominant navy, 24 uses */
+    --ink-soft:#3f4654;
+    --ink-muted:#6b7280;
+    --rule:#e3e1d9;
+    --primary:#314c7d;   /* her steel blue button/footer, 11 uses */
+    --accent:#af262b;    /* her crimson, the day's priority mark */
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Source Sans 3',-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage{ width:100vw; height:100vh; position:relative; }
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:7vh 9vw; opacity:0; transition:opacity .25s ease;
+  }
+  .slide.on{ display:flex; opacity:1; }
+  .board{ height:3px; width:64px; background:var(--primary); margin-bottom:28px; }
+  .board.pri{ background:var(--accent); }
+  .eyebrow{ font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--primary); margin-bottom:18px; }
+  h1{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5.2vw,62px);
+    line-height:1.08; letter-spacing:-.01em; max-width:17ch; }
+  h2{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,3.8vw,46px);
+    line-height:1.12; max-width:20ch; }
+  .sub{ font-size:clamp(16px,1.7vw,22px); color:var(--ink-soft); margin-top:22px; max-width:46ch; line-height:1.5; }
+  .big{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(24px,3.4vw,40px);
+    line-height:1.2; max-width:24ch; }
+  ul{ list-style:none; margin-top:30px; max-width:52ch; }
+  li{ position:relative; padding-left:30px; margin-bottom:18px; font-size:clamp(16px,1.7vw,21px);
+    color:var(--ink-soft); line-height:1.45; }
+  li::before{ content:""; position:absolute; left:0; top:11px; width:12px; height:3px; background:var(--primary); }
+  li b{ color:var(--ink); font-weight:600; }
+  .pillar{ font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; color:var(--accent);
+    letter-spacing:.14em; text-transform:uppercase; margin-bottom:14px; }
+  .note{ font-size:14px; color:var(--ink-muted); margin-top:30px; max-width:52ch; line-height:1.5; }
+  .cta-steps{ margin-top:26px; }
+  .cta-steps li::before{ background:var(--accent); }
+  .disclaimer{ font-size:12.5px; color:var(--ink-muted); margin-top:34px; max-width:60ch; line-height:1.5; font-style:italic; }
+  footer{ position:absolute; bottom:3.4vh; left:9vw; right:9vw; display:flex; justify-content:space-between;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--ink-muted); letter-spacing:.04em; }
+  .nav{ position:absolute; bottom:3vh; right:9vw; }
+  .counter{ font-variant-numeric:tabular-nums; }
+  @media (max-width:700px){ .slide{ padding:7vh 7vw; } }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const S = [
+  {t:'title',
+    eyebrow:"A live masterclass with Teresa Deason",
+    h:"Why Your Improvements Don't Stick",
+    sub:"And the daily system that makes them last. For healthcare and operations leaders who are tired of gains that fade." },
+
+  {t:'content', eyebrow:"What you'll leave with",
+    h:"By the end of this hour",
+    b:["A clear reason your last improvement faded, and it isn't the one you think",
+       "The daily rhythm that keeps every gain in place",
+       "How that same rhythm lifts staff engagement at the same time",
+       "A simple way to score where your culture stands today"] },
+
+  {t:'content', eyebrow:"Who this is for",
+    h:"You have been here before",
+    b:["You ran the event. The board looked great on Friday",
+       "Sixty days later the old habits are quietly back",
+       "The team is a little more tired of change, not less",
+       "You start to wonder if improvement just doesn't hold here"],
+    note:"If any of that sounds familiar, you are in the right room. This is the most common pattern in operational excellence, and it is fixable." },
+
+  {t:'section', pri:true, pillar:"The reframe",
+    big:"The problem was never your tools. It was the day after the event." },
+
+  {t:'content', eyebrow:"Part one, the core problem",
+    h:"Improvement as an event, not a system",
+    b:["A kaizen week is a burst of attention. Attention always fades",
+       "When the week ends, the standard has nothing holding it in place",
+       "People drift back to what the day actually rewards",
+       "Nothing in the daily routine was built to carry the change forward"] },
+
+  {t:'content', eyebrow:"The fade",
+    h:"Why gains quietly decay",
+    b:["No daily check means no one sees the slip until it is large",
+       "No visible standard means the standard becomes a memory",
+       "No daily owner means the gain belongs to no one",
+       "So the next event starts from the same place as the last"],
+    note:"This is not a people problem. It is a design problem, and daily management is the design." },
+
+  {t:'section', pillar:"Part two, the system",
+    big:"The Deason Daily Management System" },
+
+  {t:'content', pillar:"Pillar one",
+    h:"The daily huddle",
+    b:["Fifteen minutes, every level, every day, at the same time",
+       "The team sees yesterday against the standard, out loud",
+       "Problems surface in hours, not in the next quarterly review",
+       "Momentum becomes a habit the calendar protects"] },
+
+  {t:'content', pillar:"Pillar two",
+    h:"Visual management",
+    b:["The standard lives on a board the whole team can see",
+       "Green and red are honest, not political",
+       "Anyone walking the floor can read how today is going",
+       "The board carries the memory so people don't have to"] },
+
+  {t:'content', pillar:"Pillar three",
+    h:"Tiered accountability",
+    b:["Each gain has a daily owner, not a committee",
+       "Issues the floor can't solve rise one tier, the same day",
+       "Leaders hear reality early, while it is still small",
+       "Follow through becomes visible instead of assumed"] },
+
+  {t:'content', pillar:"Pillar four",
+    h:"Leader standard work",
+    b:["Leaders have a daily routine too, and theirs is to serve the work",
+       "Go and see, ask, remove the barrier, then step back",
+       "The leader's job is to protect the daily rhythm, not to fight fires",
+       "This is servant leadership made concrete, not a poster"] },
+
+  {t:'content', eyebrow:"A quick diagnostic",
+    h:"The Business Culture Assessment",
+    b:["Five pillars that predict whether change will hold",
+       "You score where your organization honestly stands today",
+       "You leave with the one pillar to work on first",
+       "It takes a few minutes and it is free"] },
+
+  {t:'section', pri:true, pillar:"The why underneath",
+    big:"You win operational excellence through hearts and minds, not control." },
+
+  {t:'content', eyebrow:"Part three, in practice",
+    h:"A day on the floor with the system running",
+    b:["The morning huddle is short, calm, and it actually happens",
+       "The board tells the truth and the truth is not punished",
+       "Small problems get solved by the people closest to them",
+       "Leaders spend their day removing barriers, not reacting to them"] },
+
+  {t:'content', eyebrow:"The outcome",
+    h:"Engagement rises with the rhythm",
+    b:["People can see their work matter, every single day",
+       "They are trusted to solve, so they bring problems forward",
+       "The standard holds, so the next improvement builds on the last",
+       "Culture stops being a slogan and becomes a daily practice"] },
+
+  {t:'content', eyebrow:"Why learn this from me",
+    h:"Teresa Deason",
+    b:["Over 35 years in Lean management, facilitation, and quality improvement",
+       "Trained directly under Toyota master sensei Chihiro Nakao",
+       "Among the first to bring Toyota principles into healthcare",
+       "Co-author of Leading the Lean Healthcare Journey and Servant Leadership"] },
+
+  {t:'content', eyebrow:"The one idea to keep",
+    h:"Lean that lasts is a daily habit",
+    b:["Events create a spike. The daily system creates the line",
+       "Fifteen minutes a day will out perform a week once a year",
+       "Protect the rhythm and the gains protect themselves"] },
+
+  {t:'cta', eyebrow:"Your next step",
+    h:"Start with where your culture stands",
+    steps:["Take the free Business Culture Assessment and get your five-pillar score",
+           "Book a call with me to walk through your result and your first daily board",
+           "We map the daily management system to your teams, at your pace"],
+    disclaimer:"This masterclass is educational. No specific result is guaranteed. Results vary by organization, leadership, and follow through." }
+];
+
+const stage = document.getElementById('stage');
+function esc(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+S.forEach((s,i)=>{
+  const d=document.createElement('section');
+  d.className='slide'+(i===0?' on':'');
+  let html='';
+  const board = '<div class="board'+(s.pri?' pri':'')+'"></div>';
+  if(s.t==='title'){
+    html += board;
+    if(s.eyebrow) html+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    html+='<h1>'+esc(s.h)+'</h1>';
+    if(s.sub) html+='<p class="sub">'+esc(s.sub)+'</p>';
+  } else if(s.t==='section'){
+    html += board;
+    if(s.pillar) html+='<div class="pillar">'+esc(s.pillar)+'</div>';
+    html+='<p class="big">'+esc(s.big)+'</p>';
+  } else if(s.t==='cta'){
+    html += board;
+    if(s.eyebrow) html+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    html+='<h2>'+esc(s.h)+'</h2>';
+    html+='<ul class="cta-steps">'+s.steps.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+    if(s.disclaimer) html+='<p class="disclaimer">'+esc(s.disclaimer)+'</p>';
+  } else {
+    html += board;
+    if(s.eyebrow) html+='<div class="eyebrow">'+esc(s.eyebrow)+'</div>';
+    if(s.pillar) html+='<div class="pillar">'+esc(s.pillar)+'</div>';
+    html+='<h2>'+esc(s.h)+'</h2>';
+    if(s.b) html+='<ul>'+s.b.map(x=>'<li>'+x.replace(/\b(daily|servant leadership|standard)\b/,'<b>$1</b>')+'</li>').join('')+'</ul>';
+    if(s.note) html+='<p class="note">'+esc(s.note)+'</p>';
+  }
+  html+='<footer><span>Point of Volition</span><span class="counter">'+(i+1)+' / '+S.length+'</span></footer>';
+  d.innerHTML=html;
+  stage.appendChild(d);
+});
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+function go(n){ if(n<0||n>=slides.length) return; slides[cur].classList.remove('on'); cur=n; slides[cur].classList.add('on'); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp') go(cur-1);
+});
+stage.addEventListener('click',()=>go(cur+1));
+</script>
+</body>
+</html>
