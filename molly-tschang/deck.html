@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Say Hard Things Without Losing the Room | Say It Skillfully</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#1c1c1c;
+    --panel:#262626;
+    --rule:#3a3a3a;
+    --accent:#fff06f;
+    --text:#f4f3ef;
+    --muted:#b8b6ae;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Lato',-apple-system,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  #stage{ width:100vw; height:100vh; position:relative; }
+  .slide{
+    position:absolute; inset:0; display:none;
+    flex-direction:column; justify-content:center;
+    padding:8vh 10vw;
+  }
+  .slide.active{ display:flex; }
+  .kicker{ font-weight:900; font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1{ font-weight:900; font-size:clamp(34px,6vw,76px); line-height:1.04; letter-spacing:-.01em; }
+  h2{ font-weight:900; font-size:clamp(28px,4.4vw,52px); line-height:1.1; margin-bottom:20px; }
+  .lede{ font-weight:400; font-size:clamp(18px,2.2vw,27px); color:var(--muted); line-height:1.5; max-width:30ch; margin-top:26px; }
+  p.body{ font-weight:400; font-size:clamp(17px,2vw,24px); color:var(--text); line-height:1.55; max-width:34ch; }
+  p.body + p.body{ margin-top:18px; }
+  .mark{ color:var(--bg); background:var(--accent); padding:0 .18em; font-weight:900; }
+  ul{ list-style:none; margin-top:14px; }
+  li{ font-size:clamp(16px,1.9vw,23px); color:var(--text); line-height:1.4; padding:14px 0; border-top:1px solid var(--rule); display:flex; gap:18px; }
+  li:last-child{ border-bottom:1px solid var(--rule); }
+  li .lab{ color:var(--accent); font-weight:900; min-width:1.4em; }
+  li .sub{ color:var(--muted); font-weight:400; }
+  .big{ font-weight:900; font-size:clamp(60px,12vw,150px); color:var(--accent); line-height:.9; }
+  .step{ font-weight:900; font-size:clamp(40px,7vw,92px); line-height:1; }
+  .step .mut{ color:var(--rule); }
+  .credit{ color:var(--muted); font-weight:700; font-size:clamp(15px,1.7vw,20px); margin-top:30px; }
+  .disclaimer{ color:var(--muted); font-size:13px; line-height:1.5; max-width:48ch; margin-top:26px; font-weight:400; }
+  .cta-line{ font-weight:900; font-size:clamp(22px,3vw,34px); color:var(--accent); margin-top:8px; }
+  .quote{ font-weight:700; font-size:clamp(24px,3.6vw,46px); line-height:1.2; max-width:24ch; }
+  .nav{ position:fixed; bottom:22px; right:28px; font-family:'Lato'; font-size:13px; color:var(--muted); font-weight:700; letter-spacing:.05em; z-index:10; }
+  .brandmark{ position:fixed; bottom:22px; left:28px; font-size:13px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:var(--rule); z-index:10; }
+  .bar{ position:fixed; top:0; left:0; height:4px; background:var(--accent); transition:width .25s ease; z-index:10; }
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="brandmark">Say It Skillfully</div>
+<div id="stage"></div>
+<div class="nav"><span id="cur">1</span> / <span id="tot">1</span></div>
+<script>
+const S = [
+  {t:'title', html:`
+    <div class="kicker">A Say It Skillfully masterclass with Molly Tschang</div>
+    <h1>Say Hard Things<br>Without <span class="mark">Losing the Room</span></h1>
+    <div class="lede">How to speak up with candor and care on the conversations that actually matter at work.</div>`},
+
+  {t:'for', html:`
+    <div class="kicker">Who this is for</div>
+    <h2>You have something true<br>to say. And a relationship<br>you don't want to break.</h2>
+    <p class="body">For leaders, managers and teammates who keep hitting the same wall: the feedback, the pushback, the hard truth that needs to be said, to a boss, a peer, a direct report, and never quite comes out right.</p>`},
+
+  {t:'trap', html:`
+    <div class="kicker">The trap</div>
+    <h2>So we pick one of two bad options.</h2>
+    <ul>
+      <li><span class="lab">1</span><span>We swallow it. The issue festers, the resentment grows, nothing changes.</span></li>
+      <li><span class="lab">2</span><span>We blurt it. We get it off our chest, and we damage the relationship doing it.</span></li>
+    </ul>
+    <p class="body" style="margin-top:26px">Most communication advice just coaches the words. The words were never the problem.</p>`},
+
+  {t:'hook', html:`
+    <div class="kicker">The reframe</div>
+    <p class="quote">The problem was never <span class="mark">what</span> you had to say.<br>It's <span class="mark">who you were being</span> when you said it.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker">Part one</div>
+    <h2>80% of a hard conversation<br>happens before you<br>open your mouth.</h2>
+    <p class="body">Skillful communication is not a clever script. It is a sequence, and almost all of it is internal. I call it Me, You, We.</p>`},
+
+  {t:'meyouwe', html:`
+    <div class="kicker">The method</div>
+    <h2>Me &rarr; You &rarr; We</h2>
+    <ul>
+      <li><span class="lab">Me</span><span>Get grounded first. Lead yourself before you lead the conversation.</span></li>
+      <li><span class="lab">You</span><span>Understand their world before you expect them to hear yours.</span></li>
+      <li><span class="lab">We</span><span>Build the shared reality where the real issue can get solved together.</span></li>
+    </ul>`},
+
+  {t:'me', html:`
+    <div class="kicker">Me &middot; the 80%</div>
+    <h2>Lead yourself first.</h2>
+    <p class="body">Before the conversation, get grounded. Let go of the anger and the impatience you are carrying in, they will leak into every word.</p>
+    <p class="body">Then set a clear, positive intention: what do you actually want to be true on the other side of this?</p>`},
+
+  {t:'you', html:`
+    <div class="kicker">You</div>
+    <h2>Walk in their shoes<br>before you ask them<br>to walk in yours.</h2>
+    <p class="body">Curiosity before conclusion. Empathy is not agreeing. It is understanding the other person so well that they feel it, and stop defending.</p>`},
+
+  {t:'we', html:`
+    <div class="kicker">We</div>
+    <h2>Make it a shared problem,<br>not a verdict.</h2>
+    <p class="body">When all voices are genuinely heard, the conversation stops being you versus them and becomes both of you versus the problem. That is where hard things get solved and the relationship gets stronger, not weaker.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker">Part two</div>
+    <h2>The five skills<br>that make it repeatable.</h2>
+    <p class="body">Me, You, We is the mindset. ADEPT is how you show up in the room, every time.</p>`},
+
+  {t:'adept', html:`
+    <div class="kicker">The ADEPT skills</div>
+    <h2>A.D.E.P.T.</h2>
+    <ul>
+      <li><span class="lab">A</span><span>Advocate <span class="sub">: help others find the courage to speak up.</span></span></li>
+      <li><span class="lab">D</span><span>Diverse <span class="sub">: hear all voices, especially the quiet ones.</span></span></li>
+      <li><span class="lab">E</span><span>Empathetic <span class="sub">: walk in their shoes first.</span></span></li>
+      <li><span class="lab">P</span><span>Present <span class="sub">: lead yourself; presence is your power move.</span></span></li>
+      <li><span class="lab">T</span><span>Transparent <span class="sub">: show your thinking; transparency builds trust.</span></span></li>
+    </ul>`},
+
+  {t:'clearkind', html:`
+    <div class="kicker">The rule that changes everything</div>
+    <p class="quote"><span class="mark">Clear is kind.</span><br>Vague is cruel.</p>
+    <p class="body" style="margin-top:26px">Softening the truth until it disappears is not kindness. The kindest thing you can do is be clear, and be caring at the same time. Those are not opposites.</p>`},
+
+  {t:'part', html:`
+    <div class="kicker">Part three</div>
+    <h2>When candor and care<br>live in the same sentence.</h2>`},
+
+  {t:'after', html:`
+    <div class="kicker">Before &rarr; after</div>
+    <ul>
+      <li><span class="lab">&times;</span><span>Before: you rehearse it for a week, then avoid it, then explode.</span></li>
+      <li><span class="lab">&check;</span><span>After: you raise it in the moment, calmly, and the other person thanks you for it.</span></li>
+    </ul>
+    <p class="body" style="margin-top:26px">Teams that say hard things skillfully move faster, trust more, and stop wasting energy on the conversations nobody is having.</p>`},
+
+  {t:'whyme', html:`
+    <div class="kicker">Why learn this from me</div>
+    <h2>I wrote the book on it.<br>Literally.</h2>
+    <p class="body">I am Molly Tschang, founder of Say It Skillfully. I co-authored the Amazon #1 best seller <em>Say It Skillfully: Speak Up. Make Your Words Matter. Win Together.</em> with legendary executive coach Marshall Goldsmith, and I have taught this method to leaders and teams through cohort training, the Say It Skillfully podcast, and the 30-Day Challenge.</p>`},
+
+  {t:'recap', html:`
+    <div class="kicker">The whole method in one line</div>
+    <p class="quote">Get <span class="mark">grounded</span>. Understand <span class="mark">them</span>. Solve it <span class="mark">together</span>.</p>`},
+
+  {t:'cta', html:`
+    <div class="kicker">Your next step</div>
+    <h2>Bring Say It Skillfully<br>to you and your team.</h2>
+    <div class="cta-line">Start the free 30-Day Say It Skillfully Challenge, or talk to Molly about cohort training for your team.</div>
+    <div class="credit">sayitskillfully.com &middot; Say It Skillfully with Molly Tschang</div>
+    <p class="disclaimer">This masterclass is for educational purposes only. Communication outcomes vary by person, team and situation; nothing here is a guarantee of any specific result.</p>`}
+];
+
+const stage = document.getElementById('stage');
+S.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slide'+(i===0?' active':''); d.innerHTML=s.html; stage.appendChild(d); });
+let idx=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=S.length;
+function show(n){ idx=Math.max(0,Math.min(S.length-1,n)); slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.getElementById('cur').textContent=idx+1;
+  document.getElementById('bar').style.width=((idx+1)/S.length*100)+'%'; }
+show(0);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' ')show(idx+1); if(e.key==='ArrowLeft')show(idx-1); });
+stage.addEventListener('click',()=>show(idx+1));
+</script>
+</body>
+</html>
