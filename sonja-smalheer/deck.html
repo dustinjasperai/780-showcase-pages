@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Scattered to Focused — Sonja Smalheer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2EA;      /* warm studio paper, light scheme (brand: site_scheme light) */
+    --ink:#23221F;        /* near-black graphite text */
+    --accent:#595959;     /* harvested brand color (extract_brand.js ranked_colors) */
+    --ochre:#B98A3E;      /* lone focal mark, studio-world derived */
+    --rule:#cfc6b5;       /* thin graphite-on-paper rule */
+    --muted:#6f6a60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#e7e1d5;font-family:'Open Sans',system-ui,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .deck{width:min(960px,96vw);aspect-ratio:16/10;background:var(--paper);
+    position:relative;overflow:hidden;box-shadow:0 18px 60px rgba(35,34,31,.22);border-radius:4px}
+  .slide{position:absolute;inset:0;padding:64px 72px;display:none;flex-direction:column;
+    justify-content:center}
+  .slide.on{display:flex}
+  .slide.alt{background:#efe9dd}
+  .kicker{font-family:'Open Sans';font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    font-size:12px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Spectral';font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:'Spectral';font-weight:700;font-size:38px;line-height:1.1;margin-bottom:18px}
+  h3{font-family:'Spectral';font-weight:600;font-size:26px;line-height:1.15;margin-bottom:12px}
+  p{font-size:19px;line-height:1.55;max-width:60ch;color:var(--ink)}
+  p.lead{font-size:22px;color:var(--ink)}
+  p.sub{color:var(--muted);font-size:18px;margin-top:10px}
+  ul{list-style:none;margin-top:18px}
+  li{font-size:19px;line-height:1.5;padding-left:28px;position:relative;margin-bottom:12px;max-width:58ch}
+  li:before{content:"";position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--accent)}
+  .big{font-family:'Spectral';font-weight:700;font-size:46px;line-height:1.05;letter-spacing:-.01em}
+  .stageflow{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .stageflow span{font-family:'Open Sans';font-weight:700;font-size:15px;letter-spacing:.04em;
+    padding:10px 16px;border:1.5px solid var(--rule);border-radius:2px;color:var(--ink)}
+  .stageflow span.mark{border-color:var(--ochre)}
+  .num{position:absolute;top:40px;right:56px;font-family:'Spectral';font-style:italic;
+    color:var(--accent);font-size:17px;opacity:.7}
+  .foot{position:absolute;left:72px;bottom:34px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .hr{height:2px;width:72px;background:var(--ochre);margin:22px 0}
+  .rulewide{height:1px;background:var(--rule);margin:22px 0;width:100%}
+  .lead-top{margin-top:22px}
+  .disc{font-size:13px;color:var(--muted);line-height:1.5;max-width:64ch;margin-top:22px}
+  .cta-step{font-family:'Spectral';font-weight:600;font-size:22px;color:var(--ink);margin-top:10px}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;
+    align-items:center;font-size:13px;color:#4a463e}
+  .nav button{font:inherit;background:var(--paper);border:1px solid var(--rule);border-radius:3px;
+    padding:6px 14px;cursor:pointer;color:var(--ink)}
+  @media(max-width:640px){.slide{padding:38px 34px}h1{font-size:34px}h2{font-size:27px}.big{font-size:30px}p,li{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+
+<div class="nav">
+  <button id="prev">Prev</button>
+  <span id="count"></span>
+  <button id="next">Next</button>
+</div>
+
+<script>
+/* Masterclass slide deck — Sonja Smalheer. The coach pitching her own audience. */
+const S=[
+  {t:'title', k:'A live masterclass with Sonja Smalheer', h:'From Scattered<br>to Focused',
+   lead:'How to build an art practice that actually moves forward, using The Thrive Framework.',
+   foot:'HELP! I AM ARTIST'},
+
+  {t:'content', k:'What you will leave with', h:'One hour. A clear way forward.',
+   bullets:[
+     'Why talented artists stay stuck, and what the real obstacle is.',
+     'The Thrive Framework: the path from hesitation to momentum, visibility and income.',
+     'A simple weekly rhythm you can start in your own studio this week.']},
+
+  {t:'content', k:'Who this is for', h:'You are not short on talent.',
+   lead:'You can make the work. What is missing is a way to show up consistently, be seen, and turn your art into a living, without losing why you started.',
+   sub:'If you feel scattered, inconsistent, or invisible, you are in the right room.'},
+
+  {t:'content', k:'The trap', h:'Make more. Post more. Sell harder.',
+   p:'That is the advice most artists are handed. So you chase every tactic at once, start five things, finish none, and end the month exhausted with nothing that compounds.',
+   sub:'Busy is not the same as moving forward.'},
+
+  {t:'hook', k:'The reframe', big:'The problem was never<br>talent or hustle.',
+   lead:'It is scatter. Distraction is the modern artist’s number one obstacle, and no amount of extra effort fixes a practice pulled in ten directions.'},
+
+  {t:'content', k:'Part One', h:'The real obstacle: a scattered practice',
+   p:'When attention is split, every project competes with every other one. Nothing gets the depth it needs, so the body of work never becomes recognisable, and recognisable is what people buy.',
+   sub:'Scatter does not just cost time. It costs a voice.'},
+
+  {t:'content', k:'Part One', h3:'What scatter quietly takes',
+   bullets:[
+     'Consistency: the work shows up in bursts, then goes quiet for months.',
+     'Visibility: an audience cannot follow a practice that keeps changing shape.',
+     'Income: buyers trust a clear, cohesive body of work, not a moving target.']},
+
+  {t:'hook', k:'The shift', big:'Clarity creates<br>momentum.',
+   lead:'When you know your direction, small consistent steps start to stack. Focus is not doing more. It is doing the few right things, on repeat.'},
+
+  {t:'content', k:'Part Two', h:'The Thrive Framework',
+   lead:'An artful roadmap of five essential pillars that carries an artist from hesitation to a practice that thrives.',
+   flow:['Hesitation','Momentum','Visibility','Sustainable income']},
+
+  {t:'content', k:'Thrive, stage one', h3:'Clarity: find your direction',
+   p:'Before tactics, you get clear on the work only you can make and where you are taking it. Direction is what turns ten half-starts into one body of work.',
+   sub:'You cannot be consistent toward a target you have not named.'},
+
+  {t:'content', k:'Thrive, stage two', h3:'Focus and consistency: a weekly structure',
+   p:'A simple, repeatable weekly rhythm keeps you in flow and out of overwhelm. The same few hours, protected, every week, is how a practice compounds.',
+   sub:'Turn distraction into traction.'},
+
+  {t:'content', k:'Thrive, stage three', h3:'Visibility: let the work be seen',
+   p:'Once the work is clear and consistent, showing up stops feeling like self-promotion and starts feeling like an invitation. You share the practice, not a sales pitch.'},
+
+  {t:'content', k:'Thrive, stage four', h3:'Sustainable income: a living, not a lottery',
+   p:'Clarity, consistency and visibility are what make income steady instead of random. The goal is a practice you can keep, that pays you, without burning out the reason you make.'},
+
+  {t:'content', k:'Part Three', h:'What a focused year looks like',
+   bullets:[
+     'One clear direction, held long enough to become recognisable.',
+     'A weekly studio rhythm you actually keep.',
+     'An audience that grows because it can follow you.',
+     'Income that comes from the work, on repeat.']},
+
+  {t:'content', k:'The weekly rhythm', h3:'Small, protected, repeated',
+   p:'You do not need more hours. You need the same few hours, pointed in one direction, week after week. That is the whole engine behind a practice that thrives.',
+   sub:'Focus is a structure, not a mood.'},
+
+  {t:'content', k:'Why me', h3:'Sonja Smalheer, artist and mentor',
+   p:'I am an artist myself, now based in the Netherlands, with more than thirty years of personal art-coaching experience. Through my HELP! I AM ARTIST podcast and my courses I work with artists all over the world on exactly this shift, from scattered to focused.'},
+
+  {t:'content', k:'Is this you', h:'You have the talent.<br>Now build the practice.',
+   lead:'If you are ready to trade scatter for a focused, intentional practice that grows, there is a clear next step.'},
+
+  {t:'cta', k:'Your next step with Sonja', h:'Join The Focused Artist Lab', alt:true,
+   p:'An eight-week, high-touch group coaching experience to take you from scattered to focused, with weekly live calls, a simple weekly structure, and a small circle of artists building alongside you.',
+   step:'Find the Lab and join the waitlist at sonjasmalheer.com/lab',
+   disc:'This masterclass is for education only. No specific result or income is guaranteed. Results vary based on your own work, consistency and circumstances.'}
+];
+
+function esc(x){return x||''}
+function render(s){
+  var h='';
+  if(s.k) h+='<div class="kicker">'+s.k+'</div>';
+  if(s.t==='title'){ h+='<h1>'+s.h+'</h1>'; if(s.lead) h+='<p class="lead lead-top">'+s.lead+'</p>'; if(s.foot) h+='<div class="foot">'+s.foot+'</div>'; return h; }
+  if(s.t==='hook'){ h+='<h1 class="big">'+s.big+'</h1><div class="hr"></div>'; if(s.lead) h+='<p class="lead">'+s.lead+'</p>'; return h; }
+  if(s.h) h+='<h2>'+s.h+'</h2>';
+  if(s.h3) h+='<h3>'+s.h3+'</h3>';
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.p) h+='<p>'+s.p+'</p>';
+  if(s.flow){ h+='<div class="stageflow">'; s.flow.forEach(function(f,k){ h+='<span class="'+(k>0?'mark':'')+'">'+f+'</span>'; }); h+='</div>'; }
+  if(s.bullets){ h+='<ul>'; s.bullets.forEach(function(b){ h+='<li>'+b+'</li>'; }); h+='</ul>'; }
+  if(s.sub) h+='<p class="sub">'+s.sub+'</p>';
+  if(s.step) h+='<div class="cta-step">'+s.step+'</div>';
+  if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  return h;
+}
+var deck=document.getElementById('deck');
+S.forEach(function(s,idx){
+  var el=document.createElement('section');
+  el.className='slide'+(s.alt?' alt':'')+(idx===0?' on':'');
+  var inner=render(s);
+  if(idx>0 && s.t!=='title') inner='<div class="num">'+String(idx+1).padStart(2,'0')+'</div>'+inner;
+  el.innerHTML=inner;
+  deck.appendChild(el);
+});
+var slides=[].slice.call(document.querySelectorAll('.slide'));
+var i=0;var count=document.getElementById('count');
+function show(n){i=(n+slides.length)%slides.length;slides.forEach(function(s,k){s.classList.toggle('on',k===i)});count.textContent=(i+1)+' / '+slides.length;}
+document.getElementById('next').onclick=function(){show(i+1)};
+document.getElementById('prev').onclick=function(){show(i-1)};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
