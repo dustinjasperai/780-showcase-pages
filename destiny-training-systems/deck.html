@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enrolled, Not Sold — a masterclass with Scott deMoulin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#131b1e;        /* their site body background */
+    --panel:#1b262b;     /* lifted from the ground */
+    --rule:#595959;      /* their ranked grey */
+    --accent:#0b9eff;    /* their dominant hex, 26 uses — the one spotlight */
+    --ink:#ffffff;       /* their body text color */
+    --muted:#aeb7bd;
+    --display:'Oswald',system-ui,sans-serif;
+    --body:'Roboto',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{background:#0b1114;color:var(--ink);font-family:var(--body);font-weight:300;line-height:1.5}
+  .slide{
+    min-height:100vh;width:100%;scroll-snap-align:start;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;position:relative;border-bottom:1px solid #0b1114;
+    background:var(--bg);
+  }
+  .slide::before{
+    content:attr(data-n)" / 20";position:absolute;top:4vh;right:9vw;
+    font-family:var(--display);font-size:13px;letter-spacing:.14em;color:var(--rule);
+  }
+  .kicker{font-family:var(--display);font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+    font-size:14px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6.4vw,80px);line-height:1.02;letter-spacing:-.02em}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,50px);line-height:1.08;letter-spacing:-.01em}
+  .lede{font-size:clamp(18px,2.2vw,26px);color:var(--muted);max-width:60ch;margin-top:26px;font-weight:300}
+  .big{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.4vw,40px);line-height:1.18;max-width:24ch}
+  .spot{color:var(--accent);position:relative;white-space:nowrap}
+  .spot::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:3px;background:var(--accent);opacity:.9}
+  ul{list-style:none;margin-top:30px;display:grid;gap:16px;max-width:70ch}
+  li{position:relative;padding-left:30px;font-size:clamp(17px,1.9vw,22px);color:#e8eef1;font-weight:300}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:11px;background:var(--accent);
+    transform:rotate(45deg)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:38px}
+  .card{background:var(--panel);border:1px solid #283640;border-top:3px solid var(--accent);
+    padding:28px 24px;border-radius:4px}
+  .card .num{font-family:var(--display);font-weight:800;color:var(--accent);font-size:15px;letter-spacing:.12em}
+  .card h3{font-family:var(--display);font-weight:700;font-size:22px;margin:12px 0 10px}
+  .card p{color:var(--muted);font-size:16px;font-weight:300}
+  .note{font-size:14px;color:var(--rule);margin-top:40px;max-width:66ch;font-weight:300;line-height:1.5}
+  .cta-box{margin-top:34px;display:inline-flex;align-items:center;gap:14px;background:var(--accent);
+    color:#07161f;font-family:var(--display);font-weight:700;font-size:clamp(18px,2vw,24px);
+    padding:18px 34px;border-radius:4px}
+  .credit{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:34px;max-width:72ch}
+  .credit div{background:var(--panel);border-left:3px solid var(--accent);padding:18px 20px;font-size:17px;color:#e8eef1}
+  @media(max-width:760px){.grid,.credit{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const S=[
+ {t:'title',kicker:'A masterclass with Scott deMoulin · Destiny Training Systems',
+  h:'Enrolled, <span class="spot">Not Sold</span>',
+  lede:'How to turn a room into enrolled clients from the stage, without a single hard close.'},
+
+ {t:'who',kicker:'Who this is for',
+  h:'You already get the stage.',
+  lede:'Coaches, consultants, authors and experts who speak, present and run webinars. You get the applause, the nods, the "that was great." Then the room leaves and almost nobody enrolls.'},
+
+ {t:'trap',kicker:'The trap',
+  big:'You think the problem is your <span class="spot">close</span>. So you add urgency, a bigger stack, one more bonus. The room feels the push, and pushes back.'},
+
+ {t:'reframe',kicker:'The reframe',
+  big:'You don\'t have a closing problem. You have an <span class="spot">enrollment</span> problem. The room never got enrolled in the problem, so the offer had nothing to land on.'},
+
+ {t:'part',kicker:'Part one',h:'Why good talks don\'t convert'},
+
+ {t:'bullets',kicker:'The communication casualty',
+  h:'Two quiet mistakes lose the room before the offer',
+  items:['It is not what you say, it is how you say it. The content can be right and still land wrong.',
+         'Most experts present: they transfer information. Persuaders move people: they change what the room believes and does.',
+         'The gap between the two is not charisma. It is sequence, the order in which you say things.']},
+
+ {t:'bullets',kicker:'The cost',
+  h:'What a presenter leaves on the table',
+  items:['A room that understands you but is not moved to act.',
+         'Enrollment that depends on a hard close at the end instead of belief built all the way through.',
+         'Great reviews, thin results. The talk gets praised and forgotten.']},
+
+ {t:'part',kicker:'Part two',h:'The Engage From Your Stage method'},
+
+ {t:'bullets',kicker:'The anatomy of a talk',
+  h:'A persuasive talk has a structure',
+  items:['Anatomy of a Speech: every talk that moves people has an underlying skeleton, not a list of slides.',
+         'Syntax: the sequence and order of what you say is what carries a room from curiosity to decision.',
+         'Get the structure right and the "close" stops being a moment. It becomes the natural next step.']},
+
+ {t:'cards',kicker:'From presenter to persuader',
+  h:'Three moves that enroll a room',
+  cards:[
+   {n:'MOVE 01',h:'Diagnose',p:'Before you ever present, surface the audience\'s real problems, the ones they know and the ones they do not. You cannot enroll a room you have not understood.'},
+   {n:'MOVE 02',h:'Educate',p:'Serve first. Teach something that changes how they see their situation today. Trust is built while you give, not while you ask.'},
+   {n:'MOVE 03',h:'Enroll',p:'Shift from selling for your benefit to enrolling them for their reasons. The invitation lands because the belief is already there.'}]},
+
+ {t:'bullets',kicker:'Enrolled, not sold',
+  h:'Why this beats the stack close',
+  items:['The old way pushes a stack of bonuses at the end and hopes pressure converts. It leaks trust.',
+         'Enrollment lets the room arrive at the decision themselves, for their own reasons.',
+         'Done right it is not softer, it is stronger: a value-first talk once produced around 2 million dollars in enrollments against an expected 750 to 900 thousand.']},
+
+ {t:'bullets',kicker:'The three kinds of communication',
+  h:'Communication is about 90% of the result',
+  items:['Internal communication: the way you talk to yourself before you ever walk on stage.',
+         'Sales and relationship communication: how you build trust in the room and in the follow-up.',
+         'Marketing communication: the message that gets the right people into the seats in the first place.']},
+
+ {t:'part',kicker:'Part three',h:'Your stage, re-engineered'},
+
+ {t:'bullets',kicker:'On your next stage',
+  h:'The same room, a different result',
+  items:['You open by naming the problem so precisely the room leans in and thinks, that is me.',
+         'You teach one idea that reframes what they believed walking in.',
+         'By the time you make the offer, enrolling is the obvious next step, not a leap.']},
+
+ {t:'cards',kicker:'Where it travels',
+  h:'One skill, every stage you own',
+  cards:[
+   {n:'LIVE',h:'Keynotes and events',p:'The ballroom, the breakout, the summit stage where decisions get made in the room.'},
+   {n:'VIRTUAL',h:'Webinars and workshops',p:'A 60-minute room online where the same structure enrolls at scale.'},
+   {n:'1 TO 1',h:'Sales conversations',p:'The same sequence works across a table or a Zoom, one person at a time.'}]},
+
+ {t:'why',kicker:'Why learn this from Scott',
+  h:'Four decades of enrolling rooms',
+  credits:['Founded Destiny Training Systems in 1989; clients report over 1 billion dollars in new results.',
+           'Invited by Tony Robbins to co-create and run Business Mastery and lead Business Breakthroughs International.',
+           'Trained with Dale Carnegie; built and ran the top sales and training franchise for Anthony Robbins & Associates.',
+           'Has worked alongside Jay Abraham and Bob Proctor, and coached founders from startups to multi-billion-dollar firms.']},
+
+ {t:'bullets',kicker:'What you walk away with',
+  h:'After the training',
+  items:['The anatomy and syntax of a talk that enrolls, not just informs.',
+         'A diagnose, educate, enroll sequence you can run on any stage this month.',
+         'A way to invite the room into your offer that feels like service, because it is.']},
+
+ {t:'quote',kicker:'The shift',
+  big:'Stop selling for your benefit. Start <span class="spot">enrolling</span> people for their reasons. The stage was never the problem.'},
+
+ {t:'cta',kicker:'Your next step',
+  h:'Learn to enroll from your stage',
+  lede:'Engage From Your Stage is Scott\'s live speaker intensive: two virtual sessions, then four days in the room in Las Vegas, with seats kept small on purpose.',
+  cta:'Book your consult call at destinytraining.com',
+  disclaimer:'Educational content only. No result is guaranteed. Results vary with your market, offer and effort; the figures shown describe past outcomes and are not a promise of future results.'}
+];
+
+const app=document.getElementById('app');
+S.forEach((s,i)=>{
+  const n=String(i+1).padStart(2,'0');
+  let inner='';
+  if(s.kicker) inner+=`<div class="kicker">${s.kicker}</div>`;
+  if(s.t==='title'||s.t==='cta'){ inner+=`<h1>${s.h}</h1>`; }
+  else if(s.h){ inner+=`<h2>${s.h}</h2>`; }
+  if(s.big) inner+=`<p class="big">${s.big}</p>`;
+  if(s.lede) inner+=`<p class="lede">${s.lede}</p>`;
+  if(s.items){ inner+='<ul>'+s.items.map(x=>`<li>${x}</li>`).join('')+'</ul>'; }
+  if(s.cards){ inner+='<div class="grid">'+s.cards.map(c=>`<div class="card"><div class="num">${c.n}</div><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')+'</div>'; }
+  if(s.credits){ inner+='<div class="credit">'+s.credits.map(c=>`<div>${c}</div>`).join('')+'</div>'; }
+  if(s.cta) inner+=`<div class="cta-box">${s.cta}</div>`;
+  if(s.disclaimer) inner+=`<p class="note">${s.disclaimer}</p>`;
+  app.insertAdjacentHTML('beforeend',`<section class="slide" data-n="${n}">${inner}</section>`);
+});
+</script>
+</body>
+</html>
