@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Unfair Advantage — a masterclass with Taylor Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #2a170d;
+    --panel: #3a2114;
+    --rule: #6b1a26;
+    --ink: #f4ead6;
+    --ink-soft: rgba(244,234,214,0.74);
+    --accent: #c9a05a;
+  }
+  html, body { height:100%; }
+  body {
+    font-family:'Work Sans', -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage { height:100vh; display:flex; align-items:center; justify-content:center; padding:7vh 8vw; }
+  .slide { display:none; width:100%; max-width:960px; }
+  .slide.active { display:block; animation:fade .35s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .kicker { font-size:13px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:22px; }
+  h1 { font-family:'Gloock', Georgia, serif; font-weight:400; font-size:clamp(34px,6vw,62px); line-height:1.1; letter-spacing:-.005em; }
+  h2 { font-family:'Gloock', Georgia, serif; font-weight:400; font-size:clamp(27px,4.4vw,44px); line-height:1.16; margin-bottom:26px; }
+  .promise { font-size:clamp(17px,2.2vw,22px); color:var(--ink-soft); margin-top:24px; max-width:720px; line-height:1.5; }
+  p.body { font-size:clamp(16px,2vw,20px); color:var(--ink-soft); margin-top:16px; max-width:760px; line-height:1.6; }
+  ul { list-style:none; margin-top:10px; }
+  li { font-size:clamp(16px,2vw,21px); padding:14px 0 14px 34px; position:relative; border-bottom:1px solid rgba(107,26,38,0.4); max-width:780px; }
+  li:last-child { border-bottom:none; }
+  li::before { content:''; position:absolute; left:4px; top:22px; width:10px; height:10px; border-radius:50%; background:var(--accent); }
+  li strong { color:var(--ink); font-weight:600; }
+  .num { font-family:'Gloock',serif; color:var(--accent); font-size:clamp(30px,4vw,44px); }
+  .lead { font-family:'Gloock',serif; font-size:clamp(22px,3.4vw,33px); line-height:1.32; color:var(--ink); max-width:820px; }
+  .panel { background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:30px 34px; margin-top:22px; }
+  .disclaimer { font-size:13px; color:var(--ink-soft); margin-top:28px; max-width:680px; line-height:1.5; }
+  .cta-step { font-size:clamp(18px,2.4vw,24px); color:var(--ink); margin-top:18px; font-weight:600; }
+  .nav { position:fixed; bottom:22px; right:26px; font-family:'Work Sans',sans-serif; font-size:13px; color:var(--ink-soft); display:flex; gap:16px; align-items:center; }
+  .nav button { background:var(--panel); color:var(--ink); border:1px solid var(--rule); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; font-family:inherit; }
+  .nav button:hover { border-color:var(--accent); color:var(--accent); }
+  .brandmark { position:fixed; top:26px; left:30px; font-family:'Gloock',serif; font-size:16px; letter-spacing:.03em; color:var(--ink-soft); }
+  @media (max-width:640px){ .stage{ padding:9vh 7vw; } .brandmark{ font-size:14px; } }
+</style>
+</head>
+<body>
+<div class="brandmark">Taylor Lee</div>
+<div class="stage"><div id="deck"></div></div>
+<div class="nav">
+  <button onclick="go(-1)">Prev</button>
+  <span id="count"></span>
+  <button onclick="go(1)">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', k:'A free masterclass with Taylor Lee',
+    h:'Your Unfair Advantage',
+    promise:'How to become the one coach your dream clients cannot look away from, so the right people choose you over everyone else in your space, every single time.'},
+
+  {t:'content', k:'In the next hour',
+    h:'Here is what we are going to do together.',
+    body:'By the end of this masterclass you will know exactly which parts of your presence are working and which are quietly costing you clients.',
+    list:['Name the one edge your dream clients are already searching for.',
+          'Walk through the five spotlights that make you the obvious choice.',
+          'Leave with a clear next move to turn the dark ones back on.']},
+
+  {t:'content', k:'Who this is for',
+    h:'You are already good. You are just not the obvious choice yet.',
+    body:'This is for women coaches and transformation based business owners who already have real client results and a loyal inner circle, and who are ready for more of the right people to find them and say yes.',
+    list:['You have made good money and have clients who buy everything you offer.',
+          'You are ready for more clients, better clients, easy yes clients.',
+          'And you keep hearing some version of "I am talking to a few other coaches."']},
+
+  {t:'quote', k:'The trap',
+    lead:'You have been told the problem is your niche, your copy, or that you need to look more like the coaches blowing up out of nowhere. None of that is the real problem.'},
+
+  {t:'content', k:'The dark reframe',
+    h:'The coaches making serious money are not the ones who describe their offer perfectly.',
+    body:'They are the ones who built a presence people cannot look away from. It is not a more luxury looking brand or more polished copy. It is knowing the one edge your people are already searching for.',
+    list:['Your unfair advantage is not your credentials.',
+          'It is not your framework with the trademarked name.',
+          'It is the reason someone would choose you over every other coach in your space.']},
+
+  {t:'content', k:'Part one, the core problem',
+    h:'When your edge is off, people cannot tell how good you are.',
+    body:'Picture yourself on a stage. You are doing the work. You are great at it. The one thing missing is the spotlight. When it is off, the right people walk past someone they would have paid in full for.',
+    list:['Every light that is off is costing you yeses every single week.',
+          'Blending in reads as safe, and safe is forgettable.',
+          'The fix is not more. It is showing people who you already are.']},
+
+  {t:'quote', k:'Part one, the real cost',
+    lead:'A plateau is almost never a strategy problem. It is a visibility problem wearing a strategy costume, and no new funnel fixes it until the right people can finally tell how good you are.'},
+
+  {t:'section', k:'Part two, the method',
+    h:'The 5 Spotlights',
+    body:'The five lights that make you the obvious choice. We are going to turn each one on.'},
+
+  {t:'spotlight', k:'Spotlight one', num:'01',
+    h:'Unique Edge',
+    body:'The specific thing you do differently that no one else in your space does the same way. Named plainly, so a stranger gets it in one sentence.'},
+
+  {t:'spotlight', k:'Spotlight two', num:'02',
+    h:'Why You',
+    body:'Your distinct point of view. The reason your take is yours and not a repeat of what every other coach is already saying.'},
+
+  {t:'spotlight', k:'Spotlight three', num:'03',
+    h:'Bold Stance',
+    body:'The opinions you actually hold out loud. A clear stance repels the wrong people and magnetizes the ones who were built to work with you.'},
+
+  {t:'spotlight', k:'Spotlight four', num:'04',
+    h:'Character Arc',
+    body:'Your transformation story, shared on purpose. This is what keeps people watching and buying, and it has nothing to do with better photos.'},
+
+  {t:'spotlight', k:'Spotlight five', num:'05',
+    h:'Results',
+    body:'Your impact and your clients outcomes, shown so the right person sees themselves in the before and believes the after is possible for them.'},
+
+  {t:'content', k:'How the five work together',
+    h:'Turn them all on and you become the only one they can imagine hiring.',
+    body:'This is the Soulmate Coach Effect. When all five spotlights are on, your content stops competing on price and hand holding and starts building the kind of connection that turns followers into lifetime clients.',
+    list:['Dream clients feel seen in the exact language they use in their own head.',
+          'Sales conversations become fit checks, not interviews.',
+          'Clients stay for three, five, even nine years because the connection is real.']},
+
+  {t:'content', k:'What most coaches reach for instead',
+    h:'The usual fixes keep you blending in.',
+    body:'When sales slow down, the reflex is to add more. More content, a new niche, a prettier brand. Each one makes you look a little more like everyone else.',
+    list:['A new niche narrows you before people even know why you are different.',
+          'More polish signals safe, and safe does not get chosen.',
+          'Another offer without a clear edge just adds more noise to scroll past.']},
+
+  {t:'content', k:'Your five spotlights, one question each',
+    h:'Everything comes back to these five.',
+    body:'When even one of these is unanswered in your content, the right person cannot place you, and someone less talented gets the yes.',
+    list:['Unique Edge: what do you do that no one else does the same way?',
+          'Why You and Bold Stance: what do you believe out loud?',
+          'Character Arc and Results: what is the proof people can see themselves in?']},
+
+  {t:'content', k:'Part three, your next twelve months',
+    h:'This is the system I used to build on my own terms.',
+    body:'Not with a bigger launch or a louder funnel, but by becoming so clearly myself that the right people had no choice but to choose me.',
+    list:['Attract perfect fit clients who hire again and again for years.',
+          'Stop hearing "I am talking to a few other coaches."',
+          'Grow revenue without trading more hours or watering yourself down.']},
+
+  {t:'quote', k:'Why me',
+    lead:'I went from cardboard boxes as floors in a seven hundred dollar apartment to a multiple seven figure business built since 2016, and I did it by owning my unfair advantage, not by looking like everyone else.'},
+
+  {t:'cta', k:'Your next step',
+    h:'Ready to turn your spotlights on?',
+    step:'Come find your unfair advantage with me inside The Obvious Yes.',
+    body:'If this masterclass showed you which of your five spotlights are still off, the next step is turning them on together so you become the obvious choice in your space.',
+    disclaimer:'This masterclass is for educational purposes only. It shares strategies and personal experience, and it is not a promise or guarantee of income or specific results. Your outcome depends on your own work, market, and circumstances.'}
+];
+
+let i = 0;
+const deck = document.getElementById('deck');
+const count = document.getElementById('count');
+function render(){
+  let s = S[i], html = '';
+  const k = s.k ? '<div class="kicker">'+s.k+'</div>' : '';
+  if (s.t === 'title') {
+    html = k + '<h1>'+s.h+'</h1>' + (s.promise ? '<p class="promise">'+s.promise+'</p>' : '');
+  } else if (s.t === 'quote') {
+    html = k + '<p class="lead">'+s.lead+'</p>';
+  } else if (s.t === 'section') {
+    html = k + '<h2>'+s.h+'</h2>' + (s.body ? '<p class="body">'+s.body+'</p>' : '');
+  } else if (s.t === 'spotlight') {
+    html = k + '<div class="num">'+s.num+'</div><h2>'+s.h+'</h2><p class="body">'+s.body+'</p>';
+  } else if (s.t === 'cta') {
+    html = k + '<h2>'+s.h+'</h2>' + (s.step ? '<div class="cta-step">'+s.step+'</div>' : '')
+         + (s.body ? '<p class="body">'+s.body+'</p>' : '')
+         + (s.disclaimer ? '<p class="disclaimer">'+s.disclaimer+'</p>' : '');
+  } else {
+    html = k + '<h2>'+s.h+'</h2>' + (s.body ? '<p class="body">'+s.body+'</p>' : '');
+    if (s.list) { html += '<ul>' + s.list.map(x=>'<li>'+x+'</li>').join('') + '</ul>'; }
+  }
+  deck.innerHTML = '<div class="slide active">'+html+'</div>';
+  count.textContent = (i+1) + ' / ' + S.length;
+}
+function go(d){ i = Math.max(0, Math.min(S.length-1, i+d)); render(); }
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') go(1); if(e.key==='ArrowLeft') go(-1); });
+render();
+</script>
+</body>
+</html>
