@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Code Before The Climb — a masterclass with Simon Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0c;        /* their black ground */
+    --panel:#16171a;     /* dark panel */
+    --rule:#595959;      /* their grey, 6 uses */
+    --accent:#e2304b;    /* their courage-red CTA, 8 uses — dominant brand hex */
+    --ink:#f4f1ea;       /* warm off-white text */
+    --muted:#a9a39a;
+    --head:'Arvo',Georgia,serif;   /* their H1/H2 face */
+    --body:'Open Sans',system-ui,sans-serif; /* their body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
+  #stage{width:min(960px,94vw);aspect-ratio:16/9;background:var(--bg);position:relative;
+    border:1px solid #23242a;border-radius:4px;overflow:hidden}
+  .slide{position:absolute;inset:0;padding:7% 8%;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kicker{font-family:var(--head);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:1.1rem;font-weight:700}
+  h1{font-family:var(--head);font-weight:700;font-size:2.7rem;line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:2.0rem;line-height:1.12;margin-bottom:1rem}
+  p{font-size:1.06rem;line-height:1.6;color:var(--ink);max-width:40ch}
+  p.lead{font-size:1.22rem;color:var(--muted);margin-top:1.1rem;max-width:44ch}
+  .seal{width:46px;height:3px;background:var(--accent);margin:1.3rem 0}
+  ul{list-style:none;margin-top:.6rem}
+  li{font-size:1.05rem;line-height:1.5;padding:.5rem 0 .5rem 2.4rem;position:relative;border-bottom:1px solid #202127;max-width:46ch}
+  li:last-child{border-bottom:0}
+  li .num{position:absolute;left:0;top:.5rem;font-family:var(--head);font-weight:700;color:var(--accent);font-size:1.05rem}
+  li b{color:var(--ink)}
+  li span.def{color:var(--muted)}
+  .big{font-family:var(--head);font-size:3.2rem;font-weight:700;color:var(--accent);line-height:1}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
+  .card{background:var(--panel);border:1px solid #23242a;border-left:3px solid var(--accent);padding:1.2rem 1.4rem;border-radius:3px}
+  .card h3{font-family:var(--head);font-size:1.05rem;margin-bottom:.4rem}
+  .card p{font-size:.95rem;color:var(--muted)}
+  .disc{font-size:.72rem;color:var(--muted);margin-top:1.4rem;max-width:52ch;line-height:1.5}
+  .credit{font-family:var(--head);color:var(--muted);font-size:.8rem;letter-spacing:.1em}
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;
+    font-family:var(--body);font-size:.8rem;color:var(--muted)}
+  #nav button{background:var(--panel);color:var(--ink);border:1px solid #2c2d33;border-radius:3px;
+    padding:6px 13px;cursor:pointer;font-size:.8rem}
+  #nav button:hover{border-color:var(--accent)}
+  .cta-btn{display:inline-block;margin-top:1.3rem;background:var(--accent);color:#fff;font-family:var(--head);
+    font-weight:700;padding:.8rem 1.6rem;border-radius:3px;text-decoration:none;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="nav"><button id="prev">&larr;</button><span id="count"></span><button id="next">&rarr;</button></div>
+<script>
+const S=[
+ {t:'title',k:'A live masterclass for men',h:'The Code Before The Climb',lead:'Why strategy fails the man who has not built himself first. 60 minutes with Simon Lee, founder of Unlimited Courage.'},
+
+ {t:'for',k:'Who this is for',h:'You know there is more in you',body:'You are driven. You have goals, plans, maybe a business and a family. But the discipline comes and goes, the courage runs thin under pressure, and you are tired of playing small.',lead:'This hour is for the man who is ready to lead himself before he leads anything else.'},
+
+ {t:'trap',k:'The trap',h:'You have been sold the climb, not the code',body:'Every program hands you another tactic. A morning routine. A productivity stack. A new goal to chase. You run it for three weeks and it fades, and you blame your willpower.',lead:'The tactic was never the problem. The man running it was unbuilt.'},
+
+ {t:'reframe',k:'The reframe',h:'The man is the mission',body:'Everything else is the method. Strategy, money, status, the body you want. These are downstream of one thing: whether you can keep a promise to yourself when no one is watching.',lead:'Build the man, and the climb takes care of itself.'},
+
+ {t:'part',k:'Part one',h:'Why discipline keeps collapsing',body:'Most men try to win the day on motivation. Motivation is a feeling, and feelings are weather. You cannot build a life on weather.',lead:'What lasts is not a feeling. It is a code you live by on the days you feel nothing.'},
+
+ {t:'part',k:'Part one',h:'Drift is the default',body:'No one chooses to drift. It happens one small surrender at a time: the snooze, the scroll, the skipped promise. Private actions no one sees become the man everyone meets.',lead:'Your private actions define you. That is where we start.'},
+
+ {t:'framework',k:'Part two, the framework',h:'The 7 Rules',lead:'The operating code I teach every man I work with. Ancient codes, Bushido and Chivalry, translated into how you live a Tuesday.'},
+
+ {t:'rules',k:'Part two',h:'The 7 Rules',rules:[
+   ['1','Character','Your private actions define you.'],
+   ['2','Code of Courage','Live by principles, not by feelings.'],
+   ['3','Inner Battle','Integrate your shadow, do not suppress it.'],
+   ['4','Intention','Control your attention to control your life.'],
+   ['5','Action','Move without waiting for motivation.'],
+   ['6','Brotherhood','Build with men who challenge you, not alone.'],
+   ['7','Legacy','Build something that outlives you.']
+ ]},
+
+ {t:'deep',k:'Rule two',h:'Courage is a decision, not a feeling',body:'Courage is not the absence of fear. It is the decision to act on your code while the fear is still in the room. You do not wait to feel ready. You become a counterpoise to fear.',lead:'Trained like a muscle, it stops being rare and becomes your default.'},
+
+ {t:'deep',k:'Rule three',h:'The inner battle you keep avoiding',body:'The parts of yourself you bury, the anger, the shame, the hunger, run you from the dark. Face them, name them, put them to work, and they stop sabotaging you.',lead:'The biggest cause of modern male angst is a man at war with himself.'},
+
+ {t:'deep',k:'Rules four and five',h:'Attention, then action',body:'Where your attention goes, your life follows. Guard it like a gate. Then act from intention, not impulse, so the day is spent on what you chose rather than what pulled at you.',lead:'Discipline is just attention and action, repeated until they are who you are.'},
+
+ {t:'deep',k:'Rule six',h:'No man builds alone',body:'Isolation feels like strength and is actually the slow road to drift. A brotherhood of men holding the same code will hold you to it on the days you would let yourself off.',lead:'This is why the work is never done in a vacuum.'},
+
+ {t:'part',k:'Part three',h:'When the code holds under load',body:'You keep the promises you make to yourself. You lead at home and at work from a settled place instead of chasing approval. The goals still matter, but they no longer own you.',lead:'Strategy finally works, because there is a built man running it.'},
+
+ {t:'two',k:'Part three',h:'From drift to code',cards:[
+   ['Before','Motivation-dependent. Private life and public face do not match. Goals chased, then abandoned.'],
+   ['After','Code-driven. The same man in private and in public. Promises kept, courage on tap, built with other men.']
+ ]},
+
+ {t:'why',k:'Why me',h:'Simon Lee',body:'30+ years coaching men in self-discipline, self-belief and courage. Former Southern England Bodybuilding Champion. Trained in 7 martial arts under National, European and World champions. Ultra-marathon runner. Father.',lead:'Author of The Courage Project and The Self-Discipline Rulebook. The 7 Rules are not theory. They have been tested in the arena.'},
+
+ {t:'quote',k:'In their words',big:'"This isn’t just coaching. It’s transformation."',credit:'Toby, 35, Unlimited Courage'},
+
+ {t:'cta',k:'Your next step',h:'Build the man. Then climb.',body:'If this is the work you are ready for, the next step is a conversation. We look at where you are drifting, which of the 7 Rules you are missing, and whether FORGED is the right fit to build the foundation.',cta:'Book your call with Simon',disc:'Educational content only. No specific outcome, income, or result is guaranteed. Results vary from man to man and depend on the work you put in.'}
+];
+
+const stage=document.getElementById('stage');
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='slide'+(i===0?' on':'');
+    let h='';
+    if(s.k) h+='<div class="kicker">'+s.k+'</div>';
+    if(s.h) h+=(s.t==='title'?'<h1>':'<h2>')+s.h+(s.t==='title'?'</h1>':'</h2>');
+    if(s.t==='title'||s.t==='framework') h+='<div class="seal"></div>';
+    if(s.rules){h+='<ul>';s.rules.forEach(r=>{h+='<li><span class="num">'+r[0]+'</span><b>'+r[1]+'.</b> <span class="def">'+r[2]+'</span></li>';});h+='</ul>';}
+    if(s.cards){h+='<div class="two">';s.cards.forEach(c=>{h+='<div class="card"><h3>'+c[0]+'</h3><p>'+c[1]+'</p></div>';});h+='</div>';}
+    if(s.big) h+='<div class="big">'+s.big+'</div>';
+    if(s.credit) h+='<p class="credit" style="margin-top:1.2rem">'+s.credit+'</p>';
+    if(s.body) h+='<p>'+s.body+'</p>';
+    if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+    if(s.cta) h+='<a class="cta-btn">'+s.cta+'</a>';
+    if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+    d.innerHTML=h;stage.appendChild(d);
+  });
+}
+render();
+let cur=0;const slides=()=>document.querySelectorAll('.slide');
+const count=document.getElementById('count');
+function show(n){const sl=slides();cur=(n+sl.length)%sl.length;sl.forEach((x,i)=>x.classList.toggle('on',i===cur));count.textContent=(cur+1)+' / '+sl.length;}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+show(0);
+</script>
+</body>
+</html>
