@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Herbalist's Path Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#12200f;          /* deep forest ground: her dominant #74aa35, darkened */
+    --panel:#1b2b16;
+    --rule:#2e4226;
+    --accent:#74aa35;      /* her leaf green, verbatim from brand.json */
+    --accent2:#c7e154;     /* her lime, verbatim from brand.json */
+    --ink:#f1ede0;         /* warm cream */
+    --ink-soft:#cdd3c2;
+    --ink-mute:#8ea07e;
+  }
+  html,body{height:100%;}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Mulish',-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .stage{width:100vw;height:100vh;position:relative;}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:8vh 11vw;opacity:0;transition:opacity .35s ease;
+  }
+  .slide.on{display:flex;opacity:1;}
+  .kick{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:22px;font-weight:600;}
+  h1{font-family:'Young Serif',Georgia,serif;font-size:clamp(36px,6.4vw,74px);line-height:1.06;
+    font-weight:500;letter-spacing:.005em;}
+  h2{font-family:'Young Serif',Georgia,serif;font-size:clamp(28px,4.6vw,50px);line-height:1.12;
+    font-weight:500;margin-bottom:26px;}
+  .lede{font-size:clamp(17px,2.1vw,23px);color:var(--ink-soft);max-width:60ch;margin-top:26px;
+    line-height:1.6;font-weight:300;}
+  .lede b{color:var(--ink);font-weight:500;}
+  .promise{font-size:clamp(18px,2.3vw,25px);color:var(--accent2);margin-top:30px;max-width:48ch;
+    line-height:1.45;}
+  ul{list-style:none;margin-top:14px;max-width:62ch;}
+  li{font-size:clamp(16px,1.9vw,21px);color:var(--ink-soft);padding:13px 0 13px 34px;
+    position:relative;border-bottom:1px solid var(--rule);line-height:1.45;font-weight:300;}
+  li:last-child{border-bottom:none;}
+  li::before{content:"";position:absolute;left:4px;top:22px;width:11px;height:11px;
+    border-radius:50%;background:var(--accent);}
+  li b{color:var(--ink);font-weight:500;}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px;}
+  .pill{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    padding:26px 22px;border-radius:4px;}
+  .pill .n{font-family:'Young Serif',serif;font-size:34px;color:var(--accent2);font-weight:600;}
+  .pill h3{font-family:'Young Serif',serif;font-weight:500;font-size:22px;margin:10px 0 10px;}
+  .pill p{font-size:15px;color:var(--ink-soft);line-height:1.5;font-weight:300;}
+  .steps{display:flex;gap:16px;margin-top:36px;flex-wrap:wrap;}
+  .step{flex:1;min-width:210px;background:var(--panel);border:1px solid var(--rule);padding:24px;
+    border-radius:4px;}
+  .step .lbl{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;}
+  .step h3{font-family:'Young Serif',serif;font-weight:500;font-size:24px;margin:12px 0 8px;}
+  .step p{font-size:15px;color:var(--ink-soft);line-height:1.5;font-weight:300;}
+  .big{font-family:'Young Serif',serif;font-size:clamp(32px,5.2vw,62px);line-height:1.1;
+    max-width:20ch;font-weight:500;}
+  .foot{position:absolute;left:11vw;bottom:5vh;font-size:12px;color:var(--ink-mute);letter-spacing:.04em;}
+  .disc{font-size:13px;color:var(--ink-mute);margin-top:30px;max-width:66ch;line-height:1.55;font-weight:300;}
+  .cta-line{font-size:clamp(18px,2.2vw,24px);color:var(--accent2);margin-top:24px;}
+  .mark{position:absolute;top:5vh;left:11vw;font-family:'Young Serif',serif;font-size:17px;
+    letter-spacing:.1em;color:var(--ink-mute);text-transform:uppercase;}
+  .nav{position:absolute;right:26px;bottom:20px;font-size:12px;color:var(--ink-mute);z-index:5;
+    font-family:'Mulish',sans-serif;}
+  .edge{position:absolute;top:0;bottom:0;width:22%;cursor:pointer;z-index:4;}
+  .edge.l{left:0;} .edge.r{right:0;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="edge l" onclick="go(-1)"></div>
+<div class="edge r" onclick="go(1)"></div>
+<div class="nav" id="nav"></div>
+<script>
+const S=[
+ {t:'cover', h:`<div class="mark">The Herbalist's Path</div>
+   <div class="kick">A live masterclass with Mel Mutterspaugh</div>
+   <h1>From Remedy Collector to Confident Herbalist</h1>
+   <div class="promise">Leave knowing WHY your remedies work, not just which jar to grab for.</div>
+   <div class="foot">Clinical herbalist, 25+ years. An herbalist in every home, again.</div>`},
+ {t:'agenda', h:`<div class="kick">What we'll cover together</div>
+   <h2>One hour, one shift.</h2>
+   <ul>
+    <li>Why more remedies never made you more confident.</li>
+    <li>The one shift that separates a collector from an herbalist.</li>
+    <li>The foundation I teach every student, in plain language.</li>
+    <li>The path from your own kitchen to serving a community.</li>
+   </ul>`},
+ {t:'who', h:`<div class="kick">Who this is for</div>
+   <h2>You already believe in the plants.</h2>
+   <ul>
+    <li>You reach for herbs first, but you're never quite sure you're doing it right.</li>
+    <li>You've got jars on the shelf you can't remember the purpose of.</li>
+    <li>You can match a symptom to a remedy, but the WHY still feels fuzzy.</li>
+    <li>You want to care for your family, and maybe one day your community, with confidence.</li>
+   </ul>`},
+ {t:'trap', h:`<div class="kick">The trap</div>
+   <h2>A thousand answers, zero confidence.</h2>
+   <div class="lede">Every cold, every ache, every worry sends you back to the search bar for one more "best herb for..." list. You end up with more jars and more doubt, because a list of answers is not the same as knowing what you're doing.</div>`},
+ {t:'reframe', h:`<div class="kick">The honest reframe</div>
+   <div class="big">Most people stay stuck as remedy collectors.</div>
+   <div class="lede">They gather more tinctures, more recipes, more "top 10 herbs for..." lists, and still feel like they're guessing. More remedies was never the answer. A different way of thinking is.</div>`},
+ {t:'problem', h:`<div class="kick">Part One: the real problem</div>
+   <h2>Symptom-matching has a ceiling.</h2>
+   <div class="lede">"What do I take for a cough?" gets you one answer for one moment. It never teaches you what the body is actually doing, so every new complaint sends you back to square one, back to the search bar, back to the dusty jars.</div>`},
+ {t:'truth', h:`<div class="kick">The shift</div>
+   <div class="big">Herbalism is how herbs work WITH the body.</div>
+   <div class="lede">Not a list of what to take. Once you understand the body system underneath the symptom, you stop guessing and start choosing. That one shift is the whole difference between a collector and an herbalist.</div>`},
+ {t:'pillars', h:`<div class="kick">Part Two: the foundation</div>
+   <h2>The Three Pillars of Herbalism</h2>
+   <div class="pillars">
+    <div class="pill"><div class="n">1</div><h3>The herbalist's role</h3><p>What it means to support the body rather than override it, and where your scope begins and ends.</p></div>
+    <div class="pill"><div class="n">2</div><h3>Principles over recipes</h3><p>The Western-herbalism logic that lets you reason about any plant, not just the ones on a list.</p></div>
+    <div class="pill"><div class="n">3</div><h3>Plants you already know</h3><p>Starting with the culinary herbs in your kitchen, so the foundation is in your hands from day one.</p></div>
+   </div>`},
+ {t:'systems', h:`<div class="kick">Part Two: the method</div>
+   <h2>Learn the body, one system at a time.</h2>
+   <ul>
+    <li><b>First, the physiology.</b> What the system actually does, in plain language.</li>
+    <li><b>Then the herbal actions.</b> How whole categories of plants move that system.</li>
+    <li><b>Then the reasoning.</b> Common complaints, and how to think toward a remedy.</li>
+    <li><b>Then your hands.</b> You make it, so the knowledge becomes yours, not theory.</li>
+   </ul>`},
+ {t:'example', h:`<div class="kick">The method in one system</div>
+   <h2>Take the immune and respiratory system.</h2>
+   <div class="lede">You learn what a fever is actually for, which herbal actions support that process rather than shut it down, and how to reason from "my child has a cough" to a remedy you understand. Do that once and every cold season looks different. Do it across every system and you are thinking like an herbalist.</div>`},
+ {t:'path', h:`<div class="kick">Part Three: where this goes</div>
+   <h2>The Herbalist's Path</h2>
+   <div class="steps">
+    <div class="step"><div class="lbl">Tier One</div><h3>Heal Your Family</h3><p>Safe, effective remedies for the people under your own roof.</p></div>
+    <div class="step"><div class="lbl">Tier Two</div><h3>Make Your Medicine</h3><p>Formulation and medicine-making, from tinctures to salves.</p></div>
+    <div class="step"><div class="lbl">Tier Three</div><h3>Heal Your Community</h3><p>Ethical, root-cause practice in service to others.</p></div>
+   </div>`},
+ {t:'make', h:`<div class="kick">Medicine-making</div>
+   <h2>Knowledge out of your head, into your hands.</h2>
+   <div class="lede">You won't just read about tinctures, glycerites, salves, syrups and infused oils. You'll make them, understand solubility and menstruums, and build a medicine chest you actually reach for, not one that gathers dust.</div>`},
+ {t:'ethics', h:`<div class="kick">Heal your community</div>
+   <h2>From caring for your own to serving others.</h2>
+   <div class="lede">When you're ready, the same root-cause thinking carries into ethical practice: how to hold scope, how to support real people with integrity, and how to be the herbalist your community has been missing.</div>`},
+ {t:'proof', h:`<div class="kick">Why it holds together</div>
+   <div class="big">A path, not a pile of courses.</div>
+   <div class="lede">Twelve months of core curriculum, monthly live mentorship, a community of people on the same path, and the hours along the way count toward Registered Herbalist status. You move from your kitchen to confident practice on one clear road.</div>`},
+ {t:'walkaway', h:`<div class="kick">What you'll walk away with today</div>
+   <h2>A new way of seeing the plants.</h2>
+   <ul>
+    <li>Why your remedies work, so you stop second-guessing every choice.</li>
+    <li>The difference between matching a symptom and reading a body.</li>
+    <li>A clear sense of your next step, from your family outward.</li>
+   </ul>`},
+ {t:'whoami', h:`<div class="kick">Your teacher</div>
+   <h2>Hi, I'm Mel.</h2>
+   <div class="lede">I'm a clinical herbalist with more than 25 years working with plants, from backpacking guide to a product line in health-food stores to teaching full time. My mission is simple: an herbalist in every home, again. And that starts with you learning to think like one.</div>`},
+ {t:'invite', h:`<div class="kick">If today resonated</div>
+   <div class="big">You don't need more jars. You need the path.</div>
+   <div class="lede">If the shift we talked about today is the thing you've been missing, there's a place to keep walking it with me, all the way from your own kitchen to confident practice.</div>`},
+ {t:'cta', h:`<div class="kick">Your next step</div>
+   <h1>Walk the path with me.</h1>
+   <div class="cta-line">Join the Community Herbalist Certification &amp; Mentorship.</div>
+   <div class="lede">Become the confident herbalist your family, and your community, needs.</div>
+   <div class="disc">Educational only. This masterclass teaches herbal and wellness education; it is not medical advice and does not diagnose, treat, or cure any condition. No specific result or income is guaranteed, and results vary by individual. Always consult a qualified provider for medical concerns.</div>`}
+];
+let i=0;const stage=document.getElementById('stage');
+S.forEach(()=>{const d=document.createElement('div');d.className='slide';stage.appendChild(d);});
+const slides=[...document.querySelectorAll('.slide')];
+function show(){slides.forEach((el,x)=>{el.classList.toggle('on',x===i);if(x===i)el.innerHTML=S[x].h;});
+ document.getElementById('nav').textContent=(i+1)+' / '+S.length;}
+function go(d){i=Math.max(0,Math.min(S.length-1,i+d));show();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+show();
+</script>
+</body>
+</html>
