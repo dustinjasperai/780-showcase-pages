@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Center That Runs Without You — ChildMYnder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eff7f5;      /* pale tint of her mint #7fcec9 */
+    --panel:#ffffff;   /* her site cards */
+    --rule:#d8c6cc;    /* muted raspberry tint */
+    --accent:#a72b5d;  /* her raspberry (brand H2) */
+    --accent2:#7fcec9; /* her mint */
+    --ink:#3f3a3c;
+    --muted:#6f676a;
+    --display:"Fira Sans",system-ui,sans-serif;
+    --body:"Nunito Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .deck{max-width:960px;margin:0 auto;padding:28px 20px 64px}
+  .slide{background:var(--panel);border:1px solid var(--rule);border-radius:16px;
+    padding:48px 44px;margin:22px 0;box-shadow:0 1px 0 rgba(167,43,93,.04);min-height:360px;
+    display:flex;flex-direction:column;justify-content:center}
+  .slide.title{background:linear-gradient(180deg,#fff, #fcf1f4);border-color:var(--accent)}
+  .slide.dark{background:#2b1119;color:#f6eef1;border-color:#2b1119}
+  .slide.dark .k,.slide.dark .num{color:var(--accent2)}
+  .k{font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin:0 0 14px}
+  h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1.08;margin:0 0 16px}
+  h2{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.14;margin:0 0 14px}
+  .lead{font-size:20px;color:var(--muted);margin:6px 0 0;max-width:62ch}
+  p{font-size:18px;margin:10px 0;max-width:64ch}
+  .presenter{margin-top:26px;font-family:var(--display);font-weight:600;color:var(--accent)}
+  .rule{height:3px;width:56px;background:var(--accent2);border:0;margin:0 0 20px}
+  ul{margin:8px 0 0;padding:0;list-style:none;max-width:64ch}
+  li{position:relative;padding:8px 0 8px 30px;font-size:18px;border-bottom:1px solid var(--rule)}
+  li:last-child{border-bottom:0}
+  li:before{content:"";position:absolute;left:0;top:16px;width:12px;height:12px;border-radius:3px;background:var(--accent)}
+  .num{font-family:var(--display);font-weight:700;font-size:15px;color:var(--accent);letter-spacing:.1em}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .two .col{background:var(--bg);border:1px solid var(--rule);border-radius:12px;padding:20px}
+  .two h3{font-family:var(--display);margin:0 0 8px;font-size:18px}
+  .disc{font-size:13px;color:var(--muted);margin-top:22px;max-width:70ch}
+  .cta-step{font-size:20px;font-family:var(--display);font-weight:600;color:var(--accent);margin-top:8px}
+  @media(max-width:640px){.slide{padding:32px 22px}h1{font-size:32px}h2{font-size:24px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'title', kicker:'A free live masterclass', h1:'The Center That Runs Without You',
+   lead:'How to build a fully staffed, profitable childcare center that does not depend on you working the floor.',
+   presenter:'Sara Schreiner · ChildMYnder'},
+
+  {t:'who', kicker:'Who this is for', h2:'You own the center. Right now it owns you.',
+   lead:'This hour is for childcare and preschool owners who are:',
+   items:['Full, with a waitlist, and still not profitable',
+          'Covering shifts because someone called out again',
+          'Losing a good teacher every few months',
+          'The only person who can actually run the place']},
+
+  {t:'plain', kicker:'The trap', h2:'You did everything they told you to do.',
+   paras:['You filled the center. You raised your rates. You poured yourself into the families.',
+          'And you are still the one holding all of it. The fires, the call-outs, the hiring, the numbers. Every one of them still runs through you.']},
+
+  {t:'dark', kicker:'The reframe', h2:'More enrollments was never the problem.',
+   paras:['A fuller center does not set you free. It just gives you more to carry.',
+          'The real problem is simpler and harder: the center cannot run without you in it.']},
+
+  {t:'plain', kicker:'Part one · the real cost', h2:'What a center that depends on you actually costs.',
+   items:['Turnover that resets your culture every few months',
+          'Burnout, starting with you and spreading to your best people',
+          'A full building that still does not turn a real profit',
+          'An owner who cannot take a week off without the place wobbling']},
+
+  {t:'plain', kicker:'Why it happens', h2:'You became the operating system.',
+   paras:['Every problem in the building has one place to go: you. So every problem comes back to you.',
+          'That is not a discipline problem or an enrollment problem. It is a leadership and systems gap, and it is fixable.']},
+
+  {t:'part', kicker:'Part two · the method', h2:'Parent Care: a business that works and a place people love to work.',
+   lead:'One size has never fit all. The method is built around your center, not a template. Five pieces:'},
+
+  {t:'pillar', num:'Pillar 01', h2:'Managing Monkeys',
+   paras:['Every call-out, complaint, and small fire is a "monkey." All day long your team hands them to you, and you take them back.',
+          'You will learn where the monkeys come from, how to hand them off for good, and how to keep daily control without holding every problem yourself.']},
+
+  {t:'pillar', num:'Pillar 02', h2:'The Hiring Edge',
+   paras:['A center that runs without you needs people who stay. Most owners hire in a panic and lose them just as fast.',
+          'The hiring system: job postings that pull the right people, interviews that actually tell you something, a job presentation that sells the role, and onboarding that makes staff stay.']},
+
+  {t:'pillar', num:'Pillar 03', h2:'Organizational Climate',
+   paras:['Turnover and burnout are climate problems before they are people problems.',
+          'You will build the culture that keeps teachers and directors engaged, so the center feels steady to families and staff want to stay.']},
+
+  {t:'pillar', num:'Pillar 04', h2:'The Annual Admin Calendar',
+   paras:['When the year runs on a plan instead of on you, the surprises stop running your week.',
+          'You will map the admin year ahead of time so hiring, training, enrollment pushes, and reviews happen on schedule, not in a scramble.']},
+
+  {t:'pillar', num:'Pillar 05', h2:'The Profit Numbers',
+   paras:['A full center is not the same as a profitable one. Most owners have never seen the handful of numbers that decide the difference.',
+          'You will learn which numbers to watch and which profit lever to pull first, so the center you built finally pays you back.']},
+
+  {t:'two', kicker:'Part three · two centers, one difference', h2:'Two centers, same enrollment.',
+   cols:[{h3:'The center that needs you',paras:['You open and close. You cover the floor. One resignation throws off the month. A day away is a day of worry.']},
+         {h3:'The center that runs without you',paras:['Your team handles the fires. Hiring and the calendar run on a system. You watch the numbers and work on the business, not in it.']}]},
+
+  {t:'plain', kicker:'Why me', h2:'I built this the hard way, and then taught it.',
+   paras:['I am a wife, mother, and owner of several child care programs. I built my childcare business from the ground up.',
+          'Along the way I have mentored and trained hundreds of women running their own centers, and I speak on this nationally. Balance is possible. Success is achievable.'],
+   presenter:'Sara Schreiner · ChildMYnder'},
+
+  {t:'plain', kicker:'Putting it together', h2:'Five pieces, one outcome.',
+   items:['Managing Monkeys, so the problems stop living with you',
+          'The Hiring Edge, so your team is built to stay',
+          'Organizational Climate, so the culture holds',
+          'The Annual Admin Calendar, so the year runs on a plan',
+          'The Profit Numbers, so a full center becomes a profitable one']},
+
+  {t:'cta', kicker:'Your next step', h2:'Let us build your center that runs without you.',
+   step:'Join the MasterMYnd mastermind, or start inside the Childcare Leadership Collective.',
+   paras:['If this hour gave you one thing to change, the next step is working through all five pieces together, around your center.'],
+   disc:'This masterclass is educational. Results vary from center to center and are not guaranteed. Nothing here is a promise of specific income, enrollment, or financial outcomes.',
+   presenter:'Sara Schreiner · ChildMYnder'}
+];
+
+const deck = document.getElementById('deck');
+function esc(x){return x}
+S.forEach(s=>{
+  const el=document.createElement('section');
+  el.className='slide '+ (s.t==='title'?'title': s.t==='dark'?'dark':'');
+  let h='';
+  if(s.kicker) h+='<p class="k">'+s.kicker+'</p>';
+  if(s.num) h+='<div class="num">'+s.num+'</div><hr class="rule">';
+  if(s.h1) h+='<h1>'+s.h1+'</h1>';
+  if(s.h2) h+='<h2>'+s.h2+'</h2>';
+  if(s.lead) h+='<p class="lead">'+s.lead+'</p>';
+  if(s.paras) s.paras.forEach(p=> h+='<p>'+p+'</p>');
+  if(s.items){h+='<ul>'; s.items.forEach(i=> h+='<li>'+i+'</li>'); h+='</ul>';}
+  if(s.cols){h+='<div class="two">'; s.cols.forEach(c=>{h+='<div class="col"><h3>'+c.h3+'</h3>'; c.paras.forEach(p=> h+='<p>'+p+'</p>'); h+='</div>';}); h+='</div>';}
+  if(s.step) h+='<p class="cta-step">'+s.step+'</p>';
+  if(s.presenter) h+='<p class="presenter">'+s.presenter+'</p>';
+  if(s.disc) h+='<p class="disc">'+s.disc+'</p>';
+  el.innerHTML=h;
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
