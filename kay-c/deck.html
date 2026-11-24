@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The High-Performance Reader — Speed Reading Simplified</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#082465;        /* brand navy header band */
+    --panel:#1c2838;     /* brand dark slate, dominant */
+    --rule:#2a3a5c;
+    --accent:#fb8225;    /* brand button orange */
+    --fg:#ffffff;
+    --muted:#9fb0cc;
+    --display:'Poppins',system-ui,sans-serif;
+    --body:'Roboto',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#04152f;color:var(--fg);font-family:var(--body);font-weight:300;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .stage{width:min(960px,100%);aspect-ratio:16/9;background:
+    radial-gradient(120% 120% at 15% 0%, #0d2d6e 0%, var(--bg) 42%, #061a44 100%);
+    border:1px solid var(--rule);border-radius:14px;position:relative;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.45)}
+  .slide{position:absolute;inset:0;padding:56px 64px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .pacer{position:absolute;left:64px;top:46px;width:54px;height:4px;background:var(--accent);border-radius:3px}
+  .kick{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;font-size:46px;line-height:1.08;margin-bottom:18px}
+  h2{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.14;margin-bottom:16px}
+  .sub{font-size:21px;color:var(--muted);line-height:1.5;max-width:40ch}
+  p{font-size:19px;line-height:1.55;color:#e7eefb;max-width:44ch;margin-top:10px}
+  ul{margin:14px 0 0 0;list-style:none;max-width:46ch}
+  li{font-size:19px;line-height:1.5;color:#e7eefb;padding-left:26px;position:relative;margin-bottom:12px}
+  li::before{content:"";position:absolute;left:0;top:11px;width:12px;height:3px;background:var(--accent);border-radius:2px}
+  .big{font-family:var(--display);font-weight:700;font-size:58px;line-height:1.05;max-width:18ch}
+  .meta{position:absolute;left:64px;bottom:34px;font-size:15px;color:var(--muted)}
+  .num{font-family:var(--display);font-weight:700;color:var(--accent);font-size:15px}
+  .pill{display:inline-block;border:1px solid var(--rule);border-radius:999px;padding:7px 15px;
+    font-size:15px;color:var(--muted);margin:6px 8px 0 0}
+  .stat{font-family:var(--display);font-weight:700;color:var(--accent);font-size:40px}
+  .disc{font-size:13px;color:var(--muted);max-width:52ch;margin-top:18px;line-height:1.5}
+  .cta-line{font-family:var(--display);font-weight:600;font-size:22px;color:#fff;margin-top:8px}
+  .nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
+  .dot{width:9px;height:9px;border-radius:50%;background:#2a3a5c;border:none;cursor:pointer}
+  .dot.on{background:var(--accent)}
+  .hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);color:#4a5f86;font-size:12px}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav" id="nav"></div>
+<div class="hint">Use the arrow keys to move through the class</div>
+<script>
+const S=[
+ {t:'title'},
+ {t:'std',kick:'Who this is for',h:'You carry a reading load most people never see',sub:'Lawyers, analysts, executives, graduate and secondary students. People who are measured on what they get through, and how much of it stays.'},
+ {t:'std',kick:'The trap',h:'You have tried "speed reading" before',sub:'It felt like skimming. You got faster for an afternoon, remembered less, and the stack on your desk never actually shrank. So you went back to reading the way you always have.'},
+ {t:'reframe',big:'Speed without recall is just skimming.'},
+ {t:'std',kick:'Part one, the real problem',h:'Reading is a skill, not a fixed trait',sub:'Three things break down under load, and they break down together:',li:['Speed, your eyes move slower than your mind can process','Focus, you reach the end of a page and remember nothing','Retention, what you do read fades before you can use it']},
+ {t:'std',kick:'The science',h:'Speed and comprehension are not opponents',sub:'Trained in the right sequence, faster reading improves comprehension rather than costing it. The eye stops wandering, attention tightens, and the brain has less idle time to drift. The problem was never your speed. It was that nobody trained the whole system.'},
+ {t:'part',num:'Part two',h:'The SRS Method',sub:'Speed, comprehension and recall, trained as one sequence. This is what the class is built on.'},
+ {t:'std',kick:'Pillar one',h:'The Core Speed Reading Exercise',sub:'A pacer-based drill that trains the mechanical rhythm of your eye movement. Most readers sit at 120 to 180 words a minute. The exercise moves you toward 360 to 540, the threshold where reading starts to feel like flow rather than effort.'},
+ {t:'std',kick:'Pillar two',h:'The SRS Textbook Method',sub:'A previewing and active-reading protocol for dense material, textbooks, contracts, reports, research. You stop reading every line at the same weight and start reading the way the material is actually built.'},
+ {t:'std',kick:'Pillar three',h:'The Cognitive Recall System',sub:'This is the piece almost nobody teaches. Real-time pencil-marking to extend your working memory, then structured review timed to the forgetting curve, so what you read holds instead of fading by the weekend.'},
+ {t:'std',kick:'Why the order matters',h:'The sequence is the method',sub:'Speed first with no recall system gives you faster skimming. Recall with no speed work leaves you slow. Built in order, each pillar protects the next, and the gain becomes permanent instead of a trick you lose in a week.'},
+ {t:'std',kick:'Start here',h:'Measure your baseline first',sub:'The HPRAudit is a five-minute reading diagnostic. Before we change anything, we find your real speed and where your recall is leaking, so the training is built for your reading, not a generic average.'},
+ {t:'part',num:'Part three',h:'What a baseline shift looks like',sub:'Thirty days, measured against where you actually started.'},
+ {t:'stats'},
+ {t:'std',kick:'The difference',h:'Gains that hold',sub:'A speed trick fades. A baseline does not. Because recall is trained in from the start, the reading you do in month three is still faster and still sticks, without going back to the exercises every time.'},
+ {t:'std',kick:'Who sees what',h:'Built around your reading, not a template',sub:'',li:['Professionals, clear the report and email load and keep the details','Students, cut study time and raise what you recall at exam time','Executives, read the heavy load the role demands without the weekends']},
+ {t:'std',kick:'Why me',h:'Twenty years, nineteen thousand readers',sub:'I have taught speed reading for over two decades to more than 19,000 students, from secondary school to postgraduate and executive level, and wrote the book this method comes from. This is the only thing I do.'},
+ {t:'cta',h:'Build your reading baseline',sub:'Start with the free HPRAudit diagnostic to see your real speed and recall. Then, if you want the full transformation, we build it together in The High-Performance Reader.',disc:'Educational content only. No specific result is guaranteed. Results vary from person to person and depend on effort and practice.'}
+];
+const stage=document.getElementById('stage'),nav=document.getElementById('nav');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function slideHTML(s){
+ if(s.t==='title'){return `<div class="pacer"></div>
+   <div class="kick">Speed Reading Simplified</div>
+   <h1>The High-Performance Reader</h1>
+   <div class="sub">Why speed without recall fails, and how to build a reading baseline that holds.</div>
+   <div class="meta">A live class with Jon Bjarnason</div>`}
+ if(s.t==='reframe'){return `<div class="pacer"></div><div class="big">${esc(s.big)}</div>
+   <p>Reading faster than you can remember is not reading faster at all.</p>`}
+ if(s.t==='part'){return `<div class="pacer"></div><div class="kick"><span class="num">${esc(s.num)}</span></div>
+   <h1>${esc(s.h)}</h1><div class="sub">${esc(s.sub)}</div>`}
+ if(s.t==='stats'){return `<div class="pacer"></div><div class="kick">The thirty-day arc</div>
+   <h2>From effort to flow</h2>
+   <div style="display:flex;gap:46px;margin-top:22px;flex-wrap:wrap">
+     <div><div class="stat">2 to 3x</div><p style="margin-top:4px">reading speed, held with comprehension</p></div>
+     <div><div class="stat">5 min</div><p style="margin-top:4px">to measure your starting baseline</p></div>
+     <div><div class="stat">1 on 1</div><p style="margin-top:4px">built around your own reading material</p></div>
+   </div>`}
+ if(s.t==='cta'){return `<div class="pacer"></div><div class="kick">Your next step</div>
+   <h1>${esc(s.h)}</h1>
+   <div class="sub">${esc(s.sub)}</div>
+   <div class="cta-line">speedreadingsimplified.com</div>
+   <div class="disc">${esc(s.disc)}</div>`}
+ let li = s.li && s.li.length ? '<ul>'+s.li.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>' : '';
+ return `<div class="pacer"></div><div class="kick">${esc(s.kick)}</div>
+   <h2>${esc(s.h)}</h2>${s.sub?`<div class="sub">${esc(s.sub)}</div>`:''}${li}`;
+}
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide'+(i===0?' on':'');d.innerHTML=slideHTML(s);stage.appendChild(d);
+ const b=document.createElement('button');b.className='dot'+(i===0?' on':'');b.onclick=()=>go(i);nav.appendChild(b)});
+let cur=0;const slides=[...document.querySelectorAll('.slide')],dots=[...document.querySelectorAll('.dot')];
+function go(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((s,i)=>s.classList.toggle('on',i===cur));dots.forEach((d,i)=>d.classList.toggle('on',i===cur))}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+stage.addEventListener('click',e=>{const r=stage.getBoundingClientRect();(e.clientX-r.left)/r.width<0.3?go(cur-1):go(cur+1)});
+</script>
+</body>
+</html>
