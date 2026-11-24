@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When the Data Doesn't Land: a Rogue Penguin Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f6f2;
+    --panel:#ffffff;
+    --ink:#17222e;
+    --muted:#55606c;
+    --rule:#dcd8cf;
+    --accent:#1d67cd;
+    --serif:'Zilla Slab',Georgia,serif;
+    --sans:'Hanken Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .deck{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .slide{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:56px 56px 52px;
+    margin:0 0 26px;
+    min-height:420px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    box-shadow:0 1px 0 rgba(23,34,46,.04);
+  }
+  .num{position:absolute;top:20px;right:24px;font-size:12px;letter-spacing:.14em;color:var(--muted)}
+  .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+  h1{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;font-size:38px;line-height:1.08;margin-bottom:18px}
+  h3{font-family:var(--serif);font-weight:600;font-size:26px;line-height:1.12;margin-bottom:10px}
+  p{font-size:19px;line-height:1.55;color:var(--ink);max-width:62ch;margin-bottom:14px}
+  p.lead{font-size:22px;color:var(--muted)}
+  .sub{font-size:20px;color:var(--muted);margin-top:14px;font-family:var(--serif);font-style:italic}
+  ul{list-style:none;margin:10px 0 0}
+  li{font-size:19px;line-height:1.5;padding:12px 0 12px 30px;border-bottom:1px solid var(--rule);position:relative}
+  li:last-child{border-bottom:0}
+  li:before{content:"";position:absolute;left:4px;top:20px;width:9px;height:9px;border-radius:2px;background:var(--accent)}
+  .stage{display:flex;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .stage:last-child{border-bottom:0}
+  .stage .k{font-family:var(--serif);font-weight:700;font-size:21px;color:var(--accent);min-width:150px}
+  .stage .v{font-size:18px;color:var(--ink)}
+  .big{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1.06;letter-spacing:-.01em}
+  .accentbar{width:54px;height:4px;background:var(--accent);border-radius:2px;margin-bottom:26px}
+  .brandline{margin-top:30px;font-size:15px;letter-spacing:.04em;color:var(--muted)}
+  .brandline b{color:var(--ink);font-weight:600}
+  .cta h2{font-size:40px}
+  .btnrow{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:17px;padding:14px 22px;border-radius:8px}
+  .btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+  .disclaimer{margin-top:28px;font-size:13px;line-height:1.5;color:var(--muted);max-width:70ch;border-top:1px solid var(--rule);padding-top:16px}
+  .cover{min-height:520px;background:var(--ink);border-color:var(--ink)}
+  .cover h1{color:var(--paper)}
+  .cover .eyebrow{color:#8fb4e8}
+  .cover p,.cover .brandline{color:#c4ccd4}
+  .cover .brandline b{color:#fff}
+  .cover .accentbar{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<script>
+const S = [
+  {t:'cover', eyebrow:'A Rogue Penguin Masterclass', h1:'When the Data Doesn’t Land',
+   p:'The story structure that turns a correct analysis into a decision your stakeholders actually act on.',
+   brand:'Presented by <b>Kat Greenbrook</b> · Rogue Penguin · author of The Data Storyteller’s Handbook'},
+
+  {t:'promise', eyebrow:'What you’ll leave with', h2:'Three things, in the next hour',
+   items:['A clear reason your best analysis keeps getting ignored, and it isn’t the analysis.',
+          'A repeatable structure for shaping any finding into a story aimed at a decision.',
+          'The first stages of my own method you can use on your very next report.']},
+
+  {t:'who', eyebrow:'Who this is for', h2:'You know your numbers are right',
+   p:'This is for analysts, data scientists and reporting professionals who do solid work and still watch it stall. You present the dashboard, the deck, the model. People nod. Then nothing changes.',
+   sub:'If that is the loop you are stuck in, you are in the right room.'},
+
+  {t:'trap', eyebrow:'The trap', h2:'You did everything right',
+   p:'The query was clean. The chart was accurate. You even made it look good. You sent it, and the decision you were trying to inform was made on a gut feel anyway, or not made at all.',
+   p2:'So the instinct is to add more. More detail, more charts, a prettier dashboard. It rarely helps.'},
+
+  {t:'reframe', eyebrow:'The reframe', big:'The problem was never your analysis. It was that you presented data, not a story aimed at a decision.'},
+
+  {t:'part', eyebrow:'Part one', h2:'Why accurate data fails to move people',
+   p:'A dashboard shows everything at once and asks the audience to find the point. A model outputs a number without the "so what". Both hand the hardest work, deciding what it means and what to do, back to a busy stakeholder who will not do it.',
+   p2:'Data that is merely displayed competes for attention. A story directs it.'},
+
+  {t:'reframe', eyebrow:'Part one', big:'If the audience has to work out why your number matters, you have not finished the job. You have moved it onto them.'},
+
+  {t:'part', eyebrow:'Part two', h2:'The method: five stages, in order',
+   p:'Data storytelling is not a flourish you add at the end. It is a sequence you work through before you build a single chart. These are the five stages I teach, and the order is the point.',
+   stages:[['The Business','Start from the decision at stake, not the data you happen to have.'],
+           ['The Audience','Map who actually has to act, and what they already believe.'],
+           ['The Data','Interrogate it until one message earns the room.'],
+           ['The Story','Shape that message into a narrative with a point.'],
+           ['The Telling','Deliver it so the decision is easy to make.']]},
+
+  {t:'stageone', eyebrow:'Stage 1 · The Business', h2:'Begin at the decision',
+   p:'Before you open the data, name the decision this work is meant to inform and who owns it. Most reporting skips this and ends up answering a question nobody asked.',
+   sub:'No decision in view means no story to tell, only data to display.'},
+
+  {t:'stagetwo', eyebrow:'Stage 2 · The Audience', h2:'Map the people who must act',
+   p:'The same finding has to be told differently to a board, a product lead, and an operations team. My Stakeholder Matrix maps your audience by what they need to know and how much influence they hold over the decision, so the telling is built for the people in the room.',
+   items:['What does this person need to decide?','What do they already believe?','What would change their mind?']},
+
+  {t:'stagethree', eyebrow:'Stage 3 · The Data', h2:'Interrogate with the Six Ws',
+   p:'A dataset usually holds several possible stories. The Six Ws are the questions I use to interrogate it, so instead of reporting everything, you find the one message the audience actually needs and can act on.',
+   sub:'Too many findings is the problem. The Six Ws choose the one that earns attention.'},
+
+  {t:'stagefour', eyebrow:'Stage 4 · The Story', h2:'The PGAI Framework',
+   p:'This is the spine of the method. PGAI takes your chosen message and structures it as a story that leads to a recommendation, not a chart that leaves the audience to guess the implication. It is how a finding becomes something a stakeholder can say yes to.',
+   sub:'A recommendation they can act on, not a visual they have to interpret.'},
+
+  {t:'stagefive', eyebrow:'Stage 5 · The Telling', h2:'Deliver for the decision',
+   p:'The final stage is how you present it live, in the meeting, the email, the deck. Here the visuals finally get built, and because the story was designed first, every chart serves the point instead of burying it.'},
+
+  {t:'canvas', eyebrow:'Pulling it together', h2:'The Data Story Canvas',
+   p:'All five stages live on one page. The Canvas is the planning tool I use to map a data story before building anything: the decision, the audience, the single message, the shape of the narrative, and how it will be told.',
+   sub:'Plan the story on one page first. The chart comes last, and it comes easy.'},
+
+  {t:'part', eyebrow:'Part three', h2:'The before and the after',
+   p:'The before: a dashboard sent on Friday, a dozen metrics, a polite "thanks" and no decision. The after: a single message, framed as a recommendation, delivered to the people who own the call, and a decision made in the meeting, not deferred.',
+   p2:'Same data. Same analyst. A different telling.'},
+
+  {t:'why', eyebrow:'Why me', h2:'I came up through the data, not the slides',
+   p:'I spent a decade in analytics, reporting analyst then insight analyst then data scientist, before retraining in design. I built Rogue Penguin in 2016 when I realised neither analysis nor aesthetics alone made data land. The method in this masterclass is the one I wrote up in The Data Storyteller’s Handbook and have refined across hundreds of workshops with real teams.',
+   brand:'<b>Kat Greenbrook</b> · Rogue Penguin'},
+
+  {t:'recap', eyebrow:'Recap', h2:'The through-line',
+   items:['Accurate data stalls when it is displayed instead of told.',
+          'Work the five stages before the chart: Business, Audience, Data, Story, Telling.',
+          'The Six Ws find the one message; PGAI shapes it into a recommendation.',
+          'Plan it on the Data Story Canvas. The visuals come last.']},
+
+  {t:'cta', eyebrow:'Two ways to go further', h2:'Put the method to work',
+   p:'If you want to go deeper than this hour allowed, here are the two ways I teach it.',
+   items:['Bring Rogue Penguin to your team, a live workshop that takes your analysts through the full method on your own reports.',
+          'Or start on your own with The Data Storyteller’s Course and the Handbook.'],
+   disclaimer:'This masterclass is educational. It teaches a method for communicating data. No specific business result is guaranteed. Results vary and depend on your own work and context.'}
+];
+
+function el(tag, cls, html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const sl=el('div','slide'+(s.t==='cover'?' cover':'')+(s.t==='cta'?' cta':''));
+  sl.appendChild(el('div','num', String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0')));
+  if(s.eyebrow) sl.appendChild(el('div','eyebrow', s.eyebrow));
+  if(s.t==='cover'||s.big){ if(!s.big){} }
+  if(s.accentbarless){}
+  if(s.h1){ sl.appendChild(el('div','accentbar')); sl.appendChild(el('h1', null, s.h1)); }
+  if(s.big){ sl.appendChild(el('div','accentbar')); sl.appendChild(el('div','big', s.big)); }
+  if(s.h2) sl.appendChild(el('h2', null, s.h2));
+  if(s.h3) sl.appendChild(el('h3', null, s.h3));
+  if(s.p) sl.appendChild(el('p','lead', s.p));
+  if(s.p2) sl.appendChild(el('p', null, s.p2));
+  if(s.stages){ const w=el('div'); s.stages.forEach(([k,v])=>{ const r=el('div','stage'); r.appendChild(el('div','k',k)); r.appendChild(el('div','v',v)); w.appendChild(r);}); sl.appendChild(w); }
+  if(s.items){ const ul=el('ul'); s.items.forEach(it=>ul.appendChild(el('li',null,it))); sl.appendChild(ul); }
+  if(s.sub) sl.appendChild(el('div','sub', s.sub));
+  if(s.t==='cta'){ const br=el('div','btnrow'); br.appendChild(el('span','btn','Enquire about a team workshop')); br.appendChild(el('span','btn ghost','Start The Data Storyteller’s Course')); sl.appendChild(br); }
+  if(s.disclaimer) sl.appendChild(el('div','disclaimer', s.disclaimer));
+  if(s.brand) sl.appendChild(el('div','brandline', s.brand));
+  deck.appendChild(sl);
+});
+</script>
+</body>
+</html>
