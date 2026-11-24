@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The $100K Brand Plan: a masterclass by Suzanne Acteson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f2ed;
+    --panel:#fffcf7;
+    --rule:#e4ddd4;
+    --ink:#474747;
+    --muted:#7d766d;
+    --accent:#dca385;
+    --sage:#989b62;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Karla',system-ui,sans-serif;font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{height:100vh;display:flex;align-items:center;justify-content:center;padding:6vh 7vw;position:relative}
+  .slide{display:none;width:100%;max-width:880px;animation:fade .35s ease}
+  .slide.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:22px}
+  h1{font-family:'Prata',Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,62px);line-height:1.05;letter-spacing:-.01em}
+  h2{font-family:'Prata',Georgia,serif;font-weight:600;font-size:clamp(26px,4.4vw,44px);line-height:1.12;margin-bottom:20px}
+  .lede{font-size:clamp(17px,2.1vw,22px);color:var(--muted);margin-top:22px;max-width:640px;line-height:1.5}
+  p.body{font-size:clamp(16px,1.9vw,20px);line-height:1.6;max-width:660px;margin-top:16px}
+  ul{list-style:none;margin-top:24px;max-width:680px}
+  li{font-size:clamp(16px,1.9vw,20px);line-height:1.45;padding:14px 0 14px 34px;position:relative;border-bottom:1px solid var(--rule)}
+  li:before{content:"";position:absolute;left:0;top:22px;width:14px;height:14px;background:var(--accent);border-radius:3px}
+  li b{font-weight:600}
+  .num{font-family:'Prata',Georgia,serif;font-size:clamp(40px,7vw,78px);color:var(--sage);font-weight:600;line-height:1}
+  .panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:34px 38px;margin-top:26px}
+  .disclaimer{font-size:13px;color:var(--muted);margin-top:30px;max-width:620px;line-height:1.5}
+  .foot{position:absolute;bottom:22px;left:7vw;right:7vw;display:flex;justify-content:space-between;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .cta-btn{display:inline-block;margin-top:26px;background:var(--accent);color:#3a2a20;font-weight:600;font-size:17px;padding:15px 30px;border-radius:999px;text-decoration:none}
+  .nav{position:absolute;bottom:16px;right:7vw;display:flex;gap:10px;z-index:5}
+  .nav button{background:var(--panel);border:1px solid var(--rule);color:var(--ink);width:40px;height:40px;border-radius:50%;font-size:17px;cursor:pointer}
+  .nav button:hover{border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button id="prev" aria-label="Previous">&larr;</button><button id="next" aria-label="Next">&rarr;</button></div>
+<script>
+const S=[
+ {t:'title',k:'A live masterclass with Suzanne Acteson',h:'The $100K Brand Plan',l:'How to scale to multi-6-figures, brand-first, without the hustle, the burnout, or the revenue roller coaster.'},
+ {t:'audience',k:'Who this is for',h:'The founder who already knows she has it in her',b:'You are making sales. You are showing up. But the income is not repeatable yet, and the only lever you have been handed is "do more, launch louder, work longer." This hour is for the woman ready for consistent $10K to $30K months on her own terms.'},
+ {t:'trap',k:'The trap',h:'More hours is not the plan',b:'Working eight hours a day, seven days a week is one of the reasons the business is not at $100K yet. The hustle feels like progress, so it is the hardest trap to see. It keeps you busy enough to never fix what is actually capping the revenue.'},
+ {t:'reframe',k:'The reframe',h:'This is a brand problem, not a productivity problem',b:'Nobody has shown you how to build a scalable business step by step. So you fill the gap with effort. But effort does not compound. A brand does. The work ahead is to build the asset that sells while you are not in the room.'},
+ {t:'part',k:'Part one',num:'01',h:'Growing is not the same as scaling'},
+ {t:'point',k:'The Scale Smarter distinction',h:'From worker bee to queen bee',b:'Growing is the climb from $0 to $10K a month. It runs on your hours. Scaling is the move to $10K to $20K and beyond, and it runs on your systems and your brand. Most founders try to scale with a growing-stage engine, then wonder why more effort stops working.'},
+ {t:'point',k:'Why the ceiling appears',h:'You cannot out-work a weak foundation',b:'When the offer, the positioning, and the rhythm are not set, every new client is a fresh negotiation and every month starts from zero. The ceiling is not your capacity. It is the three things underneath the business that were never made non-negotiable.'},
+ {t:'part',k:'Part two',num:'02',h:'The three non-negotiable foundations'},
+ {t:'pillar',k:'Foundation one',h:'A brand that does the selling',b:'Positioning so clear that the right woman reads one page and thinks, finally, someone who gets me. This is the piece I built for Nestle, P&G and Unilever before I ever built it for a one-woman business. It is the difference between chasing sales and attracting them.'},
+ {t:'pillar',k:'Foundation two',h:'A repeatable path to the sale',b:'One offer ladder that takes a stranger from first click to buyer the same way every time. No reinventing the launch each month. When the path is repeatable, the income becomes predictable, and predictable income is what lets you plan a life around the business.'},
+ {t:'pillar',k:'Foundation three',h:'An operating rhythm that holds',b:'A monthly ritual that sets the income plan, the priorities, and the belief to follow through, every single month. This is the SOW planning ritual at the heart of The Life First CEO. The rhythm is what keeps the first two foundations working when the week gets loud.'},
+ {t:'framework',k:'The Life-First Growth Method',h:'You lead the business from DO and BE',b:'The DO is the practical engine: goals, planning, and the efficiency that protects your hours. The BE is the energetic one: working with your capacity and your cycles instead of against them. Scaled businesses run on both. Drop either and the growth costs you the life you built it for.'},
+ {t:'part',k:'Part three',num:'03',h:'Past the revenue roller coaster'},
+ {t:'point',k:'The outcome',h:'Consistent months, fewer hours, clear head',b:'Income you can forecast. A calendar that is full of the right work, not all the work. The confidence that the next $10K month is a system firing, not a lucky launch. That is a life-first empire, and it is built on a plan, not on adrenaline.'},
+ {t:'point',k:'The honest part',h:'This is a plan, not a shortcut',b:'There is no seven-step secret and no cookie-cutter funnel that does it for you. There is a brand-first plan, aligned to your values and your energy, run with discipline. I will show you the plan. You decide if you want to build it with me.'},
+ {t:'credibility',k:'Why listen to me',h:'I built brands before I built this',b:'I spent my corporate career as a C-level executive scaling multi-million-dollar global brands at Nestle, P&G and Unilever. Then I built my own multi-6-figure business from scratch, and I have helped hundreds of women grow from unpredictable income to consistent $10K to $30K months, without working around the clock.'},
+ {t:'recap',k:'The plan in one page',h:'The $100K Brand Plan',b:'One: a brand that does the selling. Two: a repeatable path to the sale. Three: an operating rhythm that holds. Led from DO and BE, scaled the Scale Smarter way. That is the whole plan, and it is simpler than the hustle you have been running.'},
+ {t:'next',k:'Where this goes',h:'If you want the plan built for your business',b:'Inside Private Mentorship we build these three foundations around your brand, your offer, and your life, over a 6 to 12 month engagement. It is one-to-one, and it starts with a single conversation about where you are and where you want to be.'},
+ {t:'close',k:'Thank you',h:'Scale smarter. Live first.',l:'suzanneacteson.com'},
+ {t:'cta',k:'Your next step',h:'Book your strategy conversation',b:'Come to a 90-minute Strategy Session with me. We map your version of the $100K Brand Plan and decide together if Private Mentorship is the right next step.',btn:'Work with Suzanne',dis:'No income or specific result is guaranteed. Results vary based on your business, your effort, and your market. This masterclass is educational and is not financial or business advice.'}
+];
+const stage=document.getElementById('stage');
+let i=0;
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){
+  const s=S[i];let inner='';
+  if(s.k)inner+='<div class="kicker">'+esc(s.k)+'</div>';
+  if(s.num)inner+='<div class="num">'+esc(s.num)+'</div>';
+  if(s.t==='title'||s.t==='close')inner+='<h1>'+esc(s.h)+'</h1>';
+  else inner+='<h2>'+esc(s.h)+'</h2>';
+  if(s.l)inner+='<p class="lede">'+esc(s.l)+'</p>';
+  if(s.b)inner+='<p class="body">'+esc(s.b)+'</p>';
+  if(s.t==='cta'){
+    inner+='<a class="cta-btn" href="https://www.suzanneacteson.com/work-with-me">'+esc(s.btn)+'</a>';
+    inner+='<p class="disclaimer">'+esc(s.dis)+'</p>';
+  }
+  stage.innerHTML='<div class="slide on">'+inner+'</div>'+
+    '<div class="foot"><span>The $100K Brand Plan</span><span>'+(i+1)+' / '+S.length+'</span></div>';
+}
+function go(n){i=Math.max(0,Math.min(S.length-1,i+n));render();}
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('prev').onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
