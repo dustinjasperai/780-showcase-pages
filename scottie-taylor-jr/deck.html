@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The No-Ask Prospecting System | Scottie Taylor Jr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,400&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0e3341;         /* Scottie's dominant deep teal (brand.json, 79 uses) */
+    --panel:#12404f;      /* lighter step of the teal */
+    --rule:#1d5366;       /* hairline */
+    --accent:#e25144;     /* his coral red (brand.json, 40 uses) */
+    --ink:#f4f1ea;        /* warm off-white */
+    --ink-soft:#c7d2d6;   /* muted teal-grey */
+    --ink-dim:#8fa6ac;
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Figtree',-apple-system,sans-serif;
+    background:var(--bg);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .stage{width:100vw;height:100vh;position:relative;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;}
+  .slide.on{display:flex;}
+  .kicker{font-size:clamp(12px,1.3vw,15px);font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Zilla Slab',Georgia,serif;font-weight:700;font-size:clamp(30px,5.4vw,66px);line-height:1.08;letter-spacing:-.01em;}
+  h2{font-family:'Zilla Slab',Georgia,serif;font-weight:700;font-size:clamp(24px,3.6vw,46px);line-height:1.15;margin-bottom:26px;}
+  .lede{font-size:clamp(17px,2vw,26px);color:var(--ink-soft);line-height:1.5;max-width:60ch;margin-top:22px;}
+  p.body{font-size:clamp(16px,1.7vw,22px);color:var(--ink-soft);line-height:1.6;max-width:62ch;margin-top:14px;}
+  ul{list-style:none;margin-top:18px;max-width:64ch;}
+  li{font-size:clamp(16px,1.7vw,22px);color:var(--ink-soft);line-height:1.45;padding-left:34px;position:relative;margin-bottom:16px;}
+  li::before{content:"";position:absolute;left:0;top:.62em;width:16px;height:3px;background:var(--accent);}
+  li strong{color:var(--ink);font-weight:800;}
+  .num-grid{display:flex;gap:7vw;flex-wrap:wrap;margin-top:30px;}
+  .num .n{font-family:'Zilla Slab',Georgia,serif;font-weight:700;font-size:clamp(34px,5vw,62px);color:var(--accent);line-height:1;}
+  .num .l{font-size:clamp(13px,1.3vw,16px);color:var(--ink-dim);margin-top:10px;max-width:22ch;}
+  .pillar-no{font-family:'Zilla Slab',Georgia,serif;color:var(--rule);font-weight:700;font-size:clamp(50px,9vw,120px);line-height:.9;margin-bottom:10px;}
+  .foot{position:absolute;left:9vw;bottom:4vh;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);}
+  .disclaimer{font-size:13px;color:var(--ink-dim);line-height:1.5;max-width:70ch;margin-top:30px;border-top:1px solid var(--rule);padding-top:18px;}
+  .cta-line{font-size:clamp(17px,2vw,24px);color:var(--ink);margin-top:20px;}
+  .cta-line b{color:var(--accent);}
+  .nav{position:absolute;right:3vw;bottom:3.4vh;display:flex;gap:10px;align-items:center;z-index:5;}
+  .nav button{font-family:'Figtree',sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--rule);width:42px;height:38px;font-size:17px;cursor:pointer;border-radius:4px;}
+  .nav button:hover{border-color:var(--accent);color:var(--accent);}
+  .count{font-size:13px;color:var(--ink-dim);min-width:52px;text-align:center;}
+  .progress{position:absolute;left:0;top:0;height:4px;background:var(--accent);transition:width .25s ease;z-index:5;}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
+<script>
+const S = [
+  {t:'title', kicker:'A free masterclass for financial advisors &amp; insurance agents',
+   h:'The No-Ask Prospecting System',
+   lede:'How advisors build a steady stream of inbound referrals and high-quality leads, hit $25k a month, and do it working fewer days. Without cold calling, buying leads, or asking for referrals.',
+   foot:'Scottie Taylor Jr &middot; #WorkLessMakeMore'},
+
+  {t:'bullets', kicker:'Who this is for', h:'You are good at the work. The pipeline is the problem.',
+   items:[
+     'You are an advisor focused on insurance, investments, or fee-based planning, building your own book.',
+     'You are six months or more in, and some months are great and some are scary.',
+     'Monday morning hits and the question is always the same: who do I call today?',
+     'You know that if the right people were on your calendar, your business would be incredible.']},
+
+  {t:'statement', kicker:'The reframe', h:'Prospecting is not a personality trait. It is a system.',
+   body:['The advisors who grow fastest are not braver on the phone or better at asking. They have a defined game plan for getting leads and referrals on repeat, so new business does not depend on how they feel on a Monday.',
+     'Today I am going to show you the exact system I used to go from grinding seven days a week to writing more premium in two.']},
+
+  {t:'part', no:'Part One', h:'The treadmill nobody warns you about'},
+
+  {t:'bullets', kicker:'The core problem', h:'Most advisors are stuck chasing.',
+   items:[
+     '<strong>Not enough leads.</strong> You are hanging on by a thread between good months.',
+     '<strong>Low-quality leads.</strong> Your client base feels stuck at the same size.',
+     '<strong>No referrals coming in.</strong> So you are back to cold calling.',
+     '<strong>Awkward asks.</strong> You ask for a referral and hear, "I will think about it."']},
+
+  {t:'statement', kicker:'The hidden cost', h:'No system means the pressure never turns off.',
+   body:['When there is no clear plan for bringing in new clients, every week starts with stress: who am I going to talk to next? That pressure is what pushes good, caring advisors into burnout and underproduction.',
+     'And the moment you take time off, everything stops. A practice that stops when you stop is a job, not a business.']},
+
+  {t:'statement', kicker:'The real math of chasing', h:'Working harder is not the lever.',
+   body:['You can always dial more hours. But hours are capped and you are already tired. The lever is turning prospecting into something that works while you are in client meetings, on vacation, or asleep.',
+     'That is the difference between a pipeline you push and a pipeline that pulls.']},
+
+  {t:'part', no:'Part Two', h:'The No-Ask System: clients coming to you'},
+
+  {t:'bullets', kicker:'The system, start to finish', h:'Five moving parts. One outcome: inbound.',
+   items:[
+     '<strong>Become a Prospecting Magnet</strong> so the right people want to work with you.',
+     '<strong>Perfect Your Prospecting</strong> so referrals happen inside normal meetings.',
+     '<strong>The Top 5 Prospecting Tactics</strong> that actually move the needle.',
+     '<strong>Prospect Up</strong> to attract higher-value clients on purpose.',
+     '<strong>The No-Ask Method</strong> that generates inbound leads without the ask.']},
+
+  {t:'pillar', no:'01', kicker:'Become a Prospecting Magnet', h:'Stop chasing. Become irresistibly referable.',
+   body:['A six-step process: pick a target market, get crystal clear on their real pain points, and position yourself so you are the obvious expert for that exact person. When your market feels understood, they come to you and they bring others.']},
+
+  {t:'pillar', no:'02', kicker:'Perfect Your Prospecting', h:'Referrals that happen inside the meeting.',
+   body:['A full, proven prospecting process: the language that neutralizes a client’s perceived risk, how to handle the objection before it lands, and the exact structure that turns a normal review meeting into a source of new introductions. No begging, no awkward scripts.']},
+
+  {t:'pillarlist', no:'03', kicker:'The Top 5 Prospecting Tactics', h:'Five channels that actually produce.',
+   items:[
+     'The Dedicated Prospecting Meeting, so outreach has a home on your calendar.',
+     'LinkedIn messaging that books three to five real conversations a week.',
+     'Nesting inside companies to turn one client into many.',
+     'Email marketing that keeps you top of mind without you typing daily.',
+     'Finding warm referrals already hiding in your LinkedIn network.']},
+
+  {t:'pillar', no:'04', kicker:'Prospect Up', h:'Choose the clients you want.',
+   body:['A step-by-step way to raise the quality of who you talk to: the language for asking for higher-caliber introductions and the structure for setting client minimums, so your book grows in revenue, not just in headcount.']},
+
+  {t:'pillar', no:'05', kicker:'The No-Ask Method', h:'The holy grail: inbound leads, no ask.',
+   body:['This is where it all compounds. The scripts, templates, and daily activities that bring leads to you, so prospecting stops being something you force yourself to do and becomes something that happens on repeat, even on the days you are not actively prospecting.']},
+
+  {t:'part', no:'Part Three', h:'When the pipeline starts pulling'},
+
+  {t:'statement', kicker:'A week on the system', h:'Fewer dials. Better calendar. More premium.',
+   body:['Instead of waking up asking who do I call, you open a calendar that is already filling with people who found you, understood why you are the right fit, and asked to talk. Prospecting becomes a short, repeatable set of activities, not a daily emotional battle.']},
+
+  {t:'proof', kicker:'I have lived both sides of this', h:'Why I teach it this way.',
+   nums:[
+     {n:'$288k', l:'premium my first calendar year as an advisor'},
+     {n:'$315k', l:'premium the year I worked two days a week'},
+     {n:'$490k+', l:'revenue in 2022, working two to three days a week'}],
+   body:['I went from $26k in 2016, grinding seven days a week, to this. Same person, different system. That system is what I am handing you.']},
+
+  {t:'bullets', kicker:'This is for you if', h:'You want structure, not another hack.',
+   items:[
+     'You want a repeatable way to bring in new business, not a lucky month.',
+     'You are ready to get to $25k a month and beyond without adding hours.',
+     'You are generating few or no inbound referrals right now and you know it.',
+     'You are done feeling like you are flying by the seat of your pants.']},
+
+  {t:'cta', kicker:'Your next step', h:'Build the system inside the Financial Advisor Academy.',
+   body:['Everything you saw today is taught in full inside the Academy: the frameworks, the scripts, the LinkedIn playbook, and the exact activities that get advisors to $25k a month working fewer days.'],
+   ctaLine:'Ready to make your business easier than ever? <b>Enroll in the Financial Advisor Academy, or book a time to talk it through with me.</b>',
+   disclaimer:'Educational content only. No income or result is guaranteed. Results vary and depend on your market, effort, and execution; the numbers shown are my own and my clients’ experiences and are not typical. Nothing here is financial, legal, or investment advice.'}
+];
+
+function esc(x){ return x; }
+const RENDER = {
+  title:(s)=>`<div class="kicker">${s.kicker}</div><h1>${s.h}</h1><p class="lede">${s.lede}</p><div class="foot">${s.foot}</div>`,
+  part:(s)=>`<div class="kicker">${s.no}</div><h1>${s.h}</h1>`,
+  statement:(s)=>`<div class="kicker">${s.kicker}</div><h2>${s.h}</h2>${s.body.map(b=>`<p class="body">${b}</p>`).join('')}`,
+  bullets:(s)=>`<div class="kicker">${s.kicker}</div><h2>${s.h}</h2><ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`,
+  pillar:(s)=>`<div class="pillar-no">${s.no}</div><div class="kicker">${s.kicker}</div><h2>${s.h}</h2>${s.body.map(b=>`<p class="body">${b}</p>`).join('')}`,
+  pillarlist:(s)=>`<div class="pillar-no">${s.no}</div><div class="kicker">${s.kicker}</div><h2>${s.h}</h2><ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>`,
+  proof:(s)=>`<div class="kicker">${s.kicker}</div><h2>${s.h}</h2><div class="num-grid">${s.nums.map(x=>`<div class="num"><div class="n">${x.n}</div><div class="l">${x.l}</div></div>`).join('')}</div>${s.body.map(b=>`<p class="body">${b}</p>`).join('')}`,
+  cta:(s)=>`<div class="kicker">${s.kicker}</div><h2>${s.h}</h2>${s.body.map(b=>`<p class="body">${b}</p>`).join('')}<p class="cta-line">${s.ctaLine}</p><p class="disclaimer">${s.disclaimer}</p>`
+};
+
+let i=0;
+const stage=document.getElementById('stage');
+const count=document.getElementById('count');
+const prog=document.getElementById('prog');
+function draw(){
+  stage.innerHTML='';
+  const d=document.createElement('div');
+  d.className='slide on';
+  d.innerHTML=RENDER[S[i].t](S[i]);
+  stage.appendChild(d);
+  count.textContent=(i+1)+' / '+S.length;
+  prog.style.width=((i+1)/S.length*100)+'%';
+}
+function go(n){ i=Math.max(0,Math.min(S.length-1,n)); draw(); }
+document.getElementById('next').onclick=()=>go(i+1);
+document.getElementById('prev').onclick=()=>go(i-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+draw();
+</script>
+</body>
+</html>
