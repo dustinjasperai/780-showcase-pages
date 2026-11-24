@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The CEO Financial Advisor Masterclass, with Lisa Dion</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ea;        /* warm ivory ground, derived from their gold #8f824d over off-white */
+    --panel:#fffdf7;     /* warm white panel */
+    --rule:#e7e2d4;      /* warm hairline, their #e7e7e7 warmed toward the gold */
+    --ink:#1a1a1a;       /* their headline near-black */
+    --muted:#5e5858;     /* their warm body gray */
+    --accent:#8f824d;    /* their one chromatic accent (gold) */
+    --deep:#393732;      /* their deep warm charcoal */
+    --head:'EB Garamond', Georgia, serif;
+    --body:'Figtree', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--deep);font-family:var(--body);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .stage{width:min(96vw,1120px);aspect-ratio:16/10;position:relative}
+  .slide{position:absolute;inset:0;background:var(--bg);border:1px solid var(--rule);
+    border-radius:6px;padding:72px 84px;display:none;flex-direction:column;
+    box-shadow:0 30px 80px rgba(0,0,0,.34);overflow:hidden}
+  .slide.on{display:flex}
+  .kick{font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:26px}
+  h1{font-family:var(--head);font-weight:600;font-size:60px;line-height:1.05;
+    letter-spacing:-.01em;color:var(--ink);max-width:19ch}
+  h2{font-family:var(--head);font-weight:600;font-size:44px;line-height:1.1;color:var(--ink);max-width:22ch}
+  .lede{font-size:23px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:40ch;font-weight:400}
+  .big{font-family:var(--head);font-size:72px;line-height:1.03;color:var(--ink);max-width:16ch}
+  .big .a{color:var(--accent);font-style:italic}
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;
+    border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:var(--muted);letter-spacing:.02em}
+  .foot .b{font-weight:600;color:var(--deep)}
+  .num{color:var(--accent);font-weight:600}
+  .rows{margin-top:30px;display:flex;flex-direction:column;gap:16px;max-width:52ch}
+  .row{display:flex;gap:20px;align-items:flex-start}
+  .row .ix{font-family:var(--head);font-size:30px;color:var(--accent);font-weight:600;min-width:52px}
+  .row .rt{font-size:21px;line-height:1.4;color:var(--ink)}
+  .row .rt b{font-weight:600}
+  .row .rt span{color:var(--muted);font-size:18px;display:block;margin-top:4px}
+  .quote{font-family:var(--head);font-style:italic;font-size:40px;line-height:1.25;color:var(--ink);max-width:24ch}
+  .grid5{margin-top:34px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .cell{border:1.5px solid var(--rule);border-radius:10px;padding:20px 16px;background:var(--panel);min-height:150px}
+  .cell .cn{font-family:var(--head);font-size:26px;color:var(--accent);font-weight:600}
+  .cell .ct{font-size:16px;font-weight:600;margin-top:10px;color:var(--ink)}
+  .cell .cs{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.35}
+  .two{display:flex;gap:40px;margin-top:28px;max-width:56ch}
+  .two .col{flex:1}
+  .two h3{font-family:var(--head);font-size:24px;color:var(--ink);margin-bottom:10px}
+  .two p{font-size:18px;color:var(--muted);line-height:1.45}
+  .bio{font-size:20px;line-height:1.55;color:var(--muted);margin-top:24px;max-width:46ch}
+  .bio b{color:var(--ink);font-weight:600}
+  .cta h1{max-width:20ch}
+  .cta .lede{max-width:44ch}
+  .step{font-size:20px;color:var(--ink);margin-top:14px;font-weight:600}
+  .disc{font-size:12px;color:var(--muted);line-height:1.5;margin-top:22px;max-width:58ch}
+  .pager{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);color:#cfcabd;
+    font-size:12px;letter-spacing:.14em;font-family:var(--body)}
+  .hint{position:fixed;bottom:18px;right:22px;color:#8f8a7c;font-size:11px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="pager" id="pager"></div>
+<div class="hint">← / → to move</div>
+<script>
+const S = [
+  {t:'title', kick:'A Live Masterclass with Lisa Dion',
+    h:'The CEO Financial Advisor',
+    lede:'How independent advisors stop being the firm’s top producer and start leading it like an owner.'},
+
+  {t:'who', kick:'Who this is for',
+    h:'You built the book. Now the book owns you.',
+    lede:'For the independent advisor whose firm has real revenue, real clients, and one real bottleneck: every decision still runs through you.'},
+
+  {t:'trap', kick:'The trap',
+    rows:[
+      {ix:'01', rt:'<b>You are the best producer in your firm.</b><span>So the firm leans on you for every client, every hire, every call.</span>'},
+      {ix:'02', rt:'<b>Growth adds work, not freedom.</b><span>More clients means more of your hours, not more capacity.</span>'},
+      {ix:'03', rt:'<b>You own a high-paying job.</b><span>Not a business that holds its value without you in the chair.</span>'}
+    ]},
+
+  {t:'reframe', kick:'The reframe',
+    big:'A great advisor is not the same thing as a great <span class="a">business owner</span>.'},
+
+  {t:'reframe2', kick:'The reframe',
+    h:'The evolution is a change of seat.',
+    lede:'Financial Advisor is the role that does the work. CEO Financial Advisor is the role that builds the firm that does the work. The skills are different, and they can be learned.'},
+
+  {t:'part', kick:'Part One', h:'Why the firm keeps running through you.'},
+
+  {t:'problem', kick:'Part One',
+    h:'The problem was never effort.',
+    lede:'Hard-working advisors do not have a work problem. They have a clarity problem. When the vision lives only in your head, every decision has to come back to you to get made.'},
+
+  {t:'clarity', kick:'The operating idea',
+    quote:'“Clarity creates alignment.”',
+    lede:'When the vision is clear, expectations, processes, and accountability can be clearly defined, and a team can finally execute without the owner in the middle of everything.'},
+
+  {t:'part', kick:'Part Two', h:'The Five Key Areas of a strong firm.'},
+
+  {t:'five', kick:'The Firm Strength framework',
+    h:'Where a firm is strong, or stuck.',
+    five:[
+      {n:'01', t:'Foundation', s:'Who you are, why you exist, the values the firm is built on.'},
+      {n:'02', t:'Direction', s:'A clear vision and the priorities that move toward it.'},
+      {n:'03', t:'Performance', s:'The numbers, the accountability, how results get owned.'},
+      {n:'04', t:'Capacity', s:'The team, roles, and systems that create your time back.'},
+      {n:'05', t:'Client Experience', s:'What it is like to be served by the firm, by design.'}
+    ]},
+
+  {t:'detail', kick:'Key Area 01 & 02',
+    two:[
+      {h:'Foundation', p:'Most firms skip this and wonder why the team pulls in different directions. Foundation is the fixed point: who you are, why you exist, and the standards nobody is allowed to drop.'},
+      {h:'Direction', p:'A vision the whole firm can repeat, broken into the few priorities that actually matter this quarter. Direction is what lets people make the right call without asking you first.'}
+    ]},
+
+  {t:'detail', kick:'Key Area 03 & 04',
+    two:[
+      {h:'Performance', p:'Not more reports. The handful of numbers that tell the truth about the firm, in the open, owned by the people responsible for them. This is where accountability stops being about you chasing.'},
+      {h:'Capacity', p:'The seats, systems, and handoffs that let work leave your desk and not come back. Capacity is the Key Area that converts into the thing you actually wanted: time.'}
+    ]},
+
+  {t:'roles', kick:'Key Area 04, in practice',
+    h:'Visionary and Integrator.',
+    lede:'The owner who sees around corners and the operator who makes it run are two different seats. Naming them, and giving the Integrator the authority to run the day, is how a firm stops depending on the founder for everything.'},
+
+  {t:'detail', kick:'Key Area 05',
+    two:[
+      {h:'Client Experience', p:'When the first four areas are strong, the client experience stops being whatever you personally deliver on a good day. It becomes something the firm delivers on purpose, every time, whether or not you are in the room.'},
+      {h:'The compounding', p:'Each Key Area makes the next one easier. Clarity in Foundation and Direction is what makes Performance honest, Capacity possible, and the Client Experience consistent.'}
+    ]},
+
+  {t:'part', kick:'Part Three', h:'When the firm runs without you.'},
+
+  {t:'after', kick:'The shift',
+    rows:[
+      {ix:'→', rt:'<b>Decisions get made without you.</b><span>Because the vision and the numbers are clear enough that the team can act.</span>'},
+      {ix:'→', rt:'<b>Growth adds capacity, not just hours.</b><span>The firm can take on more because it is built to, not because you worked the weekend.</span>'},
+      {ix:'→', rt:'<b>The firm holds its value without you.</b><span>You own a business, an asset, not a job with your name on the door.</span>'}
+    ]},
+
+  {t:'why', kick:'Why listen to me',
+    h:'I have sat on the firm’s side of the table for 25 years.',
+    bio:'I am <b>Lisa Dion</b>, founder of Strategic Advisor Solutions. Over <b>25 years in financial services</b>, holding my <b>Series 7, 24, and 63</b>, I have worked with CEOs and leadership teams and advised firms managing <b>over a billion dollars in assets</b>. I built the CEO Financial Advisor framework from what actually moved those firms: clarity, direction, and capacity, not another tactic.'},
+
+  {t:'recap', kick:'What we covered',
+    h:'From top producer to owner.',
+    rows:[
+      {ix:'01', rt:'<b>The evolution is a change of seat,</b> from doing the work to building the firm that does it.'},
+      {ix:'02', rt:'<b>Clarity creates alignment,</b> and alignment is what lets a team run without you.'},
+      {ix:'03', rt:'<b>The Five Key Areas</b> show you exactly where your firm is strong and where it is stuck.'}
+    ]},
+
+  {t:'cta', kick:'Your next step',
+    h:'See where your firm actually stands.',
+    lede:'Take the Firm Strength Assessment and get clarity across all five Key Areas, what is working and what to strengthen first.',
+    step:'Start with the Firm Strength Assessment at strategicadvisorsolutions.com.',
+    disc:'This masterclass is for education only. It shares a framework and principles for building a stronger advisory firm. It is not financial, legal, tax, or investment advice, and it is not a guarantee of any particular business or financial result. Outcomes vary and depend on your own firm, effort, and circumstances.'}
+];
+
+const stage = document.getElementById('stage');
+const pager = document.getElementById('pager');
+const foot = (i)=>`<div class="foot"><div class="b">CEO Financial Advisor™ · Strategic Advisor Solutions</div><div>Lisa Dion</div></div>`;
+function slideHTML(s,i){
+  let inner='';
+  if(s.kick) inner+=`<div class="kick">${s.kick}</div>`;
+  if(s.big){ inner+=`<div class="big">${s.big}</div>`; }
+  else if(s.quote){ inner+=`<div class="quote">${s.quote}</div>`; if(s.lede) inner+=`<div class="lede">${s.lede}</div>`; }
+  else {
+    if(s.h) inner+=`<h1${s.t==='part'?'':''}>${s.h}</h1>`;
+    if(s.lede) inner+=`<div class="lede">${s.lede}</div>`;
+  }
+  if(s.rows){ inner+='<div class="rows">'+s.rows.map(r=>`<div class="row"><div class="ix">${r.ix}</div><div class="rt">${r.rt}</div></div>`).join('')+'</div>'; }
+  if(s.five){ inner+='<div class="grid5">'+s.five.map(c=>`<div class="cell"><div class="cn">${c.n}</div><div class="ct">${c.t}</div><div class="cs">${c.s}</div></div>`).join('')+'</div>'; }
+  if(s.two){ inner+='<div class="two">'+s.two.map(c=>`<div class="col"><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')+'</div>'; }
+  if(s.bio) inner+=`<div class="bio">${s.bio}</div>`;
+  if(s.step) inner+=`<div class="step">${s.step}</div>`;
+  if(s.disc) inner+=`<div class="disc">${s.disc}</div>`;
+  inner+=foot(i);
+  return `<div class="slide${s.t==='cta'?' cta':''}" data-i="${i}">${inner}</div>`;
+}
+stage.innerHTML = S.map(slideHTML).join('');
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+function show(n){cur=Math.max(0,Math.min(S.length-1,n));slides.forEach((el,i)=>el.classList.toggle('on',i===cur));pager.textContent=(cur+1)+' / '+S.length;}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+stage.addEventListener('click',()=>show(cur+1));
+show(0);
+</script>
+</body>
+</html>
