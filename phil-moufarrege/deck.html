@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sing High Without Strain — Phil Moufarrege Voice Method</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,500&family=Red+Hat+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef3f0;      /* pale sage, tinted from his accent #8faf9a */
+    --panel:#fcfdfc;
+    --ink:#2e4052;     /* his dominant slate blue */
+    --muted:#6d7a85;
+    --rule:#d6d6d6;    /* his light grey */
+    --accent:#8faf9a;  /* his sage green */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Red Hat Text",system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;overflow:hidden;
+  }
+  .stage{width:min(960px,94vw);aspect-ratio:16/10;position:relative}
+  .slide{
+    position:absolute;inset:0;background:var(--panel);
+    border:1px solid var(--rule);border-radius:14px;
+    padding:clamp(28px,5vw,64px);
+    display:none;flex-direction:column;justify-content:center;
+    box-shadow:0 18px 50px -34px rgba(46,64,82,.5);
+  }
+  .slide.on{display:flex}
+  .kicker{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:14px}
+  h1{font-family:"Bodoni Moda",serif;font-weight:600;
+    font-size:clamp(2.4rem,6vw,4rem);line-height:1.04;letter-spacing:.01em}
+  h2{font-family:"Bodoni Moda",serif;font-weight:600;
+    font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.08}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--muted);
+    margin-top:18px;max-width:42ch;line-height:1.5}
+  .brandline{margin-top:28px;font-size:.85rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);font-weight:500}
+  ul{list-style:none;margin-top:22px;display:grid;gap:14px;max-width:46ch}
+  li{position:relative;padding-left:30px;font-size:clamp(1rem,2vw,1.2rem);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:14px;height:2px;background:var(--accent)}
+  .partnum{font-family:"Bodoni Moda",serif;font-style:italic;
+    font-size:clamp(1.1rem,2.4vw,1.5rem);color:var(--accent);margin-bottom:6px}
+  .steps{margin-top:30px;display:grid;gap:0}
+  .step{display:flex;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--rule)}
+  .step:last-child{border-bottom:1px solid var(--rule)}
+  .step .n{font-family:"Bodoni Moda",serif;font-size:1.4rem;color:var(--accent);
+    width:34px;flex:0 0 34px}
+  .step.climb-1{margin-left:0}.step.climb-2{margin-left:7%}
+  .step.climb-3{margin-left:14%}.step.climb-4{margin-left:21%}
+  .quote{font-family:"Bodoni Moda",serif;font-style:italic;
+    font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.2;max-width:30ch}
+  .cite{margin-top:18px;color:var(--muted);font-size:1rem}
+  .disclaimer{margin-top:26px;font-size:.78rem;color:var(--muted);max-width:52ch;line-height:1.5}
+  .cta-step{margin-top:22px;font-size:clamp(1.05rem,2.2vw,1.3rem);font-weight:500}
+  .cta-step span{color:var(--accent)}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;gap:14px;align-items:center;color:var(--muted);font-size:.82rem}
+  .nav button{border:1px solid var(--rule);background:var(--panel);color:var(--ink);
+    border-radius:8px;padding:6px 14px;cursor:pointer;font-family:inherit}
+  .count{min-width:54px;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <span class="count" id="count"></span>
+  <button id="next">Next</button>
+</div>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass', h:'Sing High Without Strain',
+   lede:'The reverse-engineering method for a voice that finally matches what you hear in your head.',
+   brand:'Phil Moufarrege Voice Method'},
+
+  {t:'promise', kicker:'What you will learn', h:'In the next hour',
+   bullets:[
+     'Why your high notes crack or flip, even after years of warm-ups',
+     'The one question that turns a note you can only hear into a note you can sing',
+     'How to sing through your break with chest and head voice working together']},
+
+  {t:'who', kicker:'Who this is for', h:'You can hear it. You just cannot hit it yet.',
+   bullets:[
+     'Singers stuck below the notes they hear in their head',
+     'Voices that tense up, crack, or flip into falsetto at the break',
+     'Performers who lose power and consistency live and in the studio']},
+
+  {t:'trap', kicker:'The trap', h:'You have tried the obvious things.',
+   lede:'More warm-ups. More exercises off the internet. Being told to "just relax." And the high note is still not there, or it only shows up on a good day.'},
+
+  {t:'reframe', kicker:'The real problem', h:'It is not talent, and it is not effort.',
+   lede:'Most singers stay stuck because they keep reaching for the final product of great singing and skip every step underneath it.'},
+
+  {t:'part', num:'Part One', h:'The core problem: survival singing'},
+
+  {t:'body', kicker:'Survival singing', h:'Singing from the wrong place',
+   lede:'Survival singing is mind-led and tense. You are performing to impress, bracing against the high note, trying to force the sound you want before your voice knows how to make it.'},
+
+  {t:'body', kicker:'Why effort backfires', h:'The harder you push, the worse the break gets',
+   lede:'Bracing and reaching for volume locks the exact muscles that need to coordinate. That is why "sing louder" and "push through it" make the flip into falsetto more likely, not less.'},
+
+  {t:'part', num:'Part Two', h:'The reverse-engineering method'},
+
+  {t:'quote', q:'If I cannot do what they are doing right now, what is the closest sound I can make in this moment to build up to it?',
+   cite:'The question behind every exercise I give.'},
+
+  {t:'steps', kicker:'Stepping stones', h:'Build up, do not jump',
+   steps:[
+     'The closest sound you can make right now',
+     'Mix a little chest into the break',
+     'Stabilise the high note at low volume',
+     'The note you actually wanted']},
+
+  {t:'body', kicker:'How it is learned', h:'By hearing and repeating',
+   lede:'"It is learned by hearing and repeating. Most people are confused by the final product of great singing." We reverse engineer that final product into sounds you can copy today, then climb.'},
+
+  {t:'body', kicker:'Through the break', h:'Chest and head voice, working together',
+   lede:'Singing high without strain is not a louder chest voice and it is not a breathy head voice. It is a mix. We build the blend one stepping stone at a time so the top stays connected and stable.'},
+
+  {t:'body', kicker:'A false expectation to drop', h:'Smoothing the flip is not the same as power',
+   lede:'Smoothing the chest-to-falsetto break will not automatically give you a powerful full voice. They are different skills, built in a different order. Knowing that alone saves singers years.'},
+
+  {t:'part', num:'Part Three', h:'When your voice stops fighting you'},
+
+  {t:'body', kicker:'The shift', h:'From survival singing to self-expression',
+   lede:'When the technique stops fighting you, singing stops being about survival. It becomes expression: the thing you actually wanted when you started, a voice that communicates instead of bracing.'},
+
+  {t:'body', kicker:'Built around you', h:'Not a one-size-fits-all program',
+   lede:'The reason most internet exercises fail is that they were never chosen for your voice. The work is custom tailored to the actual things in the way of your goals, so every stepping stone is relevant.'},
+
+  {t:'body', kicker:'Why me', h:'I taught myself this from scratch',
+   lede:'I was close to tone deaf when I started. I reverse engineered what naturally gifted singers do, expanded my own range by about an octave, and it is now the method I teach to singers around the world.'},
+
+  {t:'cta', kicker:'Your next step', h:'Find out what is blocking your range',
+   ctas:[
+     'Take the free 5 Min Vocal Test to find your blockage',
+     'Then apply for the 1-1 Singing Intensive to build your voice with me'],
+   disclaimer:'This masterclass is for educational purposes only. Vocal results vary from singer to singer and depend on your starting point, practice, and vocal health. Nothing here is a guarantee of any specific result.',
+   brand:'Phil Moufarrege Voice Method'}
+];
+
+const stage=document.getElementById('stage');
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function render(){
+  stage.innerHTML='';
+  S.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='slide'+(i===cur?' on':'');
+    let h='';
+    if(s.kicker) h+=`<div class="kicker">${esc(s.kicker)}</div>`;
+    if(s.num) h+=`<div class="partnum">${esc(s.num)}</div>`;
+    if(s.t==='quote'){
+      h+=`<div class="quote">${esc(s.q)}</div><div class="cite">${esc(s.cite)}</div>`;
+    } else if(s.h){
+      h+= (s.t==='title')?`<h1>${esc(s.h)}</h1>`:`<h2>${esc(s.h)}</h2>`;
+    }
+    if(s.lede) h+=`<div class="lede">${esc(s.lede)}</div>`;
+    if(s.bullets){h+='<ul>'+s.bullets.map(b=>`<li>${esc(b)}</li>`).join('')+'</ul>';}
+    if(s.steps){h+='<div class="steps">'+s.steps.map((st,k)=>`<div class="step climb-${k+1}"><span class="n">${k+1}</span><span>${esc(st)}</span></div>`).join('')+'</div>';}
+    if(s.ctas){h+=s.ctas.map(c=>`<div class="cta-step"><span>&bull;</span> ${esc(c)}</div>`).join('');}
+    if(s.disclaimer) h+=`<div class="disclaimer">${esc(s.disclaimer)}</div>`;
+    if(s.brand) h+=`<div class="brandline">${esc(s.brand)}</div>`;
+    d.innerHTML=h;stage.appendChild(d);
+  });
+  document.getElementById('count').textContent=(cur+1)+' / '+S.length;
+}
+let cur=0;
+function go(n){cur=Math.max(0,Math.min(S.length-1,n));render();}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);});
+render();
+</script>
+</body>
+</html>
