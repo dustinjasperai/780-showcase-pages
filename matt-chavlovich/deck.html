@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Leaders Locker Room, A Masterclass with Matt Chavlovich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f2;
+  --ink:#141210;
+  --panel:#efe9dc;
+  --rule:#d8cfbb;
+  --accent:#d4bc63;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+#stage{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;opacity:0;transition:opacity .35s ease}
+.slide.on{display:flex;opacity:1}
+.kick{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-size:clamp(13px,1.5vw,18px);margin-bottom:26px}
+h1{font-family:'Oswald',sans-serif;font-weight:700;line-height:1.02;letter-spacing:-.005em;font-size:clamp(40px,7.4vw,104px);text-transform:uppercase}
+h1 .a{color:var(--accent)}
+h2{font-family:'Oswald',sans-serif;font-weight:600;line-height:1.08;font-size:clamp(30px,5vw,68px);text-transform:uppercase;letter-spacing:.005em}
+h2 .a{color:var(--accent)}
+.lead{font-size:clamp(19px,2.3vw,30px);line-height:1.5;max-width:46ch;color:#4a4439;margin-top:28px;font-weight:400}
+.promise{font-size:clamp(20px,2.4vw,32px);color:#4a4439;margin-top:30px;max-width:40ch}
+.sec-no{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(60px,12vw,180px);color:var(--rule);line-height:.9}
+.sec-label{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:clamp(16px,2vw,24px);color:var(--accent);margin-top:10px}
+ul.reps{list-style:none;margin-top:30px;max-width:40ch}
+ul.reps li{position:relative;padding-left:46px;margin-bottom:20px;font-size:clamp(17px,2vw,25px);line-height:1.35;color:#2a2620}
+ul.reps li::before{content:counter(r,decimal-leading-zero);counter-increment:r;position:absolute;left:0;top:2px;font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);font-size:clamp(16px,1.8vw,22px)}
+ul.reps{counter-reset:r}
+.quote{font-family:'Oswald',sans-serif;font-weight:500;font-size:clamp(26px,3.6vw,50px);line-height:1.12;max-width:20ch;text-transform:uppercase;letter-spacing:.01em}
+.tag{display:inline-block;margin-top:34px;font-size:clamp(14px,1.6vw,19px);letter-spacing:.04em;color:#6b6456}
+.season{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:38px;max-width:900px}
+.season .cell{border:1.5px solid var(--rule);border-radius:12px;padding:18px 14px;background:#fff}
+.season .cell.hi{background:var(--accent);border-color:var(--accent)}
+.season .cell.hi .ct,.season .cell.hi .cs{color:#141210}
+.season .ct{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(14px,1.5vw,19px)}
+.season .cs{font-size:clamp(12px,1.2vw,15px);color:#6b6456;margin-top:6px}
+.cred{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;max-width:52ch}
+.cred span{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(14px,1.5vw,19px);background:var(--panel);border:1px solid var(--rule);border-radius:100px;padding:12px 22px}
+.cta-step{font-size:clamp(19px,2.3vw,30px);color:#2a2620;margin-top:26px;max-width:40ch}
+.disc{margin-top:40px;font-size:clamp(12px,1.25vw,15px);color:#8a8273;max-width:60ch;line-height:1.5}
+.foot{position:absolute;left:9vw;right:9vw;bottom:4.2vh;display:flex;justify-content:space-between;align-items:center;font-family:'Oswald',sans-serif;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(11px,1.15vw,14px);color:#9a9282;border-top:1px solid var(--rule);padding-top:16px}
+.nav{position:fixed;right:22px;bottom:18px;display:flex;gap:10px;z-index:5}
+.nav button{font-family:'Oswald',sans-serif;background:var(--ink);color:var(--bg);border:none;border-radius:100px;width:46px;height:46px;font-size:20px;cursor:pointer;opacity:.85}
+.nav button:hover{opacity:1}
+.count{position:fixed;left:22px;bottom:24px;font-family:'Oswald',sans-serif;letter-spacing:.14em;color:#b3ab99;font-size:14px;z-index:5}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="count" id="count"></div>
+<div class="nav"><button id="prev" aria-label="previous">&#8249;</button><button id="next" aria-label="next">&#8250;</button></div>
+<script>
+const S = [
+  {t:'title', kick:'A live masterclass with Matt Chavlovich',
+   h:'The Leaders <span class="a">Locker Room</span>',
+   promise:'Leading like a championship athlete. How the best performers train themselves, not just their teams.'},
+
+  {t:'who', kick:'Who this is for',
+   h:'For the one everyone <span class="a">looks up to</span>',
+   lead:'Driven leaders and coaches who carry the room. Outwardly you are succeeding. Quietly you can feel stuck, bored, alone, and unsure you are doing enough.'},
+
+  {t:'trap', kick:'The trap',
+   h:'You are doing <span class="a">more</span> and feeling <span class="a">less</span>',
+   lead:'Every answer you find adds another thing to carry. The map keeps getting bigger, the grind keeps getting louder, and the one who leads never gets coached.'},
+
+  {t:'reframe', kick:'A different starting point',
+   quote:'Leadership is not a grind to survive. It is a season to <span class="a">train for</span>.',
+   tag:'The way elite athletes and teams actually prepare.'},
+
+  {t:'section', no:'01', label:'The core problem'},
+
+  {t:'content', kick:'The core problem',
+   h:'You are leading off a <span class="a">map</span>',
+   lead:'A map assumes the terrain never changes. So you push harder on a route that stopped fitting the ground a long time ago, and call the exhaustion proof you are working hard enough.'},
+
+  {t:'content', kick:'The real cost',
+   h:'Effort stops <span class="a">working</span>',
+   lead:'More hours buy less distance. The honest line nobody says out loud: owning your greatness is harder than owning your mess, so most leaders stay busy instead of getting free.'},
+
+  {t:'section', no:'02', label:'The Locker Room method'},
+
+  {t:'content', kick:'Pillar one',
+   h:'Permission to <span class="a">surrender</span>',
+   lead:'Mastery comes from surrender, not control. Our truest challenge is not learning how to do everything. It is discovering what is ours to do, and getting out of our head and into our heart.'},
+
+  {t:'content', kick:'Pillar two',
+   h:'Mastery <span class="a">and</span> Magic',
+   lead:'Mastery is the disciplined craft and the reps of the athlete. Magic is the heart, the possibility, the part you cannot measure. Held together, they are how a leader becomes rare.'},
+
+  {t:'content', kick:'The counter-intuitive reps',
+   h:'Principles that invert the <span class="a">hustle</span>',
+   reps:['Rest day is a training day.','You have nothing to prove.','Invest in your compass more than your map.','Serve like the Samurai.','Have the courage to find your Empty.']},
+
+  {t:'content', kick:'Train as a team',
+   h:'Nobody masters themselves <span class="a">alone</span>',
+   lead:'Athletes do not train in isolation and neither should leaders. The work happens inside a locker room: a capped circle of peers, in six month seasons, with real retreats and monthly team challenges. You can not get too big, and you can not get too messy.'},
+
+  {t:'content', kick:'Compass over map',
+   h:'Let your heart be your <span class="a">lighthouse</span>',
+   lead:'When the terrain shifts, a map fails and a compass holds. You stop managing yourself by other people expectations and start leading from what is actually yours to do.'},
+
+  {t:'section', no:'03', label:'What a season looks like'},
+
+  {t:'season', kick:'What a season looks like',
+   h:'Six months, one <span class="a">season</span>',
+   cells:[
+     {ct:'Pre-Season', cs:'Find your Empty', hi:false},
+     {ct:'The Reps', cs:'Daily discipline', hi:true},
+     {ct:'The Circle', cs:'A capped team of peers', hi:false},
+     {ct:'Retreats', cs:'In person, in the room', hi:false},
+     {ct:'The Win', cs:'Mastery and Magic', hi:true}
+   ]},
+
+  {t:'content', kick:'The on-ramp',
+   h:'Today I <span class="a">begin</span>',
+   lead:'Thirty three days of small, repeatable reps to uplevel yourself and your craft. Discipline is not the punishment. It is the training that makes the surrender possible.'},
+
+  {t:'why', kick:'Why listen to me',
+   h:'I have trained for <span class="a">seasons</span> my whole life',
+   lead:'Twenty five years leading human performance across five global companies and three industries, built on a career as an athlete first.',
+   cred:['Pro soccer, A-League','Two-time Ironman','Former VP, major sports league','Author, Permission to Surrender']},
+
+  {t:'cta', kick:'Your next step',
+   h:'Step into the <span class="a">Locker Room</span>',
+   step:'If you are ready to train like the leader you already are, come find what is yours to do. The next season of the Leaders Locker Room is forming now.',
+   disc:'This masterclass is educational. No specific outcome, income, or result is guaranteed, and results vary by person and effort. Seats each season are limited.'}
+];
+
+const stage = document.getElementById('stage');
+let i = 0;
+
+function render(s){
+  const f = `<div class="foot"><span>The Leaders Locker Room</span><span>Matt Chavlovich</span></div>`;
+  if(s.t==='title')
+    return `<div>${kick(s)}<h1>${s.h}</h1><div class="promise">${s.promise}</div></div>${f}`;
+  if(s.t==='section')
+    return `<div><div class="sec-no">${s.no}</div><div class="sec-label">${s.label}</div></div>${f}`;
+  if(s.t==='reframe')
+    return `<div>${kick(s)}<div class="quote">${s.quote}</div><div class="tag">${s.tag}</div></div>${f}`;
+  if(s.t==='season'){
+    const cells = s.cells.map(c=>`<div class="cell ${c.hi?'hi':''}"><div class="ct">${c.ct}</div><div class="cs">${c.cs}</div></div>`).join('');
+    return `<div>${kick(s)}<h2>${s.h}</h2><div class="season">${cells}</div></div>${f}`;
+  }
+  if(s.t==='why'){
+    const chips = s.cred.map(c=>`<span>${c}</span>`).join('');
+    return `<div>${kick(s)}<h2>${s.h}</h2><div class="lead">${s.lead}</div><div class="cred">${chips}</div></div>${f}`;
+  }
+  if(s.t==='cta')
+    return `<div>${kick(s)}<h1>${s.h}</h1><div class="cta-step">${s.step}</div><div class="disc">${s.disc}</div></div>${f}`;
+  if(s.reps){
+    const items = s.reps.map(r=>`<li>${r}</li>`).join('');
+    return `<div>${kick(s)}<h2>${s.h}</h2><ul class="reps">${items}</ul></div>${f}`;
+  }
+  return `<div>${kick(s)}<h2>${s.h}</h2><div class="lead">${s.lead||''}</div></div>${f}`;
+}
+function kick(s){ return s.kick?`<div class="kick">${s.kick}</div>`:''; }
+
+function build(){
+  stage.innerHTML = S.map((s,n)=>`<section class="slide" data-n="${n}">${render(s)}</section>`).join('');
+  show(0);
+}
+function show(n){
+  i = Math.max(0, Math.min(S.length-1, n));
+  document.querySelectorAll('.slide').forEach(el=>el.classList.toggle('on', +el.dataset.n===i));
+  document.getElementById('count').textContent = String(i+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0');
+}
+document.getElementById('next').onclick = ()=>show(i+1);
+document.getElementById('prev').onclick = ()=>show(i-1);
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') show(i+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') show(i-1);
+});
+build();
+</script>
+</body>
+</html>
