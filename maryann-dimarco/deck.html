@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Your Intuitive Language · MaryAnn DiMarco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f6efe4; --panel:#e9f1f2; --rule:#cfe0e2;
+    --ink:#232323; --head:#293b45; --grey:#4c5b62; --dim:#9aa7ab;
+    --accent:#1c455d; --teal:#6cb5c0;
+  }
+  html,body{height:100%}
+  body{background:#e8e0d4;font-family:'Figtree',-apple-system,sans-serif;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e8e0d4}
+  .deck{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:var(--bg);overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    display:flex;flex-direction:column;justify-content:center;padding:7.2% 8.4%}
+  .slide.active{opacity:1;visibility:visible}
+  .kicker{font-size:1vw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2.4vh}
+  h1{font-family:'Italiana',Georgia,serif;font-weight:500;color:var(--head);line-height:1.14;letter-spacing:.002em}
+  .t-title h1{font-size:5vw;max-width:92%}
+  .t-normal h1{font-size:3.6vw;max-width:88%}
+  .t-normal .body{font-size:1.42vw;color:var(--grey);margin-top:2.6vh;max-width:74%;line-height:1.6;font-weight:300}
+  .sub{font-size:1.7vw;color:var(--grey);margin-top:3.4vh;max-width:76%;line-height:1.5;font-weight:300}
+  .t-section{align-items:flex-start;background:var(--panel)}
+  .t-section .idx{font-family:'Figtree',sans-serif;font-size:1.05vw;font-weight:600;color:var(--accent);margin-bottom:2vh;letter-spacing:.18em;text-transform:uppercase}
+  .t-section h1{font-size:5vw;max-width:92%}
+  .t-section .rule{width:16vw;height:2px;background:linear-gradient(90deg,var(--teal),transparent);margin-top:3.4vh}
+  .t-dark{background:radial-gradient(130% 130% at 50% 0%,#24505f 0%,#1c455d 100%);align-items:center;text-align:center}
+  .t-dark h1{font-size:4vw;max-width:90%;font-weight:400;color:#f7f3ec}
+  .t-dark .accent-bar{width:9vw;height:3px;background:var(--teal);margin:3.6vh auto 0}
+  .t-cta{background:radial-gradient(130% 130% at 50% 100%,#24505f 0%,#1c455d 100%);align-items:center;text-align:center}
+  .t-cta h1{font-size:4.2vw;max-width:86%;color:#f7f3ec}
+  .chips{display:flex;gap:1.2vw;margin-top:4.4vh;flex-wrap:wrap;justify-content:center}
+  .chip{background:var(--teal);color:#13303f;border-radius:100px;padding:1.5vh 1.9vw;font-size:1.16vw;font-weight:600;font-family:'Figtree',sans-serif}
+  .disc{position:absolute;left:8.4%;right:8.4%;bottom:4.2vh;font-size:.9vw;color:var(--dim);font-style:italic;text-align:center;line-height:1.45}
+  .t-cta .disc{color:#a9bcc2}
+  .t-title .disc,.t-normal .disc{text-align:left}
+  .motif{position:absolute;pointer-events:none}
+  .title-motif{right:7%;bottom:9%;width:24vw;opacity:.9}
+  .corner-motif{right:6%;bottom:8%;width:10vw;opacity:.45}
+  .brandline{font-size:1.24vw;color:var(--grey);margin-top:3.6vh;font-weight:400;letter-spacing:.02em}
+  .brandline b{color:var(--accent);font-weight:600}
+  .hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(28,69,93,.1);z-index:20}
+  .hud > i{display:block;height:100%;background:var(--accent);width:0;transition:width .35s ease}
+  .count{position:fixed;bottom:13px;right:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);z-index:20;font-weight:500}
+  .brand-foot{position:fixed;bottom:12px;left:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);z-index:20;font-weight:600}
+  .nav{position:fixed;top:0;bottom:0;width:22%;z-index:15;cursor:pointer}
+  .nav.prev{left:0}.nav.next{right:0;width:78%}
+  .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);z-index:20;letter-spacing:.08em;transition:opacity .5s}
+  @media(max-width:640px){
+    .kicker{font-size:2.6vw}.t-title h1{font-size:8.2vw}.t-normal h1{font-size:6vw}.t-normal .body{font-size:3vw}
+    .sub{font-size:3.4vw}.t-section h1{font-size:8vw}.t-section .idx{font-size:2.8vw}
+    .t-dark h1{font-size:6.4vw}.t-cta h1{font-size:7vw}.chip{font-size:2.8vw}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="deck" id="deck"></div></div>
+<div class="nav prev" id="prev"></div>
+<div class="nav next" id="next"></div>
+<div class="hud"><i id="bar"></i></div>
+<div class="count" id="count">01 / 21</div>
+<div class="brand-foot">MaryAnn DiMarco</div>
+<div class="hint" id="hint">&rarr; click or arrow keys</div>
+
+<!-- motif: a soft rising light / horizon of guidance, drawn once -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="dawn" viewBox="0 0 300 200">
+  <g fill="none" stroke-linecap="round">
+    <path d="M40 150 H260" stroke="#6cb5c0" stroke-width="2" opacity="0.7"/>
+    <circle cx="150" cy="150" r="46" fill="none" stroke="#1c455d" stroke-width="2.4" opacity="0.85"/>
+    <path d="M150 62 V34 M150 238" stroke="#1c455d" stroke-width="2" opacity="0.5"/>
+    <path d="M86 94 L70 74 M214 94 L230 74 M60 150 H34 M240 150 H266" stroke="#6cb5c0" stroke-width="2" opacity="0.6"/>
+    <path d="M110 150 C118 124 182 124 190 150" stroke="#1c455d" stroke-width="2.2" opacity="0.6"/>
+  </g>
+</symbol>
+</defs></svg>
+
+<script>
+const S = [
+ {t:'title',title:'Your Intuitive Language',sub:'A live masterclass on how Spirit already speaks to you, and how to finally trust what you receive.',brand:true,motif:'title'},
+ {t:'normal',k:'Who this is for',title:'You already get the feelings, the knowings, the nudges. You just do not trust them yet.',body:'You sense things before they happen. A name drops in, a room feels heavy, you knew the call before the phone rang. If you are an empath, a healer, or someone who has always felt a little more tuned in, this hour is for you.'},
+ {t:'dark',title:'Intuition is not a gift a lucky few are born with. It is a language you can learn to read.'},
+
+ {t:'section',idx:'Part One',title:'Why "Am I Even Intuitive?" Is the Wrong Question'},
+ {t:'normal',k:'The comparison trap',title:'You are trying to receive the way someone else does.',body:'You watched a medium see full images and decided that is what real intuition looks like, so the quiet feelings and sudden knowings you actually get do not count. They do. You have simply been measuring your gift against the wrong channel.'},
+ {t:'normal',k:'The doubt loop',title:'The hit arrives, and then the second guess erases it.',body:'The message comes through clearly. A beat later your logical mind calls it imagination, coincidence, or wishful thinking. The information was real. What is missing is a way to recognise it and trust it the moment it lands.'},
+ {t:'normal',k:'No method',title:'Without a method, every message feels like a maybe.',body:'When you have no framework, you cannot tell a genuine nudge from your own fear or hope. So you stay stuck asking whether you are intuitive at all, instead of learning how your intuition is already speaking.'},
+ {t:'dark',title:'You are not "not intuitive." You have just never named how you receive.'},
+
+ {t:'section',idx:'Part Two',title:'The Medium Mentor Method'},
+ {t:'normal',k:'Believe',title:'Believe: decide the connection is real.',body:'The first step is choosing to believe there is a higher power, whatever you call it, and that it is reaching for you. Belief is not blind faith here. It is the decision that opens the door so the rest of the work has somewhere to stand.'},
+ {t:'normal',k:'Ask',title:'Ask: pose real questions to your team.',body:'You have a team of guides, angels, and loved ones on the other side. The skill is learning to ask them clear, specific questions, rather than a vague plea for a sign, so the answers come back in a form you can actually use.'},
+ {t:'normal',k:'Act',title:'Act: get off the cushion and move on what you receive.',body:'Intuition that never becomes action stays a hobby. When you act on the guidance you receive, you create momentum and real change, and you teach yourself that the messages can be trusted because you have watched them play out.'},
+ {t:'normal',k:'Your intuitive language',title:'Find your Clair: the four ways guidance comes in.',body:'Clairvoyance is seeing, clairaudience is hearing, clairsentience is feeling, claircognizance is simply knowing. Most people have one dominant Clair. When you identify yours, receiving stops feeling like forcing and starts feeling like your native language.'},
+ {t:'dark',title:'Name your Clair, practise Believe, Ask, Act, and the guessing stops.'},
+
+ {t:'section',idx:'Part Three',title:'When the Second-Guessing Stops'},
+ {t:'normal',k:'The shift',title:'You stop asking whether it is real and start acting on it.',body:'Once you know your channel and have a practice to strengthen it, the second guessing fades. You receive, you recognise, you act. That is the quiet confidence every medium you admire is actually running on.'},
+ {t:'normal',k:'Your Universal Team',title:'You know who is actually on your team.',body:'Guides, angels, and departed loved ones each show up differently and help in different ways. Learning to tell them apart, and to build a regular relationship with them, turns one off readings into a connection you can return to any time.'},
+ {t:'normal',k:'Why MaryAnn',title:'I am MaryAnn DiMarco, the Medium Mentor.',body:'I am a psychic medium, spiritual teacher, and author of Believe, Ask, Act, Medium Mentor, and The Guide(s) Book. I have spent years teaching aspiring and practising mediums, empaths, and lightworkers to develop and trust their own gifts, in plain, down to earth language.'},
+
+ {t:'section',idx:'Your Next Step',title:'Go Deeper, One on One'},
+ {t:'normal',k:'The Medium Mentorship Program',title:'The full method, personalised to how you receive.',body:'The Medium Mentorship Program takes everything in this masterclass and builds it around your dominant Clair and your goals, through private sessions and personalised guidance, so you move from sensing messages to trusting and delivering them with confidence.'},
+ {t:'cta',title:'Ready to stop doubting and start trusting your intuition?',chips:['Apply for the Medium Mentorship Program','Explore working with MaryAnn'],disc:'Educational and spiritual development content. No specific spiritual, personal, or financial outcome is guaranteed. Individual experiences vary by person, practice, and effort.'},
+];
+
+const deck=document.getElementById('deck');
+function motif(kind){return `<svg class="motif ${kind==='title'?'title-motif':'corner-motif'}" viewBox="0 0 300 200"><use href="#dawn"/></svg>`}
+S.forEach((s,i)=>{
+  const d=document.createElement('div');
+  d.className='slide t-'+s.t;
+  let h='';
+  if(s.k) h+=`<div class="kicker">${s.k}</div>`;
+  if(s.t==='section'){ h=`<div class="idx">${s.idx}</div><h1>${s.title}</h1><div class="rule"></div>`; }
+  else {
+    h+=`<h1>${s.title}</h1>`;
+    if(s.sub) h+=`<div class="sub">${s.sub}</div>`;
+    if(s.body) h+=`<div class="body">${s.body}</div>`;
+    if(s.brand) h+=`<div class="brandline">The Medium <b>Mentor</b> · MaryAnn DiMarco</div>`;
+    if(s.t==='dark') h+=`<div class="accent-bar"></div>`;
+    if(s.chips) h+=`<div class="chips">`+s.chips.map(c=>`<div class="chip">${c}</div>`).join('')+`</div>`;
+  }
+  if(s.motif) h+=motif(s.motif);
+  else if(s.t==='title') h+=motif('title');
+  if(s.disc) h+=`<div class="disc">${s.disc}</div>`;
+  d.innerHTML=h;
+  deck.appendChild(d);
+});
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;const bar=document.getElementById('bar');const count=document.getElementById('count');const hint=document.getElementById('hint');
+function pad(n){return String(n).padStart(2,'0')}
+function go(n){cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  count.textContent=pad(cur+1)+' / '+pad(slides.length);
+  if(cur>0)hint.style.opacity=0;}
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+go(0);
+</script>
+</body>
+</html>
