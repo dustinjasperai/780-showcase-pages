@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Command the Room — a live masterclass with Terrie Price</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1b2733;        /* ground, deepened from her slate #2c3e50 */
+    --panel:#233240;     /* one step up */
+    --rule:#3a4a5a;      /* muted slate hairline */
+    --ink:#f4f6f8;       /* white type */
+    --mut:#aab6c2;       /* muted body */
+    --accent:#ff0000;    /* her signature brand red (footer bg) */
+    --head:'Fira Sans',system-ui,sans-serif;
+    --body:'Poppins',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0f171f;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 20px 80px}
+  .slide{
+    position:relative;background:var(--bg);border:1px solid var(--rule);border-radius:16px;
+    padding:64px 64px;margin:0 0 26px;min-height:520px;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  /* spotlight motif: one hot beam in the dark */
+  .slide::before{
+    content:"";position:absolute;top:-120px;right:-80px;width:460px;height:460px;
+    background:radial-gradient(circle at center, rgba(255,0,0,0.16), rgba(255,0,0,0) 70%);
+    pointer-events:none;
+  }
+  .slide.light{background:#f5f3f0;color:#1b2733;border-color:#e3ddd4}
+  .slide.light .mut{color:#5c6672}
+  .slide.light::before{background:radial-gradient(circle at center, rgba(255,0,0,0.10), rgba(255,0,0,0) 70%)}
+  .kick{font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-size:13px;color:var(--accent);margin-bottom:22px}
+  h1{font-family:var(--head);font-weight:800;font-size:60px;line-height:1.02;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.08;letter-spacing:-.01em}
+  h3{font-family:var(--head);font-weight:600;font-size:26px;line-height:1.15}
+  p{font-size:19px;line-height:1.6;color:var(--ink);max-width:46ch}
+  .light p{color:#2b343d}
+  .mut{color:var(--mut)}
+  .lead{font-size:23px;line-height:1.5;max-width:40ch}
+  .big{font-size:76px;font-family:var(--head);font-weight:800;line-height:1}
+  .accent{color:var(--accent)}
+  .sub{margin-top:18px;font-size:20px}
+  .steps{margin-top:30px;display:flex;flex-direction:column;gap:16px;max-width:none}
+  .step{display:flex;gap:18px;align-items:flex-start}
+  .num{flex:0 0 auto;width:44px;height:44px;border-radius:999px;border:2px solid var(--accent);
+    color:var(--accent);font-family:var(--head);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:19px}
+  .step h3{margin-bottom:4px}
+  .step p{font-size:17px;margin:0}
+  .grid{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:24px}
+  .light .card{background:#fff;border-color:#e7e1d7}
+  .card h3{font-size:20px;margin-bottom:8px}
+  .card p{font-size:16px;margin:0}
+  .pill{display:inline-block;font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:6px 14px;margin-bottom:22px}
+  .tag{font-family:var(--head);font-weight:700;color:var(--mut);font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+  .disc{font-size:14px;color:var(--mut);margin-top:26px;max-width:60ch;line-height:1.5}
+  .cta-row{margin-top:30px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-family:var(--head);font-weight:700;
+    font-size:19px;padding:16px 30px;border-radius:10px;text-decoration:none}
+  .foot{position:absolute;bottom:22px;left:64px;font-size:13px;color:var(--mut);letter-spacing:.04em}
+  .n{position:absolute;bottom:22px;right:64px;font-size:13px;color:var(--mut)}
+  @media(max-width:680px){.slide{padding:40px 28px}h1{font-size:40px}h2{font-size:30px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap" id="deck"></div>
+<script>
+const S=[
+ {t:'title', light:false, kick:'A live masterclass with Terrie Price',
+  h:'Command the Room.<br><span class="accent">From Freaked Out to Confident.</span>', big:true,
+  p:'The method that takes you from a blank mind and a racing heart to a talk that actually lands, for women and professionals who would rather do anything than speak.',
+  foot:'Unlimited You &middot; unlimitedyouinc.com'},
+
+ {t:'who', light:true, kick:'Who this is for',
+  h:'You have things worth saying. You just dread the moment you have to say them.',
+  cards:[['The symptoms','Shortness of breath, sweaty palms, butterflies. Your mind goes blank the second someone asks you a question.'],
+         ['The pattern','You get interrupted or talked over. You mumble, or fill the silence with um and ah. You are a potted plant or a caged lion.']],
+  p:'Here is the good news: public speaking is a skill set, and you can learn it.'},
+
+ {t:'plain', light:false, kick:'The reframe',
+  h:'More tips are not the problem.<br>You are starting in the <span class="accent">wrong place</span>.',
+  p:'Most advice hands you a longer checklist of things to remember while you are already panicking. That is why it falls apart on stage. The fix is not more to memorize. It is knowing where a talk actually begins.'},
+
+ {t:'plain', light:false, pill:'Part One',
+  h:'A speech built from the opening line falls apart under pressure.',
+  p:'When you start writing at "Hello, thank you for having me," every sentence after it is a guess. You pile on stories and points, hoping it adds up. The moment your nerves spike, there is nothing holding the talk together, so it scatters, and so do you.'},
+
+ {t:'who', light:true, kick:'What it costs you',
+  h:'The room feels it before you do.',
+  cards:[['60%','of employers call public speaking a core workforce competency.'],
+         ['55 / 38 / 7','of what lands is non-verbal, then tone, then the actual words. Delivery is most of the message.']],
+  p:'The fear of speaking can quietly cap your pay and your promotions. Not because you lack ideas, but because they never land.'},
+
+ {t:'plain', light:false, pill:'Part Two &middot; The method', big:true,
+  h:'Build it <span class="accent">backward</span>.',
+  p:'The end comes first. Decide where the talk is going before you write a single line, and every choice after that gets easier. This is the heart of how I coach every speaker, from a nervous first-timer to a TEDx stage.'},
+
+ {t:'steps', light:false, kick:'Start with three questions',
+  h:'Answer these before you write anything.',
+  steps:[['Who is in the room?','Their beliefs, their worries, what they walked in already thinking.'],
+         ["What is this talk's job?",'Name its purpose in one plain sentence.'],
+         ['What is the one thing you want them to do?','That answer becomes your ending, and your ending launches the whole structure.']]},
+
+ {t:'plain', light:false, kick:'The One Thing', big:true,
+  h:'One thing.<br><span class="mut">Not a list of five.</span>',
+  p:'Not a list of takeaways, not five action items on a closing slide. One action, or one shift in thinking. Once that ending is fixed, every story you are considering has to earn its place by moving the room toward it. The unfocused material falls away on its own.'},
+
+ {t:'plain', light:true, kick:'Calm the body first',
+  h:'Five ways to settle your nervous system before you speak.',
+  p:'Nerves are physical before they are mental, so we work the body first. You will practice techniques to calm the shortness of breath and the racing heart, and learn how to regain control in the moment instead of hoping it does not happen. Confidence is a state you can walk yourself into.'},
+
+ {t:'plain', light:false, kick:'When you are put on the spot',
+  h:'A simple structure so your mind never goes blank.',
+  p:'The hardest moment is the unscripted one: the question from the floor, the "what do you think?" you did not see coming. You will learn a short acronym that turns a scramble into a clear, coherent answer on demand, so being asked a question stops being the thing you fear most.'},
+
+ {t:'who', light:false, kick:'The science of story',
+  h:'The four pillars that make a story land.',
+  cards:[['Why story works','What is actually happening in a listener\'s brain, and why a fact wrapped in a story is remembered and a fact alone is not.'],
+         ['A three step structure','A repeatable way to shape your own stories so they build instead of wander.']],
+  p:'71% of people would rather learn about an idea through a presentation than a blog post. Story is how you earn that attention and keep it.'},
+
+ {t:'plain', light:false, kick:'Voice and movement',
+  h:'Find the balance of voice, movement and story that is yours.',
+  p:'Not a potted plant with no movement, not a caged lion with too much. You will learn when and how to move with purpose, and discover the power of your own voice, so your delivery matches the message instead of fighting it. There is no one size fits all here. We find what works for you.'},
+
+ {t:'plain', light:true, pill:'Part Three',
+  h:'When it clicks, the room leans in.',
+  p:'You walk in knowing exactly where you are taking the room. Your body is calm because you have practiced calming it. You have a structure for the unscripted moments and stories that actually land. You leave with a personalized game plan and, after, individual video feedback on what you did well and precisely what to improve next.'},
+
+ {t:'plain', light:false, kick:'Why learn this from me',
+  h:'I built this from the fear up.',
+  p:'My own fear of public speaking started in second grade and followed me for years, so I do not teach from theory. I have coached speakers for the TEDx stage and co-organized the event, and I teach with a research-based method and a lot of games and activities, because you remember what you practice and enjoy. We learn together, out loud.'},
+
+ {t:'plain', light:false, kick:'The method, in one line',
+  h:'Decide the one thing. Build the talk <span class="accent">backward</span> to it. Calm the body, structure the moment, tell the story, own the room.',
+  p:'That is the whole method, and it is learnable in an hour of real practice.'},
+
+ {t:'cta', light:true, kick:'Your next step',
+  h:'Ready to go from freaked out to confident?',
+  p:'Book a free 30-minute discovery call with me and we will map out exactly what would change for you and your speaking.',
+  btn:'Book a free discovery call', href:'https://www.unlimitedyouinc.com/',
+  disc:'Educational content only. No result is guaranteed. Results vary with each speaker and the practice they put in. &copy; Unlimited You, Inc.'}
+];
+
+function head(s){
+  let out='';
+  if(s.pill) out+=`<span class="pill">${s.pill}</span>`;
+  if(s.kick) out+=`<div class="kick">${s.kick}</div>`;
+  out+= s.big ? `<h1>${s.h}</h1>` : `<h2>${s.h}</h2>`;
+  return out;
+}
+function cardsHtml(cards){
+  return `<div class="grid">`+cards.map(c=>`<div class="card"><h3>${c[0]}</h3><p>${c[1]}</p></div>`).join('')+`</div>`;
+}
+function stepsHtml(steps){
+  return `<div class="steps">`+steps.map((s,i)=>`<div class="step"><div class="num">${i+1}</div><div><h3>${s[0]}</h3><p class="mut">${s[1]}</p></div></div>`).join('')+`</div>`;
+}
+
+const R={
+ title:s=>head(s)+`<p class="sub mut">${s.p}</p>`+(s.foot?`<div class="foot">${s.foot}</div>`:''),
+ plain:s=>head(s)+(s.p?`<p class="sub mut">${s.p}</p>`:''),
+ who:s=>head(s)+cardsHtml(s.cards)+(s.p?`<p class="sub">${s.p}</p>`:''),
+ steps:s=>head(s)+stepsHtml(s.steps),
+ cta:s=>head(s)+`<p class="sub">${s.p}</p><div class="cta-row"><a class="btn" href="${s.href}">${s.btn}</a></div><p class="disc">${s.disc}</p>`
+};
+
+const deck=document.getElementById('deck');
+S.forEach((s,i)=>{
+  const el=document.createElement('div');
+  el.className='slide'+(s.light?' light':'');
+  el.innerHTML=R[s.t](s);
+  const n=document.createElement('div');n.className='n';n.textContent=(i+1)+' / '+S.length;
+  el.appendChild(n);
+  deck.appendChild(el);
+});
+</script>
+</body>
+</html>
