@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Enneagram Edge - Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Domine:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1b1d;
+    --panel:#232427;
+    --accent:#f4f4f4;
+    --muted:#56585a;
+    --rule:#56585a;
+    --display:'Domine',Georgia,serif;
+    --body:'Montserrat',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--accent);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{display:none;width:min(1120px,92vw);height:min(640px,86vh);background:var(--bg);
+    padding:70px 82px;position:relative;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .kick{font-family:var(--body);font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    font-size:13px;color:var(--muted);margin-bottom:26px}
+  h1{font-family:var(--display);font-weight:700;font-size:62px;line-height:1.04;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-.01em}
+  .sub{font-family:var(--body);font-weight:400;font-size:21px;line-height:1.5;color:#c9cacb;margin-top:22px;max-width:46ch}
+  .lead{font-family:var(--display);font-weight:500;font-size:34px;line-height:1.25;max-width:24ch}
+  ul{list-style:none;margin-top:30px;display:flex;flex-direction:column;gap:18px}
+  li{font-size:21px;line-height:1.45;color:#dcdddd;padding-left:30px;position:relative;max-width:50ch}
+  li:before{content:"";position:absolute;left:0;top:13px;width:14px;height:2px;background:var(--accent)}
+  .rule{width:64px;height:3px;background:var(--accent);margin-top:34px}
+  .meta{position:absolute;left:82px;bottom:48px;font-size:13px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted)}
+  .pg{position:absolute;right:82px;bottom:48px;font-size:13px;color:var(--muted);letter-spacing:.12em}
+  .big{font-family:var(--display);font-weight:700;font-size:150px;line-height:.9;color:var(--accent)}
+  .dim{color:var(--muted)}
+  .disc{font-size:14px;line-height:1.5;color:var(--muted);margin-top:26px;max-width:58ch}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:5}
+  .nav button{background:var(--panel);color:var(--accent);border:1px solid var(--rule);
+    border-radius:2px;padding:7px 15px;font-family:var(--body);font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">Prev</button><button onclick="go(1)">Next</button></div>
+<script>
+const S = [
+  {t:'title', k:'A live masterclass with Tracy O’Malley', h:'The Enneagram Edge', b:'Why knowing your type isn’t enough, and what to do with it instead.'},
+  {t:'promise', k:'What you leave with', h:'One pattern, named and handled.', li:['The single pattern of your type that quietly caps your leadership','The move that turns it from a liability into your edge','A way to lead, sell and build a team as the most authentic version of you']},
+  {t:'who', k:'Who this is for', h:'Bold leaders and teams.', b:'Founders, executives and the teams they run who have done the quizzes, know their number, and still hit the same wall.'},
+  {t:'trap', k:'The trap', h:'You took the test. You know your number. Nothing changed.', b:'Typology told you WHAT you are. It never told you how to lead with it when the pressure is on.'},
+  {t:'reframe', k:'The reframe', lead:'Your type isn’t a label you collect. It’s the operating system running your leadership, your sales, and the exact moment you shut down.'},
+  {t:'part', k:'Part one', h:'The core problem'},
+  {t:'problem', k:'Part one', h:'The pattern runs you hardest when leadership matters most.', b:'Under pressure you don’t choose your reaction. Your type does it for you, on autopilot, in the meeting that actually counts.'},
+  {t:'problem2', k:'Part one', h:'Willpower doesn’t move it.', b:'The pattern is older than this role. It was built from shame and guilt long before you ran anything, which is why trying harder keeps failing.'},
+  {t:'part', k:'Part two', h:'The method'},
+  {t:'pillar', k:'Pillar one', h:'Name the operating system.', b:'Not your number for trivia. The actual system: what your type optimizes for, and what it quietly sacrifices to get it.'},
+  {t:'pillar', k:'Pillar two', h:'Find the stress pattern.', b:'Every type moves a predictable direction under pressure. We locate yours so you can see it coming instead of living inside it.'},
+  {t:'pillar', k:'Pillar three', h:'Soul Surgery.', b:'The no-fluff work that demolishes the shame-and-guilt loop driving the pattern. This is where the change actually lands, not in the quiz result.'},
+  {t:'pillar', k:'Pillar four', h:'Lead from it on purpose.', b:'Grounding and clean boundaries so your type becomes the thing you lead WITH, deliberately, instead of the thing that leads you.'},
+  {t:'part', k:'Part three', h:'Leading from your type, on purpose'},
+  {t:'picture', k:'Part three', h:'A week leading from your type, not against it.', li:['You catch the shutdown before it runs the room','You make the hard call without the week of guilt afterward','You sell from your actual strengths instead of a borrowed script']},
+  {t:'picture2', k:'Part three', h:'The meeting that stops blowing up.', b:'When a leader can read the type dynamics in the room, the same conversation that detonated every quarter becomes the one that finally moves.'},
+  {t:'why', k:'Why me', h:'No fluff, because mine was burned off.', b:'Over a decade using the Enneagram. An SX-8 who teaches it as a performance edge, not soft self-help. 440+ episodes of The Enneagram Edge behind it.'},
+  {t:'recap', k:'The three moves', h:'Name it. Reframe it. Lead from it.', li:['Name the operating system','Do the Soul Surgery on the pattern','Lead from your type on purpose']},
+  {t:'next', k:'From here', h:'Start with the Blueprint, go deeper in coaching.', b:'The Enneagram Blueprint maps your exact system. From there, private coaching is where we do the Soul Surgery work together.'},
+  {t:'cta', k:'Your next step', h:'Ready to lead from your type?', b:'Book your Enneagram Blueprint, or apply to work with me 1:1. This is where knowing your type finally becomes using it.', disc:'Educational only. No specific result or income is guaranteed. Results vary by person and effort.'}
+];
+const stage=document.getElementById('stage');
+stage.innerHTML=S.map((s,i)=>{
+  let inner='';
+  if(s.k) inner+=`<div class="kick">${s.k}</div>`;
+  if(s.lead) inner+=`<p class="lead">${s.lead}</p>`;
+  if(s.h && (s.t==='title')) inner+=`<h1>${s.h}</h1>`;
+  else if(s.h) inner+=`<h2>${s.h}</h2>`;
+  if(s.b) inner+=`<p class="sub">${s.b}</p>`;
+  if(s.li) inner+='<ul>'+s.li.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+  if(s.t==='title'||s.t==='reframe') inner+='<div class="rule"></div>';
+  if(s.disc) inner+=`<p class="disc">${s.disc}</p>`;
+  inner+=`<div class="meta">The Enneagram Edge</div><div class="pg">${i+1} / ${S.length}</div>`;
+  return `<section class="slide${i===0?' on':''}">${inner}</section>`;
+}).join('');
+let cur=0;const slides=[...document.querySelectorAll('.slide')];
+function show(n){slides[cur].classList.remove('on');cur=(n+slides.length)%slides.length;slides[cur].classList.add('on')}
+function go(d){show(cur+d)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
+</script>
+</body>
+</html>
