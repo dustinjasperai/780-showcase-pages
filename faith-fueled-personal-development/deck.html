@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Grace-First Path — a live masterclass with Andy Jenkins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#26323f;        /* deepened from his header slate #34495e (dark-scheme site) */
+    --panel:#34495e;     /* his own header navy */
+    --rule:#3f566e;
+    --accent:#0072ef;    /* his own brand blue, brand.json 22 uses */
+    --ink:#eef2f6;
+    --muted:#aebccb;
+    --head:'Karla',system-ui,sans-serif;  /* his heading face */
+    --body:'Open Sans',system-ui,sans-serif; /* his body face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:9vh 9vw;border-bottom:1px solid var(--rule);position:relative}
+  .kicker{font-family:var(--head);text-transform:uppercase;letter-spacing:.18em;
+    font-size:.8rem;color:var(--accent);font-weight:700;margin-bottom:1.4rem}
+  h1{font-family:var(--head);font-weight:700;font-size:clamp(2.1rem,5.4vw,4rem);
+    line-height:1.08;letter-spacing:-.01em}
+  h2{font-family:var(--head);font-weight:700;font-size:clamp(1.6rem,3.6vw,2.6rem);
+    line-height:1.14;margin-bottom:1.1rem}
+  p{font-size:clamp(1.05rem,1.5vw,1.3rem);max-width:46ch;color:var(--muted)}
+  p.lead{color:var(--ink)}
+  .promise{font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--ink);max-width:40ch}
+  ul{list-style:none;margin-top:1.4rem;max-width:48ch}
+  li{position:relative;padding-left:1.6rem;margin:.75rem 0;color:var(--ink);
+    font-size:clamp(1.05rem,1.5vw,1.25rem)}
+  li:before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;
+    background:var(--accent);border-radius:2px}
+  .step{font-family:var(--head);color:var(--accent);font-weight:700;font-size:1rem;
+    letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8rem}
+  .num{font-family:var(--head);color:var(--rule);font-weight:700;
+    font-size:clamp(3rem,8vw,6rem);line-height:1;margin-bottom:.4rem}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:2.2rem;max-width:52ch}
+  .cta h1{margin-bottom:1.2rem}
+  .cta .btn{display:inline-block;margin-top:1.8rem;background:var(--accent);
+    color:#fff;font-family:var(--head);font-weight:700;padding:.9rem 1.8rem;
+    border-radius:10px;font-size:1.15rem}
+  .disclaimer{margin-top:2.6rem;font-size:.85rem;color:var(--muted);max-width:52ch;
+    border-top:1px solid var(--rule);padding-top:1.1rem}
+  .foot{position:absolute;bottom:3vh;left:9vw;font-family:var(--head);font-size:.78rem;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--rule)}
+</style>
+</head>
+<body>
+<main id="deck"></main>
+<script>
+const S = [
+  {t:'title', kicker:'A live masterclass with Andy Jenkins',
+   h:'The Grace-First Path',
+   p:'Why lasting change starts before you try harder.'},
+
+  {t:'promise', kicker:'What this hour gives you',
+   promise:'One live hour on why grace, not more effort, is the real starting line, and the first step you can take this week.'},
+
+  {t:'who', kicker:'Who this is for',
+   h:'You are rebuilding after a hard season.',
+   p:'A loss. A divorce. A disappointment. A season of rethinking your faith. You do not have it all figured out, and you are tired of pretending you do.'},
+
+  {t:'trap', kicker:'The trap',
+   h:'You tried harder. It did not hold.',
+   p:'More discipline. More resolutions. More white-knuckling. It worked for a week, maybe a month, and then you were right back where you started, a little more tired of yourself.'},
+
+  {t:'reframe', kicker:'The reframe',
+   h:'The problem was never your effort. It was where you started.',
+   p:'Almost every message aimed at you says the same thing: push harder, think bigger, want it more. That is the striving loop. And it quietly teaches you that you are the one thing standing in your own way.'},
+
+  {t:'part', step:'Part one', num:'01', h:'The striving loop',
+   p:'When change depends on your performance, every slip becomes proof against you. So you try harder to make up for it, slip again, and the shame compounds. Effort built on shame always runs out.'},
+
+  {t:'point', kicker:'Why willpower stalls',
+   h:'Willpower is a tank, not a well.',
+   p:'It is real, and it is finite. Mindset coaching can fill the tank for a season, but it cannot refill it from the inside. Something has to come before the effort, or the effort has nothing to stand on.'},
+
+  {t:'part', step:'Part two', num:'02', h:'Grace comes first',
+   p:'Grace is not a reward you earn at the finish line. It is the ground you start from. Received, not achieved. When your identity is settled before you act, effort stops being a way to prove yourself and starts being a response.'},
+
+  {t:'point', kicker:'The shift',
+   h:'From proving to responding.',
+   p:'Nothing about the work gets easier. What changes is what the work is built on. You are no longer earning your worth with every try. You are living out of worth you already have.'},
+
+  {t:'framework', kicker:'The LifeLift path',
+   h:'Four steps I walk clients through.',
+   p:'This is the path underneath the coaching. Each step builds on the one before it, and each one starts from grace, not from pressure.'},
+
+  {t:'stepcard', step:'LifeLift one', h:'Identity',
+   p:'You stop defining yourself by your last failure or your loudest role, and receive who you already are. Everything else is built on this.'},
+
+  {t:'stepcard', step:'LifeLift two', h:'Presence',
+   p:'You learn to actually be where you are, with God and with the people in front of you, instead of living one anxious step ahead of your life.'},
+
+  {t:'stepcard', step:'LifeLift three', h:'Expression',
+   p:'You begin to live out of that settled identity on purpose: your work, your relationships, your words start to carry it instead of hiding it.'},
+
+  {t:'stepcard', step:'LifeLift four', h:'Perspective',
+   p:'You read your own story differently. The hard season becomes part of the path instead of the thing that disqualifies you from it.'},
+
+  {t:'part', step:'Part three', num:'03', h:'What grace-first looks like this week',
+   p:'Not a program to complete. One honest step, taken from rest instead of pressure.'},
+
+  {t:'point', kicker:'Your next step',
+   h:'Name one place you have been trying to earn your way.',
+   p:'Then try starting there from grace instead. Same action, different ground. Notice what changes when the striving is not carrying the whole weight.'},
+
+  {t:'why', kicker:'Why me',
+   h:'I have walked this, not just taught it.',
+   p:'I hold a Master of Divinity from Baylor, and I have spent years in church ministry, in addiction recovery work, and in prison reentry. I wrote the LifeLift books and host the LifeLift podcast. Grace-first is not a slogan to me. It is the only thing that ever actually held.'},
+
+  {t:'recap', kicker:'In one line',
+   h:'Change does not start when you try harder. It starts when you stop trying to earn what grace already gave.',
+   p:''},
+
+  {t:'cta', kicker:'Your next step with me',
+   h:'Ready to walk the grace-first path with support?',
+   p:'If this is the season to stop striving alone, the next step is a free conversation. We will talk about where you are, where you want to go, and whether personal coaching is the right fit.',
+   btn:'Schedule a free conversation',
+   disc:'This masterclass is for education and encouragement. Everyone’s journey is different, and no specific outcome, result, or timeline is promised or guaranteed.'}
+];
+
+const deck = document.getElementById('deck');
+S.forEach(function(s, i){
+  const sec = document.createElement('section');
+  sec.className = 'slide' + (s.t === 'cta' ? ' cta' : '');
+  let html = '';
+  if (s.kicker) html += '<div class="kicker">'+s.kicker+'</div>';
+  if (s.step) html += '<div class="step">'+s.step+'</div>';
+  if (s.num) html += '<div class="num">'+s.num+'</div>';
+  if (s.h) html += '<h1>'+s.h+'</h1>';
+  if (s.promise) html += '<p class="promise lead">'+s.promise+'</p>';
+  if (s.p) html += '<p class="lead">'+s.p+'</p>';
+  if (s.list) { html += '<ul>'; s.list.forEach(function(x){html+='<li>'+x+'</li>';}); html += '</ul>'; }
+  if (s.btn) html += '<div class="btn">'+s.btn+'</div>';
+  if (s.disc) html += '<div class="disclaimer">'+s.disc+'</div>';
+  html += '<div class="foot">The Grace-First Path &middot; Andy Jenkins</div>';
+  sec.innerHTML = html;
+  deck.appendChild(sec);
+});
+</script>
+</body>
+</html>
