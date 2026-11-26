@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Better Practice | Tim English, The Accountants' Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#131b1e;
+    --panel:#1b2529;
+    --rule:#2b3a3f;
+    --accent:#8b3a61;
+    --ink:#f3f1ec;
+    --muted:#9fb0b4;
+  }
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Libre Franklin',-apple-system,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  #deck{position:relative;height:100vh;width:100vw;overflow:hidden;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw 14vh;}
+  .slide.active{display:flex;}
+  .kicker{font-family:'Karla',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:'Karla',sans-serif;font-weight:700;font-size:clamp(34px,6vw,68px);line-height:1.08;letter-spacing:-0.01em;margin-bottom:20px;}
+  h2{font-family:'Karla',sans-serif;font-weight:700;font-size:clamp(26px,4vw,44px);line-height:1.15;margin-bottom:22px;}
+  p{font-size:clamp(17px,1.9vw,23px);color:var(--ink);max-width:52ch;margin-bottom:16px;}
+  p.sub{color:var(--muted);}
+  .lead{font-size:clamp(22px,2.6vw,30px);color:var(--ink);max-width:42ch;}
+  ul{list-style:none;max-width:50ch;}
+  li{position:relative;padding-left:30px;margin-bottom:16px;font-size:clamp(17px,1.9vw,22px);}
+  li::before{content:"";position:absolute;left:0;top:13px;width:11px;height:11px;background:var(--accent);border-radius:1px;}
+  .big{font-family:'Karla',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,52px);color:var(--accent);line-height:1.12;max-width:22ch;}
+  .quote{font-family:'Karla',sans-serif;font-weight:600;font-size:clamp(24px,3.4vw,40px);line-height:1.25;max-width:26ch;}
+  .attrib{color:var(--muted);font-size:16px;margin-top:20px;}
+  .panel{background:var(--panel);border-left:3px solid var(--accent);padding:24px 28px;border-radius:2px;max-width:52ch;font-size:clamp(16px,1.8vw,21px);margin-top:10px;}
+  .grid2{display:flex;gap:40px;flex-wrap:wrap;}
+  .grid2 .col{flex:1;min-width:240px;}
+  .grid2 h3{font-family:'Karla',sans-serif;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .disclaimer{color:var(--muted);font-size:15px;max-width:60ch;line-height:1.55;margin-top:18px;}
+  footer{position:absolute;bottom:26px;left:9vw;right:9vw;display:flex;justify-content:space-between;font-family:'Karla',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;}
+  .nav{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:16px;z-index:10;}
+  .nav button{background:var(--panel);color:var(--ink);border:1px solid var(--rule);font-family:'Karla',sans-serif;font-size:14px;padding:8px 16px;border-radius:3px;cursor:pointer;}
+  .nav button:hover{border-color:var(--accent);color:var(--accent);}
+  .count{font-family:'Karla',sans-serif;color:var(--muted);font-size:13px;align-self:center;}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav">
+  <button id="prev">Prev</button>
+  <span class="count" id="count"></span>
+  <button id="next">Next</button>
+</div>
+
+<script>
+const S=[
+  {t:'title',k:"A masterclass for accountancy practice owners",h:"Build a Better Practice",
+   lead:"How to grow a firm that is more profitable, priced on its real value, and does not depend on you to run.",
+   sub:"Tim English, FCCA · The Accountants' Table"},
+
+  {t:'point',k:"The promise",lead:"In the next few minutes I want to show you why the firms that pull ahead are rarely the ones working the hardest.",
+   sub:"They are the ones who fixed their value, their clients, and their dependence on the owner."},
+
+  {t:'point',k:"Who this is for",h:"You built the practice. Now it owns you.",
+   bullets:["You are busier than ever, yet the profit has not moved to match it.",
+            "Too much of the work, and nearly every decision, still runs through you.",
+            "You suspect you are undercharging, but every conversation about price feels like a fight."]},
+
+  {t:'point',k:"The trap",lead:"So the answer looks obvious. Take on more clients, work more hours, hire only when things get desperate.",
+   sub:"And the firm gets heavier every year, not better."},
+
+  {t:'hook',k:"The reframe",big:"You do not have a workload problem. You have a value problem."},
+
+  {t:'point',k:"Part one",h:"Three things quietly cap a practice",
+   bullets:["Price. Fees set by habit and fear, not by the value the client actually receives.",
+            "Clients. A book full of low-value, high-maintenance work that drags the whole firm down.",
+            "Dependency. No systems or team depth, so the owner is the bottleneck for everything."]},
+
+  {t:'point',k:"The real cost",lead:"Every year those three go unfixed, you pay for it twice.",
+   bullets:["Once in profit you never charged for.",
+            "And again in the hours and headspace the firm takes from the rest of your life."]},
+
+  {t:'quote',k:"The core idea",quote:"Clients don't pay you what you're worth. They pay you what they think you're worth.",
+   attrib:"This is where a better practice starts."},
+
+  {t:'point',k:"Part two · the method",h:"Four moves that change the numbers",
+   sub:"The same moves I used to grow, and eventually sell, my own practice."},
+
+  {t:'detail',k:"Move one",h:"Price on perceived value",
+   body:"Build a consistent pricing system that reflects what different clients actually value, and learn to communicate that value so the client sees it before they see the fee.",
+   panel:"When perception goes up, price goes up. Nothing else about the work has to change."},
+
+  {t:'detail',k:"Move two",h:"Choose the right clients",
+   body:"Decide, on purpose, which clients your firm is built for. Manage the book so better-fit work steadily replaces the low-value, draining work.",
+   panel:"Fewer, better clients beat more clients almost every time."},
+
+  {t:'detail',k:"Move three",h:"Build systems and a team",
+   body:"Put the systems and the people in place so the practice can deliver without the owner touching everything. Protect your own capacity and your own boundaries.",
+   panel:"A practice that needs you for everything is a job. A practice that runs without you is an asset."},
+
+  {t:'detail',k:"Move four",h:"Grow with the end in mind",
+   body:"Grow the firm so it is valuable, not just busy. Think about succession and exit early, so the practice you build is one someone would want to buy.",
+   panel:"I know this one first-hand. I built my practice and sold it in 2021."},
+
+  {t:'point',k:"The mechanism",h:"The Table",
+   lead:"None of this happens alone at your desk.",
+   bullets:["A monthly Virtual Table with a small group of non-competing firm owners.",
+            "One to one time with me between the group sessions.",
+            "Honest perspective, real accountability, and ideas you can use the same week."]},
+
+  {t:'cols',k:"Part three",h:"What a better practice looks like",
+   colA:["Busy, stretched, underpriced.","Every decision waits for you.","Growth means more hours."],
+   colB:["Priced on value, more profitable.","A team and systems you trust.","A firm that is an asset, not a cage."]},
+
+  {t:'point',k:"Why me",h:"I have sat in your chair",
+   lead:"I am a chartered certified accountant who built, grew and sold my own practice.",
+   sub:"I mentor firm owners with the guidance I wish I had when I started. Jargon-free, and grounded in what actually worked. Tim English, FCCA, founder of The Accountants' Table."},
+
+  {t:'point',k:"Put together",h:"The four moves, working as one",
+   lead:"Value, clients, systems and a plan for the end.",
+   sub:"On their own each one helps. Together they turn a busy job back into a business you own."},
+
+  {t:'cta',k:"Your next step",h:"Come and sit at The Table",
+   body:"If building a better practice is where your head is right now, the next step is a short, no-pressure conversation about your firm and where you want it to go.",
+   big:"Book a free 20-minute consultation with Tim.",
+   disclaimer:"Educational only. This reflects one practitioner's experience and opinion and is not financial, legal, tax or investment advice. Nothing here is a promise or guarantee of any particular result. Outcomes vary from firm to firm and depend on your own circumstances, market and effort."}
+];
+
+function esc(s){return s;}
+function render(d){
+  let html='';
+  if(d.k)html+=`<div class="kicker">${d.k}</div>`;
+  if(d.h)html+=`<h1 style="${d.t!=='title'?'font-size:clamp(26px,4vw,44px)':''}">${d.h}</h1>`;
+  if(d.big&&d.t==='hook')html+=`<p class="big">${d.big}</p>`;
+  if(d.quote)html+=`<p class="quote">${d.quote}</p>`;
+  if(d.attrib)html+=`<p class="attrib">${d.attrib}</p>`;
+  if(d.lead)html+=`<p class="lead">${d.lead}</p>`;
+  if(d.body)html+=`<p>${d.body}</p>`;
+  if(d.bullets){html+='<ul>';d.bullets.forEach(b=>html+=`<li>${b}</li>`);html+='</ul>';}
+  if(d.panel)html+=`<div class="panel">${d.panel}</div>`;
+  if(d.cols||d.colA){html+='<div class="grid2"><div class="col"><h3>Before</h3><ul>';d.colA.forEach(b=>html+=`<li>${b}</li>`);html+='</ul></div><div class="col"><h3>After</h3><ul>';d.colB.forEach(b=>html+=`<li>${b}</li>`);html+='</ul></div></div>';}
+  if(d.big&&d.t==='cta')html+=`<p class="big" style="font-size:clamp(22px,3vw,34px);max-width:30ch;margin-top:18px;">${d.big}</p>`;
+  if(d.sub)html+=`<p class="sub">${d.sub}</p>`;
+  if(d.disclaimer)html+=`<p class="disclaimer">${d.disclaimer}</p>`;
+  return html;
+}
+
+const deck=document.getElementById('deck');
+S.forEach((d,idx)=>{
+  const sec=document.createElement('section');
+  sec.className='slide'+(idx===0?' active':'');
+  sec.innerHTML=render(d);
+  deck.appendChild(sec);
+});
+const foot=document.createElement('footer');
+foot.innerHTML='<span>The Accountants’ Table</span><span>Build a Better Practice</span>';
+deck.appendChild(foot);
+
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+const count=document.getElementById('count');
+function show(n){slides[i].classList.remove('active');i=(n+slides.length)%slides.length;slides[i].classList.add('active');count.textContent=(i+1)+' / '+slides.length;}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);});
+show(0);
+</script>
+</body>
+</html>
