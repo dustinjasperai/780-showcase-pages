@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity to Impact | Sandy Papavero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quattrocento+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --bg:#f7f6f3;        /* warm paper, matches her light site scheme */
+    --ink:#161e2a;       /* harvested dominant navy/ink (brand.json ranked_colors[0]) */
+    --ink-soft:#394150;
+    --ink-muted:#7b8192;
+    --paper:#ffffff;
+    --rule:#dcd9d0;
+    --accent:#161e2a;    /* accent = the harvested ink, used sparingly */
+  }
+  html,body{ height:100%; }
+  body{
+    font-family:'Quattrocento Sans', Arial, sans-serif;
+    background:var(--ink);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .slide{
+    display:none; width:100%; height:100%;
+    background:var(--bg);
+    padding:7vh 9vw;
+    flex-direction:column; justify-content:center;
+    position:relative;
+  }
+  .slide.active{ display:flex; }
+  .kicker{ font-family:'Bebas Neue',sans-serif; letter-spacing:.22em; font-size:clamp(14px,1.6vw,20px); color:var(--ink-muted); text-transform:uppercase; margin-bottom:22px; }
+  h1{ font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.01em; line-height:.98; font-size:clamp(44px,8.5vw,118px); color:var(--ink); }
+  h2{ font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.015em; line-height:1.02; font-size:clamp(32px,5.5vw,72px); color:var(--ink); margin-bottom:26px; }
+  .lead{ font-size:clamp(18px,2.3vw,30px); color:var(--ink-soft); max-width:34ch; line-height:1.5; }
+  .big{ font-size:clamp(22px,3vw,40px); color:var(--ink); max-width:24ch; line-height:1.3; font-weight:700; }
+  p.body{ font-size:clamp(16px,1.7vw,22px); color:var(--ink-soft); max-width:40ch; line-height:1.6; margin-top:14px; }
+  ul{ list-style:none; margin-top:10px; }
+  ul li{ font-size:clamp(16px,1.8vw,24px); color:var(--ink-soft); padding:14px 0; border-bottom:1px solid var(--rule); max-width:40ch; }
+  ul li b{ color:var(--ink); font-weight:700; }
+  .rule{ width:64px; height:3px; background:var(--accent); margin:0 0 28px; }
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:52ch; margin-top:10px; border-top:1px solid var(--rule); }
+  .split div{ padding:22px 24px; }
+  .split div:first-child{ border-right:1px solid var(--rule); }
+  .split .lbl{ font-family:'Bebas Neue',sans-serif; letter-spacing:.14em; font-size:14px; color:var(--ink-muted); margin-bottom:8px; text-transform:uppercase; }
+  .split .val{ font-size:clamp(16px,1.7vw,21px); color:var(--ink-soft); line-height:1.4; }
+  .dark{ background:var(--ink); }
+  .dark .kicker{ color:#9aa2b4; }
+  .dark h1,.dark h2{ color:#f4f3ef; }
+  .dark .lead,.dark .big,.dark p.body{ color:#d7dae2; }
+  .dark .rule{ background:#f4f3ef; }
+  .cta-step{ font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,2.6vw,34px); letter-spacing:.04em; color:var(--ink); margin-top:8px; }
+  .disclaimer{ position:absolute; left:9vw; right:9vw; bottom:5vh; font-size:12px; color:var(--ink-muted); line-height:1.5; max-width:70ch; }
+  .pagenum{ position:absolute; right:9vw; bottom:5vh; font-family:'Bebas Neue',sans-serif; letter-spacing:.1em; font-size:13px; color:var(--ink-muted); }
+  .brandmark{ position:absolute; left:9vw; top:5vh; font-family:'Bebas Neue',sans-serif; letter-spacing:.2em; font-size:14px; color:var(--ink-muted); text-transform:uppercase; }
+  .dark .brandmark,.dark .pagenum{ color:#9aa2b4; }
+  .nav{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:10; }
+  .nav button{ font-family:'Bebas Neue',sans-serif; letter-spacing:.1em; background:rgba(22,30,42,.85); color:#f4f3ef; border:none; padding:8px 16px; cursor:pointer; font-size:14px; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="nav"><button onclick="go(-1)">PREV</button><button onclick="go(1)">NEXT</button></div>
+<script>
+const S = [
+  {t:'title', cls:'dark', kicker:'A masterclass with Sandy Papavero', h1:'IDENTITY TO IMPACT', lead:'From reinvention to revenue. How already-successful founders rebuild the identity driving the business, and reposition the business to match it.' },
+
+  {t:'who', kicker:'Who this is for', h2:'You hit the numbers. Something still feels off.', body:'For founders, executives, and operators responsible for real decisions. You have built the career and the results. But the version of success you built no longer fits who you have become.' },
+
+  {t:'signs', kicker:'If this is you', h2:'The ones who hit walls they cannot name', list:[
+    'You look successful but feel off your game',
+    'You keep circling back to the same old habits',
+    'Your offers and pricing no longer match the room you walk into',
+    'You are asking what is next, and you actually mean it' ] },
+
+  {t:'trap', kicker:'The trap', h2:'You are not lazy. You are not lost.', big:'You are evolving. And you cannot create a new level of success from an outdated identity.' },
+
+  {t:'reframe', cls:'dark', kicker:'The reframe', h2:'Your business reflects who you had to be to build it.', big:'You are no longer that person. So the business, the offers, and the pricing quietly stop fitting.' },
+
+  {t:'cost', cls:'dark', kicker:'What it costs', h2:'Misalignment is expensive', body:'It shows up as plateaus you cannot explain, decisions made from pressure instead of clarity, and a business that quietly outgrew the identity that built it.' },
+
+  {t:'part', kicker:'Part one', h2:'Why strategy alone stops working', body:'Most people try to think their way into change. That is why it never lasts. Your mind understands the goal, but your body still identifies with the old version of you.' },
+
+  {t:'mech', kicker:'Part one', h2:'The nervous system runs the show', body:'Your nervous system does not care what you want. It only cares what feels familiar. That is why affirmations fade, motivation fails, and the same plateaus keep showing up.' },
+
+  {t:'bridge', kicker:'Part one', h2:'The problem is never the strategy.', big:'It is the identity underneath the operator. Correct that first, and positioning, messaging, and sales follow.' },
+
+  {t:'framework', cls:'dark', kicker:'Part two', h2:'The Identity to Impact framework', body:'The framework that turns confidence into clarity, and clarity into conviction. It takes who you are becoming and turns it into how you lead, decide, sell, and build.' },
+
+  {t:'how', kicker:'Part two', h2:'Confidence to clarity to conviction', body:'First we surface who you have been versus who you are becoming. Then we rewire how your body, brain, and identity communicate, so focus and discipline come from alignment instead of hype.' },
+
+  {t:'pillars', kicker:'Part two', h2:'What gets recalibrated', list:[
+    '<b>Leadership edge and presence</b>: how you show up in the room',
+    '<b>Decision-making under pressure</b>: cleaner calls, less noise',
+    '<b>Sales leadership precision</b>: selling from alignment, not pressure',
+    '<b>Team ownership and accountability</b>: the culture around you',
+    '<b>Revenue momentum</b>: growth that follows the new identity' ] },
+
+  {t:'before', kicker:'Part two', h2:'Burn the blueprint', split:[
+    { lbl:'The old blueprint', val:'Grind harder on a strategy built for who you used to be. Optimize a business that no longer fits.' },
+    { lbl:'The recalibration', val:'Realign the identity first. Let the leadership, offers, and pricing reorganize around who you are now.' } ] },
+
+  {t:'what', kicker:'Part three', h2:'The operator you become', body:'Decisions get faster and cleaner. The offer and the price finally match the operator. You stop chasing goals that no longer mean anything, and lead, sell, and perform with real presence.' },
+
+  {t:'shift', kicker:'Part three', h2:'The shift you feel first', big:'Real presence instead of pressure. You stop performing, and you start leading from who you actually are now.' },
+
+  {t:'proof', cls:'dark', kicker:'Part three', h2:'Why this, and why me', body:'Years inside finance, business ownership, and high-level sales, including work alongside Tony Robbins and Chet Holmes. I do not help people perform better. I show them where they are misaligned, and correct what is underneath.' },
+
+  {t:'mission', kicker:'The mission', h2:'Live your mission. Burn the blueprint.', big:'If you are done surviving on performance alone, this is your entry point back into power.' },
+
+  {t:'cta', kicker:'Your next step', h2:'Start with the Clarity Diagnostic', body:'A private 90-minute session to decode exactly where your identity and your business are misaligned, and what it is costing you in messaging, offers, and pricing.', step:'Apply at sandypapavero.com',
+    disclaimer:'This masterclass is educational. It shares frameworks and principles, not guarantees. Individual results vary and depend on your own effort, market, and circumstances. Nothing here is a promise of income or specific business outcomes.' }
+];
+
+const stage = document.getElementById('stage');
+stage.innerHTML = S.map((s,i)=>{
+  let inner = '';
+  inner += '<div class="brandmark">Sandy Papavero</div>';
+  if(s.kicker) inner += '<div class="kicker">'+s.kicker+'</div>';
+  if(s.h1){ inner += '<div class="rule"></div><h1>'+s.h1+'</h1>'; }
+  if(s.h2) inner += '<h2>'+s.h2+'</h2>';
+  if(s.lead) inner += '<p class="lead">'+s.lead+'</p>';
+  if(s.big) inner += '<p class="big">'+s.big+'</p>';
+  if(s.body) inner += '<p class="body">'+s.body+'</p>';
+  if(s.list){ inner += '<ul>'+s.list.map(x=>'<li>'+x+'</li>').join('')+'</ul>'; }
+  if(s.split){ inner += '<div class="split">'+s.split.map(d=>'<div><div class="lbl">'+d.lbl+'</div><div class="val">'+d.val+'</div></div>').join('')+'</div>'; }
+  if(s.step) inner += '<div class="cta-step">'+s.step+'</div>';
+  if(s.disclaimer) inner += '<div class="disclaimer">'+s.disclaimer+'</div>';
+  inner += '<div class="pagenum">'+(i+1)+' / '+S.length+'</div>';
+  return '<section class="slide'+(i===0?' active':'')+(s.cls?' '+s.cls:'')+'" data-i="'+i+'">'+inner+'</section>';
+}).join('');
+
+let cur = 0;
+const slides = [...document.querySelectorAll('.slide')];
+function show(n){ slides[cur].classList.remove('active'); cur=(n+slides.length)%slides.length; slides[cur].classList.add('active'); }
+function go(d){ show(cur+d); }
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+stage.addEventListener('click', ()=>go(1));
+</script>
+</body>
+</html>
