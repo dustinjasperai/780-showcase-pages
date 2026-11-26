@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>By Samantha Dawn — Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#131313;
+    --panel:#211d1a;
+    --rule:#3a322d;
+    --chalk:#f8f2eb;
+    --dim:#b8aea4;
+    --accent:#dfaa99;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--chalk);
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:6vh 7vw}
+  .slide{display:none;width:100%;max-width:960px}
+  .slide.on{display:block;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-size:.8rem;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;font-weight:500}
+  h1{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2.4rem,6.5vw,4.6rem);line-height:1.04;letter-spacing:.01em}
+  h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.08}
+  .sub{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(1.3rem,2.6vw,1.9rem);color:var(--dim);margin-top:1.6rem;line-height:1.3}
+  p.body{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7;color:var(--chalk);margin-top:1.5rem;max-width:40ch;font-weight:300}
+  .rule{width:64px;height:1px;background:var(--accent);margin:2rem 0}
+  ul{list-style:none;margin-top:1.8rem}
+  ul li{font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.5;padding:.7rem 0 .7rem 1.6rem;border-bottom:1px solid var(--rule);position:relative;color:var(--chalk);font-weight:300}
+  ul li:before{content:"";position:absolute;left:0;top:1.25rem;width:8px;height:8px;background:var(--accent);border-radius:50%}
+  ul li b{font-weight:600;color:var(--chalk)}
+  .disc{font-size:.8rem;color:var(--dim);margin-top:2.2rem;line-height:1.5;max-width:52ch;font-weight:300}
+  .cta-box{margin-top:2rem;padding:1.6rem 1.8rem;border:1px solid var(--rule);background:var(--panel);display:inline-block}
+  .cta-box .step{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.4vw,1.8rem);color:var(--accent)}
+  #nav{position:fixed;bottom:3vh;right:4vw;display:flex;gap:.5rem;align-items:center;z-index:5}
+  #nav button{background:transparent;border:1px solid var(--rule);color:var(--dim);width:42px;height:42px;cursor:pointer;font-size:1.1rem;transition:.2s}
+  #nav button:hover{border-color:var(--accent);color:var(--accent)}
+  #count{position:fixed;bottom:3vh;left:4vw;color:var(--dim);font-size:.8rem;letter-spacing:.2em;z-index:5}
+  .brandmark{position:fixed;top:3vh;left:4vw;font-family:'Playfair Display',serif;font-size:1rem;letter-spacing:.12em;color:var(--dim);z-index:5}
+</style>
+</head>
+<body>
+<div class="brandmark">BY SAMANTHA DAWN</div>
+<div id="stage"></div>
+<div id="count"></div>
+<div id="nav"><button id="prev" aria-label="Previous">&#8592;</button><button id="next" aria-label="Next">&#8594;</button></div>
+<script>
+const S = [
+  {t:'title', k:'A Live Masterclass', h:'Dress Like the Woman You\'re Becoming', sub:'The psychology of style for women in the middle of a life change.'},
+  {t:'who', k:'Who this is for', h:'You, standing in front of a full closet with nothing to wear.', b:'Maybe it was a baby. Maybe it was a new decade, a new body, a new season of your life. Somewhere in there, getting dressed stopped feeling like you.'},
+  {t:'trap', k:'The quiet lie', h:'You think the answer is more clothes.', b:'So you buy more. And the closet fills up while the feeling stays exactly the same. More shopping has never once fixed it, because shopping was never the problem.'},
+  {t:'reframe', k:'The real reframe', h:'Your closet isn\'t the problem. The story you\'re telling yourself is.', b:'Style is not what you own. It is who you believe you get to be. We work that first, then the wardrobe follows fast.'},
+  {t:'part', k:'Part One', h:'Why getting dressed got so hard.', b:'Nobody warned you that a life change rewrites your identity before it ever touches your wardrobe. The old clothes belong to a woman who no longer exists, and the new one has not been introduced yet.'},
+  {t:'point', k:'Part One', h:'The hiding starts here.', b:'When you do not feel like yourself, clothes become armor and camouflage. You reach for the same safe three outfits and call it practicality. It is not practicality. It is hiding, and you can feel it.'},
+  {t:'part', k:'Part Two', h:'The method: inside out, not outside in.', b:'Everything I teach runs on two tracks at once, and the order matters.', pts:['<b>The inner work.</b> Naming who you are now and who you want to be, so the clothes have someone to dress.','<b>The outer expression.</b> Translating that identity into a wardrobe that is unmistakably yours.']},
+  {t:'pillar', k:'The Method, 1 of 6', h:'The psychology of getting dressed.', b:'We start in your head. Your intentions, your blocks, the beliefs running the show every morning. This is the piece almost every stylist skips, and it is the piece that makes the rest stick.'},
+  {t:'pillar', k:'The Method, 2 of 6', h:'Know your shape.', b:'Not to shrink it or fix it. To dress the body you actually have today with intention, so clothes finally fit the woman wearing them instead of some version of her from five years ago.'},
+  {t:'pillar', k:'The Method, 3 of 6', h:'The closet cleanse.', b:'We clear out everything that belongs to the old story. What stays is what reflects who you are now. A smaller closet you love beats a full one you dread.'},
+  {t:'pillar', k:'The Method, 4 of 6', h:'Outfit formulas.', b:'Repeatable combinations built from your real pieces, so getting dressed takes five minutes and still looks intentional. No more standing there at 7am negotiating with your clothes.'},
+  {t:'pillar', k:'The Method, 5 of 6', h:'Shopping with a strategy.', b:'You learn to shop on purpose, aligned to who you are becoming, instead of grabbing whatever is on sale and hoping. Fewer pieces, better pieces, zero impulse guilt.'},
+  {t:'pillar', k:'The Method, 6 of 6', h:'Color and material.', b:'The colors that make you look alive and the fabrics that feel like you. Once you know yours, every decision in a store gets simpler and every outfit gets quieter and more expensive looking.'},
+  {t:'part', k:'Part Three', h:'What it feels like on the other side.', b:'You open the closet and you already know. Getting dressed is fast, calm, and unmistakably you. You stop outsourcing your confidence and you become your own stylist for good.'},
+  {t:'point', k:'Part Three', h:'This is the real goal.', b:'Not a capsule wardrobe. Not a single great outfit. A woman who trusts herself in front of the mirror again, and never loses that no matter what season of life comes next.'},
+  {t:'story', k:'Why me', h:'I nearly became a therapist. Then I realized I could do it through clothes.', b:'Ten-plus years in fashion, a styling certification from the School of Style, and a background in psychology. I fused them because I kept seeing that the wardrobe was never really the issue. This is the work I built my practice on.'},
+  {t:'recap', k:'The promise', h:'One hour from now, you will know the why and the how.', b:'Why getting dressed has felt so hard, and the exact method to rebuild your style from the inside out, so you feel like yourself in your clothes again.'},
+  {t:'cta', k:'Where to begin', h:'Ready to become your own stylist?', step:'Apply for Rebirth: the 6-Month Style Accelerator, or book a complimentary style audit to talk it through.', disc:'This masterclass is educational. No specific style, confidence, or personal outcome is guaranteed. Results vary from person to person and depend on your own effort and circumstances.'}
+];
+
+const stage = document.getElementById('stage');
+const count = document.getElementById('count');
+let i = 0;
+
+function esc(s){return s;}
+function render(){
+  stage.innerHTML = '';
+  const s = S[i];
+  const d = document.createElement('div');
+  d.className = 'slide on';
+  let html = '';
+  if(s.k) html += '<div class="kicker">'+s.k+'</div>';
+  if(s.t === 'title'){
+    html += '<h1>'+s.h+'</h1>';
+    if(s.sub) html += '<div class="sub">'+s.sub+'</div>';
+  } else {
+    html += '<h2>'+s.h+'</h2>';
+    html += '<div class="rule"></div>';
+    if(s.b) html += '<p class="body">'+s.b+'</p>';
+  }
+  if(s.pts){ html += '<ul>'; s.pts.forEach(function(p){ html += '<li>'+p+'</li>'; }); html += '</ul>'; }
+  if(s.step) html += '<div class="cta-box"><div class="step">'+s.step+'</div></div>';
+  if(s.disc) html += '<div class="disc">'+s.disc+'</div>';
+  d.innerHTML = html;
+  stage.appendChild(d);
+  count.textContent = (i+1) + ' / ' + S.length;
+}
+function go(n){ i = Math.max(0, Math.min(S.length-1, i+n)); render(); }
+document.getElementById('next').onclick = function(){ go(1); };
+document.getElementById('prev').onclick = function(){ go(-1); };
+document.addEventListener('keydown', function(e){
+  if(e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if(e.key === 'ArrowLeft') go(-1);
+});
+render();
+</script>
+</body>
+</html>
